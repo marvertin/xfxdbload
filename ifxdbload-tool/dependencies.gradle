@@ -1,0 +1,5 @@
+dependencies {
+	implementation project(':ifxdbload-core')
+
+	implementation group: 'ch.qos.logback', name: 'logback-classic'
+}

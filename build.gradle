@@ -1,0 +1,66 @@
+buildscript {
+	repositories {
+		maven { url tc_repo }
+	}
+}
+plugins {
+	id "io.spring.dependency-management" version "1.0.6.RELEASE" apply false
+	id "nebula.info" version "5.0.0" apply false
+	id "nebula.maven-publish" version "8.1.0" apply false 
+	id "com.zoltu.git-versioning" version "3.0.3" apply false
+}
+
+allprojects {
+	description = """ifxDbLoad - zavaděř informicí databáze"""
+
+	// Toto se dělá jen pro projekty java (zahrnuje i java-library)
+	pluginManager.withPlugin ('java') {
+		apply plugin: 'eclipse'
+		apply plugin: 'io.spring.dependency-management'
+		apply plugin: 'nebula.info'
+		apply plugin: 'nebula.maven-publish'
+
+		repositories {
+			maven { url tc_repo }
+		}
+
+		dependencies {
+			// Je žádoucí, aby všecny projekty logovaly tímto aparátem
+			implementation group: 'org.slf4j', name: 'slf4j-api'
+		}
+
+		javadoc {
+			options.encoding = 'UTF-8'       // takto jabvadoc očekává kódování zdrojových kódů
+			options.docEncoding = 'UTF-8'    // v tomto kódování  budou generovány html výstupy
+			options.charSet = 'UTF-8'        // a toto bude napsáno do html: <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		}
+
+		targetCompatibility = '1.8'
+
+		tasks.withType(JavaCompile) {
+			options.encoding = 'UTF-8'
+		}
+
+		publishing {
+			repositories {
+				mavenLocal();
+				maven {
+					url tc_repoPublishUrl
+					credentials {
+						username tc_repoPublishDeployUsername
+						password tc_repoPublishDeployPassword
+					}
+				}
+			}
+		}
+		
+		apply from: "$rootDir/libs.gradle"
+	}
+
+}
+
+subprojects {
+	apply plugin: 'com.zoltu.git-versioning'
+	version = rootProject.version
+	group = 'cz.tconsult.lib'
+}
