@@ -1,0 +1,175 @@
+* text=auto eol=lf
+
+# --------- Zdrojaky programovacich jazyku ---------------
+*.java text eol=lf ident diff=java
+*.properties text eol=lf
+*.springbeans text eol=lf
+*.pl text eol=lf
+*.pm text eol=lf        
+*.sql text eol=lf
+*.isql text eol=lf
+*.osql text eol=lf
+*.mssql text eol=lf
+*.spl text eol=lf
+*.jacc text eol=lf
+*.js text eol=lf
+*.php text eol=lf
+
+*.cpp text eol=lf
+*.ecc text eol=lf
+*.cc text eol=lf
+*.h text eol=lf
+*.ec text eol=lf 
+*.c text eol=lf
+
+# ------------------  Html/JSP atd. ----------------------
+*.jsp text eol=lf
+*.inc text eol=lf
+*.tag text eol=lf
+*.htm text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.dtd text eol=lf
+
+# ----------- XML ----------------------------------------
+ 
+*.xml text eol=lf
+*.xsd text eol=lf
+*.xdr text eol=lf
+*.wsdd text eol=lf
+*.xmi text eol=lf
+*.xsl text eol=lf
+*.xslt text eol=lf
+*.wsdl text eol=lf
+
+# ------------ Reporty a jine texty ke cteni -------------
+*.txt text eol=lf
+*.tld text eol=lf
+*.ftl text eol=lf
+*.launch text eol=lf
+*.jrxml text eol=lf
+*.jrtx text eol=lf
+*.rtf text eol=lf
+*.csv text eol=lf
+*.jmx text eol=lf
+
+# --------------------- Shelly a pseudoshelly-----------------------------
+*.sh text eol=lf
+*.ht text eol=lf
+
+# --------------------- Testy ---------------------------
+*.testsuite -text
+*.rftdef   text eol=lf
+*.rftdsd   text eol=lf
+*.rftxmap  text eol=lf
+*.rftvp text eol=lf
+*.rftxdp text eol=lf
+*.rfttpl text eol=lf
+*.rftdp text eol=lf
+*.rftmap text eol=lf
+
+# -------------------- Eklipsoviny -------------------------
+.classpath text eol=lf
+.project text eol=lf
+.buildpath text eol=lf
+.springBeans text eol=lf
+.cproject text eol=lf
+.cdtproject text eol=lf
+org.eclipse.*.prefs text eol=lf
+com.genuitec.eclipse.j2eedt.core.prefs text eol=lf
+org.springframework.ide.eclipse.core.prefs text eol=lf
+*.launch text eol=lf
+
+# ------------------ Další vývojová prostředí --------------------
+*.dev text eol=lf
+*.dsp text eol=lf             
+*.dsw text eol=lf
+
+# ---------------------- TC ---------------------
+*.roles text eol=lf
+*.xml-fragment text eol=lf 
+
+# šablony na wiki v AHelp
+*.tpl text eol=lf
+
+# datová pumpa
+*.dpr text eol=lf
+*.ds text eol=lf
+
+# Hromadné tisky
+*.mat text eol=lf
+*.arch text eol=lf
+*.esc text eol=lf
+
+# parsery
+*.y text eol=lf
+*.output text eol=lf
+
+
+# ---------------------- Powerbuldroviny ---------------------
+
+*.pbl -text
+*.pbd -text
+*.pbt -text
+*.sra -text
+*.srd -text
+*.srf -text
+*.srj -text
+*.srm -text
+*.srs -text
+*.sru -text
+*.srw -text
+*.srx -text
+*.usr.opt -text
+
+# --------------------- Multimedia --------------------------
+*.gif -text
+*.bmp -text
+*.ico -text
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.pdf -text
+*.mif -text
+
+
+# ---------------------- Microsoft -------------------------
+*.doc -text
+*.docx -text
+*.dot -text
+*.dotx -text
+*.xls -text
+*.xlsx -text
+*.ppt -text
+*.pptx -text
+*.msg -text
+*.ini text eol=lf
+*.bat text eol=lf
+*.cmd text eol=lf
+
+*.sln text eol=lf
+*.ttf -text
+
+# -------------------- binárky -----------------------------
+*.class -text
+*.war -text 
+*.jar -text
+*.ear -text
+*.exe -text
+*.dll -text
+
+
+# ----------------------- Ostatní ----------------------------
+*.jnlp text eol=lf
+MANIFEST.MF text eol=lf
+*.properties text eol=lf 
+*.zip -text
+*.tgz -text
+*.gz -text
+*.jks -text
+*.mdl -text
+*.tar -text
+
+*.epf text eol=lf
+*.reg text eol=lf

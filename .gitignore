@@ -1,0 +1,69 @@
+# ----------- ClearCase -------------------------------
+**/lost+found
+*.contrib.*
+*.contrib
+*.keep.*
+*.keep
+*.mkelem.*
+*.mkelem
+view.dat
+*.updt
+
+
+
+#-------------- GRADLE ----------------------------------------
+.gradle
+
+#------------ K3Diff ---------------------------------------------
+*.orig
+
+
+# ----------- Starý sestavovací aparát -------------------------------
+.buildedbytcant
+
+# ------------ Staré frameworky a vývojářské nástroje -----------------------
+*.library
+*.server
+*.amateras
+*.dnx
+*.old
+
+# --------------- Eclipse ------------------------------
+.metadata
+.recommenders
+RemoteSystemsTempFiles/
+soapui.log
+__External-Files/
+*/build/
+*/bin/
+.project
+.classpath
+**/.settings/org.eclipse.jdt.core.prefs
+**/.settings/org.eclipse.wst.common.component
+**/.settings/org.eclipse.wst.common.project.facet.core.xml 
+
+# -========================= TurboConsult (zneplatňování elementů - ONCE skripty atp.) -=========================
+**/build/
+**/.buildedByTcAnt
+**/tomcat/work
+**/tomcat/temp
+**/Once/arch
+*.toDelete
+*.toRemove
+*.isql.REMOVED
+*.cp1250properties
+.dorebase
+.doupdate
+**/waste/
+*.error
+*.err
+*.obsolete
+*.java_blocked
+
+
+# Aby git neobtezoval pokud nekdo pouziva jedinny eclipse project
+#/.project
+#/.settings
+
+
+/bin/
