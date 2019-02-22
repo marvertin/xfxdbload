@@ -6,7 +6,9 @@ buildscript {
 plugins {
 	id "io.spring.dependency-management" version "1.0.6.RELEASE" apply false
 	id "nebula.info" version "5.0.0" apply false
-	id "nebula.maven-publish" version "8.1.0" apply false 
+	id "nebula.source-jar" version "9.5.0"  apply false
+	id "nebula.javadoc-jar" version "9.5.0"  apply false
+	id "nebula.maven-publish" version "8.1.0" apply false      // zajistí publikování a vyhodnocení "+" ve verzích"
 	id "com.zoltu.git-versioning" version "3.0.3" apply false
 }
 
@@ -19,6 +21,8 @@ allprojects {
 		apply plugin: 'io.spring.dependency-management'
 		apply plugin: 'nebula.info'
 		apply plugin: 'nebula.maven-publish'
+		apply plugin: 'nebula.source-jar'
+		apply plugin: 'nebula.javadoc-jar'
 
 		repositories {
 			maven { url tc_repo }
