@@ -3,3 +3,13 @@ plugins {
 }
 
 apply from: 'dependencies.gradle'
+
+
+// Dependence k revizi
+dependencies {
+  compile group: 'cz.tconsult.lib', name: 'dbloader-itf', version: '1.1.0' 
+  compile group: 'cz.tconsult.lib', name: 'dbutil-core', version: '2.0.0'
+  compile group: 'cz.tconsult.lib', name: 'dbutil-informix', version: '2.0.1'
+  compile group: 'cz.tconsult.lib', name: 'parsing-core', version: '1.1.26'
+  compile group: 'cz.tconsult.lib', name: 'parsing-spl', version: '1.1.26'
+}
