@@ -1,0 +1,11 @@
+plugins {
+	id 'java'
+	id 'application'
+}
+
+application {
+	applicationName = 'ifxdbload'
+	mainClassName  = 'cz.tconsult.lib.ifxdbload.tool.IfxDbLoad'
+}
+
+apply from: 'dependencies.gradle'

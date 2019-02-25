@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.tconsult.lib.ifxdbload.tool;
+package cz.tconsult.lib.ifxdbload.workflow;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.core.core.FFaze;
 import cz.tconsult.lib.ifxdbload.core.core.FazeAnalyzeResult;
-import cz.tconsult.lib.ifxdbload.tool.data.Builder;
-import cz.tconsult.lib.ifxdbload.tool.data.DbpackProperties;
+import cz.tconsult.lib.ifxdbload.workflow.data.Builder;
+import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import cz.tconsult.tw.util.CCounterMap;
 import cz.tconsult.tw.util.CounterMap;
 

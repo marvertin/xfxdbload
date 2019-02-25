@@ -1,5 +1,7 @@
 dependencies {
-	implementation project(':ifxdbload-core')
+	implementation project(':ifxdbload-workflow')
 
 	implementation group: 'ch.qos.logback', name: 'logback-classic'
+  compile(group: 'cz.tconsult.lib', name: 'pgmbase-core', version: '3.0.5')
+  compile(group: 'cz.tconsult.lib', name: 'pgmbase-db', version: '3.0.5')
 }

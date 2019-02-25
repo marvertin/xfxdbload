@@ -1,4 +1,4 @@
-package cz.tconsult.lib.ifxdbload.tool;
+package cz.tconsult.lib.ifxdbload.workflow;
 
 /**
  * Zisteni maximalni hodnoty serna z tc.dbload_log

@@ -1,4 +1,4 @@
-package cz.tconsult.lib.ifxdbload.tool;
+package cz.tconsult.lib.ifxdbload.workflow;
 
 /**
  * !!! zatial nevyskusany dac ... nutne preskusat, opravit

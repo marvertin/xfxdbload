@@ -1,15 +1,339 @@
+/**
+ *
+ */
 package cz.tconsult.lib.ifxdbload.tool;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.Duration;
+import java.time.Instant;
 
-public class IfxDbLoad {
+import org.apache.commons.logging.LogFactory;
 
+import cz.tconsult.dbloader.itf.EFileCategory;
+import cz.tconsult.dbloader.itf.EMessageCategory;
+import cz.tconsult.dbloader.itf.UniversalResultMessage;
+import cz.tconsult.dev.TcSourceCodeInfo;
+import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
+import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoader;
+import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoaderParams;
+import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoaderResult;
+import cz.tconsult.lib.ifxdbload.workflow.DbpackReader;
+import cz.tconsult.lib.ifxdbload.workflow.FUtils;
+import cz.tconsult.lib.ifxdbload.workflow.SeeAndWriteDBLoadLogTable;
+import cz.tconsult.lib.ifxdbload.workflow.TwConnectionFactoryyy;
+import cz.tconsult.lib.ifxdbload.workflow.ZabudovaneObjekty;
+import cz.tconsult.lib.ifxdbload.workflow.data.Builder;
+import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
+import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
+import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
+import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
+import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
+import cz.tconsult.tcbase.clib.bdb.mdbpgmbase.DbPgmBase;
+import cz.tconsult.tcbase.clib.bdb.mdbpgmbase.DbPgmBaseConnectorProperties;
+import cz.tconsult.tcbase.clib.mpgmbase.OptManager;
+import cz.tconsult.tw.lang.FEnvVar;
+import cz.tconsult.tw.util.CounterMap;
+import cz.tconsult.tw.util.logging.Logf;
 
-  // TODO [veverka] Zkopírovat ještě dy dvě třídy  -- 25. 2. 2019 10:58:19 veverka
-  private static final Logger log = LoggerFactory.getLogger(IfxDbLoad.class);
+/**
+ * @author veverka
+ *
+ */
+public class IfxDbLoad extends DbPgmBase {
 
-  public static void main(final String[] args) {
-    log.info("Prázdný IfxDbLoad - loadování informix databáze");
+  private static final String DBKIND_MAIN = "main";
+  private static final String DEFAULT_SCHEMA = "<defalut>";
+
+  private static final Logf log = Logf.wrap(LogFactory.getLog(IfxDbLoad.class));
+
+  private final Instant toolStartTime;
+
+  public IfxDbLoad() {
+
+    toolStartTime = Instant.now();
   }
+  @Override
+  protected void modifyDbPgmBaseConnectorProperties(final DbPgmBaseConnectorProperties aProperties) {
+
+    super.modifyDbPgmBaseConnectorProperties(aProperties);
+    //nechceme omezovat spuštění na jedinou instanci v jednom čase
+    aProperties.setCheckDuplicitExecution(false);
+    // u simulace connection nepotřebujeme, takže ať se vytvoří až bude potřeba a nikoliv na začátku
+    aProperties.setEarlyCreateDbConnection(false);
+    // Kvůli http://jira:8080/browse/PRUBINA-1141
+    aProperties.setCallApInitDbConnectionProc(false);
+
+  }
+
+  @Override
+  protected void modifyAditionalDbPgmBaseConnectorProperties(final DbPgmBaseConnectorProperties aProperties) {
+
+    super.modifyAditionalDbPgmBaseConnectorProperties(aProperties);
+    //nechceme omezovat spuštění na jedinou instanci v jednom čase
+    aProperties.setCheckDuplicitExecution(false);
+    // u simulace connection nepotřebujeme, takže ať se vytvoří až bude potřeba a nikoliv na začátku
+    aProperties.setEarlyCreateDbConnection(false);
+    // Kvůli http://jira:8080/browse/PRUBINA-1179
+    aProperties.setCallApInitDbConnectionProc(false);
+  }
+
+  @Override
+  protected void defineOptions(final OptManager aOm) {
+
+    super.defineOptions(aOm);
+    aOm.registerBean(new OptBeanTcDbLoadBase());
+  }
+
+
+  public static void main (final String[] args) {
+    final IfxDbLoad m = new IfxDbLoad();
+    m.runApp(args);
+  };
+
+  @Override
+  public void execute() throws Exception {
+
+    final OptBeanTcDbLoadBase optBean = getRegisteredOptBean(OptBeanTcDbLoadBase.class);
+
+    // Není třeba, logback flushuje automaticky
+    //getGlobalLogger().flush();
+    if (optBean.isBackwardSourceCodeCompatibility()) {
+
+      TcSourceCodeInfo.TC_SOURCECODE_BACKWARDCOMPATIBILITY();
+    }
+
+    boolean failOnError;
+    {
+      failOnError = optBean.isFailOneError();
+      final Boolean failonerrorBool = FEnvVar.isOnceLoaderFailOnError();
+      if (failonerrorBool != null) {
+        failOnError = failonerrorBool;
+      }
+    }
+
+    final Builder builder = new Builder();
+    final DbpackReader dbpackReader = new DbpackReader(builder);
+    dbpackReader.setProcessedFazes(optBean.getProcessedFazes());
+
+    if (optBean.getDir() != null) {
+      for (final Path sfile : optBean.getDir()) {
+        final DbpackProperties defaultDbpackProperties = new DbpackProperties();
+        defaultDbpackProperties.dbkind = DBKIND_MAIN;
+        defaultDbpackProperties.dbschema = DEFAULT_SCHEMA;
+        defaultDbpackProperties.root = sfile.toFile().getAbsoluteFile();
+        dbpackReader.readDirWithDbpacks(defaultDbpackProperties);
+      }
+
+      for (final LoDbkind loDbkind : builder.getData().getLoDbkinds()) {
+        // interní věci se zavedou pro každý dbkind.
+        dbpackReader.readInternalToolDbpack(loDbkind.getName());
+      }
+
+    } else {
+      // Není žádný dbpack, budou jen interní soubory
+      dbpackReader.readInternalToolDbpack(DBKIND_MAIN);
+    }
+
+    final LoData data = builder.getData();
+
+    if (dbpackReader.getFilesForSuppressedFazes().count() > 0) {
+      log.warn("There are files in suppressed fazes: %d:%n%s", dbpackReader.getFilesForSuppressedFazes().count(), dbpackReader.getFilesForSuppressedFazes());
+    }
+
+    logCounters(data.getFilesForRoots(), "Files for root");
+    logCounters(data.getFilesForDbkinds(), "Files for dbkinds");
+
+    //    if (true) throw new RuntimeException("Bum na vyjimku", new RuntimeException("Bum bum bum"));
+    //    if (true) return;
+
+    for (final LoDbkind loDbkind : data.getLoDbkinds()) {
+      log.info("Counters for dbkind=%s", loDbkind.getName());
+      if (loDbkind.getFilesForSchemaCounter().count(DEFAULT_SCHEMA) > 0) {
+        log.warn("There are dbpacks which have no 'dbpack.properties' then using default schema!");
+      }
+      logCounters(loDbkind.getFilesForSchemaCounter(), "Files for schema");
+      logCounters(loDbkind.getFilesForPhases(), "Files for phase");
+      logCounters(loDbkind.getFilesForDbpacksCounter(), "Files for dbpack");
+      logCounters(loDbkind.getFilesForSchemasAndPhases(), "Files for schema and phase");
+    }
+
+    SeeAndWriteDBLoadLogTable seeAndWriteDBLoadLogTable = null;
+
+    final boolean simulace = optBean.isSimulation();
+    if (!simulace) {
+      final TwConnectionFactoryyy fa;
+      final TwConnectionFactoryyy factory = new SessionSettingsTwConnectionFactory(new TwConnectionFactoryyyImpl(getFactoryForAdditionalConnections()), optBean.getNlsLengthSemantics());
+
+      ZabudovaneObjekty.zavestOracleTcDbLoadATcDbTools(getPrimaryConnection(), factory);
+
+      int pocitadloSouboru = 0; // Kolik souborů dohromady ve všech fázích bylo zavedeno.
+      hlavnicyklus: for (final LoDbkind loDbkind : data.getLoDbkinds()) {
+        faze: for (final LoFaze loFaze : loDbkind.getFazes()) {
+
+          // RN00279139 Spustit f020clean jen v případě parametru --clean
+          if (loFaze.getNameFazeZavedeni() == EFazeZavedeni.f020clean && !optBean.isClean()) {
+            log.info("Fáze 020clean přeskočena, protože nebyl specifikován parametr --clean.");
+            continue faze;
+          }
+
+          // RN00406845 Pokud bylo před fází 260 zavedeno 0 souborů, přeskočíme ji.
+          if (loFaze.getNameFazeZavedeni() == EFazeZavedeni.f260afterobj
+              && pocitadloSouboru == 0) {
+            log.info("Fáze 260afterobj přeskočena, protože dosud nebyly zavedeny žádné soubory.");
+            continue faze;
+          }
+
+          // zacatecny cas spracovani
+          final Instant startTime = Instant.now();
+          final String elapsedTime = FUtils.prettyDuration(Duration.between(toolStartTime, startTime)
+              , true /*showLeftZeros*/, false /*showMilliseconds*/);
+          log.info("%n##########################################%n"
+              + "~faze: %s, doposud uplynulo: %s%n##########################################%n"
+              , loFaze, elapsedTime);
+
+          // vypojeny vypis pripojovani do DB
+          //            log.info("Connectioning to database: url='%s' user='%s'", dbConnectionParams.getJdbcUrl(), dbConnectionParams.getUserName());
+          final Connection conn = factory.createConnection();
+          //            log.info("...connected");
+
+          if (loFaze.getNameFazeZavedeni() == EFazeZavedeni.f260afterobj ||
+              loFaze.getNameFazeZavedeni() == EFazeZavedeni.f700finish){
+
+            if (seeAndWriteDBLoadLogTable == null) {
+
+              final Connection connNew = factory.createConnection();
+              seeAndWriteDBLoadLogTable = new SeeAndWriteDBLoadLogTable(connNew, toolStartTime);
+              seeAndWriteDBLoadLogTable.init();
+
+            }
+          }
+
+          try {
+            // zacni nacitavat table v novom vlakne
+            if (seeAndWriteDBLoadLogTable != null) {
+              seeAndWriteDBLoadLogTable.beginSeeAndWrite();
+              //                seeAndWriteDBLoadLogTable.setStartBeginTime(Instant.now());
+            }
+
+            final UniversalDbLoaderParams params = new UniversalDbLoaderParams();
+            params.setConnection(conn);
+            //params.setOnceForceReload(true);
+            final UniversalDbLoader dbLoader = UniversalDbLoader.getInstance(params);
+
+            dbLoader.reinit();
+            for (final LoSoubor loSoubor : loFaze.getSoubors()) {
+              pocitadloSouboru++;
+              log.info("LOADING %s", loSoubor.getLocator());
+              final UniversalDbLoaderResult result = dbLoader.load(loSoubor.getZavadenec());
+              if (ukoncitOkamzineZpracovani(loSoubor, result, failOnError)) {
+                log.info("Posledni zpracovavany soubor: \"%s\"", loSoubor);
+                log.info("Preruseno: %n - dbkind=%s%n - faze=%s%n - soubor=%s", loDbkind.getName(), loSoubor.getFaze(), loSoubor.getLocator());
+                log.info("Zpracovani bylo automaticky ukonceno, protoze doslo k chybe, pokud nechces koncit pri prvni chybe, nastav promennou prostredi \"set %s=false\".", FEnvVar.ONCELOADER_FAILONERROR);
+
+                // konecny cas spracovani pri chybe
+                final Instant finishTime = Instant.now();
+                final Duration duration = Duration.between(startTime, finishTime);
+                final String dur = FUtils.prettyDuration(duration, false/*showLeftZeros*/, false /*showMilliseconds*/);
+                log.info("%n~faze finish with ERROR: %s, duration: %s, start time: %s, finish time: %s%n"
+                    , loFaze, dur, startTime, finishTime);
+
+                break hlavnicyklus;
+              }
+            }
+
+            // ukonci nacitavanie z table a ukonci vlakno
+            if (seeAndWriteDBLoadLogTable != null) {
+              seeAndWriteDBLoadLogTable.endSeeAndWrite();
+              //                seeAndWriteDBLoadLogTable.setEndBeginTime(Instant.now());
+            }
+
+            // konecny cas spracovani
+            final Instant finishTime = Instant.now();
+            //              final Long runTime = finishTime.diff(startTime);
+
+            final Duration duration = Duration.between(startTime, finishTime);
+            final String dur = FUtils.prettyDuration(duration, true/*showLeftZeros*/, false /*showMilliseconds*/);
+            log.info("%n~faze finish OK: %s, duration: %s, start time: %s, finish time: %s%n"
+                , loFaze.getNameFazeZavedeni(), dur, startTime, finishTime);
+
+          } finally  {
+            try {
+              conn.close();
+            } catch (final Exception e) {
+              // Musíme ignorovat, protože nechceme shodit celé zavádění třeba kvůli nevalidním triggerům.
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * @param aLoSoubor
+   * @param aResult
+   * @return
+   */
+  private boolean ukoncitOkamzineZpracovani(final LoSoubor aLoSoubor, final UniversalDbLoaderResult aResult, final boolean aFailOnError) {
+    if (! aFailOnError) {
+      return false; // vypnuto fajlovani
+    }
+    if (aLoSoubor.getZavadenec().getFileCategory() != EFileCategory.ONCE) {
+      return false; // jinde nez ve once nefajlovat
+    }
+    if (FEnvVar.isOnceLoaderFailOnError() != null && ! FEnvVar.isOnceLoaderFailOnError()) {
+      return false;
+    }
+    for (final UniversalResultMessage msg : aResult.getMessages()) {
+      if (msg.getCategory() == EMessageCategory.ERROR) {
+        return true; //neco sfajlvoalo
+      }
+    }
+    return false; // nic nefajluje
+  }
+
+  /* (non-Javadoc)
+   * @see cz.tconsult.tw.app.AppBase#initLogging()
+   */
+  @Override
+  protected void initLogging() throws Exception {
+    //    getGlobalLogger().setLoggers(getClass().getPackage().getName() + ";cz.tconsult.tw;");
+    super.initLogging();
+  }
+
+  private void logCounters(final CounterMap<?> cm, final String header) {
+    log.info("%s:%n%s", header, cm);
+  }
+
+  class SessionSettingsTwConnectionFactory implements TwConnectionFactoryyy {
+
+    private final TwConnectionFactoryyy connectionFactory;
+    private final String nlsLengthSemantics;
+
+    public SessionSettingsTwConnectionFactory(final TwConnectionFactoryyy connectionFactory, final String nlsLengthSemantics) {
+      super();
+      this.connectionFactory = connectionFactory;
+      this.nlsLengthSemantics = nlsLengthSemantics;
+      if (nlsLengthSemantics != null && !"CHAR".equals(nlsLengthSemantics) && "BYTE".equals(nlsLengthSemantics)){
+        throw new RuntimeException("chybné nastavení nlsLengthSemantics");
+      }
+    }
+
+    @Override
+    public Connection createConnection() {
+      final Connection connection = connectionFactory.createConnection();
+      if (nlsLengthSemantics != null){
+        try (Statement stm = connection.createStatement()){
+          stm.execute("ALTER SESSION SET NLS_LENGTH_SEMANTICS=" + nlsLengthSemantics);
+        } catch (final SQLException e) {
+          throw new RuntimeException(e);
+        }
+      }
+      return connection;
+    }
+  };
+
+
 }

@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.tconsult.lib.ifxdbload.tool.data;
+package cz.tconsult.lib.ifxdbload.workflow.data;
 
 import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
 

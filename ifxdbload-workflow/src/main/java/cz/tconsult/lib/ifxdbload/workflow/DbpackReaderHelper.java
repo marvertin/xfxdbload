@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cz.tconsult.lib.ifxdbload.tool;
+package cz.tconsult.lib.ifxdbload.workflow;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,7 +15,7 @@ import java.util.Stack;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import cz.tconsult.lib.ifxdbload.tool.data.DbpackProperties;
+import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 
 /**
  * 

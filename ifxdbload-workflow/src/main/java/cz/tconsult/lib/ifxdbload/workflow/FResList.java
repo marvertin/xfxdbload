@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.tconsult.lib.ifxdbload.tool;
+package cz.tconsult.lib.ifxdbload.workflow;
 
 import java.io.IOException;
 import java.io.InputStream;

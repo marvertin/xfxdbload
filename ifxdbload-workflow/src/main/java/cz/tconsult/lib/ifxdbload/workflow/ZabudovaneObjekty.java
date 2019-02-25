@@ -1,4 +1,4 @@
-package cz.tconsult.lib.ifxdbload.tool;
+package cz.tconsult.lib.ifxdbload.workflow;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +37,7 @@ public class ZabudovaneObjekty {
    */
   public static void zavestOracleTcDbLoadATcDbTools(
       final Connection aPrimaryConnection,
-      final TwConnectionFactory aConnectionFactory) throws SQLException {
+      final TwConnectionFactoryyy aConnectionFactory) throws SQLException {
     final DatabaseMetaData databaseMetadata = aPrimaryConnection.getMetaData();
     if (!isOracle(databaseMetadata)) {
       // Neuděláme nic, databáze není Oracle

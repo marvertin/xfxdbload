@@ -1,4 +1,7 @@
-package cz.tconsult.lib.ifxdbload.tool;
+package cz.tconsult.lib.ifxdbload.workflow;
+
+import java.sql.Connection;
+import java.time.Instant;
 
 //import java.sql.Connection;
 //import java.time.Duration;
@@ -16,6 +19,26 @@ package cz.tconsult.lib.ifxdbload.tool;
  * @author tomas
  */
 public class SeeAndWriteDBLoadLogTable/* extends DbPgmBase */{
+
+  public SeeAndWriteDBLoadLogTable(final Connection connNew, final Instant toolStartTime) {
+    // TODO Auto-generated constructor stub
+  }
+
+  public void init() {
+    // TODO [veverka] Dát sem skutečnou implementaci -- 25. 2. 2019 14:49:36 veverka
+    //TODO [veverka] implementuj - vygenerovana metoda [veverka 14:49:23]
+
+  }
+
+  public void endSeeAndWrite() {
+    //TODO [veverka] implementuj - vygenerovana metoda [veverka 14:50:03]
+
+  }
+
+  public void beginSeeAndWrite() {
+    //TODO [veverka] implementuj - vygenerovana metoda [veverka 14:50:15]
+
+  }
 
   // TODO [veverka] Revidovat a případně obnovit -- 25. 2. 2019 13:14:42 veverka
   //  private static final Logger log = LoggerFactory.getLogger(SeeAndWriteDBLoadLogTable.class);
