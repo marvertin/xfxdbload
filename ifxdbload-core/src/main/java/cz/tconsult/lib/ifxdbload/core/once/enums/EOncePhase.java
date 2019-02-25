@@ -1,8 +1,7 @@
 package cz.tconsult.lib.ifxdbload.core.once.enums;
 
-import cz.tconsult.tw.util.HasDbValue;
 
-public enum EOncePhase implements HasDbValue {
+public enum EOncePhase  {
   BEFORE("0before"),
   ALTER("1alter"),
   SETTINGS("3settings"),
@@ -72,8 +71,7 @@ public enum EOncePhase implements HasDbValue {
     return null;
   }
 
-  @Override
-  public String getDbValue() {
+  public String getOncePhaseName() {
     return iString;
   }
 

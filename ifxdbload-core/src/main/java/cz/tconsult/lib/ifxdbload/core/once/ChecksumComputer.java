@@ -5,7 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-import cz.tconsult.dev.TcSourceCodeInfo;
+import cz.tconsult.tw.util.TcSourceCodeInfo;
+
 
 public class ChecksumComputer {
 

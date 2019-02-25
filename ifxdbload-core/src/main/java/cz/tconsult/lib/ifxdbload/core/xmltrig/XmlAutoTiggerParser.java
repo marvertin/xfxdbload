@@ -8,11 +8,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cz.tconsult.dbutil.core.AColumnName;
 import cz.tconsult.dbutil.core.ATableName;
@@ -20,17 +21,18 @@ import cz.tconsult.dbutil.informix.IfxAutomaticTriggersCreator;
 import cz.tconsult.dbutil.informix.IfxAutomaticTriggersCreator.EColumnsHandleMode;
 import cz.tconsult.dbutil.informix.atom.ETriggerEvent;
 import cz.tconsult.dbutil.informix.atom.ETriggerType;
-import cz.tconsult.tw.util.logging.Logf;
 
 
 public class XmlAutoTiggerParser {
+
+
+  private static final Logger log = LoggerFactory.getLogger(XmlAutoTiggerParser.class);
 
   List<AutoTrigger> iTriggers=new ArrayList<AutoTrigger>();
 
   private XmlTrigData iFile;
 
   private IfxAutomaticTriggersCreator iAutCreator;
-  private static final Logf log = Logf.wrap(LogFactory.getLog("cz.tconsult.lib.ifxdbload.core"));
 
   private void parseXMLFileWithAutoTriggers(final XmlTrigData aXtd) throws IOException,
   JDOMException {

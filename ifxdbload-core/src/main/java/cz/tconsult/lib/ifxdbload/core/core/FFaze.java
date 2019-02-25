@@ -5,10 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.tconsult.dbloader.itf.EFileCategory;
-import cz.tconsult.tw.lang.AString0;
 
-public final class FFaze extends AString0 {
-
+public final class FFaze {
+  // TODO [veverka] To je podivný typ, byl z AString0 -- 25. 2. 2019 12:56:11 veverka
   private static final long serialVersionUID = -6767408765694497348L;
 
   //  private static final List<EFazeZavedeni> allFazes = new ArrayList<EFazeZavedeni>();
@@ -60,7 +59,7 @@ public final class FFaze extends AString0 {
    */
 
   private FFaze(final String aValue/*, final EFileCategory category*/) {
-    super(aValue);
+    //super(aValue);
     //    iCategory = category;
   }
   /*

@@ -15,9 +15,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import cz.tconsult.lib.exception.EExceptionSeverity;
+import cz.tconsult.lib.exception.FThrowable;
 import cz.tconsult.lib.ifxdbload.core.once.OnceScript.StatementText;
 import cz.tconsult.lib.ifxdbload.core.once.datatypes.DirectiveCheck;
 import cz.tconsult.lib.ifxdbload.core.once.datatypes.OnceError;
@@ -32,11 +35,7 @@ import cz.tconsult.lib.ifxdbload.core.once.enums.EStatementStatus;
 import cz.tconsult.lib.ifxdbload.core.once.enums.EVariant;
 import cz.tconsult.lib.ifxdbload.core.once.exceptions.AlreadyLoadedButChangedRuntimeException;
 import cz.tconsult.lib.ifxdbload.core.once.exceptions.OnceScriptException;
-import cz.tconsult.tw.lang.FThrowable;
-import cz.tconsult.tw.util.exception.EExceptionSeverity;
-import cz.tconsult.tw.util.exception.FExceptionDumper;
-import cz.tconsult.tw.util.logging.Logf;
-import cz.tconsult.tw.util.tuples.Tuple2;
+import cz.tconsult.lib.tuples.Tuple2;
 
 /*
  * @author brzoza
@@ -44,8 +43,10 @@ import cz.tconsult.tw.util.tuples.Tuple2;
 
 public class OnceLoader {
 
+
+  private static final Logger log = LoggerFactory.getLogger(OnceLoader.class);
+
   private static final Pattern INFORMIX_CHECK= Pattern.compile("ADD\\s+CONSTRAINT\\s+\\(CHECK\\s+", Pattern.CASE_INSENSITIVE);
-  private static final Logf log = Logf.wrap(LogFactory.getLog("cz.tconsult.tw.oncescript"));
 
   private FrmInfoDto frmInfo;
   private EVariant iForceVariant; // vynucená varianta zadaná při spuštění onceloaderu jako parametr
@@ -697,39 +698,39 @@ public class OnceLoader {
     String SQL="";
     String comments = "";
     Boolean isCheckSum=true;
-    
+
     if (aComments!=null) {
       comments = aComments.toString();
     }
 
     // pokud nemá být skript zaváděn na databázi aktuálního druhu
     EStatementStatus status=null;
-    if (aPreskocit) 
-    	status=EStatementStatus.SKIPPED;    	
-    	else if((EOnceType.ORA_SCRIPT.equals(aOnceScript.getOnceType()) || EOnceType.MYSQL_SCRIPT.equals(aOnceScript.getOnceType()))){
-    		status=EStatementStatus.EXECUTING;
-    	    isCheckSum=false;
+    if (aPreskocit) {
+      status=EStatementStatus.SKIPPED;
+    } else if(EOnceType.ORA_SCRIPT.equals(aOnceScript.getOnceType()) || EOnceType.MYSQL_SCRIPT.equals(aOnceScript.getOnceType())){
+      status=EStatementStatus.EXECUTING;
+      isCheckSum=false;
 
-    	}
-    	else
-    		status=EStatementStatus.DONE;
-    
+    } else {
+      status=EStatementStatus.DONE;
+    }
+
     PreparedStatement stm=null;
-   
+
     SQL = "insert into xonce_scripts(checksum,scriptid,rownumber,status,comments,description) values(?,?,?,?,?,?)";
     stm=getConnection().prepareStatement(SQL);
     if(isCheckSum){
-    	stm.setLong(1, checksum);
+      stm.setLong(1, checksum);
     }
     else{
-    	stm.setLong(1, 0);
+      stm.setLong(1, 0);
     }
     stm.setString(2,scriptid);
     stm.setInt(3,0);
     stm.setString(4,status.name());
     stm.setString(5,comments);
     stm.setString(6, description);
-    
+
     try{
       System.out.println(stm);
       getConnection().setAutoCommit(false);
@@ -1002,8 +1003,10 @@ public class OnceLoader {
     }
     catch(final Exception e) {
       //      naplneResultInformaciOVyjimce(result, EErrorType.IO, aPath, e);
-      FExceptionDumper.dump(e, EExceptionSeverity.DISPLAY, "Nasazeni skriptu " + aPath);
-      FThrowable.printStackTrace(e, System.err, getPathForLog(aPath));
+      FThrowable.formatter(e).withSeverity(EExceptionSeverity.DISPLAY)
+      .withCircumstance( "Nasazeni skriptu " + aPath)
+      .withPrefix(getPathForLog(aPath))
+      .dump();
     }
     return result;
   }

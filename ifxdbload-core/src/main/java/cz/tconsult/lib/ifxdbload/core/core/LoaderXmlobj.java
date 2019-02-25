@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cz.tconsult.dbloader.itf.EMessageCategory;
 import cz.tconsult.dbloader.itf.UniversalResultMessage;
 import cz.tconsult.dbutil.core.FDb;
+import cz.tconsult.lib.exception.FThrowable;
 import cz.tconsult.lib.ifxdbload.core.xmltrig.XmlTrigData;
 import cz.tconsult.lib.ifxdbload.core.xmltrig.XmlTrigLoader;
 import cz.tconsult.lib.ifxdbload.core.xmltrig.XmlTrigLoaderResult;
-import cz.tconsult.tw.lang.FThrowable;
-import cz.tconsult.tw.util.logging.Logf;
 
 /**
  * @author veverka
@@ -25,7 +25,9 @@ import cz.tconsult.tw.util.logging.Logf;
  */
 class LoaderXmlobj extends Loader0 {
 
-  private static final Logf log = Logf.wrap(LogFactory.getLog(LoaderXmlobj.class));
+
+  private static final Logger log = LoggerFactory.getLogger(LoaderXmlobj.class);
+
 
   private XmlTrigLoader xmlTrigLoader;
 
@@ -46,7 +48,8 @@ class LoaderXmlobj extends Loader0 {
       message.append(IOUtils.LINE_SEPARATOR);
       message.append(FDb.locateAndFormatSqlException(result.exc));
       message.append(IOUtils.LINE_SEPARATOR);
-      message.append(FThrowable.getStackTrace(result.exc, "xmltrig"));
+      // TODO [veverka] revidovat, co se zde vlastně děje -- 25. 2. 2019 12:58:48 veverka
+      message.append(FThrowable.formatter(result.exc).withPrefix("xmltrig").withoutStackTraceInMoreLines().toText());
       log.error("%s\n", message.toString());
     }
 

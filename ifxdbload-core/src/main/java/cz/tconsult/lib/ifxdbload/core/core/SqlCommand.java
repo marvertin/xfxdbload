@@ -8,13 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cz.tconsult.dbloader.itf.EMessageCategory;
 import cz.tconsult.dbloader.itf.UniversalResultMessage;
 import cz.tconsult.dbutil.core.FDb;
 import cz.tconsult.tw.lang.FString;
-import cz.tconsult.tw.util.logging.Logf;
 
 /**
  * @author veverka
@@ -22,7 +22,9 @@ import cz.tconsult.tw.util.logging.Logf;
  */
 class SqlCommand {
 
-  private static final Logf log = Logf.wrap(LogFactory.getLog(SqlCommand.class));
+
+  private static final Logger log = LoggerFactory.getLogger(SqlCommand.class);
+
 
   private final Zavadenec zavadenec;
   private final String prikaz;

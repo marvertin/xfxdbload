@@ -14,8 +14,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cz.tconsult.lib.ifxdbload.core.once.datatypes.ExecuteElement;
 import cz.tconsult.lib.ifxdbload.core.once.datatypes.OnceError;
@@ -35,10 +36,11 @@ import cz.tconsult.spl.parser.SplBase0;
 import cz.tconsult.spl.parser.SplDocument;
 import cz.tconsult.tw.util.FileManager;
 import cz.tconsult.tw.util.PositionTrackPushbackReader;
-import cz.tconsult.tw.util.logging.Logf;
 
 public class OnceScript  {
-  private static final Logf log = Logf.wrap(LogFactory.getLog("cz.tconsult.tw.oncescript"));
+
+  private static final Logger log = LoggerFactory.getLogger(OnceScript.class);
+
 
   /** Znacky komentaru*/
   protected final static String COMMENTS[]={"//","#","--"};

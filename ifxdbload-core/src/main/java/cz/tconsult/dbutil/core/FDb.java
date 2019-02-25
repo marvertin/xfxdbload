@@ -9,8 +9,9 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cz.tconsult.tw.lang.FThrowable;
-import cz.tconsult.tw.lang.FThrowable.ThrowableAndSourceMethod;
+import cz.tconsult.lib.exception.FThrowable;
+import cz.tconsult.lib.exception.picker.ThrowableChainItem;
+
 
 /**
  * @author veverka,polakm
@@ -54,7 +55,8 @@ public final class FDb {
    * pokud se ji nepodaří najít, vrací null
    */
   public static SQLException locateSqlException(final Throwable thr) {
-    for(final ThrowableAndSourceMethod tasm :  FThrowable.getThrowableChain(thr)) {
+    for(final ThrowableChainItem tasm :  FThrowable.getThrowableChain(thr)) {
+      // TODO [veverka] Revidovat výjimkování -- 25. 2. 2019 12:59:46 veverka
       if (tasm.getThrowable() instanceof SQLException) {
         return (SQLException) tasm.getThrowable();
       }

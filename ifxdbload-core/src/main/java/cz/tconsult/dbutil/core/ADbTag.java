@@ -5,8 +5,6 @@ package cz.tconsult.dbutil.core;
 
 import org.apache.commons.lang3.StringUtils;
 
-import cz.tconsult.tw.lang.AString0;
-
 /**
  * Označuje v TC vymyšlený databázový jednoduchý tag
  * pro všechny možné dartabázové stroje.
@@ -24,7 +22,7 @@ import cz.tconsult.tw.lang.AString0;
  * @author veverka
  *
  */
-public class ADbTag extends AString0 {
+public class ADbTag  {
 
   static final long serialVersionUID = 158610270010909770L;
 
@@ -32,7 +30,7 @@ public class ADbTag extends AString0 {
    * @param aValue
    */
   protected ADbTag(final String aValue) {
-    super(aValue);
+    //  super(aValue);
   }
 
 
