@@ -1,0 +1,109 @@
+create procedure BD_ProbZahajDefPrep_T()
+-- případ užití Vyhodnotit probace a léčení defaultu - zahájení probační doby
+
+define _akce Int;
+define _davka Int;
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define global Exclusive_G integer default 1;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+  call TW_ErrorTran();
+end exception;
+
+let Exclusive_G = 1;
+
+BEGIN WORK;
+   
+let _davka = AP_NovaDavka('BD');
+let _akce  = TW_ProvDen ('BD', 1, NULL, 'Beginning of preparation of probation start');
+
+COMMIT;
+
+BEGIN WORK;
+
+-- inicializace tabulky
+begin
+  on exception in (-206)
+  end exception with resume;
+
+  DROP TABLE BD_ProbZahajDefSml_Ctrl;
+end;
+
+CREATE TABLE BD_ProbZahajDefSml_Ctrl (
+  ser             Serial NOT NULL,
+  smlouva         Dec(16,0),
+  tsml            Char(4),
+  stav            SmallInt DEFAULT -1,
+  sessionid       Integer,
+  chyba_sqlcode   Integer,
+  chyba_isamcode  Integer,
+  chyba_sqltext   Varchar(255),
+  starttime  datetime year to second,
+  finishtime datetime year to second,
+  reftime    datetime year to second DEFAULT CURRENT YEAR TO SECOND,
+  refuser    Char(20) DEFAULT USER,
+  
+  PRIMARY KEY(ser)
+) LOCK MODE ROW;
+
+begin
+  on exception in (-206)
+  end exception with resume;
+
+  DROP TABLE BD_ProbZahajDefOs_Ctrl;
+end;
+
+CREATE TABLE BD_ProbZahajDefOs_Ctrl (
+  ser             Serial NOT NULL,
+  osoba           Int,
+  stav            SmallInt DEFAULT -1,
+  sessionid       Integer,
+  chyba_sqlcode   Integer,
+  chyba_isamcode  Integer,
+  chyba_sqltext   Varchar(255),
+  starttime  datetime year to second,
+  finishtime datetime year to second,
+  reftime    datetime year to second DEFAULT CURRENT YEAR TO SECOND,
+  refuser    Char(20) DEFAULT USER,
+  
+  PRIMARY KEY(ser)
+) LOCK MODE ROW;
+
+-- naplnění řídící tabulky
+INSERT INTO BD_ProbZahajDefSml_Ctrl(smlouva, tsml) 
+SELECT s.smlouva, s.tsml
+FROM EU_Sml_Mat s
+WHERE s.stav IN ('D', 'L')
+  AND EXISTS(SELECT * FROM CEP_IndikatorDefault_Kart WHERE smlouva = s.smlouva AND tsml = s.tsml AND stav = 'U') -- podmínky vzniku ukončeny
+  AND NOT EXISTS(SELECT *
+                 FROM CEP_IndikatorDefault_Kart i JOIN CEP_IndikatorTyp_Cis t ON i.typindikator = t.serno
+                 WHERE i.smlouva = s.smlouva AND i.tsml = s.tsml AND i.stav = 'A' AND t.prenos <> 0); -- aktivní (který se přenáší)
+
+UPDATE STATISTICS MEDIUM FOR TABLE BD_ProbZahajDefSml_Ctrl DISTRIBUTIONS ONLY;
+UPDATE STATISTICS HIGH FOR TABLE BD_ProbZahajDefSml_Ctrl(ser);    
+
+INSERT INTO BD_ProbZahajDefOs_Ctrl(osoba) 
+SELECT o.os
+FROM EO_Osoba_Mat o
+WHERE o.stav = 'A'
+  AND EXISTS(SELECT * FROM CEP_IndikatorDefault_Kart WHERE osoba = o.os AND stav = 'U') -- podmínky vzniku ukončeny
+  AND NOT EXISTS(SELECT *
+                 FROM CEP_IndikatorDefault_Kart i JOIN CEP_IndikatorTyp_Cis t ON i.typindikator = t.serno
+                 WHERE i.osoba = o.os AND i.stav = 'A' AND t.prenos <> 0); -- aktivní (který se přenáší)
+
+UPDATE STATISTICS MEDIUM FOR TABLE BD_ProbZahajDefOs_Ctrl DISTRIBUTIONS ONLY;
+UPDATE STATISTICS HIGH FOR TABLE BD_ProbZahajDefOs_Ctrl(ser);    
+
+COMMIT;
+
+BEGIN WORK;
+
+let _akce  = TW_ProvDen ('BD', 2, NULL, 'End of preparation of probation start'); 
+
+COMMIT;     
+
+end procedure;

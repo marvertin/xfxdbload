@@ -16,6 +16,7 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -293,7 +294,7 @@ public class FileManager {
   public static BufferedReader getReaderToSkipUtfBom(final InputStream aInputStream, final String aCharSetName) {
 
     final InputStream is = getInputStreamToSkipUtfBom(aInputStream);
-    final Charset cs = StringUtils.isBlank(aCharSetName) ? TcSourceCodeInfo.getDefaultCharset() : Charset.forName(aCharSetName);
+    final Charset cs = StringUtils.isBlank(aCharSetName) ? StandardCharsets.UTF_8 : Charset.forName(aCharSetName);
     final BufferedReader result = new BufferedReader(new InputStreamReader(is, cs));
     return result;
   }

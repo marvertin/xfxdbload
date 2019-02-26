@@ -34,9 +34,6 @@ public class OptBeanTcDbLoadBase {
   private String nlsLengthSemantics;
   private boolean clean;
 
-  //Než všechny projekty například přejdou na UTF-8, tak musíme držet kompatibilitu s nepsaným win-1250
-  private boolean backwardSourceCodeCompatibility;
-
   @OptAlias(values = {"database-url", "c"})
   @OptHelp(description=@TwText("124L941TCUI=specifikace databáze")
   , paramName=@TwText("125K954TCUI=conn"), level=EHelpLevel.COMMON)
@@ -144,17 +141,6 @@ public class OptBeanTcDbLoadBase {
 
   public void setFailOneError(final boolean aFailOneError) {
     failOneError = aFailOneError;
-  }
-
-  @OptAlias(values={"backward-compatibility"})
-  @OptHelp(description=@TwText("120P629TCUI=Kódování pro načítání zdrojových textů bude zpátky win-1250"))
-  @OptVariableNameNotUsed
-  public boolean isBackwardSourceCodeCompatibility() {
-    return backwardSourceCodeCompatibility;
-  }
-
-  public void setBackwardSourceCodeCompatibility(final boolean backwardSourceCodeCompatibility) {
-    this.backwardSourceCodeCompatibility = backwardSourceCodeCompatibility;
   }
 
 

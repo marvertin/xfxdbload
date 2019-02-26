@@ -1,0 +1,34 @@
+--Cibis\Aris-Product\Source\BatchEOD\Src\ExportUR\BD_EODExpUROs_D.sql
+--/* ====================================================================== */
+--
+--
+--/* ====================================================================== */
+--
+CREATE     PROCEDURE BD_EODExpUROs_D ()
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+define global Exclusive_G integer default 1;
+
+define _DatProv Date;
+define _Akce    Int;
+define _davka   Int;
+define _poradi  Int;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+let Exclusive_G = 1;
+
+-- test, zda se jedna o mesicni davku
+let _DatProv = (SELECT DatProv FROM AP_Status);
+if ( Month(_datprov) <> Month(_datprov + 1) ) and (TW_RegGetKey('EP', 'BRKI', 'batch', 'createineom', 1) = 1) then 
+
+    call UR_ExportOsoby();
+
+end if;
+
+
+end procedure;

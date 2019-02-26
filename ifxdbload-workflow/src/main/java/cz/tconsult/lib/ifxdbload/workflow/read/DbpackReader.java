@@ -1,23 +1,28 @@
 /**
  *
  */
-package cz.tconsult.lib.ifxdbload.workflow;
+package cz.tconsult.lib.ifxdbload.workflow.read;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.core.core.FFaze;
 import cz.tconsult.lib.ifxdbload.core.core.FazeAnalyzeResult;
+import cz.tconsult.lib.ifxdbload.workflow.FResList;
+import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
+import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.Builder;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
+import cz.tconsult.lib.ifxdbload.workflow.scan.DbpackScaner;
+import cz.tconsult.lib.ifxdbload.workflow.scan.FileContentReceiver;
 import cz.tconsult.tw.util.CCounterMap;
 import cz.tconsult.tw.util.CounterMap;
 
@@ -26,12 +31,12 @@ import cz.tconsult.tw.util.CounterMap;
  * @author veverka
  *
  */
-public class DbpackReader {
+public class DbpackReader implements FileContentReceiver {
 
 
   private static final Logger log = LoggerFactory.getLogger(DbpackReader.class);
 
-  private static final File INTERNAL_ROOT = new File("<InternalTcDbLoad>");
+  private static final Path INTERNAL_ROOT = Paths.get("<InternalTcDbLoad>");
 
   private final Builder builder;
 
@@ -49,20 +54,13 @@ public class DbpackReader {
   }
 
 
-  public void readDirWithDbpacks(final DbpackProperties aDefaultDbpackProperties) throws IOException {
-    log.info("Reading dbpacks form dir \"%s\".", aDefaultDbpackProperties.root);
-    final DbpackReaderHelper dbpackReaderHelper = new DbpackReaderHelper(this, aDefaultDbpackProperties);
-    dbpackReaderHelper.readDir();
-  }
-
-  public void readInternalToolDbpack(final String aDbKind) throws IOException {
+  public void readInternalToolDbpack(final ADbkind aDbKind) throws IOException {
     // FIXME Nějak parametrizovat, ale jak? Možná to ani nebude potřeba
-    final DbpackProperties dbprops = new DbpackProperties();
-    dbprops.dbkind = aDbKind;
-    dbprops.dbschema = "tc";
-    dbprops.root = INTERNAL_ROOT;
+    // TODO [veverka] žádné schema "tc" není -- 26. 2. 2019 9:22:32 veverka
+    final DbpackProperties dbprops = new DbpackProperties(INTERNAL_ROOT, aDbKind, ASchema.of("tc"));
     for (final FResList.Entry entry : FResList.getEntries()) {
-      readAndCallBuilder(dbprops, entry.istm, entry.entryName);
+      // TODO [veverka] řešit, pokud to bude nutné --  žádné schema "tc" není -- 26. 2. 2019 9:22:32 veverka
+      // readAndCallBuilder(dbprops, entry.istm, entry.entryName);
     }
   }
 
@@ -74,7 +72,8 @@ public class DbpackReader {
    * @return
    * @throws IOException
    */
-  void readAndCallBuilder(final DbpackProperties dbprops, final InputStream istm, final String aEntryName) throws IOException {
+  @Override
+  public void add(final DbpackProperties dbprops, final Supplier<byte[]> contentSupplier, final String aEntryName) {
     if (! isScriptForLoad(aEntryName)) {
       //      log.info(aEntryName);
       return;
@@ -87,11 +86,11 @@ public class DbpackReader {
       for (final EFazeZavedeni faze : analyzeResult.getFazes()) {
         if (zavadetTutoFazi(faze)) {
           if (data == null) {
-            data = readCurrentFile(istm);
+            data = contentSupplier.get();
           }
           builder.addLoSoubor(aEntryName, faze, dbprops, data);
         } else {
-          if (dbprops.root != INTERNAL_ROOT) {
+          if (dbprops.getRoot() != INTERNAL_ROOT) {
             filesForSuppressedFazes.inc("!!! SUPPRESSED: " + faze);
           }
         }
@@ -133,27 +132,6 @@ public class DbpackReader {
   }
 
 
-
-
-  //private EFileCategory urciKategori()
-
-  /**
-   * @param zis
-   * @return
-   * @throws IOException
-   */
-  private byte[] readCurrentFile(final InputStream zis) throws IOException {
-    int size;
-    final byte[] buffer = new byte[2048];
-    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    while ((size = zis.read(buffer)) != -1) {
-      baos.write(buffer, 0, size);
-    }
-    final byte[] result = baos.toByteArray();
-    return result;
-  }
-
-
   {
     ignoredEntries.add("dbpack.properties"); // ignoruje se jen částerčně, ve fázi načítání dbpacku, byl však načten předem
     ignoredEntries.add("once/once.txt"); // ignoruje se jen dokonale
@@ -181,5 +159,16 @@ public class DbpackReader {
    */
   public CounterMap<String> getFilesForSuppressedFazes() {
     return filesForSuppressedFazes;
+  }
+
+
+  /**
+   * Hlavní načítací metoda, která zbuduje výsledek do builderu.
+   * @param defaultDbpackProperties
+   * @throws IOException
+   */
+  public void readDirWithDbpacks(final DbpackProperties defaultDbpackProperties) throws IOException {
+    new DbpackScaner(this).read(defaultDbpackProperties.getRoot());
+
   }
 }

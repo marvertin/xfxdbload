@@ -24,8 +24,14 @@ public class LoFaze implements Comparable<LoFaze> {
 
   private static final Logger log = LoggerFactory.getLogger(LoFaze.class);
 
+  private final EFazeZavedeni name;
 
-  final EFazeZavedeni name;
+
+  /** Druh databáze, do kterého fáze patří */
+  private final LoDbkind loDbkind;
+
+  private final SortedMap<String, LoSoubor> losoubors = new TreeMap<String, LoSoubor>();
+
 
   /* (non-Javadoc)
    * @see java.lang.Object#toString()
@@ -39,11 +45,6 @@ public class LoFaze implements Comparable<LoFaze> {
     return result;
   }
 
-  /** Druh databáze, do kterého fáze patří */
-  final LoDbkind loDbkind;
-
-  private final SortedMap<String, LoSoubor> losoubors = new TreeMap<String, LoSoubor>();
-
   /**
    * @param aName
    * @param aLoDbkind
@@ -54,10 +55,10 @@ public class LoFaze implements Comparable<LoFaze> {
   }
 
   public void add(final LoSoubor loSoubor) {
-    final LoSoubor staryLoSoubor = losoubors.put(loSoubor.nameForSort.toLowerCase(), loSoubor);
+    final LoSoubor staryLoSoubor = losoubors.put(loSoubor.getNameForSort().toLowerCase(), loSoubor);
     if (staryLoSoubor != null) {
 
-      final boolean dataMatched = Arrays.equals(loSoubor.data, staryLoSoubor.data);
+      final boolean dataMatched = Arrays.equals(loSoubor.getData(), staryLoSoubor.getData());
       String msg = dataMatched ? "Lehka duplicita (kod stejny)" : "Tezka duplicita (kod ROZDILNY)";
       msg += " v souborech: " + IOUtils.LINE_SEPARATOR + "    " + loSoubor.getLocator()
       + IOUtils.LINE_SEPARATOR  + "    " + staryLoSoubor.getLocator();

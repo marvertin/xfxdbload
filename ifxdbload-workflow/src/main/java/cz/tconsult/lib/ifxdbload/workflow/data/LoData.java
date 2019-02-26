@@ -17,12 +17,12 @@ import cz.tconsult.tw.util.CounterMap;
  */
 public class LoData {
 
-  SortedMap<String, LoDbkind> lodbkinds = new TreeMap<String, LoDbkind>();
+  private final SortedMap<ADbkind, LoDbkind> lodbkinds = new TreeMap<>();
 
   final CounterMap<DbpackProperties> filesForRoots = new CCounterMap<DbpackProperties>();
-  final CounterMap<String> filesForDbkinds = new CCounterMap<String>();
+  final CounterMap<ADbkind> filesForDbkinds = new CCounterMap<>();
 
-  public LoDbkind makeLoDbkind(final String aDbkindName) {
+  public LoDbkind makeLoDbkind(final ADbkind aDbkindName) {
     LoDbkind loDbkind = lodbkinds.get(aDbkindName);
     if (loDbkind == null) {
       loDbkind = new LoDbkind(this, aDbkindName);
@@ -46,7 +46,7 @@ public class LoData {
   /**
    * @return the filesForDbkinds
    */
-  public CounterMap<String> getFilesForDbkinds() {
+  public CounterMap<ADbkind> getFilesForDbkinds() {
     return filesForDbkinds;
   }
 

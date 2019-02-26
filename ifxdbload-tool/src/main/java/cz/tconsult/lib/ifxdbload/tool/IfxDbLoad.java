@@ -15,22 +15,23 @@ import org.apache.commons.logging.LogFactory;
 import cz.tconsult.dbloader.itf.EFileCategory;
 import cz.tconsult.dbloader.itf.EMessageCategory;
 import cz.tconsult.dbloader.itf.UniversalResultMessage;
-import cz.tconsult.dev.TcSourceCodeInfo;
 import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoader;
 import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoaderParams;
 import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoaderResult;
-import cz.tconsult.lib.ifxdbload.workflow.DbpackReader;
 import cz.tconsult.lib.ifxdbload.workflow.FUtils;
 import cz.tconsult.lib.ifxdbload.workflow.SeeAndWriteDBLoadLogTable;
 import cz.tconsult.lib.ifxdbload.workflow.TwConnectionFactoryyy;
 import cz.tconsult.lib.ifxdbload.workflow.ZabudovaneObjekty;
+import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
+import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.Builder;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
+import cz.tconsult.lib.ifxdbload.workflow.read.DbpackReader;
 import cz.tconsult.tcbase.clib.bdb.mdbpgmbase.DbPgmBase;
 import cz.tconsult.tcbase.clib.bdb.mdbpgmbase.DbPgmBaseConnectorProperties;
 import cz.tconsult.tcbase.clib.mpgmbase.OptManager;
@@ -44,8 +45,9 @@ import cz.tconsult.tw.util.logging.Logf;
  */
 public class IfxDbLoad extends DbPgmBase {
 
-  private static final String DBKIND_MAIN = "main";
-  private static final String DEFAULT_SCHEMA = "<defalut>";
+  private static final ADbkind DBKIND_MAIN = ADbkind.of("main");
+  // TODO [veverka] co znamená tkové defaultn íschema? -- 26. 2. 2019 9:23:18 veverka
+  private static final ASchema DEFAULT_SCHEMA = ASchema.of("<defalut>");
 
   private static final Logf log = Logf.wrap(LogFactory.getLog(IfxDbLoad.class));
 
@@ -98,13 +100,6 @@ public class IfxDbLoad extends DbPgmBase {
 
     final OptBeanTcDbLoadBase optBean = getRegisteredOptBean(OptBeanTcDbLoadBase.class);
 
-    // Není třeba, logback flushuje automaticky
-    //getGlobalLogger().flush();
-    if (optBean.isBackwardSourceCodeCompatibility()) {
-
-      TcSourceCodeInfo.TC_SOURCECODE_BACKWARDCOMPATIBILITY();
-    }
-
     boolean failOnError;
     {
       failOnError = optBean.isFailOneError();
@@ -120,10 +115,7 @@ public class IfxDbLoad extends DbPgmBase {
 
     if (optBean.getDir() != null) {
       for (final Path sfile : optBean.getDir()) {
-        final DbpackProperties defaultDbpackProperties = new DbpackProperties();
-        defaultDbpackProperties.dbkind = DBKIND_MAIN;
-        defaultDbpackProperties.dbschema = DEFAULT_SCHEMA;
-        defaultDbpackProperties.root = sfile.toFile().getAbsoluteFile();
+        final DbpackProperties defaultDbpackProperties = new DbpackProperties(sfile.toAbsolutePath(), DBKIND_MAIN, DEFAULT_SCHEMA);
         dbpackReader.readDirWithDbpacks(defaultDbpackProperties);
       }
 

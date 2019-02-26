@@ -15,29 +15,25 @@ public class Builder {
 
 
   public LoSoubor addLoSoubor (final String aEntryName, final EFazeZavedeni faze, final DbpackProperties aDbprops, final byte[] aData) {
-    final LoSoubor losoubor = new LoSoubor(aEntryName, faze);
-    losoubor.root = aDbprops.root;
-    losoubor.schema = aDbprops.dbschema;
-    losoubor.data = aData;
-
+    final LoSoubor losoubor = new LoSoubor(aEntryName, faze, aDbprops.getRoot(), aDbprops.getDbschema(), aData);
 
     final LoDbkind lodbkind = makeLoDbKind(aDbprops);
-    final LoFaze lofaze = lodbkind.makeLoFaze(losoubor.faze);
+    final LoFaze lofaze = lodbkind.makeLoFaze(losoubor.getFaze());
 
     lofaze.add(losoubor);
 
-    lodbkind.filesForDbpacksCounter.inc(losoubor.root);
-    lodbkind.filesForSchemaCounter.inc(losoubor.schema);
-    lodbkind.filesForPhases.inc(losoubor.faze);
-    lodbkind.filesForSchemasAndPhases.inc(losoubor.schema + "-" + losoubor.faze);
+    lodbkind.getFilesForDbpacksCounter().inc(losoubor.getRoot());
+    lodbkind.getFilesForSchemaCounter().inc(losoubor.getSchema());
+    lodbkind.getFilesForPhases().inc(losoubor.getFaze());
+    lodbkind.getFilesForSchemasAndPhases().inc(losoubor.getSchema() + "-" + losoubor.getFaze());
 
     data.filesForRoots.inc(aDbprops);
-    data.filesForDbkinds.inc(lodbkind.name);
+    data.filesForDbkinds.inc(lodbkind.getName());
     return losoubor;
   }
 
   public LoDbkind makeLoDbKind(final DbpackProperties aDbprops){
-    return data.makeLoDbkind(aDbprops.dbkind);
+    return data.makeLoDbkind(aDbprops.getDbkind());
   }
 
   /**

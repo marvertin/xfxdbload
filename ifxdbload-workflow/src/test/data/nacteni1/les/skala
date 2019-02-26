@@ -1,0 +1,15 @@
+CREATE PROCEDURE BD_DPDSpor_T ()
+--
+-- Výpočet DPD spoření
+--
+  define global TW_ErrSql  Int       default null;
+  define global TW_ErrIsam Int       default null;
+  define global TW_ErrText VarChar (255) default null;
+  
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  call EP_HromVypDpdSporeni_T(); 
+  
+END PROCEDURE;--BD_DPDSpor_T

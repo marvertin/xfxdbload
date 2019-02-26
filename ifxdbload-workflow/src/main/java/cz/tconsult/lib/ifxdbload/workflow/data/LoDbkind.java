@@ -3,7 +3,7 @@
  */
 package cz.tconsult.lib.ifxdbload.workflow.data;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,8 +23,16 @@ import cz.tconsult.tw.util.CounterMap;
  */
 public class LoDbkind {
 
-  final LoData lodata;
-  final String name;
+  private  final LoData lodata;
+  private final ADbkind name;
+
+  private final SortedMap<EFazeZavedeni, LoFaze> lofazes = new TreeMap<EFazeZavedeni, LoFaze>();
+
+  private final CounterMap<ASchema> filesForSchemaCounter = new CCounterMap<ASchema>(); // TODO [veverka] byl zde case insentsitive -- 26. 2. 2019 9:26:46 veverka
+  private final CounterMap<Path> filesForDbpacksCounter = new CCounterMap<Path>(FILE_Comparator);
+  private final CounterMap<String> filesForSchemasAndPhases = new CCounterMap<String>(String.CASE_INSENSITIVE_ORDER);
+  private final CounterMap<EFazeZavedeni> filesForPhases = new CCounterMap<EFazeZavedeni>(NAME_Comparator);
+
 
   private static final Comparator<EFazeZavedeni> NAME_Comparator = new Comparator<EFazeZavedeni>() {
 
@@ -36,10 +44,10 @@ public class LoDbkind {
 
   };
 
-  private static final Comparator<File> FILE_Comparator = new Comparator<File>() {
+  private static final Comparator<Path> FILE_Comparator = new Comparator<Path>() {
 
     @Override
-    public int compare(final File o1, final File o2) {
+    public int compare(final Path o1, final Path o2) {
 
       int result;
       if (o1 == null) {
@@ -52,21 +60,14 @@ public class LoDbkind {
       }
       else {
 
-        final String a = o1.getAbsolutePath();
-        final String b = o2.getAbsolutePath();
+        final String a = o1.toAbsolutePath().toString();
+        final String b = o2.toAbsolutePath().toString();
         result = String.CASE_INSENSITIVE_ORDER.compare(a, b);
       }
       return result;
     }
 
   };
-
-  SortedMap<EFazeZavedeni, LoFaze> lofazes = new TreeMap<EFazeZavedeni, LoFaze>();
-
-  final CounterMap<String> filesForSchemaCounter = new CCounterMap<String>(String.CASE_INSENSITIVE_ORDER);
-  final CounterMap<File> filesForDbpacksCounter = new CCounterMap<File>(FILE_Comparator);
-  final CounterMap<String> filesForSchemasAndPhases = new CCounterMap<String>(String.CASE_INSENSITIVE_ORDER);
-  final CounterMap<EFazeZavedeni> filesForPhases = new CCounterMap<EFazeZavedeni>(NAME_Comparator);
 
   /**
    * @return the filesForPhases
@@ -85,7 +86,7 @@ public class LoDbkind {
   /**
    * @return the name
    */
-  public String getName() {
+  public ADbkind getName() {
     return name;
   }
 
@@ -95,8 +96,7 @@ public class LoDbkind {
    * @param aLodata
    * @param aName
    */
-  public LoDbkind(final LoData aLodata, final String aName) {
-    super();
+  public LoDbkind(final LoData aLodata, final ADbkind aName) {
     lodata = aLodata;
     name = aName;
 
@@ -135,14 +135,14 @@ public class LoDbkind {
   /**
    * @return the filesForSchemaCounter
    */
-  public CounterMap<String> getFilesForSchemaCounter() {
+  public CounterMap<ASchema> getFilesForSchemaCounter() {
     return filesForSchemaCounter;
   }
 
   /**
    * @return the filesForDbpacksCounter
    */
-  public CounterMap<File> getFilesForDbpacksCounter() {
+  public CounterMap<Path> getFilesForDbpacksCounter() {
     return filesForDbpacksCounter;
   }
 

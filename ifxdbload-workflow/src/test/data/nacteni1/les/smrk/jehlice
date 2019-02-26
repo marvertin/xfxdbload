@@ -1,0 +1,15 @@
+CREATE PROCEDURE BD_DPDUverF_T ()
+--
+-- Výpočet DPD úvěr
+--
+  define global TW_ErrSql  Int       default null;
+  define global TW_ErrIsam Int       default null;
+  define global TW_ErrText VarChar (255) default null;
+  
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  call EP_HromVypDpdUver_T(1); 
+  
+END PROCEDURE;--BD_DPDUverF_T

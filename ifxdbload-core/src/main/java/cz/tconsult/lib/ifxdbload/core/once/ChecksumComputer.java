@@ -5,8 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-import cz.tconsult.tw.util.TcSourceCodeInfo;
-
 
 public class ChecksumComputer {
 
@@ -89,7 +87,7 @@ public class ChecksumComputer {
         checksumNonPrintableAsciiChecksum.update(c);
       }
     }
-    _updateRaw(oldTries, aText.getBytes(TcSourceCodeInfo.getDefaultCharset()));
+    _updateRaw(oldTries, aText.getBytes(StandardCharsets.UTF_8));
 
     {
       //Tady v tomto bloku je funkcionalita, která je nutná pro zpětnou kompatibilitu

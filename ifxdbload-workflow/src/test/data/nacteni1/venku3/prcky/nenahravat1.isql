@@ -1,0 +1,34 @@
+create procedure BD_ProbZahajDefOs_T()
+-- případ užití Vyhodnotit probace a léčení defaultu - zahájení probační doby
+
+define _akce  Int;
+define _davka Int;   
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define global Exclusive_G integer default 1;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+  call TW_ErrorTran();
+end exception;
+
+let Exclusive_G = 1;
+
+BEGIN WORK;
+   
+let _davka = AP_NovaDavka('BD');
+let _akce  = TW_ProvDen ('BD', 1, NULL, 'Beginning of processing of probation start - persons');
+
+COMMIT;
+
+call CEP_ProbZahajDefOs_D(1);
+
+BEGIN WORK;
+
+let _akce = TW_ProvDen('BD', 2, _davka, 'End of processing of probation start - persons');
+
+COMMIT;
+
+end procedure;
