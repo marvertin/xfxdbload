@@ -11,6 +11,7 @@ import java.util.zip.ZipInputStream;
 
 import com.google.common.io.ByteStreams;
 
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -24,7 +25,7 @@ public class DbpakZipReader {
    * @param aFdbpackZip
    * @throws IOException
    */
-  public void readOneDbpackZip(final Path aFdbpackZip, final String aNadrizeneEntryName, final DbpackProperties parentDbprops) throws IOException {
+  public void readOneDbpackZip(final Path aFdbpackZip, final AEntryName aNadrizeneEntryName, final DbpackProperties parentDbprops) throws IOException {
     try (FileInputStream fis = new FileInputStream(aFdbpackZip.toFile())) {
       try (final ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis))) {
         ZipEntry entry;
@@ -37,9 +38,9 @@ public class DbpakZipReader {
         }
         //    log.info("Unzipping : \"%s\" into folder \"%s\".", aFile, aAdrearProArchivaciExportu);
         while ((entry = zis.getNextEntry()) != null) {
-          if (! entry.isDirectory() && ! FDbpackPropertis.isDbpackProperties(entry.getName())) {
+          if (! entry.isDirectory() && ! FDbpackPropertis.isDbpackProperties(AEntryName.of(entry.getName()))) {
             final String entryName = entry.getName();
-            fcb.add(dbprops, () -> byteStreams_toByteArray(zis), korenEntryName + entryName);
+            fcb.add(dbprops, () -> byteStreams_toByteArray(zis), AEntryName.of(korenEntryName + entryName));
           }
         }
       }

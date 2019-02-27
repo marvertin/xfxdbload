@@ -1,4 +1,4 @@
-package cz.tconsult.lib.ifxdbload.workflow.data;
+package cz.tconsult.lib.ifxdbload.core.tw;
 
 import lombok.EqualsAndHashCode;
 

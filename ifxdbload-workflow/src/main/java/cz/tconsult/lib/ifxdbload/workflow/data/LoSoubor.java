@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.core.core.Zavadenec;
 import lombok.Data;
@@ -20,7 +21,7 @@ import lombok.Data;
 public class LoSoubor implements Comparable<LoSoubor> {
 
   /** Jméno entry v tomto dbpacku */
-  private final String entryName;
+  private final AEntryName entryName;
 
   /** Jméno fáze, ve které má být zaváděn (1. položka pro řazení) */
   private final EFazeZavedeni faze;
@@ -75,15 +76,16 @@ public class LoSoubor implements Comparable<LoSoubor> {
     return cachedNameForSort;
   }
 
-  private static String urciNameForSort(final String aEntryName) {
-    String[] xx = aEntryName.split("/");
+  private static String urciNameForSort(final AEntryName entryName) {
+    final String entname = entryName.toString();
+    String[] xx = entname.split("/");
     if (xx[0].equals("dbobj")) {
-      xx = aEntryName.split("/", 2);
+      xx = entname.split("/", 2);
       return xx[1];
     } else if (xx[0].equals("once")){
       return xx[xx.length-1];
     } else {
-      return aEntryName;
+      return entname;
     }
   }
 

@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
@@ -20,9 +21,9 @@ public class FDbpackPropertis {
   private static final String DBPACK_PROPERTIES = "dbpack.properties";
 
 
-  public static boolean isDbpackProperties(final String entry) {
+  public static boolean isDbpackProperties(final AEntryName entry) {
     // TODO [veverka] Shodit, když je tam zanořenec, který se nebere nebo aspoň varovat -- 26. 2. 2019 16:51:55 veverka
-    return entry.endsWith(DBPACK_PROPERTIES);
+    return entry.toString().endsWith(DBPACK_PROPERTIES);
   }
 
   public static Optional<DbpackProperties> readDbpackDirProperties(final Path aDir) throws IOException {

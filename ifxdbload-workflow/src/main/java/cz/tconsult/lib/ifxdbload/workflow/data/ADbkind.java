@@ -1,5 +1,7 @@
 package cz.tconsult.lib.ifxdbload.workflow.data;
 
+import cz.tconsult.lib.ifxdbload.core.tw.AScalar0;
+
 /**
  * Druh databáze jako je hlavní, archivní, statistická.
  * @author veverka

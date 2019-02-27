@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.core.core.FFaze;
 import cz.tconsult.lib.ifxdbload.core.core.FazeAnalyzeResult;
@@ -73,7 +74,7 @@ public class DbpackReader implements FileContentReceiver {
    * @throws IOException
    */
   @Override
-  public void add(final DbpackProperties dbprops, final Supplier<byte[]> contentSupplier, final String aEntryName) {
+  public void add(final DbpackProperties dbprops, final Supplier<byte[]> contentSupplier, final AEntryName aEntryName) {
     if (! isScriptForLoad(aEntryName)) {
       //      log.info(aEntryName);
       return;
@@ -112,20 +113,15 @@ public class DbpackReader implements FileContentReceiver {
   /**
    * @return
    */
-  private boolean isScriptForLoad(final String aEntryName) {
-    if (ignoredEntries.contains(aEntryName)) {
+  private boolean isScriptForLoad(final AEntryName entryName) {
+    final String en = entryName.toString().toLowerCase();
+    if (ignoredEntries.contains(en)) {
       return false;
     }
-    if (aEntryName.toLowerCase().endsWith(".osql")) {
+    if (en.endsWith(".isql")) {
       return true;
     }
-    if (aEntryName.toLowerCase().endsWith(".isql")) {
-      return true;
-    }
-    if (aEntryName.toLowerCase().endsWith(".mysql")) {
-      return true;
-    }
-    if (aEntryName.toLowerCase().endsWith(".auttrigs.xml")) {
+    if (en.endsWith(".auttrigs.xml")) {
       return true;
     }
     return false;

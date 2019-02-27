@@ -27,7 +27,7 @@ public class Zavadenec {
   private final File iRoot;
 
   /** Entry name, je to důležité protože se z toho mnoho může poznávat */
-  private final String iEntryName;
+  private final AEntryName iEntryName;
 
   /** Schéma do kterého zavádět, momentálně se nepoužívá */
   private String schema;
@@ -41,7 +41,7 @@ public class Zavadenec {
    */
   private final Charset iCharset;
 
-  public Zavadenec(final File root, final String entryName, final byte[] data, final Charset aCharset) {
+  public Zavadenec(final File root, final AEntryName entryName, final byte[] data, final Charset aCharset) {
     iRoot = root;
     iEntryName = entryName;
     iFileCategory = analyzeFileCategory(entryName);
@@ -60,7 +60,7 @@ public class Zavadenec {
   /**
    * Vhodné pro explicitní urční fáze
    */
-  public Zavadenec(final File root, final String entryName, final String data, final Charset aCharset) {
+  public Zavadenec(final File root, final AEntryName entryName, final String data, final Charset aCharset) {
     iRoot = root;
     iEntryName = entryName;
     iFileCategory = analyzeFileCategory(entryName);
@@ -76,13 +76,9 @@ public class Zavadenec {
 
 
 
-  private static EFileCategory analyzeFileCategory(final String entryName) {
+  private static EFileCategory analyzeFileCategory(final AEntryName entryName) {
     final FazeAnalyzeResult analyzeResult = FFaze.analyzeEntryName(entryName);
-    if (analyzeResult == null) {
-      return null;
-    }
     return analyzeResult.getFileCategory();
-
   }
 
 

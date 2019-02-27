@@ -13,6 +13,7 @@ import java.util.Map;
 
 import cz.tconsult.dbloader.itf.EFileCategory;
 import cz.tconsult.dbloader.itf.eclipse.IEclipseUniversalDbLoader;
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.core.core.FFaze;
 import cz.tconsult.lib.ifxdbload.core.core.FazeAnalyzeResult;
 import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoader;
@@ -46,7 +47,7 @@ public class EclipseUniversalDbLoader  extends UniversalDbLoader  implements IEc
    */
   @Override
   public Map<String, Object> loadByEclipse(final File aProjectRoot, final String aRelativePath, final byte[] aData, final Charset aCharset) throws SQLException, IOException {
-    final Zavadenec zavadenec = new Zavadenec(aProjectRoot, aRelativePath, aData, aCharset);
+    final Zavadenec zavadenec = new Zavadenec(aProjectRoot, AEntryName.of(aRelativePath), aData, aCharset);
     final UniversalDbLoaderResult r = load(zavadenec);
 
     final Map<String, Object> result = _toMap(r);
@@ -59,7 +60,7 @@ public class EclipseUniversalDbLoader  extends UniversalDbLoader  implements IEc
   @Override
   public Map<String, Object> checkByEclipse(final File aProjectRoot, final String aRelativePath, final byte[] aData, final Charset aCharset) throws SQLException, IOException {
 
-    final Zavadenec zavadenec = new Zavadenec(aProjectRoot, aRelativePath, aData, aCharset);
+    final Zavadenec zavadenec = new Zavadenec(aProjectRoot, AEntryName.of(aRelativePath), aData, aCharset);
     final UniversalDbLoaderResult r = super.checkByEclipse(zavadenec);
     final Map<String, Object> result = _toMap(r);
     return result;
@@ -70,7 +71,7 @@ public class EclipseUniversalDbLoader  extends UniversalDbLoader  implements IEc
    */
   @Override
   public EFileCategory getFileCategory(final File aProjectRoot, final String aRelativePath) {
-    final FazeAnalyzeResult result = FFaze.analyzeEntryName(aRelativePath);
+    final FazeAnalyzeResult result = FFaze.analyzeEntryName(AEntryName.of(aRelativePath));
     if (result == null) {
       return null;
     }

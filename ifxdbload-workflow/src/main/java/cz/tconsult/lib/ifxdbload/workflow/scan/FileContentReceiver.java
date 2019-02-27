@@ -2,6 +2,7 @@ package cz.tconsult.lib.ifxdbload.workflow.scan;
 
 import java.util.function.Supplier;
 
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 
 /**
@@ -19,6 +20,6 @@ public interface FileContentReceiver {
    * @param contentSupplier Dodavatel contentu, teprve jeho zavoláním jsou data orpavdu načtena.
    * @param aEntryName Jmé no entry relativně k dbpacku, oddělovače jsou lomítka. Zařazuje se tím do fází.
    */
-  void add(final DbpackProperties dbprops, final Supplier<byte[]> contentSupplier, final String aEntryName);
+  void add(final DbpackProperties dbprops, final Supplier<byte[]> contentSupplier, final AEntryName aEntryName);
 
 }

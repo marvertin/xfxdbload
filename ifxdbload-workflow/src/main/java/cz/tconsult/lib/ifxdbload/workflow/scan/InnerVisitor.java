@@ -9,6 +9,7 @@ import java.nio.file.PathMatcher;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -30,10 +31,10 @@ public class InnerVisitor extends SimpleFileVisitor<Path> {
   @Override
   public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
     if (ZIP_MATCHER.matches(file)) {
-      final String entryName = entryName(file.getParent());
+      final AEntryName entryName = entryName(file.getParent());
       new DbpakZipReader(builder).readOneDbpackZip(file, entryName, dbpackPros);
     } else {
-      final String entryName = entryName(file);
+      final AEntryName entryName = entryName(file);
       if (!FDbpackPropertis.isDbpackProperties(entryName)) {
         builder.add(dbpackPros, () -> readAllBytes(file), entryName);
       }
@@ -42,8 +43,8 @@ public class InnerVisitor extends SimpleFileVisitor<Path> {
   }
 
 
-  private String entryName(final Path file) {
-    return dbpackPros.getRoot().relativize(file).toString().replace('\\', '/');
+  private AEntryName entryName(final Path file) {
+    return AEntryName.of(dbpackPros.getRoot().relativize(file).toString().replace('\\', '/'));
   }
 
   @SneakyThrows

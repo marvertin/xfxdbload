@@ -3,6 +3,7 @@
  */
 package cz.tconsult.lib.ifxdbload.workflow.data;
 
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
 
 /**
@@ -14,7 +15,7 @@ public class Builder {
   private final LoData data = new LoData();
 
 
-  public LoSoubor addLoSoubor (final String aEntryName, final EFazeZavedeni faze, final DbpackProperties aDbprops, final byte[] aData) {
+  public LoSoubor addLoSoubor (final AEntryName aEntryName, final EFazeZavedeni faze, final DbpackProperties aDbprops, final byte[] aData) {
     final LoSoubor losoubor = new LoSoubor(aEntryName, faze, aDbprops.getRoot(), aDbprops.getDbschema(), aData);
 
     final LoDbkind lodbkind = makeLoDbKind(aDbprops);

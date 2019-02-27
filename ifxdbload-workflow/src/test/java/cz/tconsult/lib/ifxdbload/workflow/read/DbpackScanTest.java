@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
 
+import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import cz.tconsult.lib.ifxdbload.workflow.scan.DbpackScaner;
 import cz.tconsult.lib.ifxdbload.workflow.scan.FileContentReceiver;
@@ -50,7 +51,7 @@ class DbpackScanTest {
 
     private int index;
     @Override
-    public void add(final DbpackProperties dbprops, final Supplier<byte[]> contentSupplier, final String aEntryName) {
+    public void add(final DbpackProperties dbprops, final Supplier<byte[]> contentSupplier, final AEntryName aEntryName) {
       final String s = aEntryName + "  ---  " + dbprops.toString().replace('\\', '/');
       System.out.println(s);
       assertEquals(vysledky[index++], s);

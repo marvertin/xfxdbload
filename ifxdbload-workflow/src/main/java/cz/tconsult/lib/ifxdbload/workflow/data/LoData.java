@@ -12,6 +12,7 @@ import cz.tconsult.tw.util.CCounterMap;
 import cz.tconsult.tw.util.CounterMap;
 
 /**
+ * Kořen veškerých dat k zavádění. Pro každý nalezený dbkind, obsahuje LoDbKind, což jsou veškerá data.
  * @author veverka
  *
  */
