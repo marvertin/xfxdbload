@@ -10,7 +10,7 @@ import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
+import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;

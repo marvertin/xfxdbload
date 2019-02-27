@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
 
-import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
+import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import cz.tconsult.lib.ifxdbload.workflow.scan.DbpackScaner;
 import cz.tconsult.lib.ifxdbload.workflow.scan.FileContentReceiver;
@@ -35,18 +35,18 @@ class DbpackScanTest {
         "smrk/siska  ---  DbpackProperties(root=./src/test/data/nacteni1/les, dbkind=lesodruh, dbschema=smiseny)",
         "voda  ---  DbpackProperties(root=./src/test/data/nacteni1/les, dbkind=lesodruh, dbschema=smiseny)",
         "zeme  ---  DbpackProperties(root=./src/test/data/nacteni1/les, dbkind=lesodruh, dbschema=smiseny)",
-        "namesti/cinzak/byt/jidelna/stul  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto, dbkind=mestodruh, dbschema=malinkaty)",
-        "namesti/cinzak/byt/loznice/postel/polstar  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto, dbkind=mestodruh, dbschema=malinkaty)",
-        "namesti/cinzak/byt/loznice/postel/prikryvka  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto, dbkind=mestodruh, dbschema=malinkaty)",
-        "namesti/cinzak/byt/loznice/postel/prosteradlo  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto, dbkind=mestodruh, dbschema=malinkaty)",
-        "namesti/cinzak/byt/loznice/skrin  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto, dbkind=mestodruh, dbschema=malinkaty)",
-        "namesti/cinzak/chodba  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto, dbkind=mestodruh, dbschema=malinkaty)",
-        "domek/jidelna/stul  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
-        "domek/loznice/postel/polstar  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
-        "domek/loznice/postel/prikryvka  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
-        "domek/loznice/postel/prosteradlo  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
-        "domek/loznice/skrin  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
-        "predzahradka  ---  DbpackProperties(root=./src/test/data/nacteni1/mesto/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
+        "namesti/cinzak/byt/jidelna/stul  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty, dbkind=mestodruh, dbschema=malinkaty)",
+        "namesti/cinzak/byt/loznice/postel/polstar  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty, dbkind=mestodruh, dbschema=malinkaty)",
+        "namesti/cinzak/byt/loznice/postel/prikryvka  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty, dbkind=mestodruh, dbschema=malinkaty)",
+        "namesti/cinzak/byt/loznice/postel/prosteradlo  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty, dbkind=mestodruh, dbschema=malinkaty)",
+        "namesti/cinzak/byt/loznice/skrin  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty, dbkind=mestodruh, dbschema=malinkaty)",
+        "namesti/cinzak/chodba  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty, dbkind=mestodruh, dbschema=malinkaty)",
+        "domek/jidelna/stul  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
+        "domek/loznice/postel/polstar  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
+        "domek/loznice/postel/prikryvka  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
+        "domek/loznice/postel/prosteradlo  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
+        "domek/loznice/skrin  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
+        "predzahradka  ---  DbpackProperties(root=./src/test/data/nacteni1/mestodruh-malinkaty/ulice/zabalenecDomovni1.zip, dbkind=ulicodruh, dbschema=kratky)",
     };
 
     private int index;

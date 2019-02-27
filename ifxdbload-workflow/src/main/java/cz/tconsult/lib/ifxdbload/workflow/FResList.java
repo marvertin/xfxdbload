@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import cz.tconsult.tw.util.FResource;
+import cz.tconsult.CORE_REVIDOVAT.tw.util.FResource;
 
 
 /**

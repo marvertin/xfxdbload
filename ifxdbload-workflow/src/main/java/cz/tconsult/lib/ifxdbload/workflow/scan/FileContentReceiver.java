@@ -2,7 +2,7 @@ package cz.tconsult.lib.ifxdbload.workflow.scan;
 
 import java.util.function.Supplier;
 
-import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
+import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 
 /**

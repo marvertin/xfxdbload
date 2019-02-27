@@ -9,7 +9,7 @@ import java.nio.file.PathMatcher;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
+import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

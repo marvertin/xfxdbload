@@ -11,7 +11,7 @@ import java.util.zip.ZipInputStream;
 
 import com.google.common.io.ByteStreams;
 
-import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
+import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

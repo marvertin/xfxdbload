@@ -8,9 +8,9 @@ import java.nio.file.Path;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
-import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
-import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
-import cz.tconsult.lib.ifxdbload.core.core.Zavadenec;
+import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.core.Zavadenec;
+import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
+import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 import lombok.Data;
 
 /**

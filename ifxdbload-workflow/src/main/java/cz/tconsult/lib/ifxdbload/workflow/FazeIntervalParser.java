@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
-import cz.tconsult.lib.ifxdbload.core.core.FFaze;
+import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
+import cz.tconsult.lib.ifxdbload.core.faze.FFaze;
 
 /**
  * @author veverka

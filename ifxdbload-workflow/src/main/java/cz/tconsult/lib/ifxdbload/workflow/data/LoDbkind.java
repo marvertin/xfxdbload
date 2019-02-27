@@ -13,7 +13,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
+import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 import cz.tconsult.tw.util.CCounterMap;
 import cz.tconsult.tw.util.CounterMap;
 

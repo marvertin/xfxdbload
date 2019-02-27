@@ -2,7 +2,7 @@ package cz.tconsult.lib.ifxdbload.tool;
 
 import java.sql.Connection;
 
-import cz.tconsult.lib.ifxdbload.workflow.TwConnectionFactoryyy;
+import cz.tconsult.REVIDOVAT.TwConnectionFactoryyy;
 import cz.tconsult.tw.sql.TwConnectionFactory;
 
 public class TwConnectionFactoryyyImpl implements TwConnectionFactoryyy {

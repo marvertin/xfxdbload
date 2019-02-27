@@ -3,8 +3,8 @@
  */
 package cz.tconsult.lib.ifxdbload.workflow.data;
 
-import cz.tconsult.lib.ifxdbload.core.core.AEntryName;
-import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
+import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
+import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 
 /**
  * @author veverka

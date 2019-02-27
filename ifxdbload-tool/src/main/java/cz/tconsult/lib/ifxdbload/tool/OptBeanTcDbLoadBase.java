@@ -4,8 +4,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 
-import cz.tconsult.dbutil.core.ADbTag;
-import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
+import cz.tconsult.CORE_REVIDOVAT.dbutil.core.ADbTag;
+import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.workflow.FazeIntervalParser;
 import cz.tconsult.tcbase.clib.mpgmbase.opt.EHelpLevel;
 import cz.tconsult.tcbase.clib.mpgmbase.opt.annotation.OptAlias;

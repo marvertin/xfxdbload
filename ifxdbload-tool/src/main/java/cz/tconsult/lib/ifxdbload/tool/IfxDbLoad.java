@@ -9,29 +9,28 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.LogFactory;
 
+import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.core.UniversalDbLoader;
+import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.core.UniversalDbLoaderParams;
+import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.core.UniversalDbLoaderResult;
+import cz.tconsult.REVIDOVAT.SeeAndWriteDBLoadLogTable;
+import cz.tconsult.REVIDOVAT.TwConnectionFactoryyy;
+import cz.tconsult.REVIDOVAT.ZabudovaneObjekty;
 import cz.tconsult.dbloader.itf.EFileCategory;
 import cz.tconsult.dbloader.itf.EMessageCategory;
 import cz.tconsult.dbloader.itf.UniversalResultMessage;
-import cz.tconsult.lib.ifxdbload.core.core.EFazeZavedeni;
-import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoader;
-import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoaderParams;
-import cz.tconsult.lib.ifxdbload.core.core.UniversalDbLoaderResult;
+import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.workflow.FUtils;
-import cz.tconsult.lib.ifxdbload.workflow.SeeAndWriteDBLoadLogTable;
-import cz.tconsult.lib.ifxdbload.workflow.TwConnectionFactoryyy;
-import cz.tconsult.lib.ifxdbload.workflow.ZabudovaneObjekty;
-import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
-import cz.tconsult.lib.ifxdbload.workflow.data.Builder;
-import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
-import cz.tconsult.lib.ifxdbload.workflow.read.DbpackReader;
+import cz.tconsult.lib.ifxdbload.workflow.process.Processor;
 import cz.tconsult.tcbase.clib.bdb.mdbpgmbase.DbPgmBase;
 import cz.tconsult.tcbase.clib.bdb.mdbpgmbase.DbPgmBaseConnectorProperties;
 import cz.tconsult.tcbase.clib.mpgmbase.OptManager;
@@ -45,7 +44,6 @@ import cz.tconsult.tw.util.logging.Logf;
  */
 public class IfxDbLoad extends DbPgmBase {
 
-  private static final ADbkind DBKIND_MAIN = ADbkind.of("main");
   // TODO [veverka] co znamená tkové defaultn íschema? -- 26. 2. 2019 9:23:18 veverka
   private static final ASchema DEFAULT_SCHEMA = ASchema.of("<defalut>");
 
@@ -108,32 +106,12 @@ public class IfxDbLoad extends DbPgmBase {
         failOnError = failonerrorBool;
       }
     }
+    final List<Path> dirs = optBean.getDir();
+    final Set<EFazeZavedeni> processedFazes = optBean.getProcessedFazes();
 
-    final Builder builder = new Builder();
-    final DbpackReader dbpackReader = new DbpackReader(builder);
-    dbpackReader.setProcessedFazes(optBean.getProcessedFazes());
+    final Processor processor = new Processor();
 
-    if (optBean.getDir() != null) {
-      for (final Path sfile : optBean.getDir()) {
-        final DbpackProperties defaultDbpackProperties = new DbpackProperties(sfile.toAbsolutePath(), DBKIND_MAIN, DEFAULT_SCHEMA);
-        dbpackReader.readDirWithDbpacks(defaultDbpackProperties);
-      }
-
-      for (final LoDbkind loDbkind : builder.getData().getLoDbkinds()) {
-        // interní věci se zavedou pro každý dbkind.
-        dbpackReader.readInternalToolDbpack(loDbkind.getName());
-      }
-
-    } else {
-      // Není žádný dbpack, budou jen interní soubory
-      dbpackReader.readInternalToolDbpack(DBKIND_MAIN);
-    }
-
-    final LoData data = builder.getData();
-
-    if (dbpackReader.getFilesForSuppressedFazes().count() > 0) {
-      log.warn("There are files in suppressed fazes: %d:%n%s", dbpackReader.getFilesForSuppressedFazes().count(), dbpackReader.getFilesForSuppressedFazes());
-    }
+    final LoData data = processor.readFiles(dirs, processedFazes);
 
     logCounters(data.getFilesForRoots(), "Files for root");
     logCounters(data.getFilesForDbkinds(), "Files for dbkinds");
@@ -141,16 +119,7 @@ public class IfxDbLoad extends DbPgmBase {
     //    if (true) throw new RuntimeException("Bum na vyjimku", new RuntimeException("Bum bum bum"));
     //    if (true) return;
 
-    for (final LoDbkind loDbkind : data.getLoDbkinds()) {
-      log.info("Counters for dbkind=%s", loDbkind.getName());
-      if (loDbkind.getFilesForSchemaCounter().count(DEFAULT_SCHEMA) > 0) {
-        log.warn("There are dbpacks which have no 'dbpack.properties' then using default schema!");
-      }
-      logCounters(loDbkind.getFilesForSchemaCounter(), "Files for schema");
-      logCounters(loDbkind.getFilesForPhases(), "Files for phase");
-      logCounters(loDbkind.getFilesForDbpacksCounter(), "Files for dbpack");
-      logCounters(loDbkind.getFilesForSchemasAndPhases(), "Files for schema and phase");
-    }
+    logDbkindCounters(data);
 
     SeeAndWriteDBLoadLogTable seeAndWriteDBLoadLogTable = null;
 
@@ -260,6 +229,20 @@ public class IfxDbLoad extends DbPgmBase {
           }
         }
       }
+    }
+  }
+
+
+  private void logDbkindCounters(final LoData data) {
+    for (final LoDbkind loDbkind : data.getLoDbkinds()) {
+      log.info("Counters for dbkind=%s", loDbkind.getName());
+      if (loDbkind.getFilesForSchemaCounter().count(DEFAULT_SCHEMA) > 0) {
+        log.warn("There are dbpacks which have no 'dbpack.properties' then using default schema!");
+      }
+      logCounters(loDbkind.getFilesForSchemaCounter(), "Files for schema");
+      logCounters(loDbkind.getFilesForPhases(), "Files for phase");
+      logCounters(loDbkind.getFilesForDbpacksCounter(), "Files for dbpack");
+      logCounters(loDbkind.getFilesForSchemasAndPhases(), "Files for schema and phase");
     }
   }
 
