@@ -8,8 +8,11 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
+import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
+import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
@@ -29,6 +32,7 @@ public class FazeManager {
 
   private final LoData loData;
   private final FazeExecutorFactory fazeExecutorFactory;
+  private final JdbcTemplateFactory jdbcTemplateFactory;
 
 
 
@@ -39,7 +43,7 @@ public class FazeManager {
    * @param fazes Fáze, které si přejme zavést (ostatní budou skipnuty)
    * @param ctx Kontext zavádění, zde získáme databázi a sem reportujeme chyby
    */
-  public void executeAll(final Set<EFazeZavedeni> fazes, final ExecutionContext ctx) {
+  public void executeAll(final Set<EFazeZavedeni> fazes) {
     // vytvoření a inicializace exekutoru fází
     final List<ExecutorHolder> executorHolders = init();
 
@@ -55,16 +59,16 @@ public class FazeManager {
           // TODO [veverka] Lépe logovat zavádění v samostatných metodách -- 28. 2. 2019 12:14:18 veverka
           log.info("Zahajuji fázi {}", holder.lofaze);
 
-          final String resultMessage = executor.execute(ctx); // toto je vlastní provedení fáze
+          final String resultMessage = executor.execute(new ExecutionContextImpl(holder.lofaze.getLoDbkind().getName())); // toto je vlastní provedení fáze
 
           log.info("Ukončuji fázi {} s výsledkem: {}", holder.lofaze, resultMessage);
         } else {
           // nezavádíme protože je prázdná nebo fáze sama rozhodla o nezavedení
-          executor.skip(ctx);
+          executor.skip();
         }
       } else {
         // nezavádíme, protože uživatel nechtěl fázi zavádět
-        executor.skip(ctx);
+        executor.skip();
       }
     }
   }
@@ -93,6 +97,17 @@ public class FazeManager {
     return new ExecutorHolder(executor, loFaze);
   }
 
+  @RequiredArgsConstructor
+  private class ExecutionContextImpl implements ExecutionContext {
+
+    private final ADbkind dbkind;
+
+    @Override
+    public JdbcTemplate jt(final ASchema schema) {
+      return jdbcTemplateFactory.jt(dbkind, schema);
+    }
+
+  }
 
   @Data
   private class ExecutorHolder {

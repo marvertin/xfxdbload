@@ -86,4 +86,8 @@ public class LoFaze implements Comparable<LoFaze> {
     return name;
   }
 
+  public LoDbkind getLoDbkind() {
+    return loDbkind;
+  }
+
 }

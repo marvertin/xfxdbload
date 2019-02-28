@@ -64,7 +64,7 @@ public interface FazeExecutor {
    * V žádném případě by se však zde nemělo zavádět.
    * @param ctx
    */
-  public void skip(ExecutionContext ctx);
+  public void skip();
 
 
 }

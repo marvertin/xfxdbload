@@ -43,7 +43,7 @@ public class DummyExecutor implements FazeExecutor {
   }
 
   @Override
-  public void skip(final ExecutionContext ctx) {
+  public void skip() {
     //TODO [veverka] implementuj - vygenerovana metoda [veverka 13:06:02]
     //System.out.println("skipuju");
 
