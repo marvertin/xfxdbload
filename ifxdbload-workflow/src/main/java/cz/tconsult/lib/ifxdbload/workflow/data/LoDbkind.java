@@ -5,33 +5,41 @@ package cz.tconsult.lib.ifxdbload.workflow.data;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 import cz.tconsult.tw.util.CCounterMap;
 import cz.tconsult.tw.util.CounterMap;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author veverka
  *
  */
+@RequiredArgsConstructor
 public class LoDbkind {
 
-  private  final LoData lodata;
   private final ADbkind name;
+  private final LoData lodata;
 
-  private final SortedMap<EFazeZavedeni, LoFaze> lofazes = new TreeMap<EFazeZavedeni, LoFaze>();
+  private final EnumMap<EFazeZavedeni, LoFaze> lofazes
+  = new EnumMap<>(Arrays.stream(EFazeZavedeni.values())
+      .collect(Collectors.toMap(Function.identity() , faze -> new LoFaze(this, faze))));
 
+  // TODO [veverka] povyhazovat country odtud -- 28. 2. 2019 13:37:29 veverka
   private final CounterMap<ASchema> filesForSchemaCounter = new CCounterMap<ASchema>(); // TODO [veverka] byl zde case insentsitive -- 26. 2. 2019 9:26:46 veverka
   private final CounterMap<Path> filesForDbpacksCounter = new CCounterMap<Path>(FILE_Comparator);
   private final CounterMap<String> filesForSchemasAndPhases = new CCounterMap<String>(String.CASE_INSENSITIVE_ORDER);
   private final CounterMap<EFazeZavedeni> filesForPhases = new CCounterMap<EFazeZavedeni>(NAME_Comparator);
+
 
 
   private static final Comparator<EFazeZavedeni> NAME_Comparator = new Comparator<EFazeZavedeni>() {
@@ -92,29 +100,6 @@ public class LoDbkind {
 
 
 
-  /**
-   * @param aLodata
-   * @param aName
-   */
-  public LoDbkind(final LoData aLodata, final ADbkind aName) {
-    lodata = aLodata;
-    name = aName;
-
-  }
-
-  /**
-   * @param aFazeName
-   * @return
-   */
-  public LoFaze makeLoFaze(final EFazeZavedeni aFazeName) {
-    LoFaze loFaze = lofazes.get(aFazeName);
-    if (loFaze == null) {
-      loFaze = new LoFaze(this, aFazeName);
-      lofazes.put(aFazeName, loFaze);
-    }
-    return loFaze;
-  }
-
   public List<LoSoubor> getSoubors() {
     final List<LoSoubor> soubors = new ArrayList<LoSoubor>();
     for (final LoFaze loFaze : lofazes.values()) {
@@ -150,8 +135,15 @@ public class LoDbkind {
    * Vrátí seřazený seznam fází, které máme
    * @return
    */
-  public SortedSet<LoFaze> getFazes() {
+  public SortedSet<LoFaze> getFazesDeprecated() {
     return new TreeSet<LoFaze>(lofazes.values());
+  }
+  public LoFaze getFaze(final EFazeZavedeni faze) {
+    return lofazes.get(faze);
+  }
+
+  public LoData getLodata() {
+    return lodata;
   }
 
 }

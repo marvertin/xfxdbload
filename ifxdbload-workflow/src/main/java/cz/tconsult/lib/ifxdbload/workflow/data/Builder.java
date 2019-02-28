@@ -19,7 +19,7 @@ public class Builder {
     final LoSoubor losoubor = new LoSoubor(aEntryName, faze, aDbprops.getRoot(), aDbprops.getDbschema(), aData);
 
     final LoDbkind lodbkind = makeLoDbKind(aDbprops);
-    final LoFaze lofaze = lodbkind.makeLoFaze(losoubor.getFaze());
+    final LoFaze lofaze = lodbkind.getFaze(losoubor.getFaze());
 
     lofaze.add(losoubor);
 

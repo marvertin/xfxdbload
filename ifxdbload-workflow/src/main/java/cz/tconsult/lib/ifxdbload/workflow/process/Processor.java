@@ -5,17 +5,20 @@ package cz.tconsult.lib.ifxdbload.workflow.process;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.Builder;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
+import cz.tconsult.lib.ifxdbload.workflow.executors.FazeExecutorFactoryImpl;
 import cz.tconsult.lib.ifxdbload.workflow.read.DbpackReader;
 
 /**
@@ -62,6 +65,27 @@ public class Processor  {
       log.warn("There are files in suppressed fazes: %d:%n%s", dbpackReader.getFilesForSuppressedFazes().count(), dbpackReader.getFilesForSuppressedFazes());
     }
     return data;
+  }
+
+
+  /**
+   * Vykonání všech zavedených fází.
+   * @param fazes
+   * @param lodata
+   */
+  public void executeFazes(final Set<EFazeZavedeni> fazes, final LoData lodata) {
+    final Set<EFazeZavedeni> fazes2 = fazes == null ?  EnumSet.allOf(EFazeZavedeni.class) : fazes;
+    final FazeManager fazeManager = new FazeManager(lodata, new FazeExecutorFactoryImpl());
+    fazeManager.executeAll(fazes2, new ExecutionContext() {
+
+      @Override
+      public JdbcTemplate jt() {
+        //TODO [veverka] implementuj - vygenerovana metoda [veverka 12:28:14]
+        return null;
+      }
+    });
+    //TODO [veverka] implementuj - vygenerovana metoda [veverka 12:24:14]
+
   }
 
 }

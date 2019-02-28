@@ -26,7 +26,7 @@ public class LoData {
   public LoDbkind makeLoDbkind(final ADbkind aDbkindName) {
     LoDbkind loDbkind = lodbkinds.get(aDbkindName);
     if (loDbkind == null) {
-      loDbkind = new LoDbkind(this, aDbkindName);
+      loDbkind = new LoDbkind(aDbkindName, this);
       lodbkinds.put(aDbkindName, loDbkind);
     }
     return loDbkind;

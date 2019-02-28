@@ -112,6 +112,11 @@ public class IfxDbLoad extends DbPgmBase {
     final Processor processor = new Processor();
 
     final LoData data = processor.readFiles(dirs, processedFazes);
+    processor.executeFazes(optBean.getProcessedFazes(), data);
+
+    if (true) {
+      return;
+    }
 
     logCounters(data.getFilesForRoots(), "Files for root");
     logCounters(data.getFilesForDbkinds(), "Files for dbkinds");
@@ -132,7 +137,7 @@ public class IfxDbLoad extends DbPgmBase {
 
       int pocitadloSouboru = 0; // Kolik souborů dohromady ve všech fázích bylo zavedeno.
       hlavnicyklus: for (final LoDbkind loDbkind : data.getLoDbkinds()) {
-        faze: for (final LoFaze loFaze : loDbkind.getFazes()) {
+        faze: for (final LoFaze loFaze : loDbkind.getFazesDeprecated()) {
 
           // RN00279139 Spustit f020clean jen v případě parametru --clean
           if (loFaze.getNameFazeZavedeni() == EFazeZavedeni.f020clean && !optBean.isClean()) {
