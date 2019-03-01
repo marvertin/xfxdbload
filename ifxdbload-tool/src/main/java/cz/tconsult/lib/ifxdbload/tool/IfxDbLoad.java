@@ -30,6 +30,8 @@ import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
+import cz.tconsult.lib.ifxdbload.workflow.db.DsFactory;
+import cz.tconsult.lib.ifxdbload.workflow.db.JdbcTemplateFactoryImpl;
 import cz.tconsult.lib.ifxdbload.workflow.process.Processor;
 import cz.tconsult.tcbase.clib.bdb.mdbpgmbase.DbPgmBase;
 import cz.tconsult.tcbase.clib.bdb.mdbpgmbase.DbPgmBaseConnectorProperties;
@@ -112,7 +114,8 @@ public class IfxDbLoad extends DbPgmBase {
     final Processor processor = new Processor();
 
     final LoData data = processor.readFiles(dirs, processedFazes);
-    processor.executeFazes(optBean.getProcessedFazes(), data);
+    final DsFactory dsFactory = new DsFactory();
+    processor.executeFazes(optBean.getProcessedFazes(), data, new JdbcTemplateFactoryImpl(dsFactory));
 
     if (true) {
       return;

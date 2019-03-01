@@ -52,14 +52,16 @@ public class FazeManager {
       final FazeExecutor executor = holder.executor;
       if (fazes.contains(holder.lofaze.getNameFazeZavedeni())) {
         final boolean prazdna = holder.lofaze.getSoubors().isEmpty();
+        final ADbkind dbkind = holder.lofaze.getLoDbkind().getName();
         final boolean zavadet = (! prazdna || executor.isLoadIfEmty()) // jen neprázdné nebo ty, které se chtějí zavádět i prázdné
-            && executor.shouldLoad();  // a jen ty, které přesto mají být zavedeny
+            && executor.shouldLoad()  // a jen ty, které přesto mají být zavedeny
+            && jdbcTemplateFactory.canCreate(dbkind);
         if (zavadet) {
           // fázi nezavádíme a patřičně logujeme
           // TODO [veverka] Lépe logovat zavádění v samostatných metodách -- 28. 2. 2019 12:14:18 veverka
           log.info("Zahajuji fázi {}", holder.lofaze);
 
-          final String resultMessage = executor.execute(new ExecutionContextImpl(holder.lofaze.getLoDbkind().getName())); // toto je vlastní provedení fáze
+          final String resultMessage = executor.execute(new ExecutionContextImpl(dbkind)); // toto je vlastní provedení fáze
 
           log.info("Ukončuji fázi {} s výsledkem: {}", holder.lofaze, resultMessage);
         } else {
@@ -104,7 +106,7 @@ public class FazeManager {
 
     @Override
     public JdbcTemplate jt(final ASchema schema) {
-      return jdbcTemplateFactory.jt(dbkind, schema);
+      return jdbcTemplateFactory.jt(dbkind, schema); // když se to dostane až sem, tak template existuje
     }
 
   }

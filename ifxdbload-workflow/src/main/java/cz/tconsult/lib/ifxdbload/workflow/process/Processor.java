@@ -11,11 +11,9 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
-import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.Builder;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
@@ -74,18 +72,10 @@ public class Processor  {
    * @param fazes
    * @param lodata
    */
-  public void executeFazes(final Set<EFazeZavedeni> fazes, final LoData lodata) {
+  public void executeFazes(final Set<EFazeZavedeni> fazes, final LoData lodata, final JdbcTemplateFactory jtf) {
     final Set<EFazeZavedeni> fazes2 = fazes == null ?  EnumSet.allOf(EFazeZavedeni.class) : fazes;
 
-    final FazeManager fazeManager = new FazeManager(lodata, new FazeExecutorFactoryImpl(), new JdbcTemplateFactory() {
-
-      // TODO [veverka] Databázovat správně přes datasorurce a nějaký hikari -- 28. 2. 2019 15:44:21 veverka
-      @Override
-      public JdbcTemplate jt(final ADbkind dbkind, final ASchema schema) {
-        //TODO [veverka] implementuj - vygenerovana metoda [veverka 15:44:02]
-        return null;
-      }
-    });
+    final FazeManager fazeManager = new FazeManager(lodata, new FazeExecutorFactoryImpl(), jtf);
     fazeManager.executeAll(fazes2);
     //TODO [veverka] implementuj - vygenerovana metoda [veverka 12:24:14]
 

@@ -1,5 +1,8 @@
 dependencies {
 	implementation project(':ifxdbload-core')
 
-	implementation group: 'ch.qos.logback', name: 'logback-classic'
+	// https://mvnrepository.com/artifact/hikari-cp/hikari-cp
+	implementation group: 'hikari-cp', name: 'hikari-cp', version: '2.7.0'
+	
+	runtimeOnly group: 'com.informix', name: 'ifxjdbc', version: '4.10.JC9'
 }
