@@ -1,4 +1,4 @@
-package cz.tconsult.CORE_REVIDOVAT.tw.util;
+package cz.tconsult.lib.ifxdbload.core.tw;
 
 import java.io.IOException;
 import java.io.PushbackReader;
