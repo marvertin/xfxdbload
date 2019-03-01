@@ -1,8 +1,3 @@
-buildscript {
-	repositories {
-		maven { url tc_repo }
-	}
-}
 plugins {
 	id "io.spring.dependency-management" version "1.0.6.RELEASE" apply false
 	id "nebula.info" version "5.0.0" apply false
@@ -13,7 +8,7 @@ plugins {
 }
 
 allprojects {
-	description = """ifxDbLoad - zavaděř informicí databáze"""
+	description = """ifxDbLoad - zavaděč informixí databáze"""
 
 	// Toto se dělá jen pro projekty java (zahrnuje i java-library)
 	pluginManager.withPlugin ('java') {
