@@ -1,8 +1,29 @@
 dependencies {
+implementation project(':ifxdbload-core')
 	implementation project(':ifxdbload-workflow')
 
+  implementation group: 'cz.tconsult.lib', name: 'dbloader-itf'
+  implementation group: 'cz.tconsult.lib', name: 'dbutil-core'
+  
 	implementation group: 'ch.qos.logback', name: 'logback-classic'
 	
-	compile(group: 'cz.tconsult.lib', name: 'pgmbase-core', version: '3.0.5')
-	compile(group: 'cz.tconsult.lib', name: 'pgmbase-db', version: '3.0.5')
+	implementation group: 'cz.tconsult.lib', name: 'pgmbase-core'
+	implementation group: 'cz.tconsult.lib', name: 'pgmbase-db'
+  
+  // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+
+}
+
+//TODO: Implementaci povýšit a zbavit se těchto obstarožních závislostí
+dependencies {
+
+  implementation group: 'cz.tconsult.lib', name: 'sump'
+      
+  // https://mvnrepository.com/artifact/commons-logging/commons-logging
+  implementation group: 'commons-logging', name: 'commons-logging'
+  
+  // https://mvnrepository.com/artifact/commons-lang/commons-lang
+  implementation group: 'commons-lang', name: 'commons-lang'
+  
 }
