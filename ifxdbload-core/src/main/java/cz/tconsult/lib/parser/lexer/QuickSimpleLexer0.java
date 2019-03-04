@@ -895,6 +895,9 @@ public abstract class QuickSimpleLexer0 implements TokenInputStream, java.io.Ser
       LexerToken token;
       while ((token = read()) != null) {
         vysledek.add(token);
+        if (token.getType() == iEndTokenType) {
+          break; // koncový token vrazíme do výsledku jen jednou
+        }
       }
       return vysledek;
     } finally {

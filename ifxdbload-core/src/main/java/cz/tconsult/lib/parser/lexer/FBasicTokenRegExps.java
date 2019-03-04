@@ -49,7 +49,7 @@ public class FBasicTokenRegExps {
   /**
    * Bílý znak. Specifikace: <pre>[\t\r\n ]</pre>
    */
-  public static final String WHITE_SPACE = "[\t\r\n ]";
+  public static final String WHITE_SPACE = "[\uFEFF\t\r\n ]";// to první je BOM
 
   /**
    * Posloupnost bílých znaků. Specifikace: <pre>[\t\r\n ]+</pre>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 import cz.tconsult.dbloader.itf.EFileCategory;
 
@@ -13,8 +14,10 @@ public final class FFaze {
     if (aEntryName.toString().endsWith(".auttrigs.xml")) {
       return new FazeAnalyzeResult(aEntryName, EFileCategory.XMLTRIGER, EnumSet.of(EFazeZavedeni.f255trgxml, EFazeZavedeni.f555trgxml));
     } else {
-      final EFazeZavedeni faze = urciFaziDbObj(aEntryName);
-      return new FazeAnalyzeResult(aEntryName, faze.getFileCategory(), EnumSet.of(faze));
+      final Optional<EFazeZavedeni> faze = urciFaziDbObj(aEntryName);
+      return new FazeAnalyzeResult(aEntryName,
+          faze.map(EFazeZavedeni::getFileCategory).orElse(null),
+          faze.map(EnumSet::of).orElse(EnumSet.noneOf(EFazeZavedeni.class)));
     }
   }
 
@@ -22,22 +25,22 @@ public final class FFaze {
    * @param aEntryName
    * @return
    */
-  private static EFazeZavedeni urciFaziDbObj(final AEntryName aEntryName) {
+  private static Optional<EFazeZavedeni> urciFaziDbObj(final AEntryName aEntryName) {
     EFazeZavedeni faze;
     faze = urciFaziDbObjDleSlozky(aEntryName);
     if (faze != null) {
-      return faze;
+      return Optional.of(faze);
     }
     faze = urciFaziOnceDleSlozky(aEntryName);
     if (faze != null) {
-      return faze;
+      return Optional.of(faze);
     }
     faze = urciFaziDlePrimarnihoJmenaSkozky(aEntryName);
     if (faze != null) {
-      return faze;
+      return Optional.of(faze);
     }
 
-    return null;
+    return Optional.empty();
   }
 
   private static EFazeZavedeni urciFaziDbObjDleSlozky(final AEntryName aEntryName) {

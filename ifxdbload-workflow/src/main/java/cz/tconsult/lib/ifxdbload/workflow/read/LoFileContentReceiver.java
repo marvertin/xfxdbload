@@ -60,6 +60,9 @@ public class LoFileContentReceiver implements FileContentReceiver {
     final Supplier<byte[]> supp = new CachingSupplierWrapper<>(contentSupplier);
     //log.info("   found .... " + name);
     final FazeAnalyzeResult analyzeResult = FFaze.analyzeEntryName(aEntryName);
+    if (analyzeResult.getFazes().isEmpty()) {
+      throw new RuntimeException("Nebyla rozpoznana faze u \"" + aEntryName + "\"");
+    }
     builder.makeLoDbKind(dbprops);
     for (final EFazeZavedeni faze : analyzeResult.getFazes()) {
       if (zavadetTutoFazi(faze)) {

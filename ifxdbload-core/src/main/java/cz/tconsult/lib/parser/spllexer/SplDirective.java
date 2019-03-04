@@ -3,7 +3,7 @@ package cz.tconsult.lib.parser.spllexer;
 import lombok.Data;
 
 @Data
-public class SplTokenDirective {
+public class SplDirective {
 
   /** scope je typicky "ONCE" */
   private final String scope;

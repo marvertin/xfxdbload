@@ -21,9 +21,8 @@ dependencies {
 	
 	compile(group: 'cz.tconsult.lib', name: 'exception', version: '1.0.0')
 	
-	// https://mvnrepository.com/artifact/org.springframework/spring-jdbc
 	compile group: 'org.springframework', name: 'spring-jdbc', version: '5.1.5.RELEASE'
 	
-	
+	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.3'
 
 }

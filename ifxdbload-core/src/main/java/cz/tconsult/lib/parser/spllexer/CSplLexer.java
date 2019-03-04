@@ -3,6 +3,8 @@ package cz.tconsult.lib.parser.spllexer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import cz.tconsult.lib.parser.lexer.FBasicTokenRegExps;
 import cz.tconsult.lib.parser.lexer.QuickSimpleLexer0;
 import cz.tconsult.lib.parser.lexer.ValueParser;
@@ -183,12 +185,17 @@ public class CSplLexer extends QuickSimpleLexer0 {
   private static final ValueParser TCDIRECTIVE_VALUE_PARSER = aValue -> {
     final Matcher matcher = DIRECTIVE_PATTERN.matcher(aValue.trim());
     if (matcher.matches()) {
-      return new SplTokenDirective(matcher.group(1).trim(), matcher.group(2).trim(), matcher.group(3).trim());
+      return new SplDirective(matcher.group(1).trim(), matcher.group(2).trim(), StringUtils.trim(matcher.group(3)));
     } else {
       throw new RuntimeException("nemůže nastat, aby \"" + aValue + "\" nevyhovovalo /" +  DIRECTIVE_PATTERN + "/");
     }
   };
 
 
+
+  @Override
+  public void setEndToken(final Object aTokenType) {
+    super.setEndToken(aTokenType);
+  }
 
 }
