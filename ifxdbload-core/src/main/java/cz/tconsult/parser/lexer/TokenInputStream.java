@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser.lexer;
+package cz.tconsult.parser.lexer;
 
 /**Rozhraní reprezentuje vstupní tok tokenů. Umožnuje jednou přečtený token vrátit zpět.
  * <p>Title: </p>

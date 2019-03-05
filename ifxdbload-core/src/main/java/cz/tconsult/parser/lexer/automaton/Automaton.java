@@ -25,7 +25,7 @@
  *
  */
 
-package cz.tconsult.lib.parser.lexer.automaton;
+package cz.tconsult.parser.lexer.automaton;
 
 import java.io.IOException;
 import java.io.InputStream;

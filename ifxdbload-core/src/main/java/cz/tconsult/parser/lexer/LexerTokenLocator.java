@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser.lexer;
+package cz.tconsult.parser.lexer;
 
 
 /**

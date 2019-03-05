@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser.spllexer;
+package cz.tconsult.spl.lexer;
 /**
  * @author Michal Polák
  * @version 1.0

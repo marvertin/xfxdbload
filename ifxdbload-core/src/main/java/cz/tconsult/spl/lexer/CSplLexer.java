@@ -1,13 +1,13 @@
-package cz.tconsult.lib.parser.spllexer;
+package cz.tconsult.spl.lexer;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-import cz.tconsult.lib.parser.lexer.FBasicTokenRegExps;
-import cz.tconsult.lib.parser.lexer.QuickSimpleLexer0;
-import cz.tconsult.lib.parser.lexer.ValueParser;
+import cz.tconsult.parser.lexer.FBasicTokenRegExps;
+import cz.tconsult.parser.lexer.QuickSimpleLexer0;
+import cz.tconsult.parser.lexer.ValueParser;
 
 /**
  * Lexikální analyzátor tetu SQL a SPL pro Informix, bez SPL loadrovských mřížních direktiv.

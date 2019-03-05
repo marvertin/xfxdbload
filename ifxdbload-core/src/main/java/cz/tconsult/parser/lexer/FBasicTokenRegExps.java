@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser.lexer;
+package cz.tconsult.parser.lexer;
 
 /** Třída poskytuje často používané regulární výrazy pro definici tokenů v lexerech.
  * Regulární výrazy se dají použít ve funkcích defineToken, defineIgnoredToken apod. na třídě

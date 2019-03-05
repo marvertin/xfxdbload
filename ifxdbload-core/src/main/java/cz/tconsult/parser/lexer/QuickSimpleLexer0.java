@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser.lexer;
+package cz.tconsult.parser.lexer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,10 +22,10 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 
 import cz.tconsult.lib.ifxdbload.core.tw.PositionTrackPushbackReader;
-import cz.tconsult.lib.parser.lexer.automaton.Automaton;
-import cz.tconsult.lib.parser.lexer.automaton.RegExp;
-import cz.tconsult.lib.parser.lexer.automaton.RunAutomaton;
-import cz.tconsult.lib.parser.lexer.automaton.State;
+import cz.tconsult.parser.lexer.automaton.Automaton;
+import cz.tconsult.parser.lexer.automaton.RegExp;
+import cz.tconsult.parser.lexer.automaton.RunAutomaton;
+import cz.tconsult.parser.lexer.automaton.State;
 
 /**
  * Rychlý jednoduchý lexikální analyzátor postavený na definici tokenů pomocí regulárních výrazů.
@@ -583,7 +583,7 @@ public abstract class QuickSimpleLexer0 implements TokenInputStream, java.io.Ser
 
 
   /**
-   *  Provede kompilaci zadaných definic a umožní používat metody rozhraní {@link cz.tconsult.lib.parser.lexer.TokenInputStream}.
+   *  Provede kompilaci zadaných definic a umožní používat metody rozhraní {@link cz.tconsult.parser.lexer.TokenInputStream}.
    *  OD této chvíle není již možné definovat další tokeny.
    *  Tato metoda také požívá uvnnitř rozhraní {@link java.util.Iterator} a dokonce i {@link java.lang.Integer#MAX_VALUE},
    *  to sem však píši jen proto, že chci vědět, jak bude reagovat Javadoc.

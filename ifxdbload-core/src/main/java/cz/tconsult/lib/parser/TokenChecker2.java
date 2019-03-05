@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import cz.tconsult.lib.parser.lexer.LexerToken;
-import cz.tconsult.lib.parser.spllexer.ESplTokenNoKeyword;
-import cz.tconsult.lib.parser.spllexer.SplDirective;
+import cz.tconsult.parser.lexer.LexerToken;
+import cz.tconsult.spl.lexer.ESplTokenNoKeyword;
+import cz.tconsult.spl.lexer.SplDirective;
 
 class TokenChecker2 extends TokenChecker {
 

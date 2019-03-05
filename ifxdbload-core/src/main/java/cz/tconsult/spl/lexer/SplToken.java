@@ -1,7 +1,7 @@
-package cz.tconsult.lib.parser.spllexer;
+package cz.tconsult.spl.lexer;
 
 
-import cz.tconsult.lib.parser.lexer.LexerToken;
+import cz.tconsult.parser.lexer.LexerToken;
 
 /**
  * <p>Title: </p>

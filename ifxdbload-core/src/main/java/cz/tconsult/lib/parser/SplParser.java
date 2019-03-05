@@ -1,27 +1,27 @@
 package cz.tconsult.lib.parser;
 
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_ALTER;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_BEGIN;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_CALL;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_COMMIT;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_CREATE;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_DBA;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_DELETE;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_DROP;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_END;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_FUNCTION;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_INDEX;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_INSERT;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_PROCEDURE;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_RENAME;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_ROLLBACK;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_SYNONYM;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_TABLE;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_TRIGGER;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_UNIQUE;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_UPDATE;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_VIEW;
-import static cz.tconsult.lib.parser.spllexer.ESplTokenKeyword.KEYWORD_WORK;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_ALTER;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_BEGIN;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_CALL;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_COMMIT;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_CREATE;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_DBA;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_DELETE;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_DROP;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_END;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_FUNCTION;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_INDEX;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_INSERT;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_PROCEDURE;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_RENAME;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_ROLLBACK;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_SYNONYM;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_TABLE;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_TRIGGER;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_UNIQUE;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_UPDATE;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_VIEW;
+import static cz.tconsult.spl.lexer.ESplTokenKeyword.KEYWORD_WORK;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,11 +31,11 @@ import java.util.Optional;
 
 import org.apache.commons.collections4.ListUtils;
 
-import cz.tconsult.lib.parser.lexer.LexerToken;
-import cz.tconsult.lib.parser.spllexer.CSplLexer;
-import cz.tconsult.lib.parser.spllexer.ESplTokenKeyword;
-import cz.tconsult.lib.parser.spllexer.ESplTokenNoKeyword;
 import cz.tconsult.lib.tuples.Tuple2;
+import cz.tconsult.parser.lexer.LexerToken;
+import cz.tconsult.spl.lexer.CSplLexer;
+import cz.tconsult.spl.lexer.ESplTokenKeyword;
+import cz.tconsult.spl.lexer.ESplTokenNoKeyword;
 
 /**
  * Parsruje Spl

@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import cz.tconsult.lib.parser.lexer.LexerToken;
-import cz.tconsult.lib.parser.spllexer.ESeplTokenForIgnoring;
+import cz.tconsult.parser.lexer.LexerToken;
+import cz.tconsult.spl.lexer.ESeplTokenForIgnoring;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

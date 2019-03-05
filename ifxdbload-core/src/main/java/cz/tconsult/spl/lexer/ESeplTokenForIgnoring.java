@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser.spllexer;
+package cz.tconsult.spl.lexer;
 
 public enum ESeplTokenForIgnoring {
 

@@ -2,7 +2,7 @@ package cz.tconsult.lib.parser;
 
 import java.util.Set;
 
-import cz.tconsult.lib.parser.spllexer.SplDirective;
+import cz.tconsult.spl.lexer.SplDirective;
 import lombok.Data;
 
 /**

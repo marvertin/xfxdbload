@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser.lexer;
+package cz.tconsult.parser.lexer;
 
 /** Použijte tuto třídu jako předka všech LexerTokenLocatorů, aby měly společný {@link #toString()}.
  * @author roztocil
