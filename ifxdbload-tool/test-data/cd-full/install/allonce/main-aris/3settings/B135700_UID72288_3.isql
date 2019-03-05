@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B135700_UID72288_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22041: Automat na zrušení smlouvy o stavebním spoření pokud byl dán příznak, že není zájem pokud "nedopadne" úvěr {EPIC}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('ES', 'ProblemoveSmlouvy', 'StZamUver', 'Vyhodnotit', 1, 1, 'Spoření', 'Problémové smlouvy SS', 'Problematic Building Saving Contracts', 'příznak zda vyhodnocovat storno/zamítnutí úvěru', 1);
+
+call TW_RegSetOrAddKey('ES', 'ProblemoveSmlouvy', 'StZamUver', 'RozhodnyDen', 20, 1, 'Spoření', 'Problémové smlouvy SS', 'Problematic Building Saving Contracts', 'rozhodný den měsíce, ve kterém systém provádí kontrolu na storno/zamítnutí úvěru', 1);
+
+call TW_RegSetOrAddKey('ES', 'ProblemoveSmlouvy', 'StZamUver', 'LhutaSplaceni', 10, 1, 'Spoření', 'Problémové smlouvy SS', 'Problematic Building Saving Contracts', 'ochranná lhůta pro Storno/Zamítnutí úvěru', 1);
+
+call TW_RegSetOrAddKey('ES', 'ProblemoveSmlouvy', 'StZamUver', 'AutVypovidat', 1, 1, 'Spoření', 'Problémové smlouvy SS', 'Problematic Building Saving Contracts', 'příznak zda automaticky vypovídat smlouvy se stornem/zamítnutím  úvěru', 1);
+
+call TW_RegSetOrAddKey('ES', 'ProblemoveSmlouvy', 'StZamUver', 'LhutavVpoved', 0, 1, 'Spoření', 'Problémové smlouvy SS', 'Problematic Building Saving Contracts', 'lhůta pro výpověď smlouvy se stornem/zamítnutím  úvěru', 1);
+
+call TW_RegSetOrAddKey('ES', 'ProblemoveSmlouvy', 'StZamUver', 'LhutaVyporadani', 0, 1, 'Spoření', 'Problémové smlouvy SS', 'Problematic Building Saving Contracts', 'lhůta pro vypořádání smlouvy se stornem/zamítnutím  úvěru', 1);
+
+ROLLBACK WORK;
+
+--End of B135700_UID72288_3

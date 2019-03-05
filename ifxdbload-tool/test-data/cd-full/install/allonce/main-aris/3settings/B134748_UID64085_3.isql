@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B134748_UID64085_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17807: Kontrola LTV při čerpání {STORY}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'zajist', 'kontrolaGlobLTVPrior', 'A', 2, 1,
+                       'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Priorita globální kontroly LTV při čerpání pro <cílový_stav_kart>');
+
+call TW_RegSetOrAddKey('RU', 'zajist', 'kontrolaGlobLTVPrior', 'B', 2, 1,
+                       'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Priorita globální kontroly LTV při čerpání pro <cílový_stav_kart>');
+
+call TW_RegSetOrAddKey('RU', 'zajist', 'kontrolaGlobLTVPrior', 'C', 2, 1,
+                       'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Priorita globální kontroly LTV při čerpání pro <cílový_stav_kart>');
+
+call TW_RegSetOrAddKey('RU', 'zajist', 'kontrolaProdLTVPrior', 'A', 2, 1,
+                       'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Priorita kontroly produktového LTV při čerpání pro <cílový_stav_kart>');
+
+call TW_RegSetOrAddKey('RU', 'zajist', 'kontrolaProdLTVPrior', 'B', 2, 1,
+                       'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Priorita kontroly produktového LTV při čerpání pro <cílový_stav_kart>');
+
+call TW_RegSetOrAddKey('RU', 'zajist', 'kontrolaProdLTVPrior', 'C', 2, 1,
+                       'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Priorita kontroly produktového LTV při čerpání pro <cílový_stav_kart>');
+
+
+ROLLBACK WORK;
+
+--End of B134748_UID64085_3

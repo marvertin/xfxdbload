@@ -1,0 +1,94 @@
+-- @TC:ONCE: ID = V2, B136602_UID36095_1-definiceDavky
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE bc_davka_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  kod   CHAR(4) NOT NULL,
+  nazev   CHAR(40),
+  dodavatelska   Integer NOT NULL,
+  spoustetod   CHAR(5),
+  spoustetdo   CHAR(5),
+  spravce   CHAR(64),
+  platnost   Integer NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (dodavatelska IN (0,1)) CONSTRAINT bc_davka_acis_dd7j,
+  CHECK (platnost IN (0,1)) CONSTRAINT bc_davka_acis_dd7k
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_davka_acis_pk ON bc_davka_acis(idarch);
+ALTER TABLE bc_davka_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT bc_davka_acis_pk;
+
+----------------------------------------------------------------
+CREATE TABLE bc_akce_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  nazev   CHAR(40) NOT NULL,
+  typakce   CHAR(10) NOT NULL,
+  prikazspust   VARCHAR(255),
+  prikazinfo   VARCHAR(255),
+  prikazchyby   VARCHAR(255),
+  vaha   Integer,
+  davkaid   INTEGER,
+  paralelbeh   Integer NOT NULL,
+  paralelbehtest   Integer NOT NULL,
+  reflogserver   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  prikazparam   VARCHAR(255)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_akce_acis_pk ON bc_akce_acis(idarch);
+ALTER TABLE bc_akce_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT bc_akce_acis_pk;
+
+----------------------------------------------------------------
+CREATE TABLE bc_logserver_cis (
+  kod   CHAR(20) NOT NULL,
+  popis   CHAR(70) NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT bc_logserver_cis_d978
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_logserver_cis_pk ON bc_logserver_cis(kod);
+ALTER TABLE bc_logserver_cis ADD CONSTRAINT PRIMARY KEY(kod) CONSTRAINT bc_logserver_cis_pk;
+
+----------------------------------------------------------------
+CREATE TABLE bc_logserver_acis (
+  idarch   SERIAL NOT NULL,
+  kod   CHAR(20) NOT NULL,
+  popis   CHAR(70) NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT bc_logserver_acis_d97f
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_logserver_acis_pk ON bc_logserver_acis(idarch);
+ALTER TABLE bc_logserver_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT bc_logserver_acis_pk;
+
+----------------------
+ALTER TABLE bc_akce_cis ADD paralelbehtest Integer DEFAULT 0 NOT NULL  BEFORE reftime;
+ALTER TABLE bc_akce_cis ADD reflogserver   CHAR(20) BEFORE reftime;
+
+ALTER TABLE bc_davka_cis ADD spoustetod   CHAR(5) BEFORE spravce;
+ALTER TABLE bc_davka_cis ADD spoustetdo   CHAR(5) BEFORE spravce;
+
+--FK
+CREATE INDEX bc_akce_cis_i_f2 ON bc_akce_cis(reflogserver);
+ALTER TABLE bc_akce_cis ADD CONSTRAINT FOREIGN KEY(reflogserver) REFERENCES bc_logserver_cis(kod) CONSTRAINT bc_akce_cis_f2;
+
+ROLLBACK WORK;
+
+--End of B136602_UID36095_1-definiceDavky

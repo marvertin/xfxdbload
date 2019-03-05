@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136771_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+ALTER TABLE tw_monitor_log ADD note varchar(100);
+
+ROLLBACK WORK;
+
+--End of B136771_UID77507_1

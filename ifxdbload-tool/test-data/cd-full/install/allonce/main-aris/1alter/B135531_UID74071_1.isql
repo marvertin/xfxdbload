@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B135531_UID74071_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření datového typu z INT na BIGINT z důvodu rozdílného rozsahu INT na Informixu
+
+
+BEGIN WORK;
+
+ALTER TABLE pef_firmaodpovedo_den MODIFY (entid BIGINT);
+
+ALTER TABLE pef_firmaosoba_cis MODIFY (entid BIGINT);
+
+-- Změna z NULLABLE NO na NULLABLE YES
+ALTER TABLE pef_firmaosoba_cis MODIFY (jmeno VARCHAR(70));
+
+UPDATE STATISTICS FOR ROUTINE pef_firmaAktualizuj;
+
+ROLLBACK WORK;
+
+--End of B135531_UID74071_1

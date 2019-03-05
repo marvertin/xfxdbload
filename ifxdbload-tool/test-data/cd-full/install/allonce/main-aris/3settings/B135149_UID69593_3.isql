@@ -1,0 +1,74 @@
+-- @TC:ONCE: ID = V2, B135149_UID69593_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20529: RSTS procedury do dodávky {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+-- dle souboru registry.sql
+-- ORR finalne
+
+update tw_registr_cis set hodnota='' where uloha = 'rizKon-URG' and funkce='funkce' and udaj='aktualniImpl';
+
+update tw_registr_cis set hodnota='crk_vypocetUrgVychoziImpl' where uloha = 'rizKon-URG' and funkce='funkce' and udaj='vychoziImpl';
+
+update tw_registr_cis set hodnota='2' where uloha = 'rizKon-URG' and funkce='nahradni-hodnoty' and udaj='APLscore';
+
+update tw_registr_cis set hodnota='100' where uloha = 'rizKon-URG' and funkce='nahradni-hodnoty' and udaj='CBscore-default-v-BR';
+
+update tw_registr_cis set hodnota='430.5' where uloha = 'rizKon-URG' and funkce='nahradni-hodnoty' and udaj='CBscore-jiny-problem';
+
+update tw_registr_cis set hodnota='729' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='poc-PFSU-HY';
+
+update tw_registr_cis set hodnota='720.7' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='poc-PFSU-RE';
+
+update tw_registr_cis set hodnota='886.29' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='poc-SUFO';
+
+update tw_registr_cis set hodnota='720.7' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='pocatek';
+
+update tw_registr_cis set hodnota='5.59' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='shAS-PFSU-HY';
+
+update tw_registr_cis set hodnota='5.26' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='shAS-PFSU-RE';
+
+update tw_registr_cis set hodnota='6.71' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='shAS-SUFO';
+
+update tw_registr_cis set hodnota='513' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='shCB-PFSU-HY';
+
+update tw_registr_cis set hodnota='499.6' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='shCB-PFSU-RE';
+
+update tw_registr_cis set hodnota='520' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='shCB-SUFO';
+
+update tw_registr_cis set hodnota='70.6' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='skl-PFSU-HY';
+
+update tw_registr_cis set hodnota='87.7' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='skl-PFSU-RE';
+
+update tw_registr_cis set hodnota='128.8' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='skl-SUFO';
+
+update tw_registr_cis set hodnota='87.7' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='sklon';
+
+update tw_registr_cis set hodnota='1.36' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='smer-odch-AS';
+
+update tw_registr_cis set hodnota='65.2' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='smer-odch-CB';
+
+update tw_registr_cis set hodnota='1.09' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='soAS-PFSU-HY';
+
+update tw_registr_cis set hodnota='1.36' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='soAS-PFSU-RE';
+
+update tw_registr_cis set hodnota='1.19' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='soAS-SUFO';
+
+update tw_registr_cis set hodnota='65.1' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='soCB-PFSU-HY';
+
+update tw_registr_cis set hodnota='65.2' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='soCB-PFSU-RE';
+
+update tw_registr_cis set hodnota='65' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='soCB-SUFO';
+
+update tw_registr_cis set hodnota='5.26' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='stredni-hodnota-AS';
+
+update tw_registr_cis set hodnota='499.6' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='stredni-hodnota-CB';
+
+update tw_registr_cis set hodnota='0.5' where uloha = 'rizKon-URG' and funkce='parametr-vypoctu' and udaj='vaha';
+
+
+
+ROLLBACK WORK;
+
+--End of B135149_UID69593_3

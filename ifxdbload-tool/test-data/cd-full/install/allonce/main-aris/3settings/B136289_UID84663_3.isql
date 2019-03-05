@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B136289_UID84663_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28355: UŽ - Zajištění - překlepy {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+update eu_otazkarozhod_cis
+set text = 'Je nutné využít odložené zástavy (dražba, insolvence, družstevní bydlení,..)'
+where id = 214;
+
+update eu_otazkarozhod_cis
+set text = 'Zastavujete samostatný pozemek?'
+where id = 211;
+
+update eu_otazkarozhod_cis
+set text = 'Je zástavní právo ve prospěch právnické nebo fyzické osoby?'
+where id = 215;
+
+ROLLBACK WORK;
+
+--End of B136289_UID84663_3

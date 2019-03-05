@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B136339_UID85205_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28698: V dotazníku přestalo fungovat předgenerování pojištění Uniqa {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE eu_sadavazebrozhod_cis SET id = serno;
+
+UPDATE eu_sadavazebrozhod_cis SET id = 100 WHERE urceni = 'VARIANTAPU' AND platnost = 1 AND tsml = 'PFSU';
+UPDATE eu_sadavazebrozhod_cis SET id = 110 WHERE urceni = 'VARIANTAPU' AND platnost = 1 AND tsml = 'SUFO';
+UPDATE eu_sadavazebrozhod_cis SET id = 120 WHERE urceni = 'ZAJISTENI' AND platnost = 1 AND tsml = 'PFSU';
+UPDATE eu_sadavazebrozhod_cis SET id = 130 WHERE urceni = 'ZAJISTENI' AND platnost = 1 AND tsml = 'SUFO';
+UPDATE eu_sadavazebrozhod_cis SET id = 140 WHERE urceni = 'UCEL' AND platnost = 1 AND tsml = 'PFSU';
+UPDATE eu_sadavazebrozhod_cis SET id = 150 WHERE urceni = 'UCEL' AND platnost = 1 AND tsml = 'SUFO';
+
+
+ROLLBACK WORK;
+
+--End of B136339_UID85205_3

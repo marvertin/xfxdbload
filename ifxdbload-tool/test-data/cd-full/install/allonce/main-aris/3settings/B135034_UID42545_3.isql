@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135034_UID42545_3
+-- @TC:ONCE: DESCRIPTION = RSTS-7317: Schválit úvěrovou smlouvu {STORY}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3004, 'Schválit úvěrový návrh', 1);
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3005, 'Vrátit smlouvu do úvěrového návrhu pracovníkem centrály', 1);
+
+ROLLBACK WORK;
+
+--End of B135034_UID42545_3

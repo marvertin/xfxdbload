@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B134784_UID65236_1
+-- @TC:ONCE: DESCRIPTION = RSTS-18327: TF001742 - Nepředávají se požadavky z CIBIS-Sale do CIBIS-Main {DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE sep_predanierror_log  MODIFY pozadavekSerno BIGINT;
+
+ALTER TABLE sep_predanierror_log
+  DROP CONSTRAINT sep_predanierror_log_c1;
+
+ALTER TABLE sep_predanierror_log
+ ADD CONSTRAINT (CHECK (pozadavektyp in ('UZ', 'SS', 'OS', 'CP', 'DB', 'XX')) 
+  CONSTRAINT sep_predanierror_log_c1);
+
+ROLLBACK WORK;
+
+--End of B134784_UID65236_1

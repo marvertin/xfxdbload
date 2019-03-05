@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B137084_UID91256_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31909: Central: Umožnit změnit lhůtu pro smazání ÚŽ {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE crk_schvaluverh_arch 
+  ADD  smazlimitdny   Integer before poruser,
+  ADD  smazlimitduvod   VARCHAR(255) before poruser 
+;
+
+ALTER TABLE crk_schvaluverh_mat  
+  ADD  smazlimitdny   Integer before poruser,
+  ADD  smazlimitduvod   VARCHAR(255) before poruser 
+;
+
+ROLLBACK WORK;
+
+--End of B137084_UID91256_1

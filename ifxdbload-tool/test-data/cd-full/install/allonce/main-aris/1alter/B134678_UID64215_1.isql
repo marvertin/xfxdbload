@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B134678_UID64215_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17891: Main: Správně přednastavit úrokové sazby při vytvoření úvěru v Main {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eu_sml_arch ADD (
+  indivsazbapu   Integer,
+  indivsazba   Integer
+);
+
+ALTER TABLE eu_sml_arch ADD CONSTRAINT (
+  CHECK (indivsazbapu IN (0,1)) CONSTRAINT eu_sml_arch_d4t7,
+  CHECK (indivsazba IN (0,1)) CONSTRAINT eu_sml_arch_d4t8
+);
+
+ALTER TABLE eu_sml_mat ADD (
+  indivsazbapu   Integer,
+  indivsazba   Integer
+);
+
+ALTER TABLE eu_sml_mat ADD CONSTRAINT (
+  CHECK (indivsazbapu IN (0,1)) CONSTRAINT eu_sml_mat_d4t5,
+  CHECK (indivsazba IN (0,1)) CONSTRAINT eu_sml_mat_d4t6
+);
+
+ROLLBACK WORK;
+
+--End of B134678_UID64215_1

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B137211_UID92332_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+--seu_cecklistItem_mat
+ALTER TABLE seu_checklistitem_mat ADD refzavazek BIGINT BEFORE refPrijem;
+ALTER TABLE seu_checklistitem_arch ADD refzavazek BIGINT BEFORE refPrijem;
+
+CREATE INDEX seu_checklistitem_mat_i_f6 ON seu_checklistitem_mat(refzavazek);
+ALTER TABLE seu_checklistitem_mat ADD CONSTRAINT FOREIGN KEY(refzavazek) REFERENCES cfs_zavazek_mat(serno) CONSTRAINT seu_checklistitem_mat_f6;
+
+ROLLBACK WORK;
+
+--End of B137211_UID92332_1

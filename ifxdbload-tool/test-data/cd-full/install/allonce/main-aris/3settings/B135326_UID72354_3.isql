@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135326_UID72354_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22094: Přiložený dokument zmizí {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE do_typdokumentuskupina_cis SET skupina = 1 WHERE skupina=3 AND doktyp=48;
+
+ROLLBACK WORK;
+
+--End of B135326_UID72354_3

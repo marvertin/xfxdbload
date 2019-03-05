@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, B135854_UID78210_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24680: Algoritmy provedení stresových kontrol {STORY}
+
+BEGIN WORK;
+
+CREATE TABLE crk_kontrolastresvyp_den (
+  serno   BIGSERIAL NOT NULL,
+  streskoefprijmy   dec(6,2),
+  streskoefsplatzav   dec(6,2),
+  streskoefnakldomacnost   dec(6,2),
+  maxprijem   DECIMAL(16, 2),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refdatprov   DATE
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX crk_kontrolastresvyp_den_pk ON crk_kontrolastresvyp_den(serno);
+ALTER TABLE crk_kontrolastresvyp_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT crk_kontrolastresvyp_den_pk;
+
+alter table crk_kontrolastav_den
+  add refkontrolastresvyp   BIGINT before datdotazextregistr
+;
+
+--FK
+CREATE INDEX crk_kontrolastav_den_i_fk6 ON crk_kontrolastav_den(refkontrolastresvyp);
+ALTER TABLE crk_kontrolastav_den ADD CONSTRAINT FOREIGN KEY(refkontrolastresvyp) REFERENCES crk_kontrolastresvyp_den(serno) CONSTRAINT crk_kontrolastav_den_fk6;
+
+ROLLBACK WORK;
+
+--End of B135854_UID78210_1

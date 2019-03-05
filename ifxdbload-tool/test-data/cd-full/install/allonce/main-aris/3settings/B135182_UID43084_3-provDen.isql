@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135182_UID43084_3-provDen
+-- @TC:ONCE: DESCRIPTION = RSTS-7546: Provést kompletaci dokumentů USD {STORY}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis) values ('EU', '3008', 'Provést kompletaci ÚSD');
+insert into tw_prov_typ_cis (okruh, typ, popis) values ('EU', '3009', 'Uložit a distribuovat ÚSD');
+
+ROLLBACK WORK;
+
+--End of B135182_UID43084_3-provDen

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136047_UID70672_1-rr_reptype_acis
+-- @TC:ONCE: DESCRIPTION = RSTS-21185: Rozlišení šablon pro PB a J2EE aplikace {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE rr_reptype_acis ADD(
+  reporttechnology   CHAR(20)
+);
+
+
+ROLLBACK WORK;
+
+--End of B136047_UID70672_1-rr_reptype_acis

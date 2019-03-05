@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B135953_UID80710_1-residence
+-- @TC:ONCE: DESCRIPTION = RSTS-26048: Rozšířit číselník druhů pobytu o povinnost zadání pobytu od-do {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eo_residence_cis ADD (
+  xterm_mandatory   Integer  DEFAULT 1 NOT NULL before refuser
+);
+
+ALTER TABLE eo_residence_acis ADD (
+  xterm_mandatory   Integer  before refuser
+);
+
+ROLLBACK WORK;
+
+--End of B135953_UID80710_1-residence

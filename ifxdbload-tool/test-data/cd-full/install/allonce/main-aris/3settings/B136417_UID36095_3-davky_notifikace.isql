@@ -1,0 +1,88 @@
+-- @TC:ONCE: ID = V2, B136417_UID36095_3-davky_notifikace
+-- @TC:ONCE: DESCRIPTION = RSTS-5046: TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetKey('BP','batch','e-mailType','START', 'DAVKA_START');
+call TW_RegSetKey('BP','batch','e-mailType','END',   'DAVKA_END');
+call TW_RegSetKey('BP','batch','e-mailType','ERR',   'DAVKA_ERR');
+call TW_RegSetKey('BP','batch','e-mailType','END_WARN', 'DAVKA_ENDW');
+call TW_RegSetKey('BP','batch','e-mailType','STOP',  'DAVKA_STOP');
+call TW_RegSetKey('BP','batch','e-mailType','CANCEL','DAVKA_CANCEL');
+
+call TW_RegSetKey('BP', 'batch', 'SMSType','START', 'DAVKA_START');
+call TW_RegSetKey('BP', 'batch', 'SMSType','END',   'DAVKA_END');
+call TW_RegSetKey('BP', 'batch', 'SMSType','ERR',   'DAVKA_ERR');
+call TW_RegSetKey('BP', 'batch', 'SMSType','END_WARN', 'DAVKA_ENDW');
+call TW_RegSetKey('BP', 'batch', 'SMSType','STOP',  'DAVKA_STOP');
+call TW_RegSetKey('BP', 'batch', 'SMSType','CANCEL','DAVKA_CANCEL');
+
+INSERT INTO TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost, maxpocetpriloh, maxpocetznaku) 
+VALUES ('DAVKA_CANCEL', 'Notifikace zrušení dávky', 'EOD@rsts.cz', 'CIBIS', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>', 
+'Došlo k <<AKCE>> dávky <<DAVKA>>.\n'|| 
+' Provozní datum dávky: <<DATUM_START>>\n'|| 
+' Provozní datum při ukončení: <<DATUM_KONEC>>', null, 0, 5, 1, 0, 'S', 1, 1, 0, null);
+
+INSERT INTO TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost, maxpocetpriloh, maxpocetznaku) 
+VALUES ('DAVKA_END', 'Notifikace ukončení dávky', 'EOD@rsts.cz', 'CIBIS', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>', 
+'Došlo k <<AKCE>> dávky <<DAVKA>>.\n'|| 
+' Čas ukončení: <<CAS_KONEC>>\n'|| 
+' Pořadí běhu: <<PORADI_BEH>>\n'|| 
+' Provozní datum dávky: <<DATUM_START>>\n'|| 
+' Provozní datum při ukončení: <<DATUM_KONEC>>', null, 0, 5, 1, 0, 'S', 1, 1, 0, null);
+
+INSERT INTO TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost, maxpocetpriloh, maxpocetznaku) 
+VALUES ('DAVKA_ENDW', 'Notifikace varování dávky', 'EOD@rsts.cz', 'CIBIS', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>', 
+'Došlo k <<AKCE>> dávky <<DAVKA>>.\n'||  
+'  Čas ukončení: <<CAS_KONEC>>\n'|| 
+'  Pořadí běhu: <<PORADI_BEH>>\n'||  
+'  Provozní datum dávky: <<DATUM_START>>\n'||  
+'  Provozní datum při ukončení: <<DATUM_KONEC>>\n'|| 
+' Seznam varování:\n'||  
+' <<WARNINGS>>', null, 0, 5, 1, 0, 'S', 1, 1, 0, null);
+
+INSERT INTO TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost, maxpocetpriloh, maxpocetznaku) 
+VALUES ('DAVKA_ERR', 'Notifikace chyby dávky', 'EOD@rsts.cz', 'CIBIS', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>', 
+'Došlo k <<AKCE>> dávky <<DAVKA>>.\n'||  
+' Chyba: <<ERROR>>\n'||  
+' Čas ukončení: <<CAS_KONEC>>\n'||  
+' Pořadí běhu: <<PORADI_BEH>>\n'||  
+' Provozní datum při chybě: <<DATUM_KONEC>>', null, 0, 5, 1, 0, 'S', 1, 1, 0, null);
+
+INSERT INTO TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost, maxpocetpriloh, maxpocetznaku) 
+VALUES ('DAVKA_START', 'Notifikace startu dávky', 'EOD@rsts.cz', 'CIBIS', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>', 
+'Došlo k <<AKCE>> dávky <<DAVKA>>.\n'|| 
+' Čas spuštění: <<CAS_BEH_START>>\n'|| 
+' Pořadí běhu: <<PORADI_BEH>>\n'|| 
+' Provozní datum dávky: <<DATUM_START>>', null, 0, 5, 1, 0, 'S', 1, 1,  0, null);
+
+INSERT INTO TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost, maxpocetpriloh, maxpocetznaku) 
+VALUES ('DAVKA_STOP', 'Notifikace přerušení dávky', 'EOD@rsts.cz', 'CIBIS', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>', 
+'Došlo k <<AKCE>> dávky <<DAVKA>>.\n'|| 
+' Čas ukončení: <<CAS_KONEC>>\n'|| 
+' Pořadí běhu: <<PORADI_BEH>>\n'|| 
+' Provozní datum dávky: <<DATUM_START>>\n'|| 
+' Provozní datum při ukončení: <<DATUM_KONEC>>', null, 0, 5, 1, 0, 'S', 1, 1, 0, null);
+
+INSERT INTO TW_SMSTyp_Cis (zkratka, popis, textsms, plnasms, platnost, ignorovatcas) 
+VALUES ('DAVKA_START', 'Notifikace startu dávky', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>.', 1, 1, 1);
+
+INSERT INTO TW_SMSTyp_Cis (zkratka, popis, textsms, plnasms, platnost, ignorovatcas) 
+VALUES ('DAVKA_END', 'Notifikace ukončení dávky', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>. Provozní datum dávky: <<DATUM_START>>. Provozní datum při ukončení: <<DATUM_KONEC>>.', 1, 1, 1);
+
+INSERT INTO TW_SMSTyp_Cis (zkratka, popis, textsms, plnasms, platnost, ignorovatcas) 
+VALUES ('DAVKA_ERR', 'Notifikace chyby dávky', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>. Chyba: <<ERROR>>.', 1, 1, 1);
+
+INSERT INTO TW_SMSTyp_Cis (zkratka, popis, textsms, plnasms, platnost, ignorovatcas) 
+VALUES ('DAVKA_STOP', 'Notifikace přerušení dávky', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>. Provozní datum dávky: <<DATUM_START>>. Provozní datum při ukončení: <<DATUM_KONEC>>.', 1, 1, 1);
+
+INSERT INTO TW_SMSTyp_Cis (zkratka, popis, textsms, plnasms, platnost, ignorovatcas) 
+VALUES ('DAVKA_CANCEL', 'Notifikace zrušení dávky', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>. Provozní datum dávky: <<DATUM_START>>. Provozní datum při ukončení: <<DATUM_KONEC>>.', 1, 1, 1);
+
+INSERT INTO TW_SMSTyp_Cis (zkratka, popis, textsms, plnasms, platnost, ignorovatcas) 
+VALUES ('DAVKA_ENDW', 'Notifikace varování dávky', '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>. Provozní datum dávky: <<DATUM_START>>. Provozní datum při ukončení: <<DATUM_KONEC>>.', 1, 1, 1);
+
+
+ROLLBACK WORK;
+
+--End of B136417_UID36095_3-davky_notifikace

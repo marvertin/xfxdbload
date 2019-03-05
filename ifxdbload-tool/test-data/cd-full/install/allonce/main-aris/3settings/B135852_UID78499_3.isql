@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135852_UID78499_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24827: Import kurzovního lístku {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO ws_metoda_cis (id, nazev, specifikace, metoda, poznamka, platnost, smersluzby, skupinasluzeb) 
+VALUES (52, 'Import kursovního lístku', 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date=', 'getKursListek', NULL, 1, 1, 10);
+
+ROLLBACK WORK;
+
+--End of B135852_UID78499_3

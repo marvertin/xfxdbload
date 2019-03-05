@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B135653_UID76197_1
+-- @TC:ONCE: DESCRIPTION = RSTS-23577: Pravidla pro vyhledání hranic RK závislá na typu kontroly {STORY}
+
+BEGIN WORK;
+
+alter table crk_kontrolapravidlo_acis
+  add reftyp CHAR(10) before sadaporadi
+  , add hranice VARCHAR(255) before poruser
+;
+
+alter table crk_kontrolapravidlo_cis
+  add reftyp CHAR(10) before sadaporadi
+  , add hranice VARCHAR(255) before poruser
+;
+
+--FK
+CREATE INDEX crk_kontrolapravidlo_cis_i_f3 ON crk_kontrolapravidlo_cis(reftyp);
+ALTER TABLE crk_kontrolapravidlo_cis ADD CONSTRAINT FOREIGN KEY(reftyp) REFERENCES crk_kontrolatyp_cis(kod) CONSTRAINT crk_kontrolapravidlo_cis_f3;
+
+
+ROLLBACK WORK;
+
+--End of B135653_UID76197_1

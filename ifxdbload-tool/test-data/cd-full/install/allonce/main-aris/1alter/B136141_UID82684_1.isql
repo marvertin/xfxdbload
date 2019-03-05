@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136141_UID82684_1
+-- @TC:ONCE: DESCRIPTION = Vyplněný dotazník
+
+
+BEGIN WORK;
+
+ALTER TABLE PRO_BSSimulationCase  ADD refdotaznik   BIGINT BEFORE xbsid;
+
+CREATE INDEX pro_bssimulationcase_i_f3 ON pro_bssimulationcase(refdotaznik);
+ALTER TABLE pro_bssimulationcase ADD CONSTRAINT FOREIGN KEY(refdotaznik) REFERENCES eu_dotaznikhead_mat(serno) CONSTRAINT pro_bssimulationcase_f3;
+
+ROLLBACK WORK;
+
+--End of B136141_UID82684_1

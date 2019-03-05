@@ -1,0 +1,93 @@
+-- @TC:ONCE: ID = V2, B136772_UID36095_1-prostredi
+-- @TC:ONCE: DESCRIPTION = RSTS-5046: TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE bc_prostredi_acis (
+  idarch   SERIAL NOT NULL,
+  kod   CHAR(10) NOT NULL,
+  popis   CHAR(70),
+  dbserver   CHAR(35),
+  dbnazev   CHAR(35),
+  prodprostredi   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (prodprostredi IN (0,1)) CONSTRAINT bc_prostredi_acis_d9n8,
+  CHECK (platnost IN (0,1)) CONSTRAINT bc_prostredi_acis_d9n5
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_prostredi_acis_pk ON bc_prostredi_acis(idarch);
+ALTER TABLE bc_prostredi_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT bc_prostredi_acis_pk;
+
+----------------------------------------------------------------
+CREATE TABLE bc_prostredi_cis (
+  kod   CHAR(10) NOT NULL,
+  popis   CHAR(70),
+  dbserver   CHAR(35),
+  dbnazev   CHAR(35),
+  prodprostredi   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (prodprostredi IN (0,1)) CONSTRAINT bc_prostredi_cis_d9mk,
+  CHECK (platnost IN (0,1)) CONSTRAINT bc_prostredi_cis_d9mh
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_prostredi_cis_pk ON bc_prostredi_cis(kod);
+ALTER TABLE bc_prostredi_cis ADD CONSTRAINT PRIMARY KEY(kod) CONSTRAINT bc_prostredi_cis_pk;
+
+----------------------------------------------------------------
+CREATE TABLE bc_fyzserver_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  jmeno   CHAR(30) NOT NULL,
+  reflogserver   CHAR(20) NOT NULL,
+  refprostredi   CHAR(10) NOT NULL,
+  agenturl   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT bc_fyzserver_acis_d9ni
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_fyzserver_acis_pk ON bc_fyzserver_acis(idarch);
+ALTER TABLE bc_fyzserver_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT bc_fyzserver_acis_pk;
+
+----------------------------------------------------------------
+CREATE TABLE bc_fyzserver_cis (
+  serno   SERIAL NOT NULL,
+  jmeno   CHAR(30) NOT NULL,
+  reflogserver   CHAR(20) NOT NULL,
+  refprostredi   CHAR(10) NOT NULL,
+  agenturl   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT bc_fyzserver_cis_d9mu
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_fyzserver_cis_pk ON bc_fyzserver_cis(serno);
+ALTER TABLE bc_fyzserver_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT bc_fyzserver_cis_pk;
+
+--FK
+CREATE INDEX bc_fyzserver_cis_i_f1 ON bc_fyzserver_cis(reflogserver);
+ALTER TABLE bc_fyzserver_cis ADD CONSTRAINT FOREIGN KEY(reflogserver) REFERENCES bc_logserver_cis(kod) CONSTRAINT bc_fyzserver_cis_f1;
+CREATE INDEX bc_fyzserver_cis_i_f2 ON bc_fyzserver_cis(refprostredi);
+ALTER TABLE bc_fyzserver_cis ADD CONSTRAINT FOREIGN KEY(refprostredi) REFERENCES bc_prostredi_cis(kod) CONSTRAINT bc_fyzserver_cis_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX bc_fyzserver_cis_u1 ON bc_fyzserver_cis(jmeno);
+ALTER TABLE bc_fyzserver_cis ADD CONSTRAINT (UNIQUE (jmeno) CONSTRAINT bc_fyzserver_cis_u1);
+
+
+ROLLBACK WORK;
+
+--End of B136772_UID36095_1-prostredi

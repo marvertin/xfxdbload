@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, B136149_UID82435_1
+-- @TC:ONCE: DESCRIPTION = RSTS-26917: Upravit RK Cizinec tak, aby pracovala s více doklady {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE crk_vypocetcizinec_den DROP  druhprukaz1o1;
+ALTER TABLE crk_vypocetcizinec_den DROP  druhprukaz2o1;
+ALTER TABLE crk_vypocetcizinec_den DROP  druhprukaz1o2;
+ALTER TABLE crk_vypocetcizinec_den DROP  druhprukaz2o2;
+ALTER TABLE crk_vypocetcizinec_den DROP  druhprukaz1o3;
+ALTER TABLE crk_vypocetcizinec_den DROP  druhprukaz2o3;
+ALTER TABLE crk_vypocetcizinec_den DROP  druhprukaz1o4;
+ALTER TABLE crk_vypocetcizinec_den DROP  druhprukaz2o4;
+
+
+CREATE TABLE crk_vypocetcizdokl_den (
+  serno   BIGINT NOT NULL,
+  refvypocet   BIGINT,
+  poziceos   CHAR(2),
+  druhprukaz   Integer,  
+  priorita   Integer,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX crk_vypocetcizdokl_den_pk ON crk_vypocetcizdokl_den(serno);
+ALTER TABLE crk_vypocetcizdokl_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT crk_vypocetcizdokl_den_pk;
+
+--FK
+CREATE INDEX crk_vypocetcizdokl_den_i_f1 ON crk_vypocetcizdokl_den(refvypocet);
+ALTER TABLE crk_vypocetcizdokl_den ADD CONSTRAINT FOREIGN KEY(refvypocet) REFERENCES crk_vypocetcizinec_den(serno) CONSTRAINT crk_vypocetcizdokl_den_f1;
+
+ROLLBACK WORK;
+
+--End of B136149_UID82435_1

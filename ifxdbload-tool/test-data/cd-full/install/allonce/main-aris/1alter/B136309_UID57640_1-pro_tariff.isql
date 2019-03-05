@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136309_UID57640_1-pro_tariff
+-- @TC:ONCE: DESCRIPTION = RSTS-14563: zesouladit datové typy v modelování {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_tariff 
+  MODIFY xallotmentnumber DECIMAL(16,2)
+;
+
+ROLLBACK WORK;
+
+--End of B136309_UID57640_1-pro_tariff

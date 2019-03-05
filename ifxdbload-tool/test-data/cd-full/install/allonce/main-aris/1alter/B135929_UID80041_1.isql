@@ -1,0 +1,84 @@
+-- @TC:ONCE: ID = V2, B135929_UID80041_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25718: Umožnit zadat více dokladů totožnosti v CIBIS-Sale {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE seo_pobyt_mat (
+  serno   BIGINT NOT NULL,
+  refosoba   BIGINT NOT NULL,
+  pobytod   DATE,
+  pobytdo   DATE,
+  druhpobyt   CHAR(1),
+  mistonaroz   CHAR(45),
+  statnaroz   CHAR(2),
+  politexp   Integer,
+  residentflag   Integer,
+  druhpobytinterni   INTEGER,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (politexp IN (0,1)) CONSTRAINT seo_pobyt_mat_d74x,
+  CHECK (residentflag IN (0,1)) CONSTRAINT seo_pobyt_mat_d74y
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX seo_pobyt_mat_pk ON seo_pobyt_mat(serno);
+ALTER TABLE seo_pobyt_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seo_pobyt_mat_pk;
+
+--FK
+CREATE INDEX seo_pobyt_mat_i_f1 ON seo_pobyt_mat(druhpobyt);
+ALTER TABLE seo_pobyt_mat ADD CONSTRAINT FOREIGN KEY(druhpobyt) REFERENCES eo_residence_cis(xcode) CONSTRAINT seo_pobyt_mat_f1;
+CREATE INDEX seo_pobyt_mat_i_f2 ON seo_pobyt_mat(statnaroz);
+ALTER TABLE seo_pobyt_mat ADD CONSTRAINT FOREIGN KEY(statnaroz) REFERENCES eo_stat_cis(statprisl) CONSTRAINT seo_pobyt_mat_f2;
+CREATE INDEX seo_pobyt_mat_i_f3 ON seo_pobyt_mat(druhpobytinterni);
+ALTER TABLE seo_pobyt_mat ADD CONSTRAINT FOREIGN KEY(druhpobytinterni) REFERENCES eo_druhpobytinterni_cis(id) CONSTRAINT seo_pobyt_mat_f3;
+CREATE INDEX seo_pobyt_mat_i_f4 ON seo_pobyt_mat(refosoba);
+ALTER TABLE seo_pobyt_mat ADD CONSTRAINT FOREIGN KEY(refosoba) REFERENCES seo_osoba_mat(serno) CONSTRAINT seo_pobyt_mat_f4;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+
+------------------------------------------------------------------------------------------------------
+
+CREATE TABLE seo_pobyt_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  refosoba   BIGINT,
+  pobytod   DATE,
+  pobytdo   DATE,
+  druhpobyt   CHAR(1),
+  mistonaroz   CHAR(45),
+  statnaroz   CHAR(2),
+  politexp   Integer,
+  residentflag   Integer,
+  druhpobytinterni   INTEGER,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (politexp IN (0,1)) CONSTRAINT seo_pobyt_arch_d847,
+  CHECK (residentflag IN (0,1)) CONSTRAINT seo_pobyt_arch_d848
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX seo_pobyt_arch_pk ON seo_pobyt_arch(idarch);
+ALTER TABLE seo_pobyt_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT seo_pobyt_arch_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+
+ROLLBACK WORK;
+
+--End of B135929_UID80041_1

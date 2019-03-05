@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137236_UID92332_5
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+-- benevolentnější check, rozšiřujeme o možnost ZAVAZEK
+ALTER TABLE cpd_pozdokumenty_cis ADD CONSTRAINT (CHECK (typobjektu IN ('OSOBA','PRIJEM','ZAJISTENI','UCEL', 'ZAVAZEK', 'OSTATNI')) CONSTRAINT cpd_pozdokumenty_cis_c1);
+
+ROLLBACK WORK;
+
+--End of B137236_UID92332_5

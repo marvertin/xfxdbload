@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135793_UID72301_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22054: Kontrola na maximální výši příjmů vybraných typů příjmů {EPIC}
+
+
+BEGIN WORK;
+
+ALTER TABLE ac_kurslist_den ADD pocet1 Integer NOT NULL before mena2;
+
+ROLLBACK WORK;
+
+--End of B135793_UID72301_1

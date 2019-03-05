@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B136011_UID80005_3-agregLTV
+-- @TC:ONCE: DESCRIPTION = RSTS-25696: Parametrizace a migrace nového typu RK Agregované LTV {STORY}
+
+
+BEGIN WORK;
+
+-- #Počet měsíců pro souběh úvěrů pro agregované LTV#
+call TW_RegSetOrAddKey('EU', 'rizKon-LTV', 'agreg-LTV', 'poc-mes-soubeh', 3, 1,
+                       'Úvěr', 'Rizikové kontroly úvěru - LTV', 'Agregované LTV', 'Počet měsíců pro souběh úvěrů pro agregované LTV', 1);
+                       
+-- #Defaultní LTV pro závazky mimo RSTS#               
+call TW_RegSetOrAddKey('EU', 'rizKon-LTV', 'agreg-LTV', 'default-LTV-ext-zav', 0.8, 1,
+                       'Úvěr', 'Rizikové kontroly úvěru - LTV', 'Agregované LTV', 'Defaultní LTV pro závazky mimo RSTS', 1); 
+                 
+
+INSERT INTO crk_kontrolatyp_cis(kod, poradizobraz, nazev, garant, pozadovatkdy,
+                                spustrozliseniko, nejnizsiuroven, zpusoburcenihranicekon, popishranice, spustitelnakontrola,
+                                prioritavolani, typalternativninabidky, algoritmusfunkcef1, algoritmusfunkcef2, algoritmusfunkcef3,
+                                algoritmusfunkcef4, algoritmusfunkcef5, spustautprischval, nedostupsalechyba)
+VALUES ('LTV_AGREG', 1200, 'Agregované LTV', 'OZU', 'P',
+        1, 'U', 'S', 'Agregované LTV', 1,
+        1055, 'VYSEUVERU', 'F1 PRAH % OK', 'F2 NE', 'F3 NE',
+        'F4 NE', 'F5 NE', 1, 1);
+
+ROLLBACK WORK;
+
+--End of B136011_UID80005_3-agregLTV

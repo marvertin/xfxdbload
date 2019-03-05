@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135741_UID76986_3-registry
+-- @TC:ONCE: DESCRIPTION = RSTS-23957: IMPLEMENTACE (BE): RSTS-14722_Údržba chybové evidence modelu splácení a spoření {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EP', 'modSplacASpor', 'mazaniModelu', 'pocDniVymazChyby', 365, 1, 'Podpora pro produkt', 'Model splácení a spoření', 'Mazání modelů', 'Počet dní pro vymazání informací o chybách výpočtu modelu splácení a spoření', 1);
+
+ROLLBACK WORK;
+
+--End of B135741_UID76986_3-registry

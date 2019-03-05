@@ -1,0 +1,102 @@
+-- @TC:ONCE: ID = V2, B137216_UID93246_1-obdobi
+-- @TC:ONCE: DESCRIPTION = RSTS-32908: IMPL (dat.model+část BE): RSTS-32037_Nová úloha - Vratky SP na MF {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+CREATE TABLE csp_vratobdobi_mat (
+  serno   BIGINT NOT NULL,
+  rok   datetime year to year NOT NULL,
+  obdobi   Integer NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  castka   DECIMAL(16, 2),
+  pocetsml  Integer,
+  datotev   DATE,
+  otevuser   CHAR(20),
+  otevtime   datetime year to second,
+  datuzav   DATE,
+  uzavuser   CHAR(20),
+  uzavtime   datetime year to second,
+  datsum   DATE,
+  sumuser   CHAR(20),
+  sumtime   datetime year to second,
+  datexport   DATE,
+  exportuser   CHAR(20),
+  exporttime   datetime year to second,
+  jenactenf   Integer DEFAULT 0 NOT NULL,
+  datimpchstr   DATE,
+  impchstruser   CHAR(20),
+  impchstrtime   datetime year to second,
+  jenactend   Integer DEFAULT 0 NOT NULL,
+  datimpchhlav   DATE,
+  impchhlavuser   CHAR(20),
+  impchhlavtime   datetime year to second,
+  datzprac   DATE,
+  zpracuser   CHAR(20),
+  zpractime   datetime year to second,
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_vratobdobi_mat_pk ON csp_vratobdobi_mat(serno);
+ALTER TABLE csp_vratobdobi_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT csp_vratobdobi_mat_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX csp_vratobdobi_mat_u1 ON csp_vratobdobi_mat(rok,obdobi);
+ALTER TABLE csp_vratobdobi_mat ADD CONSTRAINT (UNIQUE (rok,obdobi) CONSTRAINT csp_vratobdobi_mat_u1);
+
+--CHECKS
+ALTER TABLE csp_vratobdobi_mat
+ADD CONSTRAINT (CHECK (stav in ('O','U','S','E','I','Z')) CONSTRAINT csp_vratobdobi_mat_c1),
+ADD CONSTRAINT (CHECK (jenactend in (0,1)) CONSTRAINT csp_vratobdobi_mat_c2),
+ADD CONSTRAINT (CHECK (jenactenf in (0,1)) CONSTRAINT csp_vratobdobi_mat_c3);
+
+----------------------------------------------------------------
+CREATE TABLE csp_vratobdobi_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  rok   datetime year to year,
+  obdobi   Integer,
+  stav   CHAR(1) NOT NULL,
+  castka   DECIMAL(16, 2),
+  pocetsml  Integer,
+  datotev   DATE,
+  otevuser   CHAR(20),
+  otevtime   datetime year to second,
+  datuzav   DATE,
+  uzavuser   CHAR(20),
+  uzavtime   datetime year to second,
+  datsum   DATE,
+  sumuser   CHAR(20),
+  sumtime   datetime year to second,
+  datexport   DATE,
+  exportuser   CHAR(20),
+  exporttime   datetime year to second,
+  jenactenf   Integer,
+  datimpchstr   DATE,
+  impchstruser   CHAR(20),
+  impchstrtime   datetime year to second,
+  jenactend   Integer,
+  datimpchhlav   DATE,
+  impchhlavuser   CHAR(20),
+  impchhlavtime   datetime year to second,
+  datzprac   DATE,
+  zpracuser   CHAR(20),
+  zpractime   datetime year to second,
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_vratobdobi_arch_pk ON csp_vratobdobi_arch(idarch);
+ALTER TABLE csp_vratobdobi_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT csp_vratobdobi_arch_pk;
+
+ROLLBACK WORK;
+
+--End of B137216_UID93246_1-obdobi

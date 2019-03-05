@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B134616_UID63483_1-overenitime
+-- @TC:ONCE: DESCRIPTION = RSTS-17582: V souhlasech se u způsobu podpisu Biometricky neukládá datudeleni {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE do_dokument_mat ADD (
+    overeniuser   CHAR(20) BEFORE stavpodpisu
+  , overenitime DATETIME YEAR TO SECOND BEFORE stavpodpisu
+);
+ALTER TABLE do_dokument_arch ADD (
+    overeniuser   CHAR(20) BEFORE stavpodpisu
+  , overenitime DATETIME YEAR TO SECOND BEFORE stavpodpisu
+);
+
+ROLLBACK WORK;
+
+--End of B134616_UID63483_1-overenitime

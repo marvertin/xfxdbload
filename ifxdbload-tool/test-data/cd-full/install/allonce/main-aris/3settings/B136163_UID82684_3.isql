@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B136163_UID82684_3
+-- @TC:ONCE: DESCRIPTION = Dotazník na výběr účelu a zajištění v CIBIS-Sale
+
+BEGIN WORK;
+
+update do_typdokumentu_cis set text = 'Nájemní smlouva na současného člena drustva' where doktyp = 56;
+
+update do_typdokumentu_cis set text = 'Návrh smlouvy (i rezervace, vypořádání spoluvlastnictví)' where doktyp = 58;
+
+update do_typdokumentu_cis set text = 'Návrh smlouvy / budoucí smlouvy (i rezervace) s podmínkami realizace prodeje a splácení' where doktyp = 61;
+
+update do_typdokumentu_cis set text = 'Rozhodnutí soudu / notářský zápis smlouvy o vypořádání SJM nebo smlouva s úředně ověřenými podpisy či sepsaná advokátem' where doktyp = 76;
+
+update do_typdokumentu_cis set text = 'Návrh smlouvy /budoucí smlouvy (i rezervace)' where doktyp = 1181;
+
+INSERT INTO do_typdokumentu_cis (doktyp, text, generovany, archivovat, platnost, biztyp, obsah, podobsah, garant, podepisovany, slucovatproecm)
+VALUES(2150, 'Návrh smlouvy / budoucí smlouvy / nabídka k odkoupení', 0,  1,   1 , '39', '3907', '390706', 'OZU', 0 , 1);
+
+INSERT INTO do_typdokumentu_cis (doktyp, text, generovany, archivovat, platnost, biztyp, obsah, podobsah, garant, podepisovany, slucovatproecm)
+VALUES(2151, 'Stavební doklad / potvrzení stavebního úřadu o umístění objektu v lokalitě určené k trvalému bydlení', 0,  1,   1 , '39', '3907', '390710', 'OZU', 0 , 1);
+
+INSERT INTO do_typdokumentu_cis (doktyp, text, generovany, archivovat, platnost, biztyp, obsah, podobsah, garant, podepisovany, slucovatproecm)
+VALUES(2152, 'Stavební doklad / potvrzení stavebního odboru, že je pozemek určen k výstavbě + demoliční výměr pokud odstraňujete stavbu', 0,  1,   1 , '39', '3907', '390710', 'OZU', 0 , 1);
+
+INSERT INTO do_typdokumentu_cis (doktyp, text, generovany, archivovat, platnost, biztyp, obsah, podobsah, garant, podepisovany, slucovatproecm)
+VALUES(2153, 'Návrh dohody / budoucí dohody (i rezervace)', 0,  1,   1 , '39', '3907', '390710', 'OZU', 0 , 1);
+
+ROLLBACK WORK;
+
+--End of B136163_UID82684_3

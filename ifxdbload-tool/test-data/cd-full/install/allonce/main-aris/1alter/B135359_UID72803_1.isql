@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135359_UID72803_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22291: Šablona "Prohlášení příjmů" {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+ALTER TABLE cfs_prijemtyp_cis ADD socialnidavka INTEGER DEFAULT 0 NOT NULL BEFORE poznamka;
+
+ALTER TABLE cfs_prijemtyp_acis ADD socialnidavka INTEGER BEFORE poznamka;
+
+
+ROLLBACK WORK;
+
+--End of B135359_UID72803_1

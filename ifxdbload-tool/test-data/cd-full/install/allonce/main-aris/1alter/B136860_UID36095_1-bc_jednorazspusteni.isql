@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, B136860_UID36095_1-bc_jednorazspusteni
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE bc_jednorazspusteni (
+  id   SERIAL NOT NULL,
+  davkaid   INTEGER NOT NULL,
+  datumcasplan   datetime year to second,
+  datumcasdo   datetime year to second NOT NULL,
+  stav   CHAR(20) NOT NULL,
+  textchyby CHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  planuser   CHAR(20),
+  plantime   datetime year to second,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_jednorazspusteni_pk ON bc_jednorazspusteni(id);
+ALTER TABLE bc_jednorazspusteni ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT bc_jednorazspusteni_pk;
+
+--FK
+CREATE INDEX bc_jednorazspusteni_i_f1 ON bc_jednorazspusteni(davkaid);
+ALTER TABLE bc_jednorazspusteni ADD CONSTRAINT FOREIGN KEY(davkaid) REFERENCES bc_davka_cis(id) CONSTRAINT bc_jednorazspusteni_f1;
+
+--INDEXES
+CREATE INDEX bc_jednorazspusteni_i1 ON bc_jednorazspusteni(stav);
+CREATE INDEX bc_jednorazspusteni_i2 ON bc_jednorazspusteni(reftime);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE bc_jednorazspusteni
+ADD CONSTRAINT (CHECK (stav IN ('NAVRH','NAPLANOVANO','SPUSTENO','ZRUSENO','CHYBA')) CONSTRAINT bc_jednorazspusteni_c1);
+
+ROLLBACK WORK;
+
+--End of B136860_UID36095_1-bc_jednorazspusteni

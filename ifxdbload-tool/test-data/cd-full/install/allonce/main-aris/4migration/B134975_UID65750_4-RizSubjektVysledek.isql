@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B134975_UID65750_4-RizSubjektVysledek
+-- @TC:ONCE: DESCRIPTION = RSTS-18594: S19sRSTS: Opravit migraci výsledku kontroly rizikového subjektu {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+SET TRIGGERS FOR ep_rizsubjektkontr_den DISABLED;
+/*
+  Ano=1 -> KO tvrdé=KOT
+  Ne=0 -> OK=OKI
+  Neprovedeno=-1 -> Neověřeno=ERR
+*/
+UPDATE ep_rizsubjektkontr_den SET vysledek='KOT' WHERE xold_vysledek=1;
+UPDATE ep_rizsubjektkontr_den SET vysledek='OKI' WHERE xold_vysledek=0;
+UPDATE ep_rizsubjektkontr_den SET vysledek='ERR' WHERE xold_vysledek=-1;
+SET TRIGGERS FOR ep_rizsubjektkontr_den ENABLED;
+
+ROLLBACK WORK;
+
+--End of B134975_UID65750_4-RizSubjektVysledek

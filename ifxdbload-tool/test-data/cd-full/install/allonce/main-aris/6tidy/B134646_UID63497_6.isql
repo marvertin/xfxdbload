@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B134646_UID63497_6
+-- @TC:ONCE: DESCRIPTION = RSTS-17590: Parametrizace číselníků k dotazníku - poslední úpravy. {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+call mo_paramrefreshnew();
+
+ROLLBACK WORK;
+
+--End of B134646_UID63497_6

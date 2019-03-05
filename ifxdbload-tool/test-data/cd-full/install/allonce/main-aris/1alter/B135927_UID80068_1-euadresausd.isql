@@ -1,0 +1,74 @@
+-- @TC:ONCE: ID = V2, B135927_UID80068_1-euadresausd
+-- @TC:ONCE: DESCRIPTION = RSTS-25737: Předat nové údaje do centrální evidence. {STORY}
+
+
+BEGIN WORK;
+  
+CREATE TABLE eu_adresausd_mat (
+  serno   BIGINT NOT NULL,
+  corient   CHAR(8),
+  cpopis   CHAR(8),
+  obec   VARCHAR(100),
+  platnost   Integer  DEFAULT 1,
+  psc   CHAR(5),
+  stat   VARCHAR(60),
+  ulice   VARCHAR(60),
+  adresat   CHAR(45),
+  kodadm   CHAR(10),
+  adrruianpouzito   Integer  DEFAULT 0,
+  adrruiansynch   datetime year to second,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_adresausd_mat_d84r,
+  CHECK (adrruianpouzito IN (0,1)) CONSTRAINT eu_adresausd_mat_d84t
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_adresausd_mat_pk ON eu_adresausd_mat(serno);
+ALTER TABLE eu_adresausd_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_adresausd_mat_pk;
+
+--FK
+CREATE INDEX eu_adresausd_mat_i_f1 ON eu_adresausd_mat(smlouva,tsml);
+ALTER TABLE eu_adresausd_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_adresausd_mat_f1;
+
+CREATE TABLE eu_adresausd_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  corient   CHAR(8),
+  cpopis   CHAR(8),
+  obec   VARCHAR(100),
+  platnost   Integer,
+  psc   CHAR(5),
+  stat   VARCHAR(60),
+  ulice   VARCHAR(60),
+  adresat   CHAR(45),
+  kodadm   CHAR(10),
+  adrruianpouzito   Integer,
+  adrruiansynch   datetime year to second,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poradatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_adresausd_arch_d84r,
+  CHECK (adrruianpouzito IN (0,1)) CONSTRAINT eu_adresausd_arch_d84t
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_adresausd_arch_pk ON eu_adresausd_arch(idarch);
+ALTER TABLE eu_adresausd_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_adresausd_arch_pk;
+
+--FK
+CREATE INDEX eu_adresausd_arch_i_f1 ON eu_adresausd_arch(smlouva,tsml);
+ALTER TABLE eu_adresausd_arch ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_adresausd_arch_f1;
+
+ROLLBACK WORK;
+
+--End of B135927_UID80068_1-euadresausd

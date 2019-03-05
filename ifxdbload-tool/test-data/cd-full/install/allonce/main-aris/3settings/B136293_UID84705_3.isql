@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B136293_UID84705_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28392: Parametrizace {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+UPDATE eu_vazbarozhod_cis
+SET refotazkarozhodnasl = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 212)
+WHERE refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 210) AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1);
+
+UPDATE eu_vazbarozhod_cis
+SET refotazkarozhodnasl = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 211)
+WHERE refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 210) AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2);
+
+ROLLBACK WORK;
+
+--End of B136293_UID84705_3

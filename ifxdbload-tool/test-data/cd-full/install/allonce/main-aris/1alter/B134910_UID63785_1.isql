@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134910_UID63785_1
+-- @TC:ONCE: DESCRIPTION = Nezohledňovat variantu procesu v určení způsobu podpisu
+
+BEGIN WORK;
+
+ALTER TABLE do_zpusobpodeptypdokskup_cis DROP varianta;
+ALTER TABLE do_zpusobpodeptypdokskup_acis DROP varianta;
+
+ROLLBACK WORK;
+
+--End of B134910_UID63785_1

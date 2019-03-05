@@ -1,0 +1,130 @@
+-- @TC:ONCE: ID = V2, B136748_UID28910_1-refixace
+-- @TC:ONCE: DESCRIPTION = RSTS-2755: Realizace RSTS-2754:Nabídka sazeb při refixu - poloautomatizace {REALIZACE}
+
+
+BEGIN WORK;
+
+CREATE TABLE ceu_refixace_mat (
+  serno   BIGSERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  cisloint   Integer,
+  fixaceid   Integer,
+  sazbabe   DECIMAL(6, 2),
+  periodabe   CHAR(1),
+  sazbasa   DECIMAL(6, 2),
+  periodasa   CHAR(1),
+  splatka   DECIMAL(16,2),
+  indivsazba   Integer  DEFAULT 0,
+  autobnovafix   Integer  DEFAULT 0,
+  fixaceod   DATE,
+  fixacedo   DATE,
+  fixaceidnova   Integer,
+  sazbabenova   DECIMAL(6, 2),
+  periodabenova   CHAR(1),
+  sazbasanova   DECIMAL(6, 2),
+  periodasanova   CHAR(1),
+  splatkanova   DECIMAL(16,2),
+  indivsazbanova   Integer  DEFAULT 1,
+  fixaceodnova   DATE,
+  fixacedonova   DATE,
+  stav   CHAR(1),
+  exportdopis   Integer  DEFAULT 0,
+  datvzniku   DATE,
+  datschv   DATE,
+  schvtime   datetime year to second,
+  schvuser   CHAR(20),
+  datexpdopis   DATE,
+  provexpdopis   Integer  DEFAULT 0,
+  chybaimport   Integer  DEFAULT 0,
+  chybaimporttext   char(250),
+  poznamka   char(250),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (indivsazba IN (0,1)) CONSTRAINT ceu_refixace_mat_d9ha,
+  CHECK (autobnovafix IN (0,1)) CONSTRAINT ceu_refixace_mat_d9hb,
+  CHECK (indivsazbanova IN (0,1)) CONSTRAINT ceu_refixace_mat_d9hj,
+  CHECK (exportdopis IN (0,1)) CONSTRAINT ceu_refixace_mat_d9iw,
+  CHECK (provexpdopis IN (0,1)) CONSTRAINT ceu_refixace_mat_d9j0,
+  CHECK (chybaimport IN (0,1)) CONSTRAINT ceu_refixace_mat_d9j1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ceu_refixace_mat_pk ON ceu_refixace_mat(serno);
+ALTER TABLE ceu_refixace_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ceu_refixace_mat_pk;
+
+--FK
+CREATE INDEX ceu_refixace_mat_i_f1 ON ceu_refixace_mat(fixaceid);
+ALTER TABLE ceu_refixace_mat ADD CONSTRAINT FOREIGN KEY(fixaceid) REFERENCES eu_variaurokfixace_cis(ser) CONSTRAINT ceu_refixace_mat_f1;
+CREATE INDEX ceu_refixace_mat_i_f2 ON ceu_refixace_mat(smlouva,tsml);
+ALTER TABLE ceu_refixace_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT ceu_refixace_mat_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ceu_refixace_mat
+ADD CONSTRAINT (CHECK (stav in ('A', 'B', 'C', 'Z')) CONSTRAINT ceu_refixace_mat_c1);
+
+
+CREATE TABLE ceu_refixace_arch (
+  idarch   BIGSERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  cisloint   Integer,
+  fixaceid   Integer,
+  sazbabe   DECIMAL(6, 2),
+  periodabe   CHAR(1),
+  sazbasa   DECIMAL(6, 2),
+  periodasa   CHAR(1),
+  splatka   DECIMAL(16,2),
+  indivsazba   Integer  DEFAULT 0,
+  autobnovafix   Integer  DEFAULT 0,
+  fixaceod   DATE,
+  fixacedo   DATE,
+  fixaceidnova   Integer,
+  sazbabenova   DECIMAL(6, 2),
+  periodabenova   CHAR(1),
+  sazbasanova   DECIMAL(6, 2),
+  periodasanova   CHAR(1),
+  splatkanova   DECIMAL(16,2),
+  indivsazbanova   Integer  DEFAULT 1,
+  fixaceodnova   DATE,
+  fixacedonova   DATE,
+  stav   CHAR(1),
+  exportdopis   Integer  DEFAULT 0,
+  datvzniku   DATE,
+  datschv   DATE,
+  schvtime   datetime year to second,
+  schvuser   CHAR(20),
+  datexpdopis   DATE,
+  provexpdopis   Integer  DEFAULT 0,
+  chybaimport   Integer  DEFAULT 0,
+  chybaimporttext   char(250),
+  poznamka   char(250),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (indivsazba IN (0,1)) CONSTRAINT ceu_refixace_arch_d9ja,
+  CHECK (autobnovafix IN (0,1)) CONSTRAINT ceu_refixace_arch_d9jb,
+  CHECK (indivsazbanova IN (0,1)) CONSTRAINT ceu_refixace_arch_d9jj,
+  CHECK (exportdopis IN (0,1)) CONSTRAINT ceu_refixace_arch_d9k3,
+  CHECK (provexpdopis IN (0,1)) CONSTRAINT ceu_refixace_arch_d9ju,
+  CHECK (chybaimport IN (0,1)) CONSTRAINT ceu_refixace_arch_d9jv
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ceu_refixace_arch_pk ON ceu_refixace_arch(idarch);
+ALTER TABLE ceu_refixace_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ceu_refixace_arch_pk;
+
+
+ROLLBACK WORK;
+
+--End of B136748_UID28911_1

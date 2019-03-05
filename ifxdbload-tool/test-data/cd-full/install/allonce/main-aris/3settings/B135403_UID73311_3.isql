@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135403_UID73311_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22519: Překlep v názvu dokumetnu "Příloha č. 1 o dostatečnosti prostředků přitupitele na splátky" {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+update do_typdokumentu_cis set text=replace(text,'přitupitele','přistupitele') where text like '%přitupitele%';
+
+
+ROLLBACK WORK;
+
+--End of B135403_UID73311_3

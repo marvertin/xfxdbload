@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136383_UID77502_3-ac_skomap_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+UPDATE ac_mapkod_cis SET platnost = 0 WHERE kod NOT IN ('0', '1', '2', '3', '4', '5');
+
+INSERT INTO ac_mapkod_cis (kod, popis) 
+  SELECT fincode, fincode FROM ep_fincodemap_cis WHERE fincode NOT IN ('0', '1', '2', '3', '4', '5'); 
+
+ROLLBACK WORK;
+
+--End of B136383_UID77502_3-ac_skomap_cis

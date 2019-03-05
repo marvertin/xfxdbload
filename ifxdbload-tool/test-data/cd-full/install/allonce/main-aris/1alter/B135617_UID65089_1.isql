@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135617_UID65089_1
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+CREATE INDEX ru_opmof_cis_i1 ON ru_opmof_cis(mesic,puvodnitreal,zajistnemov,scenar,platnost);
+
+ROLLBACK WORK;
+
+--End of B135617_UID65089_1

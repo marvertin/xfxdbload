@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B134933_UID59793_3-dokoncDoplnTypDok
+-- @TC:ONCE: DESCRIPTION = RSTS-15546: Předání doplnění ÚŽ zpět na centrálu – informování centrály (v Sale) {STORY}
+
+
+BEGIN WORK;
+
+call TW_RegSetKey ('EU', 'posouzeniUveru', 'generDok', 'dokoncDoplnOZU'
+  , (select doktyp from do_typdokumentu_cis where text = 'Informace o dokončení doplnění ÚŽ – odpovědi na otázky za OZU na OZU'));
+call TW_RegSetKey ('EU', 'posouzeniUveru', 'generDok', 'dokoncDoplnTEC'
+  , (select doktyp from do_typdokumentu_cis where text = 'Informace o dokončení doplnění ÚŽ – odpovědi na otázky za Techniky na OZU'));
+call TW_RegSetKey ('EU', 'posouzeniUveru', 'generDok', 'dokoncDoplnANA'
+  , (select doktyp from do_typdokumentu_cis where text = 'Informace o dokončení doplnění ÚŽ – odpovědi na otázky za Analytiky na OZU'));
+call TW_RegSetKey ('EU', 'posouzeniUveru', 'generDok', 'dokoncDoplnFRA'
+  , (select doktyp from do_typdokumentu_cis where text = 'Informace o dokončení doplnění ÚŽ – odpovědi na otázky za Fraud na OZU'));
+
+ROLLBACK WORK;
+
+--End of B134933_UID59793_3-dokoncDoplnTypDok

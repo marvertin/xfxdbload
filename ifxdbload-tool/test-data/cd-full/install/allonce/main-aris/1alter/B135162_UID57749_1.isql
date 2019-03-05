@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B135162_UID57749_1
+-- @TC:ONCE: DESCRIPTION = RSTS-14632: Schvalovací protokol - základní údaje úvěru - nejjednodušší kostra {STORY}
+
+BEGIN WORK;
+
+alter table cps_posouzprot_arch
+  modify serno bigint not null
+;
+
+alter table cps_posouzprot_kart
+  modify serno bigint not null
+;
+
+ROLLBACK WORK;
+
+--End of B135162_UID57749_1

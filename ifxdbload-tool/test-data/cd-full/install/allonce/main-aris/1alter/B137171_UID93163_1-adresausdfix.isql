@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B137171_UID93163_1-adresausdfix
+-- @TC:ONCE: DESCRIPTION = RSTS-32856: Chybí triggery nad eu_adresausd_mat a eu_adresausd_arch {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_adresausd_mat 
+        ADD pordatprov DATE 
+     BEFORE portime;
+
+ALTER TABLE eu_adresausd_mat 
+        ADD refdatprov DATE;
+
+--odstraneni not null z archivu
+ALTER TABLE eu_adresausd_arch
+     MODIFY poruser   CHAR(20)  DEFAULT USER,
+     MODIFY portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+     MODIFY poradatprov   DATE,
+     MODIFY refuser   CHAR(20)  DEFAULT USER,
+     MODIFY reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+     MODIFY refdatprov   DATE;
+
+ALTER TABLE eu_adresausd_arch
+        ADD pordatprov DATE
+     BEFORE refuser;
+      
+ROLLBACK WORK;
+
+--End of B137171_UID93163_1-adresausdfix

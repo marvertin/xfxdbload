@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, B136257_UID76919_1-ltd_deniky
+-- @TC:ONCE: DESCRIPTION = REAL: Výpisy SIS - zaručená elektronická pečeť PO
+
+
+BEGIN WORK;
+
+CREATE TABLE ltd_dotaz_den (
+  serno   SERIAL NOT NULL,
+  soubor   CHAR(100),
+  cas   DATETIME YEAR TO FRACTION,
+  timeout   Integer,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ltd_dotaz_den_pk ON ltd_dotaz_den(serno);
+ALTER TABLE ltd_dotaz_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ltd_dotaz_den_pk;
+
+
+CREATE TABLE ltd_odpoved_den (
+  serno   SERIAL NOT NULL,
+  refdotaz   INTEGER,
+  vysledek   CHAR(25),
+  detailchyby   CHAR(255),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ltd_odpoved_den_pk ON ltd_odpoved_den(serno);
+ALTER TABLE ltd_odpoved_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ltd_odpoved_den_pk;
+
+--FK
+CREATE INDEX ltd_odpoved_den_i_f1 ON ltd_odpoved_den(refdotaz);
+ALTER TABLE ltd_odpoved_den ADD CONSTRAINT FOREIGN KEY(refdotaz) REFERENCES ltd_dotaz_den(serno) CONSTRAINT ltd_odpoved_den_f1;
+
+
+ROLLBACK WORK;
+
+--End of B136257_UID76919_1-ltd_deniky

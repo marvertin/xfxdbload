@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B136271_UID84154_1-tw_useraction_den
+-- @TC:ONCE: DESCRIPTION = RSTS-28007: Super A++ - Brzký problém přetečení seren v seu_sml_mat a možná i jinde {INTERNAL_DEFECT}
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+BEGIN WORK;
+
+ALTER TABLE tw_useraction_den MODIFY (serno SERIAL (2147483647));
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+call TW_ExecSQL('INSERT INTO tw_useraction_den(login,casakce,typakce) VALUES ('''',sysdate,'''')', -268, -691);
+
+ROLLBACK WORK;
+
+BEGIN WORK;
+
+ALTER TABLE tw_useraction_den MODIFY (serno SERIAL (61500000));
+
+COMMIT WORK;
+
+--End of B136271_UID84154_1-tw_useraction_den

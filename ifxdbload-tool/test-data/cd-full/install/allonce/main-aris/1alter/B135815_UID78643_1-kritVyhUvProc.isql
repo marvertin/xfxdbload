@@ -1,0 +1,48 @@
+-- @TC:ONCE: ID = V2, B135815_UID78643_1-kritVyhUvProc
+-- @TC:ONCE: DESCRIPTION = RSTS-24922: Zavést číselník kritérií vyhodnocení úvěrového procesu {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE cps_kritvyhuvproc_cis (
+  serno   SERIAL NOT NULL,
+  nazev   CHAR(128) NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT cps_kritvyhuvproc_cis_d66r
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_kritvyhuvproc_cis_pk ON cps_kritvyhuvproc_cis(serno);
+ALTER TABLE cps_kritvyhuvproc_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cps_kritvyhuvproc_cis_pk;
+
+
+CREATE TABLE cps_kritvyhuvproc_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  nazev   CHAR(128) NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT cps_kritvyhuvproc_acis_d66r
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_kritvyhuvproc_acis_pk ON cps_kritvyhuvproc_acis(idarch);
+ALTER TABLE cps_kritvyhuvproc_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cps_kritvyhuvproc_acis_pk;
+
+
+ROLLBACK WORK;
+
+--End of B135815_UID78643_1-kritVyhUvProc

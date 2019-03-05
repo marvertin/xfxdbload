@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B133941_UID41995_1
+-- @TC:ONCE: DESCRIPTION = Změny v modelování
+
+
+BEGIN WORK;
+
+CREATE TABLE pro_prilohauv (
+  id   SERIAL NOT NULL,
+  bssimulationcase_id   Integer NOT NULL,
+  refpriloha   Integer
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_prilohauv_pk ON pro_prilohauv(id);
+ALTER TABLE pro_prilohauv ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_prilohauv_pk;
+
+--FK
+CREATE INDEX pro_prilohauv_i_f1 ON pro_prilohauv(bssimulationcase_id);
+ALTER TABLE pro_prilohauv ADD CONSTRAINT FOREIGN KEY(bssimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_prilohauv_f1;
+CREATE INDEX pro_prilohauv_i_f2 ON pro_prilohauv(refpriloha);
+ALTER TABLE pro_prilohauv ADD CONSTRAINT FOREIGN KEY(refpriloha) REFERENCES es_priloha_cis(priloha) CONSTRAINT pro_prilohauv_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+
+ROLLBACK WORK;
+
+--End of B133941_UID41995_1

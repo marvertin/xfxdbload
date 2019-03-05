@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137285_UID93132_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32836: Sale: Úprava algoritmu generování IČC {STORY}
+
+
+BEGIN WORK;
+
+CREATE INDEX ceo_generovaneicc_mat_i1 ON ceo_generovaneicc_mat(icc);
+
+ROLLBACK WORK;
+
+--End of B137285_UID93132_1

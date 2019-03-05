@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B135073_UID68379_1-eu_expsml_den
+-- @TC:ONCE: DESCRIPTION = RSTS-19973: IMPLEMENTACE (modrá): RSTS-12829_REAL: Rozšíření údajů pro USD - doplnění {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_expsml_den ADD (
+  obchzastweb1   VARCHAR(255),
+  obchzastweb2   VARCHAR(255),
+  obchzastextnazevusd   Integer,
+  obchzastextmobilusd   Integer,
+  obchzastextemailusd   Integer,
+  obchzasttipweb1   VARCHAR(255),
+  obchzasttipweb2   VARCHAR(255),
+  agenttipextnazevusd   Integer,
+  agenttipextmobilusd   Integer,
+  agenttipextemailusd   Integer,
+  obchzastputweb1   VARCHAR(255),
+  obchzastputweb2   VARCHAR(255),
+  agentputextnazevusd   Integer,
+  agentputextmobilusd   Integer,
+  agentputextemailusd   Integer,
+  obchzastoverweb1   VARCHAR(255),
+  obchzastoverweb2   VARCHAR(255),
+  ozorgovernazevusd   Integer,
+  ozorgovermobilusd   Integer,
+  ozorgoveremailusd   Integer
+ );
+ 
+ROLLBACK WORK;
+
+--End of B135073_UID68379_1-eu_expsml_den

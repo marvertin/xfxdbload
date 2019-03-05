@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137199_UID93078_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32796: Rozšíření evidence problémů o nové údaje {STORY}
+
+BEGIN WORK;
+
+INSERT INTO tw_typobjserno_cis(tabulka, nazev, platnost) VALUES (
+  'ses_pozadavekproblem_mat', 'Problém (opisovaného formuláře)', 1
+);
+
+ROLLBACK WORK;
+
+--End of B137199_UID93078_3

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135353_UID72437_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22128: Nelze předat požadavek na změnu údajů v části klient
+
+BEGIN WORK;
+
+alter table seo_osoba_arch
+  add   povolani Integer before vzdelani ;
+
+
+ROLLBACK WORK;
+
+--End of B135353_UID72437_1

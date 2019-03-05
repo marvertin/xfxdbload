@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134912_UID66827_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19218: Chybná parametrizace nových záznamů číselníku typů dokumentů {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+update do_typdokumentu_cis set obsah=trim(biztyp)||obsah, podobsah=trim(biztyp)||trim(obsah)||podobsah where doktyp between 1102 and 1204;
+
+ROLLBACK WORK;
+
+--End of B134912_UID66827_3

@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B136394_UID85919_1-cfs_prijemtyp_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-29152: OPRAVA: RSTS-28996_REAL: Záporné serno {INTERNAL_WORK}
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+BEGIN WORK;
+
+ALTER TABLE cfs_prijemtyp_cis MODIFY (serno SERIAL (2147483647) NOT NULL);
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+call TW_ExecSQL('INSERT INTO cfs_prijemtyp_cis(poradi, nazev, druhprijmu, verifikaceprijmu, socialnidavka) VALUES (0, 0, 0, 0, 0)', -268, -691);
+
+ROLLBACK WORK;
+
+BEGIN WORK;
+
+ALTER TABLE cfs_prijemtyp_cis MODIFY (serno SERIAL (1000) NOT NULL);
+
+ALTER TABLE cfs_prijemtyp_cis  ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT cfs_prijemtyp_cis_pk;
+
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT (FOREIGN KEY(refprijemtyp) REFERENCES cfs_prijemtyp_cis(serno) CONSTRAINT cfs_prijem_mat_fk2);
+ALTER TABLE cpd_pozdokumenty_cis ADD CONSTRAINT (FOREIGN KEY(typprijmu) REFERENCES cfs_prijemtyp_cis(serno) CONSTRAINT cpd_pozdokumenty_cis_f4);
+
+COMMIT WORK;
+
+--End of B136394_UID85919_1

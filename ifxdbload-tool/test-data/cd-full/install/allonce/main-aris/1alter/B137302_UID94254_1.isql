@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B137302_UID94254_1
+-- @TC:ONCE: DESCRIPTION = RSTS-33427: Dořešení dopadů do RK Cizinec. {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE crk_vypocetcizinec_den ADD (refdelkavzamo1 INTEGER BEFORE statobcanstvio1,
+                                        refdelkavzamo2 INTEGER BEFORE statobcanstvio1,
+                                        refdelkavzamo3 INTEGER BEFORE statobcanstvio1,
+                                        refdelkavzamo4 INTEGER BEFORE statobcanstvio1);
+                                
+CREATE INDEX crk_vypocetcizinec_den_i_fk2 ON crk_vypocetcizinec_den(refdelkavzamo1);
+ALTER TABLE crk_vypocetcizinec_den ADD CONSTRAINT FOREIGN KEY(refdelkavzamo1) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT crk_vypocetcizinec_den_fk2;
+
+CREATE INDEX crk_vypocetcizinec_den_i_fk3 ON crk_vypocetcizinec_den(refdelkavzamo2);
+ALTER TABLE crk_vypocetcizinec_den ADD CONSTRAINT FOREIGN KEY(refdelkavzamo2) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT crk_vypocetcizinec_den_fk3;
+
+CREATE INDEX crk_vypocetcizinec_den_i_fk4 ON crk_vypocetcizinec_den(refdelkavzamo3);
+ALTER TABLE crk_vypocetcizinec_den ADD CONSTRAINT FOREIGN KEY(refdelkavzamo3) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT crk_vypocetcizinec_den_fk4;
+
+CREATE INDEX crk_vypocetcizinec_den_i_fk5 ON crk_vypocetcizinec_den(refdelkavzamo4);
+ALTER TABLE crk_vypocetcizinec_den ADD CONSTRAINT FOREIGN KEY(refdelkavzamo4) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT crk_vypocetcizinec_den_fk5;
+
+
+ROLLBACK WORK;
+
+--End of B137302_UID94254_1

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136059_UID80310_3-soubehHypoHranice
+-- @TC:ONCE: DESCRIPTION = RSTS-25869: Určovat hranici RK podle existence souběžného hypotečního úvěru {STORY}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', 'rizKon-zaklad', 'hranice', 'poc-mes-soubeh', 3, 1,
+ 'Úvěr', 'Rizikové kontroly úvěru - základ', 'Hranice kontrol', 'Počet měsíců pro souběh hypotečních úvěrů pro určení hranice RK', 1);
+
+ROLLBACK WORK;
+
+--End of B136059_UID80310_3-soubehHypoHranice

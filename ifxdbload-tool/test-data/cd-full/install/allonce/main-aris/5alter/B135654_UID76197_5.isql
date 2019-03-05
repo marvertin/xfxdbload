@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135654_UID76197_5
+-- @TC:ONCE: DESCRIPTION = RSTS-23577: Pravidla pro vyhledání hranic RK závislá na typu kontroly {STORY}
+
+BEGIN WORK;
+
+alter table crk_kontrolapravidlo_cis
+  modify reftyp CHAR(10) NOT NULL
+;
+  
+ROLLBACK WORK;
+
+--End of B135654_UID76197_5

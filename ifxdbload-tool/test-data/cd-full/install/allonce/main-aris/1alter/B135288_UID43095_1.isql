@@ -1,0 +1,59 @@
+-- @TC:ONCE: ID = V2, B135288_UID43095_1
+-- @TC:ONCE: DESCRIPTION = Nastavit odeslání typu SMS/e-mailu do ECM {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- ###############################################################
+--do_typemailtypdok_bnd
+
+CREATE TABLE do_typemailtypdok_bnd (
+  serno   BIGINT NOT NULL,
+  doktyp   Integer NOT NULL,
+  zkratka   VARCHAR(50) NOT NULL ,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT do_typemailtypdok_bnd_dour
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX do_typemailtypdok_bnd_pk ON do_typemailtypdok_bnd(serno);
+ALTER TABLE do_typemailtypdok_bnd ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT do_typemailtypdok_bnd_pk;
+
+--FK
+CREATE INDEX do_typemailtypdok_bnd_i_f2 ON do_typemailtypdok_bnd(doktyp);
+ALTER TABLE do_typemailtypdok_bnd ADD CONSTRAINT FOREIGN KEY(doktyp) REFERENCES do_typdokumentu_cis(doktyp) CONSTRAINT do_typemailtypdok_bnd_f2;
+CREATE INDEX do_typemailtypdok_bnd_i_f1 ON do_typemailtypdok_bnd(zkratka);
+ALTER TABLE do_typemailtypdok_bnd ADD CONSTRAINT FOREIGN KEY(zkratka) REFERENCES tw_emailtyp_cis(zkratka) CONSTRAINT do_typemailtypdok_bnd_f1;
+
+
+-- ###############################################################
+--do_typsmstypdok_bnd
+
+CREATE TABLE do_typsmstypdok_bnd (
+  serno   BIGINT NOT NULL,
+  doktyp   Integer NOT NULL,
+  zkratka   VARCHAR(50) NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT do_typsmstypdok_bnd_dour
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX do_typsmstypdok_bnd_pk ON do_typsmstypdok_bnd(serno);
+ALTER TABLE do_typsmstypdok_bnd ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT do_typsmstypdok_bnd_pk;
+
+--FK
+CREATE INDEX do_typsmstypdok_bnd_i_f1 ON do_typsmstypdok_bnd(zkratka);
+ALTER TABLE do_typsmstypdok_bnd ADD CONSTRAINT FOREIGN KEY(zkratka) REFERENCES tw_smstyp_cis(zkratka) CONSTRAINT do_typsmstypdok_bnd_f1;
+CREATE INDEX do_typsmstypdok_bnd_i_f2 ON do_typsmstypdok_bnd(doktyp);
+ALTER TABLE do_typsmstypdok_bnd ADD CONSTRAINT FOREIGN KEY(doktyp) REFERENCES do_typdokumentu_cis(doktyp) CONSTRAINT do_typsmstypdok_bnd_f2;
+
+ROLLBACK WORK;
+
+--End of B135288_UID43095_1

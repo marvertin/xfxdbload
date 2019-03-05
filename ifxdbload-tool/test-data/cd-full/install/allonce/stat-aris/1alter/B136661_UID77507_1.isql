@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, B136661_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-29523: Odstranění klasifikací
+-- @TC:ONCE: DBKIND = STAT
+
+BEGIN WORK;
+
+ALTER TABLE sv_uvery_fo ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE sv_uvery_fo ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT sv_uvery_fo_c1
+);
+
+ALTER TABLE sv_uvery_po ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE sv_uvery_po ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT sv_uvery_po_c1
+);
+
+ALTER TABLE sv_uvurok_fo ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE sv_uvurok_fo ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT sv_uvurok_fo_c1
+);
+
+ALTER TABLE sv_uvurok_po ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE sv_uvurok_po ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT sv_uvurok_po_c1
+);
+
+ROLLBACK WORK;
+
+--End of B136661_UID77507_1

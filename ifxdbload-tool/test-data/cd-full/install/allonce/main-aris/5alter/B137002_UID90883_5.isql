@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B137002_UID90883_5
+-- @TC:ONCE: DESCRIPTION = RSTS-31743: RK - agregované LTV {DEFECT}
+
+
+
+BEGIN WORK;
+
+-- Benevolentnější CHECK – pokud se jedná externí závazek, pak číslo kontraktu nemusí být vyplněno
+ALTER TABLE crk_kontrolasmlouvyagltv_den
+ADD CONSTRAINT (CHECK (zdroj = 'E' and cisloUverSmlouva is NULL and cisloUz is NULL
+or
+zdroj = 'S' and cisloExtKontrakt is NULL and cisloUverSmlouva is not NULL and cisloUz is NULL
+or
+zdroj = 'Z' and cisloExtKontrakt is NULL and cisloUverSmlouva is NULL and cisloUz is not NULL) CONSTRAINT crk_kontrolasmlouvyagltv_den_c1);
+
+ROLLBACK WORK;
+
+--End of B137002_UID90883_5

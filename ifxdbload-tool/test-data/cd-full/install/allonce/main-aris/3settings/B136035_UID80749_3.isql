@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136035_UID80749_3
+-- @TC:ONCE: DESCRIPTION = RSTS-26064: Rozlišovat bezpečné druhy pobytu pro RK Cizinec {STORY}
+
+
+BEGIN WORK;
+
+UPDATE eo_druhpobytinterni_cis SET bezpecnyprork = 1 
+WHERE id IN (1, 2, 3, 4);
+
+
+ROLLBACK WORK;
+
+--End of B136035_UID80749_3

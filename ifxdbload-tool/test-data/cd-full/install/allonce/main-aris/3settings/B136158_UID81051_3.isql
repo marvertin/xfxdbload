@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136158_UID81051_3
+-- @TC:ONCE: DESCRIPTION = RSTS-26249: TF001877 - ÚŽ - Servisní předání - chyba Vztah mezi smlouvami nebude výjimečný {DEFECT}
+
+
+BEGIN WORK;
+
+-- #Důvod nezahrnutí závazku - refinacování#
+call TW_RegSetOrAddKey('EU', 'finSit', 'refinancovani', 'duvodNezahrnuti', 1, 1 /*lze editovat*/);
+
+ROLLBACK WORK;
+
+--End of B136158_UID81051_3

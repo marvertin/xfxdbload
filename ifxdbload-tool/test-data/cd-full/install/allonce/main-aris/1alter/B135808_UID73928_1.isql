@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135808_UID73928_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22808: V tabulce pracovníků firmy předělat overeniDo na overeniOd {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+RENAME COLUMN pef_firmapracovnik_mat.overenido TO overeniod;
+RENAME COLUMN pef_firmapracovnik_arch.overenido TO overeniod;
+
+ROLLBACK WORK;
+
+--End of B135808_UID73928_1

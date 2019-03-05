@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B137048_UID90477_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31537: IMPL (integrace): RSTS-30170_Evidence exekucí {INTERNAL_WORK}
+
+BEGIN WORK;
+
+CREATE INDEX cep_fraud_arch_i1 ON cep_fraud_arch(serno);
+
+CREATE INDEX cep_fraud_mat_i1 ON cep_fraud_mat(os);
+
+CREATE INDEX cep_holisticflag_arch_i1 ON cep_holisticflag_arch(serno);
+
+CREATE INDEX cep_holisticflag_mat_i1 ON cep_holisticflag_mat(os);
+
+CREATE INDEX cep_holisticflag_mat_i2 ON cep_holisticflag_mat(smlouva,tsml);
+
+CREATE INDEX cep_exekuce_arch_i1 ON cep_exekuce_arch(serno);
+
+CREATE INDEX cep_exekuce_mat_i1 ON cep_exekuce_mat(os);
+
+ROLLBACK WORK;
+
+--End of B137048_UID90477_1

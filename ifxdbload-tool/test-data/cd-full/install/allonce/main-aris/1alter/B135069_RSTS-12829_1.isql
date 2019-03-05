@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B135069_RSTS-12829_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-OS - REAL: Rozšíření údajů pro USD - doplnění {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- ###############################################################
+-- oos_ozast_mat
+
+ALTER TABLE oos_ozast_mat
+    ADD exportdousd INTEGER  DEFAULT 1  NOT NULL  BEFORE usdextozname
+;
+
+ALTER TABLE oos_ozast_mat ADD CONSTRAINT (
+    CHECK (exportdousd IN (1,2)) CONSTRAINT oos_ozast_mat_export_chk1
+);
+
+ALTER TABLE oos_ozast_arch
+    ADD exportdousd INTEGER  DEFAULT 1  NOT NULL  BEFORE usdextozname
+;
+
+ROLLBACK WORK;
+
+--End of B135069_RSTS-12829_1

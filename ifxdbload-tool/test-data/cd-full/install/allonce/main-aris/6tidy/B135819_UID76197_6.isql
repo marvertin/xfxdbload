@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135819_UID76197_6
+-- @TC:ONCE: DESCRIPTION = RSTS-23577: Pravidla pro vyhledání hranic RK závislá na typu kontroly {STORY}
+
+
+BEGIN WORK;
+
+RENAME TABLE crk_kontrolatyph_cis TO old_crk_kontrolatyph_cis;
+
+ROLLBACK WORK;
+
+--End of B135819_UID76197_6

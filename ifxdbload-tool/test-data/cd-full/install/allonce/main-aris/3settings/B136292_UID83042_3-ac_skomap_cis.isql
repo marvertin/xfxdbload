@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B136292_UID83042_3-ac_skomap_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-27243: Potřeba zachovat při odpisu sankční úroky {REQUEST}
+
+BEGIN WORK;
+
+UPDATE AC_SkoMap_Cis SET ucet = 999040, protiucet = 999901, vynosucet = 762040 WHERE  mapkod = 'X_X_FO_VO' AND tko = 'CA' AND sko = 'MPIN';
+
+UPDATE AC_SkoMap_Cis SET ucet = 999040, protiucet = 999901, vynosucet = 762040 WHERE  mapkod = 'X_X_FO_VO' AND tko = 'CA' AND sko = 'PINT';
+
+UPDATE AC_SkoMap_Cis SET ucet = 999070, protiucet = 999901, vynosucet = 762070 WHERE  mapkod = 'X_X_PN_VO' AND tko = 'CA' AND sko = 'MPIN';
+
+UPDATE AC_SkoMap_Cis SET ucet = 999070, protiucet = 999901, vynosucet = 762070 WHERE  mapkod = 'X_X_PN_VO' AND tko = 'CA' AND sko = 'PINT';
+
+UPDATE AC_SkoMap_Cis SET ucet = 999060, protiucet = 999901, vynosucet = 762060 WHERE  mapkod = 'X_X_PZ_VO' AND tko = 'CA' AND sko = 'MPIN';
+
+UPDATE AC_SkoMap_Cis SET ucet = 999060, protiucet = 999901, vynosucet = 762060 WHERE  mapkod = 'X_X_PZ_VO' AND tko = 'CA' AND sko = 'PINT';
+
+ROLLBACK WORK;
+
+--End of B136292_UID83042_3-ac_skomap_cis

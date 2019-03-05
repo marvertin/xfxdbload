@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B137187_UID92332_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+  --crk_kodoperace_cis
+ ALTER TABLE crk_kodoperace_cis  ADD povolitrefin Integer DEFAULT 0;
+    
+ ALTER TABLE crk_kodoperace_cis  ADD CONSTRAINT CHECK (povolitrefin IN (0,1)) CONSTRAINT crk_kodoperace_cis_dc6z;
+ 
+ 
+ -- ACIS CHYBA V EA
+ --crk_kodoperace_acis
+ ALTER TABLE crk_kodoperace_acis  ADD povolitrefin Integer DEFAULT 0;
+    
+ ALTER TABLE crk_kodoperace_acis  ADD CONSTRAINT CHECK (povolitrefin IN (0,1)) CONSTRAINT crk_kodoperace_acis_dc71;
+
+ROLLBACK WORK;
+
+--End of B137187_UID92332_1

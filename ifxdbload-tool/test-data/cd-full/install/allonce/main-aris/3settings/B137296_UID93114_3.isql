@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B137296_UID93114_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32822: Zajistit, aby dokumenty k problémům nebyly vidět v jiných formulářích sale {STORY}
+
+BEGIN WORK;
+
+insert into do_skupina_cis (skupina,nazev,platnost) values (23,'Sale: Problémy opisovaného formuláře spoření', 1);
+
+call TW_RegSetOrAddKey ('ES','problemy-opisu-formu','dokumenty','skupina-dokumentu', 23, 0);      
+
+
+ROLLBACK WORK;
+
+--End of B137296_UID93114_3

@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B136490_UID84174_5-prukaz
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+
+BEGIN WORK;
+
+alter table bs_sttotoznost_arch modify prukaz BIGINT;
+alter table bs_sttotoznost_mat  modify prukaz BIGINT;
+
+alter table bs_zmtotoznost_arch modify prukaz BIGINT;
+alter table bs_zmtotoznost_mat  modify prukaz BIGINT;
+
+alter table eo_prukazzmpl_kart  modify prukaz BIGINT;
+
+alter table eo_prukaz_arch modify prukaz  BIGINT;
+alter table eo_prukaz_arch modify idarch BIGSERIAL (2147483648) NOT NULL;
+alter table eo_prukaz_arch add constraint primary key (idarch) constraint eo_prukaz_arch_pk;
+
+alter table eo_prukaz_mat  modify prukaz BIGSERIAL (2147483648) NOT NULL;
+alter table eo_prukaz_mat  add constraint primary key (prukaz) constraint eo_prukaz_mat_pk;
+
+ALTER TABLE bs_sttotoznost_mat ADD CONSTRAINT (FOREIGN KEY(prukaz) REFERENCES eo_prukaz_mat(prukaz) CONSTRAINT bs_sttotoznost_mat_f2);
+ALTER TABLE bs_zmtotoznost_mat ADD CONSTRAINT (FOREIGN KEY(prukaz) REFERENCES eo_prukaz_mat(prukaz) CONSTRAINT bs_zmtotoznost_mat_f2);
+ALTER TABLE eo_prukazzmpl_kart ADD CONSTRAINT (FOREIGN KEY(prukaz) REFERENCES eo_prukaz_mat(prukaz) CONSTRAINT eo_prukazzmpl_kart_f3);
+
+ROLLBACK WORK;
+
+--End of B136490_UID84174_5

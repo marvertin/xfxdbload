@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B137388_UID91093_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31847: Doplnění exportů a polí v CIBISu (RBI) {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ru_op_kart 
+  ADD pd12mesbezmof   dec(7,4),
+  ADD pdcelozivotnibezmof   dec(7,4);
+
+ROLLBACK WORK;
+
+--End of B137388_UID91093_1

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B134960_UID62501_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17036: Automaticky vygenerovat vinkulaci SS po zadání zajištění typu vinkulace jiné smlouvy SS v RSTS {STORY}
+
+BEGIN WORK;
+
+call TW_RegDelKey('EU', '*', 'zajist', 'vinkarjina');
+/*
+call TW_RegSetOrAddKey('EU', '*', 'zajist', 'vinkarjina', '102', 1,
+                       'Úvěr', 'Zajištění úvěru', 'Vinkulace', 'Typ zajištění pro vinkulace konta SS jiná');
+*/
+call TW_RegSetOrAddKey('RS', 'vinkulace', 'jina-SS-pro-uver', 'druh', '13', 1,
+                       'Spoření', 'Vinkulace vkladů', 'Vinkulace pro úvěry', 'Druh vinkulace pro cizí SS v RSTS');
+
+ROLLBACK WORK;
+
+--End of B134960_UID62501_3

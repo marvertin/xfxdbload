@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B135386_UID70866_1
+-- @TC:ONCE: DESCRIPTION = RSTS-21289: Při odstranění nemovisti z vybraných zajištění zůstane optimalizovaná hodnota {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+alter table ceu_grafzajist_arch add (
+
+  os1   INTEGER before optimaluser,
+  os2   INTEGER before optimaluser,
+  refeusml   DECIMAL(16, 0) before optimaluser,
+  dlevlastnictvi   Integer  DEFAULT 1 before optimaluser,
+  dlesmlouvy   Integer  DEFAULT 1 before optimaluser,
+  cizi   Integer  DEFAULT 1 before optimaluser
+)
+;
+
+alter table ceu_grafzajist_mat add (
+
+  os1   INTEGER before optimaluser,
+  os2   INTEGER before optimaluser,
+  refeusml   DECIMAL(16, 0) before optimaluser,
+  dlevlastnictvi   Integer  DEFAULT 1 before optimaluser,
+  dlesmlouvy   Integer  DEFAULT 1 before optimaluser,
+  cizi   Integer  DEFAULT 1 before optimaluser
+)
+;
+
+ROLLBACK WORK;
+
+--End of B135386_UID70866_1

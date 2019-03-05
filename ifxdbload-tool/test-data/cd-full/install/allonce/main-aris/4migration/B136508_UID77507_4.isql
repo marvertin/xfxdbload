@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B136508_UID77507_4
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+UPDATE RU_Real_Mat SET 
+stadiumifrs = (CASE WHEN klasif = 0 THEN 1 WHEN klasif = 1 THEN 2 ELSE 3 END), 
+klasif = NULL,
+klasifreal  = NULL, 
+klasifsdruz = NULL,
+klasifuv = NULL,
+stadiumifrspozn = 'Migrací z klasifikace: ' || tw_datetochar(ap_datprov())
+WHERE stav NOT IN ('V', 'Z');
+
+ROLLBACK WORK;
+
+--End of B136508_UID77507_4

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B137355_UID94833_5-akcevratkasp
+-- @TC:ONCE: DESCRIPTION = RSTS-33723: IMPLEMENTACE (Datovy model): RSTS-32034_Nová úloha - Kartotéka akce vratka SP {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE sp_vratky_kart MODIFY(
+  serno     BIGINT NOT NULL
+  );
+
+--PK
+ALTER TABLE sp_vratky_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT sp_vratky_kart_pk;
+
+ROLLBACK WORK;
+
+--End of B137355_UID94833_5-akcevratkasp

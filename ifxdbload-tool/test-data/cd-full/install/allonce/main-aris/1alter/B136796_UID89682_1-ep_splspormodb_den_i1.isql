@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136796_UID89682_1-ep_splspormodb_den_i1
+-- @TC:ONCE: DESCRIPTION = RSTS-31182: Úprava indexu ep_splspormodb_den {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+drop index ep_splspormodb_den_i1;
+
+create index ep_splspormodb_den_i1 on ep_splspormodb_den(headser, typpoh);
+
+ROLLBACK WORK;
+
+--End of B136796_UID89682_1-ep_splspormodb_den_i1

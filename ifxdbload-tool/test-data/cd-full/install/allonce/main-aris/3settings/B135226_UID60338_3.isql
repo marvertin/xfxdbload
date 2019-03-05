@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135226_UID60338_3
+-- @TC:ONCE: DESCRIPTION = RSTS-15821: Vygenerovat a zobrazit dokumenty k úvěrovým přílohám {STORY}
+
+
+BEGIN WORK;
+
+update rr_xreptype_cis set  soubor='PR195.jrxml', predloha='J'   where refrepcode in ('PR195');
+
+ROLLBACK WORK;
+
+--End of B135226_UID60338_3

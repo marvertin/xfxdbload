@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B134926_UID38758_1
+-- @TC:ONCE: DESCRIPTION = RSTS-5826: CRM: zrušit staré tabulky a sloupce v cl_client_mat {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+  ALTER TABLE cl_client_mat
+    DROP dateplancontact_old, 
+    DROP note_old;
+    
+  ALTER TABLE cl_client_arch
+    DROP dateplancontact_old, 
+    DROP note_old;
+    
+    
+ROLLBACK WORK;
+
+--End of B134926_UID38758_1

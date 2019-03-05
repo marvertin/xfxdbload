@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B137058_RSTS-32030_Ciselnik_TYPSML_inicializace
+-- @TC:ONCE: DESCRIPTION = RSTS-32030: IMPL (integrace): RSTS-32030_Číselník TYPSML {REALIZACE}
+
+BEGIN WORK;
+
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (1, 'nová Věta se SP', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (2, 'průběžná Věta se SP – Nová Smlouva', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (3, 'ukončovací Věta se SP', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (4, 'nová Věta bez SP', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (5, 'průběžná Věta bez SP – Nová Smlouva', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (6, 'ukončovací Věta bez SP', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (20, 'průběžná Věta se SP – Stará Smlouva', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (21, 'průběžná Věta se SP – Hybridní Smlouva', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (22, 'průběžná Věta se SP – Hybridní Smlouva (opravená požadavkem stavební spořitelny)', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (25, 'průběžná Věta se SP – stále nerozhodnutá Smlouva, v budoucnu jen jedna z více Starých Smluv (které nyní existují na jedno RČ) bude mít nárok na označení Typ Smlouvy = 20', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (50, 'průběžná Věta bez SP – Stará Smlouva, která může být převedena na Typ Smlouvy = 20', 1);
+INSERT INTO csp_typsml_cis (typsml, popis, platnost) VALUES (51, 'průběžná Věta bez SP – Hybridní Smlouva, která může být převedena na Typ Smlouvy = 22', 1);
+
+ROLLBACK WORK;
+
+--End of B137058_RSTS-32030_Ciselnik_TYPSML_inicializace

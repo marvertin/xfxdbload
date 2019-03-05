@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135169_UID69943_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20766: Úprava nastavení dokumentu schvalovacího protokolu {INTERNAL_WORK}
+
+BEGIN WORK;
+
+UPDATE do_typdokumentu_cis SET text = 'Protokol o posouzení úvěru', biztyp = '36', obsah = '06', podobsah = null
+, garant = 'OZU' WHERE text like 'Schvalovací protokol%'
+;
+
+ROLLBACK WORK;
+
+--End of B135169_UID69943_3

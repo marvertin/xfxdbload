@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B134846_UID59784_1-supervize
+-- @TC:ONCE: DESCRIPTION = RSTS-15537: Při dokončení Supervize (starý Central) propsat výsledky do posouzení (nový Central) {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE cev_supervize_mat DROP CONSTRAINT cev_supervize_mat_c2;
+
+alter table cev_supervize_arch modify vysledekposouzeni char(3);
+
+alter table cev_supervize_mat modify vysledekposouzeni char(3);
+
+ROLLBACK WORK;
+
+--End of B134846_UID59784_1-supervize

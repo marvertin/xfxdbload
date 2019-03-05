@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B134084_UID62546_3
+-- @TC:ONCE: DESCRIPTION = Zapisovat zamítnutí úvěrové smlouvy do provozního deníku {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3001, 'Zamítnout úvěrový návrh', 1);
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3002, 'Stornovat úvěrovou smlouvu', 1);
+
+ROLLBACK WORK;
+
+--End of B134084_UID62546_3

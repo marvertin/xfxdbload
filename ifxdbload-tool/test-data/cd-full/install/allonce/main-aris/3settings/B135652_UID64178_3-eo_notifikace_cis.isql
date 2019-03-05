@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B135652_UID64178_3-eo_notifikace_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-17861: Notifikační upozornění – uzavřená smlouva o úvěru {REQUEST}
+
+BEGIN WORK;
+
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob, poznamka, platnost) VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'UverPotvrKlient'), 1, null, 1);
+
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob, poznamka, platnost) VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'UverPotvrKlient'), 2, null, 1);
+
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob, poznamka, platnost) VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'UverPotvrOZ'), 1, null, 1);
+
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob, poznamka, platnost) VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'UverPotvrOZ'), 2, null, 1);
+
+ROLLBACK WORK;
+
+--End of B135652_UID64178_3-eo_notifikace_cis

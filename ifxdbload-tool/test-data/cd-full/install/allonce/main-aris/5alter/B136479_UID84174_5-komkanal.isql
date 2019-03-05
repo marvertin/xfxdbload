@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136479_UID84174_5-komkanal
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+
+BEGIN WORK;
+
+alter table seo_komkanal_arch modify serno BIGINT    NOT NULL;
+alter table seo_komkanal_arch modify idarch BIGSERIAL (2147483648) NOT NULL;
+alter table seo_komkanal_arch add constraint primary key (idarch) constraint seo_komkanal_arch_pk;
+
+alter table seo_komkanal_mat  modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table seo_komkanal_mat  add constraint primary key (serno) constraint seo_komkanal_mat_pk;
+
+ROLLBACK WORK;
+
+--End of B136479_UID84174_5

@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B135986_UID80187_1-ecm_contractupdatecreditmetadata_den
+-- @TC:ONCE: DESCRIPTION = RSTS-25799: IMPLEMENTACE (modrá): RSTS-13211_REAL: Integrace úvěrového procesu CIBIS – ECM (dokončení 2018S) {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+CREATE TABLE ecm_contractupdatecreditmetadata_den (
+  serno             BIGINT NOT NULL,
+  refpozadavek      BIGINT NOT NULL,
+  system            CHAR(10) NOT NULL,
+  creditno          DECIMAL(16, 0),
+  credcontractno    DECIMAL(16, 0),
+  regno             VARCHAR(25),
+  state             CHAR(1) NOT NULL,
+  kandidat          INTEGER NOT NULL,
+  realizationstate  CHAR(1),
+  refuser           CHAR(20)  DEFAULT USER NOT NULL,
+  reftime           DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+ROLLBACK WORK;
+
+--End of B135986_UID80187_1-ecm_contractupdatecreditmetadata_den

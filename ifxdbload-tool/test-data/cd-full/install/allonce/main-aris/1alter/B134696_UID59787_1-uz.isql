@@ -1,0 +1,61 @@
+-- @TC:ONCE: ID = V2, B134696_UID59787_1-uz
+-- @TC:ONCE: DESCRIPTION = RSTS-15540: Manuálně vyžádat doplnění podkladů od OZ po 1. posouzení na centrále {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE seu_uz_mat 
+  ADD schvalstav   CHAR(1)  DEFAULT 'N' BEFORE poruser,
+  ADD technikstav   CHAR(1)  DEFAULT 'N' BEFORE poruser,
+  ADD rizikstav   CHAR(1)  DEFAULT 'N' BEFORE poruser,
+  ADD schvalposldopludajdatprov   DATE BEFORE poruser,
+  ADD technikposldopludajdatprov   DATE BEFORE poruser,
+  ADD rizikposldopludajdatprov   DATE BEFORE poruser,
+  ADD schvalposldoplpreddatprov   DATE BEFORE poruser,
+  ADD technikposldoplpreddatprov   DATE BEFORE poruser,
+  ADD rizikposldoplpreddatprov   DATE BEFORE poruser,
+  ADD schvalposldopludajreftime   datetime year to second BEFORE poruser,
+  ADD technikposldopludajreftime   datetime year to second BEFORE poruser,
+  ADD rizikposldopludajreftime   datetime year to second BEFORE poruser,
+  ADD schvalposldoplpredreftime   datetime year to second BEFORE poruser,
+  ADD technikposldoplpredreftime   datetime year to second BEFORE poruser,
+  ADD riziktposldoplpredreftime   datetime year to second BEFORE poruser,
+  ADD schvalposldopludajrefuser   CHAR(20) BEFORE poruser,
+  ADD technikposldopludajrefuser   CHAR(20) BEFORE poruser,
+  ADD rizikkposldopludajrefuser   CHAR(20) BEFORE poruser,
+  ADD schvalposldoplpredrefuser   CHAR(20) BEFORE poruser,
+  ADD technikposldoplpredrefuser   CHAR(20) BEFORE poruser,
+  ADD rizikposldoplpredrefuser   CHAR(20) BEFORE poruser;
+
+ALTER TABLE seu_uz_arch 
+  ADD schvalstav   CHAR(1)  DEFAULT 'N' BEFORE poruser,
+  ADD technikstav   CHAR(1)  DEFAULT 'N' BEFORE poruser,
+  ADD rizikstav   CHAR(1)  DEFAULT 'N' BEFORE poruser,
+  ADD schvalposldopludajdatprov   DATE BEFORE poruser,
+  ADD technikposldopludajdatprov   DATE BEFORE poruser,
+  ADD rizikposldopludajdatprov   DATE BEFORE poruser,
+  ADD schvalposldoplpreddatprov   DATE BEFORE poruser,
+  ADD technikposldoplpreddatprov   DATE BEFORE poruser,
+  ADD rizikposldoplpreddatprov   DATE BEFORE poruser,
+  ADD schvalposldopludajreftime   datetime year to second BEFORE poruser,
+  ADD technikposldopludajreftime   datetime year to second BEFORE poruser,
+  ADD rizikposldopludajreftime   datetime year to second BEFORE poruser,
+  ADD schvalposldoplpredreftime   datetime year to second BEFORE poruser,
+  ADD technikposldoplpredreftime   datetime year to second BEFORE poruser,
+  ADD riziktposldoplpredreftime   datetime year to second BEFORE poruser,
+  ADD schvalposldopludajrefuser   CHAR(20) BEFORE poruser,
+  ADD technikposldopludajrefuser   CHAR(20) BEFORE poruser,
+  ADD rizikkposldopludajrefuser   CHAR(20) BEFORE poruser,
+  ADD schvalposldoplpredrefuser   CHAR(20) BEFORE poruser,
+  ADD technikposldoplpredrefuser   CHAR(20) BEFORE poruser,
+  ADD rizikposldoplpredrefuser   CHAR(20) BEFORE poruser;
+
+--CHECKS
+ALTER TABLE seu_uz_mat
+  ADD CONSTRAINT (CHECK (schvalstav in ('N', 'R', 'P')) CONSTRAINT seu_uz_mat_c4),
+  ADD CONSTRAINT (CHECK (technikstav in ('N', 'R', 'P')) CONSTRAINT seu_uz_mat_c5),
+  ADD CONSTRAINT (CHECK (rizikstav in ('N', 'R', 'P')) CONSTRAINT seu_uz_mat_c6);
+  
+ROLLBACK WORK;
+
+--End of B134696_UID59787_1-uz

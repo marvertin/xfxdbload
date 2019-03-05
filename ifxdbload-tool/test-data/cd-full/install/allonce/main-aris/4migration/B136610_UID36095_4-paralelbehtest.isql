@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136610_UID36095_4-paralelbehtest
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+
+BEGIN WORK;
+
+UPDATE bc_akce_cis SET paralelbehtest = paralelbeh;
+
+ROLLBACK WORK;
+
+--End of B136610_UID36095_4-paralelbehtest

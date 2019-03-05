@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B136861_UID36095_1-bc_parametrspusteni_den
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE bc_parametrspusteni_den ADD jednorazspustid Integer  BEFORE parametrid;
+
+ALTER TABLE bc_parametrspusteni_den MODIFY davkadenid Integer;
+
+--FK
+CREATE INDEX bc_parametrspusteni_den_i_f4 ON bc_parametrspusteni_den(jednorazspustid);
+ALTER TABLE bc_parametrspusteni_den ADD CONSTRAINT FOREIGN KEY(jednorazspustid) REFERENCES bc_jednorazspusteni(id) CONSTRAINT bc_parametrspusteni_den_f4;
+
+DROP INDEX bc_parametrspusteni_den_u1;
+ALTER TABLE bc_parametrspusteni_den DROP CONSTRAINT bc_parametrspusteni_den_u1;
+
+CREATE UNIQUE INDEX bc_parametrspusteni_den_u1 ON bc_parametrspusteni_den(davkadenid,jednorazspustid,parametrid);
+ALTER TABLE bc_parametrspusteni_den ADD CONSTRAINT (UNIQUE (davkadenid,jednorazspustid,parametrid) CONSTRAINT bc_parametrspusteni_den_u1);
+
+--CHECKS
+ALTER TABLE bc_parametrspusteni_den
+ADD CONSTRAINT (CHECK ((jednorazspustid IS NOT NULL OR davkadenid IS NOT NULL)) CONSTRAINT bc_parametrspusteni_den_c1);
+
+ROLLBACK WORK;
+
+--End of B136861_UID36095_1-bc_parametrspusteni_den

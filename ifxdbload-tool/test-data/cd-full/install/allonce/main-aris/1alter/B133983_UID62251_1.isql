@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B133983_UID62251_1
+-- @TC:ONCE: DESCRIPTION = Ukládání a mazání modelu - rozšíření číselníku akcí tvorby modelu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodakce_cis 
+  ADD vymazobrcfschvaluv   Integer  DEFAULT 0 ,
+  ADD CONSTRAINT CHECK (vymazobrcfschvaluv IN (0,1)) CONSTRAINT ep_splspormodakce_cis_d4do,
+  ADD vymazobrcfuzavuv   Integer  DEFAULT 0 ,
+  ADD CONSTRAINT CHECK (vymazobrcfuzavuv IN (0,1)) CONSTRAINT ep_splspormodakce_cis_d4dp,
+  ADD vymazmodelschval   Integer  DEFAULT 0 ,
+  ADD CONSTRAINT CHECK (vymazmodelschval IN (0,1)) CONSTRAINT ep_splspormodakce_cis_d4dq,
+  ADD vymazmodeluzav   Integer  DEFAULT 0 ,
+  ADD CONSTRAINT CHECK (vymazmodeluzav IN (0,1)) CONSTRAINT ep_splspormodakce_cis_d4dr;
+
+ALTER TABLE ep_splspormodakce_acis 
+  ADD vymazobrcfschvaluv   Integer  DEFAULT 0 ,
+  ADD CONSTRAINT CHECK (vymazobrcfschvaluv IN (0,1)) CONSTRAINT ep_splspormodakce_acis_d4ds,
+  ADD vymazobrcfuzavuv   Integer  DEFAULT 0 ,
+  ADD CONSTRAINT CHECK (vymazobrcfuzavuv IN (0,1)) CONSTRAINT ep_splspormodakce_acis_d4dt,
+  ADD vymazmodelschval   Integer  DEFAULT 0 ,
+  ADD CONSTRAINT CHECK (vymazmodelschval IN (0,1)) CONSTRAINT ep_splspormodakce_acis_d4du,
+  ADD vymazmodeluzav   Integer  DEFAULT 0 ,
+  ADD CONSTRAINT CHECK (vymazmodeluzav IN (0,1)) CONSTRAINT ep_splspormodakce_acis_d4dv;
+    
+ROLLBACK WORK;
+
+--End of B133983_UID62251_1

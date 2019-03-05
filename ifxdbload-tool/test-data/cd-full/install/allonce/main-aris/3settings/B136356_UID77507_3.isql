@@ -1,0 +1,112 @@
+-- @TC:ONCE: ID = V2, B136356_UID77507_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+SET TRIGGERS EP_FinCodeMap_Cis_d DISABLED;
+
+DELETE FROM EP_FinCodeMap_Cis WHERE treal IS NOT NULL OR odepsano = 1;
+
+SET TRIGGERS EP_FinCodeMap_Cis_d ENABLED;
+
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fr', 'K', '1', 0, '1_K_Fr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fr', 'K', '1', 0, '1_K_Fr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fr', 'K', '1', 0, '1_K_Fr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fn', 'K', '1', 0, '1_K_Fn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fn', 'K', '1', 0, '1_K_Fn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fn', 'K', '1', 0, '1_K_Fn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Po', 'K', '1', 0, '1_K_Po_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Po', 'K', '1', 0, '1_K_Po_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Po', 'K', '1', 0, '1_K_Po_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Po', 'K', '1', 0, '1_K_Po_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pr', 'K', '1', 0, '1_K_Pr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pr', 'K', '1', 0, '1_K_Pr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pr', 'K', '1', 0, '1_K_Pr_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pr', 'K', '1', 0, '1_K_Pr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pn', 'K', '1', 0, '1_K_Pn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pn', 'K', '1', 0, '1_K_Pn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pn', 'K', '1', 0, '1_K_Pn_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pn', 'K', '1', 0, '1_K_Pn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fr', 'S', '1', 0, '1_S_Fr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fr', 'S', '1', 0, '1_S_Fr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fr', 'S', '1', 0, '1_S_Fr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fn', 'S', '1', 0, '1_S_Fn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fn', 'S', '1', 0, '1_S_Fn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fn', 'S', '1', 0, '1_S_Fn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Po', 'S', '1', 0, '1_S_Po_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Po', 'S', '1', 0, '1_S_Po_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Po', 'S', '1', 0, '1_S_Po_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Po', 'S', '1', 0, '1_S_Po_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pr', 'S', '1', 0, '1_S_Pr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pr', 'S', '1', 0, '1_S_Pr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pr', 'S', '1', 0, '1_S_Pr_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pr', 'S', '1', 0, '1_S_Pr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pn', 'S', '1', 0, '1_S_Pn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pn', 'S', '1', 0, '1_S_Pn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pn', 'S', '1', 0, '1_S_Pn_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pn', 'S', '1', 0, '1_S_Pn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fr', 'D', '1', 0, '1_D_Fr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fr', 'D', '1', 0, '1_D_Fr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fr', 'D', '1', 0, '1_D_Fr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fn', 'D', '1', 0, '1_D_Fn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fn', 'D', '1', 0, '1_D_Fn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fn', 'D', '1', 0, '1_D_Fn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Po', 'D', '1', 0, '1_D_Po_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Po', 'D', '1', 0, '1_D_Po_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Po', 'D', '1', 0, '1_D_Po_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Po', 'D', '1', 0, '1_D_Po_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pr', 'D', '1', 0, '1_D_Pr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pr', 'D', '1', 0, '1_D_Pr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pr', 'D', '1', 0, '1_D_Pr_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pr', 'D', '1', 0, '1_D_Pr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pn', 'D', '1', 0, '1_D_Pn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pn', 'D', '1', 0, '1_D_Pn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pn', 'D', '1', 0, '1_D_Pn_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pn', 'D', '1', 0, '1_D_Pn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fr', 'X', '2', 0, '2_X_Fr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fr', 'X', '2', 0, '2_X_Fr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fr', 'X', '2', 0, '2_X_Fr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fn', 'X', '2', 0, '2_X_Fn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fn', 'X', '2', 0, '2_X_Fn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fn', 'X', '2', 0, '2_X_Fn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Po', 'X', '2', 0, '2_X_Po_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Po', 'X', '2', 0, '2_X_Po_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Po', 'X', '2', 0, '2_X_Po_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Po', 'X', '2', 0, '2_X_Po_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pr', 'X', '2', 0, '2_X_Pr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pr', 'X', '2', 0, '2_X_Pr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pr', 'X', '2', 0, '2_X_Pr_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pr', 'X', '2', 0, '2_X_Pr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pn', 'X', '2', 0, '2_X_Pn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pn', 'X', '2', 0, '2_X_Pn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pn', 'X', '2', 0, '2_X_Pn_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pn', 'X', '2', 0, '2_X_Pn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fr', 'X', '3', 0, '3_X_Fr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fr', 'X', '3', 0, '3_X_Fr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fr', 'X', '3', 0, '3_X_Fr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUFO', 'Fn', 'X', '3', 0, '3_X_Fn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUFO', 'Fn', 'X', '3', 0, '3_X_Fn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUFO', 'Fn', 'X', '3', 0, '3_X_Fn_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Po', 'X', '3', 0, '3_X_Po_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Po', 'X', '3', 0, '3_X_Po_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Po', 'X', '3', 0, '3_X_Po_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Po', 'X', '3', 0, '3_X_Po_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pr', 'X', '3', 0, '3_X_Pr_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pr', 'X', '3', 0, '3_X_Pr_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pr', 'X', '3', 0, '3_X_Pr_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pr', 'X', '3', 0, '3_X_Pr_VU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'PUPO', 'Pn', 'X', '3', 0, '3_X_Pn_PU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'SUPO', 'Pn', 'X', '3', 0, '3_X_Pn_SU', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'KOME', 'Pn', 'X', '3', 0, '3_X_Pn_KO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, 'VUPO', 'Pn', 'X', '3', 0, '3_X_Pn_VU', 1);
+
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, NULL, 'Pn', NULL, NULL, 1, 'X_X_Pn_VO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, NULL, 'Po', NULL, NULL, 1, 'X_X_Po_VO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, NULL, 'Pr', NULL, NULL, 1, 'X_X_Pr_VO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, NULL, 'Fn', NULL, NULL, 1, 'X_X_Fn_VO', 1);
+INSERT INTO ep_fincodemap_cis (tarif, treal, typostiger, dobost, stadiumifrs, odepsano, fincode, platnost) VALUES (0, NULL, 'Fr', NULL, NULL, 1, 'X_X_Fr_VO', 1);
+
+ROLLBACK WORK;
+
+--End of B136356_UID77507_3

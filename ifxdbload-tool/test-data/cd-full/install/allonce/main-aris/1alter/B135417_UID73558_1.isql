@@ -1,0 +1,15 @@
+-- TC:ONCE: ID = V2, B135417_UID73558_1
+-- TC:ONCE: DESCRIPTION = RSTS-22637: Výkonnost: Procedure: aris.cpd_naplnfcetmp {INTERNAL_DEFECT}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE INDEX seu_checklistitem_mat_i1 ON seu_checklistitem_mat(refprijem);
+
+CREATE INDEX ws_logvolani_den_i2 ON ws_logvolani_den(portime);
+
+--CREATE INDEX ecm_pozadavek_kart_i5 ON ecm_pozadavek_kart(portime);
+
+ROLLBACK WORK;
+
+--End of B135417_UID73558_1

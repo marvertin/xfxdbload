@@ -1,0 +1,89 @@
+-- @TC:ONCE: ID = V2, B136388_UID77502_3-am_uvprislib_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Fr_PU', '911115', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Fr_SU', '911116', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Fr_KO', '911117', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Fn_PU', '911145', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Fn_SU', '911146', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Fn_KO', '911147', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Pr_PU', '911185', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Pr_SU', '911186', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Pr_KO', '911187', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Pn_PU', '911165', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Pn_SU', '911166', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Pn_KO', '911167', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Po_PU', '911175', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Po_SU', '911176', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_K_Po_KO', '911177', '999911', 'Úvěrový příslib');
+
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Fr_PU', '911115', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Fr_SU', '911116', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Fr_KO', '911117', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Fn_PU', '911145', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Fn_SU', '911146', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Fn_KO', '911147', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Pr_PU', '911185', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Pr_SU', '911186', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Pr_KO', '911187', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Pn_PU', '911165', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Pn_SU', '911166', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Pn_KO', '911167', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Po_PU', '911175', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Po_SU', '911176', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_S_Po_KO', '911177', '999911', 'Úvěrový příslib');
+
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Fr_PU', '911115', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Fr_SU', '911116', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Fr_KO', '911117', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Fn_PU', '911145', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Fn_SU', '911146', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Fn_KO', '911147', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Pr_PU', '911185', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Pr_SU', '911186', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Pr_KO', '911187', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Pn_PU', '911165', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Pn_SU', '911166', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Pn_KO', '911167', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Po_PU', '911175', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Po_SU', '911176', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '1_D_Po_KO', '911177', '999911', 'Úvěrový příslib');
+
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Fr_PU', '911215', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Fr_SU', '911216', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Fr_KO', '911217', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Fn_PU', '911245', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Fn_SU', '911246', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Fn_KO', '911247', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Pr_PU', '911285', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Pr_SU', '911286', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Pr_KO', '911287', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Pn_PU', '911265', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Pn_SU', '911266', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Pn_KO', '911267', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Po_PU', '911275', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Po_SU', '911276', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '2_X_Po_KO', '911277', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Fr_PU', '911315', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Fr_SU', '911316', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Fr_KO', '911317', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Fn_PU', '911345', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Fn_SU', '911346', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Fn_KO', '911347', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Pr_PU', '911385', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Pr_SU', '911386', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Pr_KO', '911387', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Pn_PU', '911365', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Pn_SU', '911366', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Pn_KO', '911367', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Po_PU', '911375', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Po_SU', '911376', '999911', 'Úvěrový příslib');
+INSERT INTO am_uvprislib_cis (platnost, mapkod, ucet, protiucet, popis) VALUES (1, '3_X_Po_KO', '911377', '999911', 'Úvěrový příslib');
+
+
+ROLLBACK WORK;
+
+--End of B136388_UID77502_3-am_uvprislib_cis

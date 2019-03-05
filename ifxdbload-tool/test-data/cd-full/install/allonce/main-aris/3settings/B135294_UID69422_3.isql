@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B135294_UID69422_3
+-- @TC:ONCE: DESCRIPTION = Parametrizace typů sms a e-mailů pro ECM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO do_typsmstypdok_bnd ( serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(),  'NEPRPRIKAZU', 2001, 1);
+
+INSERT INTO do_typsmstypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'ZMEN_HESLO', 2002, 1);
+
+INSERT INTO do_typsmstypdok_bnd (serno, zkratka, doktyp, platnost) VALUES ( tw_nextserno(),'ZMEN_TRNU', 2003, 1);
+
+INSERT INTO do_typsmstypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'ZMEN_REGMOB', 2004, 1);
+
+INSERT INTO do_typsmstypdok_bnd (serno, zkratka, doktyp, platnost) VALUES ( tw_nextserno(),'ZMEN_REGEML', 2005, 1);
+
+INSERT INTO do_typsmstypdok_bnd ( serno, zkratka, doktyp, platnost) VALUES ( tw_nextserno(),'OK_P_VARIANTA_OZ', 2006, 1);
+
+INSERT INTO do_typsmstypdok_bnd (serno, zkratka, doktyp, platnost) VALUES ( tw_nextserno(),'OK_P_VARIANTA_KLIENT', 2007, 1);
+
+ROLLBACK WORK;
+
+--End of B135294_UID69422_3

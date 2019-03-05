@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135735_UID77360_3-provtyp
+-- @TC:ONCE: DESCRIPTION = RSTS-24155: Přidat firmu do číselníku firem {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EO', 1302, 'Přidat firmu', 1);
+
+ROLLBACK WORK;
+
+--End of B135735_UID77360_3-provtyp

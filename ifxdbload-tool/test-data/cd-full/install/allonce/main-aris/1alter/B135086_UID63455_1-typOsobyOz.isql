@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B135086_UID63455_1-typOsobyOz
+-- @TC:ONCE: DESCRIPTION = RSTS-17560: Dynamika v popiscích ve Skupině údajů OZ {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE sep_pozadavekoz_mat 
+  ADD typosobyoz   CHAR(1) before ico,
+  ADD typosobyexternioz   CHAR(1) before icoexternioz
+  ;
+
+ALTER TABLE sep_pozadavekoz_mat
+ADD CONSTRAINT (CHECK (typosobyoz in ('F', 'P')) CONSTRAINT sep_pozadavekoz_mat_c1),
+ADD CONSTRAINT (CHECK (typosobyexternioz in ('F', 'P')) CONSTRAINT sep_pozadavekoz_mat_c2);
+
+ALTER TABLE sep_pozadavekoz_arch 
+  ADD typosobyoz   CHAR(1) before ico,
+  ADD typosobyexternioz   CHAR(1) before icoexternioz
+  ;
+
+ROLLBACK WORK;
+
+--End of B135086_UID63455_1-typOsobyOz

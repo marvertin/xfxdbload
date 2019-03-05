@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135042_UID68624_1
+-- @TC:ONCE: DESCRIPTION = RSTS-20019: Výkonnostní testy Sale v TC na prostředí NÚ {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+--FK
+CREATE INDEX seu_sml_mat_i_f4 ON seu_sml_mat(refgrafzajist);
+ALTER TABLE seu_sml_mat ADD CONSTRAINT FOREIGN KEY(refgrafzajist) 
+  REFERENCES ceu_grafzajist_mat(serno) CONSTRAINT seu_sml_mat_f4
+;
+
+ROLLBACK WORK;
+
+--End of B135042_UID68624_1

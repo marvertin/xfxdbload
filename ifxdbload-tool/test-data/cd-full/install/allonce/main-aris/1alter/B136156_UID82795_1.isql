@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136156_UID82795_1
+-- @TC:ONCE: DESCRIPTION = RSTS-27145: Otázky, odpovědi a vazby {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eu_odpovedrozhod_acis MODIFY typodpoved CHAR(10);
+
+ALTER TABLE eu_odpovedrozhod_cis MODIFY typodpoved CHAR(10);
+
+ROLLBACK WORK;
+
+--End of B136156_UID82795_1

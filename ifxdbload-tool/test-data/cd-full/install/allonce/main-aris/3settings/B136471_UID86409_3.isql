@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136471_UID86409_3
+-- @TC:ONCE: DESCRIPTION = RSTS-29428: Sankční pokuty {REQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'odppohl', 'D', 'stornopopl', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční poplatky při odpisu <typ odpisu>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'O', 'stornopopl', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční poplatky při odpisu <typ odpisu>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'P', 'stornopopl', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční poplatky při odpisu <typ odpisu>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'N', 'stornopopl', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční poplatky při odpisu <typ odpisu>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'X', 'stornopopl', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční poplatky při odpisu <typ odpisu>');
+
+ROLLBACK WORK;
+
+--End of B136471_UID86409_3

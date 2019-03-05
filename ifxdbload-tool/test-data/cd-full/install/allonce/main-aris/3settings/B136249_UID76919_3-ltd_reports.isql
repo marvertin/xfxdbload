@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, B136249_UID76919_3-ltd_reports
+-- @TC:ONCE: DESCRIPTION = REAL: Výpisy SIS - zaručená elektronická pečeť PO
+BEGIN WORK;
+
+UPDATE rr_reptype_cis SET signature = 1 WHERE repcode in ('TV011','TV012','TV013','TV014');
+
+ROLLBACK WORK;
+--End of B136249_UID76919_3-ltd_reports

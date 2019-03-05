@@ -1,0 +1,60 @@
+-- @TC:ONCE: ID = V2, B137059_RSTS-32031_Ciselnik_INFORMACE
+-- @TC:ONCE: DESCRIPTION = RSTS-32031: IMPL (integrace): RSTS-32031_Číselník INFORMACE {REALIZACE}
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE csp_informace_cis (
+  serno   SERIAL NOT NULL,
+  informace   Integer,
+  typkomunikace   CHAR(1) NOT NULL,
+  popis   VARCHAR(255) NOT NULL,
+  vratkauplna   Integer NOT NULL,
+  vratkacastecna   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poznamka   VARCHAR(255),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (vratkauplna IN (0,1)) CONSTRAINT csp_informace_cis_da4t,
+  CHECK (vratkacastecna IN (0,1)) CONSTRAINT csp_informace_cis_da4u,
+  CHECK (platnost IN (0,1)) CONSTRAINT csp_informace_cis_da4v
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_informace_cis_pk ON csp_informace_cis(serno);
+ALTER TABLE csp_informace_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT csp_informace_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX csp_informace_cis_u1 ON csp_informace_cis(typkomunikace,informace);
+ALTER TABLE csp_informace_cis ADD CONSTRAINT (UNIQUE (typkomunikace,informace) CONSTRAINT csp_informace_cis_u1);
+
+--CHECKS
+
+CREATE TABLE csp_informace_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  informace   Integer,
+  typkomunikace   CHAR(1),
+  popis   VARCHAR(255),
+  vratkauplna   Integer,
+  vratkacastecna   Integer,
+  platnost   Integer,
+  poznamka   VARCHAR(255),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (vratkauplna IN (0,1)) CONSTRAINT csp_informace_acis_da4m,
+  CHECK (vratkacastecna IN (0,1)) CONSTRAINT csp_informace_acis_da4n,
+  CHECK (platnost IN (0,1)) CONSTRAINT csp_informace_acis_da4j
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_informace_acis_pk ON csp_informace_acis(idarch);
+ALTER TABLE csp_informace_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT csp_informace_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B137059_RSTS-32031_Ciselnik_INFORMACE

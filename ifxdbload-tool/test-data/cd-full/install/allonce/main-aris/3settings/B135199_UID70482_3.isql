@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135199_UID70482_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21071: Migrace koeficientu zajištění {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+UPDATE EU_Zajist_Cis SET maxProcSniz = 100 WHERE zajist = 105;
+
+ROLLBACK WORK;
+
+--End of B135199_UID70482_3

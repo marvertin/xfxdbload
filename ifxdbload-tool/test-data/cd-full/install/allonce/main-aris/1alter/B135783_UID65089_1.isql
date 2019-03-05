@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135783_UID65089_1
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+RENAME COLUMN  ru_opparametry_cis.pfp TO pfpdiff;
+RENAME COLUMN  ru_opparametry_acis.pfp TO pfpdiff;
+
+ROLLBACK WORK;
+
+--End of B135783_UID65089_1

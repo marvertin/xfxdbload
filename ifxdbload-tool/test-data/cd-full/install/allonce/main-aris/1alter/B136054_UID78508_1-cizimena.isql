@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, B136054_UID78508_1-cizimena
+-- @TC:ONCE: DESCRIPTION = RSTS-24836: Export úvěrové smlouvy {STORY}
+
+
+BEGIN WORK;
+
+alter table EU_ExpSml_Den
+  add cizimena  Integer;
+  
+CREATE TABLE eo_exproleprijm_den (
+  id_index      Int not null,
+  id_poradi     Int not null,
+  smlouva       DECIMAL(16, 0),
+  tsml          CHAR(4),
+  osoba         Int,
+  pozice        Char(2),
+  typrole       Char(3),
+  id            CHAR(13),                             
+  typid         CHAR(1),
+  prijemtyp     Int,
+  mena          CHAR(3),
+  castkamena    Dec(16,2),
+  kurs          Dec(16,8),
+  mescastka     Dec(16,2),
+  uzncastka     Dec(16,2)  
+);
+
+CREATE unique INDEX eo_exproleprijm_den_pk ON eo_exproleprijm_den (id_index, id_poradi) ;
+ALTER TABLE eo_exproleprijm_den ADD CONSTRAINT PRIMARY KEY (id_index, id_poradi)  CONSTRAINT eo_exproleprijm_den_pk;
+  
+ROLLBACK WORK;
+
+--End of B136054_UID78508_1-cizimena

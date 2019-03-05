@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136441_UID36095_1-securedobjects
+-- @TC:ONCE: DESCRIPTION = RSTS-5046: TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+-- constraint není v modelu a ani u ostaních systémů, tak to sjednocuji s modelem
+ALTER TABLE frm_securedobject_cis DROP CONSTRAINT (frm_securedobject_cis_c1);
+
+ROLLBACK WORK;
+
+--End of B136441_UID36095_1-securedobjects

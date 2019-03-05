@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137301_UID94204_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33384: Sale: Úprava příjmů ve skupině údajů Příjmy 1 {STORY}
+
+
+BEGIN WORK;
+
+UPDATE cfs_prijemtyp_cis SET druhprijmu = 'CESTOVNE' WHERE poradi = 9;
+
+ROLLBACK WORK;
+
+--End of B137301_UID94204_3

@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B137003_UID28910_1
+-- @TC:ONCE: DESCRIPTION = RSTS-2754: Nabídka sazeb při refixu - poloautomatizace {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_kalendarfixaci_mat
+  DROP CONSTRAINT eu_kalendarfixaci_mat_c4;
+  
+ALTER TABLE eu_kalendarfixaci_mat
+  ADD CONSTRAINT (CHECK (vznik in ('U', 'D', 'P', 'O', 'M', 'I', 'R')) CONSTRAINT eu_kalendarfixaci_mat_c4);
+
+
+ALTER TABLE eu_kalendarfixaci_arch
+  DROP CONSTRAINT eu_kalendarfixaci_arch_c2;
+  
+ALTER TABLE eu_kalendarfixaci_arch
+  ADD CONSTRAINT (CHECK (vznik in ('U', 'D', 'P', 'O', 'M', 'I', 'R')) CONSTRAINT eu_kalendarfixaci_arch_c2);
+  
+ROLLBACK WORK;
+
+--End of B137003_UID28910_1

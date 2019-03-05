@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137094_UID91256_6_automat_storno_UZ
+-- @TC:ONCE: DESCRIPTION = RSTS-31909: Central: Umožnit změnit lhůtu pro smazání ÚŽ {STORY}
+
+
+BEGIN WORK;
+
+--Lhůta pro zrušení žádosti ÚŽ
+CALL tw_regdelkey('EU', 'creditrq-zaklad', 'zrus', 'lhutaDni');
+
+ROLLBACK WORK;
+
+--End of B137094_UID91256_6

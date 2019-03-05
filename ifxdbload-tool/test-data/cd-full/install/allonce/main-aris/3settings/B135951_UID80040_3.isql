@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135951_UID80040_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25717: Umožnit zadat více dokladů totožnosti v CIBIS-Central {STORY}
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1009, 'Vytvořit doklad fyzické osoby', null, 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1010, 'Změnit doklad fyzické osoby', null, 1);
+
+ROLLBACK WORK;
+
+--End of B135951_UID80040_3

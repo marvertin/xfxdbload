@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B136229_UID76919_3-ltd_dbregistry
+-- @TC:ONCE: DESCRIPTION = REAL: Výpisy SIS - zaručená elektronická pečeť PO
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'napojeni', 'CasovyLimit', 60000, 1, 'WS', 'Napojení na LongTermDocs', 'Napojení', 'Časový limit pro obdržení odpovědi LTD', 1);
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'napojeni', 'KoncovyBod', '', 1, 'WS', 'Napojení na LongTermDocs', 'Napojení', 'Koncový bod pro připojení služby LTD', 1);
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'autentizace', 'Jmeno', '', 1, 'WS', 'Napojení na LongTermDocs', 'Autentizace', 'Jméno pro LTD', 1);
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'autentizace', 'Heslo', '', 1, 'WS', 'Napojení na LongTermDocs', 'Autentizace', 'Heslo pro LTD', 1);
+
+-- parametry WS LTD pro pečetění
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'nastaveni', 'IdentifikPecete', '', 1, 'WS', 'Napojení na LongTermDocs', 'Nastavení', 'Identifikátor elektronické pečetě', 1);
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'nastaveni', 'HesloPrivatniKlic', '', 1, 'WS', 'Napojení na LongTermDocs', 'Nastavení', 'Heslo k privátnímu klíči', 1);
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'nastaveni', 'CasoveRazitko', 0, 1, 'WS', 'Napojení na LongTermDocs', 'Nastavení', 'Připojovat k pečeti časové razítko', 1);
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'nastaveni', 'FormatBES', 1, 1, 'WS', 'Napojení na LongTermDocs', 'Nastavení', 'Elektronická pečeť ve formátu BES', 1);
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'nastaveni', 'ZobrazovatIkonu', 0, 1, 'WS', 'Napojení na LongTermDocs', 'Nastavení', 'Zobrazovat ikonu s výsledkem ověření pečeti', 1);
+
+-- notifikace o neúspěšném volání WS LTD
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'notifikace', 'TypE-mailu', 'EPECET_FAILED_NOTIF', 1, 'WS', 'Napojení na LongTermDocs', 'Notifikace', 'Typ e-mailu o neúspěchu pečetění', 1);
+call TW_RegSetOrAddKey('WS', 'napojeniLTD', 'notifikace', 'e-mail', '', 1, 'WS', 'Napojení na LongTermDocs', 'Notifikace', 'Adresát e-mailu o neúspěchu pečetění', 1);
+
+ROLLBACK WORK;
+
+--End of B136229_UID76919_3-ltd_dbregistry

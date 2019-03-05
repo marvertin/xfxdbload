@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135861_UID57405_1-eu_xvariapu_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-14468: Zjednotiť datové typy v tabulkách {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+alter table eu_xvariapu_cis modify zaklursazba dec(5, 2);
+alter table eu_xvariapu_cis modify sankursazba dec(5, 2);
+alter table eu_xvariapu_cis modify referminursazba dec(5, 2);
+
+ROLLBACK WORK;
+
+--End of B135861_UID57405_1-eu_xvariapu_cis

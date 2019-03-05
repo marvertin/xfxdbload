@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135075_UID58669_3
+-- @TC:ONCE: DESCRIPTION = RSTS-15001: Central - Rozšíření číselníku typů stavby {REQUEST}
+
+BEGIN WORK;
+
+insert into cev_typstavby_cis (kod, nazev, platnost) values (
+(SELECT MAX(kod) + 1 FROM cev_typstavby_cis), 'budova s rozestavěnými jednotkami', 1)
+;
+
+--#Evidence nemovitostí - typ stavby - budova s rozestavěnými jednotkami#
+Call TW_RegSetOrAddKey('EN', 'evidenceNemovitosti', 'specCisPol', 'typStavby-budRozJedn'
+, (select kod FROM cev_typstavby_cis where nazev = 'budova s rozestavěnými jednotkami') 
+);
+
+ROLLBACK WORK;
+
+--End of B135075_UID58669_3

@@ -1,0 +1,63 @@
+-- @TC:ONCE: ID = V2, B135962_UID80000_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25691: Číselník vlastností typů kontraktů {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('SP', 'koupě na splátky', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('OU', 'osobní úvěr', 1, null, null, 1, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('SU', 'spotřební úvěr', 1, null, null, 1, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('HU', 'hypotéční úvěr', 1, null, null, 1, 1);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('IU', 'investiční úvěr', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('PU', 'provozní úvěr', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('FL', 'finanční leasing', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('OL', 'operativní leasing', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('OS', 'exportní / importní / eskontní úvěr', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('KU', 'kontokorentní úvěr', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('ON', 'povolený debet na běžném účtu / nepovolený debet na běžném účtu', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('KK', 'kreditní karty', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('KS', 'kreditní karty splátkové', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('RU', 'revolvingový úvěr', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('ST', 'úvěr na stavební spoření – malá výše', 1, 0, 699999.99, 1, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('ST', 'úvěr na stavební spoření – velká výše', 1, 700000, null, 1, 1);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('PB', 'platby účtů', 1, null, null, 0, 0);
+
+INSERT INTO crk_urdataoperace_cis(typkontraktu, popis, platnost, vyseod, vysedo, zahrnoutagregltv, zajistnem) 
+                        VALUES('PF', 'platby faktur', 1, null, null, 0, 0);
+
+ROLLBACK WORK;
+
+--End of B135962_UID80000_3

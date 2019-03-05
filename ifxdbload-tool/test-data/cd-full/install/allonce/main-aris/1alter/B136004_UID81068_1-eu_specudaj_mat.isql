@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136004_UID81068_1-eu_specudaj_mat
+-- @TC:ONCE: DESCRIPTION = RSTS-26255: OPRAVA (2 a 3): RSTS-26062_REAL: Sledování SQL sessions na provozu {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+CREATE INDEX eu_specudaj_mat_i1 ON eu_specudaj_mat(smlouva);
+
+ROLLBACK WORK;
+
+--End of B136004_UID81068_1-eu_specudaj_mat

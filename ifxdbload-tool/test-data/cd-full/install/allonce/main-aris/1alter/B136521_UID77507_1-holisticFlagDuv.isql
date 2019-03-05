@@ -1,0 +1,75 @@
+-- @TC:ONCE: ID = V2, B136521_UID77507_1-holisticFlagDuv
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+CREATE TABLE cep_holisticflagduv_cis (
+  serno   SERIAL NOT NULL,
+  duvod   CHAR(40) NOT NULL,
+  popis   VARCHAR(255),
+  kodindikatoru   CHAR(10) NOT NULL,
+  vztahobjekt   CHAR(10) NOT NULL,
+  hodnotazapnuti   CHAR(10) NOT NULL,
+  hodnotavypnuti   CHAR(10) NOT NULL,
+  pocetmesautoukonc   Integer,
+  autoproved   Integer NOT NULL,
+  platnost   Integer NOT NULL,
+  poznamka   VARCHAR(255),
+  refduvautoukon   INTEGER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (autoproved IN (0,1)) CONSTRAINT cep_holisticflagduv_cis_d915,
+  CHECK (platnost IN (0,1)) CONSTRAINT cep_holisticflagduv_cis_d916
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_holisticflagduv_cis_pk ON cep_holisticflagduv_cis(serno);
+ALTER TABLE cep_holisticflagduv_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_holisticflagduv_cis_pk;
+
+--FK
+-- viz skript B136522_UID77507_1-holisticFlagUkon
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX cep_holisticflagduv_cis_u1 ON cep_holisticflagduv_cis(duvod,kodindikatoru);
+ALTER TABLE cep_holisticflagduv_cis ADD CONSTRAINT (UNIQUE (duvod,kodindikatoru) CONSTRAINT cep_holisticflagduv_cis_u1);
+
+--CHECKS
+ALTER TABLE cep_holisticflagduv_cis
+ADD CONSTRAINT (CHECK (kodindikatoru in ('RDT00u', 'RDT00d', 'RD020', 'RD110', 'RD130', 'RD150', 'RD160', 'RD230', 'S06u', 'S06d')) CONSTRAINT cep_holisticflagduv_cis_c1),
+ADD CONSTRAINT (CHECK (vztahobjekt in ('UVER', 'DLUZNIK')) CONSTRAINT cep_holisticflagduv_cis_c2),
+ADD CONSTRAINT (CHECK (hodnotazapnuti in ('1', '2', '2,3')) CONSTRAINT cep_holisticflagduv_cis_c3),
+ADD CONSTRAINT (CHECK (hodnotavypnuti in ('0', '1')) CONSTRAINT cep_holisticflagduv_cis_c4),
+ADD CONSTRAINT (CHECK (pocetmesautoukonc > 0) CONSTRAINT cep_holisticflagduv_cis_c5);
+
+
+CREATE TABLE cep_holisticflagduv_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   CHAR(40) NOT NULL,
+  popis   VARCHAR(255),
+  kodindikatoru   CHAR(10) NOT NULL,
+  vztahobjekt   CHAR(10) NOT NULL,
+  hodnotazapnuti   CHAR(10) NOT NULL,
+  hodnotavypnuti   CHAR(10) NOT NULL,
+  pocetmesautoukonc   Integer,
+  autoproved   Integer NOT NULL,
+  platnost   Integer NOT NULL,
+  poznamka   VARCHAR(255),
+  refduvautoukon   INTEGER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (autoproved IN (0,1)) CONSTRAINT cep_holisticflagduv_acis_d915,
+  CHECK (platnost IN (0,1)) CONSTRAINT cep_holisticflagduv_acis_d916
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_holisticflagduv_acis_pk ON cep_holisticflagduv_acis(idarch);
+ALTER TABLE cep_holisticflagduv_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cep_holisticflagduv_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B136521_UID77507_1

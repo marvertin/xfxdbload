@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135416_UID71955_1
+-- @TC:ONCE: DESCRIPTION = RSTS-21873: Není implementován zápis do PD a oprávnění pro UC "Změnit smluvní údaje" {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis) values ('EU', '3017', 'Změnit smluvní údaje pracovníkem centrály');
+
+ROLLBACK WORK;
+
+--End of B135416_UID71955_1

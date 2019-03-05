@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135984_UID79242_1-sep_pozadavek
+-- @TC:ONCE: DESCRIPTION = RSTS-25306: Nezobrazovat doložení dokladů ze staré verze {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE sep_pozadavek_arch DROP CONSTRAINT sep_pozadavek_arch_c1; 
+
+ROLLBACK WORK;
+
+--End of B135984_UID79242_1-sep_pozadavek

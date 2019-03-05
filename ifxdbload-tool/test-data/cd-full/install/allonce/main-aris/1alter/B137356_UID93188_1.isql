@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B137356_UID93188_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32866: Založení prázdného požadavku s přenosem RČ {STORY}
+
+BEGIN WORK;
+
+alter table sep_pozadavek_mat
+  drop constraint sep_pozadavek_mat_c1
+;
+
+ALTER TABLE sep_pozadavek_mat
+ADD CONSTRAINT (CHECK (typpozadavku IN ('N', 'Z', 'U', 'V', 'O', 'C', 'D', 'A')) CONSTRAINT sep_pozadavek_mat_c1)
+;
+
+
+ROLLBACK WORK;
+
+--End of B137356_UID93188_1

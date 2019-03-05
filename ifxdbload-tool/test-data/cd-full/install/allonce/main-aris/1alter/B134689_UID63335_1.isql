@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B134689_UID63335_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17538: Umožnit uživatelsky nastavit možnost jiného způsobu dodání dokumentu (A-4) {STORY}
+
+
+BEGIN WORK;
+
+rename column do_typdokumentutypobjektu_cis.elektronickaverze to nekontrolovatkvalitu;
+
+rename column do_typdokumentutypobjektu_acis.elektronickaverze to nekontrolovatkvalitu;
+
+ROLLBACK WORK;
+
+--End of B134689_UID63335_1

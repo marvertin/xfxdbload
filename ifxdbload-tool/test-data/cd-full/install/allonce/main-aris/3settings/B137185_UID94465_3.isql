@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B137185_UID94465_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33515: Úprava parametrizace sloupce Refinancování bez navýšení v číselníku Účelů
+
+
+BEGIN WORK;
+
+-- Pokud záznam ještě neexistuje, tak bude vloženo
+INSERT INTO eu_ucel_cis (ucel, text, skupina, zkratka, poznamka, kodrsts, platnost, ucelss, 
+                         typzadost, nabizetprouz, nabizetod, nabizetdo, verejnynazev)
+SELECT FIRST 1  1507, 'REF RSTS HU bez navýšení', 150, 'RBH', CAST(null as CHAR(1000)), 'FO', 1, 0,
+                'O', 1, mdy(9,1,2018),  CAST(null as DATE), 'Refinancování RSTS - hypoteční úvěr bez navýšení' 
+FROM eu_ucel_cis
+WHERE NOT EXISTS (SELECT 1 FROM eu_ucel_cis WHERE ucel = 1507)
+;
+
+-- Pokud záznam ještě neexistuje, tak bude vloženo
+INSERT INTO eu_ucel_cis (ucel, text, skupina, zkratka, poznamka, kodrsts, platnost, ucelss,
+                         typzadost, nabizetprouz, nabizetod, nabizetdo, verejnynazev)
+SELECT FIRST 1  1508, 'REF fin. instituce HU bez navýšení', 150, 'RFIH', CAST(null as CHAR(1000)), 'FO', 1, CAST(null as SMALLINT),
+                'O', 1, mdy(9,1,2018), CAST(null as DATE), 'Refinancování finanční instituce ČR - hypoteční úvěr bez navýšení'     
+FROM eu_ucel_cis
+WHERE NOT EXISTS (SELECT 1 FROM eu_ucel_cis WHERE ucel = 1508)
+;
+
+ROLLBACK WORK;
+
+--End of B137279_UID94152_3

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135648_UID64178_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17861: Notifikační upozornění – uzavřená smlouva o úvěru {REQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetKey('EO', 'notifikace', 'uver_potvr_klient', 'povoleno', 1);
+
+call TW_RegSetKey('EO', 'notifikace', 'uver_potvr_ioz', 'povoleno', 1);
+
+call TW_RegSetKey('EO', 'notifikace', 'uver_potvr_eoz', 'povoleno', 1);
+
+ROLLBACK WORK;
+
+--End of B135648_UID64178_3

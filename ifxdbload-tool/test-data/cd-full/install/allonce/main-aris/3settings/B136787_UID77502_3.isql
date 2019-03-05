@@ -1,0 +1,60 @@
+-- @TC:ONCE: ID = V2, B136787_UID77502_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Fn_VU', 0, '218483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Fn_VU', 1, '218483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Fr_VU', 0, '218183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Fr_VU', 1, '218183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Pn_VU', 0, '218683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Pn_VU', 1, '218683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Po_VU', 0, '218783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Po_VU', 1, '218783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Pr_VU', 0, '218883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_D_Pr_VU', 1, '218883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Fn_VU', 0, '215483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Fn_VU', 1, '215483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Fr_VU', 0, '215183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Fr_VU', 1, '215183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Pn_VU', 0, '215683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Pn_VU', 1, '215683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Po_VU', 0, '215783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Po_VU', 1, '215783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Pr_VU', 0, '215883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_K_Pr_VU', 1, '215883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Fn_VU', 0, '216483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Fn_VU', 1, '216483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Fr_VU', 0, '216183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Fr_VU', 1, '216183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Pn_VU', 0, '216683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Pn_VU', 1, '216683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Po_VU', 0, '216783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Po_VU', 1, '216783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Pr_VU', 0, '216883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '1_S_Pr_VU', 1, '216883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Fn_VU', 0, '242483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Fn_VU', 1, '242483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Fr_VU', 0, '242183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Fr_VU', 1, '242183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Pn_VU', 0, '242683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Pn_VU', 1, '242683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Po_VU', 0, '242783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Po_VU', 1, '242783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Pr_VU', 0, '242883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '2_X_Pr_VU', 1, '242883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Fn_VU', 0, '243483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Fn_VU', 1, '243483', '712048', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Fr_VU', 0, '243183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Fr_VU', 1, '243183', '712018', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Pn_VU', 0, '243683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Pn_VU', 1, '243683', '712068', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Po_VU', 0, '243783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Po_VU', 1, '243783', '712078', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Pr_VU', 0, '243883', '712088', 0, 1);
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, vynosucet, jepodrozvaha, platnost) VALUES (310, '3_X_Pr_VU', 1, '243883', '712088', 0, 1);
+
+ROLLBACK WORK;
+
+--End of B136787_UID77502_3

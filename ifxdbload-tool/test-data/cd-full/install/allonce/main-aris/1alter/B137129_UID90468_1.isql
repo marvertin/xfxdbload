@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B137129_UID90468_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31529: IMPL (design,dat.model): RSTS-30719_Evidence indikátorů - datové struktury {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE cep_indikatortyp_acis ADD portime DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL BEFORE reftime;
+ALTER TABLE cep_indikatortyp_acis ADD poruser CHAR(20)  DEFAULT USER NOT NULL BEFORE reftime;
+
+ALTER TABLE cep_indikatortyp_cis ADD portime DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL BEFORE reftime;
+ALTER TABLE cep_indikatortyp_cis ADD poruser CHAR(20)  DEFAULT USER NOT NULL BEFORE reftime;
+
+ROLLBACK WORK;
+
+--End of B137129_UID90468_1

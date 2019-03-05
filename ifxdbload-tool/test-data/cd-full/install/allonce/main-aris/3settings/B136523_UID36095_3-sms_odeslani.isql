@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136523_UID36095_3-sms_odeslani
+-- @TC:ONCE: DESCRIPTION = RSTS-5046: TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+
+BEGIN WORK;
+
+-- #Synchronní odesílání SMS notifikace dávek#
+Call TW_RegSetOrAddKey('BP', 'batch', 'SMS', 'synchroni', 1, 0);
+
+ROLLBACK WORK;
+
+--End of B136523_UID36095_3-sms_odeslani

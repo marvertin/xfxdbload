@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B134841_UID66222_3
+-- @TC:ONCE: DESCRIPTION = RSTS-18854: Parametr pro pojištění nemovitosti {STORY}
+
+BEGIN WORK;
+
+call TW_RegDelKey('EU', 'zajist', 'typZajist', 'pojNemov');
+
+call TW_RegSetOrAddKey('EU', 'zajist', 'pojNemov', '1', 31, 1, 'Úvěr', 'Zajištění úvěru', 'Credit Insurance', 'Zajištění pro pojištění nemovitosti');
+call TW_RegSetOrAddKey('EU', 'zajist', 'pojNemov', '2', 32, 1, 'Úvěr', 'Zajištění úvěru', 'Credit Insurance', 'Zajištění pro pojištění nemovitosti');
+call TW_RegSetOrAddKey('EU', 'zajist', 'pojNemov', '3', 33, 1, 'Úvěr', 'Zajištění úvěru', 'Credit Insurance', 'Zajištění pro pojištění nemovitosti');
+call TW_RegSetOrAddKey('EU', 'zajist', 'pojNemov', '4', 34, 1, 'Úvěr', 'Zajištění úvěru', 'Credit Insurance', 'Zajištění pro pojištění nemovitosti');
+
+ROLLBACK WORK;
+
+--End of B134841_UID66222_3

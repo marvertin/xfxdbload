@@ -1,0 +1,6 @@
+-- @TC:ONCE: ID = V2, RSTS_33381_find_D_drop
+-- @TC:ONCE: DESCRIPTION = Drop RSTS_33381_find_D_drop
+-- @TC:ONCE: RELOAD_ALWAYS
+BEGIN WORK;
+  call TW_DropRoutineOpt('RSTS_33381_find_D');
+ROLLBACK WORK;

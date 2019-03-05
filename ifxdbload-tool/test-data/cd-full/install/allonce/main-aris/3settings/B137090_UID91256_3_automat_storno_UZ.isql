@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B137090_UID91256_3_automat_storno_UZ
+-- @TC:ONCE: DESCRIPTION = RSTS-31909: Central: Umožnit změnit lhůtu pro smazání ÚŽ {STORY}
+
+
+BEGIN WORK;
+
+--tw_email_typ_cis
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, archivovat, platnost, maxpocetpriloh) 
+VALUES ('UVER_UPOZOR_AUT_ZAM_OZ', 'Upozornění na automatické storno/zamítnutí ÚŽ - OZ', 'rsts@rsts.cz', 'RSTS', 'Upozornění OZ na brzké storno/zamítnutí rozpracované ÚŽ', 
+'U žádosti o úvěr <<CISLO_UZ>> pro klienta <<JMENO_PRIJMENI>> uplynulo již <<Lhůta pro zrušení žádosti>> dní. Úvěrovou žádost je potřeba předat ke zpracování na centrálu RSTS do <<Počet dní pro smazání od upozornění>> dní. Po uplynutí této lhůty budeme nuceni úvěrovou žádost stornovat/zamítnout. Raiffeisen stavební spořitelna',
+null, 0, 5, 24, null, null, null, 0, 'A', 0, 1, 0, 1, 0);
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, archivovat, platnost, maxpocetpriloh) 
+VALUES ('UVER_UPOZOR_AUT_ZAM_KL', 'Upozornění na automatické storno/zamítnutí ÚŽ - klient', 'rsts@rsts.cz', 'RSTS', 'Upozornění klienta na brzké storno/zamítnutí rozpracované ÚŽ', 
+'Vážený kliente, od zadání žádosti o úvěr <<CISLO_UZ>> uplynulo již <<Lhůta pro zrušení žádosti>> dní. Po uplynutí dalších <<Počet dní pro smazání od upozornění>> dní budeme nuceni úvěrovou žádost stornovat/zamítnout. Raiffeisen stavební spořitelna', 
+null, 0, 5, 24, null, null, null, 0, 'A', 0, 1, 0, 1, 0);
+
+--crk_revizetyp_cis
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, platnost) 
+VALUES ('MANLHUTA', 'Manuální prodloužení lhůty pro smazání rozpracované ÚŽ', null, 1);
+
+--tw_registr_cis
+call tw_regsetkey('EU', 'creditrq-zaklad', 'zrus', 'lhutaDniUpozor', tw_reggetkey('EU', 'creditrq-zaklad', 'zrus', 'lhutaDni'));
+
+call tw_regsetkey('EU', 'creditrq-zaklad', 'zrus', 'lhutaDniSmaz', '5');
+
+ROLLBACK WORK;
+
+--End of B137090_UID91256_3

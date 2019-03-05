@@ -1,0 +1,115 @@
+-- @TC:ONCE: ID = V2, B135150_UID69593_1
+-- @TC:ONCE: DESCRIPTION = RSTS-20529: RSTS procedury do dodávky {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+-- dle NU_kontroly_inicialni_tabulky
+
+call TW_ExecSql('DROP TABLE NU_rizsubjekth_temp;', -206);
+CREATE TABLE aris.NU_rizsubjekth_temp(
+          serno        BIGINT,
+          owner        integer,
+          smlouva      decimal(16,0),
+          typ          varchar(4),
+          refuz        bigint,
+          cislorevize  integer,
+          odhadci      varchar(255),
+          ozsepsal     decimal(16,0),
+          ozsepsalext  varchar(16),
+          ozzadal      decimal(16,0),
+          ozzadalext   varchar(16),
+          vysledek     varchar(3),
+          NUSer       SERIAL NOT NULL,
+          reftime      DATETIME YEAR TO SECOND
+                       DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+          refuser      VARCHAR(20) DEFAULT USER NOT NULL
+           );
+
+
+
+call TW_ExecSql('DROP TABLE NU_rizsubjektos_temp;', -206);
+CREATE TABLE aris.NU_rizsubjektos_temp( 
+                serno         BIGINT,
+                refhead       integer,
+                owner         integer,
+                rc            varchar(13),
+                typid         varchar(1),
+                typrole       varchar(2),
+                jmeno         varchar(35),
+                prijmeni      varchar(35),
+                datnaroz      date,
+                pohlavi       integer,
+                vek           integer,
+                ulice         varchar(45),
+                cpopis        varchar(8),
+                corient       varchar(8),
+                psc           varchar(5),
+                obec          varchar(60),
+                stat          varchar(2),
+                kodadm        integer,
+                ulicekor      varchar(45),
+                cpopiskor     varchar(8),
+                corientkor    varchar(8),
+                psckor        varchar(5),
+                obeckor       varchar(60),
+                statkor       varchar(2),
+                kodadmkor     integer,
+                pobytdo       date,
+                druhprukaz    integer,
+                cisprukaz     varchar(20),
+                platnostdo    date,
+                kontakty      varchar(255),
+                NUSer         integer
+                );
+ 
+
+call TW_ExecSql('DROP TABLE NU_rizsubjektprij_temp;', -206);
+CREATE TABLE aris.NU_rizsubjektprij_temp(  
+                 serno         BIGINT,
+                 refos         integer,
+                 owner         integer,
+                 refprijemtyp  integer,
+                 ico           varchar(10),
+                 nazevfirmy    varchar(60),
+                 telkontakty   varchar(20),   
+                 NUSer         integer
+                 );   
+
+
+CREATE INDEX aris.NU_rizsubjekth_temp_i1 on aris.NU_rizsubjekth_temp(NUSer);
+CREATE INDEX aris.NU_rizsubjektos_temp_i1 on aris.NU_rizsubjektos_temp(NUSer);
+CREATE INDEX aris.NU_rizsubjektprij_temp_i1 on aris.NU_rizsubjektprij_temp(NUSer);
+
+
+CREATE TABLE NU_kontroly(nazev_NU      CHAR(35),
+                               rc_NU    VARCHAR(16),
+                               poznamka_NU  CHAR(255),
+                               hodnota1_NU  CHAR(35),
+                               hodnota2_NU  CHAR(35) DEFAULT NULL,
+                               hodnota3_NU  CHAR(35) DEFAULT NULL,
+                               hodnota4_NU  CHAR(35) DEFAULT NULL,
+                               hodnota5_NU  CHAR(35) DEFAULT NULL,
+                               hodnota6_NU  CHAR(35) DEFAULT NULL,
+                               hodnota7_NU  CHAR(35) DEFAULT NULL,
+                               hodnota8_NU  CHAR(35) DEFAULT NULL,
+                               hodnota9_NU  CHAR(35) DEFAULT NULL,
+                               hodnota10_NU CHAR(35) DEFAULT NULL,
+                               vysledek_NU    CHAR(3),
+                               KOSer      SERIAL NOT NULL,
+                               reftime    DATETIME YEAR TO SECOND
+                                          DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+                               refuser    VARCHAR(20) DEFAULT USER NOT NULL  )
+                                ;
+
+CREATE TABLE NU_chyby(nazev      CHAR(35),
+                      typ        CHAR(1),
+                      CHYSer      SERIAL NOT NULL,
+                      reftime    DATETIME YEAR TO SECOND
+                                  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+                      refuser    VARCHAR(20) DEFAULT USER NOT NULL );
+
+
+ROLLBACK WORK;
+
+--End of B135150_UID69593_1

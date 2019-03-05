@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, B136209_UID78209_4
+-- @TC:ONCE: DESCRIPTION = RSTS-24679: Parametrizace a migrace stresových kontrol {STORY}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B135813_UID78209_4
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+call crk_initNewRk('B136209_UID78209_4', 'RSTS-24679: Parametrizace a migrace stresových kontrol {STORY}', 'STRES_PRVY', 'STRES_DSTI', 'STRES_DTI');
+
+--End of B136209_UID78209_4

@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B136357_UID85226_1
+-- @TC:ONCE: DESCRIPTION = RSTS-28713: RK - detail (dlouhá odezva) {DEFECT}
+
+
+BEGIN WORK;
+
+CREATE INDEX crk_schvaluverh_arch_i1 ON crk_schvaluverh_arch(serno);
+UPDATE STATISTICS FOR TABLE crk_schvaluverh_arch(serno);
+
+CREATE INDEX crk_kontrolapredmetos_arch_i1 ON crk_kontrolapredmetos_arch(refkontrolapredmet);
+UPDATE STATISTICS FOR TABLE crk_kontrolapredmetos_arch(refkontrolapredmet);
+
+CREATE INDEX seo_role_arch_i1 ON seo_role_arch(refosoba);
+UPDATE STATISTICS FOR TABLE seo_role_arch(refosoba);
+
+
+ROLLBACK WORK;
+
+--End of B136357_UID85226_1

@@ -1,0 +1,72 @@
+-- @TC:ONCE: ID = V2, B136355_UID76763_4-nabizetAktivSis
+-- @TC:ONCE: DESCRIPTION = Sale3 - UZ - Pridani priznaku zda nabizet SIS pro manzelku/partnerku
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- SEO_SluzbaSis_Mat
+
+-- Doplneni priznaku zda nabizet SIS pro manzelku/partnerku klienta na UZ
+
+SET TRIGGERS FOR seo_sluzbasis_mat DISABLED;
+
+UPDATE seo_sluzbasis_mat
+  SET nabizetaktiv = 1
+  WHERE nabizetaktiv IS NULL
+    AND serno IN (SELECT sis.serno
+      FROM seo_sluzbasis_mat sis
+      JOIN seo_osoba_mat oso ON oso.serno = sis.refosoba
+      JOIN seo_role_mat rol ON rol.refosoba = sis.refosoba
+      JOIN seu_uz_mat puz ON puz.serno = rol.refpozadavek
+      JOIN eo_osoba_mat mos ON mos.bic = oso.bic
+      JOIN seo_vztahos_mat vzt ON vzt.refosoba2 = sis.refosoba AND vzt.refosoba1 = Seu_getOsobaUzKlient(puz.serno)
+      WHERE rol.platnost = 1
+        AND rol.typrole IN ('MK', 'PR')
+        AND vzt.platnost = 1
+        AND vzt.vztahrod IN (3, 5) 
+        AND oso.nactena = 1
+        AND sis.aktualniStav = 0
+        AND sis.nabizetAktiv IS NULL
+        AND EXISTS (SELECT * FROM eo_role_mat WHERE typrole = 'KL' AND stav = 'A' AND os = mos.os)
+    )
+;
+
+SET TRIGGERS FOR seo_sluzbasis_mat ENABLED;
+
+
+-- ###############################################################
+-- SEO_SluzbaSis_Arch
+
+SET TRIGGERS FOR seo_sluzbasis_arch DISABLED;
+
+UPDATE seo_sluzbasis_arch
+  SET nabizetaktiv = 1
+  WHERE nabizetAktiv IS NULL
+    AND serno IN (SELECT sis.serno
+      FROM seo_sluzbasis_mat sis
+      JOIN seo_osoba_mat oso ON oso.serno = sis.refosoba
+      JOIN seo_role_mat rol ON rol.refosoba = sis.refosoba
+      JOIN seu_uz_mat puz ON puz.serno = rol.refpozadavek
+      JOIN eo_osoba_mat mos ON mos.bic = oso.bic
+      JOIN seo_vztahos_mat vzt ON vzt.refosoba2 = sis.refosoba AND vzt.refosoba1 = Seu_getOsobaUzKlient(puz.serno)
+      WHERE rol.platnost = 1
+        AND rol.typrole IN ('MK', 'PR')
+        AND vzt.platnost = 1
+        AND vzt.vztahrod IN (3, 5) 
+        AND oso.nactena = 1
+        AND sis.aktualniStav = 0
+        AND sis.nabizetAktiv IS NULL
+        AND EXISTS (SELECT * FROM eo_role_mat WHERE typrole = 'KL' AND stav = 'A' AND os = mos.os)
+    )
+;
+
+SET TRIGGERS FOR seo_sluzbasis_arch ENABLED;
+ 
+
+ROLLBACK WORK;
+
+
+--End of B136355_UID76763_4-nabizetAktivSis
+
+

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B134455_UID61069_1-verze_column
+-- @TC:ONCE: DESCRIPTION = RSTS-16183-Nastavení verze dokumentu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE do_dokument_mat ADD verze int BEFORE nazevsouboru;
+ALTER TABLE do_dokument_arch ADD verze int BEFORE nazevsouboru;
+
+ROLLBACK WORK;
+
+--End of B134455_UID61069_1-verze_column

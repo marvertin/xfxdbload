@@ -1,0 +1,60 @@
+-- @TC:ONCE: ID = V2, B137196_UID93078_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32796: Rozšíření evidence problémů o nové údaje {STORY}
+
+BEGIN WORK;
+
+alter table ses_pozadavekh_arch add (
+
+  --Způsob podpisu reakce na problémy
+  zpuspodpreakcenaprobl   char(7),
+  --Podepisovaný dokument k poslední reakci OZ
+  refpodpdokposlreakce   BIGINT
+)
+;
+
+alter table ses_pozadavekh_mat add (
+
+  --Způsob podpisu reakce na problémy
+  zpuspodpreakcenaprobl   char(7),
+  --Podepisovaný dokument k poslední reakci OZ
+  refpodpdokposlreakce   BIGINT
+)
+;
+
+--CHECKS
+ALTER TABLE ses_pozadavekh_mat
+ADD CONSTRAINT (CHECK (zpusPodpReakceNaProbl in ('BIOMETR', 'PAPIREM')) CONSTRAINT ses_pozadavekh_mat_c5)
+;
+
+alter table ses_pozadavekproblem_arch add (
+
+--Položka určuje, kdo by se měl aktuálně problémem zabývat
+odpovednastrana   char(5) before xold_refpozadavekh,
+--Reakce obchodního zástupce na zadaný problém (vyjádření k problému)
+reakceoz   LVARCHAR(5000) before xold_refpozadavekh,
+--Vyžadován podpis klienta
+vyzadpodpklient   Integer before xold_refpozadavekh
+)
+;
+
+alter table ses_pozadavekproblem_mat add (
+
+--Položka určuje, kdo by se měl aktuálně problémem zabývat
+odpovednastrana   char(5) before xold_refpozadavekh,
+--Reakce obchodního zástupce na zadaný problém (vyjádření k problému)
+reakceoz   LVARCHAR(5000) before xold_refpozadavekh,
+--Vyžadován podpis klienta
+vyzadpodpklient   Integer before xold_refpozadavekh
+)
+;
+alter table ses_pozadavekproblem_mat
+  add CONSTRAINT (CHECK (vyzadpodpklient IN (0,1)) CONSTRAINT ses_pozadavekproblem_mat_dc7b)
+;
+
+--CHECKS
+ALTER TABLE ses_pozadavekproblem_mat
+ADD CONSTRAINT (CHECK (odpovednaStrana in ('CENTR', 'AGENT')) CONSTRAINT ses_pozadavekproblem_mat_c2);
+
+ROLLBACK WORK;
+
+--End of B137196_UID93078_1

@@ -1,0 +1,61 @@
+-- @TC:ONCE: ID = V2, B134663_UID59776_3-dokumenty
+-- @TC:ONCE: DESCRIPTION = RSTS-15529: Parametrizace pro posouzení úvěru {STORY}
+
+
+BEGIN WORK;
+
+-- rr_reptype_cis
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, exportdir, keepinterval, bulkprint, bulkprintformat, bulkprintsave, bulkprintdir, savewithoutpreview, formatchange, listinternalmail, writedocument) 
+VALUES ('EU241', 'EU', 24, 1, '0', 'Přehled požadavků centrály na doplnění ÚŽ', 'p:\RSTS\PROJEKTY\CIBIS-RSTS-2017F-P\Test\Tisky\', 1, 0, null, 0, null, 1, 0, 0, 0);
+
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, exportdir, keepinterval, bulkprint, bulkprintformat, bulkprintsave, bulkprintdir, savewithoutpreview, formatchange, listinternalmail, writedocument) 
+VALUES ('EU242', 'EU', 24, 2, '0', 'Informace o dokončení doplnění ÚŽ – odpovědi na otázky', 'p:\RSTS\PROJEKTY\CIBIS-RSTS-2017F-P\Test\Tisky\', 1, 0, null, 0, null, 1, 0, 0, 0);
+
+-- rr_xreptype_cis
+INSERT INTO rr_xreptype_cis (refrepcode, datod, datdo, predloha, cesta, soubor, interniid, externiid, externidocid, poznamka, platnost) 
+VALUES ('EU241', mdy(1, 1, 2017), null, 'J', 'c:\cibisweb\05\reports\EU24', 'EU241.jrxml', null, null, null, null, 1);
+
+INSERT INTO rr_xreptype_cis (refrepcode, datod, datdo, predloha, cesta, soubor, interniid, externiid, externidocid, poznamka, platnost) 
+VALUES ('EU242', mdy(1, 1, 2017), null, 'J', 'c:\cibisweb\05\reports\EU24', 'EU242.jrxml', null, null, null, null, 1);
+
+-- do_typdokumentu_cis
+-- do_typdokumentutypobjektu_cis
+-- ID_1
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm) 
+VALUES ('Přehled požadavků centrály na doplnění ÚŽ', null, null, 1, '37', '3703', null, 'OZU', 1, 'EU241', 1, 0, null, null, null);
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo) 
+VALUES ((select max(doktyp) from do_typdokumentu_cis), 'crk_schvaluverh_mat', 'NEPRISTUPNY', null, '1', null, '0', 1, mdy(1, 1, 2017), null);
+
+-- ID_2
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm) 
+VALUES ('Informace o dokončení doplnění ÚŽ – odpovědi na otázky za OZU na OZU', null, null, 1, '39', '3913', '391300', 'OZU', 1, 'EU242', 1, 0, null, null, null);
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo) 
+VALUES ((select max(doktyp) from do_typdokumentu_cis), 'crk_posouzuver_mat', 'NEPRISTUPNY', null, '1', null, '0', 1, mdy(1, 1, 2017), null);
+
+-- ID_3
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm) 
+VALUES ('Informace o dokončení doplnění ÚŽ – odpovědi na otázky za Techniky na OZU', null, null, 1, '39', '3914', '391301', 'OZU', 1, 'EU242', 1, 0, null, null, null);
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo) 
+VALUES ((select max(doktyp) from do_typdokumentu_cis), 'crk_posouzuver_mat', 'NEPRISTUPNY', null, '1', null, '0', 1, mdy(1, 1, 2017), null);
+
+-- ID_4
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm) 
+VALUES ('Informace o dokončení doplnění ÚŽ – odpovědi na otázky za Analytiky na OZU', null, null, 1, '39', '3915', '391302', 'OZU', 1, 'EU242', 1, 0, null, null, null);
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo) 
+VALUES ((select max(doktyp) from do_typdokumentu_cis), 'crk_posouzuver_mat', 'NEPRISTUPNY', null, '1', null, '0', 1, mdy(1, 1, 2017), null);
+
+-- ID_5
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm) 
+VALUES ('Informace o dokončení doplnění ÚŽ – odpovědi na otázky za Fraud na OZU', null, null, 1, '39', '3916', '391303', 'OZU', 1, 'EU242', 1, 0, null, null, null);
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo) 
+VALUES ((select max(doktyp) from do_typdokumentu_cis), 'crk_posouzuver_mat', 'NEPRISTUPNY', null, '1', null, '0', 1, mdy(1, 1, 2017), null);
+
+
+ROLLBACK WORK;
+
+--End of B134663_UID59776_3-doklady

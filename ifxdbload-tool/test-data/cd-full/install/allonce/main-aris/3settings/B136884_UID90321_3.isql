@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136884_UID90321_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31456: Historie změn kontrol - opravit překlep v pojmenování typu revize {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE CRK_RevizeTyp_Cis set nazev = 'Aktualizace/inicializace při změně seznamu osob v úvěrovém případu'
+WHERE kod = 'ZMESEZOS';
+
+UPDATE CRK_RevizeTyp_Cis set nazev = 'Aktualizace/inicializace při změně seznamu příjmů v úvěrovém případu'
+WHERE kod = 'ZMESEZPR';
+
+ROLLBACK WORK;
+
+--End of B136884_UID90321_3

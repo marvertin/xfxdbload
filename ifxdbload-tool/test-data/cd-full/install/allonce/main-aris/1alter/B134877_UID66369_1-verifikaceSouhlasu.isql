@@ -1,0 +1,124 @@
+-- @TC:ONCE: ID = V2, B134877_UID66369_1-verifikaceSouhlasu
+-- @TC:ONCE: DESCRIPTION = RSTS-18928: Datový model a entity pro CC verifikace souhlasů {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE seu_oversouhlas_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  refrole   INTEGER,
+  refdokument   BIGINT,
+  vysledek   CHAR(3) NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  casvzniku   datetime year to second,
+  casotevreni   datetime year to second,
+  casovereni   datetime year to second,
+  caszruseni   datetime year to second,
+  priorita   Integer NOT NULL,
+  ulozil   CHAR(20),
+  otevrel   CHAR(20),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX seu_oversouhlas_arch_pk ON seu_oversouhlas_arch(idarch);
+ALTER TABLE seu_oversouhlas_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT seu_oversouhlas_arch_pk;
+
+
+CREATE TABLE seu_oversouhlas_mat (
+  serno   BIGINT NOT NULL,
+  refrole   INTEGER,
+  refdokument   BIGINT,
+  vysledek   CHAR(3) NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  casvzniku   datetime year to second,
+  casotevreni   datetime year to second,
+  casovereni   datetime year to second,
+  caszruseni   datetime year to second,
+  priorita   Integer NOT NULL,
+  ulozil   CHAR(20),
+  otevrel   CHAR(20),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX seu_oversouhlas_mat_pk ON seu_oversouhlas_mat(serno);
+ALTER TABLE seu_oversouhlas_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seu_oversouhlas_mat_pk;
+
+--FK
+CREATE INDEX seu_oversouhlas_mat_i_f1 ON seu_oversouhlas_mat(refrole);
+ALTER TABLE seu_oversouhlas_mat ADD CONSTRAINT FOREIGN KEY(refrole) REFERENCES seo_role_mat(serno) CONSTRAINT seu_oversouhlas_mat_f1;
+CREATE INDEX seu_oversouhlas_mat_i_f2 ON seu_oversouhlas_mat(refdokument);
+ALTER TABLE seu_oversouhlas_mat ADD CONSTRAINT FOREIGN KEY(refdokument) REFERENCES do_dokument_mat(serno) CONSTRAINT seu_oversouhlas_mat_f2;
+
+--CHECKS
+ALTER TABLE seu_oversouhlas_mat
+ADD CONSTRAINT (CHECK (priorita in (1,2)) CONSTRAINT seu_oversouhlas_mat_c1),
+ADD CONSTRAINT (CHECK (vysledek in ('ERR', 'OKI', 'KOT')) CONSTRAINT seu_oversouhlas_mat_c2),
+ADD CONSTRAINT (CHECK (stav in ('A', 'B', 'Z')) CONSTRAINT seu_oversouhlas_mat_c3);
+
+
+CREATE TABLE seu_oversouhlaskolo_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  refoversouhlas   BIGINT,
+  kolo   Integer,
+  vysledek   CHAR(3) NOT NULL,
+  casovereni   datetime year to second,
+  ulozil   CHAR(20),
+  poznamka   LVarChar(1020),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX seu_oversouhlaskolo_arch_pk ON seu_oversouhlaskolo_arch(idarch);
+ALTER TABLE seu_oversouhlaskolo_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT seu_oversouhlaskolo_arch_pk;
+
+
+CREATE TABLE seu_oversouhlaskolo_mat (
+  serno   BIGINT NOT NULL,
+  refoversouhlas   BIGINT,
+  kolo   Integer,
+  vysledek   CHAR(3) NOT NULL,
+  casovereni   datetime year to second,
+  ulozil   CHAR(20),
+  poznamka   LVarChar(1020),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX seu_oversouhlaskolo_mat_pk ON seu_oversouhlaskolo_mat(serno);
+ALTER TABLE seu_oversouhlaskolo_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seu_oversouhlaskolo_mat_pk;
+
+--FK
+CREATE INDEX seu_oversouhlaskolo_mat_i_f1 ON seu_oversouhlaskolo_mat(refoversouhlas);
+ALTER TABLE seu_oversouhlaskolo_mat ADD CONSTRAINT FOREIGN KEY(refoversouhlas) REFERENCES seu_oversouhlas_mat(serno) CONSTRAINT seu_oversouhlaskolo_mat_f1;
+
+--CHECKS
+ALTER TABLE seu_oversouhlaskolo_mat
+ADD CONSTRAINT (CHECK (vysledek in ('ERR', 'OKI', 'KOT')) CONSTRAINT seu_oversouhlaskolo_mat_c1);
+
+ROLLBACK WORK;
+
+--End of B134877_UID66369_1-verifikaceSouhlasu

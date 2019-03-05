@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B137008_UID28910_1
+-- @TC:ONCE: DESCRIPTION = RSTS-2754: Nabídka sazeb při refixu - poloautomatizace {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ceu_refixace_mat 
+  ADD refkalendarfixaci   INTEGER BEFORE smlouva;
+  
+CREATE INDEX ceu_refixace_mat_i_f3 ON ceu_refixace_mat(refkalendarfixaci);
+
+ALTER TABLE ceu_refixace_mat ADD CONSTRAINT FOREIGN KEY(refkalendarfixaci) REFERENCES eu_kalendarfixaci_mat(serno) CONSTRAINT ceu_refixace_mat_f3;  
+
+ROLLBACK WORK;
+
+--End of B137008_UID28910_1

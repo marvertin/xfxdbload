@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136285_UID83612_3
+-- @TC:ONCE: DESCRIPTION = RSTS-27630: OPRAVA: RSTS-24184_REAL: Chyba při označení všech záznamů na stránce {INTERNAL_WORK}
+
+BEGIN WORK;
+
+call TW_RegDelKey('TW', 'changeMenu', 'requestMethod', 'CIBIS-Os');
+
+ROLLBACK WORK;
+
+--End of B136285_UID83612_3-UID83612_3

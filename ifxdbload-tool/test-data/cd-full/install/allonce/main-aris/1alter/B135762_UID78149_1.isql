@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B135762_UID78149_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24647: Zavedení optimalizovaného NHZ a práce s ním {STORY}
+
+BEGIN WORK;
+
+alter table eu_zajist_arch
+  --Výše NHZ po optimalizaci pro jiný úvěr 
+  add optimNhz dec(16,2) before refoptimsmlouva
+;
+
+alter table eu_zajist_mat
+  --Výše NHZ po optimalizaci pro jiný úvěr 
+  add optimNhz dec(16,2) before refoptimsmlouva
+;
+
+ROLLBACK WORK;
+
+--End of B135762_UID78149_1

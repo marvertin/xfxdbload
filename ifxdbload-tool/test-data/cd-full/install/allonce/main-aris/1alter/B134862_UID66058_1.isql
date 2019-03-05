@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B134862_UID66058_1
+-- @TC:ONCE: DESCRIPTION = RSTS-18748: Do exportu úvěrové smlouvy doplnit datum souhlasu {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eu_expsml_den ADD datudelenisouhlas   datetime year to second;
+
+ROLLBACK WORK;
+
+--End of B134862_UID66058_1

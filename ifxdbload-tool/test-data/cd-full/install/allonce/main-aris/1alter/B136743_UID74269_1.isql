@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136743_UID74269_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22978: RK - UR a Bonita kontrola {EPIC}
+
+
+BEGIN WORK;
+
+ALTER TABLE cfs_zavazek_mat ADD datumVzniku DATE BEFORE mesicniSplatZav;
+
+ALTER TABLE cfs_zavazek_arch ADD datumVzniku DATE BEFORE mesicniSplatZav;
+
+ROLLBACK WORK;
+
+--End of B136743_UID74269_1

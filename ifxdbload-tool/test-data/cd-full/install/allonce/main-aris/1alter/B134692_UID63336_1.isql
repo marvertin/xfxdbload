@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B134692_UID63336_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17539: Aktualizovat check-list (A-6) {STORY}
+
+
+BEGIN WORK;
+
+  alter table seu_checklistitem_mat add predanismazat INTEGER before poruser;
+  alter table seu_checklistitem_arch add predanismazat INTEGER before poruser;
+
+ROLLBACK WORK;
+
+--End of B134692_UID63336_1

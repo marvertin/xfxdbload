@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135254_UID48285_1
+-- @TC:ONCE: DESCRIPTION = RSTS-10132: Řazení položek s českou diakritikou {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE pef_firma_cis 
+  MODIFY nazev NCHAR(60) NOT NULL, 
+  MODIFY ulice NCHAR(60),
+  MODIFY obec NCHAR(100),
+  MODIFY stat NCHAR(60);
+
+ROLLBACK WORK;
+
+--End of B135254_UID48285_1

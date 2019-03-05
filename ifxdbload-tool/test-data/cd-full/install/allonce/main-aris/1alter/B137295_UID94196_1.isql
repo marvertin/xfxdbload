@@ -1,0 +1,88 @@
+-- @TC:ONCE: ID = V2, B137295_UID94196_1
+-- @TC:ONCE: DESCRIPTION = RSTS-33376: Migrace Doby v zaměstnání a domain model Příjem {STORY}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE cfs_prijem_mat ADD (
+                                refdelkavzam  INTEGER BEFORE datumukonceni,
+                                reftyppracpomer INTEGER BEFORE platnost,
+                                ukoncpracpomer  Integer BEFORE platnost,
+                                budeprodlouzeno char(2) BEFORE platnost,
+                                pracpomerbudetrvat CHAR(5) BEFORE platnost,
+                                zkusebnidoba Integer BEFORE platnost,
+                                refcestovninahrady BIGINT BEFORE platnost,
+                                jsoucestovninahrady   Integer BEFORE platnost,
+                                prijemzasilannaucet   Integer BEFORE platnost,
+                                cislouctu   CHAR(18) BEFORE platnost,
+                                refkodbanky   DECIMAL(7, 0) BEFORE platnost,
+                                iban   VARCHAR(50) BEFORE platnost,
+                                vyslfcezapoctprij   CHAR(3) BEFORE platnost,
+                                vyslkalkulzam   CHAR(3) BEFORE platnost,
+                                vyslprehodnoceni   CHAR(2) BEFORE platnost,
+                                textprehodnoceni   CHAR(128) BEFORE platnost);
+                                
+
+-- CONSTRAINT pro Booleany
+ALTER TABLE cfs_prijem_mat
+ADD CONSTRAINT CHECK (ukoncpracpomer IN (0,1)) CONSTRAINT cfs_prijem_mat_dcoo,
+ADD CONSTRAINT CHECK (zkusebnidoba IN (0,1)) CONSTRAINT cfs_prijem_mat_dcor,
+ADD CONSTRAINT CHECK (jsoucestovninahrady IN (0,1)) CONSTRAINT cfs_prijem_mat_dcos,
+ADD CONSTRAINT CHECK (prijemzasilannaucet IN (0,1)) CONSTRAINT cfs_prijem_mat_dcot
+;
+
+
+--CHECKS
+ALTER TABLE cfs_prijem_mat
+ADD CONSTRAINT (CHECK (pracPomerBudeTrvat IN ('DO6M', 'NAD6M')) CONSTRAINT cfs_prijem_mat_c2),
+ADD CONSTRAINT (CHECK (VyslFCEZapoctPrij IN ('KOT', 'KOM', 'OKI')) CONSTRAINT cfs_prijem_mat_c3),
+ADD CONSTRAINT (CHECK (VyslKalkulZam IN ('KOT', 'KOM', 'OKI')) CONSTRAINT cfs_prijem_mat_c4),
+ADD CONSTRAINT (CHECK (VyslPrehodnoceni IN ('KO', 'OK')) CONSTRAINT cfs_prijem_mat_c5),
+ADD CONSTRAINT (CHECK (budeprodlouzeno in ('PA', 'NE', 'NV')) CONSTRAINT cfs_prijem_mat_c6)
+;
+
+-- Indexy a cizí klíče
+CREATE INDEX cfs_prijem_mat_i_fk8 ON cfs_prijem_mat(refdelkavzam);
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT FOREIGN KEY(refdelkavzam) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT cfs_prijem_mat_fk8;
+
+CREATE INDEX cfs_prijem_mat_i_fk9 ON cfs_prijem_mat(refkodbanky);
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT FOREIGN KEY(refkodbanky) REFERENCES ac_bank_cis(bankanum) CONSTRAINT cfs_prijem_mat_fk9;
+
+CREATE INDEX cfs_prijem_mat_i_fk10 ON cfs_prijem_mat(refcestovninahrady);
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT FOREIGN KEY(refcestovninahrady) REFERENCES cfs_prijem_mat(serno) CONSTRAINT cfs_prijem_mat_fk10;
+
+CREATE INDEX cfs_prijem_mat_i_fk11 ON cfs_prijem_mat(reftyppracpomer);
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT FOREIGN KEY(reftyppracpomer) REFERENCES cfs_typpracpomer_cis(id) CONSTRAINT cfs_prijem_mat_fk11;
+
+
+--------------------------------
+
+ALTER TABLE cfs_prijem_arch ADD (refdelkavzam INTEGER BEFORE datumukonceni,
+                                 reftyppracpomer   INTEGER BEFORE platnost,
+                                 ukoncpracpomer   Integer BEFORE platnost,
+                                 budeprodlouzeno   char(2) BEFORE platnost,
+                                 pracpomerbudetrvat   CHAR(5) BEFORE platnost,
+                                 zkusebnidoba   Integer BEFORE platnost,
+                                 refcestovninahrady   BIGINT BEFORE platnost,
+                                 jsoucestovninahrady   Integer BEFORE platnost,
+                                 prijemzasilannaucet   Integer BEFORE platnost,
+                                 cislouctu   CHAR(18) BEFORE platnost,
+                                 refkodbanky   DECIMAL(7, 0) BEFORE platnost,
+                                 iban   VARCHAR(50) BEFORE platnost,
+                                 vyslfcezapoctprij   CHAR(3) BEFORE platnost,
+                                 vyslkalkulzam   CHAR(3) BEFORE platnost,
+                                 vyslprehodnoceni   CHAR(2) BEFORE platnost,
+                                 textprehodnoceni   CHAR(128) BEFORE platnost);
+
+-- CONSTRAINT pro Booleany
+ALTER TABLE cfs_prijem_arch
+ADD CONSTRAINT CHECK (ukoncpracpomer IN (0,1)) CONSTRAINT cfs_prijem_arch_dcp1,
+ADD CONSTRAINT CHECK (zkusebnidoba IN (0,1)) CONSTRAINT cfs_prijem_arch_dcp4,
+ADD CONSTRAINT CHECK (jsoucestovninahrady IN (0,1)) CONSTRAINT cfs_prijem_arch_dcp5,
+ADD CONSTRAINT CHECK (prijemzasilannaucet IN (0,1)) CONSTRAINT cfs_prijem_arch_dcp6
+;
+
+ROLLBACK WORK;
+
+--End of B137295_UID94196_1

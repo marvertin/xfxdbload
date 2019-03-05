@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B136058_UID80310_1-crksoubehHypo
+-- @TC:ONCE: DESCRIPTION = RSTS-25869: Určovat hranici RK podle existence souběžného hypotečního úvěru {STORY}
+
+
+BEGIN WORK;
+-- Dotčený UC, Zjistit hranici rizikové kontroly úvěru
+
+ALTER TABLE crk_kontrolapravidlo_cis
+ADD soubehhypouver Integer BEFORE platnost;
+
+ALTER TABLE crk_kontrolapravidlo_acis
+ADD soubehhypouver Integer BEFORE platnost;
+
+ROLLBACK WORK;
+
+--End of B136058_UID80310_1-crksoubehHypo

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135650_UID64178_3-tw_smstyp_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-17861: Notifikační upozornění – uzavřená smlouva o úvěru {REQUEST}
+
+BEGIN WORK;
+
+INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, ignorovatcas, platnost)
+VALUES ('UVER_POTVR_KLIENT', 'Informace o potvrzení úvěrové smlouvy - klient', 'Vaše úvěrová slmouva č. <<CISLO_SS>> na částku <<VYSE_UVERU>> byla uzavřena. Raiffeisen stavební spořitelna ', 0, 0, 1);
+
+INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, ignorovatcas, platnost)
+VALUES ('UVER_POTVR_OZ_INT', 'Informace o potvrzení úvěrové smlouvy - OZ - interní', 'Úvěrová smlouva č. <<CISLO_SS>> na částku <<VYSE_UVERU>> pro klienta <<JMENO_PRIJMENI>> byla uzavřena. Raiffeisen stavební spořitelna', 0, 0, 1);
+
+INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, ignorovatcas, platnost)
+VALUES ('UVER_POTVR_OZ_EXT', 'Informace o potvrzení úvěrové smlouvy - OZ - externí', 'Úvěrová smlouva č. <<CISLO_SS>> na částku <<VYSE_UVERU>> pro klienta <<JMENO_PRIJMENI>> byla uzavřena. Raiffeisen stavební spořitelna', 0, 0, 1);
+
+ROLLBACK WORK;
+
+--End of B135650_UID64178_3-tw_smstyp_cis

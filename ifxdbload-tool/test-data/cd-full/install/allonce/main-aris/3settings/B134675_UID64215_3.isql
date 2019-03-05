@@ -1,0 +1,80 @@
+-- @TC:ONCE: ID = V2, B134675_UID64215_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17891: Main: Správně přednastavit úrokové sazby při vytvoření úvěru v Main {STORY}
+
+BEGIN WORK;
+
+DELETE FROM TW_Registr_Cis WHERE oblast = 'EU' AND funkce = '*' AND udaj = 'zmenasazby';
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-PU-PFSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro PÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-PU-PUSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro PÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-PU-PPSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro PÚ', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-PU-PFSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro PÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-PU-PUSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro PÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-PU-PPSU', 'M', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro PÚ', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-PU-PFSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro PÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-PU-PUSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro PÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-PU-PPSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro PÚ', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-PU-PFSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro PÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-PU-PUSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro PÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-PU-PPSU', 'M', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro PÚ', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-PU-je-fix-PFSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro PÚ je fixní', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-PU-je-fix-PUSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro PÚ je fixní', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-PU-je-fix-PPSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro PÚ je fixní', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-PU-fix-sazba-PFSU', '8', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro PÚ – fixní sazba', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-PU-fix-sazba-PUSU', '8', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro PÚ – fixní sazba', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-PU-fix-sazba-PPSU', '8', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro PÚ – fixní sazba', 1);
+
+-- není specifikován žádný typ smlouvy, tak nevytvářím
+--call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-PU-diference-<typ_smlouvy>', '0', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro PÚ – diference vůči běžné sazbě', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-SU-PFSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-SU-PUSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-SU-SUFO', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-SU-PPSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-SU-SUPO', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-BE-SU-KOME', '702', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze BE pro SÚ', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-SU-PFSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-SU-PUSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-SU-SUFO', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-SU-PPSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-SU-SUPO', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-BE-SU-KOME', 'M', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda BE pro SÚ', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-SU-PFSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-SU-PUSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-SU-SUFO', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-SU-PPSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-SU-SUPO', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'ID-baze-SA-SU-KOME', '702', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - ID báze SA pro SÚ', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-SU-PFSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-SU-PUSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-SU-SUFO', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-SU-PPSU', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-SU-SUPO', 'R', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro SÚ', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'perioda-SA-SU-KOME', 'M', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - perioda SA pro SÚ', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-je-fix-PFSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ je fixní', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-je-fix-PUSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ je fixní', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-je-fix-SUFO', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ je fixní', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-je-fix-PPSU', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ je fixní', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-je-fix-SUPO', '1', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ je fixní', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-je-fix-KOME', '0', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ je fixní', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-fix-sazba-PFSU', '8', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ – fixní sazba', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-fix-sazba-PUSU', '8', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ – fixní sazba', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-fix-sazba-SUFO', '8', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ – fixní sazba', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-fix-sazba-PPSU', '8', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ – fixní sazba', 1);
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-fix-sazba-SUPO', '8', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ – fixní sazba', 1);
+
+call TW_RegSetOrAddKey('EU', 'uverova-smlouva', 'urokove-sazby', 'SA-SU-diference-KOME', '5', 1, 'Úvěr', 'Úvěrová smlouva', 'Úrokové sazby', 'Iniciální úroková sazba úvěru pro <typ smlouvy> - sazba SA pro SÚ – diference vůči běžné sazbě', 1);
+
+ROLLBACK WORK;
+
+--End of B134675_UID64215_3

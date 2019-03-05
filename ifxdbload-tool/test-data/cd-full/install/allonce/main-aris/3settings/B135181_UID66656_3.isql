@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135181_UID66656_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19122: Kontrola povolených přechodů mezi rodinnými stavy. {STORY}
+
+
+BEGIN WORK;
+
+UPDATE eo_stavrod_cis SET nepovoleneprechody = '1' WHERE stavrod = 2;
+UPDATE eo_stavrod_cis SET nepovoleneprechody = '1' WHERE stavrod = 3;
+UPDATE eo_stavrod_cis SET nepovoleneprechody = '1,3' WHERE stavrod = 4;
+
+ROLLBACK WORK;
+
+--End of B135181_UID66656_3

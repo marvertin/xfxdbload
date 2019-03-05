@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B137188_UID92332_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+ --cfs_duvodnezapoct_cis 
+ ALTER TABLE cfs_duvodnezapoct_cis ADD nabizetvsale Integer DEFAULT 0;
+ ALTER TABLE cfs_duvodnezapoct_cis ADD generovatdokument Integer DEFAULT 0;
+    
+ ALTER TABLE cfs_duvodnezapoct_cis ADD CONSTRAINT CHECK (nabizetvsale IN (0,1)) CONSTRAINT cfs_duvodnezapoct_cis_dc70;  
+ ALTER TABLE cfs_duvodnezapoct_cis ADD CONSTRAINT CHECK (generovatdokument IN (0,1)) CONSTRAINT cfs_duvodnezapoct_cis_dc71;
+ 
+ 
+ --cfs_duvodnezapoct_acis 
+ ALTER TABLE cfs_duvodnezapoct_acis ADD nabizetvsale Integer DEFAULT 0;
+ ALTER TABLE cfs_duvodnezapoct_acis ADD generovatdokument Integer DEFAULT 0;
+    
+ ALTER TABLE cfs_duvodnezapoct_acis ADD CONSTRAINT CHECK (nabizetvsale IN (0,1)) CONSTRAINT cfs_duvodnezapoct_acis_dc73;  
+ ALTER TABLE cfs_duvodnezapoct_acis ADD CONSTRAINT CHECK (generovatdokument IN (0,1)) CONSTRAINT cfs_duvodnezapoct_acis_dc72;
+
+ROLLBACK WORK;
+
+--End of B137188_UID92332_1

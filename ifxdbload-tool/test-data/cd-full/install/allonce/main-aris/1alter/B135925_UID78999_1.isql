@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, B135925_UID78999_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25172: Vytvořit číselník důvodů neexistence ZZ včetně obslužné úlohy {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE ses_duvodnezz_cis (
+  serno   SERIAL NOT NULL,
+  popis   VARCHAR(255),
+  poradi   Integer,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ses_duvodnezz_cis_d835
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ses_duvodnezz_cis_pk ON ses_duvodnezz_cis(serno);
+ALTER TABLE ses_duvodnezz_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ses_duvodnezz_cis_pk;
+
+
+CREATE TABLE ses_duvodnezz_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  popis   VARCHAR(255),
+  poradi   Integer,
+  platnost   Integer,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ses_duvodnezz_acis_pk ON ses_duvodnezz_acis(idarch);
+ALTER TABLE ses_duvodnezz_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ses_duvodnezz_acis_pk;
+
+
+ROLLBACK WORK;
+
+--End of B135925_UID78999_1

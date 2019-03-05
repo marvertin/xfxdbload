@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B135906_UID80060_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25731: Přidání adresy po odpovědi na návodnou otázku na povolení zadání jiné adresy {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE seu_uz_mat ADD (
+  refadresadorucusd   Integer
+);
+
+ALTER TABLE seu_uz_arch ADD (
+  refadresadorucusd   Integer
+);
+
+ROLLBACK WORK;
+
+--End of B135906_UID80060_1

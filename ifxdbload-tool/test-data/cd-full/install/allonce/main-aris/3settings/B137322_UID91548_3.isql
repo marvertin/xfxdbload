@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B137322_UID91548_3
+-- @TC:ONCE: DESCRIPTION = Nová úloha - Správa komunikačních období vracení SP na MF
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('SP', 'VRATKA', 'KONTROLY', 'PROCEDURA', 'RSTS_ZkontrolovatVratky', 1, 'Státní podpora', 'Komunikace s MF (CZ)', 'Communicaton with MF (CZ)', 'název procedury kontrol období vracení SP na MF', 1);
+
+ROLLBACK WORK;
+
+--End of B137322_UID91548_3

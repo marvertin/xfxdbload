@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, B137055_UID77507_3-IFRS
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', 'rizKon-histvRSTS', 'IFRS-os', 'limitPocetMesicu', 48, 1, 'Úvěr', 'Rizikové kontroly úvěru - historie v RSTS', 'Stádium IFRS osoby', 'Riziková kontrola Stádium IFRS osoby - limitní počet měsíců', 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-histvRSTS', 'IFRS-uv', 'limitPocetMesicu', 48, 1, 'Úvěr', 'Rizikové kontroly úvěru - historie v RSTS', 'Stádium IFRS úvěru', 'Riziková kontrola Stádium IFRS úvěru - limitní počet měsíců', 1);
+
+UPDATE crk_kontrolatyp_cis
+   SET pozadovatkdy = 'X'
+  WHERE kod IN ('HIST_VYMU', 'HIST_KLOS');
+  
+INSERT INTO crk_kontrolatyp_cis(kod, poradizobraz, nazev, garant, pozadovatkdy, zpusvypoctupar,
+                                spustrozliseniko, nejnizsiuroven, zpusoburcenihranicekon, hranicekontroly, popishranice, spustitelnakontrola,
+                                prioritavolani, algoritmusfunkcef1, algoritmusfunkcef2, algoritmusfunkcef3,
+                                algoritmusfunkcef4, algoritmusfunkcef5, spustautprischval, spustautpricerp, nedostupsalechyba)
+VALUES ('IFRS_UVER', 310, 'Stádium IFRS úv.', 'ORRA', 'P', 'A', 
+        1, 'O', 'O', 2,  'Stádium IFRS', 1,
+        32, 'F1 NE', 'F2 PRUMER', 'F3 MAX3 MIN',
+        'F4 ZACHRANA', 'F5 JEN VYMENA', 1, 1, 1);
+        
+INSERT INTO crk_kontrolatyp_cis(kod, poradizobraz, nazev, garant, pozadovatkdy, zpusvypoctupar,
+                                spustrozliseniko, nejnizsiuroven, zpusoburcenihranicekon, hranicekontroly, popishranice, spustitelnakontrola,
+                                prioritavolani, algoritmusfunkcef1, algoritmusfunkcef2, algoritmusfunkcef3,
+                                algoritmusfunkcef4, algoritmusfunkcef5, spustautprischval, spustautpricerp, nedostupsalechyba)
+VALUES ('IFRS_OSOB', 320, 'Stádium IFRS úv.', 'ORRA', 'P', 'A', 
+        1, 'O', 'O', 2,  'Stádium IFRS', 1,
+        34, 'F1 NE', 'F2 PRUMER', 'F3 MAX3 MIN',
+        'F4 ZACHRANA', 'F5 JEN VYMENA', 1, 1, 1);        
+
+ROLLBACK WORK;
+--End of B137055_UID77507_3-regIFRS

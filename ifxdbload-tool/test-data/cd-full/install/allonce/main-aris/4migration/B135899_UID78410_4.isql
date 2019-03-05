@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135899_UID78410_4
+-- @TC:ONCE: DESCRIPTION = RSTS-24772: Slučováním dokumentů ztrácíme certifikáty {REQUEST}
+
+
+BEGIN WORK;
+
+UPDATE do_typdokumentu_cis SET slucovatproecm = 0 WHERE doktyp in (
+  107, 1102, 1106, 1110, 1134,
+  1103, 1107, 1111, 1135, 1143,
+  1104, 1108, 1112, 1136, 1144,
+  1105, 1109, 1113, 1137, 1145
+);
+
+
+ROLLBACK WORK;
+
+--End of B135899_UID78410_4

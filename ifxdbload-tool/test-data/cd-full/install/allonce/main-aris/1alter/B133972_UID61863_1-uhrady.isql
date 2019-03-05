@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B133972_UID61863_1-uhrady
+-- @TC:ONCE: DESCRIPTION = Modelování úhrad
+
+
+BEGIN WORK;
+
+RENAME TABLE ep_parammoduhr_cis TO old_ep_parammoduhr_cis;
+RENAME TABLE ep_parammoduhr_acis TO old_ep_parammoduhr_acis;
+
+
+ROLLBACK WORK;
+
+--End of B133972_UID61863_1-uhrady

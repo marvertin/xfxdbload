@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B135561_UID65089_5-op
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+/* tabulka se s každým importem parametrů OP promazává, takže zálohovat sloupce nemá cenu */
+alter  TABLE ru_opparametry_cis
+  drop stariuver,
+  drop zbytksplat,
+  drop pd12mes,
+  drop pdcelozivotni;
+
+alter  TABLE ru_opparametry_acis
+  drop stariuver,
+  drop zbytksplat,
+  drop pd12mes,
+  drop pdcelozivotni;
+ 
+ROLLBACK WORK;
+
+--End of B135561_UID65089_5

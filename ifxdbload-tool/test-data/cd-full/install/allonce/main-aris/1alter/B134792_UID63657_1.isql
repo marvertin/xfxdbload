@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B134792_UID63657_1
+-- @TC:ONCE: DESCRIPTION = Upravit práci s číselníkem povolání  {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_fo_mat MODIFY povolani Integer  ;
+
+ALTER TABLE eo_fo_arch MODIFY povolani Integer  ;
+
+ALTER TABLE eo_fozmpl_kart MODIFY povolani Integer   ;
+
+ROLLBACK WORK;
+
+--End of B134792_UID63657_1

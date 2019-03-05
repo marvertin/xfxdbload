@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B135222_UID60338_3-do_typdokumentuskupina_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-15821: Vygenerovat a zobrazit dokumenty k úvěrovým přílohám {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis) 
+  VALUES (1204, 19, '0195 Úvěr pro zaměstnance', null, 1, null, 0, null, 0);
+
+ROLLBACK WORK;
+
+--End of B135222_UID60338_3-do_typdokumentuskupina_cis
+
+
+
+

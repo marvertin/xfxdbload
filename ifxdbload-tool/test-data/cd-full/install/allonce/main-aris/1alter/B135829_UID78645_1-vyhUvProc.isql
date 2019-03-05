@@ -1,0 +1,155 @@
+-- @TC:ONCE: ID = V2, B135829_UID78645_1-vyhUvProc
+-- @TC:ONCE: DESCRIPTION = RSTS-24924: Nové evidence a nová úloha Vyhodnocení procesu {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE cps_vyhuvproc_den (
+  serno   BIGINT NOT NULL,
+  refeusml   DECIMAL(16, 0),
+  refeusmltyp   CHAR(4),
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  pordatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refdatprov   DATE
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_vyhuvproc_den_pk ON cps_vyhuvproc_den(serno);
+ALTER TABLE cps_vyhuvproc_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cps_vyhuvproc_den_pk;
+
+--FK
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE cps_vysledekvyhuvproc_den (
+  refvyhuvproc   BIGINT NOT NULL,
+  datvyhod   DATE,
+  verzeprocfunkce   CHAR(20),
+  pozadveriftel   Integer  DEFAULT 0,
+  pozadposozu   Integer  DEFAULT 0,
+  pozadposana   Integer  DEFAULT 0,
+  pozadpostec   Integer  DEFAULT 0,
+  pozadposfra   Integer  DEFAULT 0,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (pozadveriftel IN (0,1)) CONSTRAINT cps_vysledekvyhuvproc_den_d726,
+  CHECK (pozadposozu IN (0,1)) CONSTRAINT cps_vysledekvyhuvproc_den_d727,
+  CHECK (pozadposana IN (0,1)) CONSTRAINT cps_vysledekvyhuvproc_den_d728,
+  CHECK (pozadpostec IN (0,1)) CONSTRAINT cps_vysledekvyhuvproc_den_d729,
+  CHECK (pozadposfra IN (0,1)) CONSTRAINT cps_vysledekvyhuvproc_den_d72a
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_vysledekvyhuvproc_den_pk ON cps_vysledekvyhuvproc_den(refvyhuvproc);
+ALTER TABLE cps_vysledekvyhuvproc_den ADD CONSTRAINT PRIMARY KEY(refvyhuvproc) CONSTRAINT cps_vysledekvyhuvproc_den_pk;
+
+--FK
+ALTER TABLE cps_vysledekvyhuvproc_den ADD CONSTRAINT FOREIGN KEY(refvyhuvproc) REFERENCES cps_vyhuvproc_den(serno) CONSTRAINT cps_vysledekvyhuvproc_den_f1;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE cps_vyhuvprocprijem_den (
+  serno   BIGINT NOT NULL,
+  refvyhuvproc   BIGINT NOT NULL,
+  refprijem   BIGINT,
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  pordatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refdatprov   DATE
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_vyhuvprocprijem_den_pk ON cps_vyhuvprocprijem_den(serno);
+ALTER TABLE cps_vyhuvprocprijem_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cps_vyhuvprocprijem_den_pk;
+
+--FK
+CREATE INDEX cps_vyhuvprocprijem_den_i_f1 ON cps_vyhuvprocprijem_den(refprijem);
+ALTER TABLE cps_vyhuvprocprijem_den ADD CONSTRAINT FOREIGN KEY(refprijem) REFERENCES cfs_prijem_mat(serno) CONSTRAINT cps_vyhuvprocprijem_den_f1;
+CREATE INDEX cps_vyhuvprocprijem_den_i_f2 ON cps_vyhuvprocprijem_den(refvyhuvproc);
+ALTER TABLE cps_vyhuvprocprijem_den ADD CONSTRAINT FOREIGN KEY(refvyhuvproc) REFERENCES cps_vyhuvproc_den(serno) CONSTRAINT cps_vyhuvprocprijem_den_f2;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE cps_vysledekvyhuvprocprijem_den (
+  refvyhuvprocprijem   BIGINT NOT NULL,
+  pozadverifpri   Integer  DEFAULT 0,
+  uznatmescastka   DECIMAL(16, 2),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (pozadverifpri IN (0,1)) CONSTRAINT cps_vysledekvyhuvprocprijem_den_d72p
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_vysledekvyhuvprocprijem_den_pk ON cps_vysledekvyhuvprocprijem_den(refvyhuvprocprijem);
+ALTER TABLE cps_vysledekvyhuvprocprijem_den ADD CONSTRAINT PRIMARY KEY(refvyhuvprocprijem) CONSTRAINT cps_vysledekvyhuvprocprijem_den_pk;
+
+--FK
+ALTER TABLE cps_vysledekvyhuvprocprijem_den ADD CONSTRAINT FOREIGN KEY(refvyhuvprocprijem) REFERENCES cps_vyhuvprocprijem_den(serno) CONSTRAINT cps_vysledekvyhuvprocprijem_den_f1;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE cps_kritvyhuvproc_den (
+  serno   BIGINT NOT NULL,
+  refvyhuvproc   BIGINT NOT NULL,
+  refvyhuvprocprijem   BIGINT,
+  hodnota   VARCHAR(255),
+  hranice   VARCHAR(255),
+  typhodnoty   CHAR(1) NOT NULL,
+  popiskriteria   INTEGER NOT NULL,
+  parametrkriteria   DECIMAL(16,2),
+  vlivnaana   Integer  DEFAULT 0 NOT NULL,
+  vlivnafra   Integer  DEFAULT 0 NOT NULL,
+  vlivnaozu   Integer  DEFAULT 0 NOT NULL,
+  vlivnatec   Integer  DEFAULT 0 NOT NULL,
+  vlivnaverifpri   Integer  DEFAULT 0 NOT NULL,
+  vlivnaveriftel   Integer  DEFAULT 0 NOT NULL,
+  vysledek   CHAR(2),
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  pordatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refdatprov   DATE,
+  CHECK (vlivnaana IN (0,1)) CONSTRAINT cps_kritvyhuvproc_den_d6ay,
+  CHECK (vlivnafra IN (0,1)) CONSTRAINT cps_kritvyhuvproc_den_d6az,
+  CHECK (vlivnaozu IN (0,1)) CONSTRAINT cps_kritvyhuvproc_den_d6b0,
+  CHECK (vlivnatec IN (0,1)) CONSTRAINT cps_kritvyhuvproc_den_d6b1,
+  CHECK (vlivnaverifpri IN (0,1)) CONSTRAINT cps_kritvyhuvproc_den_d6b2,
+  CHECK (vlivnaveriftel IN (0,1)) CONSTRAINT cps_kritvyhuvproc_den_d6b3
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_kritvyhuvproc_den_pk ON cps_kritvyhuvproc_den(serno);
+ALTER TABLE cps_kritvyhuvproc_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cps_kritvyhuvproc_den_pk;
+
+--FK
+CREATE INDEX cps_kritvyhuvproc_den_i_f1 ON cps_kritvyhuvproc_den(refvyhuvproc);
+ALTER TABLE cps_kritvyhuvproc_den ADD CONSTRAINT FOREIGN KEY(refvyhuvproc) REFERENCES cps_vyhuvproc_den(serno) CONSTRAINT cps_kritvyhuvproc_den_f1;
+CREATE INDEX cps_kritvyhuvproc_den_i_f2 ON cps_kritvyhuvproc_den(refvyhuvprocprijem);
+ALTER TABLE cps_kritvyhuvproc_den ADD CONSTRAINT FOREIGN KEY(refvyhuvprocprijem) REFERENCES cps_vyhuvprocprijem_den(serno) CONSTRAINT cps_kritvyhuvproc_den_f2;
+CREATE INDEX cps_kritvyhuvproc_den_i_f3 ON cps_kritvyhuvproc_den(popiskriteria);
+ALTER TABLE cps_kritvyhuvproc_den ADD CONSTRAINT FOREIGN KEY(popiskriteria) REFERENCES cps_kritvyhuvproc_cis(serno) CONSTRAINT cps_kritvyhuvproc_den_f3;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cps_kritvyhuvproc_den
+ADD CONSTRAINT (CHECK (typHodnoty IN ('I','M','D')) CONSTRAINT cps_kritvyhuvproc_den_c1),
+ADD CONSTRAINT (CHECK (vysledek IN ('OK','KO')) CONSTRAINT cps_kritvyhuvproc_den_c2);
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ROLLBACK WORK;
+
+--End of B135829_UID78645_1-vyhUvProc

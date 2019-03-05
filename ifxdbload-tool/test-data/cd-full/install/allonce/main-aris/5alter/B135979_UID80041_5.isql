@@ -1,0 +1,54 @@
+-- @TC:ONCE: ID = V2, B135979_UID80041_5
+-- @TC:ONCE: DESCRIPTION = RSTS-25718: Umožnit zadat více dokladů totožnosti v CIBIS-Sale {STORY}
+
+
+BEGIN WORK;
+
+-- Odstranění constraintů pro sloupce, které se budou přejmenovávat(zneplatní se)
+ALTER TABLE seo_prukaz_mat DROP CONSTRAINT seo_prukaz_mat_f1; -- druhpobyt
+
+ALTER TABLE seo_prukaz_mat DROP CONSTRAINT seo_prukaz_mat_fk_seo_prukaz_mat_eo_stat_cis; -- statnaroz
+
+
+-- Přejmenování (zneplatnění )sloupců
+RENAME COLUMN seo_prukaz_mat.pobytod TO xold_pobytod;
+
+RENAME COLUMN seo_prukaz_mat.pobytdo TO xold_pobytdo;
+
+RENAME COLUMN seo_prukaz_mat.druhpobyt TO xold_druhpobyt;
+
+RENAME COLUMN seo_prukaz_mat.mistonaroz TO xold_mistonaroz;
+
+RENAME COLUMN seo_prukaz_mat.statnaroz TO xold_statnaroz;
+
+RENAME COLUMN seo_prukaz_mat.politexp TO xold_politexp;
+
+RENAME COLUMN seo_prukaz_mat.residentflag TO xold_residentflag;
+
+RENAME COLUMN seo_prukaz_mat.refdruhpobytinterni TO xold_refdruhpobytinterni;
+
+-- Archív
+RENAME COLUMN seo_prukaz_arch.pobytod TO xold_pobytod;
+
+RENAME COLUMN seo_prukaz_arch.pobytdo TO xold_pobytdo;
+
+RENAME COLUMN seo_prukaz_arch.druhpobyt TO xold_druhpobyt;
+
+RENAME COLUMN seo_prukaz_arch.mistonaroz TO xold_mistonaroz;
+
+RENAME COLUMN seo_prukaz_arch.statnaroz TO xold_statnaroz;
+
+RENAME COLUMN seo_prukaz_arch.politexp TO xold_politexp;
+
+RENAME COLUMN seo_prukaz_arch.residentflag TO xold_residentflag;
+
+RENAME COLUMN seo_prukaz_arch.refdruhpobytinterni TO xold_refdruhpobytinterni;
+
+
+-- Migrace doplnila do sloupce priorita hodnoty
+-- tento sloupec má být NOT NULL
+ALTER TABLE seo_prukaz_mat MODIFY priorita INTEGER NOT NULL;
+
+ROLLBACK WORK;
+
+--End of B135979_UID80041_5

@@ -1,0 +1,3 @@
+--V1,ID:B135325_UID71591_drop_exec
+--notran
+  EXECUTE PROCEDURE B135325_UID71591_drop();

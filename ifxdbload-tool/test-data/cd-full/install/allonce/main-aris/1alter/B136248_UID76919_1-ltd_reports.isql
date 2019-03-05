@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136248_UID76919_1-ltd_reports
+-- @TC:ONCE: DESCRIPTION = REAL: Výpisy SIS - zaručená elektronická pečeť PO
+BEGIN WORK;
+
+ALTER TABLE rr_reptype_acis ADD  signature   Integer  DEFAULT 0 BEFORE  reporttechnology;
+ALTER TABLE rr_reptype_acis ADD CONSTRAINT (CHECK (signature IN (0,1)) CONSTRAINT rr_reptype_acis_d8lt);
+
+ALTER TABLE rr_reptype_cis ADD  signature   Integer  DEFAULT 0 BEFORE  reporttechnology;
+ALTER TABLE rr_reptype_cis ADD CONSTRAINT (CHECK (signature IN (0,1)) CONSTRAINT rr_reptype_cis_d8ls);
+
+ROLLBACK WORK;
+--End of B136248_UID76919_1-ltd_reports

@@ -1,0 +1,497 @@
+-- @TC:ONCE: ID = V2, B137299_UID93196_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32874: Parametrizace dokumentů a způsobů podpisu pro doplňkové požadavky {STORY}
+
+
+BEGIN WORK;
+
+--tw_typobjserno_cis
+INSERT INTO tw_typobjserno_cis(tabulka, nazev, platnost) 
+  VALUES ('sep_doplnpozadavek_mat', 'Hlavička doplňkového požadavku', 1);
+
+
+--rr_reptype_cis
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, exportdir, keepinterval, bulkprint, bulkprintformat, bulkprintsave, bulkprintdir, savewithoutpreview, formatchange, listinternalmail, writedocument, signature, reporttechnology)
+  VALUES ('SS060', 'SS', '06', 0, 0, 'Podepisovaný dokument k doplňkovým požadavkům', 'p:\RSTS\PROJEKTY\CIBIS-RSTS-2019F-R\Test\Tisky\', 1, 0, null, 0, null, 1, 0, 0, 0, 0, 'reports_j2ee');
+
+
+--rr_xreptype_cis
+INSERT INTO rr_xreptype_cis (refrepcode, datod, datdo, predloha, cesta, soubor, lasttemplatedir, interniid, externiid, externidocid, poznamka, platnost)
+  VALUES ('SS060', MDY(1, 1, 2018), null, 'J', 'c:\Tomcat\111\tcres\reports_j2ee\SS06', 'SS060.jrxml', 'SS05', null, null, null, null, 1);
+
+
+
+CREATE TEMP TABLE typdokumentu_lastserno_temp (typpodepdok INTEGER, typprilohdok INTEGER, skupina INTEGER, typdokumentuskupina INTEGER);
+INSERT INTO typdokumentu_lastserno_temp(typpodepdok, typprilohdok, skupina, typdokumentuskupina) VALUES (0, 0, 0, 0);
+
+--do_skupina_cis
+UPDATE typdokumentu_lastserno_temp SET skupina = (SELECT MAX(skupina) + 1 FROM do_skupina_cis);
+INSERT INTO do_skupina_cis (skupina, nazev, popis, poznamka, platnost) 
+  VALUES ((SELECT skupina FROM typdokumentu_lastserno_temp), 'Sale: Doplňkový požadavek', null, null, 1);
+
+
+--do_typdokumentu_cis
+--do_typdokumentutypobjektu_cis
+--do_typdokumentuskupina_cis
+--do_zpusobpodeptypdokskup_cis
+--Dokument 1
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Reakce na  intervenci - nová smlouva"', null, null, 1, 25, 2505, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 2
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Reakce na  intervenci - nová smlouva"', null, null, 1, 25, 2505, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+  
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Reakce na  intervenci - nová smlouva', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'VOL_SPOR');
+
+
+--Dokument 3
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Reakce na intervenci - změna"', null, null, 1, 26, 2607, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 4
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Reakce na intervenci - změna"', null, null, 1, 26, 2607, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Reakce na intervenci - změna', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_SPOR');
+
+
+--Dokument 5
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Reakce na intervenci - ukončení dohoda"', null, null, 1, 22, 2203, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 6
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Reakce na intervenci - ukončení dohoda"', null, null, 1, 22, 2203, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Reakce na intervenci - ukončení dohoda', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_SPOR');
+
+
+--Dokument 7
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Reakcena intervenci - ukončení výpověď"', null, null, 1, 21, 2107, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 8
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Reakcena intervenci - ukončení výpověď"', null, null, 1, 21, 2107, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Reakcena intervenci - ukončení výpověď', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_SPOR');
+
+
+--Dokument 9
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Doplňující informace - nová smlouva"', null, null, 1, 25, 2505, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 10
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Doplňující informace - nová smlouva"', null, null, 1, 25, 2505, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Doplňující informace - nová smlouva', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'VOL_SPOR');
+
+
+--Dokument 11
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Doplňující informace - změna"', null, null, 1, 26, 2607, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+
+--Dokument 12
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Doplňující informace - změna"', null, null, 1, 26, 2607, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Doplňující informace - změna', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_SPOR');
+
+
+--Dokument 13
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Doplňující informace- ukončení dohoda"', null, null, 1, 22, 2203, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 14
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Doplňující informace- ukončení dohoda"', null, null, 1, 22, 2203, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Doplňující informace- ukončení dohoda', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_SPOR');
+
+
+--Dokument 15
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Doplňující informace - ukončení výpověď"', null, null, 1, 21, 2107, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 16
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Doplňující informace - ukončení výpověď"', null, null, 1, 21, 2107, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Doplňující informace - ukončení výpověď', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_SPOR');
+
+
+--Dokument 17
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Reklamace spoření"', null, null, 1, 16, null, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 2, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 18
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Reklamace spoření"', null, null, 1, 16, null, null, 'OSSKOR', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Reklamace spoření', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'VOL_SPOR');
+
+
+--Dokument 19
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Korespondence spoření"', null, null, 1, 10, null, null, 'OSSKOR', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 2, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 20
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Korespondence spoření"', null, null, 1, 10, null, null, 'OSSKOR', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Korespondence spoření', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'VOL_SPOR');
+
+
+--Dokument 21
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Žádost o dodatek k úvěru"', null, null, 1, 70, null, null, 'OSSKOR', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 2, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 22
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Žádost o dodatek k úvěru"', null, null, 1, 70, null, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Žádost o dodatek k úvěru', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_UVER');
+
+
+--Dokument 23
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Reklamace úvěr"', null, null, 1, 76, null, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 2, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 24
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Reklamace úvěr"', null, null, 1, 76, null, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Reklamace úvěr', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_UVER');
+
+
+--Dokument 25
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Podepisovaný dokument k doplň. pož. typu "Korespondence úvěr"', null, null, 1, 70, null, null, 'OSSSS', 1, 'SS060', 1, 1, null, null, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typpodepdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+UPDATE typdokumentu_lastserno_temp SET typdokumentuskupina = tw_lastSer();  
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 1, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 2, null, null, 1);
+
+INSERT INTO do_zpusobpodeptypdokskup_cis (reftypdokumentuskupina, zpusobpodep, popis, poznamka, platnost)
+  VALUES ((SELECT typdokumentuskupina FROM typdokumentu_lastserno_temp), 3, null, null, 1);
+
+
+--Dokument 26
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+  VALUES ('Příloha doplň. pož. typu "Korespondence úvěr"', null, null, 1, 70, null, null, 'OSSSS', 0, null, 1, 0, null, null, null, 1);
+UPDATE typdokumentu_lastserno_temp SET typprilohdok = tw_lastSer();  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'sep_doplnpozadavek_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);  
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis)
+  VALUES ((SELECT typprilohdok FROM typdokumentu_lastserno_temp), (SELECT skupina FROM typdokumentu_lastserno_temp), null, null, 1, 'O', 0, null, 0);
+
+INSERT INTO sep_doplnpozadtyp_cis (nazev, platnost, poznamka, refpodepdoktyp, refprilohadoktyp, vazbanasml)
+  VALUES ('Korespondence úvěr', 1, null, (SELECT typpodepdok FROM typdokumentu_lastserno_temp), (SELECT typprilohdok FROM typdokumentu_lastserno_temp), 'POV_UVER');
+
+
+
+ROLLBACK WORK;
+
+--End of B137290_UID93196_3

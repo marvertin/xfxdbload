@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136157_UID83260_5
+-- @TC:ONCE: DESCRIPTION = RSTS-27368: nelze pokračovat v úž {INTERNAL_DEFECT}
+
+BEGIN WORK;
+-- dočasné přejmenování zpět, než se dodělá epic RSTS-24188
+RENAME COLUMN eu_odpovedrozhod_acis.xold_typodpoved TO typodpoved;
+
+RENAME COLUMN eu_odpovedrozhod_cis.xold_typodpoved TO typodpoved;
+
+ROLLBACK WORK;
+
+--End of B136157_UID83260_5

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134737_UID65005_4
+-- @TC:ONCE: DESCRIPTION = RSTS-18220: SIS - Informace o klientovi - tituly {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE sec_useraccount_mat SET displayname = replace(displayname, ', ,', ',') WHERE instr(displayname, ', , ') > 0;
+
+ROLLBACK WORK;
+
+--End of B134737_UID65005_4

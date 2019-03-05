@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B134735_UID61415_3-RefinVzSmlDef
+-- @TC:ONCE: DESCRIPTION = Předat refinancování - včetně návazných akcí {STORY}
+
+BEGIN WORK;
+
+INSERT INTO EP_VzSmlDef_Cis (tsml1, tsml2, vztah, platnost, vyj1, vyj2
+  ) VALUES ('PFSU', 'PFSU', 'R', 1, 0, 1
+);
+
+INSERT INTO EP_VzSmlDef_Cis (tsml1, tsml2, vztah, platnost, vyj1, vyj2
+  ) VALUES ('PFSU', 'SUFO', 'R', 1, 0, 1
+);
+
+INSERT INTO EP_VzSmlDef_Cis (tsml1, tsml2, vztah, platnost, vyj1, vyj2
+  ) VALUES ('SUFO', 'PFSU', 'R', 1, 0, 1
+);
+
+INSERT INTO EP_VzSmlDef_Cis (tsml1, tsml2, vztah, platnost, vyj1, vyj2
+  ) VALUES ('SUFO', 'SUFO', 'R', 1, 0, 1
+);
+
+
+ROLLBACK WORK;
+
+--End of B134735_UID61415_3-RefinVzSmlDef

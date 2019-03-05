@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135018_UID62484_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17019: Promítnout nové vlastnosti sazebníku do modelování {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_contractData ADD (
+  datsouhlasuklienta   DATE,
+  ltvprischvaleni   DECIMAL(16, 2)
+);
+
+ROLLBACK WORK;
+
+--End of B135018_UID62484_1

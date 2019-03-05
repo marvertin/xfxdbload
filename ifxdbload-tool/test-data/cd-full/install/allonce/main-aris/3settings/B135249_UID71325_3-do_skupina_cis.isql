@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135249_UID71325_3-do_skupina_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-21567: 0195 se generuje více krát {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO do_skupina_cis (skupina, nazev) VALUES (20, 'Dokumenty k úvěrovým přílohám');
+
+UPDATE do_typdokumentuskupina_cis SET skupina = 20 WHERE skupina=19 AND doktyp=1204;
+
+UPDATE do_typdokumentu_cis SET podepisovany = 0 WHERE doktyp=1204;
+
+ROLLBACK WORK;
+
+--End of B135249_UID71325_3-do_skupina_cis

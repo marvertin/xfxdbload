@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B136939_UID90619_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31617: Kontakt na Fraud {DEFECT}
+
+
+BEGIN WORK;
+
+--#Uvádět telefonní kontakt na pracovníka OZU pro CŘS při schvalování úvěru#
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-preruseni', 'tel-OZU-CRS', '1', 1);
+
+--#Mailbox pro komunikaci OZ s techniky ve schvalovacím procesu#
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-preruseni', 'mb-OZ-TEC', 'techniciORR@rsts.cz', 1);
+
+--#Mailbox pro komunikaci OZ s analytiky OŘR a fraud ve schvalovacím procesu#
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-preruseni', 'mb-OZ-ANA-FRA', 'analyticiORR@rsts.cz', 1);
+
+--#Uvádět kontakt na konkrétního technika při schvalování úvěru#
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-preruseni', 'kontakt-TEC', '1', 1);
+
+--#Uvádět kontakt na konkrétního analytika OŘR při schvalování úvěru#
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-preruseni', 'kontakt-ANA', '1', 1);
+
+--#Uvádět kontakt na konkrétního pracovníka fraud při schvalování úvěru#
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-preruseni', 'kontakt-FRA', '1', 1);
+
+ROLLBACK WORK;
+
+--End of B136939_UID90619_3

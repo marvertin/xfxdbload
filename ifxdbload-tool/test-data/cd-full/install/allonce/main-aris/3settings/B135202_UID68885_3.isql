@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135202_UID68885_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20115: Předaná ÚŽ s přistupitelským párem nelze v Sale znovu otevřít - Unable to find cz.tconsult.rsts.sale.uver.osoba.model.SeuOsoba with id 4308096300 {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO do_skupina_cis (skupina, nazev) VALUES (19, 'Požadované dokumenty');
+
+UPDATE do_typdokumentuskupina_cis SET skupina=19 WHERE doktyp=1000 and skupina=14;
+
+ROLLBACK WORK;
+
+--End of B135202_UID68885_3

@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B136351_UID84174_5-firma
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+alter table cfs_prijemfirma_arch modify reffirma bigint;
+alter table cfs_prijemfirma_mat  modify reffirma bigint;
+
+alter table pef_firmaosoba_cis  modify reffirma bigint;
+
+alter table pef_firmapracovnik_arch modify reffirma bigint not null;
+alter table pef_firmapracovnik_mat  modify reffirma bigint not null;
+
+alter table pef_firmavarovani_cis  modify reffirma bigint not null;
+
+alter table pef_firma_acis modify serno  BIGINT    NOT NULL;
+alter table pef_firma_acis modify idarch BIGSERIAL (2147483648) NOT NULL;
+alter table pef_firma_acis add constraint primary key (idarch) constraint pef_firma_acis_pk;
+
+alter table pef_firma_cis  modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table pef_firma_cis  add constraint primary key (serno) constraint pef_firma_cis_pk;
+
+ALTER TABLE cfs_prijemfirma_mat     ADD CONSTRAINT (FOREIGN KEY(reffirma) REFERENCES pef_firma_cis(serno) CONSTRAINT cfs_prijemfirma_mat_fk2);
+ALTER TABLE pef_firmaosoba_cis      ADD CONSTRAINT (FOREIGN KEY(reffirma) REFERENCES pef_firma_cis(serno) CONSTRAINT pef_firmaosoba_cis_f1);
+ALTER TABLE pef_firmapracovnik_mat  ADD CONSTRAINT (FOREIGN KEY(reffirma) REFERENCES pef_firma_cis(serno) CONSTRAINT pef_firmapracovnik_mat_fk1);
+ALTER TABLE pef_firmavarovani_cis   ADD CONSTRAINT (FOREIGN KEY(reffirma) REFERENCES pef_firma_cis(serno) CONSTRAINT pef_firmavarovani_cis_f1);
+        
+ROLLBACK WORK;
+
+--End of B136351_UID84174_5
+ 

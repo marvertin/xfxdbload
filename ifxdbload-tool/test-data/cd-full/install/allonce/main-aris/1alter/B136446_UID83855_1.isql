@@ -1,0 +1,86 @@
+-- @TC:ONCE: ID = V2, B136446_UID83855_1
+-- @TC:ONCE: DESCRIPTION = Zavedení výpočtu EBA DPD
+
+BEGIN WORK;
+
+alter table eo_tigertyp_acis add uroven CHAR(1);
+
+alter table eo_tigertyp_cis add uroven CHAR(1);
+
+ALTER TABLE eo_tigertyp_cis ADD CONSTRAINT (CHECK (uroven in ('D','P')) CONSTRAINT eo_tigertyp_cis_c1);
+
+--vytvoření tabulky ep_dpdeba_den 
+
+call tw_execSql('DROP TABLE ep_dpdeba_den;', -206);
+
+CREATE TABLE ep_dpdeba_den (
+  id   BIGSERIAL NOT NULL,
+  realuv   Integer,
+  reals   Integer,
+  osoba   Integer,
+  poradi   Integer NOT NULL,
+  datvyhodnoceni   DATE NOT NULL,
+  typvyhodnoceni   CHAR(1) NOT NULL,
+  dpdeba   Integer NOT NULL,
+  nesplaccastka   DECIMAL(16, 2),
+  datprvvyhodnoceni   DATE NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)
+EXTENT SIZE 128000
+NEXT SIZE 307200
+lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_dpdeba_den_pk ON ep_dpdeba_den(id);
+ALTER TABLE ep_dpdeba_den ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ep_dpdeba_den_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX ep_dpdeba_den_i1 ON ep_dpdeba_den(realuv,datvyhodnoceni,typvyhodnoceni);
+CREATE INDEX ep_dpdeba_den_i2 ON ep_dpdeba_den(reals,datvyhodnoceni);
+CREATE INDEX ep_dpdeba_den_i3 ON ep_dpdeba_den(osoba,datvyhodnoceni);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ep_dpdeba_den
+ADD CONSTRAINT (CHECK (typvyhodnoceni IN('D','L','S','P')) CONSTRAINT ep_dpdeba_den_c1);
+
+--vytvoření tabulky ep_dpdebazprac_work 
+
+call tw_execSql('DROP TABLE ep_dpdebazprac_work;', -206);
+
+CREATE TABLE ep_dpdebazprac_work (
+  id   SERIAL NOT NULL,
+  datvyhodnoceni   DATE,
+  typobjektu   CHAR(1),
+  idobjektu   Integer,
+  stav   Integer,
+  chyba_sqlcode   Integer,
+  chyba_isamcode   Integer,
+  chyba_sqltext   VARCHAR(255),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_dpdebazprac_work_pk ON ep_dpdebazprac_work(id);
+ALTER TABLE ep_dpdebazprac_work ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ep_dpdebazprac_work_pk;
+
+--INDEXES
+CREATE INDEX ep_dpdebazprac_work_i1 ON ep_dpdebazprac_work(idobjektu);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ep_dpdebazprac_work
+ADD CONSTRAINT (CHECK (typobjektu IN ('D','L','P')) CONSTRAINT ep_dpdebazprac_work_c1),
+ADD CONSTRAINT (CHECK (stav IN (-2,-1,1)) CONSTRAINT ep_dpdebazprac_work_c2);
+  
+ROLLBACK WORK;
+
+--End of B136446_UID83855_1

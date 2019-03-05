@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, B137208_UID92332_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+--cpd_pozdokumenty_log
+CREATE TABLE cpd_pozdokumenty_log (
+  serno   BIGSERIAL NOT NULL,
+  parametr   VARCHAR(255),
+  vstup   DECIMAL(30,0),
+  sloupce   VARCHAR(255),
+  poradi   DECIMAL(30,0),
+  vyslvarchar   VARCHAR(255),
+  vyslint   DECIMAL(30,0),
+  vyslbigint   DECIMAL(30,0),
+  vyslbigint2   DECIMAL(30,0),
+  vysldec_16_2   DECIMAL(16,2),
+  vysldate   DATE,
+  uverovazadost   DECIMAL(30,0),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cpd_pozdokumenty_log_pk ON cpd_pozdokumenty_log(serno);
+ALTER TABLE cpd_pozdokumenty_log ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cpd_pozdokumenty_log_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+------------------------------
+
+ROLLBACK WORK;
+
+--End of B137208_UID92332_1

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134901_UID60289_3
+-- @TC:ONCE: DESCRIPTION = RSTS-15795: Upravit PDF se seznamem požadovaných dokumentů dle šablony RSTS {STORY}
+
+
+BEGIN WORK;
+
+update do_typdokumentu_cis set biztyp='39', obsah='04',podobsah='01',garant='OZU' where repcode='EU420';
+
+ROLLBACK WORK;
+
+--End of B134901_UID60289_3

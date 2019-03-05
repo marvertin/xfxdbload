@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135049_UID67521_1-bonita
+-- @TC:ONCE: DESCRIPTION = RSTS-19549: Doplnit do modelování novou položku <Placené výživné> {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_bonita  
+  ADD vyzivneklienta   DECIMAL(16, 2) BEFORE refuser,
+  ADD vyzivnepartnera   DECIMAL(16, 2) BEFORE refuser;
+
+ROLLBACK WORK;
+
+--End of B135049_UID67521_1-bonita

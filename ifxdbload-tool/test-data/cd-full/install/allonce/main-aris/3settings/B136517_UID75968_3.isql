@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136517_UID75968_3
+-- @TC:ONCE: DESCRIPTION = RSTS-23512: Parametry procesní funkce {EPIC}
+
+
+BEGIN WORK;
+
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (23, 'Způsob podepsání úvěrové žádosti = Poštou');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (24, 'Interní druh pobytu je mimo vyjmenovaný výčet');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (25, 'Země narození je mimo vyjmenovaný výčet');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (26, 'Státní občanství je mimo vyjmenovaný výčet');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (27, 'Existence účelů pro koupi developera');
+
+ROLLBACK WORK;
+
+--End of B136517_UID75968_3

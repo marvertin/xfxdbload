@@ -1,0 +1,76 @@
+-- @TC:ONCE: ID = V2, B137238_UID93131_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32835: Main: Rozšíření číselníku bank a vznik nových číselníků
+
+BEGIN WORK;
+
+CREATE TABLE cfs_delkavzam_cis (
+  id   SERIAL NOT NULL,
+  nazev   CHAR(40),
+  kod   CHAR(10),
+  vetsineborovno   Integer,
+  mensinez   Integer,
+  platnost   Integer  DEFAULT 1,
+  poznamka   CHAR(70),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT cfs_delkavzam_cis_dcc5
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_delkavzam_cis_pk ON cfs_delkavzam_cis(id);
+ALTER TABLE cfs_delkavzam_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT cfs_delkavzam_cis_pk;
+
+CREATE TABLE cfs_delkavzam_acis (
+  idarch   SERIAL NOT NULL,
+  id    INTEGER NOT NULL,
+  nazev   CHAR(40),
+  kod   CHAR(10),
+  vetsineborovno   Integer,
+  mensinez   Integer,
+  platnost   Integer,
+  poznamka   CHAR(70),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT cfs_delkavzam_acis_dcc5
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_delkavzam_acis_pk ON cfs_delkavzam_acis(idarch);
+ALTER TABLE cfs_delkavzam_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cfs_delkavzam_acis_pk;
+
+CREATE TABLE cfs_typpracpomer_cis (
+  id   SERIAL NOT NULL,
+  nazev   CHAR(40),
+  akceptpomer   Integer  DEFAULT 0,
+  platnost   Integer  DEFAULT 1,
+  poznamka   CHAR(70),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (akceptpomer IN (0,1)) CONSTRAINT cfs_typpracpomer_cis_dccr,
+  CHECK (platnost IN (0,1)) CONSTRAINT cfs_typpracpomer_cis_dcc5
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_typpracpomer_cis_pk ON cfs_typpracpomer_cis(id);
+ALTER TABLE cfs_typpracpomer_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT cfs_typpracpomer_cis_pk;
+
+CREATE TABLE cfs_typpracpomer_acis (
+  idarch   SERIAL NOT NULL,
+  id    INTEGER NOT NULL,
+  nazev   CHAR(40),
+  akceptpomer   Integer  DEFAULT 0,
+  platnost   Integer,
+  poznamka   CHAR(70),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (akceptpomer IN (0,1)) CONSTRAINT cfs_typpracpomer_acis_dccr,
+  CHECK (platnost IN (0,1)) CONSTRAINT cfs_typpracpomer_acis_dcc5
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_typpracpomer_acis_pk ON cfs_typpracpomer_acis(idarch);
+ALTER TABLE cfs_typpracpomer_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cfs_typpracpomer_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B137238_UID93131_1

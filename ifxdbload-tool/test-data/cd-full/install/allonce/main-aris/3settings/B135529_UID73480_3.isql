@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135529_UID73480_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22596: Chyby v názvu dokumentu Manžel/ka přistupitele a Přistupitel {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+update do_typdokumentu_cis
+set text = REPLACE(text, 'a;ky', '/ky')
+WHERE doktyp in (1135, 1137);
+
+update do_typdokumentu_cis
+set text = REPLACE(text, 'a;ky', 'a/ky')
+WHERE lower(text) like '%manžela;%'; 
+
+ROLLBACK WORK;
+
+--End of B135529_UID73480_3

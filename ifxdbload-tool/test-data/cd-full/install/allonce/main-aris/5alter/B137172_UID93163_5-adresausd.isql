@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B137172_UID93163_5-adresausd
+-- @TC:ONCE: DESCRIPTION = RSTS-32856: Chybí triggery nad eu_adresausd_mat a eu_adresausd_arch {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+-- Sloupec poradatprov vzniknul omylem (chybný názov) v rámci https://jira.turboconsult.cz/browse/RSTS-25737 
+-- Stará data není nutné migrovat (z poradatprov => pordatprov). Žádná data tam totiž nejsou protože neexistoval trigger, který by sloupec plnil.
+ALTER TABLE eu_adresausd_arch
+       DROP poradatprov;
+           
+ROLLBACK WORK;
+
+--End of B137172_UID93163_5-adresausd

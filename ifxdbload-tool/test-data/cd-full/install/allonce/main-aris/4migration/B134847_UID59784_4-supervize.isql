@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B134847_UID59784_4-supervize
+-- @TC:ONCE: DESCRIPTION = RSTS-15537: Při dokončení Supervize (starý Central) propsat výsledky do posouzení (nový Central) {STORY}
+
+
+BEGIN WORK;
+
+UPDATE cev_supervize_mat SET vysledekposouzeni = 'KOT' WHERE vysledekposouzeni = 'N';
+
+UPDATE cev_supervize_mat SET vysledekposouzeni = 'POK' WHERE vysledekposouzeni = 'P';
+
+UPDATE cev_supervize_mat SET vysledekposouzeni = 'OKI' WHERE vysledekposouzeni = 'A';
+
+ROLLBACK WORK;
+
+--End of B134847_UID59784_4-supervize

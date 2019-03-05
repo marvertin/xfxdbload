@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B136206_UID83430_3-cev_druhcislparcel_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-27486: OPRAVA (Parametrizace): RSTS-26834_REAL: Číselník katastrálních území {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+-- #Evidence nemovitostí - druh číslování - jednotná řada# 
+Call TW_RegSetKey('EN', 'evidenceNemovitosti', 'specCisPol', 'druhCisl-jednotRada', 1);
+
+-- #Evidence nemovitostí - druh číslování - dvojí řada# 
+Call TW_RegSetKey('EN', 'evidenceNemovitosti', 'specCisPol', 'druhCisl-dvojiRada', 2);
+
+update cev_druhcislparcel_cis set nazev='Při jednotné číselné řadě', poznamka='Parcela pozemková a parcela stavební při jednotné číselné řadě' where kod = 1;
+update cev_druhcislparcel_cis set nazev='Při dvojí číselné řadě', poznamka='Parcela stavební při dvojí číselné řadě' where kod = 2;
+
+ROLLBACK WORK;
+
+--End of B136206_UID83430_3-cev_druhcislparcel_cis

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135881_UID67399_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19476: Doplnění parametru Nový tarif pro výpočet úhrad {REQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(58,'Nový tarif spořicí smlouvy','INTEGER',0,null,1,1);
+
+ROLLBACK WORK;
+
+--End of B135881_UID67399_3

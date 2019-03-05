@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B136659_UID61156_4
+-- @TC:ONCE: DESCRIPTION = RSTS-16259: Zpřehlednění názvů sloupců v cfs_zavazek_mat {REALIZACE}
+
+
+BEGIN WORK;
+
+-- z důvodu přejmenování sloupce se nebude měnit reftime
+set triggers for cfs_zavazek_mat disabled;
+set triggers for cfs_zavazek_arch disabled;
+
+UPDATE cfs_zavazek_mat
+SET refseuuzpuvod = refseuuz 
+ ,  refeusmlpuvod = refeusml 
+ , refeusmltyppuvod = refeusmltyp; 
+
+
+UPDATE cfs_zavazek_arch
+SET refseuuzpuvod = refseuuz 
+ ,  refeusmlpuvod = refeusml 
+ , refeusmltyppuvod = refeusmltyp;
+ 
+set triggers for cfs_zavazek_mat enabled;
+set triggers for cfs_zavazek_arch enabled;
+
+ROLLBACK WORK;
+
+--End of B136659_UID61156_4

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B134816_UID64082_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17805: Hraniční hodnota LTV {STORY}
+
+BEGIN WORK;
+
+alter table seu_sml_arch
+  add  ltvhranice   DECIMAL(16, 2) before poruser
+;
+
+alter table seu_sml_mat
+  --Hranice LTV dle parametrů produktu
+  add  ltvHranice   DECIMAL(16, 2) before poruser
+;
+
+ROLLBACK WORK;
+
+--End of B134816_UID64082_1

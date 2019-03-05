@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137197_UID93078_5
+-- @TC:ONCE: DESCRIPTION = RSTS-32796: Rozšíření evidence problémů o nové údaje {STORY}
+
+BEGIN WORK;
+
+alter table ses_pozadavekproblem_mat
+  modify serno BIGINT NOT NULL
+;
+
+ROLLBACK WORK;
+
+--End of B137197_UID93078_5

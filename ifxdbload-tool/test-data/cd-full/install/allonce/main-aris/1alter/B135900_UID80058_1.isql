@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B135900_UID80058_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25730: Skupina údajů bude rozšířena o způsob doručení v CIBIS-Sale. {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE seu_uz_mat ADD (
+  zpusobdorucusd   Integer
+);
+
+ALTER TABLE seu_uz_arch ADD (
+  zpusobdorucusd   Integer
+);
+
+ROLLBACK WORK;
+
+--End of B135900_UID80058_1

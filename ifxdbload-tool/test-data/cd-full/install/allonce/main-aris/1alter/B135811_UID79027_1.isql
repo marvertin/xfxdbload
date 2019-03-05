@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B135811_UID79027_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25188: Doplnit národní ID osoby do evidencí CIBIS-Main {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_fo_mat 
+  ADD narodniId   CHAR(35);
+
+ALTER TABLE eo_fo_arch
+  ADD narodniId   CHAR(35);
+
+ALTER TABLE EO_FOZmPl_kart
+  ADD narodniId   CHAR(35);  
+
+ALTER TABLE EO_ExpRole_Den
+  ADD narodniId   CHAR(35);
+
+ALTER TABLE EO_ExpPartner_Den
+  ADD narodniId   CHAR(35);  
+  
+ROLLBACK WORK;
+
+--End of B135811_UID79027_1

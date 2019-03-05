@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137411_UID95535_3
+-- @TC:ONCE: DESCRIPTION = RSTS-34068: Typ pracovního poměru - opravit překlep {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+--cfs_typpracpomer_cis
+UPDATE cfs_typpracpomer_cis SET nazev = 'Zaměstnanecký poměr' WHERE nazev = 'Zaměstnanecý poměr';
+
+ROLLBACK WORK;
+
+--End of B137411_UID95535_3

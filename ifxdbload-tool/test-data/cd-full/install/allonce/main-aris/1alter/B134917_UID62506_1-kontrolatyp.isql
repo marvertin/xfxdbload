@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B134917_UID62506_1-kontrolatyp
+-- @TC:ONCE: DESCRIPTION = RSTS-17041: Automaticky spustit RK při čerpání v Main dle číselníku {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE crk_kontrolatyp_acis
+  ADD spustAutPriSchval   INTEGER  DEFAULT 0 NOT NULL BEFORE poznamka,
+  ADD spustAutPriCerp   INTEGER  DEFAULT 0  NOT NULL BEFORE poznamka;
+  
+ ALTER TABLE crk_kontrolatyp_cis
+  ADD spustAutPriSchval   INTEGER  DEFAULT 0  NOT NULL BEFORE poznamka,
+  ADD spustAutPriCerp   INTEGER   DEFAULT 0 NOT NULL BEFORE poznamka;
+  
+ALTER TABLE crk_kontrolatyp_cis
+  ADD CONSTRAINT CHECK (spustAutPriSchval IN (0,1)) CONSTRAINT crk_kontrolatyp_cis_d5dr,
+  ADD CONSTRAINT CHECK (spustAutPriCerp IN (0,1)) CONSTRAINT crk_kontrolatyp_cis_d5ds;
+  
+ROLLBACK WORK;
+
+--End of B134917_UID62506_1-kontrolatyp

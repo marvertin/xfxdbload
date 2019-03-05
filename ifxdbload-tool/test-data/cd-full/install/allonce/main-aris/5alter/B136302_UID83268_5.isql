@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B136302_UID83268_5
+-- @TC:ONCE: DESCRIPTION = RSTS-27373: IFRS - OP číselník {REQUEST}
+
+
+BEGIN WORK;
+
+rename column ru_opmof_cis.puvodnitreal to treal;
+rename column ru_opmof_acis.puvodnitreal to treal;
+
+DROP TABLE ru_opmof_wrk;
+
+CREATE TABLE ru_opmof_wrk (
+  serno   SERIAL NOT NULL,
+  radek   Integer,
+  mesic   Integer,
+  treal   CHAR(4),
+  zajistnemov   Integer  DEFAULT 0,
+  scenar   Integer,
+  mofpd   decimal(10,6),
+  moflgd  decimal(10,6),
+  owner   int
+)lock mode row;
+
+CREATE UNIQUE INDEX ru_opmof_wrk_pk ON ru_opmof_wrk(serno);
+ALTER TABLE ru_opmof_wrk ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_opmof_wrk_pk;
+
+CREATE INDEX ru_opmof_wrk_i1 ON ru_opmof_wrk(mesic,treal,zajistnemov,scenar);
+
+
+ROLLBACK WORK;
+
+--End of B136302_UID83268_5

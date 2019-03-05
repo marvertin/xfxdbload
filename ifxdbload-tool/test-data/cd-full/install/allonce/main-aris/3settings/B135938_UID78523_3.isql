@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135938_UID78523_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24849: RK - krátká doba podnikání {REQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU','rizKonUv-podnikatel','obecne','poc-dni-data-RK', 90, 1 /*lze editovat*/);
+
+ROLLBACK WORK;
+
+--End of B135938_UID78523_3

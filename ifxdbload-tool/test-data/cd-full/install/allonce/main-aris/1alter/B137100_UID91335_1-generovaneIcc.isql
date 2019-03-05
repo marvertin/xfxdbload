@@ -1,0 +1,89 @@
+-- @TC:ONCE: ID = V2, B137100_UID91335_1-generovaneIcc
+-- @TC:ONCE: DESCRIPTION = RSTS-31945: Interní evidence vygenerovaných IČC {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE ceo_generovaneicc_mat (
+  serno   SERIAL NOT NULL,
+  datumnarozeni   DATE NOT NULL,
+  pohlavi   Integer NOT NULL,
+  poznamka   CHAR(70),
+  icc   CHAR(10) NOT NULL,
+  datumvygenerovani   DATE,
+  cisloozvygenerovani   DECIMAL(16, 0),
+  refozvygenerovani   INTEGER,
+  cisloextozvygenerovani   CHAR(16),
+  refextozvygenerovani   INTEGER,
+  uzivatelvygenerovani   CHAR(20),
+  casvygenerovani   datetime year to second,
+  datzalozenios   DATE,
+  caszalozenios   datetime year to second,
+  uzivatelzalozenios   CHAR(20),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ceo_generovaneicc_mat_pk ON ceo_generovaneicc_mat(serno);
+ALTER TABLE ceo_generovaneicc_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ceo_generovaneicc_mat_pk;
+
+--FK
+CREATE INDEX ceo_generovaneicc_mat_i_fk1 ON ceo_generovaneicc_mat(refozvygenerovani);
+ALTER TABLE ceo_generovaneicc_mat ADD CONSTRAINT FOREIGN KEY(refozvygenerovani) REFERENCES oos_ozast_mat(serno) CONSTRAINT ceo_generovaneicc_mat_fk1;
+CREATE INDEX ceo_generovaneicc_mat_i_fk2 ON ceo_generovaneicc_mat(refextozvygenerovani);
+ALTER TABLE ceo_generovaneicc_mat ADD CONSTRAINT FOREIGN KEY(refextozvygenerovani) REFERENCES oos_externispol_mat(serno) CONSTRAINT ceo_generovaneicc_mat_fk2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+-------------------------------------------------------------------------
+
+CREATE TABLE ceo_generovaneicc_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  datumnarozeni   DATE NOT NULL,
+  pohlavi   Integer NOT NULL,
+  poznamka   CHAR(70),
+  icc   CHAR(10) NOT NULL,
+  datumvygenerovani   DATE,
+  cisloozvygenerovani   DECIMAL(16, 0),
+  refozvygenerovani   INTEGER,
+  cisloextozvygenerovani   CHAR(16),
+  refextozvygenerovani   INTEGER,
+  uzivatelvygenerovani   CHAR(20),
+  casvygenerovani   datetime year to second,
+  datzalozenios   DATE,
+  caszalozenios   datetime year to second,
+  uzivatelzalozenios   CHAR(20),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ceo_generovaneicc_arch_pk ON ceo_generovaneicc_arch(idarch);
+ALTER TABLE ceo_generovaneicc_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ceo_generovaneicc_arch_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+
+ROLLBACK WORK;
+
+--End of B137100_UID91335_1-generovaneIcc

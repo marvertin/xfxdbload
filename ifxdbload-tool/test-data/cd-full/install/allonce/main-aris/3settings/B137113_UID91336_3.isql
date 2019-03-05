@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B137113_UID91336_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31946: Obchodní pravidlo pro vygenerování nového IČC {STORY}
+
+
+BEGIN WORK;
+
+-- #denní limit maximálního počtu uživatelem generovaných IČC#
+call TW_RegSetOrAddKey('EO', 'GENICC', 'LIMIT', 'POCUSERGEN', 50, 1, 'Osoba', 'Evidence osoby', 'Generátor IČC', 'denní limit maximálního počtu uživatelem generovaných IČC', 1);
+
+-- #denní limit maximálního počtu uživatelem generovaných IČC pro datum narození a pohlaví#
+call TW_RegSetOrAddKey('EO', 'GENICC', 'LIMIT', 'POCUSERGENDATPOHL', 5, 1, 'Osoba', 'Evidence osoby', 'Generátor IČC', 'denní limit maximálního počtu uživatelem generovaných IČC pro datum narození a pohlaví', 1);
+
+-- #Počet dnů pro exspiraci nespárovaného IČC#
+call TW_RegSetOrAddKey('EO', 'GENICC', 'LIMIT', 'POCDNUEXP', 30, 1, 'Osoba', 'Evidence osoby', 'Generátor IČC', 'Počet dnů pro exspiraci nespárovaného IČC', 1);
+
+
+ROLLBACK WORK;
+
+--End of B137113_UID91336_3

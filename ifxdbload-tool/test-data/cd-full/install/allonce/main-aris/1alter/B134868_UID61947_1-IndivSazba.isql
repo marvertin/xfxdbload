@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B134868_UID61947_1-IndivSazba
+-- @TC:ONCE: DESCRIPTION = Předat/vyhodnotit sankční úrokovou sazbu a název sazby {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE seu_sml_mat
+  ADD indivsazbabe   DECIMAL(5,2) BEFORE sazbabepu
+;
+
+ALTER TABLE seu_sml_arch
+  ADD indivsazbabe   DECIMAL(5,2) BEFORE sazbabepu
+;
+
+
+ROLLBACK WORK;
+
+--End of B134868_UID61947_1-IndivSazba

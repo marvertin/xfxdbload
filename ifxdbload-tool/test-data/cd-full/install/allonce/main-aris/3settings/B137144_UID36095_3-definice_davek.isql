@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B137144_UID36095_3-definice_davek
+-- @TC:ONCE: DESCRIPTION = RSTS-5046: TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+
+BEGIN WORK;
+
+call BC_NastavParametryAkce('CRHR','Hromadný převod čas. Rozliš. (před EOM)','UNIX');
+call BC_NastavParametryAkce('ECMO','Export čísel OZ do ECM','UNIX');
+call BC_NastavParametryAkce('ECMS','Export čísel smluv do ECM','UNIX');
+call BC_NastavParametryAkce('XZA','Odstranění starých záz.přep.zajištění','UNIX');
+call BC_NastavParametryAkce('PLMO','Vyhod.pl.morálky pro přístup do aplikace','UNIX');
+
+ROLLBACK WORK;
+
+--End of B137144_UID36095_3-definice_davek

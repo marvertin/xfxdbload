@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B136447_UID83855_3
+-- @TC:ONCE: DESCRIPTION = Zavedení výpočtu EBA DPD
+
+BEGIN WORK;
+
+update eo_tigertyp_cis set uroven = 'P' where serno = 1; 
+
+update eo_tigertyp_cis set uroven = 'D' where serno <> 1;
+
+call TW_RegSetorAddKey('EU', 'EBADPD', 'relPrah', 'KL', 1, 1, 'Podpora pro produkt', 'DPD', 'Vyhodnocení', 'Zahrnutí KL pro EBA DPD', 1);
+
+call TW_RegSetorAddKey('EU', 'EBADPD', 'relPrah', 'MK', 1, 1, 'Podpora pro produkt', 'DPD', 'Vyhodnocení', 'Zahrnutí MK pro EBA DPD', 1);
+
+call TW_RegSetorAddKey('EU', 'EBADPD', 'relPrah', 'PR', 1, 1, 'Podpora pro produkt', 'DPD', 'Vyhodnocení', 'Zahrnutí PR pro EBA DPD', 1);         
+
+ROLLBACK WORK;
+
+--End of B136447_UID83855_3

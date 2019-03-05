@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B135410_UID73419_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22567: NU_CIBIS_Sale_2018F_3_kolo_S25_UZ_chybi_udaje_potvrzeni_o_prijmu_1_A {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+CALL TW_RegDelKey('EU', 'creditrq-zaklad', 'docPrijmy', 'O1');
+CALL TW_RegDelKey('EU', 'creditrq-zaklad', 'docPrijmy', 'O2');
+CALL TW_RegDelKey('EU', 'creditrq-zaklad', 'docPrijmy', 'O3');
+CALL TW_RegDelKey('EU', 'creditrq-zaklad', 'docPrijmy', 'O4');
+
+CALL TW_RegDelKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'O1');
+CALL TW_RegDelKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'O2');
+CALL TW_RegDelKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'O3');
+CALL TW_RegDelKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'O4');
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmy', 'KL', 13, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu PVP zaměstnavatele <role_v ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmy', 'MK', 14, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu PVP zaměstnavatele <role v ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmy', 'PR', 15, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu PVP zaměstnavatele <role v ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmy', 'MP', 16, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu PVP zaměstnavatele <role v ÚŽ>');
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'KL', 812, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu PVP zaměstnavatele v zahraničí <role v ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'MK', 813, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu PVP zaměstnavatele v zahraničí <role v ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'PR', 814, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu PVP zaměstnavatele v zahraničí <role v ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'MP', 815, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu PVP zaměstnavatele v zahraničí <role v ÚŽ>');
+
+ROLLBACK WORK;
+
+--End of B135410_UID73419_3

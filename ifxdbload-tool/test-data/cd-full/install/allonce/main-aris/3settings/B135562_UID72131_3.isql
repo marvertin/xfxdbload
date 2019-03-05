@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135562_UID72131_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21971: CIBIS-OS - Chybí nadefinované obecné výběry
+
+
+BEGIN WORK;
+
+UPDATE tw_defcond SET appname = 'cibis-os'  where appname = 'CbRsts-AOs-MWeb';
+
+ROLLBACK WORK;
+
+--End of B135562_UID72131_3

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136049_UID70672_1-rr_xreptype_acis
+-- @TC:ONCE: DESCRIPTION = RSTS-21185: Rozlišení šablon pro PB a J2EE aplikace {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE rr_xreptype_acis ADD lastTemplateDir VARCHAR(255) BEFORE interniid;
+
+ROLLBACK WORK;
+
+--End of B136049_UID70672_1-rr_xreptype_acis

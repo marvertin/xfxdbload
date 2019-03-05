@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135926_UID78999_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25172: Vytvořit číselník důvodů neexistence ZZ včetně obslužné úlohy {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO ses_duvodnezz_cis (platnost, poradi, popis) values (1, 1, 'Zemřel');
+INSERT INTO ses_duvodnezz_cis (platnost, poradi, popis) values (1, 2, 'Neuveden v rodném listu');
+INSERT INTO ses_duvodnezz_cis (platnost, poradi, popis) values (1, 3, 'Prohlášení o nezvěstnosti');
+
+ROLLBACK WORK;
+
+--End of B135926_UID78999_3

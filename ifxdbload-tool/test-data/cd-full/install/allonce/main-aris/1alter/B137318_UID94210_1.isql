@@ -1,0 +1,121 @@
+-- @TC:ONCE: ID = V2, B137318_UID94210_1
+-- @TC:ONCE: DESCRIPTION = RSTS-33386: Uložit výsledky z funkce pro vyhodnocení započítávání příjmů {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE cfs_prijemzapoctvstup_den (
+  serno   SERIAL NOT NULL,
+  reftyppracpomer   INTEGER,
+  refdelkavzam   INTEGER,
+  refprijemtyp   INTEGER,
+  jsoucestovninahrady   Integer  DEFAULT 0,
+  smlouvadobaurcita   Integer  DEFAULT 0,
+  zkusebnidoba   Integer  DEFAULT 0,
+  budeprodlouzeno   CHAR(6),
+  pracpomerbudetrvat   CHAR(11),
+  ukoncpracpomer   Integer  DEFAULT 0,
+  poradivypoctuprijmu   Integer,
+  prijemzasilannaucet   Integer  DEFAULT 0,
+  pracovniagentura   Integer  DEFAULT 0,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (jsoucestovninahrady IN (0,1)) CONSTRAINT cfs_prijemzapoctvstup_den_dcrx,
+  CHECK (smlouvadobaurcita IN (0,1)) CONSTRAINT cfs_prijemzapoctvstup_den_dcry,
+  CHECK (zkusebnidoba IN (0,1)) CONSTRAINT cfs_prijemzapoctvstup_den_dcsf,
+  CHECK (ukoncpracpomer IN (0,1)) CONSTRAINT cfs_prijemzapoctvstup_den_dcs3,
+  CHECK (prijemzasilannaucet IN (0,1)) CONSTRAINT cfs_prijemzapoctvstup_den_dcs2,
+  CHECK (pracovniagentura IN (0,1)) CONSTRAINT cfs_prijemzapoctvstup_den_dcwf
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_prijemzapoctvstup_den_pk ON cfs_prijemzapoctvstup_den(serno);
+ALTER TABLE cfs_prijemzapoctvstup_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cfs_prijemzapoctvstup_den_pk;
+
+--FK
+CREATE INDEX cfs_prijemzapoctvstup_den_i_f1 ON cfs_prijemzapoctvstup_den(refprijemtyp);
+ALTER TABLE cfs_prijemzapoctvstup_den ADD CONSTRAINT FOREIGN KEY(refprijemtyp) REFERENCES cfs_prijemtyp_cis(serno) CONSTRAINT cfs_prijemzapoctvstup_den_f1;
+CREATE INDEX cfs_prijemzapoctvstup_den_i_f2 ON cfs_prijemzapoctvstup_den(reftyppracpomer);
+ALTER TABLE cfs_prijemzapoctvstup_den ADD CONSTRAINT FOREIGN KEY(reftyppracpomer) REFERENCES cfs_typpracpomer_cis(id) CONSTRAINT cfs_prijemzapoctvstup_den_f2;
+CREATE INDEX cfs_prijemzapoctvstup_den_i_f3 ON cfs_prijemzapoctvstup_den(refdelkavzam);
+ALTER TABLE cfs_prijemzapoctvstup_den ADD CONSTRAINT FOREIGN KEY(refdelkavzam) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT cfs_prijemzapoctvstup_den_f3;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cfs_prijemzapoctvstup_den
+ADD CONSTRAINT (CHECK (budeprodlouzeno in ('PA', 'NE', 'NV')) CONSTRAINT cfs_prijemzapoctvstup_den_c1),
+ADD CONSTRAINT (CHECK (pracPomerBudeTrvat IN ('DO6M', 'NAD6M')) CONSTRAINT cfs_prijemzapoctvstup_den_c2);
+
+-----------------------------------
+
+CREATE TABLE cfs_prijemzapoctvyhod_den (
+  serno   SERIAL NOT NULL,
+  refprijemzapoctvstup   INTEGER,
+  refprijemzapoctkrit   INTEGER,
+  odpoved   Integer  DEFAULT 0,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (odpoved IN (0,1)) CONSTRAINT cfs_prijemzapoctvyhod_den_dcs5
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_prijemzapoctvyhod_den_pk ON cfs_prijemzapoctvyhod_den(serno);
+ALTER TABLE cfs_prijemzapoctvyhod_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cfs_prijemzapoctvyhod_den_pk;
+
+--FK
+CREATE INDEX cfs_prijemzapoctvyhod_den_i_f1 ON cfs_prijemzapoctvyhod_den(refprijemzapoctvstup);
+ALTER TABLE cfs_prijemzapoctvyhod_den ADD CONSTRAINT FOREIGN KEY(refprijemzapoctvstup) REFERENCES cfs_prijemzapoctvstup_den(serno) CONSTRAINT cfs_prijemzapoctvyhod_den_f1;
+CREATE INDEX cfs_prijemzapoctvyhod_den_i_f2 ON cfs_prijemzapoctvyhod_den(refprijemzapoctkrit);
+ALTER TABLE cfs_prijemzapoctvyhod_den ADD CONSTRAINT FOREIGN KEY(refprijemzapoctkrit) REFERENCES cfs_prijemzapoctkrit_cis(id) CONSTRAINT cfs_prijemzapoctvyhod_den_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+-----------------------------------
+
+CREATE TABLE cfs_prijemzapoctvysl_den (
+  serno   SERIAL NOT NULL,
+  refprijemzapoctvstup   INTEGER,
+  vysledek   CHAR(3),
+  verzefunkce   CHAR(10),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_prijemzapoctvysl_den_pk ON cfs_prijemzapoctvysl_den(serno);
+ALTER TABLE cfs_prijemzapoctvysl_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cfs_prijemzapoctvysl_den_pk;
+
+--FK
+CREATE INDEX cfs_prijemzapoctvysl_den_i_f1 ON cfs_prijemzapoctvysl_den(refprijemzapoctvstup);
+ALTER TABLE cfs_prijemzapoctvysl_den ADD CONSTRAINT FOREIGN KEY(refprijemzapoctvstup) REFERENCES cfs_prijemzapoctvstup_den(serno) CONSTRAINT cfs_prijemzapoctvysl_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cfs_prijemzapoctvysl_den
+ADD CONSTRAINT (CHECK (vysledek IN ('OKI', 'KOM', 'KOT')) CONSTRAINT cfs_prijemzapoctvysl_den_c1);
+
+ROLLBACK WORK;
+
+--End of B137318_UID94210_1

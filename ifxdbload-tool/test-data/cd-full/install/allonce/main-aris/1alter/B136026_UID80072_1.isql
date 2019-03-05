@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B136026_UID80072_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25741: Upravit export úvěrové smlouvy + upravit šablonu. {STORY}
+
+
+BEGIN WORK;
+
+alter table EU_ExpSml_Den
+  add zpusobdorucusd  Integer,
+  add adresatusd      Char(45),
+  add uliceusd        Char(60),
+  add cpopisusd       Char(8),
+  add corientusd      Char(8),
+  add obecusd         Char(100),
+  add pscusd          Char(5),
+  add statusd         Char(60);
+
+ROLLBACK WORK;
+
+--End of B136026_UID80072_1

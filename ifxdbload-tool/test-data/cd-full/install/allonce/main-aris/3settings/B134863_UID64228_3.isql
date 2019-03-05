@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B134863_UID64228_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17898: Úvěrové přílohy - parametrizace {STORY}
+
+BEGIN WORK;
+
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, exportdir, keepinterval, bulkprint, bulkprintformat, bulkprintsave, bulkprintdir, savewithoutpreview, formatchange, listinternalmail, writedocument)
+VALUES ('PR195', 'PR', '19', 5, 0, null, 'J2EE', 1, 0, null, 0, null, 0, 0, 0, 0);
+
+INSERT INTO rr_xreptype_cis (refrepcode, datod, datdo, predloha, cesta, soubor, interniid, externiid, externidocid, poznamka, platnost)
+VALUES ('PR195', mdy(1, 1, 2018), null, 'F', 'C:\Cibis\reports\reports_j2ee\PR19', '195 Zaměstnanecké úvěry.pdf', null, null, null, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost)
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'PR195'), 1, 0, 0, 129, 50, 'Podpis klienta', 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost)
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'PR195'), 2, 0, 0, 129, 50, 'Podpis OZ', 1);
+
+ROLLBACK WORK;
+
+--End of B134863_UID64228_3

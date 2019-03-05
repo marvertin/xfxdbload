@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136361_UID84174_5
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+alter table eo_blockingjournal  modify id BIGSERIAL (2147483648) NOT NULL;
+alter table eo_blockingjournal  add constraint primary key (id) constraint eo_blockingjournal_pk;
+
+ROLLBACK WORK;
+
+--End of B136361_UID84174_5

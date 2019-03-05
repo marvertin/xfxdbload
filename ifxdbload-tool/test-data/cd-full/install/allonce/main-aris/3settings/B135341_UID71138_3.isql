@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135341_UID71138_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21455: Fiktivní IČ {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+INSERT INTO aris.pef_firma_cis(nazev, ico, whitelist, datumzalozeni, datzrusregdph) 
+VALUES ('Fiktivní IČ – OSVČ bez IČ','00000000', 1, EXTEND(MDY(1,1,2000), YEAR to SECOND), EXTEND(MDY(1,1,2000), YEAR to SECOND));
+
+ROLLBACK WORK;
+
+--End of B135341_UID71138_3

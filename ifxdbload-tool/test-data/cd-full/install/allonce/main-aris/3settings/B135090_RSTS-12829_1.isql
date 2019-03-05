@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135090_RSTS-12829_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-OS - REAL: Rozšíření údajů pro USD - doplnění {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CALL tw_regsetoraddkey('EO', 'osoba', 'komkanal', 'web', '', 1,'CIBIS-OS','Komunikační kanály','Mapování komunikačních kanálů', 'Komunikační kanál pro Web');
+
+ROLLBACK WORK;
+
+--End of B135090_RSTS-12829_1

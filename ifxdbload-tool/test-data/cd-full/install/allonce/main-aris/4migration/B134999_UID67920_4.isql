@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B134999_UID67920_4
+-- @TC:ONCE: DESCRIPTION = RSTS-19745: SOLUS - výsledkem odpovědi je vždy KOT {INTERNAL_DEFECT}
+BEGIN WORK;
+ 
+ UPDATE sol_check set (xresult) = 
+   (CASE WHEN xresult_old = 'Y' THEN 'OKI' WHEN xresult_old = 'N' THEN 'KOT' WHEN xresult_old = 'P' THEN 'KOM' WHEN xresult_old = 'F' THEN 'ERR' ELSE 'NDF' END)
+   WHERE xresult in('KOT','OKI') and xresult_old is not null;
+
+UPDATE sol_action set (xresult) = 
+   (CASE WHEN xresult_old = 'Y' THEN 'OKI' WHEN xresult_old = 'N' THEN 'KOT' WHEN xresult_old = 'P' THEN 'KOM' WHEN xresult_old = 'F' THEN 'ERR' ELSE 'NDF' END)
+   WHERE xresult in('KOT','OKI') and xresult_old is not null;
+   
+UPDATE sol_vyhodnoceni_cis set (solusvysledek) = 
+   (CASE WHEN solusvysledek_old = 'Y' THEN 'OKI' WHEN solusvysledek_old = 'N' THEN 'KOT' WHEN solusvysledek_old = 'P' THEN 'KOM' WHEN solusvysledek_old = 'F' THEN 'ERR' ELSE 'NDF' END)
+   WHERE solusvysledek in('KOT','OKI') and solusvysledek_old is not null;
+
+ROLLBACK WORK;
+
+--End of B134999_UID67920_4

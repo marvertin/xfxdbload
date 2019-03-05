@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135832_UID79082_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25215: Doplnit národní ID osoby do evidencí CIBIS-Sale {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE seo_osoba_arch
+  ADD narodniid   CHAR(35);
+
+ALTER TABLE seo_osoba_mat
+  ADD narodniid   CHAR(35);
+
+ROLLBACK WORK;
+
+--End of B135832_UID79082_1

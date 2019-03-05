@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B134865_UID64228_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17898: Úvěrové přílohy - parametrizace {STORY}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+SELECT NVL(MAX(priloha), 0) + 1 AS maxpriloha FROM es_priloha_cis INTO TEMP es_priloha_max; 
+
+INSERT INTO es_priloha_cis (priloha, text, ukon, od, datdo, pl, poznamka, nabizetvsale, pozadovatpotvrzeni)
+VALUES ((SELECT maxpriloha FROM es_priloha_max), '0' || (SELECT maxpriloha FROM es_priloha_max) || ' Zaměstnanecký úvěr', 'U', mdy(1, 1, 2018), mdy(12, 31, 2100), 1, 'Úvěr pro zaměstnance - grantovaná sazba', 1, 1);
+
+INSERT INTO es_prilohadokument_cis (priloha, poradi, datplat, arch, doktyp)
+VALUES ((SELECT maxpriloha FROM es_priloha_max), 1, mdy(1, 1, 2018), 1, (SELECT doktyp FROM do_typdokumentu_cis WHERE repcode = 'PR195'));
+
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost)
+VALUES ((SELECT maxpriloha FROM es_priloha_max), 'PFSU', 1);
+
+DROP TABLE es_priloha_max;
+
+ROLLBACK WORK;
+
+--End of B134865_UID64228_3

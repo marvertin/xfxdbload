@@ -1,0 +1,52 @@
+-- @TC:ONCE: ID = V2, B136543_UID86452_1-ZpracPriorSml
+-- @TC:ONCE: DESCRIPTION = CIBIS-OS - REAL: Výše provize - schvalování {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- ###############################################################
+-- opr_zpracPriorSml_prot
+
+CREATE TABLE opr_zpracpriorsml_prot (
+  serno   SERIAL NOT NULL,
+  datprov   DATE NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  realcissml   DECIMAL(16, 0) NOT NULL,
+  refprodukt   INTEGER NOT NULL,
+  reftypobchodu   INTEGER NOT NULL,
+  stav   CHAR(3)  DEFAULT 'NOV' NOT NULL,
+  runerr   Integer  DEFAULT 0 NOT NULL,
+  starttime   datetime year to second,
+  endtime   datetime year to second,
+  stavtime   datetime year to second,
+  errortime   datetime year to second,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (runerr IN (0,1)) CONSTRAINT opr_zpracpriorsml_prot_d9d8
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX opr_zpracpriorsml_prot_pk ON opr_zpracpriorsml_prot(serno);
+ALTER TABLE opr_zpracpriorsml_prot ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT opr_zpracpriorsml_prot_pk;
+
+--FK
+CREATE INDEX opr_zpracpriorsml_prot_i_fk1 ON opr_zpracpriorsml_prot(refprodukt);
+ALTER TABLE opr_zpracpriorsml_prot ADD CONSTRAINT FOREIGN KEY(refprodukt) REFERENCES opr_produkt_cis(serno) CONSTRAINT opr_zpracpriorsml_prot_fk1;
+CREATE INDEX opr_zpracpriorsml_prot_i_fk2 ON opr_zpracpriorsml_prot(reftypobchodu);
+ALTER TABLE opr_zpracpriorsml_prot ADD CONSTRAINT FOREIGN KEY(reftypobchodu) REFERENCES opr_typobchodu_cis(serno) CONSTRAINT opr_zpracpriorsml_prot_fk2;
+
+--INDEXES
+CREATE INDEX opr_zpracpriorsml_prot_i1 ON opr_zpracpriorsml_prot(smlouva);
+CREATE INDEX opr_zpracpriorsml_prot_i2 ON opr_zpracpriorsml_prot(realcissml);
+CREATE INDEX opr_zpracpriorsml_prot_i3 ON opr_zpracpriorsml_prot(stav);
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+
+
+ROLLBACK WORK;
+
+--End of B136543_UID86452_1-ZpracPriorSml

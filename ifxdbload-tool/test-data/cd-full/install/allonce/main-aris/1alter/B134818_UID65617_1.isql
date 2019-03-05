@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B134818_UID65617_1
+-- @TC:ONCE: DESCRIPTION = RSTS-18518: Rozšířit generování check-list o vazbu na typ příjmu {STORY}
+
+
+BEGIN WORK;
+
+alter table seu_checklistitem_mat add refprijem BIGINT before typdokumentu;
+
+alter table seu_checklistitem_arch add refprijem BIGINT before typdokumentu;
+
+ROLLBACK WORK;
+
+--End of B134818_UID65617_1

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135327_UID70699_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21205: CIBIS-OS - Chyba při označení všech záznamů na stránce {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('TW','changeMenu','requestMethod','CIBIS-Os', 'POST', 0);
+call tw_regsetoraddkey('TW','changeMenu','requestMethod','CIBIS-Sale', 'POST', 0);
+
+
+ROLLBACK WORK;
+
+--End of B135327_UID70699_3

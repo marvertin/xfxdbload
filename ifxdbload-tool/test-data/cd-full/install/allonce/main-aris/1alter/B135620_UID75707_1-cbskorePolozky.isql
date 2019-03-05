@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B135620_UID75707_1-cbskorePolozky
+-- @TC:ONCE: DESCRIPTION = RSTS-23438: Rozšíření vstupů pro scoring o 8 položek. {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE crk_vypocetaplscore_den
+ADD ( cbskore DECIMAL(16, 2) BEFORE poruser,
+      cbkod Integer BEFORE poruser,
+      solusdluh Decimal(16, 2) BEFORE poruser,
+      pocetduveryhodnost Integer BEFORE poruser,
+      nejvyssiupominka Smallint BEFORE poruser,
+      pohlavi Integer BEFORE poruser,
+      delkazamestnani1 char(4) BEFORE poruser,
+      delkazamestnani2 char(4) BEFORE poruser,
+      delkazamestnani3 char(4) BEFORE poruser,
+      druhbydleni Integer BEFORE poruser
+      );
+
+ROLLBACK WORK;
+
+--End of B135620_UID75707_1-cbskorePolozky

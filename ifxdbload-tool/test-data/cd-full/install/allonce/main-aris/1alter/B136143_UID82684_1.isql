@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B136143_UID82684_1
+-- @TC:ONCE: DESCRIPTION = Vyplněný dotazník
+
+
+BEGIN WORK;
+
+ALTER TABLE seu_uz_mat  ADD refdotaznik   BIGINT BEFORE cislouz;
+
+CREATE INDEX seu_uz_mat_i_fk2 ON seu_uz_mat(refdotaznik);
+ALTER TABLE seu_uz_mat ADD CONSTRAINT FOREIGN KEY(refdotaznik) REFERENCES eu_dotaznikhead_mat(serno) CONSTRAINT seu_uz_mat_fk2;
+
+ALTER TABLE seu_uz_arch  ADD refdotaznik   BIGINT BEFORE cislouz;
+
+ALTER TABLE seu_ucel_mat  ADD refdotaznik   BIGINT BEFORE poradi;
+
+CREATE INDEX seu_ucel_mat_i_f3 ON seu_ucel_mat(refdotaznik);
+ALTER TABLE seu_ucel_mat ADD CONSTRAINT FOREIGN KEY(refdotaznik) REFERENCES eu_dotaznikhead_mat(serno) CONSTRAINT seu_ucel_mat_f3;
+
+ALTER TABLE seu_ucel_arch  ADD refdotaznik   BIGINT BEFORE poradi;
+
+ALTER TABLE seu_zajist_mat  ADD refdotaznik   BIGINT BEFORE poradi;
+
+CREATE INDEX seu_zajist_mat_i_f5 ON seu_zajist_mat(refdotaznik);
+ALTER TABLE seu_zajist_mat ADD CONSTRAINT FOREIGN KEY(refdotaznik) REFERENCES eu_dotaznikhead_mat(serno) CONSTRAINT seu_zajist_mat_f5;
+
+ALTER TABLE seu_zajist_arch  ADD refdotaznik   BIGINT BEFORE poradi;
+
+ROLLBACK WORK;
+
+--End of B136143_UID82684_1

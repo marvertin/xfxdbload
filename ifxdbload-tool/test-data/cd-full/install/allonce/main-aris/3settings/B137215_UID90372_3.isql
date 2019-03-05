@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137215_UID90372_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31489: IMPLEMENTACE (Datovy model): RSTS-26843_REAL: Konstantní pojistné UNIQA {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+update ev_varpojist_cis set typvypoctu='V' where tvec = 'P' and druh =  tw_reggetkey('EU', '*', 'druhpoj', 'pojistUQ');
+
+ROLLBACK WORK;
+
+--End of B137215_UID90372_3

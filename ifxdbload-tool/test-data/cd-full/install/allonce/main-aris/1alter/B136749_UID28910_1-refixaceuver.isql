@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, B136749_UID28910_1-refixaceuver
+-- @TC:ONCE: DESCRIPTION = RSTS-2754: Nabídka sazeb při refixu - poloautomatizace {REQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE ceu_refixaceuver_den (
+  serno   BIGSERIAL NOT NULL,
+  refrefixace   BIGINT NOT NULL,
+  datsplat   DATE,
+  ltv   DECIMAL(16,2),
+  nezajvyse   DECIMAL(16,2),
+  nespljistina   DECIMAL(16,2),
+  platneuvery   Integer,
+  cislouz   Integer,
+  fazeuveru   CHAR(1),
+  treal   CHAR(4),
+  variantapu   CHAR(10),
+  pocetupom   Integer,
+  prnauveru   Integer  DEFAULT 0,
+  vznikpodhs   Integer  DEFAULT 0,
+  splnenyspecpodm   Integer  DEFAULT 0,
+  zvlrezim   Integer  DEFAULT 0,
+  stage   Integer,
+  smluvnidatsplat   DATE,
+  prilohy   VARCHAR(255),
+  regcissml VARCHAR(15),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (prnauveru IN (0,1)) CONSTRAINT ceu_refixaceuver_den_d9kk,
+  CHECK (vznikpodhs IN (0,1)) CONSTRAINT ceu_refixaceuver_den_d9kl,
+  CHECK (splnenyspecpodm IN (0,1)) CONSTRAINT ceu_refixaceuver_den_d9km,
+  CHECK (zvlrezim IN (0,1)) CONSTRAINT ceu_refixaceuver_den_d9kn
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ceu_refixaceuver_den_pk ON ceu_refixaceuver_den(serno);
+ALTER TABLE ceu_refixaceuver_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ceu_refixaceuver_den_pk;
+
+--FK
+CREATE INDEX ceu_refixaceuver_den_i_f1 ON ceu_refixaceuver_den(refrefixace);
+ALTER TABLE ceu_refixaceuver_den ADD CONSTRAINT FOREIGN KEY(refrefixace) REFERENCES ceu_refixace_mat(serno) CONSTRAINT ceu_refixaceuver_den_f1;
+
+ROLLBACK WORK;
+
+--End of B136749_UID28910_1

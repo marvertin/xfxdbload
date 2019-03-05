@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136224_UID82904_1
+-- @TC:ONCE: DESCRIPTION = RSTS-27203: Z blobu se neodmazávají dokumenty z checklistu {DEFECT}
+
+
+BEGIN WORK;
+
+create index seu_checklist_mat_xold2_refuzadost on seu_checklist_mat(xold2_refuzadost);
+
+
+ROLLBACK WORK;
+
+--End of B136224_UID82904_1

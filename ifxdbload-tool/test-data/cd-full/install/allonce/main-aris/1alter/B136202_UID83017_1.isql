@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136202_UID83017_1
+-- @TC:ONCE: DESCRIPTION = RSTS-27233: Upravit export úvěrové smlouvy ohledně údajů USD {STORY}
+
+
+BEGIN WORK;
+
+alter table EU_ExpSml_Den
+  add typadresyusd  char(1);
+  
+ROLLBACK WORK;
+
+--End of B136202_UID83017_1

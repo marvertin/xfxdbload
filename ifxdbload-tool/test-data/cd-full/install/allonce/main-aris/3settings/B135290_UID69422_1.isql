@@ -1,0 +1,91 @@
+-- @TC:ONCE: ID = V2, B135290_UID69422_1
+-- @TC:ONCE: DESCRIPTION = Parametrizace typů sms a e-mailů pro ECM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- tw_smstyp_cis  
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'NEPRPRIKAZU';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_HESLO';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_TRNU';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_REGMOB';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_REGEML';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'OK_P_VARIANTA_OZ';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'OK_P_VARIANTA_KLIENT';
+
+-- ###############################################################
+-- tw_emailtyp_cis  
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'K_AKCTP_NAB';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'K_ODMN_NAB';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'CHYBA_ZP_PL';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_HESLO';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_TRNU';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_REGMOB';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_REGEML';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL_NS';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL_NSU';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL_ZS';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL_ZSU';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL_US_V';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL_USU_V';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL_US_D';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SS_OPIS_PROBL_USU_D';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'UVER_ZAMIT_KLIENT';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'UVER_STORNO_KLIENT';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'UVER_CERP_KLIENT';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'USD_REKLAMACE';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'USD_ODMITNUTI';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'ZMEN_LOGIN';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'UVER_ZAMITREG_KLIENT';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SCH_UV_DOK_ORR';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SCH_UV_ODPOVED_OZ_INFO_OZU_OZU';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SCH_UV_ODPOVED_OZ_INFO_TEC_TEC';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SCH_UV_ODPOVED_OZ_INFO_TEC_OZU';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SCH_UV_ODPOVED_OZ_INFO_ANA_ANA';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SCH_UV_ODPOVED_OZ_INFO_ANA_OZU';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SCH_UV_ODPOVED_OZ_INFO_FRA_FRA';
+
+UPDATE  tw_smstyp_cis SET archivovat = 1 WHERE zkratka = 'SCH_UV_ODPOVED_OZ_INFO_FRA_OZU';
+
+ROLLBACK WORK;
+
+--End of B135290_UID69422_1

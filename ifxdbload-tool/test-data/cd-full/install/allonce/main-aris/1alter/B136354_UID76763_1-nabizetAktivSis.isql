@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B136354_UID76763_1-nabizetAktivSis
+-- @TC:ONCE: DESCRIPTION = Sale3 - UZ - Pridani priznaku zda nabizet SIS pro manzelku/partnerku
+
+BEGIN WORK;
+
+
+ALTER TABLE seo_sluzbasis_mat ADD
+    nabizetaktiv   Integer  BEFORE aktivovat
+;
+
+ALTER TABLE seo_sluzbasis_mat ADD CONSTRAINT CHECK (nabizetaktiv IN (0,1)) CONSTRAINT seo_sluzbasis_mat_d8n0;
+
+
+ALTER TABLE seo_sluzbasis_arch ADD
+    nabizetaktiv   Integer  BEFORE aktivovat
+;
+
+ALTER TABLE seo_sluzbasis_arch ADD CONSTRAINT CHECK (nabizetaktiv IN (0,1)) CONSTRAINT seo_sluzbasis_arch_d8n1;
+
+
+
+ROLLBACK WORK;
+
+--End of B136354_UID76763_1-nabizetAktivSis

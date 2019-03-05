@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136154_UID82795_4
+-- @TC:ONCE: DESCRIPTION = RSTS-27145: Otázky, odpovědi a vazby {STORY}
+
+BEGIN WORK;
+
+UPDATE eu_sadavazebrozhod_cis SET urceni = 'VARIANTAPU' WHERE urceni IS NULL;
+
+ROLLBACK WORK;
+
+--End of B136154_UID82795_4

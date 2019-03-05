@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135719_UID76533_3-registry
+-- @TC:ONCE: DESCRIPTION = RSTS-23737: IMPLEMENTACE (dotazy- BE): RSTS-9162_REAL: Zmena procesu PaV {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('WS', 'napojeniECM', 'metodyWS', 'lhutaDotaz9', 45, 1, 'WS', 'Napojení na ECM', 'Metody WS', 'dotazování z ECM – korekční lhůta ve dnech pro dotaz typu 9', 1);
+
+ROLLBACK WORK;
+
+--End of B135719_UID76533_3-registry

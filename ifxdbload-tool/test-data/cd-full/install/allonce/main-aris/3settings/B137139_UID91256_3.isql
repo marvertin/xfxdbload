@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137139_UID91256_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31909: Central: Umožnit změnit lhůtu pro smazání ÚŽ {STORY}
+
+
+BEGIN WORK;
+
+--Zapis do provozniho denniku: Manuálně prodloužit lhůtu pro smazání ÚŽ
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4024, 'Manuálně prodloužit lhůtu pro smazání ÚŽ', null, 1);
+
+ROLLBACK WORK;
+
+--End of B137139_UID91256_3

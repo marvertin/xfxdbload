@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135220_UID69352_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20399: Umožnit editovat spec.údaje a přílohy k úvěru {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3007, 'Provést závazné vyúčtování', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3010, 'Vytvořit specifický údaj', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3011, 'Změnit specifický údaj', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3012, 'Zrušit specifický údaj', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3013, 'Vytvořit přílohu k úvěrové smlouvě', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3014, 'Změnit přílohu k úvěrové smlouvě', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3015, 'Zrušit přílohu k úvěrové smlouvě', 1);
+
+ROLLBACK WORK;
+
+--End of B135220_UID69352_3

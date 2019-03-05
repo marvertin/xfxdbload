@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135411_UID70116_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20897: Konsolidace úvěru {REQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('AO', 6, 'Oprava změny OČ salda', 1);
+
+ROLLBACK WORK;
+
+--End of B135411_UID70116_3

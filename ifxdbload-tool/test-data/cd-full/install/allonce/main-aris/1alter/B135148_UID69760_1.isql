@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B135148_UID69760_1
+-- @TC:ONCE: DESCRIPTION = RSTS-20633: V procesní funkci postavit výsledek Neověreno na úroveň KO měkké {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE cps_rozhproces_log
+  ADD (
+    kontrozuerr   Integer BEFORE kontrozuindiv,
+    kontranaerr   Integer BEFORE kontrozuindiv,
+    kontrtecerr   Integer BEFORE kontrozuindiv,
+    kontrfraerr   Integer BEFORE kontrozuindiv
+  ),
+  ADD CONSTRAINT (
+    CHECK (kontrozuerr IN (0,1)) CONSTRAINT cps_rozhproces_log_d5lf,
+    CHECK (kontranaerr IN (0,1)) CONSTRAINT cps_rozhproces_log_d5lg,
+    CHECK (kontrtecerr IN (0,1)) CONSTRAINT cps_rozhproces_log_d5lh,
+    CHECK (kontrfraerr IN (0,1)) CONSTRAINT cps_rozhproces_log_d5li
+  );
+
+ROLLBACK WORK;
+
+--End of B135148_UID69760_1

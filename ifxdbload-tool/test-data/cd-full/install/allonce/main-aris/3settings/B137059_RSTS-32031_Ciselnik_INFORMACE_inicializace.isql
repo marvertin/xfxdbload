@@ -1,0 +1,73 @@
+-- @TC:ONCE: ID = V2, B137059_RSTS-32031_Ciselnik_INFORMACE_inicializace
+-- @TC:ONCE: DESCRIPTION = RSTS-32031: IMPL (integrace): RSTS-32031_Číselník INFORMACE {REALIZACE}
+
+BEGIN WORK;
+
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (1, 'S', 'ukončení doby spoření Staré Smlouvy se SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (2, 'S', 'ukončení doby spoření Staré Smlouvy se SP bez poskytnutí úvěru min. po 5 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (4, 'S', 'ukončení doby spoření Smlouvy při úmrtí Účastníka s nárokem na připsání úměrné části SP', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (5, 'S', 'změna Smlouvy se SP na Smlouvu bez SP', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (6, 'S', 'změna Smlouvy bez SP na Smlouvu se SP (Smlouva zůstává Stará, Nová)', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (7, 'S', 'ukončení doby spoření Staré Smlouvy bez SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (8, 'S', 'ukončení doby spoření Staré Smlouvy bez SP bez poskytnutí úvěru min. po 5 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (10, 'S', 'ukončení doby spoření Nové Smlouvy se SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (11, 'S', 'ukončení doby spoření Hybridní Smlouvy se SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (12, 'S', 'ukončení doby spoření Hybridní Smlouvy se SP bez poskytnutí úvěru min. po 5 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (17, 'S', 'ukončení doby spoření Hybridní Smlouvy bez SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (18, 'S', 'ukončení doby spoření Hybridní Smlouvy bez SP bez poskytnutí úvěru min. po 5 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (22, 'S', 'ukončení doby spoření Nové Smlouvy se SP bez poskytnutím úvěru min. po 6 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (66, 'S', 'změna Staré Smlouvy (nebo Hybridní Smlouvy bez SP) na Hybridní Smlouvu se SP', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (77, 'S', 'ukončení doby spoření Nové Smlouvy bez SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (88, 'S', 'ukončení doby spoření Nové Smlouvy bez SP bez poskytnutí úvěru min. po 6 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (null, 'S', '<prázdná>', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (3, 'V', 'ukončení doby spoření Nové Smlouvy, na níž nepřísluší žádná SP', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (9, 'V', 'informace o nečerpání úvěru', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (11, 'V', 'převod Smlouvy', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (14, 'V', 'rozdělení Smluv (na více osob) a u rozdělené Smlouvy došlo k nakládání s uspořenou částkou', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (15, 'V', 'rozdělení Smluv (sám na sebe) a u rozdělené Smlouvy došlo k nakládání s uspořenou částkou', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (17, 'V', 'Exekuce', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (18, 'V', 'vracení SP na Smlouvy s ukončenou dobou spoření', 1, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (19, 'V', 'vracení SP z důvodu nakládání s uspořenou částkou', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (20, 'V', 'zrušení Exekuce', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (30, 'V', 'ukončení doby spoření Staré Smlouvy, na níž nepřísluší žádná SP', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (31, 'V', 'ukončení doby spoření Hybridní Smlouvy, na níž nepřísluší žádná SP', 0, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (40, 'V', 'vracení SP na základě informace MF (protokol o kontrole)', 1, 1, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (98, 'V', 'anulování zablokované SP', 1, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (null, 'V', '<prázdná>', 1, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (5, 'Z', 'změna Smlouvy se SP na Smlouvu bez SP   ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (6, 'Z', 'změna Smlouvy bez SP na Smlouvu se SP (Smlouva zůstává Stará, Nová)  ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (11, 'Z', 'převod Smlouvy   ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (12, 'Z', 'dědění Smlouvy   ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (13, 'Z', 'spojení Smluv   ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (14, 'Z', 'rozdělení Smluv (na více osob) a u rozdělené Smlouvy došlo k nakládání s uspořenou částkou   ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (24, 'Z', 'rozdělení Smluv (na více osob) a u rozdělené Smlouvy nedošlo k nakládání s uspořenou částkou ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (15, 'Z', 'rozdělení Smluv (sám na sebe) a u rozdělené Smlouvy došlo k nakládání s uspořenou částkou   ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (25, 'Z', 'rozdělení Smluv (sám na sebe) a u rozdělené Smlouvy nedošlo k nakládání s uspořenou částkou', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (16, 'Z', 'změna RČ u Smluv, kde doba spoření trvá ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (26, 'Z', 'změna RČ u Smluv s ukončenou dobou spoření   ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (66, 'Z', 'změna Staré Smlouvy (nebo Hybridní Smlouvy bez SP) na Hybridní Smlouvu se SP', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (null, 'Z', '<prázdná>', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (98, 'D', 'Doplněná žádost o SP ', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (1, 'M', 'ukončení doby spoření Staré Smlouvy se SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (2, 'M', 'ukončení doby spoření Staré Smlouvy se SP bez poskytnutí úvěru min. po 5 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (3, 'M', 'ukončení doby spoření Nové Smlouvy, na níž nepřísluší žádná SP', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (4, 'M', 'ukončení doby spoření Smlouvy při úmrtí Účastníka s nárokem na připsání úměrné části SP', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (7, 'M', 'ukončení doby spoření Staré Smlouvy bez SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (8, 'M', 'ukončení doby spoření Staré Smlouvy bez SP bez poskytnutí úvěru min. po 5 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (9, 'M', 'informace o nečerpání úvěru', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (10, 'M', 'ukončení doby spoření Nové Smlouvy se SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (11, 'M', 'ukončení doby spoření Hybridní Smlouvy se SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (12, 'M', 'ukončení doby spoření Hybridní Smlouvy se SP bez poskytnutí úvěru min. po 5 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (17, 'M', 'ukončení doby spoření Hybridní Smlouvy bez SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (18, 'M', 'ukončení doby spoření Hybridní Smlouvy bez SP bez poskytnutí úvěru min. po 5 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (22, 'M', 'ukončení doby spoření Nové Smlouvy se SP bez poskytnutím úvěru min. po 6 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (30, 'M', 'ukončení doby spoření Staré Smlouvy, na níž nepřísluší žádná SP', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (31, 'M', 'ukončení doby spoření Hybridní Smlouvy, na níž nepřísluší žádná SP', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (77, 'M', 'ukončení doby spoření Nové Smlouvy bez SP s poskytnutím úvěru min. po 2 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (88, 'M', 'ukončení doby spoření Nové Smlouvy bez SP bez poskytnutí úvěru min. po 6 letech', 0, 0, 1);
+INSERT INTO csp_informace_cis (informace, typkomunikace, popis, vratkauplna, vratkacastecna, platnost) VALUES (null, 'M', '<prázdná>', 0, 0, 1);
+
+
+ROLLBACK WORK;
+
+--End of B137059_RSTS-32031_Ciselnik_INFORMACE_inicializace

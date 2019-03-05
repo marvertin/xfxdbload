@@ -1,0 +1,68 @@
+-- @TC:ONCE: ID = V2, B136162_UID82684_3
+-- @TC:ONCE: DESCRIPTION = Dotazník na výběr účelu a zajištění v CIBIS-Sale
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+update eu_ucel_cis set kodrsts = 'FO', platnost = 1 where ucel = 153;
+
+update eu_ucel_cis set kodrsts = 'FO', platnost = 1 where ucel = 154;
+
+update eu_ucel_cis set kodrsts = 'FO', platnost = 1 where ucel = 1231;
+
+update eu_ucel_cis set platnost = 0 where ucel = 1204;
+
+update eu_ucel_cis set platnost = 0 where ucel = 1205;
+
+update eu_ucel_cis set platnost = 0 where ucel = 1505;
+
+update eu_ucel_cis set platnost = 0,  nabizetprouz = 0 where ucel = 1102;
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,poznamka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1303,'Modernizace bydlení v podnájmu',130,'MPO','Modenizace domu/BJ podnájmu','FO',1,1,'B','1',mdy(9,1,2018),'Modernizace bydlení v podnájmu');
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1105,'Modernizace vlastního nebyt. objektu',110,'MNeVlO','FO/PO',1,1,'V','1',mdy(9,1,2018),'Modernizace vlastního nebytového objektu');
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1106,'Modernizace nebyt. objektu nájem',110,'MNeNaO','FO',1,1,'V','1',mdy(9,1,2018),'Modernizace nebytového objektu v nájmu');
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1207,'Koupě domu/bytu v privatizaci',120,'KDPPri','FO/PO',1,1,'K','1',mdy(9,1,2018),'Koupě domu/bytu v privatizaci');
+ 
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1107,'Koupě pozemku s neúč. stavbou',110,'StavPNe','FO',1,1,'V','1',mdy(9,1,2018),'Koupě pozemku s neúčelovou stavbou');
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1108,'Koupě pozemku v privatizaci',110,'StavPPr','FO/PO',1,1,'V','1',mdy(9,1,2018),'Koupě pozemku v privatizaci'); 
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1405,'Odkup bytového domu (nepřímá priv.)',140,'DBPriv','FO',1,1,'O','1',mdy(9,1,2018),'Odkup bytového domu - nepřímá provatizace'); 
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1406,'Koupě podílu v PO (družstvo)',140,'DBKou','FO',1,1,'O','1',mdy(9,1,2018),'Koupě podílu v PO - souvislost s bytovou potřebou'); 
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1407,'Navýšení členského vkladu v byt. druž.',140,'DBnav','FO',1,1,'O','1',mdy(9,1,2018),'Navýšení členského vkladu v bytovém družstvu'); 
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1213,'Koupě nemovistosti s nebyt. částí obj.',120,'KNOČ','FO/PO',1,1,'K','1',mdy(9,1,2018),'Koupě nemovistosti s nebytovou částí objektu'); 
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1208,'Koupě nebyt. Obj. v rámci privatizace',120,'KNOP','FO',1,0,'K','1',mdy(9,1,2018),'Koupě nebytového objektu v rámci privatizace'); 
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1209,'Koupě domu/bytu v insolvenci',120,'ZinD','FO',1,0,'K','1',mdy(9,1,2018),'Koupě domu/bytu v insolvenci'); 
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1210,'Koupě pozemku v insolvenci',120,'ZinP','FO',1,0,'K','1',mdy(9,1,2018),'Koupě pozemku v insolvenci');     
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1211,'Koupě bytu/domu v dražbě',120,'ZDrD','FO',1,0,'K','1',mdy(9,1,2018),'Koupě bytu/domu v dražbě'); 
+
+INSERT INTO eu_ucel_cis (ucel,text,skupina,zkratka,kodrsts,platnost,ucelss,typzadost,nabizetprouz,nabizetod,verejnynazev)
+VALUES(1212,'Koupě pozemku v dražbě',120,'ZDrP','FO',1,0,'K','1',mdy(9,1,2018),'Koupě pozemku v dražbě'); 
+
+ROLLBACK WORK;
+
+--End of B136162_UID82684_3

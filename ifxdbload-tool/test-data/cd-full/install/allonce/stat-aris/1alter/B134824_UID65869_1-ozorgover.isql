@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B134824_UID65869_1-ozorgover
+-- @TC:ONCE: DESCRIPTION = RSTS-18654: TF001743 - Technický problém při zobrazení seznamu balíčků USD {DEFECT}
+-- @TC:ONCE: DBKIND = STAT
+
+
+BEGIN WORK;
+
+ALTER TABLE sv_uvery_fo MODIFY ozorgover   CHAR(16);
+
+ALTER TABLE sv_uvery_po MODIFY ozorgover   CHAR(16);
+
+ROLLBACK WORK;
+
+--End of B134824_UID65869_1-ozorgover

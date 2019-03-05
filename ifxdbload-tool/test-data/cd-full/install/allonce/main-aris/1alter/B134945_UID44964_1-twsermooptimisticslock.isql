@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B134945_UID44964_1-twsermooptimisticslock
+-- @TC:ONCE: DESCRIPTION = RSTS-8431: Zamezit uložení editovaných dat pokud se mezitím změnily {STORY}
+
+
+BEGIN WORK;
+
+create table tw_sernooptimisticslock (
+   serno bigint primary key, 
+   locktime datetime year to fraction(5), 
+   dummy float) 
+   
+   extent size 8192
+   next size 8192
+   
+   lock mode row;
+
+
+
+ROLLBACK WORK;
+
+--End of B134945_UID44964_1-tw_sernooptimisticslock

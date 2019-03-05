@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B137105_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+ALTER TABLE ru_stavsplaceni_den DROP CONSTRAINT ru_stavsplaceni_den_c1;
+
+RENAME COLUMN ru_stavsplaceni_den.indikdefault TO charakterdefault;
+
+ALTER TABLE ru_stavsplaceni_den ADD varovani   Integer  DEFAULT 0;
+
+ALTER TABLE ru_stavsplaceni_den
+ADD CONSTRAINT (CHECK (charakterdefault IN (0,1,2,3)) CONSTRAINT ru_stavsplaceni_den_c1),
+ADD CONSTRAINT (CHECK (varovani IN (0,1)) CONSTRAINT ru_stavsplaceni_den_da7d);
+
+ROLLBACK WORK;
+
+--End of B137105_UID77507_1

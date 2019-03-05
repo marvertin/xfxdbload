@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137210_UID93730_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33150: Konta s mapovacím kódem 0 {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO ep_fincodemap_cis (treal, tarif, typostiger, dobost, stadiumifrs, odepsano, druhvklad, fincode, platnost, poznamka)
+  SELECT 'VUKO', tarif, typostiger, dobost, stadiumifrs, odepsano, druhvklad, fincode, platnost, poznamka FROM ep_fincodemap_cis WHERE treal LIKE 'VUPO';
+
+ROLLBACK WORK;
+
+--End of B137210_UID93730_3

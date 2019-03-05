@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B134702_UID57735_1
+-- @TC:ONCE: DESCRIPTION = RSTS-14622: Zobrazit maximální splátku úvěru a neumožnit uživateli zadat vyšší {STORY}
+
+BEGIN WORK;
+
+alter table seu_sml_arch
+  --Maximální možná výše splátky v ÚŽ z pohledu rizikových kontrol
+  add maxSplatka   DECIMAL(16, 2) before poruser
+;
+
+alter table seu_sml_mat
+  --Maximální možná výše splátky v ÚŽ z pohledu rizikových kontrol
+  add maxSplatka   DECIMAL(16, 2) before poruser
+;
+
+ROLLBACK WORK;
+
+--End of B134702_UID57735_1

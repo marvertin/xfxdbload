@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135812_UID78209_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24679: Parametrizace a migrace stresových kontrol {STORY}
+
+BEGIN WORK;
+
+INSERT INTO crk_kontrolatyp_cis (kod, refkontrolakombin, kombinovana, poradizobraz, nazev, garant, pozadovatkdy, spustrozliseniko, zpusvypoctupar, nejnizsiuroven, vypocetctvericepodpora, vypocetctvericeprovest, zadatupresneni, zpusoburcenihranicekon, hranicekontroly, popishranice, pozadovatprozalozce, spustitelnakontrola, prioritavolani, typalternativninabidky, expiracepocetdni, cachepocetdni, dotazextregistr, externiregistr, algoritmusfunkcef1, algoritmusfunkcef2, algoritmusfunkcef3, algoritmusfunkcef4, algoritmusfunkcef5, spustautprischval, spustautpricerp, poznamka, platnost, nedostupsalechyba, zverejnitprizamitnuti, nazevproklienta, refdatprov)
+  VALUES ('STRES_PRVY', null, 0, 51, 'Stresové PPV', 'OZU ', 'P', 1, 'P', 'O', 1, 1, 0, 'D', null, 'Stresový poměr příjmů a výdajů', 0, 1, 1031, null, null, null, 0, null, 'F1 PRAH % OK        ', 'F2 NE               ', 'F3 MIN              ', 'F4 NE', 'F5 NE', 0, 0, null, 1, 1, 0, null, mdy(9, 1, 2017));
+INSERT INTO crk_kontrolatyp_cis (kod, refkontrolakombin, kombinovana, poradizobraz, nazev, garant, pozadovatkdy, spustrozliseniko, zpusvypoctupar, nejnizsiuroven, vypocetctvericepodpora, vypocetctvericeprovest, zadatupresneni, zpusoburcenihranicekon, hranicekontroly, popishranice, pozadovatprozalozce, spustitelnakontrola, prioritavolani, typalternativninabidky, expiracepocetdni, cachepocetdni, dotazextregistr, externiregistr, algoritmusfunkcef1, algoritmusfunkcef2, algoritmusfunkcef3, algoritmusfunkcef4, algoritmusfunkcef5, spustautprischval, spustautpricerp, poznamka, platnost, nedostupsalechyba, zverejnitprizamitnuti, nazevproklienta, refdatprov)
+  VALUES ('STRES_DTI', null, 0, 52, 'Stresové DTI', 'OZU ', 'P', 1, 'P', 'O', 1, 1, 0, 'D', null, 'Stresové DTI', 0, 1, 1041, null, null, null, 0, null, 'F1 PRAH % OK        ', 'F2 NE               ', 'F3 MIN              ', 'F4 NE', 'F5 NE', 0, 0, null, 1, 1, 0, null, mdy(9, 1, 2017));
+INSERT INTO crk_kontrolatyp_cis (kod, refkontrolakombin, kombinovana, poradizobraz, nazev, garant, pozadovatkdy, spustrozliseniko, zpusvypoctupar, nejnizsiuroven, vypocetctvericepodpora, vypocetctvericeprovest, zadatupresneni, zpusoburcenihranicekon, hranicekontroly, popishranice, pozadovatprozalozce, spustitelnakontrola, prioritavolani, typalternativninabidky, expiracepocetdni, cachepocetdni, dotazextregistr, externiregistr, algoritmusfunkcef1, algoritmusfunkcef2, algoritmusfunkcef3, algoritmusfunkcef4, algoritmusfunkcef5, spustautprischval, spustautpricerp, poznamka, platnost, nedostupsalechyba, zverejnitprizamitnuti, nazevproklienta, refdatprov)
+  VALUES ('STRES_DSTI', null, 0, 53, 'Stresové DSTI', 'OZU ', 'P', 1, 'P', 'O', 1, 1, 0, 'D', null, 'Stresové DSTI', 0, 1, 1051, null, null, null, 0, null, 'F1 PRAH % OK        ', 'F2 NE               ', 'F3 MIN              ', 'F4 NE', 'F5 NE', 0, 0, null, 1, 1, 0, null, mdy(9, 1, 2017));
+
+ROLLBACK WORK;
+
+--End of B135812_UID78209_3

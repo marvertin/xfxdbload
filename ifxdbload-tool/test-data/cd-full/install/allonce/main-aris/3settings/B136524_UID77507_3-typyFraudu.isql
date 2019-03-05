@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B136524_UID77507_3-typyFraudu
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+INSERT INTO cep_fraudtyp_cis(typ, popis, kodindikatoru, hodnotazapnuti, hodnotavypnuti, stopcerp, prenosrs, autoproved, platnost)
+VALUES('FR1', 'Malý, nezávažný podvod (účel, faktury) - minimální ohrožení návratnosti poskyt. finančních prostředků', 'S04', '2', '1', 1, 1, 0, 1);
+
+INSERT INTO cep_fraudtyp_cis(typ, popis, kodindikatoru, hodnotazapnuti, hodnotavypnuti, stopcerp, prenosrs, autoproved, platnost)
+VALUES('FR2', 'Závažný podvod, podvod v bonitě klienta - vysoká pravděpodobnost nesplácení závazku', 'RD070', '1', '0', 1, 1, 1, 1);
+
+INSERT INTO cep_fraudtyp_cis(typ, popis, kodindikatoru, hodnotazapnuti, hodnotavypnuti, stopcerp, prenosrs, autoproved, platnost)
+VALUES('FR3', 'Organizovaná skupina - účelem je získat finanční prostředky na základě nepravdivých informací - vysoká pravděpodobnost nesplácení závazku - velká kumulace podvodu, vzájemná spojitost', 'RD070', '1', '0', 1, 1, 1, 1);
+
+INSERT INTO cep_fraudtyp_cis(typ, popis, kodindikatoru, hodnotazapnuti, hodnotavypnuti, stopcerp, prenosrs, autoproved, platnost)
+VALUES('SID', 'Zcizená identita - jednoznačný podvod s defaultem, úvěr nebude nikdy splacen (možnost náhrady z rozhodnutí soudu po pachateli) ', 'RD070', '1', '0', 1, 1, 1, 1);
+
+INSERT INTO cep_fraudtyp_cis(typ, popis, kodindikatoru, hodnotazapnuti, hodnotavypnuti, stopcerp, prenosrs, autoproved, platnost)
+VALUES('FID', 'Falešná identita - jednoznačný podvod s defaultem, úvěr nebude nikdy splacen (možnost náhrady z rozhodnutí soudu po pachateli) ', 'RD070', '1', '0', 1, 1, 1, 1);
+
+ROLLBACK WORK;
+
+--End of B136524_UID77507_3

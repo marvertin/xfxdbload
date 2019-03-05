@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B137315_UID94875_1
+-- @TC:ONCE: DESCRIPTION = RSTS-33756: Dořešení dopadů do RK Aplikační scoring {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE crk_vypocetaplscore_den ADD (refdelkavzam1 INTEGER BEFORE druhbydleni,
+                                         refdelkavzam2 INTEGER BEFORE druhbydleni,
+                                         refdelkavzam3 INTEGER BEFORE druhbydleni);
+
+CREATE INDEX crk_vypocetaplscore_den_i_fk5 ON crk_vypocetaplscore_den(refdelkavzam1);
+ALTER TABLE crk_vypocetaplscore_den ADD CONSTRAINT FOREIGN KEY(refdelkavzam1) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT crk_vypocetaplscore_den_fk5;
+
+CREATE INDEX crk_vypocetaplscore_den_i_fk6 ON crk_vypocetaplscore_den(refdelkavzam2);
+ALTER TABLE crk_vypocetaplscore_den ADD CONSTRAINT FOREIGN KEY(refdelkavzam2) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT crk_vypocetaplscore_den_fk6;
+
+CREATE INDEX crk_vypocetaplscore_den_i_fk7 ON crk_vypocetaplscore_den(refdelkavzam3);
+ALTER TABLE crk_vypocetaplscore_den ADD CONSTRAINT FOREIGN KEY(refdelkavzam3) REFERENCES cfs_delkavzam_cis(id) CONSTRAINT crk_vypocetaplscore_den_fk7;
+
+ROLLBACK WORK;
+
+--End of B137315_UID94875_1

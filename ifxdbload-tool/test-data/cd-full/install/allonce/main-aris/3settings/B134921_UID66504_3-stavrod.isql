@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B134921_UID66504_3-stavrod
+-- @TC:ONCE: DESCRIPTION = RSTS-19017: S20p57: Nezobrazila se chyba na nevyplněný rodinný stav. {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'STAVROD', 'nepovolenProUZ', 0, 1,
+  'Osoba', 'Evidence osoby', 'Persons', 'Nepovolený rodinný stav pro ÚŽ');
+
+ROLLBACK WORK;
+
+--End of B134921_UID66504_3-stavrod

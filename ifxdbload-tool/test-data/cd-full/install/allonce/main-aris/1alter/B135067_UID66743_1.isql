@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135067_UID66743_1
+-- @TC:ONCE: DESCRIPTION = RSTS-19166: U stavebního úvěru se nevypočítává min.splátka a tak nelze projít přes sekci Nabídka produktu {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+alter table seu_sml_arch
+  add minSplatkaSu dec(16,2) before poruser
+;
+
+alter table seu_sml_mat
+  --Minimální splátka pro úvěr bez překlenovací fáze (SUFO)
+  add minSplatkaSu dec(16,2) before poruser
+;
+
+ROLLBACK WORK;
+
+--End of B135067_UID66743_1

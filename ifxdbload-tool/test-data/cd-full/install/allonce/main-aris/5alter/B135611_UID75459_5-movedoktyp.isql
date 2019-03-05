@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135611_UID75459_5-movedoktyp
+-- @TC:ONCE: DESCRIPTION = Chyby při pokusu o předání ÚŽ - presun doktyp v archivu evidence dokumentu
+-- @TC:ONCE: LOAD_IF_LOADED = B135609_UID75459_4-movedoktyp
+
+BEGIN WORK;
+
+-- ###############################################################
+-- DO_Dokument_Arch
+
+ALTER TABLE do_dokument_arch DROP xold_doktyp;
+
+
+ROLLBACK WORK;
+
+--End of B135611_UID75459_5-movedoktyp

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135772_UID78348_1-extenty
+-- @TC:ONCE: DESCRIPTION = RSTS-24734: Chybné nastavení extentů u tabulky crk_kontrolastav_den
+
+BEGIN WORK;
+
+ALTER TABLE crk_kontrolastav_den MODIFY NEXT SIZE  2600000;
+
+ROLLBACK WORK;
+
+--End of B135772_UID78348_1-extenty

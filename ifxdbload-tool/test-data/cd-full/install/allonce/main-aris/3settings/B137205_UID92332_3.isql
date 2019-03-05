@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B137205_UID92332_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+--crk_kodoperace_cis
+UPDATE crk_kodoperace_cis SET povolitrefin=1 WHERE kod in ('OU','SU','HU','ST');
+UPDATE crk_kodoperace_cis SET povolitrefin=0 WHERE kod in ('SP','IU','PU','FL','OL','OS','KU','ON','KK','KS','RU','PB','PF');
+
+ROLLBACK WORK;
+
+--End of B137205_UID92332_3
