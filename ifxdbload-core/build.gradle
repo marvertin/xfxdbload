@@ -4,6 +4,10 @@ plugins {
 
 apply from: 'dependencies.gradle'
 
+dependencies {
+	// lexer použijeme pro jednoduchý parser
+	implementation group: 'cz.tconsult.lib', name: 'spllexer'
+}
 
 // Dependence k revizi
 dependencies {

@@ -7,8 +7,9 @@ dependencyManagement {
 			entry 'parsing-jaccutil' // na-zahozeni: není potřeba nikým jiným
 		}
 
+		dependency group: 'cz.tconsult.lib', name: 'spllexer', version: '1.0.0'
 
-		//dependency group: 'cz.tconsult.lib', name: 'sump', version: '5.1.0'
+		dependency group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
 
 		dependency group: 'commons-lang', name: 'commons-lang', version: '2.6'
 		dependency group: 'org.apache.commons', name: 'commons-lang3', version:'3.8.1'

@@ -35,7 +35,7 @@ import cz.tconsult.CORE_REVIDOVAT.spl.IfxSqlCompiler;
 import cz.tconsult.CORE_REVIDOVAT.spl.parser.SplBase0;
 import cz.tconsult.CORE_REVIDOVAT.spl.parser.SplDocument;
 import cz.tconsult.CORE_REVIDOVAT.tw.util.FileManager;
-import cz.tconsult.tw.util.PositionTrackPushbackReader;
+import cz.tconsult.lib.lexer.PositionTrackPushbackReader;
 
 public class OnceScript  {
 
