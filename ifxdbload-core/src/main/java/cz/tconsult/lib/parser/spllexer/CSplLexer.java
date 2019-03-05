@@ -91,11 +91,11 @@ public class CSplLexer extends QuickSimpleLexer0 {
 
     defineToken("-- *@TC:[A-Z]+:[^\r\n]*[\r\n]?", ESplTokenNoKeyword.TCDIRECTIVE, TCDIRECTIVE_VALUE_PARSER);
 
-    defineTokenForIgnoring(FBasicTokenRegExps.WHITE_SPACES);
-    defineTokenForIgnoring(FBasicTokenRegExps.COMMENTARY_C);
-    defineTokenForIgnoring(FBasicTokenRegExps.COMMENTARY_PASCAL);
-    defineTokenForIgnoring(FBasicTokenRegExps.COMMENTARY_SLASH);
-    defineTokenForIgnoring(FBasicTokenRegExps.COMMENTARY_DASH);
+    defineTokenForIgnoring(FBasicTokenRegExps.WHITE_SPACES, ESeplTokenForIgnoring.WITESPACEC);
+    defineTokenForIgnoring(FBasicTokenRegExps.COMMENTARY_C, ESeplTokenForIgnoring.COMMENTARY);
+    defineTokenForIgnoring(FBasicTokenRegExps.COMMENTARY_PASCAL, ESeplTokenForIgnoring.COMMENTARY);
+    defineTokenForIgnoring(FBasicTokenRegExps.COMMENTARY_SLASH, ESeplTokenForIgnoring.COMMENTARY);
+    defineTokenForIgnoring(FBasicTokenRegExps.COMMENTARY_DASH, ESeplTokenForIgnoring.COMMENTARY);
 
 
     //TC directives

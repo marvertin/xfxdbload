@@ -401,7 +401,7 @@ public abstract class QuickSimpleLexer0 implements TokenInputStream, java.io.Ser
    * @return Identifikaci definice tokenu, což je objekt, jenž může být přiřazen do proměnné a použit v dalším volání.
    */
   protected TokenDef defineTokenForIgnoring(final String aRegExp) {
-    final TokenDef  def = _defineToken(aRegExp, "ignoráček", ValueParser.NULL, false, false);
+    final TokenDef  def = _defineToken(aRegExp, null, null, true, false);
     def.setForIgnoring(true);
     return def;
   }

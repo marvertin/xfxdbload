@@ -55,7 +55,7 @@ public class SplParser {
   public List<SplStatement> parse(final String data, final String resourceName) {
     try {
       final CSplLexer lexer = new CSplLexer();
-      lexer.setIgnoreWhiteSpacesAndComments(true);
+      //lexer.setIgnoreWhiteSpacesAndComments(true);
       lexer.setEndToken(KONECNIK.KONECNIK);
       final List<LexerToken> tokens = lexer.lex(data, resourceName);
       return parseAll(new TokenIterator<LexerToken>(tokens));

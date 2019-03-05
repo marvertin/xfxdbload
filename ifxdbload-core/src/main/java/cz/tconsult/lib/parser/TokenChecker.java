@@ -5,22 +5,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import cz.tconsult.lib.parser.lexer.LexerToken;
+import cz.tconsult.lib.parser.spllexer.ESeplTokenForIgnoring;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-abstract class TokenChecker<T> {
+abstract class TokenChecker {
 
 
-  private final TokenIterator<T> it;
+  private final TokenIterator<LexerToken> it;
 
   /**
    * Očekává, jeden ze zadaných token typů.
    * @param types
    * @throws YCannotParse
    */
-  T expect(final Object ... types) throws YCannotParse {
+  LexerToken expect(final Object ... types) throws YCannotParse {
     if (! isOneOf(types)) {
-      throw new YCannotParse(it.get());
+      throw new YCannotParse(get());
     }
     return shift();
   }
@@ -30,9 +32,9 @@ abstract class TokenChecker<T> {
    * @param types
    * @throws YCannotParse
    */
-  T notExpect(final Object ... types) throws YCannotParse {
+  LexerToken notExpect(final Object ... types) throws YCannotParse {
     if (isOneOf(types)) {
-      throw new YCannotParse(it.get());
+      throw new YCannotParse(get());
     }
     return shift();
   }
@@ -42,7 +44,7 @@ abstract class TokenChecker<T> {
    * @param types
    * @throws YCannotParse
    */
-  Optional<T> optional(final Object ... types) {
+  Optional<LexerToken> optional(final Object ... types) {
     if (isOneOf(types)) {
       return Optional.of(shift());
     } else {
@@ -57,11 +59,23 @@ abstract class TokenChecker<T> {
    * @param types
    * @return
    */
-  T shiftUntil(final Object ... types) {
+  LexerToken shiftUntil(final Object ... types) {
     while (! isOneOf(types)) {
       shift();
     }
+    return get();
+  }
+
+  private LexerToken get() {
+    shiftAllWitespacesAndComentaries();
     return it.get();
+  }
+
+  private void shiftAllWitespacesAndComentaries() {
+    while (it.get().getType() instanceof ESeplTokenForIgnoring) {
+      onShift(it.get());
+      it.shift();
+    }
   }
 
   /**
@@ -70,8 +84,8 @@ abstract class TokenChecker<T> {
    * @param types
    * @return
    */
-  List<T> shiftWhile(final Object ... types) {
-    final List<T> list = new LinkedList<T>();
+  List<LexerToken> shiftWhile(final Object ... types) {
+    final List<LexerToken> list = new LinkedList<LexerToken>();
     while (isOneOf(types)) {
       list.add(shift());
     }
@@ -79,18 +93,20 @@ abstract class TokenChecker<T> {
   }
 
   public boolean isOneOf(final Object... types) {
-    return Arrays.asList(types).contains(extractType(it.get()));
+    return Arrays.asList(types).contains(get().getType());
   }
 
 
-  protected abstract Object extractType(T token);
+  protected Object extractType(final LexerToken token) {
+    return token.getType();
+  }
 
-  private T shift() {
-    onShift(it.get());
+  private LexerToken shift() {
+    onShift(get());
     return it.shift();
   }
 
-  protected abstract void onShift(T token);
+  protected abstract void onShift(LexerToken token);
 
 
 

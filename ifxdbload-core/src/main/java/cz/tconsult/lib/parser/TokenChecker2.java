@@ -9,7 +9,7 @@ import cz.tconsult.lib.parser.lexer.LexerToken;
 import cz.tconsult.lib.parser.spllexer.ESplTokenNoKeyword;
 import cz.tconsult.lib.parser.spllexer.SplDirective;
 
-class TokenChecker2 extends TokenChecker<LexerToken>{
+class TokenChecker2 extends TokenChecker {
 
   private StringBuilder sb;
 
@@ -17,10 +17,6 @@ class TokenChecker2 extends TokenChecker<LexerToken>{
     super(it);
   }
 
-  @Override
-  protected Object extractType(final LexerToken token) {
-    return token.getType();
-  }
 
   @Override
   protected void onShift(final LexerToken token) {

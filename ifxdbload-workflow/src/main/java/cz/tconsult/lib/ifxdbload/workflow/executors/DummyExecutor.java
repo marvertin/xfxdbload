@@ -65,8 +65,8 @@ public class DummyExecutor implements FazeExecutor {
       final SplParser splParser = new SplParser();
       final List<SplStatement> result = splParser.parse(data, loso.getRoot() + "|" + loso.getEntryName().toString());
       for (final SplStatement stm: result) {
-        //System.out.println("********************** " + stm.getName() + " : " + stm.getStmType());
-        //System.out.println(stm.getText());
+        System.out.println("********************** " + stm.getName() + " : " + stm.getStmType());
+        System.out.println(stm.getText());
       }
     }
 
