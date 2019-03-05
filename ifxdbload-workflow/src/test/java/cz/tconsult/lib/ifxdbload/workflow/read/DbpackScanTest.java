@@ -1,13 +1,14 @@
 package cz.tconsult.lib.ifxdbload.workflow.read;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;

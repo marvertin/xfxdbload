@@ -5,4 +5,8 @@ dependencies {
 	implementation group: 'hikari-cp', name: 'hikari-cp', version: '2.7.0'
 	
 	runtimeOnly group: 'com.informix', name: 'ifxjdbc', version: '4.10.JC9'
+	
+	// https://mvnrepository.com/artifact/junit/junit
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+	
 }
