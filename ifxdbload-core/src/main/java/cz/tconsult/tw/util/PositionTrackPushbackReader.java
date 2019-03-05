@@ -1,7 +1,6 @@
-package cz.tconsult.lib.ifxdbload.core.tw;
+package cz.tconsult.tw.util;
 
-import java.io.IOException;
-import java.io.PushbackReader;
+import java.io.*;
 
 
 /**
@@ -53,15 +52,14 @@ public class PositionTrackPushbackReader extends PushbackReader {
 
   private int iDelkaMinulehoRadku;
 
-  public PositionTrackPushbackReader(final PushbackReader aReader, final String aInputSourceName) {
+  public PositionTrackPushbackReader(PushbackReader aReader, String aInputSourceName) {
     super(aReader); // musí být, ale nepoužije se, všechny metody jsou přepsány
     iReader =  aReader;
     iInputSourceName = aInputSourceName;
   }
 
 
-  @Override
-  public void unread(final int c) throws java.io.IOException {
+  public void unread(int c) throws java.io.IOException {
     iReader.unread( c);
     iPozice --;
     iIgnorujDalsiLf = false;
@@ -76,20 +74,16 @@ public class PositionTrackPushbackReader extends PushbackReader {
         iRadek --;
         iSloupec = iDelkaMinulehoRadku;
         iDelkaMinulehoRadku = 0;
-      } else {
+      } else
         iIgnorujPredchoziCr = false;
-      }
     } else {  // běžný znak
-      if (iSloupec > 0) {
-        iSloupec --;
-      }
+      if (iSloupec > 0) iSloupec --;
       iIgnorujPredchoziCr = false;
     }
   }
 
-  @Override
   public int read() throws java.io.IOException {
-    final int c = iReader.read();
+    int c = iReader.read();
     iPozice ++;
     iIgnorujPredchoziCr = false;
     if (c < 0) {   // je to konec
@@ -103,9 +97,8 @@ public class PositionTrackPushbackReader extends PushbackReader {
         iRadek ++;
         iDelkaMinulehoRadku = iSloupec;
         iSloupec = 0;
-      } else {
+      } else
         iIgnorujDalsiLf = false;
-      }
     } else { // běžný znak
       iSloupec++;
       iIgnorujDalsiLf = false;
@@ -113,60 +106,43 @@ public class PositionTrackPushbackReader extends PushbackReader {
     return c;  // a vždy vrátíme předchozí znak
   }
 
-  ////////// Metody, jenž bylo nutné předefinovat, aby pracovali s jednoduchou metodu
-  @Override
-  public int read(final char[] aZnaky, final int aOdkud, final int aDelka) throws java.io.IOException {
+////////// Metody, jenž bylo nutné předefinovat, aby pracovali s jednoduchou metodu
+  public int read(char[] aZnaky, int aOdkud, int aDelka) throws java.io.IOException {
     int c = read();
-    if (c < 0)
-    {
-      return -1; // nepodařilo se načíst
-    }
+    if (c < 0) return -1; // nepodařilo se načíst
     int pocet = 0;
     for (int i = aOdkud; i < aOdkud + aDelka; i++) {
       pocet ++;
       aZnaky[i] = (char)c;
       c = read();
-      if (c < 0)
-      {
-        break;  // konec souboru, ale něco jsme načetli
-      }
+      if (c < 0) break;  // konec souboru, ale něco jsme načetli
     }
     return pocet;
 
   }
 
-  @Override
-  public void unread(final char[] aZnaky, final int aOdkud, final int aDelka) throws java.io.IOException {
-    for (int i = aOdkud + aDelka - 1; i>=aOdkud; i--) {
+  public void unread(char[] aZnaky, int aOdkud, int aDelka) throws java.io.IOException {
+    for (int i = aOdkud + aDelka - 1; i>=aOdkud; i--)
       unread(aZnaky[i]);
-    }
   }
 
 
-  @Override
-  public int read(final char[] aZnaky) throws java.io.IOException {
+  public int read(char[] aZnaky) throws java.io.IOException {
     return read(aZnaky, 0, aZnaky.length);
   }
 
-  @Override
-  public void unread(final char[] aZnaky) throws java.io.IOException {
+  public void unread(char[] aZnaky) throws java.io.IOException {
     unread(aZnaky,0, aZnaky.length);
   }
 
-  @Override
-  public long skip(final long n) throws java.io.IOException {
+  public long skip(long n) throws java.io.IOException {
     for (int i=0; i<n; i++)
-    {
-      if (read() < 0)
-      {
-        return i;  // pokud jsme na konci, vratme co jsme přečetli
-      }
-    }
+      if (read() < 0) return i;  // pokud jsme na konci, vratme co jsme přečetli
     return n;
 
   }
 
-  //////////// Nové metody určené pro práci s pozicí
+//////////// Nové metody určené pro práci s pozicí
 
   /**
    * Nastaví na nulu číslo, řádku, číslo sloupce a pozici.
@@ -183,7 +159,7 @@ public class PositionTrackPushbackReader extends PushbackReader {
    * Nastaví číslo řádku.
    * @param line Číslo řádku počítané od nuly.
    */
-  public void setLineNumber(final int line) {
+  public void setLineNumber(int line) {
     this.iRadek = line;
   }
 
@@ -200,7 +176,7 @@ public class PositionTrackPushbackReader extends PushbackReader {
    * Nastaví číslo sloupce.
    * @param column Číslo sloupce počítané od nuly. Pokud je menší než nula, nastaví se nula.
    */
-  public void setColumnNumber(final int column) {
+  public void setColumnNumber(int column) {
     this.iSloupec = column < 0 ? 0 : column;
   }
 
@@ -217,7 +193,7 @@ public class PositionTrackPushbackReader extends PushbackReader {
    * co bude vracet metoda getPosition.
    * @param position Poczice v proudu.
    */
-  public void setPosition(final int position) {
+  public void setPosition(int position) {
     this.iPozice = position;
   }
 
@@ -249,77 +225,69 @@ public class PositionTrackPushbackReader extends PushbackReader {
   }
 
 
-  /// Jednoduše přehozené metody
-  @Override
+/// Jednoduše přehozené metody
   public void close() throws java.io.IOException {
     iReader.close();
   }
 
-  @Override
   public boolean ready() throws java.io.IOException {
     return iReader.ready();
   }
 
-  @Override
-  public void mark(final int readAheadLimit) throws java.io.IOException {
+  public void mark(int readAheadLimit) throws java.io.IOException {
     iReader.mark( readAheadLimit); // vyhodí výjimku
   }
 
-  @Override
   public boolean markSupported() {
     return iReader.markSupported();  // vrátí false
   }
 
-  @Override
   public void reset() throws java.io.IOException {
     iReader.reset();  // vyhodí výjimku
   }
 
 
-  @Override
-  public boolean equals(final Object parm1) {
+  public boolean equals(Object parm1) {
     return iReader.equals( parm1);
   }
 
-  @Override
   public String toString() {
     return iReader.toString();
   }
 
-  @Override
   public int hashCode() {
     return iReader.hashCode();
   }
 
   public String readLine() throws IOException {
-
-    final StringBuffer result = new StringBuffer();
+   
+    StringBuffer result = new StringBuffer();
     for (;;) {
-
+      
       int c = read();
       if (c < 0) {
-
+        
         if (result.length() > 0) {
           return result.toString();
         }
         else {
-
+          
           return null;
         }
       }
-
+      
       boolean eor = false;
       if (c == CR) {
-
+        
         eor = true;
         c = read();
         if (c != LF) {unread(c);}
       }
       else if (c == LF) {
-
+        
         eor = true;
       }
-
+      
       if (eor) {return result.toString();}
       result.append(Character.valueOf((char)c));
     }//end of for (;;) {
