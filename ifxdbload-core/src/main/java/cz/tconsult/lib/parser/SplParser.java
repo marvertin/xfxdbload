@@ -31,6 +31,7 @@ import java.util.Optional;
 
 import org.apache.commons.collections4.ListUtils;
 
+import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
 import cz.tconsult.lib.lexer.LexerToken;
 import cz.tconsult.lib.spllexer.CSplLexer;
 import cz.tconsult.lib.spllexer.ESplTokenKeyword;
@@ -47,20 +48,36 @@ public class SplParser {
 
   /** za všemi tokeny je toto, pro jednodušší zpracování  pro možnost nekončit středníkem */
   private enum KONECNIK { KONECNIK };
+  private final CSplLexer lexer;
 
 
+  /**
+   * Stvoření parseru relativně dlouho trvá, protož se zde vytváří i lexer.
+   * Proto je vhodné jednou vtvořit parser a pak parsrovat jednotlivé procedury.
+   * Například pro procedury v RSTS se jednorázovým vytvoením parseru zrychlylo zpracování všech procedur 10 z minuty na 6 sekund.
+   * Nemá však smysl optimalizovat mezi fázemi
+   *
+   */
   public SplParser() {
+    lexer = new CSplLexer();
+    //lexer.setIgnoreWhiteSpacesAndComments(true);
+    lexer.setEndToken(KONECNIK.KONECNIK);
   }
 
-  public List<SplStatement> parse(final String data, final String resourceName) {
+  /**
+   * Parsruje zadaná data, přicházející ze zadaného zdroje.
+   * @param data
+   * @param sourceName
+   * @return
+   */
+  public ParseredSource parse(final NamedString source) {
     try {
-      final CSplLexer lexer = new CSplLexer();
-      //lexer.setIgnoreWhiteSpacesAndComments(true);
-      lexer.setEndToken(KONECNIK.KONECNIK);
-      final List<LexerToken> tokens = lexer.lex(data, resourceName);
-      return parseAll(new TokenIterator<LexerToken>(tokens));
+      final List<LexerToken> tokens = lexer.lex(source.getData(), source.getName().toString());
+      final List<SplStatement> result = parseAll(new TokenIterator<LexerToken>(tokens));
+      return new ParseredSource(source.getName(), result);
     } catch (final Exception e) {
-      throw new RuntimeException("Parsing \"" + resourceName + "\"", e);
+      // toto je výjika způsobená sšpatným parsrem, ne chybou v parsrovaném
+      throw new RuntimeException("Parsing \"" + source.getName() + "\"", e);
     }
   }
 

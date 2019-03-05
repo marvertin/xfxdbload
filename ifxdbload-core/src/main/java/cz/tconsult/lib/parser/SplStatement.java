@@ -12,7 +12,6 @@ import lombok.Data;
  */
 @Data
 public class SplStatement {
-
   /** seznam direktiv u tohoto příkazu */
   private final Set<SplDirective> directives;
 

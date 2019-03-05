@@ -11,7 +11,12 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.core.Zavadenec;
 import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
+import cz.tconsult.lib.ifxdbload.core.tw.ASourceName;
+import cz.tconsult.lib.ifxdbload.core.tw.NamedBytes;
+import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * @author veverka
@@ -34,6 +39,7 @@ public class LoSoubor implements Comparable<LoSoubor> {
   private final ASchema schema;
 
   /** Načtená data ze souboru */
+  @Getter(AccessLevel.NONE)
   private final byte[] data;
 
 
@@ -59,11 +65,28 @@ public class LoSoubor implements Comparable<LoSoubor> {
   /**
    * @return
    */
-  public String getDataAsString() {
+  public NamedString getDataAsString() {
+    return new NamedString(getFulLSourceName(), new String(data, StandardCharsets.UTF_8));
 
-    final String sdata = new String(data, StandardCharsets.UTF_8);
-    return sdata;
   }
+
+  /**
+   * Vrátí data i se jménem
+   * @return
+   */
+  public NamedBytes getDataAsBytes() {
+    return new NamedBytes(getFulLSourceName(), data);
+  }
+
+
+  /**
+   * Vrátí plné jméno zdroje, co může znamenat buď jméno souboru, nebo jméno zipu a entry v něm
+   * @return
+   */
+  private ASourceName getFulLSourceName() {
+    return ASourceName.of(root + "|" + entryName);
+  }
+
 
   /**
    * @param aEntryName
@@ -88,8 +111,6 @@ public class LoSoubor implements Comparable<LoSoubor> {
       return entname;
     }
   }
-
-
 
 
   public Zavadenec getZavadenec()  {

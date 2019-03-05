@@ -4,7 +4,6 @@
 package cz.tconsult.lib.ifxdbload.workflow.data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -58,7 +57,7 @@ public class LoFaze implements Comparable<LoFaze> {
     final LoSoubor staryLoSoubor = losoubors.put(loSoubor.getNameForSort().toLowerCase(), loSoubor);
     if (staryLoSoubor != null) {
 
-      final boolean dataMatched = Arrays.equals(loSoubor.getData(), staryLoSoubor.getData());
+      final boolean dataMatched = loSoubor.getDataAsBytes().equals(staryLoSoubor.getDataAsBytes());
       String msg = dataMatched ? "Lehka duplicita (kod stejny)" : "Tezka duplicita (kod ROZDILNY)";
       msg += " v souborech: " + IOUtils.LINE_SEPARATOR + "    " + loSoubor.getLocator()
       + IOUtils.LINE_SEPARATOR  + "    " + staryLoSoubor.getLocator();
