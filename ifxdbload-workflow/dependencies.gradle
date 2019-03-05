@@ -1,12 +1,23 @@
 dependencies {
-	implementation project(':ifxdbload-core')
+	implementation project (':ifxdbload-core')
 
-	// https://mvnrepository.com/artifact/hikari-cp/hikari-cp
-	implementation group: 'hikari-cp', name: 'hikari-cp', version: '2.7.0'
+	compileOnly group: 'org.projectlombok', name: 'lombok'
+	annotationProcessor group: 'org.projectlombok', name: 'lombok'
+
+	implementation group: 'commons-io', name: 'commons-io'
+
+	implementation group: 'org.apache.commons', name: 'commons-lang3'
+
+	implementation group: 'hikari-cp', name: 'hikari-cp'
+
+	implementation group: 'com.google.guava', name: 'guava'
 	
-	runtimeOnly group: 'com.informix', name: 'ifxjdbc', version: '4.10.JC9'
+	runtimeOnly group: 'com.informix', name: 'ifxjdbc'
 	
-	// https://mvnrepository.com/artifact/junit/junit
-	testCompile group: 'junit', name: 'junit', version: '4.12'
+	implementation group: 'org.springframework', name: 'spring-jdbc'
+
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+	testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
 	
+
 }

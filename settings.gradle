@@ -1,3 +1,5 @@
+rootProject.name = 'ifxdbload'
+
 include 'ifxdbload-core'
 include 'ifxdbload-workflow'
 include 'ifxdbload-tool'

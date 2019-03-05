@@ -1,24 +1,23 @@
 package cz.tconsult.lib.ifxdbload.workflow.read;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import cz.tconsult.lib.ifxdbload.workflow.scan.DbpackScaner;
 import cz.tconsult.lib.ifxdbload.workflow.scan.FileContentReceiver;
 
-class DbpackScanTest {
+public class DbpackScanTest {
 
   @Test
-  void testNacteni1() throws IOException {
+  public void testNacteni1() throws IOException {
     final Path cesta = Paths.get("./src/test/data/nacteni1");
     new DbpackScaner(new FileContentBuilderTestImpl()).read(cesta);
 
