@@ -191,7 +191,7 @@ Token:  KWD_END: END           [begline=3, endline=3, begcolun=0, endcolumn=3, b
  * @version 1.0
  */
 
-public abstract class QuickSimpleLexer0 implements TokenInputStream, java.io.Serializable  {
+public abstract class QuickSimpleLexer0 implements TokenInputStream<LexerToken>, java.io.Serializable  {
 
   private static final long serialVersionUID = 5850799391589012359L;
 

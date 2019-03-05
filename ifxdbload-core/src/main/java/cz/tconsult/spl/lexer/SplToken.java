@@ -1,7 +1,7 @@
 package cz.tconsult.spl.lexer;
 
 
-import cz.tconsult.parser.lexer.LexerToken;
+import cz.tconsult.tw.util.Token;
 
 /**
  * <p>Title: </p>
@@ -12,7 +12,8 @@ import cz.tconsult.parser.lexer.LexerToken;
  * @version 1.0
  */
 
-public interface SplToken extends LexerToken
+public interface SplToken
+  extends Token
 {
   int getTokenId();
   String getTokenIdAsString();

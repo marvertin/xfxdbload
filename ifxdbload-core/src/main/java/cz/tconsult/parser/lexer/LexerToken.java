@@ -1,37 +1,37 @@
 package cz.tconsult.parser.lexer;
 
+import cz.tconsult.tw.util.Token;
 
 /**
  * Speciální token vracený lexerem. Veškerá volání {@link QuickSimpleLexer0#read} budou vracejí instanci tohoto objektu.
- * Volající si může vrácený token přetypovat, aby se dostal k údaji, který není na standarním tokenu k dispozici.
- * Tímto údajem je původní text tokenu, vracený metodou {@link #getText}.
+* Volající si může vrácený token přetypovat, aby se dostal k údaji, který není na standarním tokenu k dispozici.
+* Tímto údajem je původní text tokenu, vracený metodou {@link #getText}.
  * @author Martin Veverka
  * @version 1.0
  */
 
-public interface LexerToken {
+public interface LexerToken extends Token {
 
   /**
    * Vrátí typ tokenu, je to hodnota definovaná metodu {@link QuickSimpleLexer#defineToken}
-   * Vrací typ tokenu. Může to být objekt libovolného typu. Typicky to však bude  řetězec, číslo, či výčet.
-   * Vracený typ musí správně implementovat toString, equals a hashCode.
-   * @return Objekt reprezentující typ tokenu. Nemělo by to být nikdy null.
+   * @return Typ tokenu.
    */
   public Object getType();
 
   /**
    * Vrátí hodnotu tokenu, hodnota může být přímo zadaný řetězec, nebo se jedná o konvertovanou hodnotu.
-   * Vrací hodnotu tokenu. Hodnotou může být libovolný typ. Typické jsou však řetězce, čísla,
-   * datumy BigDecimaly a podobné "elementární typy". Další požadavky nejsou
-   * @return Hodnota tokenu, může vrátit i null, to je také hodnota.
+   * @return Hodnota tokenu.
    */
   public Object getValue();
 
+
   /**
    * Vrátí infomraci o pozici. Vrací totéž co {@link #getLocator}, ale beztypově.
-   * Vrací objekt nesoucí informace o pozici tokenu ve zdroji tokenů. Může to být třeba dvojice řádek sloupec,
-   * pořadové číslo bytu v tokenu ze sítí atd. Objekt by měl mít metodu toString
-   * implementovánu tak, aby vrátil něco smysluplného, co půjde zobrazit člověku a člověk bude schopen token nalézt.
+   * @return Vrácená hodnota je typu {@link LexerTokenLocator}, nikdy nevrací null.
+   */
+  public Object getSourcePositionInfo();
+
+  /**
    * Vrátí token locator. Vracet totéž co {@link #getSourcePositionInfo}, ale typově.
    * @return Vrácená hodnota je typu {@link LexerTokenLocator}, nikdy nevrací null.
    */

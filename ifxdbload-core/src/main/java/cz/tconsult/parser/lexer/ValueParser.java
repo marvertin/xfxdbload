@@ -32,16 +32,14 @@ import java.math.BigInteger;
  * @version 1.0
  */
 
-@FunctionalInterface
-public interface ValueParser {
+ public interface ValueParser {
 
   /**
    * Veškeré hodnoty parseruje na null. Hodí se v případech, kdy tokeny představují oddělovače,
    * operátory atd. a hodnota tak postrádá jakýkoli význam.
    */
   public static final ValueParser NULL = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return null; }
+    public Object parseValue(String aValue) { return null; }
   };
 
   /**
@@ -49,47 +47,41 @@ public interface ValueParser {
    * Stejné chování se dosáhne uvedením defineToken pez parametru parseru.
    */
   public static final ValueParser IDENTITY = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return aValue; }
+    public Object parseValue(String aValue) { return aValue; }
   };
   /**
    * Parseruje hodnotu ve formátu javovského typu java.lang.Double
    */
   public static final ValueParser DOUBLE = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return new Double(aValue); }
+    public Object parseValue(String aValue) { return new Double(aValue); }
   };
 
   /**
    * Parseruje hodnotu ve formátu javovského typu java.lang.Integer
    */
   public static final ValueParser INTEGER = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return new Integer(aValue); }
+    public Object parseValue(String aValue) { return new Integer(aValue); }
   };
 
   /**
    * Parseruje hodnotu ve formátu javovského typu java.lang.Long
    */
   public static final ValueParser LONG = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return new Long(aValue); }
+    public Object parseValue(String aValue) { return new Long(aValue); }
   };
 
   /**
    * Parseruje hodnotu ve formátu javovského typu java.lang.Boolean
    */
   public static final ValueParser BOOLEAN = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return new Boolean(aValue); }
+    public Object parseValue(String aValue) { return new Boolean(aValue); }
   };
 
   /**
    * Parseruje hodnotu ve formátu javovského typu java.lang.Short
    */
   public static final ValueParser SHORT = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return new Short(aValue); }
+    public Object parseValue(String aValue) { return new Short(aValue); }
   };
 
 
@@ -97,24 +89,21 @@ public interface ValueParser {
    * Parseruje hodnotu ve formátu javovského typu java.lang.Byte
    */
   public static final ValueParser BYTE = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return new Byte(aValue); }
+    public Object parseValue(String aValue) { return new Byte(aValue); }
   };
 
   /**
    * Parseruje hodnotu ve formátu javovského typu java.lang.Byte
    */
   public static final ValueParser BIGINTEGER = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return new BigInteger(aValue,10); }
+    public Object parseValue(String aValue) { return new BigInteger(aValue,10); }
   };
 
   /**
    * Parseruje hodnotu ve formátu javovského typu java.lang.Byte
    */
   public static final ValueParser BIGDECIMAL = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) { return new BigDecimal(aValue); }
+    public Object parseValue(String aValue) { return new BigDecimal(aValue); }
   };
 
 
@@ -123,38 +112,37 @@ public interface ValueParser {
    * Podporuje však veškeré ostatní bekslešování.
    */
   public static final ValueParser STRING = new ValueParser() {
-    @Override
-    public Object parseValue(final String aValue) {
-
-      assert aValue != null;
-      assert aValue.length() > 2;
-      assert aValue.charAt(0) == '"';
-      assert aValue.charAt(aValue.length()-1) == '"';
-
-      final StringBuffer sb = new StringBuffer(aValue.length());
-
-      for (int i = 1; i < aValue.length() - 1; i++) {  // předpokládáme, že řetězec je uzavřen uvozovkami, takže koncové značky nebereme
-        char c = aValue.charAt(i);  // znak řetězce
-        if (c == '\\') { // je-li to escape
-          c = aValue.charAt(++i); //posuneme se na další znak
-          switch (c) {
-          case 'b'  : sb.append('\b'); break;
-          case 't'  : sb.append('\t'); break;
-          case 'n'  : sb.append('\n'); break;
-          case 'f'  : sb.append('\f'); break;
-          case 'r'  : sb.append('\r'); break;
-          case '"'  : sb.append('\"'); break;
-          case '\'' : sb.append('\''); break;
-          case '\\' : sb.append('\\'); break;
-          default: assert false; // nesmí tam být paznak
-          }
-        }
-        else {
-
-          sb.append(c);
-        }
-      }
-      return sb.toString();
+    public Object parseValue(String aValue) {
+       
+       assert aValue != null;
+       assert aValue.length() > 2;
+       assert aValue.charAt(0) == '"';
+       assert aValue.charAt(aValue.length()-1) == '"';
+       
+       StringBuffer sb = new StringBuffer(aValue.length());
+       
+       for (int i = 1; i < aValue.length() - 1; i++) {  // předpokládáme, že řetězec je uzavřen uvozovkami, takže koncové značky nebereme
+         char c = aValue.charAt(i);  // znak řetězce
+         if (c == '\\') { // je-li to escape
+           c = aValue.charAt(++i); //posuneme se na další znak
+           switch (c) {
+             case 'b'  : sb.append('\b'); break;
+             case 't'  : sb.append('\t'); break;
+             case 'n'  : sb.append('\n'); break;
+             case 'f'  : sb.append('\f'); break;
+             case 'r'  : sb.append('\r'); break;
+             case '"'  : sb.append('\"'); break;
+             case '\'' : sb.append('\''); break;
+             case '\\' : sb.append('\\'); break;
+             default: assert false; // nesmí tam být paznak
+           }
+         }
+         else {
+           
+           sb.append(c);
+         }
+       }
+       return sb.toString();
     }
   };
 
