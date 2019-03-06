@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser;
+package cz.tconsult.lib.ifxdbload.core.splparser;
 
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_ALTER;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_BEGIN;

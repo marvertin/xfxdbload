@@ -1,4 +1,4 @@
-package cz.tconsult.lib.parser;
+package cz.tconsult.lib.ifxdbload.core.splparser;
 
 public enum EStmType {
   PROCEDURE,

@@ -5,15 +5,15 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import cz.tconsult.lib.ifxdbload.core.splparser.ParseredSource;
+import cz.tconsult.lib.ifxdbload.core.splparser.SplParser;
+import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
 import cz.tconsult.lib.ifxdbload.workflow.process.ExecutionContext;
 import cz.tconsult.lib.ifxdbload.workflow.process.FazeExecutor;
 import cz.tconsult.lib.ifxdbload.workflow.process.InterFazeBoard;
-import cz.tconsult.lib.parser.ParseredSource;
-import cz.tconsult.lib.parser.SplParser;
-import cz.tconsult.lib.parser.SplStatement;
 
 public class F230prcExecutor implements FazeExecutor {
 
