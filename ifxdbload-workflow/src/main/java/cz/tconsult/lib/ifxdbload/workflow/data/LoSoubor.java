@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.core.Zavadenec;
 import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
+import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.core.tw.ASourceName;
 import cz.tconsult.lib.ifxdbload.core.tw.NamedBytes;
 import cz.tconsult.lib.ifxdbload.core.tw.NamedString;

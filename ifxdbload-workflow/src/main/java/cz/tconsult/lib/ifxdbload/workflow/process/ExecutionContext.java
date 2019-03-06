@@ -2,7 +2,7 @@ package cz.tconsult.lib.ifxdbload.workflow.process;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
+import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 
 /**
  * Exekuční kontext, určuje především databázi, do které se zavádí.

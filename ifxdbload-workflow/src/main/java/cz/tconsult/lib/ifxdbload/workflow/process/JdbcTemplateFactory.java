@@ -2,8 +2,8 @@ package cz.tconsult.lib.ifxdbload.workflow.process;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
-import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
 
 /**
  * Továrna na template. Implementace musí poskytnout.

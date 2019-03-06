@@ -3,7 +3,7 @@ package cz.tconsult.lib.ifxdbload.workflow.executors;
 import java.util.List;
 import java.util.Map;
 
-import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
+import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.process.ExecutionContext;
 import cz.tconsult.lib.ifxdbload.workflow.process.FazeExecutor;

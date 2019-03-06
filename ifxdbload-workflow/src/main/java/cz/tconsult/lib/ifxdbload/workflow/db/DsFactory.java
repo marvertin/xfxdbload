@@ -5,8 +5,8 @@ import javax.sql.DataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
-import cz.tconsult.lib.ifxdbload.workflow.data.ASchema;
 
 /**
  * Bude vyrábět datasourcy

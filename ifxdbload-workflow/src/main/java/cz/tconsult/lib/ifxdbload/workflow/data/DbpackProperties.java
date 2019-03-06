@@ -5,6 +5,7 @@ package cz.tconsult.lib.ifxdbload.workflow.data;
 
 import java.nio.file.Path;
 
+import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import lombok.Data;
 
 

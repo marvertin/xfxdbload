@@ -5,9 +5,11 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import cz.tconsult.lib.ifxdbload.core.loaders.prc.PrcLoader;
 import cz.tconsult.lib.ifxdbload.core.splparser.ParseredSource;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplParser;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
+import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
@@ -58,6 +60,14 @@ public class F230prcExecutor implements FazeExecutor {
         .flatMap(ps -> ps.getStatements().stream())
         .collect(Collectors.toList());
 
+    final ASchema aris = ASchema.of("aris");
+    final PrcLoader prcLoader = new PrcLoader(ctx.jt(aris), aris);
+    prcLoader.readFromCatalog();
+    prcLoader.load(stms);
+
+    if (true) {
+      return "prociny";
+    }
     for (final SplStatement stm : stms) {
 
       System.out.println("********************** " + stm.getName() + " : " + stm.getStmType());
