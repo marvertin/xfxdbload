@@ -3,34 +3,40 @@ package cz.tconsult.lib.ifxdbload.workflow.db;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import com.p6spy.engine.spy.P6DataSource;
+
+import cz.tconsult.lib.ifxdbload.core.db.DbContext;
 import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
-import cz.tconsult.lib.ifxdbload.workflow.process.JdbcTemplateFactory;
+import cz.tconsult.lib.ifxdbload.workflow.process.DbContextFactory;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 /**
  * Továrna na JdbcTemplate.
- * Jejích ukolem je dodávat templaty pro daný druh databáze a schema. Templatey jsou přes datadsourcy, teré poskytuje
+ * Jejích ukolem je dodávat templaty pro daný druh databáze a schema. Templatey jsou přes datadsourcy, které poskytuje
  * factory.
  * @author veverka
  *
  */
 @RequiredArgsConstructor
-public class JdbcTemplateFactoryImpl implements JdbcTemplateFactory {
+public class JdbcTemplateFactoryImpl implements DbContextFactory {
+
+
+  private static final Logger log = LoggerFactory.getLogger(JdbcTemplateFactoryImpl.class);
 
   private final DsFactory dsFactory;
 
-  private final Map<KindSchema, JdbcTemplate> jdbcTemplates = new HashMap<>();
+  private final Map<KindSchema, DbContext> jdbcTemplates = new HashMap<>();
 
-  @Override
-  public JdbcTemplate jt(final ADbkind dbkind, final ASchema schema) {
-
-    return jdbcTemplates.computeIfAbsent(new KindSchema(dbkind, schema),
-        __ -> new JdbcTemplate(dsFactory.createDs(dbkind, schema)));
-  }
 
   @Override
   public boolean canCreate(final ADbkind dbkind) {
@@ -38,9 +44,30 @@ public class JdbcTemplateFactoryImpl implements JdbcTemplateFactory {
   }
 
 
+  @Override
+  public DbContext dc(final ADbkind dbkind, final ASchema schema) {
+
+    return jdbcTemplates.computeIfAbsent(new KindSchema(dbkind, schema),
+        __ -> {
+          log.info("Creating emplates for " + dbkind + "-" + schema);
+          final DataSource realDs = dsFactory.createDs(dbkind, schema);
+          final P6DataSource ds = new P6DataSource(realDs);
+          ds.setJdbcEventListenerFactory(() -> new P6SpyExceptionEnrichmentEventListener());
+          final TransactionTemplate tt = new TransactionTemplate(new DataSourceTransactionManager(ds));
+          final JdbcTemplate jt = new JdbcTemplate(ds);
+          // jt.setExceptionTranslator(new IfxExceptionTranslator());
+
+          return new DbContext(tt, jt);
+        });
+  }
+
   @Data
   private static class KindSchema {
     private final ADbkind dbkind;
     private final ASchema schema;
   }
+
+
+
+
 }

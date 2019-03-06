@@ -1,0 +1,63 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromNew_t.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB23~1.SQL
+--
+--POPIS: Modul obsahuje proceduru AB_HromNew_t
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS: Procedura volá proceduru AB_HromNew. Slouží jako rozhraní FE a AB_New
+-- při editaci nového dokladu.
+-- Volané procedury a funkce:
+--  AB_HromNew
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HromNew_t (aDokladTyp Char(2),
+                             aOwner Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB05~1
+-- vytvořeno 18.8.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _dokladBDS Int;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hromnew_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+ call AB_HromNew(aDokladTyp, aOwner);
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hromnew_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

@@ -1,0 +1,37 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_MemoBDSInit.sql
+--/* ---------------------------------------------------------------------------
+--MODUL: PRAB17~1.SQL
+--
+--POPIS: Modul obsahuje proceduru   AB_MemoBDSinit
+--VERZE: 3.0
+--
+--VYTVOŘENO: 8.9.1997
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS: Procedura pro vytvoření temporální tabbulky seriálůpro memoserver
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_MemoBDSinit ()
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\PRAM01~1
+-- vytvořeno 8.9.1997
+
+begin
+  ON EXCEPTION IN (-206)
+  END EXCEPTION;
+      DROP TABLE tmp_AB_MemoBDS;
+end;
+
+CREATE TEMP TABLE tmp_AB_MemoBDS (ser   Int,
+                                  Title         Char(100),
+                                  Subtitle      Char(100),
+                                  porUser      Char  (20),
+                                  porTime      DateTime Year to Second,
+                                  potvrdUser   Char  (20),
+                                  potvrdTime   DateTime Year to Second
+) WITH NO LOG;
+
+end procedure;

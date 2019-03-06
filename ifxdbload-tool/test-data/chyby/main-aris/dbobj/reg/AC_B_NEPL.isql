@@ -1,0 +1,16 @@
+-- 2008/05/22 15:03:19
+-- Tento komentar byl vygenerovan pri migraci. Nasleduje komentar
+-- z puvodniho souboru, ktery obsahoval vice databazovych objektu a byl pri migraci rozdelen.
+-- Nepotrebne informace je mozno odstranit
+-- jeho konec je uvoze radkem "Konec komentare k modulu"
+--
+--Cibis\Aris-PaySys\Source\Unclear\Src\DOFINACC\AC_B_NEPL.sql
+--/* ---------------------------------------------------------------------------
+--
+--Modul obsahuje proceduru pro doložení zůstatku účtu se zkratkou NEPL
+--
+-----------------------------------------------------------------------------*/
+-- Konec komentare k modulu
+
+
+EXECUTE PROCEDURE TW_ProcServiceNewReg("DOFINACC","AC_B_NEPL");

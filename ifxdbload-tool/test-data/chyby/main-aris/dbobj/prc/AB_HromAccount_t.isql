@@ -1,0 +1,263 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromAccount_t.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB15~1.SQL
+--
+--POPIS: Modul obsahuje proceduru AB_Account_t
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:Procedura provádí zaúčtování více hromadných dokladů BDS. Jejím parametrem je příznak = 0
+-- pro noční zpracování a =1 pro individuální.
+--
+-- Volané procedury a funkce:
+--  AB_Accountone
+-- ====================================================================== */
+--
+CREATE     PROCEDURE AB_HromAccount_t (APriznak   Int            default 1 ,
+                                 Adokladtyp Char(2)        default null,
+                                 ADavka     Int            default null,
+                                 AProtFile  VarChar(255,0) default null)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB15~1
+-- vytvořeno 18.8.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+define global f_Exclusive integer default 0;
+define global TW_MsgNum  Char(15)  default null;
+
+define _hromprikaz   Int;
+define _chyba        Int;
+define _prvnidoklad  Int;
+define _dokladcislo  Int;
+define _pocet        Int;
+define _potvrzeno    Int;
+define _castkacelk   Dec(16,2);
+define _dbcr         integer ;
+define _davkaVznik   Int;
+define _porUser      Char  (20);
+define _porTime      DateTime Year to Second;
+define _potvrdUser   Char  (20);
+define _potvrdTime   DateTime Year to Second;
+define _Celkem       Int  ;
+define _CelkemChyb   Int  ;
+define _ser          Int;
+define _dokladTyp    Char(2);
+define _Akce         Int;
+define _DavkaOd      Int;
+define _DavkaDo      Int;
+define _Stav         integer;
+define _DatProv      Date;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hromaccount_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+
+if (AProtFile is not null) then
+   SET DEBUG FILE TO AProtFile;
+end if;
+
+CALL Tmp_AB_Account_Prep();
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+if (ADavka is not null) then
+   let _DavkaOd = ADavka;
+   let _DavkaDo  = ADavka;
+else
+   SELECT Min(Davka), Max(davka)
+     INTO _DavkaOd, _DavkaDo
+     FROM AB_Davka_Prot
+    WHERE ((DokladTyp = ADokladTyp) or (ADokladTyp is null))
+      AND Stav in (0,1);
+end if;
+
+--zalozeni temp tabulky pro prenos vysledku
+call AB_MemoBDSinit () ;
+let _Celkem     =0;
+let _CelkemChyb =0;
+
+let _DatProv = TW_RegGetKeyDate("AC","*","*","datuct");
+
+foreach d with hold for
+  SELECT davka, dokladTyp, stav
+    INTO _DavkaVznik, _dokladTyp, _Stav
+    FROM AB_Davka_Prot
+    WHERE (davka between _DavkaOd AND _DavkaDo)
+      AND (dokladTyp = ADokladTyp OR (ADokladTyp is null AND DokladTyp[1]="H") )
+      AND stav in (0,1)
+
+   -- Zápis o zahájení zpracování dávky v provozním deníku.
+   let _Akce {= TW-ProvDen("AB",2,_DavkaVznik,"Zahájeno zpracování dávky "||_DavkaVznik||" pro doklady typu "||_DokladTyp);}
+              = TW_ProvDen ("AB", 2, _DavkaVznik, 'Start processing batch BDS ' || nu(_DavkaVznik) || ' for kind ' || nu(_DokladTyp));
+   if (AProtFile is not null) then
+        {tra-ce "Zahájeno zpracování dávky "||_DavkaVznik||" pro doklady typu "||_DokladTyp;}
+         trace 'AB_HromAccount_t: Zahájeno zpracování dávky ' || nu(_DavkaVznik) || ' pro doklady typu ' || nu(_DokladTyp);
+   end if;
+
+   foreach c with hold for
+     SELECT hromPrikaz, prvnidoklad,pocet,castkacelk,dbcr,
+            Poruser,portime,potvrdUser, potvrdTime,potvrzeno
+       INTO _HromPrikaz, _prvnidoklad, _pocet ,_castkacelk,_dbcr,
+            _PorUser, _PorTime,_PotvrdUser, _PotvrdTime,_potvrzeno
+       FROM AB_HromDokl_Kart
+       WHERE potvrzeno = 1
+         AND davkavznik =_davkaVznik
+
+      --inicializace (JR 23.3.2001)
+      let _chyba = 0;
+
+      if (_Potvrzeno=0) then
+          {call tw-error(-13036,'Neověřený záznam',"AB048",_hromprikaz);}
+           call TW_RaiseError ('04072AB048TCUI', 'AB_HromAccount_t:', 'Neověřený záznam: doklad č. %1', _hromprikaz);
+      end if;
+
+      foreach e with hold for
+      SELECT DokladBDS
+         INTO _DokladCislo
+         FROM AB_Doklad_Kart
+         WHERE hromprikaz = _hromprikaz
+          AND DatSplatnost <= _DatProv
+
+         begin
+           on exception set tw_errsql, tw_errisam, tw_errtext
+              begin
+                 --transaction not available.
+                 on exception in (-122)
+                 end exception
+                 ROLLBACK WORK;
+              end;
+
+              BEGIN WORK;
+              begin
+                 --no update permission
+                 on exception in (-273)
+                 end exception;
+
+                 --zapisu chybu do zaznamu
+                 UPDATE AB_Doklad_Kart
+                    SET Chyba = TW_ErrSql||' '||TW_ErrIsam||' '||TW_LiterNull(TW_ErrText)
+                    WHERE DokladBDS = _DokladCislo;
+
+                 --a zvetsim pocitalo chyb v hlavicce hrom BDS
+                 UPDATE AB_Davka_Prot
+                   SET PocCHyb=PocChyb+1
+                   WHERE Davka=_Davkavznik AND dokladtyp= _dokladtyp;
+
+                 let _chyba = 1;
+                 exit foreach;
+              end;
+
+           end exception;
+
+         --provedu zauctovani jedne vety rozpisu
+         let _ser= AB_Accountone (_DokladCislo);
+
+         UPDATE  AB_Doklad_Arch
+           SET hromprikaz =  _HromPrikaz
+           WHERE dokladBds = _DokladCislo;
+
+         end;
+      end foreach;
+
+
+      --zauctovani HBDS u nektereho z radku rozpisu je s chybou
+      if _chyba = 1 then
+         let  _CelkemChyb = _CelkemChyb +1;
+
+      --vse se zauctovalo
+      --(JR 11.7.2001) musim overit primo v datech, jesli se vubec uctovalo (nejen z duvodu chyby, ale i z duvodu splatnosti)
+      elif (SELECT Count(*) FROM AB_Doklad_Kart WHERE hromprikaz = _hromprikaz) = 0 then
+
+         DELETE FROM AB_hromDokl_Kart
+           WHERE hromprikaz = _hromprikaz AND dokladtyp= _dokladtyp;
+
+         INSERT INTO AB_hromDokl_Arch
+               (ser,davkaVznik,dokladTyp,prvnidoklad,pocet,
+                castkacelk,dbcr,Poruser,portime,potvrdUser,
+                potvrdTime,zauctuser, zaucttime)
+         VALUES (_hromprikaz,_Davkavznik, _DokladTyp,_prvnidoklad,_pocet,
+                _castkacelk,_dbcr, _PorUser, _PorTime,_PotvrdUser,
+                _PotvrdTime,AP_User(), Current Year to Second);
+
+         let  _Celkem = _Celkem +1;
+
+         UPDATE AB_Davka_Prot SET PocPotvrd=PocPotvrd-1
+            WHERE Davka = _Davkavznik AND DokladTyp = _DokladTyp;
+
+         UPDATE AB_Davka_Prot SET PocAuto=PocAuto+1
+            WHERE Davka = _Davkavznik AND DokladTyp = _DokladTyp;
+      end if;
+
+      COMMIT WORK;
+      BEGIN WORK;
+   end foreach;
+
+   UPDATE AB_Davka_Prot
+      SET stav = 2
+      WHERE davka     = _DavkaVznik AND
+            dokladTyp = _DokladTyp AND
+            PocPoriz <= PocMan+PocAuto+PocVymaz AND
+            stav = 1;
+   if (TW_LastCount()>0) then
+      -- Zápis o ukončení dávky v provozním deníku.
+      let _Akce {= TW-ProvDen("AB",4,_DavkaVznik,"Ukončení dávky BDS pro doklady "||_dokladTyp);}
+                 = TW_ProvDen ("AB", 4, _DavkaVznik, 'End processing batch BDS for kind ' || nu(_dokladTyp));
+   end if;
+
+
+   -- Zápis o ukončení zpracování dávky v provozním deníku.
+   let _Akce {= TW-ProvDen("AB",3,_DavkaVznik,"Ukončení zpracování dávky BDS");}
+              = TW_ProvDen ("AB", 3, _DavkaVznik, 'Finishing processing batch BDS');
+   if (AProtFile is not null) then
+      {tra-ce "Ukončení zpracování dávky BDS "||_DavkaVznik;}
+       trace 'AB_HromAccount_t: Ukončení zpracování dávky BDS ' || nu(_DavkaVznik);
+   end if;
+
+   COMMIT WORK;
+   BEGIN WORK;
+end foreach;
+
+
+--navratove hodnoty do hlasek FE
+begin
+   on exception in (-206)
+   end exception;
+   UPDATE TW_retval_temp
+     SET Int1=_Celkem, Int2=_CelkemChyb;
+end;
+
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hromaccount_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

@@ -1,0 +1,2 @@
+-- Cibis\Aris-PaySys\Models\Data\view_ab_hromdokl_arch_a.sql
+create view ab_hromdokl_arch_a (ser, davkavznik, dokladtyp, prvnidoklad, castkacelk, pocet, dbcr, poruser, portime, potvrduser, potvrdtime, zauctuser, zaucttime, refuser, reftime) AS select x0.ser,x0.davkavznik,x0.dokladtyp,x0.prvnidoklad,x0.castkacelk,x0.pocet,x0.dbcr,x0.poruser,x0.portime,x0.potvrduser,x0.potvrdtime,x0.zauctuser,x0.zaucttime,x0.refuser,x0.reftime from "aris".arch_ab_hromdokl_arch x0

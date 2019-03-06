@@ -1,7 +1,7 @@
 package cz.tconsult.lib.ifxdbload.workflow.process;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-
+import cz.tconsult.lib.ifxdbload.core.db.DbContext;
+import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 
@@ -10,7 +10,7 @@ import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
  * @author veverka
  *
  */
-public interface JdbcTemplateFactory {
+public interface DbContextFactory {
 
   /**
    * Pokud je pro daný druh a schema definováno připjení k databáz, vrátí template,
@@ -19,7 +19,7 @@ public interface JdbcTemplateFactory {
    * @param schema
    * @return
    */
-  public JdbcTemplate jt(ADbkind dbkind, ASchema schema);
+  public DbContext dc(ADbkind dbkind, ASchema schema);
 
   /**
    * Zjistí, zda je možné se připojit k databázi tohoto druhu, tedy že

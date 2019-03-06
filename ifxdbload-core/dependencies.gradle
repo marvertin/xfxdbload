@@ -34,5 +34,11 @@ dependencies {
 	
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
 	testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+
+	api group: 'p6spy', name: 'p6spy'	
+	
+		// vyrábění hashů zdrojáků pro kontrolu zmeny
+	implementation group: 'commons-codec', name: 'commons-codec'
+
 	
 }

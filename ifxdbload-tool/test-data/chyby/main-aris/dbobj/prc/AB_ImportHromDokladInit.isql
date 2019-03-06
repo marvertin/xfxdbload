@@ -1,0 +1,10 @@
+CREATE FUNCTION AB_ImportHromDokladInit(ATyp    CHAR(4))
+  RETURNING INT   
+  
+  DEFINE _id      INT; 
+  
+  INSERT INTO ab_import_prot (typ) VALUES (ATyp);
+  LET _id = TW_LastSer();
+  
+  RETURN _id;
+end function;

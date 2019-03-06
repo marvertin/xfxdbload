@@ -1,0 +1,17 @@
+CREATE PROCEDURE do_getArcisAttributes_evi_prep ()
+   ON EXCEPTION IN (-958)
+      -- Tabulka už existuje - ignorujeme.
+   END EXCEPTION
+
+   CREATE TEMP TABLE do_getArcisAttributes_evi (
+      evtid       INTEGER NOT NULL,
+      poznamka    VARCHAR(255),
+      locked      INTEGER DEFAULT 0 NOT NULL CHECK (locked IN (0, 1)),
+         
+      -- interní id dokumentu
+      dokumentId  BIGINT,
+      -- typ navázaného objektu
+      objektId    BIGINT,
+      objektTyp   varchar(255)--tw_serno.tabulka
+   ) WITH NO LOG;
+END PROCEDURE;

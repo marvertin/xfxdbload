@@ -8,9 +8,12 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.dao.DataAccessException;
 
+import cz.tconsult.lib.ifxdbload.core.db.DbContext;
+import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
+import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
@@ -32,7 +35,7 @@ public class FazeManager {
 
   private final LoData loData;
   private final FazeExecutorFactory fazeExecutorFactory;
-  private final JdbcTemplateFactory jdbcTemplateFactory;
+  private final DbContextFactory dbContextFactory;
 
 
 
@@ -55,13 +58,13 @@ public class FazeManager {
         final ADbkind dbkind = holder.lofaze.getLoDbkind().getName();
         final boolean zavadet = (! prazdna || executor.isLoadIfEmty()) // jen neprázdné nebo ty, které se chtějí zavádět i prázdné
             && executor.shouldLoad()  // a jen ty, které přesto mají být zavedeny
-            && jdbcTemplateFactory.canCreate(dbkind);
+            && dbContextFactory.canCreate(dbkind);
         if (zavadet) {
           // fázi nezavádíme a patřičně logujeme
           // TODO [veverka] Lépe logovat zavádění v samostatných metodách -- 28. 2. 2019 12:14:18 veverka
           log.info("Zahajuji fázi {}", holder.lofaze);
 
-          final String resultMessage = executor.execute(new ExecutionContextImpl(dbkind)); // toto je vlastní provedení fáze
+          final String resultMessage = executor.execute(new LoadContextImpl(dbkind)); // toto je vlastní provedení fáze
 
           log.info("Ukončuji fázi {} s výsledkem: {}", holder.lofaze, resultMessage);
         } else {
@@ -100,13 +103,20 @@ public class FazeManager {
   }
 
   @RequiredArgsConstructor
-  private class ExecutionContextImpl implements ExecutionContext {
+  private class LoadContextImpl implements LoadContext {
 
     private final ADbkind dbkind;
 
     @Override
-    public JdbcTemplate jt(final ASchema schema) {
-      return jdbcTemplateFactory.jt(dbkind, schema); // když se to dostane až sem, tak template existuje
+    public DbContext dc(final ASchema schema) {
+      return dbContextFactory.dc(dbkind, schema); // když se to dostane až sem, tak template existuje
+    }
+
+    @Override
+    public void reportError(final DataAccessException exc, final SplStatement stm) {
+      System.out.println("CHYBISKO JE TU A NECO SE MUSI: " + exc);
+      //TODO [veverka] implementuj - vygenerovana metoda [veverka 14:05:55]
+
     }
 
   }

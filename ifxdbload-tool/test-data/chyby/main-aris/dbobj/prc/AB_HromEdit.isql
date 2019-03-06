@@ -1,0 +1,232 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromEdit.sql
+--/* ---------------------------------------------------------------------------
+--MODUL: PRAB24~1.SQL
+--
+--POPIS: Modul obsahuje proceduru AB_HromEdit
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS: Procedura slouží k inicializaci tmp_AB_Hrom_Kart pro opravu dokladu
+--  daného typu a čísla
+--
+-- Volané procedury a funkce:
+--  AB_BatchInit
+--  AB_HromKartInit
+--  AB_Edit
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HromEdit (aHromPrikaz Int,
+                            aDokladTyp Char(2),
+                            aOwner Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB06~1
+-- vytvořeno 18.8.1997
+--
+-- IMPORTANT! Byl to parametr jménem _DokladTyp a také stejně pojmenovaná proměnné.
+--            Pokusem jsem si ověřil, že proměnná má přednost a parametr jsem kvůli
+--            ORACLE přejmenoval.
+--            nedivte se, že parametr není nikde použit. Nebyl ani před přejmenováním,
+--            jen to nebylo tak moc poznat. Je-li to chyba, pak ne moje. ;-)
+-- [2007-08-30, roztocil]
+--
+define i             Int;
+define _DokladBDS    Int;
+define _Davka        Int;
+define _tko          Char (2);
+define _dnesnidat    Date;
+define _datPlVypl    Date   ;
+define _druh         Char (4);
+define _davkavznik   Int;
+define _datSplatnost Date;
+define _valuta       Date;
+define _datUct       Date ;
+define _dokladTyp    Char  (2);
+define _smer         integer;
+define _uhrInk       Char  (1);
+define _priorita     integer;
+define _konstSym     Dec   (10,0);
+define _castka       Dec   (16,2);
+define _marketAkce   Char  (4);
+define _uziv1        integer;
+define _uziv2        integer;
+define _uziv3        integer;
+define _premRok      DateTime Year to Year;
+define _dbKonto      like AB_Doklad_Kart.dbkonto;
+define _dbKontopred  Dec   (6,0);
+define _dbKontozakl  Dec   (10,0);
+define _dbKontopredCh  Char(2);
+define _dbKontozaklCh  Char(22);
+define _dbSko        Char  (4);
+define _dbUcet       Char  (9);
+define _dbCOobjekt   Char  (10);
+define _dbCz         Char  (3);
+define _dbNS         Char  (5);
+define _dbBanka      like AC_Bank_Cis.bankanum;
+define _dbVarSym     Dec   (10,0);
+define _dbSpecSym    Dec   (10,0);
+define _dbText       Char  (20);
+define _crKonto      like AB_Doklad_Kart.crkonto;
+define _crKontopred  Dec   (6,0);
+define _crKontozakl  Dec   (10,0);
+define _crKontopredCh  Char(2);
+define _crKontozaklCh  Char(22);
+define _crSko        Char  (4);
+define _crUcet       Char  (9);
+define _crCOobjekt   Char  (10);
+define _crCZ         Char  (3);
+define _crNS         Char  (5);
+define _crBanka      like AC_Bank_Cis.bankanum;
+define _crVarSym     Dec   (10,0);
+define _crSpecSym    Dec   (10,0);
+define _crText       Char  (20);
+define _chyba        VarChar  (255,0);
+define _potvrzeno    integer;
+define _porUser      Char  (20);
+define _porTime      DateTime Year to Second;
+define _refUser      Char  (20);
+define _refTime      DateTime Year to Second;
+define _potvrdUser   Char  (20);
+define _potvrdTime   DateTime Year to Second;
+define _stav         integer;
+define _hhromPrikaz  Int;
+define _hPrvnidoklad Int;
+define _hcastkaCelk  Dec   (16,2);
+define _hpocet       Int;
+define _hdbcr        integer;
+define _hpotvrzeno   integer;
+define _hdavkaVznik  Int;
+define _hdokladTyp   Char  (2);
+define _hporUser     Char  (20);
+define _hporTime     DateTime Year to Second;
+define _hrefUser     Char  (20);
+define _hrefTime     DateTime Year to Second;
+define _hpotvrdUser  Char  (20);
+define _hpotvrdTime  DateTime Year to Second;
+define _jekontoch    integer;
+
+
+call AB_HromInit (aOwner);
+
+{set debug file to "hromedit.log";
+trace on;}
+
+--v opravy pripade HBDS se provede insert az v teto proc
+DELETE  FROM tmp_AB_Souhrn_Kart WHERE owner = aOwner;
+DELETE  FROM tmp_AB_Rozpis_Kart WHERE owner = aOwner;
+
+SELECT  hromPrikaz,Prvnidoklad ,castkaCelk,pocet,dbcr,potvrzeno ,
+        davkaVznik,dokladTyp,porUser,porTime,potvrdUser,potvrdTime,refUser,refTime
+  INTO _hhromPrikaz,_hPrvnidoklad ,_hcastkaCelk,_hpocet,_hdbcr,_hpotvrzeno ,
+       _hdavkaVznik,_hdokladTyp,_hporUser,_hporTime,_hpotvrdUser,_hpotvrdTime,
+       _hrefUser,_hrefTime
+  FROM AB_HromDokl_Kart
+  WHERE hromprikaz = aHromPrikaz;
+
+
+foreach c with hold for
+  SELECT dokladBDS,datPlVypl,druh,davkavznik,datSplatnost,valuta,datUct,
+         dokladTyp, hromPrikaz,smer,uhrInk,priorita,konstSym,castka,marketAkce,
+         uziv1,uziv2, uziv3,premrok,dbKonto,dbSko,dbUcet,
+         dbCOobjekt[3,5],dbCOobjekt[6,10],dbBanka,dbVarSym,dbSpecSym,dbText,
+         crKonto,crSko,crUcet,crCOobjekt[3,5],crCOobjekt[6,10],crbanka,crVarSym,crSpecSym,crText,chyba,potvrzeno,
+         porUser,porTime,refUser,refTime,potvrdUser,potvrdTime
+   INTO _dokladBDS,_datPlVypl, _druh, _davkavznik, _datSplatnost, _valuta, _datUct,
+        _dokladTyp, aHromPrikaz, _smer, _uhrInk, _priorita, _konstSym, _castka, _marketAkce,
+        _uziv1, _uziv2, _uziv3, _premrok, _dbKonto, _dbSko,_dbUcet,
+        _dbCZ,_dbNS, _dbBanka, _dbVarSym, _dbSpecSym, _dbText,
+        _crKonto,_crSko, _crUcet, _crCZ,_crNS,_crbanka, _crVarSym, _crSpecSym, _crText,
+        _chyba, _potvrzeno, _porUser, _porTime, _refUser, _refTime, _potvrdUser,
+        _potvrdTime
+   FROM AB_Doklad_Kart
+   WHERE hromPrikaz = aHromPrikaz
+
+
+        if TW_RegGetKey("AC","typ","*","konto")="kontodec" then       --kontodec
+          let _crkontoPredch = null;
+          let _CrKontoZaklch = null;
+          let _DbkontopredCh = null;
+          let _DbKontoZaklCh = null;
+         let _Dbkontopred = AO_KontoPred(_dbkonto);
+         let _Dbkontozakl = AO_KontoZakl(_dbkonto);
+         let _Crkontopred = AO_KontoPred(_Crkonto);
+         let _Crkontozakl = AO_KontoZakl(_Crkonto);
+          let _jekontoCh = 0;
+        else
+          let _crkontoPred = null;
+          let _CrKontoZakl = null;
+          let _Dbkontopred = null;
+          let _DbKontoZakl = null;
+          let _DbkontopredCh = AC_KontoPredCh(_dbkonto);
+          let _DbkontozaklCh = AC_KontoZaklCh(_dbkonto);
+          let _CrkontopredCh = AC_KontoPredCh(_Crkonto);
+          let _CrkontozaklCh = AC_KontoZaklCh(_Crkonto);
+          let _jekontoCh = 1;
+        end if
+
+
+
+         if _hdbcr = 1 then
+            INSERT INTO tmp_AB_Rozpis_Kart
+            (dokladBDS,castka,{RKonto,}RKontopred,RKontozakl,RSko ,
+             RUcet,RCZ,RNS,RBanka,dokladTyp,RVarSym ,RSpecSym ,RText,
+             Premrok,Valuta, chyba, Owner,
+             RKontopredCh,RKontozaklCh)
+            VALUES(_dokladBDS,_castka,{_DbKonto,}_DbKontopred,_DbKontozakl,_DbSko ,
+            _DbUcet,_dbCZ,_dbNS,_DbBanka,_hdokladTyp,_DbVarSym ,_DbSpecSym ,_DbText,
+            _Premrok,_Valuta, _chyba, aOwner,
+            _DbKontopredCh,_DbKontozaklCh) ;
+         else
+            INSERT INTO tmp_AB_Rozpis_Kart
+                   (dokladBDS,castka,{RKonto,}RKontopred,RKontozakl,RSko ,
+                    RUcet,RCZ,RNS,RBanka,dokladTyp,RVarSym ,RSpecSym ,
+                    RText,Premrok,Valuta, chyba, Owner,
+                    RKontopredCh,RKontozaklCh)
+            VALUES (_dokladBDS,_castka,{_CrKonto,}_CrKontopred,_CrKontozakl,_CrSko ,
+                    _CrUcet,_crCZ,_crNS,_CrBanka,_hdokladTyp,_CrVarSym ,_CrSpecSym ,
+                    _CrText,_Premrok,_Valuta, _chyba, aOwner,
+                    _CrKontopredCh,_CrKontozaklCh);
+         end if;
+end foreach;
+
+if _hdbcr = 1 then
+      INSERT INTO tmp_AB_Souhrn_Kart
+            (datPlVypl,druh,dbcr ,pocet,davkavznik,datSplatnost,datUct,
+              dokladTyp,hromPrikaz,smer,uhrInk,priorita,konstSym ,
+              castkacelk ,marketAkce,uziv1,uziv2 ,uziv3 ,{SKonto,}SKontopred,
+              SKontozakl,SSko,SUcet ,SCZ,SNS,SBanka,SVarSym,SSpecSym,
+              SText,potvrzeno,porUser,porTime ,refUser,
+              refTime,potvrdUser,potvrdTime,Owner,
+              SKontopredCh,SKontozaklCh, jekontoCh
+            )
+      VALUES(_datplvypl,_druh,_hdbcr,_hpocet,_davkavznik,_datsplatnost,_datuct,
+              _dokladtyp,aHromPrikaz,_smer,_uhrink,_priorita,_konstsym,
+              _castka,_marketakce,_uziv1,_uziv2 ,_uziv3 ,{_CrKonto,}_CrKontopred,
+              _CrKontozakl,_CrSko,_CrUcet ,_crCZ,_crNS,_CrBanka,_CrVarSym,_CrSpecSym,
+              _CrText,_hpotvrzeno,_porUser,_porTime ,_refUser,
+              _hrefTime,_potvrdUser,_potvrdTime,aOwner,
+              _CrKontopredCh,_CrKontozaklCh,_jekontoCh);
+else
+      INSERT INTO tmp_AB_Souhrn_Kart
+         (datPlVypl,druh,dbcr ,pocet,davkavznik,datSplatnost,datUct,
+           dokladTyp,hromPrikaz,smer,uhrInk,priorita,konstSym ,
+           castkacelk ,marketAkce,uziv1,uziv2 ,uziv3 ,{SKonto,}SKontopred,
+           SKontozakl,SSko,SUcet ,SCZ,SNS,SBanka,SVarSym,SSpecSym,
+           SText,potvrzeno,porUser,porTime ,refUser,
+           refTime,potvrdUser,potvrdTime,Owner,
+           SKontopredCh,SKontozaklCh, jekontoCh)
+      VALUES
+         (_datplvypl,_druh,_hdbcr,_hpocet,_davkavznik,_datsplatnost,_datuct,
+          _dokladtyp,aHromPrikaz,_smer,_uhrink,_priorita,_konstsym,
+          _castka,_marketakce,_uziv1,_uziv2 ,_uziv3 ,{_DbKonto,}_DbKontopred,
+          _DbKontozakl,_DbSko ,_DbUcet,_dbCZ,_dbNS,_DbBanka,_DbVarSym ,_DbSpecSym ,
+          _DbText,_hpotvrzeno,_porUser,_porTime ,_refUser,
+          _hrefTime,_potvrdUser,_potvrdTime,aOwner,
+          _DbKontopredCh,_DbKontozaklCh,_jekontoCh);
+end if;
+
+end procedure;

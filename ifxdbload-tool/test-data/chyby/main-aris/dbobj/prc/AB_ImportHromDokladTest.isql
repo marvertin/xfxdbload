@@ -1,0 +1,36 @@
+CREATE PROCEDURE AB_ImportHromDokladTest(AId Integer)
+  --AId je vlastník "chyb" v tabulce, ktere byly predany z javaaction
+
+  define _msgnum   CHAR(15);
+  define _text     VARCHAR(255);
+  define _par1     VARCHAR(255);
+  define _par2     VARCHAR(255);
+  define _par3     VARCHAR(255);
+  define _datuct   DATE;
+  define DatUct_G  DATE;
+  
+  call AP_ErrorInit(AId);
+  
+  FOREACH c1 WITH HOLD FOR
+    SELECT msgnum, text, par1, par2, par3 INTO _msgnum, _text, _par1, _par2, _par3 FROM ab_importerror_log
+    WHERE
+      refimportid = AId
+    ORDER BY id 
+    
+    CALL APInternal_ErrorWrite (1, _msgnum, AId, _text, _par1, _par2, _par3);  
+  END FOREACH;
+  
+  LET DatUct_G = TW_RegGetKeyDate('AC', '*', '*', 'datuct');
+  SELECT datuct
+  INTO _datuct
+  FROM ab_importhromsouhrn_kart
+  WHERE refimportid = AId AND zprac = 0;
+  
+  IF(_datuct > DatUct_G) THEN
+    CALL APInternal_ErrorWrite(2, '129G226TCUI', AId, 'Datum účtování %1 je dopředné.', _datuct); 
+  END IF;
+  IF(_datuct < DatUct_G) THEN
+    CALL APInternal_ErrorWrite(2, '129H227TCUI', AId, 'Datum účtování %1 je zpětné.', _datuct); 
+  END IF;
+
+end procedure;

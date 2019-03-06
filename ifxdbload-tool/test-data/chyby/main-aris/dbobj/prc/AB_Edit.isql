@@ -1,0 +1,104 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_Edit.sql
+--/* ---------------------------------------------------------------------------
+--MODUL: PRAB06~1.SQL
+--
+--POPIS: Modul obsahuje proceduru AB_Edit
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--  20.2.2001  JR   doplneni prace s Ownerem v temp tabulce (dropovani tabulky je blbost)
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS: Procedura slouží k inicializaci tmp_AB_Doklad_Kart pro opravu dokladu daného typu a čísla
+-- Volané procedury a funkce:
+--  AB_BatchInit
+--  AB_KartInit
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_Edit (aDokladCislo Int,
+                        aDokladTyp Char(2),
+                        AOwner Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB06~1
+-- vytvořeno 18.8.1997
+
+define           _Davka              Int;
+define           _Dbkonto            Dec(16,0);
+define           _Dbkontozakl        Dec(10,0);
+define           _Dbkontopred        Dec(6,0);
+define           _Crkonto            like AB_Doklad_Kart.crkonto;
+define           _Crkontozakl        Dec(10,0);
+define           _Crkontopred        Dec(6,0);
+define       _CrkontopredCh    Char(2);
+define       _CrkontozaklCh      Char(22);
+
+--set debug file to "DEBUG";
+--trace on;
+
+SELECT DavkaVznik
+   INTO _Davka
+   FROM AB_Doklad_Kart
+   WHERE (DokladBDS = aDokladCislo);
+
+--   let _Davka =  AB_BatchInit (aDokladTyp,adokladCislo,_Davka);
+call AB_KartInit (AOwner);
+
+if TW_RegGetKey("AC","typ","*","konto")="kontodec" then       --kontodec
+ let _crkontoPredch = null;
+ let _CrKontoZaklch = null;
+ UPDATE tmp_AB_Doklad_Kart
+   SET( dokladBDS,datPlVypl,druh,davkavznik,datSplatnost,valuta,datUct,
+      dokladTyp, hromPrikaz,smer,uhrInk,priorita,konstSym,castka,marketAkce,
+      uziv1,uziv2, uziv3,premrok,dbSko,dbUcet,
+      dbCZ,dbNS,dbBanka,dbVarSym,dbSpecSym,dbText,
+      crSko,crUcet,crCZ,crNS,crbanka,crVarSym,crSpecSym,crText,chyba,potvrzeno,
+      porUser,porTime,refUser,refTime,potvrdUser,potvrdTime,
+      dbkontoPred, dbkontoZakl,crkontoPred, CrKontoZakl,crkontoPredCh, CrKontoZaklCh
+     ) =
+     (
+      (SELECT aDokladCislo,datPlVypl,druh,davkavznik,datSplatnost,valuta,datUct,
+               dokladTyp, hromPrikaz,smer,uhrInk,priorita,konstSym,castka,marketAkce,
+               uziv1,uziv2, uziv3,premrok,dbSko,dbUcet,
+               dbCOobjekt[3,5],dbCOobjekt[6,10],dbBanka,dbVarSym,dbSpecSym,dbText,
+               crSko,crUcet,crCOobjekt[3,5],crCOobjekt[6,10],crbanka,
+               crVarSym,crSpecSym,crText,chyba,potvrzeno,
+               porUser,porTime,refUser,refTime,potvrdUser,potvrdTime,
+               AO_KontoPred(DbKonto),AO_KontoZakl(DbKonto),AO_KontoPred(CrKonto),
+        AO_KontoZakl(CrKonto),_crkontoPredCh, _CrKontoZaklCh
+          FROM AB_Doklad_Kart
+         WHERE dokladBDS=aDokladCislo)
+      )
+   WHERE owner = AOwner;
+else                                                          --kontochar
+ let _crkontoPred = null;
+ let _CrKontoZakl = null;
+ UPDATE tmp_AB_Doklad_Kart
+   SET( dokladBDS,datPlVypl,druh,davkavznik,datSplatnost,valuta,datUct,
+      dokladTyp, hromPrikaz,smer,uhrInk,priorita,konstSym,linkmark,castka,marketAkce,
+      uziv1,uziv2, uziv3,premrok,dbSko,dbUcet,
+      dbCZ,dbNS,dbBanka,dbVarSym,dbSpecSym,dbText,
+      crSko,crUcet,crCZ,crNS,crbanka,crVarSym,crSpecSym,crText,chyba,potvrzeno,
+      porUser,porTime,refUser,refTime,potvrdUser,potvrdTime,
+      dbkontoPred, dbkontoZakl,crkontoPred, CrKontoZakl,crkontoPredCh, CrKontoZaklCh
+     ) =
+     (
+      (SELECT aDokladCislo,datPlVypl,druh,davkavznik,datSplatnost,valuta,datUct,
+               dokladTyp, hromPrikaz,smer,uhrInk,priorita,konstSym,konstSym,castka,marketAkce,
+               uziv1,uziv2, uziv3,premrok,dbSko,dbUcet,
+               dbCOobjekt[3,5],dbCOobjekt[6,10],dbBanka,dbVarSym,dbSpecSym,dbText,
+               crSko,crUcet,crCOobjekt[3,5],crCOobjekt[6,10],crbanka,
+        crVarSym,crSpecSym,crText,chyba,potvrzeno,
+               porUser,porTime,refUser,refTime,potvrdUser,potvrdTime,
+               AO_KontoPred(DbKonto),AO_KontoZakl(DbKonto),_crkontoPred, _CrKontoZakl,
+        AC_KontoPredCh(CrKonto),AC_KontoZaklCh(CrKonto)
+          FROM AB_Doklad_Kart
+         WHERE dokladBDS=aDokladCislo)
+      )
+   WHERE owner = AOwner;
+end if;
+--trace off;
+
+end procedure;

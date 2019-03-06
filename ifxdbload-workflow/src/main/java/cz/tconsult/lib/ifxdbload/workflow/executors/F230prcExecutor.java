@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.loaders.prc.PrcLoader;
 import cz.tconsult.lib.ifxdbload.core.splparser.ParseredSource;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplParser;
@@ -13,7 +14,6 @@ import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
-import cz.tconsult.lib.ifxdbload.workflow.process.ExecutionContext;
 import cz.tconsult.lib.ifxdbload.workflow.process.FazeExecutor;
 import cz.tconsult.lib.ifxdbload.workflow.process.InterFazeBoard;
 
@@ -47,7 +47,7 @@ public class F230prcExecutor implements FazeExecutor {
   }
 
   @Override
-  public String execute(final ExecutionContext ctx) {
+  public String execute(final LoadContext ctx) {
     //    lofaze.getSoubors()
     //    .spliterator()
     final SplParser splParser = new SplParser();
@@ -61,7 +61,7 @@ public class F230prcExecutor implements FazeExecutor {
         .collect(Collectors.toList());
 
     final ASchema aris = ASchema.of("aris");
-    final PrcLoader prcLoader = new PrcLoader(ctx.jt(aris), aris);
+    final PrcLoader prcLoader = new PrcLoader(ctx.dc(aris).getJt(), aris);
     prcLoader.readFromCatalog();
     prcLoader.load(stms);
 

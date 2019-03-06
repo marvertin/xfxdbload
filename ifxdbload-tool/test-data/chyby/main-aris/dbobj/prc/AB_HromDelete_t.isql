@@ -1,0 +1,112 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromDelete_t.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB33~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru AB_HromDelete_t
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--Procedura volá proceduru AB_HromDelete. Slouží jako rozhraní FE a AB_HromDelete
+-- při mazání hromadného dokladu z kartotéky.
+--
+-- Volané procedury a funkce:
+--  AB_HromDelete
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HromDelete_t (aHromPrikaz Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB11~1
+-- vytvořeno 18.8.1997
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _prvnidoklad        Int;
+define _dokladcislo        Int;
+define _pocet              Int;
+define _Davka        Int;
+define _DokladTyp    Char(2);
+define _potvrzeno        Int;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hromdelete_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+  SELECT Prvnidoklad,pocet,DavkaVznik,DokladTyp,potvrzeno
+    INTO _Prvnidoklad,_pocet,_Davka,_DokladTyp,_potvrzeno
+     FROM AB_HromDokl_Kart
+    WHERE HromPrikaz = aHromPrikaz;
+
+foreach c with hold for
+   SELECT DokladBDS
+      INTO _DokladCislo
+   FROM AB_Doklad_Kart
+   WHERE hromprikaz = aHromPrikaz
+
+   DELETE FROM AB_Doklad_Kart
+   WHERE DokladBDS = _DokladCislo;
+
+
+
+end foreach;
+
+DELETE FROM AB_HromDokl_Kart
+WHERE HromPrikaz = aHromPrikaz;
+
+
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+   if DbInfo("SQLCA.SQLERRD2")=0 then
+            {call TW-Message("AB044",aHromPrikaz,_Davka);}
+             call TW_ShowMessage ('04077AB044TCUI', 'AB_HromDelete_t:', 'Hrom.doklad %1 v dávce %2 byl vymazán', aHromPrikaz, _Davka);
+            UPDATE AB_Davka_Prot SET PocVymaz=PocVymaz+1
+              WHERE Davka = _Davka and DokladTyp = _DokladTyp;
+            if (_potvrzeno=1)then
+              UPDATE AB_Davka_Prot SET PocPotvrd=PocPotvrd-1
+                  WHERE Davka = _Davka and DokladTyp = _DokladTyp;
+            end if;
+
+         else
+            {call tw-Message("AB045",aHromPrikaz);}
+             call TW_ShowMessage ('04078AB045TCUI', 'AB_HromDelete_t:', 'Hrom.doklad %1 nebyl vymazán', aHromPrikaz);
+         end if;
+
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hromdelete_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

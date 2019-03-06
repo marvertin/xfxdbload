@@ -1,0 +1,15 @@
+CREATE PROCEDURE sec_extUsrMngRqDone_evi_init()
+   ON EXCEPTION IN (-958)
+     -- Tabulka už existuje, ignorujeme.
+   END EXCEPTION;
+
+   CREATE TEMP TABLE sec_extUsrMngRqDone_evi (
+     evtid     INTEGER PRIMARY KEY,
+     poznamka  VARCHAR(255),
+     locked    INTEGER NOT NULL CHECK (locked IN (0, 1)),
+     rqtype    VARCHAR(100, 10) NOT NULL CHECK (rqtype IN ('EO_SERVICE')),
+     rqid      INTEGER NOT NULL,
+     userid    VARCHAR(64, 20),
+     userpwd   VARCHAR(100, 20)
+   ) WITH NO LOG;
+END PROCEDURE;

@@ -1,0 +1,60 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_Delete.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB10~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru AB_Delete
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 21.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--Procedura AB_Delete odstraní záznam z kartotéky
+--====================================================================== */
+--
+--
+CREATE     PROCEDURE AB_Delete (aDokladCislo Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB10~1
+-- vytvořeno 21.8.1997
+
+define _Davka        Int;
+define _potvrzeno    Int;
+define _DokladTyp    Char(2);
+
+ SELECT DavkaVznik,DokladTyp,potvrzeno
+    INTO _Davka,_DokladTyp,_potvrzeno
+   FROM AB_Doklad_Kart
+    WHERE DokladBDS = aDokladCislo;
+
+
+ DELETE FROM AB_Doklad_Kart
+        WHERE DokladBDS = aDokladCislo;
+
+ if (DbInfo('SQLCA.SQLERRD2')=1) then
+      UPDATE AB_Davka_Prot SET PocVymaz=PocVymaz+1
+      WHERE Davka = _Davka and DokladTyp = _DokladTyp;
+
+     if (_potvrzeno=1)then
+      UPDATE AB_Davka_Prot SET PocPotvrd=PocPotvrd-1
+      WHERE Davka = _Davka and DokladTyp = _DokladTyp;
+     end if;
+
+
+      {call tw-Message("AB001",aDokladCislo,_Davka);}
+       call TW_ShowMessage ('04069AB001TCUI', 'AB_Delete:', 'Doklad %1 v dávce %2 byl vymazán', aDokladCislo, _Davka);
+ else
+       {call tw-Message("AB002",aDokladCislo);}
+        call TW_ShowMessage ('04070AB002TCUI', 'AB_Delete:', 'Doklad %1 nebyl vymazán', aDokladCislo);
+   end if;
+
+end procedure;

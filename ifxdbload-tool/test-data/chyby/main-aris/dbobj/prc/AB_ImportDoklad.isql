@@ -1,0 +1,130 @@
+CREATE PROCEDURE AB_ImportDoklad(AId          Int,
+                                 ADokladTyp   INT)
+
+  -- procedura provede nacteni naimportovanych BDS dokladu a prekonveruje do tmp tabulek pro editaci BDS dokladu
+  -- a pote provede vytvoreni noveho BDS dokladu 
+
+  define _dokladbds          like ab_importdoklad_kart.dokladbds;  
+  define _dokladtyp          like ab_importdoklad_kart.dokladtyp;  
+  define _zprac              like ab_importdoklad_kart.zprac;      
+  define _druh               like ab_importdoklad_kart.druh;
+  define _smer               like ab_importdoklad_kart.smer;
+  define _akce               like ab_importdoklad_kart.akce;
+  define _castka             like ab_importdoklad_kart.castka;     
+  define _datuct             like ab_importdoklad_kart.datuct;     
+  define _roksp              like ab_importdoklad_kart.roksp;      
+  define _valuta             like ab_importdoklad_kart.valuta;     
+  define _konstsym           like ab_importdoklad_kart.konstsym;   
+  define _dbucet             like ab_importdoklad_kart.dbucet;     
+  define _dbkonto            like ab_importdoklad_kart.dbkonto;    
+  define _dbsko              like ab_importdoklad_kart.dbsko;      
+  define _dbprefixzak        like ab_importdoklad_kart.dbprefixzak;
+  define _dbvarsym           like ab_importdoklad_kart.dbvarsym;   
+  define _dbspecsym          like ab_importdoklad_kart.dbspecsym;  
+  define _dbtextsouhrn       like ab_importdoklad_kart.dbtextsouhrn;
+  define _dbnaklstr          like ab_importdoklad_kart.dbnaklstr;  
+  define _crucet             like ab_importdoklad_kart.crucet;     
+  define _crkonto            like ab_importdoklad_kart.crkonto;    
+  define _crsko              like ab_importdoklad_kart.crsko;      
+  define _crbanka            like ab_importdoklad_kart.crbanka;    
+  define _crprefixzak        like ab_importdoklad_kart.crprefixzak;
+  define _crvarsym           like ab_importdoklad_kart.crvarsym;   
+  define _crspecsym          like ab_importdoklad_kart.crspecsym;  
+  define _crtextsouhrn       like ab_importdoklad_kart.crtextsouhrn;
+  define _crnaklstr          like ab_importdoklad_kart.crnaklstr;   
+  define _poradi             INT; 
+  
+  define _MsgNum             CHAR(15);
+  define _MsgDetail          VARCHAR(255);
+  define _MsgImplText        VARCHAR(255);
+  define _MsgPar1            VARCHAR(255);
+  define _MsgPar2            VARCHAR(255);
+  define _MsgPar3            VARCHAR(255);  
+  
+  define _dokladbdsTmp       like ab_importdoklad_kart.dokladbds;  
+
+  IF(ADokladTyp = 0) THEN
+    LET _dokladtyp = 'IB';
+  ELSE
+    LET _dokladtyp = 'IK';
+  END IF;
+  
+  LET _poradi = 0;
+
+  FOREACH c1 WITH HOLD FOR
+    SELECT dokladbds, zprac, druh, smer, akce, castka, datuct, roksp, valuta, konstsym, dbucet, dbkonto, dbsko, dbprefixzak, dbvarsym, dbspecsym, dbtextsouhrn, dbnaklstr, crucet, crkonto, crsko, crbanka, crprefixzak, crvarsym, crspecsym, crtextsouhrn, crnaklstr
+    INTO _dokladbds, _zprac, _druh, _smer, _akce, _castka, _datuct, _roksp, _valuta, _konstsym, _dbucet, _dbkonto, _dbsko, _dbprefixzak, _dbvarsym, _dbspecsym, _dbtextsouhrn, _dbnaklstr, _crucet, _crkonto, _crsko, _crbanka, _crprefixzak, _crvarsym, _crspecsym, _crtextsouhrn, _crnaklstr
+    FROM ab_importdoklad_kart
+    WHERE refimportid = AId AND zprac = 0 
+    ORDER BY dokladbds
+    
+    LET _poradi = _poradi + 1;
+        
+    CALL AB_KartInit(AId);    
+    
+    IF(_datuct IS NULL) THEN
+      LET _datuct = AP_DatProv();
+    END IF;    
+
+    IF(_valuta IS NULL) THEN
+      LET _valuta = _datuct;
+    END IF;    
+    
+    IF(_roksp IS NULL) THEN
+      LET _roksp = _valuta;
+    END IF;
+    
+    IF(_akce IS NULL) THEN
+      LET _akce = '____';
+    END IF;
+    
+    IF(_smer IS NULL) THEN
+      LET _smer = 1;
+    END IF;                 
+        
+    UPDATE tmp_AB_Doklad_Kart
+    SET      
+      dokladtyp      = _dokladtyp,                
+      druh           = _druh,           
+      smer           = _smer,           
+      marketakce     = _akce,           
+      castka         = _castka,         
+      datuct         = _datuct,         
+      premrok        = _roksp,          
+      valuta         = _valuta,         
+      konstsym       = _konstsym,       
+      dbucet         = _dbucet,         
+      dbkontoPred    = AO_KontoPred(_dbkonto),
+      dbkontoZakl    = AO_KontoZakl(_dbkonto),        
+      dbsko          = _dbsko,          
+      dbcz           = _dbprefixzak,    
+      dbvarsym       = _dbvarsym,       
+      dbspecsym      = _dbspecsym,      
+      dbtext         = _dbtextsouhrn,   
+      dbns           = _dbnaklstr,      
+      crucet         = _crucet,         
+      crkontoPred    = AO_KontoPred(_crkonto),
+      crkontoZakl    = AO_KontoZakl(_crkonto),     
+      crsko          = _crsko,          
+      crbanka        = _crbanka,        
+      crcz           = _crprefixzak,    
+      crvarsym       = _crvarsym,       
+      crspecsym      = _crspecsym,
+      crtext         = _crtextsouhrn,   
+      crns           = _crnaklstr       
+    WHERE owner = AId;
+    
+    BEGIN
+      ON exception IN (-746)
+        let _MsgNum, _MsgDetail, _MsgImplText, _MsgPar1, _MsgPar2, _MsgPar3 = TW_GetErrMessage();
+
+        call TWInternal_RaiseError(_MsgNum, _MsgDetail, 'Doklad '|| _poradi ||': '||_MsgImplText, _MsgPar1, _MsgPar2, _MsgPar3);       
+      END exception
+      CALL AB_KartInsertTest(AId, 1);
+      LET _dokladbdsTmp =  AB_KartInsert(0, AId);
+    END;
+    UPDATE ab_importdoklad_kart SET zprac = 1, refdokladbds = _dokladbdsTmp WHERE dokladbds = _dokladbds;    
+  END FOREACH; 
+  
+  UPDATE ab_import_prot SET stav = 'C' WHERE id = AId;   
+end procedure;

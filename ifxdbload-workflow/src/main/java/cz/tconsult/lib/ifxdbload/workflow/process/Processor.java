@@ -61,7 +61,7 @@ public class Processor  {
     final LoData data = builder.getData();
 
     if (dbpackReader.getFilesForSuppressedFazes().count() > 0) {
-      log.warn("There are files in suppressed fazes: %d:%n%s", dbpackReader.getFilesForSuppressedFazes().count(), dbpackReader.getFilesForSuppressedFazes());
+      log.warn("There are files in suppressed fazes ({})\n{}%s", dbpackReader.getFilesForSuppressedFazes().count(), dbpackReader.getFilesForSuppressedFazes());
     }
     return data;
   }
@@ -72,7 +72,7 @@ public class Processor  {
    * @param fazes
    * @param lodata
    */
-  public void executeFazes(final Set<EFazeZavedeni> fazes, final LoData lodata, final JdbcTemplateFactory jtf) {
+  public void executeFazes(final Set<EFazeZavedeni> fazes, final LoData lodata, final DbContextFactory jtf) {
     final Set<EFazeZavedeni> fazes2 = fazes == null ?  EnumSet.allOf(EFazeZavedeni.class) : fazes;
 
     final FazeManager fazeManager = new FazeManager(lodata, new FazeExecutorFactoryImpl(), jtf);

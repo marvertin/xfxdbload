@@ -1,0 +1,16 @@
+CREATE PROCEDURE sec_extUsrMngRqInit_E_evo_init()
+   ON EXCEPTION IN (-958)
+     -- Tabulka už existuje, ignorujeme.
+   END EXCEPTION;
+
+   CREATE TEMP TABLE sec_extUsrMngRqInit_E_evo (
+     serno     SERIAL PRIMARY KEY,
+     evtid     INTEGER NOT NULL,  -- REFERENCES sec_extUsrMngRqInit_evo,
+     poznamka  VARCHAR(255),
+     locked    INTEGER NOT NULL CHECK (locked IN (0, 1)),
+
+     rqId      INTEGER NOT NULL, -- REFERENCES eo_sluzba_kart,
+     errCode   INTEGER DEFAULT -1 NOT NULL,
+     errText   VARCHAR(255) NOT NULL
+   ) WITH NO LOG;
+END PROCEDURE;

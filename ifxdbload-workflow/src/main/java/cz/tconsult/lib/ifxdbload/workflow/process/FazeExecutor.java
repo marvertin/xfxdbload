@@ -1,5 +1,6 @@
 package cz.tconsult.lib.ifxdbload.workflow.process;
 
+import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 
 /**
@@ -56,7 +57,7 @@ public interface FazeExecutor {
    * @param ctx
    * @return Zpráva do logu o tom, kolik se toho zavedlo.
    */
-  public String execute(ExecutionContext ctx);
+  public String execute(LoadContext ctx);
 
 
   /**

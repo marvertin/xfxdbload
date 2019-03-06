@@ -1,0 +1,35 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_ServerDone.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB91~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro vymazání záznamu o pořízeném BDS dokladu z
+--přechodné tabulky BDS serveru
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 20.9.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:
+--
+--                              A B _ S e r v e r D o n e
+--====================================================================== */
+--
+--
+CREATE     PROCEDURE AB_ServerDone (AHWnd Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\SERVER\PRAB91~1
+-- vytvořeno 20.9.1997
+
+DELETE FROM AB_ServDokl_Temp WHERE HWnd = AHWnd;
+DELETE FROM AB_ServFlag_Temp WHERE HWnd = AHWnd;
+
+end procedure;

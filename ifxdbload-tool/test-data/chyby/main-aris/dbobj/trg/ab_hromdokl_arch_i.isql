@@ -1,0 +1,7 @@
+CREATE TRIGGER ab_hromdokl_arch_i insert on ab_hromdokl_arch
+  referencing new as new
+  for each row
+  (
+    execute procedure Ap_User(new.poruser) into poruser BLBEC/*-,
+    execute procedure Ap_User(new.refuser) into refuser
+  );

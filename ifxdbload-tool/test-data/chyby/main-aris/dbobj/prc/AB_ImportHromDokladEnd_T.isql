@@ -1,0 +1,40 @@
+CREATE PROCEDURE AB_ImportHromDokladEnd_T(AId Int)
+
+-- procedura provede nastaveni importu na chyba 
+
+  define global TW_ErrSql  Int       default null;
+  define global TW_ErrIsam Int       default null;
+  define global TW_ErrText VarChar (255) default null;
+
+
+  -- defninice globalni promenne G_TRACE
+  DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  -- zahajeni trasovani TRACE_BEGIN_1
+  if G_TRACE = 1 then
+    if pd_tracebegin('AB_ImportHromDokladEnd_T') = 1 then
+      trace on;
+    end if;
+  end if;
+  -- zahajeni trasovani TRACE_BEGIN_2
+  
+  SET ISOLATION TO REPEATABLE READ;
+  BEGIN WORK;
+  
+    CALL AB_ImportHromDokladEnd(AId);
+  
+  COMMIT WORK;
+  SET ISOLATION TO COMMITTED READ;
+  
+  -- ukonceni trasovani TRACE_END_1
+  if G_TRACE = 1  then
+    if pd_traceend('AB_ImportHromDokladEnd_T') = 1 then
+      trace off;
+    end if;
+  end if;
+  -- ukonceni trasovani TRACE_END_2
+end procedure;

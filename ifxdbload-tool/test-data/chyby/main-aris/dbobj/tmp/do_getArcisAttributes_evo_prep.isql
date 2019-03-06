@@ -1,0 +1,39 @@
+CREATE PROCEDURE do_getArcisAttributes_evo_prep ()
+   ON EXCEPTION IN (-958)
+      -- Tabulka už existuje - ignorujeme.
+   END EXCEPTION
+
+   CREATE TEMP TABLE do_getArcisAttributes_evo (
+      evtid       INTEGER NOT NULL,
+      poznamka    VARCHAR(255),
+      locked      INTEGER DEFAULT 0 NOT NULL CHECK (locked IN (0, 1)),
+      
+      
+      system           char(10),   
+      contractNo       DECIMAL(16, 0),
+      dateProcess      DATE,
+      dateFinish       DATE,
+      docTypeNew       CHAR(35),
+      annotationNew    CHAR(35),
+      subAnnotationNew CHAR(35),
+      garant           CHAR(35),
+      doruceno         DATE,
+      typrc            CHAR(1),
+      rc               CHAR(13),
+      rezimUveru       CHAR(1),
+      referentName     VARCHAR(200),
+      OZsepsani VARCHAR(25), -- 25 znaků = 16 (číslo OZ) + 1 (lomítko) + 8 (externí číslo OZ) (RN00351397) [smid;2013-10-01 16:57:22]
+      OZzadani VARCHAR(25), --"--
+      status     CHAR(1),
+      cuz         DEC(16,0), -- číslo uverove zadosti
+      produkt  CHAR(35), --nazev varianty pu
+      vyseuver DEC(16,2), -- vyse uveru
+      spuver     INTEGER, -- spotrebitelsky uver
+      kandidat INTEGER, --kandidat pro zamintuni
+      nazev CHAR(120), --nazev klienta 
+      OZsepsaniext CHAR(16), -- oz sepsani ext 
+      registracniCS CHAR(15), --neplní se, neznámo datový typ
+      biometr INTEGER, -- biometricky podepsáno
+      typ_procesu CHAR(1) -- typ procesu (na počátku bylo 'A', 'B', 'C')
+   ) WITH NO LOG;
+END PROCEDURE;

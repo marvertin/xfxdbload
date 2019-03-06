@@ -1,0 +1,218 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_CloseAll_D.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB38~1.SQL
+--
+--POPIS: Modul obsahuje proceduru pro vyvedení všech dokladů BDS
+--VERZE: 3.0
+--
+--VYTVOŘENO: 22.9.1997
+--ZMĚNA:
+--2000-12-08  JS Účtování podle data splatnosti
+--               Odstranění vyvádění hromadného BDS
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS:                     A B _ C L O S E A L L _ D
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_CloseAll_D (AProtFile VarChar(255,0) default null )
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB12~1
+-- vytvořeno 22.9.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+define global Exclusive_g integer default 1;
+
+define _ser Int;
+define ser Int;
+define _counter Int;
+define _davka Int;
+define _akce Int;
+define _stavdavky integer;
+define _pocporiz Int;
+define _pocvymaz Int;
+define _poczauct Int;
+define _dokladtyp Char(2);
+define _Dokladcislo Int;
+define _hromprikaz   Int;
+define _prvnidoklad  Int;
+define _pocet        Int;
+define _castkacelk   Dec(16,2);
+define _dbcr         integer ;
+define _davkaVznik   Int;
+define _porUser      Char  (20);
+define _porTime      DateTime Year to Second;
+define _potvrdUser   Char  (20);
+define _potvrdTime   DateTime Year to Second;
+define _Celkem       Int  ;
+define _DavkaOd      Int;
+define _DavkaDo      Int;
+define Chyba         Int;
+define _Stav         integer;
+define _DatProv      Date;
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+BEGIN WORK;
+
+--inicializace , temp tabulka pro zauctovane operace
+call AB_MemoBDSinit () ;
+
+let Exclusive_g = 1;
+-- Založení  chybové temporary  tabulky
+CALL Tmp_AB_Account_Prep();
+COMMIT WORK;
+
+SET ISOLATION TO REPEATABLE READ;
+
+
+--Nastavení  souboru o zpracování
+begin
+   if (AProtFile is not null) then
+   SET DEBUG FILE TO AProtFile;
+   let _Counter = 0;
+   end if;
+end;
+
+
+BEGIN WORK;
+
+--set debug file to "js_debug.sql";
+--trace on;
+
+let _DatProv = TW_RegGetKeyDate("AC","*","*","datuct");
+
+foreach h with hold for   -- < --------- Průchod  přes všechny neukončené a vybrané dávky.
+   SELECT davka,stav,pocporiz, pocVymaz, dokladTyp
+     INTO _Davka,_StavDavky,_pocporiz, _pocVymaz, _DokladTyp
+     FROM AB_Davka_Prot
+    WHERE  Stav in (0,1) and
+           dokladtyp in("IB","IK","II")
+
+   -- Zápis o zahájení zpracování dávky v provozním deníku.
+   let _Akce {= TW-ProvDen("AB",2,_Davka,"Zahájení zpracování dávky BDS pro doklady "||_dokladTyp);}
+              = TW_ProvDen ("AB", 2, _Davka, 'Start processing batch BDS for kind ' || nu(_DokladTyp));
+
+   if (AProtFile is not null) then
+      {tra-ce "Zahájení zpracování dávky BDS "||_Davka||" pro doklady typu"||_DokladTyp;}
+       trace 'AB_CloseAll_D: Zahájení zpracování dávky BDS ' || nu(_Davka) || ' pro doklady typu' || nu(_DokladTyp);
+   end if;
+
+
+   foreach g with hold for   -- < --------- Průchod  přes všechny potvrzené doklady daného typu
+      SELECT dokladBDS
+         INTO _DokladCislo
+         FROM AB_Doklad_Kart
+         WHERE potvrzeno = 1         and
+               dokladtyp=_dokladtyp and
+               dokladtyp in("IB","IK","II") and
+               DatSplatnost <= _DatProv
+
+
+      begin
+         on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText   --  <--- Ošetření chyb
+         -- Je-li chybový kód = -213, uživatelsky přerušeno zpracování,
+         -- je ošetření chyby předáno do nadřízeného bloku a procedura
+         -- je ukončena. V opačném případě je nejprve proveden ROLLBACK
+         -- zmíněný chybový kód společně s textem je vložen do příslušného řádku v kartotéce.
+
+            if (TW_ErrSql = -213) then
+               {call TW-Error(-17001,'Akce byla zastavena obsluhou');}
+                call TW_RaiseError ('04068_NEW_TCUI', 'AB_CloseAll_D:', 'Akce byla zastavena obsluhou');
+            else
+               begin
+                  on exception in (-122)
+                  end exception;
+                  ROLLBACK WORK;
+               end;
+
+               BEGIN WORK;
+               begin
+                  on exception in (-273)
+                  end exception
+                  -- Zápis chyby do záznamu kartotéky
+
+                  UPDATE AB_Doklad_Kart
+                     SET Chyba = TW_ErrSql||' '||TW_ErrIsam||' '||TW_LiterNull(TW_ErrText)
+                     WHERE DokladBDS = _DokladCislo;
+
+                  SELECT DavkaVznik
+                     INTO _Davka
+                     FROM AB_Doklad_kart
+                     WHERE DokladBDS = _DokladCislo ;
+
+                  UPDATE AB_Davka_Prot
+                     SET PocCHyb=PocChyb+1
+                     WHERE Davka=_Davka and dokladtyp= _dokladtyp;
+                  INSERT INTO  tmp_AB_Account(ser,chyba )
+                        VALUES ( _Dokladcislo, TW_ErrSql||' '||TW_ErrIsam||' '||TW_LiterNull(TW_ErrText));
+               end;
+               COMMIT WORK;
+               BEGIN WORK;
+            end if;
+         end exception;                                    -- < ----------- Konec ošetření chyb
+
+         let _ser= AB_Accountone (_DokladCislo);
+
+         UPDATE AB_Davka_Prot SET PocPotvrd=PocPotvrd-1
+           WHERE Davka = _Davka and DokladTyp = _DokladTyp;
+
+         UPDATE AB_Davka_Prot SET PocAuto=PocAuto+1
+            WHERE Davka = _Davka and DokladTyp = _DokladTyp;
+
+         if (AProtFile is not null) then
+         let _Counter=_Counter+1;
+         if (Mod(_Counter,10) = 0) then
+            {tra-ce "Zpracováno "||_Counter;}
+             trace 'AB_CloseAll_D: Zpracováno ' || nu(_Counter);
+            end if;
+         end if;
+      end;
+
+      COMMIT WORK;
+      BEGIN WORK;
+      end foreach;
+      COMMIT WORK;
+      BEGIN WORK;
+
+      -- Zápis o zahájení zpracování dávky v provozním deníku.
+      let _Akce {= TW-ProvDen("AB",3,_Davka,"Ukončení zpracování dávky BDS pro doklady "||_dokladTyp);}
+                 = TW_ProvDen ("AB", 3, _Davka, 'End processing batch BDS for kind ' || nu(_DokladTyp));
+
+      if (AProtFile is not null) then
+         {tra-ce "Ukončení zpracování dávky BDS "||_Davka||" pro doklady typu"||_DokladTyp;}
+          trace 'AB_CloseAll_D: Ukončení zpracování dávky BDS ' || nu(_Davka) || ' pro doklady typu' || nu(_DokladTyp);
+      end if;
+
+      -- Potenciální ukončení dávky
+      UPDATE AB_Davka_Prot
+      SET stav = 2,
+         endtime = Current Year to Second,
+         endUser = AP_User()
+      WHERE davka = _Davka and Stav = 1 and
+            pocporiz <= pocauto+pocman+pocvymaz;
+
+      if (TW_LastCount()>0) then
+         -- Zápis o ukončení dávky v provozním deníku.
+         let _Akce {= TW-ProvDen("AB",4,_Davka,"Ukončení  dávky BDS pro doklady "||_dokladTyp);}
+                    = TW_ProvDen ("AB", 4, _Davka, 'Finishing batch BDS for kind ' || nu(_DokladTyp));
+      end if;
+
+   end foreach;
+
+
+   if (AProtFile is not null) then
+      {TRA-CE "Konec zpracování BDS ";}
+       trace 'AB_CloseAll_D: Konec zpracování BDS ';
+   end if;
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+end procedure;

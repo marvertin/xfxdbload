@@ -1,0 +1,112 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HrDoklArch_N.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB42~1.SQL
+--
+--POPIS:
+--
+--VERZE: 3.00
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HrDoklArchIni_N (AOwner Int)
+-- verze - 3.00
+
+define global TW_ErrSql, TW_ErrIsam Int default null;
+define global TW_ErrText VarChar (255) default null;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+-- osetreni vyjimek:
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+  call TW_ErrorNoTran ();
+END EXCEPTION;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hrdoklarchini_n') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_HrDoklArch_Temp
+             WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_HrDoklArch_Temp
+  (ser                  integer,
+   davkavznik           integer,
+   dokladtyp            char(2),
+   prvnidoklad          integer,
+   castkacelk           decimal(16,2),
+   pocet                integer,
+   dbcr                 integer,
+   poruser              char(20),
+   portime              Datetime Year to Second,
+   potvrduser           char(20),
+   potvrdtime           datetime Year to second,
+   zauctuser            char(20),
+   zaucttime            datetime year to second,
+   refuser              char(20),
+   reftime              datetime year to second,
+   arch                 integer,
+   owner                Int
+
+   ) WITH NO LOG;
+end;
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_HrDoklArch_Tmp1
+           WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_HrDoklArch_Tmp1
+(  ser                  integer ,
+   arch                 integer,
+   owner                integer
+
+  ) WITH NO LOG;
+end;
+
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_HrDoklArch_Tmp2
+           WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_HrDoklArch_Tmp2
+(  ser                  integer,
+   arch                 integer,
+   owner                integer
+
+  ) WITH NO LOG;
+end;
+
+
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hrdoklarchini_n') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

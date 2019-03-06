@@ -1,0 +1,60 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromInsert_C.sql
+--/* ---------------------------------------------------------------------------
+--MODUL:
+--
+--POPIS: Modul obsahuje proceduru AB_HromInsert_C
+--VERZE: 3.0
+--
+--VYTVOŘENO: 14.01.2002
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS: Procedura slouží k uložení pořízeného hromadného dokladu do kartotéky AB_HromDokl_Kart
+-- a AB_Doklad_Kart.
+-- ====================================================================== */
+--
+CREATE     PROCEDURE AB_HromInsert_C (aHromPrikaz Int,
+                                aOwner Int)
+--
+-- vytvořeno 14.01.2002
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hrominsert_c') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+--set debug file to  "dbg";
+--trace on;
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+Call AB_HromInsert(aHromPrikaz,aOwner);
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hrominsert_c') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

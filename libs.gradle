@@ -3,6 +3,7 @@ dependencyManagement {
 		dependency group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
 		dependency group: 'com.informix', name: 'ifxjdbc', version: '4.10.JC9'
 		dependency group: 'commons-beanutils',  name: 'commons-beanutils',    version: '1.9.3'
+		dependency group: 'commons-codec', name: 'commons-codec', version: '1.12'
 		dependency group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
 		dependency group: 'commons-configuration', name: 'commons-configuration', version: '1.10'
 		dependency group: 'commons-io', name: 'commons-io', version:'2.4'
@@ -28,6 +29,7 @@ dependencyManagement {
 		dependency group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
 		dependency group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
 		dependency group: 'org.springframework', name: 'spring-jdbc', version: '5.1.5.RELEASE'
+		dependency group: 'p6spy', name: 'p6spy', version: '3.8.1'
 	}
   
 	 //TODO: Implementaci povýšit a zbavit se těchto obstarožních závislostí

@@ -1,0 +1,342 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_DoklArchTemp_T.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB41~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro Naplnění temporální tabulky pro přístup
+--  k datům archívu BDS z archívní databáze
+--VERZE: 3.0
+--
+--VYTVOŘENO: 21.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:               A B _ D O K L A R C H T E M P _ T
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_DoklArchTemp_T (AOwner      Int)
+-- verze - 3.0
+
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _ser int;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_doklarchtemp_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+--set debug file to "DEBUG";
+--trace on;
+
+foreach c with hold for
+     SELECT ser
+      INTO _ser
+      FROM AB_DoklArch_Temp2
+      WHERE owner = AOwner
+
+      DELETE FROM AB_DoklArch_Temp1 WHERE owner = AOwner and ser = _ser;
+
+
+ INSERT INTO AB_DoklArch_Temp
+     ( ser                  ,
+            druh                 ,
+            zdroj                ,
+            datuct               ,
+            smer                 ,
+            castka               ,
+            akce                 ,
+            uziv1                ,
+            uziv2                ,
+            uziv3                ,
+            davkavznik           ,
+            davkaucto            ,
+            reftime              ,
+            refuser              ,
+            db_ucet              ,
+            db_zkratka           ,
+            db_coobjekt          ,
+            db_varsym            ,
+            db_text              ,
+            cr_ucet              ,
+            cr_zkratka           ,
+            cr_coobjekt          ,
+            cr_varsym            ,
+            cr_text              ,
+            db_konto             ,
+            db_tko               ,
+            db_sko               ,
+            db_specsym           ,
+            dbvaluta             ,
+            dbpremrok            ,
+            cr_konto             ,
+            cr_tko               ,
+            cr_sko               ,
+            cr_specsym           ,
+            crvaluta             ,
+            crpremrok            ,
+            db_davkacc           ,
+            db_jezpraccc         ,
+            db_jenepl            ,
+            db_jeneplout         ,
+            db_ckonto            ,
+            db_cspecsym          ,
+            db_cbanka            ,
+            db_cidtran           ,
+            db_ckonstsym         ,
+            db_cuhrink           ,
+            db_cpriorita         ,
+            db_cdatpor           ,
+            db_cdatuct           ,
+            db_cvaluta           ,
+            db_cdbident          ,
+            db_ccrident          ,
+            db_czprkli           ,
+            db_czprbank          ,
+            cr_davkacc           ,
+            cr_jezpraccc         ,
+            cr_jenepl            ,
+            cr_jeneplout         ,
+            cr_ckonto            ,
+            cr_cspecsym          ,
+            cr_cbanka            ,
+            cr_cidtran           ,
+            cr_ckonstsym         ,
+            cr_cuhrink           ,
+            cr_cpriorita         ,
+            cr_cdatpor           ,
+            cr_cdatuct           ,
+            cr_cvaluta           ,
+            cr_cdbident          ,
+            cr_ccrident          ,
+            cr_czprkli           ,
+            cr_czprbank          ,
+            dokladbds            ,
+            dokladtyp            ,
+            poruser              ,
+            portime              ,
+            potvrduser           ,
+            potvrdtime           ,
+      arch)
+    SELECT  ser                  ,
+            druh                 ,
+            zdroj                ,
+            datuct               ,
+            smer                 ,
+            castka               ,
+            akce                 ,
+            uziv1                ,
+            uziv2                ,
+            uziv3                ,
+            davkavznik           ,
+            davkaucto            ,
+            reftime              ,
+            refuser              ,
+            db_ucet              ,
+            db_zkratka           ,
+            db_coobjekt          ,
+            db_varsym            ,
+            db_text              ,
+            cr_ucet              ,
+            cr_zkratka           ,
+            cr_coobjekt          ,
+            cr_varsym            ,
+            cr_text              ,
+            db_konto             ,
+            db_tko               ,
+            db_sko               ,
+            db_specsym           ,
+            dbvaluta             ,
+            dbpremrok            ,
+            cr_konto             ,
+            cr_tko               ,
+            cr_sko               ,
+            cr_specsym           ,
+            crvaluta             ,
+            crpremrok            ,
+            db_davkacc           ,
+            db_jezpraccc         ,
+            db_jenepl            ,
+            db_jeneplout         ,
+            db_ckonto            ,
+            db_cspecsym          ,
+            db_cbanka            ,
+            db_cidtran           ,
+            db_ckonstsym         ,
+            db_cuhrink           ,
+            db_cpriorita         ,
+            db_cdatpor           ,
+            db_cdatuct           ,
+            db_cvaluta           ,
+            db_cdbident          ,
+            db_ccrident          ,
+            db_czprkli           ,
+            db_czprbank          ,
+            cr_davkacc           ,
+            cr_jezpraccc         ,
+            cr_jenepl            ,
+            cr_jeneplout         ,
+            cr_ckonto            ,
+            cr_cspecsym          ,
+            cr_cbanka            ,
+            cr_cidtran           ,
+            cr_ckonstsym         ,
+            cr_cuhrink           ,
+            cr_cpriorita         ,
+            cr_cdatpor           ,
+            cr_cdatuct           ,
+            cr_cvaluta           ,
+            cr_cdbident          ,
+            cr_ccrident          ,
+            cr_czprkli           ,
+            cr_czprbank          ,
+            dokladbds            ,
+            dokladtyp            ,
+            poruser              ,
+            portime              ,
+            potvrduser           ,
+            potvrdtime           ,
+            1
+    FROM  AB_DoklArch_View_A
+    WHERE ser = _ser;
+
+  -- Kvůli UD1
+  UPDATE AB_DoklArch_Temp
+     SET owner = AOwner
+   WHERE ser = _ser
+     and owner is null;
+
+end foreach;
+
+
+foreach c with hold for
+     SELECT ser
+      INTO _ser
+      FROM AB_DoklArch_Temp1
+      WHERE owner = AOwner
+
+
+    INSERT INTO AB_DoklArch_Temp
+    SELECT  ser                  ,
+            druh                 ,
+            zdroj                ,
+            datuct               ,
+            smer                 ,
+            castka               ,
+            akce                 ,
+            uziv1                ,
+            uziv2                ,
+            uziv3                ,
+            davkavznik           ,
+            davkaucto            ,
+            reftime              ,
+            refuser              ,
+            db_ucet              ,
+            db_zkratka           ,
+            db_coobjekt          ,
+            db_varsym            ,
+            db_text              ,
+            cr_ucet              ,
+            cr_zkratka           ,
+            cr_coobjekt          ,
+            cr_varsym            ,
+            cr_text              ,
+            db_konto             ,
+            db_tko               ,
+            db_sko               ,
+            db_specsym           ,
+            dbvaluta             ,
+            dbpremrok            ,
+            cr_konto             ,
+            cr_tko               ,
+            cr_sko               ,
+            cr_specsym           ,
+            crvaluta             ,
+            crpremrok            ,
+            db_davkacc           ,
+            db_jezpraccc         ,
+            db_jenepl            ,
+            db_jeneplout         ,
+            db_ckonto            ,
+            db_cspecsym          ,
+            db_cbanka            ,
+            db_cidtran           ,
+            db_ckonstsym         ,
+            db_cuhrink           ,
+            db_cpriorita         ,
+            db_cdatpor           ,
+            db_cdatuct           ,
+            db_cvaluta           ,
+            db_cdbident          ,
+            db_ccrident          ,
+            db_czprkli           ,
+            db_czprbank          ,
+            cr_davkacc           ,
+            cr_jezpraccc         ,
+            cr_jenepl            ,
+            cr_jeneplout         ,
+            cr_ckonto            ,
+            cr_cspecsym          ,
+            cr_cbanka            ,
+            cr_cidtran           ,
+            cr_ckonstsym         ,
+            cr_cuhrink           ,
+            cr_cpriorita         ,
+            cr_cdatpor           ,
+            cr_cdatuct           ,
+            cr_cvaluta           ,
+            cr_cdbident          ,
+            cr_ccrident          ,
+            cr_czprkli           ,
+            cr_czprbank          ,
+            dokladbds            ,
+            dokladtyp            ,
+            poruser              ,
+            portime              ,
+            potvrduser           ,
+            potvrdtime           ,
+            0 ,
+            Aowner
+    FROM  AB_DoklArch_View
+    WHERE ser = _ser;
+
+end foreach;
+
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_doklarchtemp_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

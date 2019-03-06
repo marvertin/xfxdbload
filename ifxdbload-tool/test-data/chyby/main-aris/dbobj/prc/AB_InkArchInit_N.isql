@@ -1,0 +1,135 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_InkArch_N.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB45~1.SQL
+--
+--POPIS:
+--
+--VERZE: 3.00
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_InkArchInit_N (AOwner Int)
+-- verze - 3.00
+
+define global TW_ErrSql, TW_ErrIsam Int default null;
+define global TW_ErrText VarChar (255) default null;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+-- osetreni vyjimek:
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+  call TW_ErrorNoTran ();
+END EXCEPTION;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_inkarchinit_n') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_InkArch_Temp
+             WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_InkArch_Temp
+  (ser                  integer,
+   stav                 integer,
+   davka                integer,
+   davkacc              integer,
+   zdroj                char(1),
+   typ                  char(1),
+   priorita             integer,
+   datpor               date,
+   idtran               char(13),
+   castka               decimal(16,2),
+   valuta               date,
+   konstsym             decimal(10,0),
+   zprkli               varchar(144,0),
+   zprbank              varchar(144,0),
+   datsplatnost         date,
+   davkavznik           integer,
+   seruhr               integer,
+   serplatba            integer,
+   serodm               integer,
+   dbkonto              decimal(16,0),
+   dbident              varchar(144,0),
+   dbbanka              decimal(7,0),
+   dbspecsym            decimal(10,0),
+   dbvarsym             decimal(10,0),
+   dbtext               char(20),
+   crkonto              decimal(16,0),
+   crident              varchar(144,0),
+   crbanka              decimal(7,0),
+   crspecsym            decimal(10,0),
+   crvarsym             decimal(10,0),
+   crtext               char(20),
+   refuser              char(20),
+   reftime              Datetime Year to Second,
+   dokladbds            integer,
+   poruser              char(20),
+   portime              Datetime Year to Second,
+   potvrduser           char(20),
+   potvrdtime           datetime Year to second,
+   arch                 integer,
+   owner                Int
+
+   ) WITH NO LOG;
+end;
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_InkArch_Temp1
+           WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_InkArch_Temp1
+(  ser                  integer ,
+   arch                 integer,
+   owner                integer
+
+  ) WITH NO LOG;
+end;
+
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_InkArch_Temp2
+           WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_InkArch_Temp2
+(  ser                  integer,
+   arch                 integer,
+   owner                integer
+
+  ) WITH NO LOG;
+end;
+
+
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_inkarchinit_n') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

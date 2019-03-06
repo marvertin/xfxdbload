@@ -1,0 +1,16 @@
+CREATE PROCEDURE ECM_NewContractData_evi_prep ()
+   ON EXCEPTION IN (-958)
+      -- Tabulka už existuje - ignorujeme.
+   END EXCEPTION
+
+   CREATE TEMP TABLE ECM_NewContractData_evi (
+      evtid       INTEGER NOT NULL,
+      poznamka    VARCHAR(255),
+      locked      INTEGER DEFAULT 0 NOT NULL CHECK (locked IN (0, 1)),
+         
+      
+      Smlouva DEC(16,0), 
+      Tsml CHAR(4),
+      sernouz bigint
+   ) WITH NO LOG;
+END PROCEDURE;

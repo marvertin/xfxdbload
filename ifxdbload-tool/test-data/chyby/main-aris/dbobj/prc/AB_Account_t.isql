@@ -1,0 +1,185 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_Account_t.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB15~1.SQL
+--
+--POPIS: Modul obsahuje proceduru AB_Account_t
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:Procedura provádí zaúčtování více dokladů BDS. Jejím parametrem je příznak = 0
+-- pro noční zpracování a =1 pro individuální.
+--
+-- Volané procedury a funkce:
+--  AB_Accountone
+--  AB_Account_hrom
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_Account_t (APriznak   Int            default 1 ,
+                             ADokladTyp char(2)        default null,
+                             ADavka     Int            default null,
+                             AProtFile  VarChar(255,0) default null)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB15~1
+-- vytvořeno 18.8.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+define global TW_MsgNum  Char(15)  default null;
+
+define _DokladCislo Int;
+define _ser         Int;
+define _davkavznik  Int;
+define _Akce        Int;
+define _Celkem      Int  ;
+define _CelkemChyb  Int  ;
+define _dokladTyp   Char(2);
+define _DavkaOd     Int;
+define _DavkaDo     Int;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_account_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+--inicializace , temp tabulka pro zauctovane operace
+call AB_MemoBDSinit () ;
+let _Celkem     =0;
+let _CelkemChyb =0;
+
+CALL Tmp_AB_Account_Prep();
+
+SET ISOLATION TO REPEATABLE READ;
+
+BEGIN WORK;
+
+if (ADavka is not null) then
+   let _DavkaOd = ADavka;
+   let _DavkaDo  = ADavka;
+else
+   SELECT 0, Max(davkavznik)
+     INTO _DavkaOd, _DavkaDo
+     FROM AB_Doklad_Kart;
+end if;
+
+--zapisy pro denni davku
+if (AProtFile is not null) then
+   SET DEBUG FILE TO AProtFile;
+   {TRA-CE 'Zahájení zpracování dávky BDS ';}
+    trace 'AB_Account_t: Zahájení zpracování dávky BDS ';
+
+   -- Zápis o zahájení zpracování dávky v provozním deníku.
+   let _Akce {= TW-ProvDen('AB',2,null,'Zahájení zpracování dávky BDS ');}
+              = TW_ProvDen ('AB', 2, null, 'Start processing BDS batch');
+end if;
+
+
+    foreach c with hold for
+      SELECT dokladBDS, dokladTyp, davkavznik
+        INTO _DokladCislo, _dokladTyp, _davkavznik
+        FROM AB_Doklad_Kart
+        WHERE potvrzeno = 1
+          AND (dokladTyp = ADokladTyp OR (ADokladTyp is null AND DokladTyp[1]='I') )
+          AND (davkavznik between _DavkaOd AND _DavkaDo)
+
+      begin
+
+         on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+            begin
+              --transaction not available
+              on exception in (-122)
+              end exception;
+              ROLLBACK WORK;
+            end;
+            BEGIN WORK;
+
+            begin
+              --No UPDATE permission
+              on exception in (-273)
+              end exception;
+
+              UPDATE AB_Doklad_Kart
+                SET Chyba = TW_ErrSql||' '||TW_ErrIsam||' '||TW_LiterNull(TW_ErrText)
+                WHERE DokladBDS = _DokladCislo;
+
+              UPDATE AB_Davka_Prot
+                SET PocCHyb=PocChyb+1
+                WHERE Davka=_Davkavznik AND dokladtyp= _dokladtyp;
+            end ;
+
+            --sumace poctu chyb
+            let  _CelkemChyb = _CelkemChyb +1;
+
+         -- konec ošetření vyjímek
+         end exception;
+
+         let _ser= AB_Accountone (_DokladCislo);
+
+         UPDATE AB_Davka_Prot SET PocPotvrd=PocPotvrd-1
+               WHERE Davka = _Davkavznik AND DokladTyp = _DokladTyp;
+
+         UPDATE AB_Davka_Prot SET PocMan=Pocman+1
+               WHERE Davka = _Davkavznik AND DokladTyp = _DokladTyp;
+
+         let  _Celkem = _Celkem +1;
+
+         --zapisy pro denni davku
+         if (AProtFile is not null) and (Mod(_Celkem,10) = 0) then
+               {TRA-CE 'Zpracováno: '||_Celkem;}
+                trace 'AB_Account_t: Zpracováno: ' || nu(_Celkem);
+         end if;
+
+      end;
+
+      COMMIT WORK;
+      BEGIN WORK;
+
+    end foreach;
+
+--zapisy pro denni davku
+if (AProtFile is not null) then
+   {TRA-CE 'Ukončení zpracování dávky trvalých BDS ';}
+    trace 'AB_Account_t: Ukončení zpracování dávky trvalých BDS ';
+
+   -- Zápis o ukončení zpracování dávky v provozním deníku.
+   let _Akce {= TW-ProvDen('AB',3,null,'Ukončení zpracování dávky BDS');}
+              = TW_ProvDen ('AB', 3, null, 'End processing BDS batch');
+end if;
+
+COMMIT WORK;
+
+--navratove hodnoty do hlasek FE
+begin
+   on exception in (-206)
+   end exception;
+   UPDATE TW_retval_temp
+     SET Int1=_Celkem, Int2=_CelkemChyb;
+end;
+
+SET ISOLATION TO COMMITTED READ;
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_account_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

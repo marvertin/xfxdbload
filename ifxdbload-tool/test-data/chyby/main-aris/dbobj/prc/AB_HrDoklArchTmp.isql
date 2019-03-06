@@ -1,0 +1,79 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HrDoklArchTmp.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB43~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro Naplnění temporální tabulky pro přístup
+--  k datům archívu hrom. BDS z archívní databáze
+--VERZE: 3.0
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:
+--
+--AB_DoklArchTemp
+--====================================================================== */
+--
+--
+CREATE     PROCEDURE AB_HrDoklArchTmp    (AOwner      Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\UCJADRO\AC
+-- vytvořeno 14.4.1998
+
+
+
+INSERT INTO AB_HrDoklArch_Temp
+    SELECT    ser   ,
+   davkavznik        ,
+   dokladtyp         ,
+   prvnidoklad       ,
+   castkacelk        ,
+   pocet             ,
+   dbcr              ,
+   poruser           ,
+   portime           ,
+   potvrduser        ,
+   potvrdtime        ,
+   zauctuser         ,
+   zaucttime         ,
+   refuser           ,
+   reftime           ,
+   1 ,
+   Aowner
+    FROM  AB_HromDokl_Arch_A
+    WHERE ser in (SELECT ser FROM AB_HrDoklArch_Tmp2 WHERE owner = AOwner);
+
+
+
+    INSERT INTO AB_HrDoklArch_Temp
+    SELECT    ser    ,
+   davkavznik         ,
+   dokladtyp          ,
+   prvnidoklad        ,
+   castkacelk         ,
+   pocet              ,
+   dbcr               ,
+   poruser            ,
+   portime            ,
+   potvrduser         ,
+   potvrdtime         ,
+   zauctuser          ,
+   zaucttime          ,
+   refuser            ,
+   reftime            ,
+   0 ,
+   Aowner
+    FROM  AB_HromDokl_Arch
+    WHERE ser in (SELECT ser FROM AB_HrDoklArch_Tmp1 WHERE owner = AOwner)
+            AND ser not in (SELECT ser FROM AB_HrDoklArch_Tmp2 WHERE owner = AOwner) ;
+
+
+end procedure;

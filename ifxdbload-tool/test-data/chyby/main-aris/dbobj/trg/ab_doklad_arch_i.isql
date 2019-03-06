@@ -1,0 +1,7 @@
+CREATE TRIGGER ab_doklad_arch_i insert on ab_doklad_arch
+  referencing new as new
+  for each row
+  (
+    execute procedure Ap_Userxx(new.poruser) into poruser,
+    execute procedure Ap_User(new.refuser) into refuser
+  );

@@ -1,0 +1,64 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_MemoBDSInit_t.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB18~1.SQL
+--
+--POPIS:
+--   Modul obsahuje proceduru   AB_MemoBDSinit_t
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 8.9.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS: Procedura tvoří rozhraní pro AB_MemoBDSinit
+--
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_MemoBDSinit_t ()
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\PRAM02~1
+-- vytvořeno 8.9.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_memobdsinit_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+    call AB_MemoBDSinit();
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_memobdsinit_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

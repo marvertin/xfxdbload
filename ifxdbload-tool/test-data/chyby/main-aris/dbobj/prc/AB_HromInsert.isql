@@ -1,0 +1,561 @@
+CREATE PROCEDURE AB_HromInsert(AHromPrikaz  Int,
+                               AOwner       Int)
+--POPIS: Procedura slouží k uložení pořízeného hromadného dokladu  do kartotéky AB_HromDokl_Kart
+-- a AB_Doklad_Kart.
+--
+
+  define _dokladcislo  Int;
+  define _dokladBDS    Int;
+  define _mindokladBDS Int;
+  define _hromprikaz   Int;
+  define _Davka        Int;
+  define _tko          Char (2);
+  define _dnesnidat    Date;
+  define _datPlVypl    Date   ;
+  define _druh         Char (4);
+  define _davkavznik   Int;
+  define _datSplatnost Date;
+  define _valuta       Date;
+  define _Svaluta      Date;
+  define _datUct       Date ;
+  define _dokladTyp    Char  (2);
+  define _smer         integer;
+  define _uhrInk       Char  (1);
+  define _priorita     integer;
+  define _konstSym     Dec   (10,0);
+  define _castka       Dec   (16,2);
+  define _Acastka      Dec   (16,2);
+  define _marketAkce   Char  (4);
+  define _uziv1        integer;
+  define _uziv2        integer;
+  define _uziv3        integer;
+  define _premRok      DateTime Year to Year;
+  define _SpremRok     DateTime Year to Year;
+  define _dbKonto      like vy_vyplban_kart.konto;
+  define _dbKontopred  Dec   (6,0);
+  define _dbKontozakl  Dec   (10,0);
+  define _dbSko        Char  (4);
+  define _dbUcet       Char  (9);
+  define _dbCOobjekt   Char  (10);
+  define _dbCz         Char  (3);
+  define _dbNS         Char  (5);
+  define _dbBanka      like AC_Bank_Cis.bankanum;
+  define _dbVarSym     Dec   (10,0);
+  define _dbSpecSym    Dec   (10,0);
+  define _dbText       Char  (20);
+  define _crKonto      like vy_vyplban_kart.konto;
+  define _crKontopred  Dec   (6,0);
+  define _crKontozakl  Dec   (10,0);
+  define _crSko        Char  (4);
+  define _crUcet       Char  (9);
+  define _crCOobjekt   Char  (10);
+  define _crCZ         Char  (3);
+  define _crNS         Char  (5);
+  define _crBanka      like AC_Bank_Cis.bankanum;
+  define _crVarSym     Dec   (10,0);
+  define _crSpecSym    Dec   (10,0);
+  define _crText       Char  (20);
+  define _chyba        VarChar  (255,0);
+  define _potvrzeno    integer;
+  define _porUser      Char  (20);
+  define _porTime      DateTime Year to Second;
+  define _refUser      Char  (20);
+  define _refTime      DateTime Year to Second;
+  define _potvrdUser   Char  (20);
+  define _potvrdTime   DateTime Year to Second;
+  define _stav         integer;
+  define _hhromPrikaz  Int;
+  define _hPrvnidoklad Int;
+  define _hcastkaCelk  Dec   (16,2);
+  define _hpocet       Int;
+  define _hdbcr        integer;
+  define _hpotvrzeno   integer;
+  define _hdavkaVznik  Int;
+  define _hdokladTyp   Char  (2);
+  define _hporUser     Char  (20);
+  define _hporTime     DateTime Year to Second;
+  define _hrefUser     Char  (20);
+  define _hrefTime     DateTime Year to Second;
+  define _hpotvrdUser  Char  (20);
+  define _hpotvrdTime  DateTime Year to Second;
+  define _UcStav       integer;
+  define _khromprikaz  INT;
+  define _cislorozpis  integer;
+  define _datprov      date;
+  
+  define _CrKontopredCh  Char(2);
+  define _CrKontozaklCh  Char(22);
+  define _DbKontopredCh  Char(2);
+  define _DbKontozaklCh  Char(22);
+  define _jekontoCh     integer;
+  
+  define _seropmemo          Int;
+  define _serpoc             Int;
+  define _isError            Int;    
+  define _zdrojSer           Integer;    
+  
+  SELECT datPlVypl,druh,dbcr ,pocet,davkavznik,datSplatnost ,datUct,
+         dokladTyp,smer,uhrInk,priorita,konstSym ,marketAkce,uziv1,
+         uziv2 ,uziv3  ,SKonto,SKontopred,SKontozakl,SSko,SUcet ,SNS,SCZ,
+         SKontopredCh,SKontozaklCh,jekontoCh,
+         SBanka,SVarSym,SSpecSym,SText,potvrzeno,porUser,porTime,
+         refUser,refTime,potvrdUser,potvrdTime,Premrok,Valuta
+    INTO _datplvypl,_druh,_hdbcr,_hpocet,_hdavkavznik,_datsplatnost,_datuct,
+         _dokladtyp,_smer,_uhrink,_priorita,_konstsym,_marketakce,_uziv1,
+         _uziv2,_uziv3,_DbKonto,_DbKontopred,_DbKontozakl,_DbSko,_DbUcet,_dbNS,_dbCZ,
+         _DbKontopredCh,_DbKontozaklCh,_jekontoCh,
+         _DbBanka,_DbVarSym,_DbSpecSym,_DbText,_hpotvrzeno,_hporUser,_hporTime,
+         _hrefUser,_hrefTime,_hpotvrdUser,_hpotvrdTime,_SPremrok,_SValuta
+  FROM tmp_AB_Souhrn_Kart
+  WHERE owner = AOwner;
+  
+  --test druhu
+  if (_druh is null)  then
+    call TW_RaiseError ('04079AB028TCUI', 'AB_HromInsert:', 'Musí být vyplněn druh operace!');
+  end if;
+  if (SELECT Count(*) FROM ac_druh_cis WHERE druh=_druh AND platnost=1) = 0 then
+    call TW_RaiseError ('04080AB029TCUI', 'AB_HromInsert:', 'Druh operace neexistuje nebo je neplatný!');
+  end if;
+  
+  -- test na valutu
+  IF (_SValuta < TW_RegGetKeyDate('AC','*','*','valutamin')) THEN
+    LET _isError = 0;
+    --db konto
+    IF (_DbKonto is not null AND _dbBanka IS NULL) THEN
+        SELECT seropmemo,serpoc,zdrojser INTO _seropmemo,_serpoc,_zdrojser FROM ac_konto_mat WHERE konto=_DbKonto AND stav <> 2;
+        IF _zdrojser = 0 AND _seropmemo <> _serpoc THEN -- pokud je něco v archívu
+           let _isError = 1;
+        END IF;
+    END IF;
+
+    if _isError = 1 then
+        call TW_RaiseError ('127U212TCUI', 'AB_HromInsert: ', 'Souhrn: Valuta nesmí být menší než minimální povolená: %1', _SValuta);
+    end if;
+  END IF;   
+  
+  --test akce
+  if (_marketAkce is null)  then
+    call TW_RaiseError ('04081AB026TCUI', 'AB_HromInsert:', 'Marketinková akce musí být vyplněna!');
+  end if;
+  if _marketAkce <> '____'
+  and (SELECT Count(*) FROM ac_marketakce_cis WHERE marketakce=_marketAkce AND platnost=1) = 0 then
+    call TW_RaiseError ('04082AB027TCUI', 'AB_HromInsert:', 'Marketinková akce neexistuje nebo je neplatná!');
+  end if;
+  
+  -- test na datum uctovani
+  IF (_datUct < TW_RegGetKeyDate('AC','*','*','datuctmin')) THEN
+    CALL TW_RaiseError ('127S184TCUI', 'AB_HromInsert: ', 'Datum účtování musí být větší, nebo rovno nejstaršímu povolenému datu účtování.');
+  END IF;  
+  
+  IF(_datUct != TW_RegGetKeyDate('AC','*','*','datuct') AND _datUct > _datSplatnost) THEN
+    CALL TW_RaiseError ('127U186TCUI', 'AB_HromInsert: ', 'Datum účtování musí být menší nebo rovno datu splatnosti.');
+  END IF;   
+  
+  --test
+  if _DbUcet is not null then
+    if (SELECT Count(*) FROM AC_Ucet_Mat WHERE ucet = TRIM(_DbUcet) AND stav>0) = 0 then
+      call TW_RaiseError ('04083AB053TCUI', 'AB_HromInsert:', 'Souhrn: Účet %1 neexistuje v číselníku nebo je neplatný!', tw_liternull ( _DbUcet ));
+    end if;
+    if (SELECT Count(*) FROM AC_Ucet_Mat WHERE ucet = TRIM(_DbUcet) AND stav=1) = 1 then
+      call TW_RaiseError ('04084AB050TCUI', 'AB_HromInsert:', 'Souhrn: Na účtu %1 není povoleno manuální účtování!', tw_liternull ( _dbUcet ));
+    end if;
+  end if;
+  
+  --test sko
+  if _dbSko is not null
+  and (SELECT Count(*) FROM ac_sko_cis WHERE sko=_dbsko AND platnost=1) = 0 then
+    call TW_RaiseError ('04085AB060TCUI', 'AB_HromInsert:', 'Souhrn: %1 %2 neexistuje nebo je neplatné!', 'Sko ', _dbSko);
+  end if;
+  
+  --test
+  if _dbNS is not null and TRIM(_dbNS) <> '_____'
+  and (SELECT Count(*) FROM ac_naklstr_cis WHERE naklstr=_dbNS AND platnost=1) = 0 then
+    call TW_RaiseError ('04086AB060TCUI', 'AB_HromInsert:', 'Souhrn: %1 %2 neexistuje nebo je neplatné!', 'NS ', _dbNS);
+  end if;
+  if _dbCZ is not null and TRIM(_dbCZ) <> '___'
+  and (SELECT Count(*) FROM ac_cozakpfx_cis WHERE czprefix=_dbCZ AND platnost=1) = 0 then
+    call TW_RaiseError ('04087AB060TCUI', 'AB_HromInsert:', 'Souhrn: %1 %2 neexistuje nebo je neplatné!', 'CZ ', _dbCZ);
+  end if;
+  
+  --test
+  if _hdbcr = -1 and _DbBanka is not null then
+    call TW_RaiseError ('04088AB063TCUI', 'AB_HromInsert:', '%1 : Na debetní straně nelze zadávat banku!', 'Souhrn');
+  end if;
+  
+  
+  --Určení CO objektů
+  call AC_SetCOObj_N (_dbUcet,_dbNS,_dbCZ);
+  SELECT Char1
+     INTO _dbCOObjekt
+     FROM TW_RetVal_Temp ;
+  
+  SELECT  sum(castka)
+    INTO  _hcastkacelk
+    FROM tmp_AB_Rozpis_Kart
+    WHERE owner = AOwner;
+  
+  let _hromprikaz = aHromPrikaz  ;
+  
+  if (aHromPrikaz <> 0)  then
+  
+     UPDATE AB_HromDokl_Kart
+        SET (castkaCelk,pocet,dbcr,potvrzeno ,DavkaVznik,dokladTyp,
+             porUser,porTime,potvrdUser,potvrdTime) =
+            (_hcastkacelk,_hpocet,_hdbcr,0 , _hdavkaVznik,_dokladTyp,
+             ap_user(),Current Year to Second,null,null)
+      WHERE hromprikaz = _hromprikaz AND reftime = _hrefTime;
+  
+      if (TW_LastCount()=0) then
+        call TW_RaiseError ('04089AB800TCUI', 'AB_HromInsert:', 'Záznam změnil jiný uživatel');
+      end if;
+  
+      --musim aktualizovat reftime, protoze jsem ten kdo menil (pokud ma rozpis vice radku)
+      let _hrefTime = (SELECT reftime FROM AB_HromDokl_Kart WHERE hromprikaz = _hromprikaz);
+      UPDATE tmp_AB_Souhrn_Kart SET reftime = _hrefTime WHERE owner = AOwner;
+  
+      UPDATE AB_Doklad_Kart
+        SET potvrzeno  = 0,
+            potvrdUser = null,
+            potvrdTime = null,
+            poruser = ap_user(),
+            portime = Current Year to Second 
+            
+      WHERE hromprikaz = _hromprikaz;
+      --update pro AB_HromDokl_Kart se dela vzdy,
+      --proto neni potreba kontrola reftime pro rozpis (AB_Doklad_Kart)
+  
+      if _hpotvrzeno = 1 then
+        UPDATE AB_Davka_Prot
+           SET PocPotvrd=PocPotvrd-1
+        WHERE (Davka = _hDavkavznik) and (dokladTyp = _dokladTyp);
+      end if;
+  else
+     let _hDavkavznik =  AB_BatchInit (_DokladTyp,null,_hDavkaVznik);
+    --kontrola na archiv
+    LET _hromprikaz = (SELECT NVL(max(ser),0) FROM AB_HromDokl_Arch ) + 1;
+    LET _khromprikaz = (SELECT NVL(max(hromprikaz),0) FROM AB_HromDokl_Kart ) + 1;
+    LET _hromprikaz = TW_MaxInt(_hromprikaz,_khromprikaz);
+  
+     INSERT INTO AB_HromDokl_Kart
+            (hromprikaz,castkaCelk,pocet,dbcr,potvrzeno ,davkavznik,
+             dokladTyp,porUser,porTime,potvrdUser,potvrdTime)
+     VALUES (_hromprikaz,_hcastkaCelk,_hpocet,_hdbcr,_hpotvrzeno ,_hDavkavznik,
+             _dokladTyp,_hporUser,_hporTime,_hpotvrdUser,_hpotvrdTime);
+     --let _Hromprikaz = TW_LastSer();
+  
+     UPDATE AB_Davka_Prot
+        SET PocPoriz=Pocporiz+1
+      WHERE (Davka = _hDavkavznik) and (dokladTyp = _dokladTyp);
+  end if;
+  
+  
+  SELECT min(dokladBDS)
+    INTO _mindokladBDS
+    FROM tmp_AB_Rozpis_Kart
+    WHERE owner = AOwner;
+  
+  --JR 29.11.2000: init cislo rozpisu (kvuli FE hlaskam)
+  let _cislorozpis = 0;
+  
+  
+  foreach c1 with hold for
+  SELECT dokladBDS,castka,RKontopred,RKontozakl,RSko ,RUcet,
+         RKontopredCh,RKontozaklCh,
+         RNS,RCZ,RBanka,RVarSym ,RSpecSym ,RText,Premrok,Valuta,chyba
+    INTO _dokladcislo,_castka,_CrKontopred,_CrKontozakl,_CrSko,_CrUcet,
+          _CrKontopredCh,_CrKontozaklCh,
+         _crNS,_crCZ,_CrBanka,_CrVarSym ,_CrSpecSym ,_CrText,_Premrok,_Valuta,_chyba
+    FROM tmp_AB_Rozpis_Kart
+    WHERE owner = AOwner
+  
+    --JR 29.11.2000: cislo rozpisu
+    let _cislorozpis = _cislorozpis + 1;
+    
+    --Určení kont
+    let _CrKonto= AO_MergeKonto (_CrKontopred,_CrKontozakl);
+    let _DbKonto= AO_MergeKonto (_DbKontopred,_DbKontozakl);
+  
+    if _dbKonto = 0  then
+      let _dbKonto =null;
+    end if ;
+  
+    if _crKonto = 0  then
+      let _crKonto = null;
+    end if  ;   
+    
+    -- test vyplnenosti stran
+    IF(_hdbcr = -1) THEN
+      CALL AB_DokladStranaTest(_DbKonto, _dbSko, _dbUcet, _dbBanka, _crKonto, _crSko, _crUcet, _crBanka, 'Rozpis '||tw_liternull ( _cislorozpis )||': ', _hdbcr);
+    ELSE
+      CALL AB_DokladStranaTest(_crKonto, _crSko, _crUcet, _crBanka, _DbKonto, _dbSko, _dbUcet, _dbBanka, 'Rozpis '||tw_liternull ( _cislorozpis )||': ', _hdbcr);
+    END IF;
+  
+    -- test valuty
+    IF (_valuta < TW_RegGetKeyDate('AC','*','*','valutamin')) THEN
+      LET _isError = 0;
+      --cr konto
+      if (_isError = 0) AND (_CrKonto is not null AND _crBanka IS NULL) then
+          SELECT seropmemo,serpoc,zdrojser INTO _seropmemo,_serpoc,_zdrojser FROM ac_konto_mat WHERE konto=_CrKonto AND stav <> 2;
+          if _zdrojser = 0 AND _seropmemo <> _serpoc then -- pokud je něco v archívu
+             let _isError = 1;
+          end if;
+      end if;
+  
+      if _isError = 1 then
+          call TW_RaiseError ('127T211TCUI', 'AB_HromInsert: ', 'Rozpis %1 : Valuta nesmí být menší než minimální povolená: %2',tw_liternull ( _cislorozpis ), _valuta);
+      end if;
+    END IF;     
+  
+    --test
+    if _CrUcet is not null then
+      if (SELECT Count(*) FROM AC_Ucet_Mat WHERE ucet = TRIM(_CrUcet) AND stav>0) = 0 then
+        call TW_RaiseError ('04090AB054TCUI', 'AB_HromInsert:', 'Rozpis %1 : Účet %2 neexistuje v číselníku nebo je neplatný!', tw_liternull ( _cislorozpis ), tw_liternull ( _CrUcet ));
+      end if;
+      if (SELECT Count(*) FROM AC_Ucet_Mat WHERE ucet = TRIM(_CrUcet) AND stav=1) = 1 then
+        call TW_RaiseError ('04091AB049TCUI', 'AB_HromInsert:', 'Rozpis %1 : Na účtu %2 není povoleno manuální účtování!', tw_liternull ( _cislorozpis ), tw_liternull ( _CrUcet ));
+      end if;
+    end if;
+  
+    --test
+    if _crSko is not null
+    and (SELECT Count(*) FROM ac_sko_cis WHERE sko=_crsko AND platnost=1) = 0 then
+      call TW_RaiseError ('04092AB051TCUI', 'AB_HromInsert:', 'Rozpis %1 : Sko %2 neexistuje nebo je neplatné!', tw_liternull ( _cislorozpis ), _crSko);
+    end if;
+  
+    --test
+    if _crNS is not null and TRIM(_crNS) <> '_____'
+    and (SELECT Count(*) FROM ac_naklstr_cis WHERE naklstr=_crNS AND platnost=1) = 0 then
+      call TW_RaiseError ('04093AB061TCUI', 'AB_HromInsert:', 'Rozpis %1 : NS %2 neexistuje v číselníku nebo je neplatné', tw_liternull ( _cislorozpis ), _crNS);
+    end if;
+    if _crCZ is not null and TRIM(_crCZ) <> '___'
+    and (SELECT Count(*) FROM ac_cozakpfx_cis WHERE czprefix=_crCZ AND platnost=1) = 0 then
+      call TW_RaiseError ('04094AB062TCUI', 'AB_HromInsert:', 'Rozpis %1 : CZ %2 neexistuje v číselníku nebo je neplatné!', tw_liternull ( _cislorozpis ), _crCZ);
+    end if;
+  
+    --test
+    if _hdbcr = 1 and _CrBanka is not null then
+      call TW_RaiseError ('04095AB063TCUI', 'AB_HromInsert:', '%1 : Na debetní straně nelze zadávat banku!', 'Rozpis');
+    end if;
+  
+    --Určení CO objektů
+     call AC_SetCOObj_N (_crUcet,_crNS,_crCZ);
+  
+     SELECT Char1
+        INTO _crCOObjekt
+        FROM TW_RetVal_Temp ;    
+  
+     let _hDavkaVznik = AB_BatchInit(_DokladTyp, _DokladCislo,_hDavkaVznik);
+     let _dnesnidat = TW_RegGetKeyDate('AC','*','*','datuct');
+  
+     if (_datSplatnost is null) or (_DatSplatnost < _DnesniDat) then
+        let _datSplatnost = _dnesnidat;
+     end if;
+  
+     if (TW_RegGetKey('AB', 'vypl', '*', 'zpozdvypl', 0) = 1) then
+       if (_DatPlVypl is null) or (_DatPlVypl < _datSplatnost) then
+          let _DatPlVypl = _datSplatnost;
+       end if;
+     end if;
+  
+  
+     if  _Valuta is null then
+        if  not(_SValuta is null) then
+           let _Valuta =_SValuta;
+        else
+           let _Valuta = _DatSplatnost;
+        end if;
+     end if  ;
+  
+     if  _premrok is null then
+        if  not(_Spremrok is null) then
+           let _premrok =_Spremrok;
+        else
+           --let _premrok = Current Year to Year;
+           let _premrok = Extend(_Valuta, Year to Year);
+        end if;
+     end if  ;
+  
+     -- Test na debetní straně operace
+     if (_DbKonto is not null) then
+        if (_DbBanka is null) then        -- Vlastní konto  
+           SELECT  tko, stav
+             INTO _tko , _Stav
+             FROM AC_Konto_Mat
+            WHERE konto = _DbKonto and stav in(0,1);
+  
+           if (_tko is null) then
+             call TW_RaiseError ('04096AB031TCUI', 'AB_HromInsert:', 'Souhrn: Konto %1 není platné, nebo neexistuje!', tw_liternull ( _DbKonto ));
+           elif (_Stav = 1) then
+             call TW_RaiseError ('04097AB033TCUI', 'AB_HromInsert:', 'Souhrn: Konto %1 je vinkulováno!', tw_liternull ( _DbKonto ));
+           end if;
+         else
+           if (AO_KontoModulo(_DbKonto) <> 1) then
+             call TW_RaiseError ('04098AB034TCUI', 'AB_HromInsert:', 'Souhrn: Konto %1 není modulo 11!', tw_liternull ( _DbKonto ));
+           end if;
+           if (not Exists (SELECT * FROM AC_Bank_Cis WHERE BankaNum = _DbBanka AND platnost=1)) then
+             call TW_RaiseError ('04099AB035TCUI', 'AB_HromInsert:', 'Souhrn: Banka %1 neexistuje v číselníku nebo není platná!!', tw_liternull ( _DbBanka ));
+           end if;
+        end if;
+     end if;
+  
+     -- Test na krediní straně operace
+     if (_CrKonto is not null) then
+        if (_CrBanka is null) then        -- Vlastní konto  
+           SELECT  tko, stav
+              INTO _tko , _Stav
+              FROM AC_Konto_Mat
+              WHERE konto = _CrKonto and stav in(0,1);
+  
+           if (_tko is null) then
+             call TW_RaiseError ('04100AB036TCUI', 'AB_HromInsert:', 'Rozpis %1 : Konto %2 není platné nebo neexistuje!', tw_liternull ( _cislorozpis ), tw_liternull ( _CrKonto ));
+           end if;
+        else
+          if (AO_KontoModulo(_CrKonto) <> 1) then
+            call TW_RaiseError ('04101AB038TCUI', 'AB_HromInsert:', 'Rozpis %1 : Konto %2 není modulo 11!', tw_liternull ( _cislorozpis ), tw_liternull ( _CrKonto ));
+          end if;
+          if (not Exists (SELECT * FROM AC_Bank_Cis WHERE BankaNum = _CrBanka AND platnost=1)) then
+            call TW_RaiseError ('04102AB039TCUI', 'AB_HromInsert:', 'Rozpis %1 : Banka %2 neexistuje v číselníku nebo není platná!', tw_liternull ( _cislorozpis ), tw_liternull ( _CrBanka ));
+          end if;
+        end if;
+     end if;
+  
+  
+     -- Test splatnosti na zadaný počet pracovních dnů po dnesku v případě, že uživatel pořizující
+     -- tuto platbu nemá speciální oprávnění a test na cizí banku
+     if (_CrBanka is not null) then
+        -- Test na právo platby do cizí banky
+        call tw_Testrole('.abcbb_a');
+  
+       -- Test na právo prioritní platby
+       if (_Priorita = 1) then
+          call tw_Testrole('.abpri_a');
+       end if;
+  
+       select datprov into _datprov from ap_status;
+       let _CrSko = null;
+       if (_DatPlVypl < (TW_NextWorkday(_datprov,TW_RegGetKey('AB','*','*','minpocdnu'))))  then
+           begin
+              on exception in (-746)
+                call TW_RaiseError ('04103AB016TCUI', 'AB_HromInsert:', 'Platba do cizí banky má valutu menší než 3. prac den!');
+              end exception;
+              call TW_Testrole('.abcba_a');
+           end;
+       end if;
+     end if;
+  
+     if ((_dbKonto is null) and (_DbUcet is null)) then
+       call TW_RaiseError ('04104AB041TCUI', 'AB_HromInsert:', 'Souhrn: musí být vyplněno konto, nebo účet!');
+     end if;
+  
+     if ((_CrKonto is null) and (_CrUcet is null)) then
+       call TW_RaiseError ('04105AB042TCUI', 'AB_HromInsert:', 'Rozpis %1 : musí být vyplněno konto, nebo účet!', tw_liternull ( _cislorozpis ));
+     end if;
+  
+     if (_Castka is null) or (_Castka =0) then
+       call TW_RaiseError ('04106AB056TCUI', 'AB_HromInsert:', 'Rozpis %1 : Částka musí být větší než 0', tw_liternull ( _cislorozpis ));
+     end if;
+  
+     if (_Castka < 0) then
+       call TW_RaiseError ('04107AB055TCUI', 'AB_HromInsert:', 'Rozpis %1 : Nelze vložit zápornou částku!', tw_liternull ( _cislorozpis ));
+     end if;
+  
+  
+     -- Test na částku
+    if  (_Castka between 1000 and 10000) then
+      call tw_Testrole('.abca3_a');
+    elif (_Castka between 10000.01 and 100000) then
+      call tw_Testrole('.abca4_a');
+    elif (_Castka between 100000.01 and 1000000) then
+      call tw_Testrole('.abca5_a');
+    elif (_Castka > 1000000) then
+      call tw_Testrole('.abca6_a');
+    end if;
+  
+  
+    if aHromPrikaz <> 0  then
+        if _hdbcr = -1 then
+              UPDATE AB_Doklad_Kart
+                 SET (datPlVypl,druh,davkavznik,datSplatnost,valuta,
+                      datUct,dokladTyp, hromPrikaz,smer,uhrInk,priorita,
+                      konstSym,castka,marketAkce,uziv1,uziv2, uziv3,
+                      premrok,dbKonto,dbSko,dbUcet,
+                      dbCOobjekt,dbBanka,dbVarSym,dbSpecSym,dbText,
+                      crKonto,crSko,crUcet,crCOobjekt,crbanka,crVarSym,
+                      crSpecSym,crText,chyba,potvrzeno,porUser,porTime,
+                      potvrdUser,potvrdTime )=
+                    (_datPlVypl, _druh, _hdavkavznik, _datSplatnost, _valuta,
+                     _datUct,_dokladTyp, _hromPrikaz, _smer, _uhrInk, _priorita,
+                     _konstSym, _castka, _marketAkce,_uziv1, _uziv2, _uziv3,
+                     _premrok, _dbKonto, _dbSko,_dbUcet,
+                     _dbCOobjekt, _dbBanka, _dbVarSym, _dbSpecSym, _dbText,
+                     _CrKonto, _crSko, _crUcet, _crCOobjekt,_crbanka, _crVarSym,
+                     _crSpecSym, _crText,_chyba, 0, _hporUser, _hporTime,
+                     null, null)
+               WHERE dokladBDS = _dokladcislo;
+        else
+              UPDATE AB_Doklad_Kart
+                 SET(datPlVypl,druh,davkavznik,datSplatnost,valuta,
+                     datUct,castka,dokladTyp, hromPrikaz,smer,uhrInk,
+                     priorita,konstSym,marketAkce,uziv1,uziv2, uziv3,
+                     premrok,dbKonto,dbSko,dbUcet,dbCOobjekt,dbBanka,
+                     dbVarSym,dbSpecSym,dbText,crKonto,crSko,crUcet,
+                     crCOobjekt,crbanka,crVarSym,crSpecSym,crText,
+                     chyba,potvrzeno,porUser,porTime,potvrdUser,potvrdTime )=
+                    (_datPlVypl, _druh, _hdavkavznik, _datSplatnost, _valuta,
+                     _datUct,_castka,_dokladTyp, _hromPrikaz, _smer, _uhrInk,
+                     _priorita, _konstSym,_marketAkce,_uziv1, _uziv2, _uziv3,
+                     _premrok, _CrKonto, _crSko, _crUcet,_crCOobjekt,_crbanka,
+                     _crVarSym, _crSpecSym, _crText, _dbKonto, _dbSko,_dbUcet,
+                     _dbCOobjekt, _dbBanka, _dbVarSym,_dbSpecSym, _dbText,
+                     _chyba, 0, _hporUser, _hporTime,
+                     null,null)
+              WHERE dokladBDS = _dokladcislo;
+        end if;
+    else
+        if _hdbcr = -1 then
+           INSERT INTO AB_Doklad_Kart
+                    (datPlVypl,druh,davkavznik,datSplatnost,valuta,datUct,
+                    dokladTyp, hromPrikaz,smer,uhrInk,priorita,konstSym,castka,marketAkce,
+                    uziv1,uziv2, uziv3,premrok,dbKonto,dbSko,dbUcet,
+                    dbCOobjekt,dbBanka,dbVarSym,dbSpecSym,dbText,
+                    crKonto,crSko,crUcet,crCOobjekt,crbanka,crVarSym,crSpecSym,crText,chyba,
+                    potvrzeno,porUser,porTime,potvrdUser,potvrdTime )
+           VALUES (_datPlVypl, _druh, _hdavkavznik, _datSplatnost, _valuta, _datUct,
+                    _dokladTyp, _hromPrikaz, _smer, _uhrInk, _priorita, _konstSym, _castka,
+                    _marketAkce,_uziv1, _uziv2, _uziv3, _premrok, _dbKonto, _dbSko,_dbUcet,
+                    _dbCOobjekt, _dbBanka, _dbVarSym, _dbSpecSym, _dbText,
+                    _CrKonto, _crSko, _crUcet, _crCOobjekt,_crbanka, _crVarSym, _crSpecSym,
+                    _crText,_chyba, _hpotvrzeno, _hporUser, _hporTime,
+                    null,null);
+        else
+           INSERT INTO AB_Doklad_Kart
+                    (datPlVypl,druh,davkavznik,datSplatnost,valuta,datUct,
+                    dokladTyp, hromPrikaz,smer,uhrInk,priorita,konstSym,castka,marketAkce,
+                    uziv1,uziv2, uziv3,premrok,dbKonto,dbSko,dbUcet,
+                    dbCOobjekt,dbBanka,dbVarSym,dbSpecSym,dbText,
+                    crKonto,crSko,crUcet,crCOobjekt,crbanka,crVarSym,crSpecSym,crText,chyba,potvrzeno,
+                    porUser,porTime,potvrdUser,potvrdTime )
+           VALUES (_datPlVypl, _druh, _hdavkavznik, _datSplatnost, _valuta, _datUct,
+                    _dokladTyp, _hromPrikaz, _smer, _uhrInk, _priorita, _konstSym, _castka, _marketAkce,
+                    _uziv1, _uziv2, _uziv3, _premrok,
+                    _CrKonto, _crSko, _crUcet, _crCOobjekt,_crbanka, _crVarSym, _crSpecSym, _crText,
+                    _dbKonto, _dbSko,_dbUcet,_dbCOobjekt, _dbBanka, _dbVarSym, _dbSpecSym, _dbText,
+                    _chyba, _hpotvrzeno, _hporUser, _hporTime, null,
+                    null);
+        end if;
+  
+        let _dokladBDS = TW_LastSer();
+  
+        if _dokladcislo = _mindokladBDS then
+           UPDATE AB_HromDokl_Kart
+              SET (Prvnidoklad) = (_dokladBDS)
+              WHERE hromprikaz = _hromprikaz;
+        end if;
+    end if;
+  
+  end foreach;
+  
+  UPDATE TW_retval_temp
+         SET Int1=_Hromprikaz;  
+
+end procedure;

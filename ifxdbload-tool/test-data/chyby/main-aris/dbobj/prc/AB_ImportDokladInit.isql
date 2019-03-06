@@ -1,0 +1,11 @@
+CREATE FUNCTION AB_ImportDokladInit(ATyp   CHAR(4))
+  RETURNING INT    
+  -- procedura provede zneplatneni importu pod stejnym ownerem
+  
+  DEFINE _id      INT; 
+  
+  INSERT INTO ab_import_prot (typ) VALUES (ATyp);
+  LET _id = TW_LastSer();
+  
+  RETURN _id;
+end function;

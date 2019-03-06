@@ -1,0 +1,353 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_Accountone.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB14~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru AB_Accountone
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 21.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--Procedura provede zaúčtování dokladu daného čísla.
+--====================================================================== */
+--
+--
+CREATE     FUNCTION AB_Accountone (ADokladCislo Int, AOwner Int default null)
+                                 returning Int;
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB14~1
+-- vytvořeno 21.8.1997
+define _TW_Akce      Int;
+define _ser          Int;
+define _dokladBDS    Int;
+define _datPlVypl    Date   ;
+define _druh         Char (4);
+define _davkavznik   Int;
+define _datSplatnost Date;
+define _valuta       Date;
+define _datUct       Date ;
+define _dokladTyp    Char  (2);
+define _hromPrikaz   Int;
+define _smer         integer;
+define _uhrInk       Char  (1);
+define _priorita     integer;
+define _konstSym     Dec   (10,0);
+define _castka       Dec   (16,2);
+define _marketAkce   Char  (4);
+define _uziv1        integer;
+define _uziv2        integer;
+define _uziv3        integer;
+define _premRok      DateTime Year to Year;
+define _dbKonto      Dec   (16,0);
+define _dbSko        Char  (4);
+define _dbUcet       Char  (9);
+define _dbCOobjekt    Char  (10);
+define _dbBanka      Dec   (7,0);
+define _dbVarSym     Dec   (10,0);
+define _dbSpecSym    Dec   (10,0);
+define _dbText       Char  (20);
+define _crKonto      like AB_Doklad_Kart.crkonto;
+define _crSko        Char  (4);
+define _crUcet       Char  (9);
+define _crCOobjekt    Char  (10);
+define _crBanka      Dec   (7,0);
+define _crVarSym     Dec   (10,0);
+define _crSpecSym    Dec   (10,0);
+define _crText       Char  (20);
+define _chyba        VarChar  (255,0);
+define _potvrzeno    integer;
+define _porUser      Char  (20);
+define _porTime      DateTime Year to Second;
+define _refUser      Char  (20);
+define _refTime      DateTime Year to Second;
+define _potvrdUser   Char  (20);
+define _potvrdTime   DateTime Year to Second;
+define _stav         integer;
+define _dnesnidat    Date;
+define _PocPolDav    Int;
+define _PocPolZauct  Int;
+define _Title        Char  (100);
+define _Subtitle     Char  (100);
+define _UcStav       integer;
+define _zprkli       like AB_Doklad_Kart.zprkli;
+define _smlouva      Dec(16,2);
+define _tsml         Char(4); 
+define _tko          Char(2);
+define _kodChyby     CHAR(4);
+
+if AOwner is not null then
+  call AP_ErrorInit(AOwner);
+end if
+
+  SELECT datPlVypl,druh,davkavznik,datSplatnost,valuta,datUct,
+         dokladTyp, hromPrikaz,smer,uhrInk,priorita,konstSym,castka,marketAkce,zprkli,
+         uziv1,uziv2, uziv3,premrok,dbKonto,dbSko,dbUcet,
+         dbCOobjekt,dbBanka,dbVarSym,dbSpecSym,dbText,
+         crKonto,crSko,crUcet,crCOobjekt,crbanka,crVarSym,crSpecSym,crText,chyba,potvrzeno,
+         porUser,porTime,refUser,refTime,potvrdUser,potvrdTime
+   INTO  _datPlVypl, _druh, _davkavznik, _datSplatnost, _valuta, _datUct,
+        _dokladTyp, _hromPrikaz, _smer, _uhrInk, _priorita, _konstSym, _castka, _marketAkce, _zprkli,
+        _uziv1, _uziv2, _uziv3, _premrok, _dbKonto,_dbSko, _dbUcet,
+        _dbCOobjekt, _dbBanka, _dbVarSym, _dbSpecSym, _dbText,
+        _crKonto, _crSko, _crUcet, _crCOobjekt,_crbanka, _crVarSym, _crSpecSym, _crText,
+        _chyba, _potvrzeno, _porUser, _porTime, _refUser, _refTime, _potvrdUser,
+        _potvrdTime
+         FROM AB_Doklad_Kart
+   WHERE (DokladBDS=ADokladCislo);
+
+ --   let _DavkaVznik = AB_BatchInit(_DokladTyp,ADokladCislo,_Davkavznik);
+
+  let _dnesnidat = TW_RegGetKeyDate('AC','*','*','datuct');
+
+
+  if _valuta is null then
+      let _valuta = _dnesnidat;
+  end if;
+
+--   if (_DatPlVypl is null) or (_DatPlVypl < _valuta) then
+--      let _DatPlVypl = _Valuta;
+--    end if;
+
+  if (_DatPlVypl < _valuta) then
+    let _datplvypl = null;
+  end if;
+
+  -- Test na právo platby do cizí banky
+  if (_CrBanka is not null) then
+    call tw_Testrole('.abcbb_a');
+  end if;
+
+  -- Test na právo prioritní platby
+  if (_Priorita = 1) then
+    call tw_Testrole('.abpri_a');
+  end if;
+
+  if (_DbUcet is not null) then
+    SELECT stav
+      INTO _UcStav
+      FROM AC_Ucet_Mat
+      WHERE ucet = _DbUcet;
+
+    if _UcStav = 1 then
+      {call tw-error(-13038,'Na Db účtu není povoleno manuální účtování.'||tw_liternull(_DbUcet),'AB049');}
+       call TW_RaiseError ('04061AB049TCUI', 'AB_Accountone:', 'Rozpis %1 : Na účtu %2 není povoleno manuální účtování!', adokladcislo, _dbucet);
+    end if;
+  end if;
+
+  if (_CrUcet is not null) then
+    SELECT stav
+      INTO _UcStav
+      FROM AC_Ucet_Mat
+      WHERE ucet = _CrUcet;
+
+    if _UcStav = 1 then
+      {call tw-error(-13039,'Na Cr účtu není povoleno manuální účtování.'||tw_liternull(_CrUcet),'AB050');}
+       call TW_RaiseError ('04062AB050TCUI', 'AB_Accountone:', 'Souhrn: Na účtu %1 není povoleno manuální účtování!', _crucet);
+    end if;
+  end if;
+
+
+  -- Test na částku
+  if  (_Castka between 1000 and 10000) then
+    call tw_Testrole('.abca3_a');
+  elif (_Castka between 10000.01 and 100000) then
+    call tw_Testrole('.abca4_a');
+  elif (_Castka between 100000.01 and 1000000) then
+    call tw_Testrole('.abca5_a');
+  elif (_Castka > 1000000) then
+    call tw_Testrole('.abca6_a');
+  end if;
+
+
+  if (_Potvrzeno=0) then
+    {call tw-error(-13019,'Neověřený záznam','AB005',ADokladCislo);}
+     call TW_RaiseError ('04063AB005TCUI', 'AB_Accountone:', 'Doklad %1 nebyl potvrzen', ADokladCislo);
+ end if;
+ 
+  -- test na exekuce
+  
+  let _tko = (SELECT tko FROM ac_konto_mat WHERE konto = _dbKonto and stav <> 2);
+  let _kodChyby = AO_TestOpravneniPlatby(AOwner, _dbKonto, _tko, 2);
+
+if _dokladtyp ='IB' or _dokladtyp ='HB' or _dokladTyp = 'TP' then
+  let _Ser = AC_Zauctuj(  1            ,--AZpusobUct
+                          _davkavznik  ,--ADavkaVznik
+                          _druh        ,--Adruh
+                          _Castka      ,--Acastka
+                          _Smer        ,--ASmerUct
+                          _Valuta      ,--AValuta
+                          _Datuct      ,--ADatUct
+                          _premrok     ,--ARokSP
+                          _dbkonto     ,--ADbKonto
+                          null         ,--ADbTko
+                          _dbsko       ,--ADbSko
+                          _dbbanka     ,--ADbBanka
+                          null         ,--ADbZkratka
+                          _dbucet      ,--ADbUcet
+                          _dbCOobjekt   ,--ADbCOobjekt
+                          _crkonto     ,--ACrKonto
+                          null         ,--ACrTko
+                          _crsko       ,--ACrSko
+                          _crbanka     ,--ACrBanka
+                          null         ,--ACrZkratka
+                          _crucet      ,--ACrUcet
+                          _crCOobjekt   ,--ACrCOobjekt
+                          _dbtext      ,--ADbText
+                          _dbspecsym   ,--ADbSpecSym
+                          _dbvarsym    ,--ADbVarSym
+                          _crtext      ,--ACrText
+                          _crspecsym   ,--ACrSpecSym
+                          _crvarsym    ,--ACrVarSym
+                          _datplvypl   ,--ADatVypl
+                          null         ,--AIdTran
+                          _uhrink      ,--AUhrInk
+                          null         ,--AZdroj
+                          _priorita    ,--APriorita
+                          _konstsym    ,--AKonstSym
+                          null         ,--ACiziDatUct
+                          null         ,--ACiziValuta
+                          _portime     ,--ADatPor
+                          _zprkli      ,--AZprKli
+                          null         ,--AZprBank
+                          null         ,--ADbIdent
+                          null         ,--ACrIdent
+                          _marketakce  ,--AMarketAkce
+                          _uziv1       ,--AUziv1
+                          _uziv2       ,--AUziv2
+                          _uziv3       ,--AUziv3
+                          null         --AExclusive
+  );
+else
+   if  _dokladtyp ='IK' or _dokladtyp ='HK'  then
+     let _Ser = AC_Zauctuj( 0         ,--AZpusobUct
+                          _davkavznik ,--ADavkaVznik
+                          _druh       ,--Adruh
+                          _Castka     ,--Acastka
+                          _Smer       ,--ASmerUct
+                          _Valuta     ,--AValuta
+                          _datuct     ,--ADatUct
+                          _premrok    ,--ARokSP
+                          _dbkonto    ,--ADbKonto
+                          null        ,--ADbTko
+                          _dbsko      ,--ADbSko
+                          _dbbanka    ,--ADbBanka
+                          null        ,--ADbZkratka
+                          _dbucet     ,--ADbUcet
+                          _dbCOobjekt  ,--ADbCOobjekt
+                          _crkonto    ,--ACrKonto
+                          null        ,--ACrTko
+                          _crsko      ,--ACrSko
+                          _crbanka    ,--ACrBanka
+                          null        ,--ACrZkratka
+                          _crucet     ,--ACrUcet
+                          _crCOobjekt  ,--ACrCOobjekt
+                          _dbtext     ,--ADbText
+                          _dbspecsym  ,--ADbSpecSym
+                          _dbvarsym   ,--ADbVarSym
+                          _crtext     ,--ACrText
+                          _crspecsym  ,--ACrSpecSym
+                          _crvarsym   ,--ACrVarSym
+                          _datplvypl  ,--ADatVypl
+                          null        ,--AIdTran
+                          _uhrink     ,--AUhrInk
+                          null        ,--AZdroj
+                          _priorita   ,--APriorita
+                          _konstsym   ,--AKonstSym
+                          null        ,--ACiziDatUct
+                          null        ,--ACiziValuta
+                          _portime    ,--ADatPor
+                          _zprkli     ,--AZprKli
+                          null        ,--AZprBank
+                          null        ,--ADbIdent
+                          null        ,--ACrIdent
+                          _marketakce ,--AMarketAkce
+                          _uziv1      ,--AUziv1
+                          _uziv2      ,--AUziv2
+                          _uziv3      ,--AUziv3
+                          null        --AExclusive
+    );
+  else --pro doklady typu II
+     let _Ser = CZ_InsertKart(
+                           'I'        ,--Typ žádosti
+                          _davkavznik ,--ADavkaVznik
+                          _druh       ,--Adruh
+                          _Castka     ,--Acastka
+                          _Valuta     ,--AValuta
+                          _dbkonto    ,--ADbKonto
+                          _dbbanka    ,--ADbBanka
+                          _crkonto    ,--ACrKonto
+                          _dbtext     ,--ADbText
+                          _dbspecsym  ,--ADbSpecSym
+                          _dbvarsym   ,--ADbVarSym
+                          _crtext     ,--ACrText
+                          _crspecsym  ,--ACrSpecSym
+                          _crvarsym   ,--ACrVarSym
+                          _priorita   ,--APriorita
+                          _konstsym   ,--AKonstSym
+                          NULL        ,-- AIdTran     
+                          NULL        ,-- AMena       
+                          NULL        ,-- ADuvodStorna
+                          NULL        ,-- ASerStorna  
+                          AOwner      ,-- AOwner      
+                          NULL         -- ADavka                                
+    );
+
+  end if;
+end if ;
+
+  DELETE
+    FROM AB_Doklad_Kart
+   WHERE DokladBDS=ADokladCislo AND dokladtyp= _dokladtyp;
+
+  begin
+   on exception in (-206, -217)
+   end exception;
+  --if (_DokladTyp<>'II' )then
+      let _Title = 'Doklad BDS '||_dokladtyp||' č.'||ADokladCislo;
+      let _SubTitle = 'operace č. '||_ser;
+
+      INSERT  INTO tmp_AB_memoBDS (ser,Title,Subtitle,porUser,porTime,
+         potvrdUser,potvrdTime)  VALUES(_ser,_Title,_Subtitle,_porUser,_porTime,
+         _potvrdUser,_potvrdTime);
+  -- end if;
+  end;
+
+ INSERT
+    INTO AB_Doklad_Arch(dokladBDS,ser,davkaVznik,dokladTyp,Poruser,portime,
+         potvrdUser, potvrdTime,zauctuser, zaucttime)
+    VALUES(ADokladCislo,_ser,_Davkavznik, _DokladTyp, _PorUser, _PorTime,
+          _PotvrdUser, _PotvrdTime,AP_User(), CURRENT YEAR TO SECOND);
+
+
+
+return _ser;
+--  trace off;
+-- Ukončení dávky v případě, že byla uzavřena a už v ní nejsou další doklady
+let _PocPolDav  = (SELECT Count(*) FROM AB_Doklad_Kart WHERE davkaVznik = _DavkaVznik);
+
+if (_PocPolDav = 0) then
+  --JR 25.1.2001: doplneni do wheru chybejici 'dokladtyp' (soucast prim key)
+  if (not Exists (SELECT * FROM AB_Davka_Prot
+                    WHERE Davka=_DavkaVznik AND DokladTyp=_dokladtyp AND stav = 0)) then
+     UPDATE AB_Davka_Prot
+        SET Stav = 2,
+            endUser = AP_User(),
+            EndTime = Current Year to Second
+      WHERE Davka = _DavkaVznik;
+
+      let _TW_Akce {= TW-ProvDen('AB',8,_DavkaVznik,'Konec dávky');}
+                    = TW_ProvDen ('AB', 8, _DavkaVznik, 'Finishing BDS batch');
+   end if;
+end if;
+
+end function;
