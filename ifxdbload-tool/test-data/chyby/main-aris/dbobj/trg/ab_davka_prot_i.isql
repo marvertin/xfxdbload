@@ -2,6 +2,6 @@ CREATE TRIGGER ab_davka_prot_i insert on ab_davka_prot
   referencing new as new
   for each row
   (
-    execute procedure Ap_User(new.openuser) into openuser,
-    execute procedure Ap_User(new.refuser) into refuser
+    execute procedure Ap_User(new.openuser) into refuser,
+    execute procedure Ap_User(new.refuser) into openuser
   );

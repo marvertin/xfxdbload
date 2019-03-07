@@ -6,7 +6,11 @@ import static java.util.stream.Collectors.mapping;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -61,28 +65,67 @@ public class CatalogHasher {
    * @param jt template, který použít
    * @return mapa názvů na data
    */
-  public Map<String, String> hashCatalog(final EStmType stmType) {
+  private Map<String, String> hashCatalogAll(final EStmType stmType) {
     final Map<String, String> map =
-        jt.query(sql(stmType + "_hashCatalog.sql"),
+        jt.query(sql(stmType + "_hashCatalogAll.sql"),
             new Object[] {schema.toString()},  // podle schématu se vybírá
             new BeanPropertyRowMapper<>(Record.class, true)) // a to je jen pomocný objekt
         .stream().collect(
             groupingBy(Record::getNazev, // podle názvu seskupit do seznamu stringů
                 mapping(Record::getData, joining()))); // a všechny stringy spojit
     log.debug("Mapa názvů na data: {}" , map);
-    map.replaceAll((__, data) -> DigestUtils.sha1Hex(data)); // spočítat heše
+    map.replaceAll((__, body) -> DigestUtils.sha1Hex(body)); // spočítat heše
     log.debug("Mapa názvů na heše: {}" , map);
     return map;
   }
 
   /**
-   * Aktualizuje hashe v tabulce hešů podle zdrojáků i systémového katalogu. Očekává se, že objekt byl právě zaveden.
+   * Hešne jeden objekt z katalogu
+   * @param objName
+   * @param stmType
+   * @return
+   */
+  public String hashCatalogOne(final String objName, final EStmType stmType) {
+    final String body = jt.queryForList(sql(stmType+ "_hashCatalogOne.sql"),
+        new Object[] {objName, schema.toString()}, String.class).stream()
+        .collect(Collectors.joining());
+    return DigestUtils.sha1Hex(body);
+  }
+
+  /**
+   * Aktualizuje hashe v tabulce hešů podle zdrojáků i systémového katalogu. Očekává se, že objekt byl právě zaveden ve stejné transakci.
+   * Buď záznam aktualizuje nebo ho přidá.
    * @param stm
    */
   public void updateHashes(final SplStatement stm) {
-
+    final Object[] params = new Object[] {
+        DigestUtils.sha1Hex(stm.getText()),
+        hashCatalogOne(stm.getName(), stm.getStmType()),
+        stm.getStmType().toString(),
+        stm.getName().toString(),
+        schema.toString(),
+    };
+    if (jt.update(sql("hashesUpdate.sql"), params) == 0) { // zkusit updatnout
+      jt.update(sql("hashesInsert.sql"), params); // a když to tam nebylo, tak vložit
+    }
   }
 
+
+  /**
+   * Seznam jmen objektů, které není nutné zavádět, protože:
+   *  - je typu, který bereme v úvahu
+   *  - má záznam v tabulce ifxdbloader_objhash
+   *  - heš zdrojáku souhlasí s hešem v tabulce
+   *  - heš katalogu souhlasí s hešem v tabulce
+   * @param stms Kolekce k prověření
+   * @param stmType Typ příkazu
+   * @return
+   */
+  public Set<String> notChangedObjNames(final Collection<SplStatement> stms, final EStmType stmType) {
+    final Map<String, String> hešeZKatalogu = hashCatalogAll(stmType);
+    // TODO [veverka]  -- 7. 3. 2019 9:50:08 veverka
+    return Collections.emptySet();
+  }
 
   @Data
   public static class Record {

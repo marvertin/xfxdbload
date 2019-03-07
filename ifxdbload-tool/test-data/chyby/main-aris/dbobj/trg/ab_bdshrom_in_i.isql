@@ -10,7 +10,7 @@
 
 --
 CREATE TRIGGER ab_bdshrom_in_i insert on ab_bdshrom_in
-  referencing new as new
+  referencing new  as   new
   for each row
   (
     execute procedure Ap_User(new.poruser) into poruser

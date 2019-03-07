@@ -1,5 +1,6 @@
 package cz.tconsult.lib.ifxdbload.core.loaders.hasher;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Data;
  *
  */
 @Data
+@AllArgsConstructor
 public class IfxdbloaderObjhash {
   private String objtype;
   private String objname;
