@@ -14,3 +14,5 @@ CREATE TABLE ifxdbloader_objhash (
 
   PRIMARY KEY (objtype, objname, owner)
 )
+
+LOCK MODE ROW
