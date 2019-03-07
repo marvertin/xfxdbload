@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import cz.tconsult.lib.lexer.LexerToken;
+import cz.tconsult.lib.spllexer.ESeplTokenForIgnoring;
 import cz.tconsult.lib.spllexer.ESplTokenNoKeyword;
 import cz.tconsult.lib.spllexer.SplDirective;
 
@@ -21,7 +22,14 @@ class TokenChecker2 extends TokenChecker {
   @Override
   protected void onShift(final LexerToken token) {
     if (sb != null) {
-      sb.append(token.getText());
+      if (token.getType() == ESeplTokenForIgnoring.COMMENTARY && token.getText().startsWith("//")) {
+        // Komentář udělaný z dvojice lomítek převedeme na stnadardní komentář
+        sb.append("--");
+        sb.append(token.getText().substring(2));
+      } else {
+        sb.append(token.getText());
+
+      }
     }
   }
 
