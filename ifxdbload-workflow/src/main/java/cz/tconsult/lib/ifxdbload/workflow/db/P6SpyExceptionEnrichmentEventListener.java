@@ -13,6 +13,8 @@ import com.p6spy.engine.event.JdbcEventListener;
 import com.zaxxer.hikari.pool.ProxyConnection;
 
 import cz.tconsult.lib.exception.FThrowable;
+import cz.tconsult.lib.ifxdbload.core.tw.RowCol;
+import cz.tconsult.lib.ifxdbload.workflow.process.FSqlExcFormatter;
 import lombok.Data;
 import lombok.SneakyThrows;
 
@@ -136,9 +138,7 @@ public class P6SpyExceptionEnrichmentEventListener extends JdbcEventListener {
       final ProxyConnection hikariConnection =  (ProxyConnection) loggable.getConnectionInformation().getConnection();
       IfxConnection ifxconn;
       ifxconn = unwrap(hikariConnection, IfxConnection.class);
-      final int errorOffset = ifxconn.getSQLStatementOffset();
-
-      System.out.println("EROROVYOFSET: " + errorOffset);
+      final int errorOffset = ifxconn.getSQLStatementOffset() - 1; // chceme počítat od nuly
       // Do výjimky přidáme informace o SQL příkazu a jeho parametrech.
       // Nedokážeme to jinak, než přidáním do existující výjimky na konec řetězce.
       // Je totiž proti fylozofii P6Spy modifikovat chování JDBC driveru, proto k tomu nedvá žádné prostředky.
@@ -147,12 +147,21 @@ public class P6SpyExceptionEnrichmentEventListener extends JdbcEventListener {
       final String text = "connId=" + connectionId + ", " + loggable.getSqlWithValues();
       final ErrorOffset errorOfsetException = new ErrorOffset(errorOffset);
       e.setNextException(errorOfsetException);
-
-      errorOfsetException.setNextException(new SQLException(text));
-
-      final int znovuvytazenyOffset = FThrowable.findThrowableType(e, ErrorOffset.class).get().getOffset();
-      System.out.println(znovuvytazenyOffset);
+      final String s = FSqlExcFormatter.format(e, "", new RowCol(0,0), loggable.getSqlWithValues(), errorOffset);
+      errorOfsetException.setNextException(new SQLException(s));
     }
+  }
+
+  /**
+   * Vrátí offset chyby zababušený ve výjimce nebo 0, když nebyl offset nalezen
+   * Offset je počítán od nuly.
+   * @param e
+   * @return
+   */
+  public static int pickErrorOffset(final Exception e) {
+    return FThrowable.findThrowableType(e, ErrorOffset.class)
+        .map(ErrorOffset::getOffset)
+        .orElse(1);
   }
 
   /**

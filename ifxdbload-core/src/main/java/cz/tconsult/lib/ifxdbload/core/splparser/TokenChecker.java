@@ -71,6 +71,14 @@ abstract class TokenChecker {
     return it.get();
   }
 
+  /**
+   * Vrátí token, který je k dispozici, bez ohledu na to, zda je to bílý znak, či nikoli
+   * @return
+   */
+  protected LexerToken rawGet() {
+    return it.get();
+  }
+
   private void shiftAllWitespacesAndComentaries() {
     while (it.get().getType() instanceof ESeplTokenForIgnoring) {
       onShift(it.get());

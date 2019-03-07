@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
-import cz.tconsult.lib.exception.FThrowable;
 import cz.tconsult.lib.ifxdbload.core.db.DbContext;
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
@@ -38,8 +37,7 @@ public class FazeManager {
   private final FazeExecutorFactory fazeExecutorFactory;
   private final DbContextFactory dbContextFactory;
 
-
-
+  private final ErrorReporter errorReporter = new ErrorReporter();
 
   /**
    * Provede zavdení dané množiny fází v daném exekučním kontextu.
@@ -115,11 +113,7 @@ public class FazeManager {
 
     @Override
     public void reportError(final DataAccessException exc, final SplStatement stm) {
-      // TODO [veverka] reportovat chybu, ajít místo jejího výskytu -- 7. 3. 2019 11:15:51 veverka
-      System.out.println("CHYBISKO JE TU A NECO SE MUSI TODO\n: " +FThrowable.formatter(exc).withoutStackTraceInMoreLines().toText());
-
-      //TODO [veverka] implementuj - vygenerovana metoda [veverka 14:05:55]
-
+      errorReporter.reportError(exc, stm);
     }
 
   }

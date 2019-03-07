@@ -19,6 +19,8 @@ dependencies {
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
 	testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
 	
+ 	// použito pro formátování výjimky
+	implementation group: 'org.apache.commons', name: 'commons-text'
 	
 
 }

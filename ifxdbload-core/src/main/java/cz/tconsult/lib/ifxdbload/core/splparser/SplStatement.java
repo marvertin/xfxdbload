@@ -2,6 +2,7 @@ package cz.tconsult.lib.ifxdbload.core.splparser;
 
 import java.util.Set;
 
+import cz.tconsult.lib.lexer.LexerTokenLocator;
 import cz.tconsult.lib.spllexer.SplDirective;
 import lombok.Data;
 
@@ -23,4 +24,7 @@ public class SplStatement {
 
   /** Text SQL příkazu */
   private final String text;
+
+  /** Lokátor prvního tokenu příkazu, je zajímavý pro určení pozice */
+  private final LexerTokenLocator firstTokenLocator;
 }

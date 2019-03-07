@@ -12,7 +12,10 @@ import cz.tconsult.lib.spllexer.SplDirective;
 
 class TokenChecker2 extends TokenChecker {
 
+  /** Posbíraný aktuálně parsrovaný příkaz */
   private StringBuilder sb;
+  /** první token příkazu, jenž se začínal sbírat do sb */
+  private LexerToken firstToken;
 
   public TokenChecker2(final TokenIterator<LexerToken> it) {
     super(it);
@@ -43,6 +46,7 @@ class TokenChecker2 extends TokenChecker {
 
   public void startCollecting() {
     sb = new StringBuilder();
+    firstToken = rawGet();
   }
 
   public SplStatement createStatement(final List<LexerToken> directives, final EStmType type, final LexerToken nazev) {
@@ -51,7 +55,7 @@ class TokenChecker2 extends TokenChecker {
       .map(LexerToken::getValue)
       .map( x -> (SplDirective) x)
       .collect(Collectors.toSet());
-    return new SplStatement(directs, type, nazev == null ? null : (String) nazev.getValue(), sb.toString());
+    return new SplStatement(directs, type, nazev == null ? null : (String) nazev.getValue(), sb.toString(), firstToken.getLocator());
   }
 
   /**
