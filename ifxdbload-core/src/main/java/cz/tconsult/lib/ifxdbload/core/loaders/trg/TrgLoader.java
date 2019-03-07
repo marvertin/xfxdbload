@@ -2,6 +2,8 @@ package cz.tconsult.lib.ifxdbload.core.loaders.trg;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,11 @@ import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 
+/**
+ * Zavaděč triggerů
+ * @author veverka
+ *
+ */
 public class TrgLoader extends Loader0 {
 
 
@@ -44,26 +51,30 @@ public class TrgLoader extends Loader0 {
    * @param stms Seznam procedur a funkcí k zavedení. Implementace může předpokládat, že zde nejsou žádné další objekty.
    */
   public void load(final List<SplStatement> stms) {
-    System.out.println("měl bych loudnout: " + stms.size());
     final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms, EStmType.TRIGGER);
-
-
-    stms.parallelStream()
-    .filter(trg -> ! notChangedObjNames.contains(trg.getName()))  // pryč s těmi, které se nezměnily
+    final List<SplStatement> triggeryKZavedeni = stms.stream().
+        filter(trg -> ! notChangedObjNames.contains(trg.getName()))
+        .collect(Collectors.toList());
+    log.info("TRIGGERS: changed {} + same {} = total {}",  triggeryKZavedeni.size(),  stms.size() - triggeryKZavedeni.size(), stms.size());
+    // Triggery zavádíme paralelně.
+    final AtomicInteger pocetChyb = new AtomicInteger(0);
+    triggeryKZavedeni.parallelStream()
     .forEach(trg -> {
-      log.info("TRIGGER --> \"{}\"", trg.getName());
+      log.debug("TRIGGER --> \"{}\"", trg.getName());
       tranik().execute(status -> {
         jt().update("DROP TRIGGER IF EXISTS " + trg.getName());
         try {
           jt().execute(trg.getText());  // Vlastní zavedení triggeru
+          catalogHasher.updateHashes(trg); // ve stejné tgransakci updatneme heše
         } catch (final BadSqlGrammarException e) {
           ctx().reportError(e, trg);
-          status.setRollbackOnly();
+          status.setRollbackOnly(); // rolbackujeme
+          pocetChyb.incrementAndGet();
         }
-        catalogHasher.updateHashes(trg);
         return null; // není co vracet
       });
-      log.info("TRIGGER <-- \"{}\"", trg.getName());
+      log.debug("TRIGGER <-- \"{}\"", trg.getName());
     });
+    log.info("TRIGGERS: loaded {} + error {} = total {}",  triggeryKZavedeni.size() - pocetChyb.get(),  pocetChyb.get(), triggeryKZavedeni.size());
   }
 }
