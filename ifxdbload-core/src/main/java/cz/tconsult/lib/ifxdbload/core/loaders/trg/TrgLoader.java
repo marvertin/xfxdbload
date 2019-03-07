@@ -4,39 +4,32 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.support.TransactionTemplate;
 
+import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
+import cz.tconsult.lib.ifxdbload.core.loaders.Loader0;
 import cz.tconsult.lib.ifxdbload.core.loaders.hasher.CatalogHasher;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public class TrgLoader {
+public class TrgLoader extends Loader0 {
 
-  private final TransactionTemplate tranik;
-  /**
-   * Template pro zavedení, musí být už spojen s tím správným schématem pomocí
-   *   SET SESSION AUTHORIZATION TO.
-   */
-  private final JdbcTemplate jt;
+  private final CatalogHasher catalogHasher;
 
-  /** Schéma, do kterého se zavádí. Musí být dodáno schéma, do kterého zavádí template.
-   * Schéma se použije proto, aby se daly vyfilrovat ty správné procedury ze systémového katalogu.
-   * Zavádět lze JsbcTempatem bez schématu */
-  private final ASchema schema;
-  private CatalogHasher catalogHasher;
+
+  public TrgLoader(final LoadContext ctx, final ASchema schema) {
+    super(ctx, schema);
+    catalogHasher = new CatalogHasher(jt(), schema());
+    catalogHasher.createDbTableWithHashesIfNotExists(jt());
+  }
 
   /**
    * Zjistí informace z katalogu. to znamená těla všech procedur daného schématu do mapy,
    * aby bylo možno zkontrolovat, zda nedošlo ke změně.
-   * Je volána jako první.
+   * Je volána jako první. Ale jen při zavádění z loaderu. Při adhok zavádění z eclipsu se nevolá.
    */
   public void readAllFromCatalog() {
-    catalogHasher = new CatalogHasher(jt, schema);
-    catalogHasher.createDbTableWithHashesIfNotExists(jt);
+    catalogHasher.readFromCatalog();
   }
 
   /**
@@ -52,19 +45,17 @@ public class TrgLoader {
 
     for (final SplStatement trg: stms) {
       System.out.println("-**------------------------------------- " + trg.getName());
-      tranik.execute(status -> {
+      tranik().execute(status -> {
         if (! notChangedObjNames.contains(trg.getName())) { // jen změněné triggery
-          jt.update("DROP TRIGGER IF EXISTS " + trg.getName());
+          jt().update("DROP TRIGGER IF EXISTS " + trg.getName());
           try {
-            jt.execute(trg.getText());  // Vlastní zavedení triggeru
+            jt().execute(trg.getText());  // Vlastní zavedení triggeru
           } catch (final BadSqlGrammarException e) {
-            System.out.println("CHYBA: " + e);
-            System.out.println(trg.getText());
+            ctx().reportError(e, trg);
             status.setRollbackOnly();
           }
           catalogHasher.updateHashes(trg);
         }
-        //      }
         return null;
       });
 

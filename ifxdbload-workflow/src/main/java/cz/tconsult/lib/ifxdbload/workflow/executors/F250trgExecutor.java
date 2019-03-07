@@ -46,8 +46,6 @@ public class F250trgExecutor implements FazeExecutor {
 
   @Override
   public String execute(final LoadContext ctx) {
-    //    lofaze.getSoubors()
-    //    .spliterator()
     final SplParser splParser = new SplParser();
 
     final Instant str = Instant.now();
@@ -58,8 +56,9 @@ public class F250trgExecutor implements FazeExecutor {
         .flatMap(ps -> ps.getStatements().stream())
         .collect(Collectors.toList());
 
+    // TODO [veverka] řešit schema -- 7. 3. 2019 10:34:16 veverka
     final ASchema aris = ASchema.of("aris");
-    final TrgLoader prcLoader = new TrgLoader(ctx.dc(aris).getTt(), ctx.dc(aris).getJt(), aris);
+    final TrgLoader prcLoader = new TrgLoader(ctx, aris);
     prcLoader.readAllFromCatalog();
     prcLoader.load(stms);
 

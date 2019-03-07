@@ -40,6 +40,12 @@ public class CatalogHasher {
 
 
   /**
+   * Načte z katalogu, spočítá heše a načte pomocné heše, aby byly k dispozici pro kontroly zavedenosti.
+   */
+  public void readFromCatalog() {
+  }
+
+  /**
    * Vytvoří tabulku s hashama, pokud neexistuje.
    * @param jt
    */
@@ -138,5 +144,6 @@ public class CatalogHasher {
   public String sql(final String sqlResoruceName) {
     return Resources.toString(Resources.getResource("sql/" + sqlResoruceName), StandardCharsets.UTF_8);
   }
+
 
 }
