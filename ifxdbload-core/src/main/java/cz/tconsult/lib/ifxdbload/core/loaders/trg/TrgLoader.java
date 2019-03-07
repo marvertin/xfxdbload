@@ -7,7 +7,8 @@ import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import cz.tconsult.lib.ifxdbload.core.loaders.util.CatalogHasher;
+import cz.tconsult.lib.ifxdbload.core.loaders.hasher.CatalogHasher;
+import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +35,10 @@ public class TrgLoader {
    * aby bylo možno zkontrolovat, zda nedošlo ke změně.
    * Je volána jako první.
    */
-  public void readFromCatalog() {
-    final String sql = "select trigname as nazev, data, b.trigid"
-        + " from systrigbody b join systriggers t on b.trigid = t.trigid"
-        + " where datakey in ('A', 'D') and owner = ?"
-        +" order by b.trigid, datakey, seqno";
-
-    catalogHashes = new CatalogHasher().hashCatalog(sql, schema, jt);
+  public void readAllFromCatalog() {
+    final CatalogHasher catalogHasher = new CatalogHasher(jt, schema);
+    catalogHasher.createDbTableWithHashesIfNotExists(jt);
+    catalogHashes = catalogHasher.hashCatalog(EStmType.TRIGGER);
     System.out.println(catalogHashes);
   }
 

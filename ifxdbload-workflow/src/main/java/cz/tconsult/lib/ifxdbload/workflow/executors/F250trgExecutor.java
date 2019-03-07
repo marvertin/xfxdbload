@@ -60,7 +60,7 @@ public class F250trgExecutor implements FazeExecutor {
 
     final ASchema aris = ASchema.of("aris");
     final TrgLoader prcLoader = new TrgLoader(ctx.dc(aris).getTt(), ctx.dc(aris).getJt(), aris);
-    prcLoader.readFromCatalog();
+    prcLoader.readAllFromCatalog();
     prcLoader.load(stms);
 
     //TODO [veverka] implementuj - vygenerovana metoda [veverka 10:47:26]

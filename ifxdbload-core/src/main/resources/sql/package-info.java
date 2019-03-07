@@ -1,0 +1,6 @@
+/**
+ *
+ * SQL příkazy
+ *
+ */
+package sql;
