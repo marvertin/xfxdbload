@@ -25,7 +25,7 @@ public class DsFactory {
     // TODO
 
     final HikariConfig hc = new HikariConfig();
-    hc.setJdbcUrl("jdbc:informix-sqli://kosatka:1529/zavadec:;INFORMIXSERVER=kosatkarn;CLIENT_LOCALE=cs_CZ.1250;DB_LOCALE=cs_CZ.1250");
+    hc.setJdbcUrl("jdbc:informix-sqli://kosatka:1529/zav1_on:;INFORMIXSERVER=kosatkarn;CLIENT_LOCALE=cs_CZ.1250;DB_LOCALE=cs_CZ.1250");
     hc.setUsername("aris");
     hc.setPassword("aris741");
 

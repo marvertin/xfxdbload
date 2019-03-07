@@ -19,6 +19,8 @@ import cz.tconsult.lib.ifxdbload.workflow.process.InterFazeBoard;
 
 public class F230prcExecutor implements FazeExecutor {
 
+  private static final String PROCEDURES_OWNER = "aris";
+
   private LoFaze lofaze;
 
   @Override
@@ -60,7 +62,7 @@ public class F230prcExecutor implements FazeExecutor {
         .flatMap(ps -> ps.getStatements().stream())
         .collect(Collectors.toList());
 
-    final ASchema aris = ASchema.of("aris");
+    final ASchema aris = ASchema.of(PROCEDURES_OWNER);
     final PrcLoader prcLoader = new PrcLoader(ctx.dc(aris).getJt(), aris);
     prcLoader.readFromCatalog();
     prcLoader.load(stms);
