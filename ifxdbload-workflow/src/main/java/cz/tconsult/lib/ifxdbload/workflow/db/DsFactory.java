@@ -29,11 +29,12 @@ public class DsFactory {
     hc.setUsername("aris");
     hc.setPassword("aris741");
 
-    hc.setConnectionInitSql("SET SESSION AUTHORIZATION TO '" + schema + "'");
+    hc.setConnectionInitSql("SET SESSION AUTHORIZATION TO '" + schema + "'; SET LOCK MODE TO WAIT 30");
     // to jsem opsal z nějakého píkladu a nevím, jestli je to dobře
     hc.addDataSourceProperty( "cachePrepStmts" , "true" );
     hc.addDataSourceProperty( "prepStmtCacheSize" , "250" );
     hc.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
+
     return new HikariDataSource(hc);
 
   }

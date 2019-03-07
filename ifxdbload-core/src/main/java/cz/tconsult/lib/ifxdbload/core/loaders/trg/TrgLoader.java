@@ -3,6 +3,8 @@ package cz.tconsult.lib.ifxdbload.core.loaders.trg;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.BadSqlGrammarException;
 
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
@@ -13,6 +15,9 @@ import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 
 public class TrgLoader extends Loader0 {
+
+
+  private static final Logger log = LoggerFactory.getLogger(TrgLoader.class);
 
   private final CatalogHasher catalogHasher;
 
@@ -43,22 +48,22 @@ public class TrgLoader extends Loader0 {
     final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms, EStmType.TRIGGER);
 
 
-    for (final SplStatement trg: stms) {
-      System.out.println("-**------------------------------------- " + trg.getName());
+    stms.parallelStream()
+    .filter(trg -> ! notChangedObjNames.contains(trg.getName()))  // pryč s těmi, které se nezměnily
+    .forEach(trg -> {
+      log.info("TRIGGER --> \"{}\"", trg.getName());
       tranik().execute(status -> {
-        if (! notChangedObjNames.contains(trg.getName())) { // jen změněné triggery
-          jt().update("DROP TRIGGER IF EXISTS " + trg.getName());
-          try {
-            jt().execute(trg.getText());  // Vlastní zavedení triggeru
-          } catch (final BadSqlGrammarException e) {
-            ctx().reportError(e, trg);
-            status.setRollbackOnly();
-          }
-          catalogHasher.updateHashes(trg);
+        jt().update("DROP TRIGGER IF EXISTS " + trg.getName());
+        try {
+          jt().execute(trg.getText());  // Vlastní zavedení triggeru
+        } catch (final BadSqlGrammarException e) {
+          ctx().reportError(e, trg);
+          status.setRollbackOnly();
         }
-        return null;
+        catalogHasher.updateHashes(trg);
+        return null; // není co vracet
       });
-
-    }
+      log.info("TRIGGER <-- \"{}\"", trg.getName());
+    });
   }
 }
