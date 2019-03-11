@@ -5,7 +5,6 @@ import javax.sql.DataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 
 /**
@@ -14,13 +13,15 @@ import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
  *
  */
 public class DsFactory {
+  /** Unizverzální schéma do kterého podporujeme zavádění */
+  private static final String SCHEMA = "aris";
 
 
   public boolean canCreateDs(final ADbkind dbkind) {
     return true;
   }
 
-  public DataSource createDs(final ADbkind dbkind, final ASchema schema) {
+  public DataSource createDs(final ADbkind dbkind) {
 
     // TODO
 
@@ -29,7 +30,7 @@ public class DsFactory {
     hc.setUsername("aris");
     hc.setPassword("aris741");
 
-    hc.setConnectionInitSql("SET SESSION AUTHORIZATION TO '" + schema + "'; SET LOCK MODE TO WAIT 30");
+    hc.setConnectionInitSql("SET SESSION AUTHORIZATION TO '" + SCHEMA + "'; SET LOCK MODE TO WAIT 30");
     // to jsem opsal z nějakého píkladu a nevím, jestli je to dobře
     hc.addDataSourceProperty( "cachePrepStmts" , "true" );
     hc.addDataSourceProperty( "prepStmtCacheSize" , "250" );

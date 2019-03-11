@@ -24,7 +24,6 @@ import com.google.common.io.Resources;
 import cz.tconsult.lib.exception.FThrowable;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -33,7 +32,6 @@ import lombok.SneakyThrows;
 public class CatalogHasher {
 
   private final JdbcTemplate jt;
-  private final ASchema schema;
 
   //45b5431a56cf58cf676c5b67c0a404b5b64b63b8
   private static final Logger log = LoggerFactory.getLogger(CatalogHasher.class);
@@ -74,7 +72,7 @@ public class CatalogHasher {
   private Map<String, String> hashCatalogAll(final EStmType stmType) {
     final Map<String, String> map =
         jt.query(sql(stmType + "_hashCatalogAll.sql"),
-            new Object[] {schema.toString()},  // podle schématu se vybírá
+            new Object[] {},  // podle schématu se vybírá
             new BeanPropertyRowMapper<>(Record.class, true)) // a to je jen pomocný objekt
         .stream().collect(
             groupingBy(Record::getNazev, // podle názvu seskupit do seznamu stringů
@@ -93,7 +91,7 @@ public class CatalogHasher {
    */
   public String hashCatalogOne(final String objName, final EStmType stmType) {
     final String body = jt.queryForList(sql(stmType+ "_hashCatalogOne.sql"),
-        new Object[] {objName, schema.toString()}, String.class).stream()
+        new Object[] {objName}, String.class).stream()
         .collect(Collectors.joining());
     return DigestUtils.sha1Hex(body);
   }
@@ -109,7 +107,6 @@ public class CatalogHasher {
         hashCatalogOne(stm.getName(), stm.getStmType()),
         stm.getStmType().toString(),
         stm.getName().toString(),
-        schema.toString(),
     };
     if (jt.update(sql("hashesUpdate.sql"), params) == 0) { // zkusit updatnout
       jt.update(sql("hashesInsert.sql"), params); // a když to tam nebylo, tak vložit

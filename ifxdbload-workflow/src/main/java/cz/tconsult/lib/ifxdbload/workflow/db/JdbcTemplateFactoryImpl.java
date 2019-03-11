@@ -14,10 +14,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.p6spy.engine.spy.P6DataSource;
 
 import cz.tconsult.lib.ifxdbload.core.db.DbContext;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.process.DbContextFactory;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -35,7 +33,7 @@ public class JdbcTemplateFactoryImpl implements DbContextFactory {
 
   private final DsFactory dsFactory;
 
-  private final Map<KindSchema, DbContext> jdbcTemplates = new HashMap<>();
+  private final Map<ADbkind, DbContext> jdbcTemplates = new HashMap<>();
 
 
   @Override
@@ -45,12 +43,12 @@ public class JdbcTemplateFactoryImpl implements DbContextFactory {
 
 
   @Override
-  public DbContext dc(final ADbkind dbkind, final ASchema schema) {
+  public DbContext dc(final ADbkind dbkind) {
 
-    return jdbcTemplates.computeIfAbsent(new KindSchema(dbkind, schema),
+    return jdbcTemplates.computeIfAbsent(dbkind,
         __ -> {
-          log.info("Creating emplates for " + dbkind + "-" + schema);
-          final DataSource realDs = dsFactory.createDs(dbkind, schema);
+          log.info("Creating emplates for \"" + dbkind + "\"");
+          final DataSource realDs = dsFactory.createDs(dbkind);
           final P6DataSource ds = new P6DataSource(realDs);
           ds.setJdbcEventListenerFactory(() -> new P6SpyExceptionEnrichmentEventListener());
           final TransactionTemplate tt = new TransactionTemplate(new DataSourceTransactionManager(ds));
@@ -59,12 +57,6 @@ public class JdbcTemplateFactoryImpl implements DbContextFactory {
 
           return new DbContext(tt, jt);
         });
-  }
-
-  @Data
-  private static class KindSchema {
-    private final ADbkind dbkind;
-    private final ASchema schema;
   }
 
 

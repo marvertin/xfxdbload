@@ -14,7 +14,6 @@ import cz.tconsult.lib.ifxdbload.core.loaders.Loader0;
 import cz.tconsult.lib.ifxdbload.core.loaders.hasher.CatalogHasher;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 
 /**
  * Zavaděč triggerů
@@ -29,9 +28,9 @@ public class TrgLoader extends Loader0 {
   private final CatalogHasher catalogHasher;
 
 
-  public TrgLoader(final LoadContext ctx, final ASchema schema) {
-    super(ctx, schema);
-    catalogHasher = new CatalogHasher(jt(), schema());
+  public TrgLoader(final LoadContext ctx) {
+    super(ctx);
+    catalogHasher = new CatalogHasher(jt());
     catalogHasher.createDbTableWithHashesIfNotExists(jt());
   }
 

@@ -24,7 +24,6 @@ import cz.tconsult.dbloader.itf.EFileCategory;
 import cz.tconsult.dbloader.itf.EMessageCategory;
 import cz.tconsult.dbloader.itf.UniversalResultMessage;
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.FUtils;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
@@ -45,9 +44,6 @@ import cz.tconsult.tw.util.logging.Logf;
  *
  */
 public class IfxDbLoad extends DbPgmBase {
-
-  // TODO [veverka] co znamená tkové defaultn íschema? -- 26. 2. 2019 9:23:18 veverka
-  private static final ASchema DEFAULT_SCHEMA = ASchema.of("<defalut>");
 
   private static final Logf log = Logf.wrap(LogFactory.getLog(IfxDbLoad.class));
 
@@ -244,10 +240,7 @@ public class IfxDbLoad extends DbPgmBase {
   private void logDbkindCounters(final LoData data) {
     for (final LoDbkind loDbkind : data.getLoDbkinds()) {
       log.info("Counters for dbkind=%s", loDbkind.getName());
-      if (loDbkind.getFilesForSchemaCounter().count(DEFAULT_SCHEMA) > 0) {
-        log.warn("There are dbpacks which have no 'dbpack.properties' then using default schema!");
-      }
-      logCounters(loDbkind.getFilesForSchemaCounter(), "Files for schema");
+
       logCounters(loDbkind.getFilesForPhases(), "Files for phase");
       logCounters(loDbkind.getFilesForDbpacksCounter(), "Files for dbpack");
       logCounters(loDbkind.getFilesForSchemasAndPhases(), "Files for schema and phase");

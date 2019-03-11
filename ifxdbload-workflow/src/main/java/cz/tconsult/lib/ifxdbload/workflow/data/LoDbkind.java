@@ -16,7 +16,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.tw.util.CCounterMap;
 import cz.tconsult.tw.util.CounterMap;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,6 @@ public class LoDbkind {
       .collect(Collectors.toMap(Function.identity() , faze -> new LoFaze(this, faze))));
 
   // TODO [veverka] povyhazovat country odtud -- 28. 2. 2019 13:37:29 veverka
-  private final CounterMap<ASchema> filesForSchemaCounter = new CCounterMap<ASchema>(); // TODO [veverka] byl zde case insentsitive -- 26. 2. 2019 9:26:46 veverka
   private final CounterMap<Path> filesForDbpacksCounter = new CCounterMap<Path>(FILE_Comparator);
   private final CounterMap<String> filesForSchemasAndPhases = new CCounterMap<String>(String.CASE_INSENSITIVE_ORDER);
   private final CounterMap<EFazeZavedeni> filesForPhases = new CCounterMap<EFazeZavedeni>(NAME_Comparator);
@@ -116,13 +114,6 @@ public class LoDbkind {
   @Override
   public String toString() {
     return "LoDbkind [name=" + name + "]";
-  }
-
-  /**
-   * @return the filesForSchemaCounter
-   */
-  public CounterMap<ASchema> getFilesForSchemaCounter() {
-    return filesForSchemaCounter;
   }
 
   /**

@@ -11,7 +11,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 
@@ -71,13 +70,10 @@ public class FDbpackPropertis {
    */
   private static  DbpackProperties convertDbpackProperties(final Properties properties, final Path root) {
     final DbpackProperties dbpackProperties = new DbpackProperties(root,
-        ADbkind.of(properties.getProperty("dbkind")),
-        ASchema.of(properties.getProperty("dbschema")));
+        ADbkind.of(properties.getProperty("dbkind"))
+        );
     if (dbpackProperties.getDbkind() == null) {
       throw new RuntimeException("Dbpack neobsahuje v 'dbpack.properties' property 'dbkind' ");
-    }
-    if (dbpackProperties.getDbschema() == null) {
-      throw new RuntimeException("Dbpack neobsahuje v 'dbpack.properties' property 'schema' ");
     }
     return dbpackProperties;
   }

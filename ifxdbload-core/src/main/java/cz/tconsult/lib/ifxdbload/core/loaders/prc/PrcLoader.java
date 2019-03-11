@@ -14,7 +14,6 @@ import org.springframework.lang.Nullable;
 
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -36,12 +35,6 @@ public class PrcLoader {
    */
   private final JdbcTemplate jt;
 
-  /**
-   * Schéma, do kterého se zavádí. Musí být dodáno schéma, do kterého zavádí
-   * template. Schéma se použije proto, aby se daly vyfilrovat ty správné
-   * procedury ze systémového katalogu. Zavádět lze JsbcTempatem bez schématu
-   */
-  private final ASchema schema;
 
   /**
    * Zjistí informace z katalogu. to znamená těla všech procedur daného schématu
@@ -49,8 +42,6 @@ public class PrcLoader {
    * první.
    */
   public void readFromCatalog() {
-
-    System.out.println("louduji z katalogu: " + schema);
 
     final List<Map<String, Object>> procedures = jt.queryForList(PROCEDURES_FROM_CATALOG);
 

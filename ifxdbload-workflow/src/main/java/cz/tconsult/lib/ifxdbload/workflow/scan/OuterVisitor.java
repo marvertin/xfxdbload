@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.DbpackProperties;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OuterVisitor extends SimpleFileVisitor<Path> {
 
+  /**
+   * Je tpatern jako main-aris, stat-aris, arch-aris. To aris je schéma, ale je to stej ně jediné podporované schéma.
+   */
   private static Pattern patDbpackRootDirName = Pattern.compile("([a-z]+)-([a-z][a-z0-9]+)");
 
   private final FileContentReceiver builder;
@@ -64,8 +66,7 @@ public class OuterVisitor extends SimpleFileVisitor<Path> {
     final Matcher matcher = patDbpackRootDirName.matcher(dir.getFileName().toString());
     if (matcher.matches()) {
       return  Optional.of(new DbpackProperties(dir,
-          ADbkind.of(matcher.group(1)),
-          ASchema.of(matcher.group(2))));
+          ADbkind.of(matcher.group(1))));
     } else {
       return Optional.empty();
     }

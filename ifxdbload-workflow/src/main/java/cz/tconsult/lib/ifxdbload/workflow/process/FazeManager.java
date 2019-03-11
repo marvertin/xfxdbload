@@ -14,7 +14,6 @@ import cz.tconsult.lib.ifxdbload.core.db.DbContext;
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
@@ -107,8 +106,8 @@ public class FazeManager {
     private final ADbkind dbkind;
 
     @Override
-    public DbContext dc(final ASchema schema) {
-      return dbContextFactory.dc(dbkind, schema); // když se to dostane až sem, tak template existuje
+    public DbContext dc() {
+      return dbContextFactory.dc(dbkind); // když se to dostane až sem, tak template existuje
     }
 
     @Override

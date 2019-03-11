@@ -3,7 +3,6 @@ package cz.tconsult.lib.ifxdbload.core.db;
 import org.springframework.dao.DataAccessException;
 
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 
 /**
  * Exekuční kontext, určuje především databázi, do které se zavádí.
@@ -17,7 +16,7 @@ public interface LoadContext {
    * @param schema
    * @return
    */
-  DbContext dc(ASchema schema);
+  DbContext dc();
 
   /**
    * Nahlásí chybu, která nastala při zavádění daného příkazu.

@@ -8,7 +8,6 @@ import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.loaders.trg.TrgLoader;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplParser;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
 import cz.tconsult.lib.ifxdbload.workflow.process.FazeExecutor;
@@ -57,8 +56,7 @@ public class F250trgExecutor implements FazeExecutor {
         .collect(Collectors.toList());
 
     // TODO [veverka] řešit schema -- 7. 3. 2019 10:34:16 veverka
-    final ASchema aris = ASchema.of("aris");
-    final TrgLoader prcLoader = new TrgLoader(ctx, aris);
+    final TrgLoader prcLoader = new TrgLoader(ctx);
     prcLoader.readAllFromCatalog();
     prcLoader.load(stms);
 

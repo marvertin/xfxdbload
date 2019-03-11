@@ -1,8 +1,6 @@
 package cz.tconsult.lib.ifxdbload.workflow.process;
 
 import cz.tconsult.lib.ifxdbload.core.db.DbContext;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 
 /**
@@ -19,7 +17,7 @@ public interface DbContextFactory {
    * @param schema
    * @return
    */
-  public DbContext dc(ADbkind dbkind, ASchema schema);
+  public DbContext dc(ADbkind dbkind);
 
   /**
    * Zjistí, zda je možné se připojit k databázi tohoto druhu, tedy že

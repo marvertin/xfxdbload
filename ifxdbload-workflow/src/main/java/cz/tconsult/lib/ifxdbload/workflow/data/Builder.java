@@ -16,7 +16,7 @@ public class Builder {
 
 
   public LoSoubor addLoSoubor (final AEntryName aEntryName, final EFazeZavedeni faze, final DbpackProperties aDbprops, final byte[] aData) {
-    final LoSoubor losoubor = new LoSoubor(aEntryName, faze, aDbprops.getRoot(), aDbprops.getDbschema(), aData);
+    final LoSoubor losoubor = new LoSoubor(aEntryName, faze, aDbprops.getRoot(), aData);
 
     final LoDbkind lodbkind = makeLoDbKind(aDbprops);
     final LoFaze lofaze = lodbkind.getFaze(losoubor.getFaze());
@@ -24,9 +24,7 @@ public class Builder {
     lofaze.add(losoubor);
 
     lodbkind.getFilesForDbpacksCounter().inc(losoubor.getRoot());
-    lodbkind.getFilesForSchemaCounter().inc(losoubor.getSchema());
     lodbkind.getFilesForPhases().inc(losoubor.getFaze());
-    lodbkind.getFilesForSchemasAndPhases().inc(losoubor.getSchema() + "-" + losoubor.getFaze());
 
     data.filesForRoots.inc(aDbprops);
     data.filesForDbkinds.inc(lodbkind.getName());

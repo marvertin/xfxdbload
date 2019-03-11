@@ -11,7 +11,6 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.core.Zavadenec;
 import cz.tconsult.lib.ifxdbload.core.faze.AEntryName;
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
-import cz.tconsult.lib.ifxdbload.core.tw.ASchema;
 import cz.tconsult.lib.ifxdbload.core.tw.ASourceName;
 import cz.tconsult.lib.ifxdbload.core.tw.NamedBytes;
 import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
@@ -35,9 +34,6 @@ public class LoSoubor implements Comparable<LoSoubor> {
 
   /** Jméno dbpacku nebo adresáře, ve kterém se soubor nacházel */
   private final Path root;
-
-  /** Schéma, do kterého se má zavádět */
-  private final ASchema schema;
 
   /** Načtená data ze souboru */
   @Getter(AccessLevel.NONE)
@@ -116,7 +112,6 @@ public class LoSoubor implements Comparable<LoSoubor> {
 
   public Zavadenec getZavadenec()  {
     final Zavadenec zavadenec = new Zavadenec(root.toFile(), entryName, data, StandardCharsets.UTF_8);
-    zavadenec.setSchema(schema.toString());
     return zavadenec;
   }
 
