@@ -1,9 +1,5 @@
 package cz.tconsult.lib.ifxdbload.core.loaders.hasher;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.mapping;
-
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -27,7 +23,6 @@ import com.google.common.io.Resources;
 import cz.tconsult.lib.exception.FThrowable;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -120,18 +115,16 @@ public class CatalogHasher {
    * @return mapa názvů na data
    */
   private Map<String, String> hashCatalogAll() {
-    final Map<String, String> map =
-        jt.query(sql(stmTypesAsParamsAsPartOfResourceName() + "_hashCatalogAll.sql"),
-            new Object[] {},
-            new BeanPropertyRowMapper<>(Record.class, true)) // a to je jen pomocný objekt
-        .stream().collect(
-            groupingBy(Record::getNazev, // podle názvu seskupit do seznamu stringů
-                mapping(Record::getData, joining()))); // a všechny stringy spojit
+    final String sql = sql(stmTypesAsParamsAsPartOfResourceName() + "_hashCatalogAll.sql");
+    final Map<String, String> map = FSql.selectBodies(jt, sql);
     log.debug("Mapa názvů na data: {}" , map);
     map.replaceAll((__, body) -> DigestUtils.sha1Hex(body)); // spočítat heše
     log.debug("Mapa názvů na heše: {}" , map);
     return map;
   }
+
+
+
 
   /**
    * Hešne jeden objekt z katalogu
@@ -203,11 +196,6 @@ public class CatalogHasher {
         .collect(Collectors.toSet());
   }
 
-  @Data
-  public static class Record {
-    private String nazev;
-    private String data;
-  }
 
 
   @SneakyThrows
