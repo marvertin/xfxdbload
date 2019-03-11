@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlProvider;
 import org.springframework.jdbc.core.StatementCallback;
@@ -18,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class PrcLoader {
+
+  private static final Logger log = LoggerFactory.getLogger(PrcLoader.class);
 
   private static final String PROCEDURES_FROM_CATALOG = "select procid, owner, procname, isproc from sysprocedures where  mode!='o' and mode!='r' and mode!='d'order by procid";
 
@@ -74,9 +78,9 @@ public class PrcLoader {
 
     stms.stream().forEach(p -> loadProcedure(p));
 
-    System.out.println("Zavedeno: " + loaded);
-    System.out.println("Přezavedeno: " + reloaded);
-    System.out.println("Přeskočeno: " + skipped);
+    log.info("Zavedeno: {}", loaded);
+    log.info("Přezavedeno: {}", reloaded);
+    log.info("Přeskočeno: {}", skipped);
 
   }
 
@@ -92,7 +96,7 @@ public class PrcLoader {
 
       if (StringUtils.equalsAnyIgnoreCase(procbodyInDb, procbodyInSource)) {
         skipped++;
-        System.out.println("přeskakuji (nezměněno) " + procname);
+        log.debug("Přeskakuji (nezměněno) {}", procname);
       } else {
         reloaded++;
         dropProcedure(procedure);
@@ -111,17 +115,18 @@ public class PrcLoader {
     final String procname = procedure.getName();
     final EStmType type = procedure.getStmType();
 
-    System.out.println("dropuji " + procname);
+    log.debug("Dropuji {}", procname);
     jt.execute("DROP " + type + " " + procname);
 
   }
 
   private void createProcedure(final SplStatement procedure) {
 
-    System.out.println("vytvářím " + procedure.getName());
+    log.debug("Vytvářím {}", procedure.getName());
 
     final String sql = procedure.getText();
 
+    // vypnutí sql escapingu, řeší se tím komentře ve složených závorkách
     class ExecuteStatementCallback implements StatementCallback<Object>, SqlProvider {
       @Override
       @Nullable
