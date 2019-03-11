@@ -27,4 +27,9 @@ public class SplStatement {
 
   /** Lokátor prvního tokenu příkazu, je zajímavý pro určení pozice */
   private final LexerTokenLocator firstTokenLocator;
+
+
+  public String getNameLower() {
+    return name.toLowerCase();
+  }
 }

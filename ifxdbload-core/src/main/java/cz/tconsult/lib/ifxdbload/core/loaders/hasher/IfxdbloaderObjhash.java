@@ -2,6 +2,7 @@ package cz.tconsult.lib.ifxdbload.core.loaders.hasher;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Záznam v tabulce hashů.
@@ -10,10 +11,10 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class IfxdbloaderObjhash {
   private String objtype;
   private String objname;
-  private String owner;
   private String srchash;
   private String cathash;
 }

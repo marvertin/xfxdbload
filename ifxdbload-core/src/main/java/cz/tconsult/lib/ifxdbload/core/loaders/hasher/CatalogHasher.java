@@ -8,6 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,7 +34,19 @@ import lombok.SneakyThrows;
 @RequiredArgsConstructor
 public class CatalogHasher {
 
+  /** Seznam typů, které podporujeme, například PRROCEDUE a FUNCTION.
+   * Typy se předají jako parametry do vybíracích selektů.
+   */
+  private final EnumSet<EStmType> stmTypes;
+  //private final EStmType stmType;
   private final JdbcTemplate jt;
+
+  /** Obsahuje heše zdrojáků dříve zavedených objektů, ale jen takových, které jsou stále v systémovém katalogu
+   * a aktuální heš obsahu systémového katalo odpovídá evidovanému hešei. To znamené, že objekty nebyly ručně přezavedeny.
+   *
+   * Objekty této mapy jsou kandidáti na objekty, které nebude nutné zavádět, pokud bude sedět i zdrojový heš.
+   */
+  private final Map<String, String> hešeDříveZavedených = Collections.synchronizedMap(new HashMap<>());
 
   //45b5431a56cf58cf676c5b67c0a404b5b64b63b8
   private static final Logger log = LoggerFactory.getLogger(CatalogHasher.class);
@@ -39,15 +54,50 @@ public class CatalogHasher {
 
   /**
    * Načte z katalogu, spočítá heše a načte pomocné heše, aby byly k dispozici pro kontroly zavedenosti.
+   * Metoda bude volána za zavaděčů jen v případě hromadného zavádění.
+   * Při zavádění z eclipsu nejspíš volána nebude, což znamená, že mapa zůstane prázdná
    */
   public void readFromCatalog() {
+    final Map<String, String> mapCatalog = hashCatalogAll(); // mapa názvů objektů na heše
+    //System.err.println(mapCatalog.get);
+
+    hešeDříveZavedených.clear();
+    for (final IfxdbloaderObjhash rec : readIfxDbloaderObjhash()) {
+      final String catalogHash = mapCatalog.get(rec.getObjname()); // může být null, pokud objekt není v databázi, třeba byl zrušen mimo zavaděč
+      if (rec.getCathash().equals(catalogHash)) { // objekt máme a heše katalogu se rovnají
+        hešeDříveZavedených.put(rec.getObjname(), rec.getSrchash()); // už nás budou zajímat jen heše zdrojáků
+      }
+
+    }
   }
+
+
+  /**
+   * Získá z naší pomocné evidence seznam objektů určitého typu
+   * @param stmType
+   * @return
+   */
+  private List<IfxdbloaderObjhash> readIfxDbloaderObjhash() {
+    final Object[] params = stmTypes.stream()
+        .map(Object::toString)
+        .collect(Collectors.toList())
+        .toArray();
+
+    final String otazniky = stmTypes.stream()
+        .map(__-> "?")
+        .collect(Collectors.joining(","));
+
+    return jt.query("SELECT objtype, objname, srchash, cathash FROM ifxdbloader_objhash WHERE objtype IN (" + otazniky + ")",
+        params,
+        new BeanPropertyRowMapper<>(IfxdbloaderObjhash.class, true));
+  }
+
 
   /**
    * Vytvoří tabulku s hashama, pokud neexistuje.
    * @param jt
    */
-  public void createDbTableWithHashesIfNotExists(final JdbcTemplate jt) {
+  public void createDbTableWithHashesIfNotExists() {
     try {
       jt.execute(sql("createDbTableWithHashesIfNotExists.sql"));
       log.info("Created table ifxdbloader_objhash");
@@ -69,10 +119,10 @@ public class CatalogHasher {
    * @param jt template, který použít
    * @return mapa názvů na data
    */
-  private Map<String, String> hashCatalogAll(final EStmType stmType) {
+  private Map<String, String> hashCatalogAll() {
     final Map<String, String> map =
-        jt.query(sql(stmType + "_hashCatalogAll.sql"),
-            new Object[] {},  // podle schématu se vybírá
+        jt.query(sql(stmTypesAsParamsAsPartOfResourceName() + "_hashCatalogAll.sql"),
+            new Object[] {},
             new BeanPropertyRowMapper<>(Record.class, true)) // a to je jen pomocný objekt
         .stream().collect(
             groupingBy(Record::getNazev, // podle názvu seskupit do seznamu stringů
@@ -89,7 +139,7 @@ public class CatalogHasher {
    * @param stmType
    * @return
    */
-  public String hashCatalogOne(final String objName, final EStmType stmType) {
+  private String hashCatalogOne(final String objName, final EStmType stmType) {
     final String body = jt.queryForList(sql(stmType+ "_hashCatalogOne.sql"),
         new Object[] {objName}, String.class).stream()
         .collect(Collectors.joining());
@@ -102,17 +152,39 @@ public class CatalogHasher {
    * @param stm
    */
   public void updateHashes(final SplStatement stm) {
+    checkStmType(stm);
     final Object[] params = new Object[] {
-        DigestUtils.sha1Hex(stm.getText()),
-        hashCatalogOne(stm.getName(), stm.getStmType()),
+        sha1(stm),
+        hashCatalogOne(stm.getNameLower(), stm.getStmType()),
         stm.getStmType().toString(),
-        stm.getName().toString(),
+        stm.getNameLower().toString(),
     };
+    // nejdříve odstranit heše z evidovaných dříve zavedených. Je to proto, že nevíme, zda transakce nebude rolbacknuta a tak by došlo k nekonzistenci
+    /// evidence a skutečného stavu. Menší zlo je zavádět vícekrát než nezavést vůbec.
+    hešeDříveZavedených.remove(stm.getNameLower());
+
     if (jt.update(sql("hashesUpdate.sql"), params) == 0) { // zkusit updatnout
       jt.update(sql("hashesInsert.sql"), params); // a když to tam nebylo, tak vložit
     }
   }
 
+  private void checkStmType(final SplStatement stm) {
+    if (! stmTypes.contains(stm.getStmType())) {
+      throw new RuntimeException("Očekáván jeden z typů " + stmTypes + ", ale přišel typ " + stm.getStmType() + " objektu " + stm.getName() + " | " + stm);
+    }
+  }
+
+  private String sha1(final SplStatement stm) {
+    return DigestUtils.sha1Hex(stm.getText());
+  }
+
+
+
+  private String stmTypesAsParamsAsPartOfResourceName() {
+    return stmTypes.stream()
+        .map(Object::toString)
+        .collect(Collectors.joining("_"));
+  }
 
   /**
    * Seznam jmen objektů, které není nutné zavádět, protože:
@@ -124,10 +196,11 @@ public class CatalogHasher {
    * @param stmType Typ příkazu
    * @return
    */
-  public Set<String> notChangedObjNames(final Collection<SplStatement> stms, final EStmType stmType) {
-    final Map<String, String> hešeZKatalogu = hashCatalogAll(stmType);
-    // TODO [veverka]  -- 7. 3. 2019 9:50:08 veverka
-    return Collections.emptySet();
+  public Set<String> notChangedObjNames(final Collection<SplStatement> stms) {
+    return stms.stream()
+        .filter(stm -> sha1(stm).equals(hešeDříveZavedených.get(stm.getNameLower())))
+        .map(SplStatement::getNameLower)
+        .collect(Collectors.toSet());
   }
 
   @Data
@@ -138,7 +211,7 @@ public class CatalogHasher {
 
 
   @SneakyThrows
-  public String sql(final String sqlResoruceName) {
+  private String sql(final String sqlResoruceName) {
     return Resources.toString(Resources.getResource("sql/" + sqlResoruceName), StandardCharsets.UTF_8);
   }
 

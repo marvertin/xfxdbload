@@ -1,5 +1,6 @@
 package cz.tconsult.lib.ifxdbload.core.loaders.trg;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,8 +31,8 @@ public class TrgLoader extends Loader0 {
 
   public TrgLoader(final LoadContext ctx) {
     super(ctx);
-    catalogHasher = new CatalogHasher(jt());
-    catalogHasher.createDbTableWithHashesIfNotExists(jt());
+    catalogHasher = new CatalogHasher(EnumSet.of(EStmType.TRIGGER), jt());
+    catalogHasher.createDbTableWithHashesIfNotExists();
   }
 
   /**
@@ -47,12 +48,12 @@ public class TrgLoader extends Loader0 {
    * Zavedení všech procedur, které se nezměnily.
    * Teoreticky může být volána vícekrát.
    *
-   * @param stms Seznam procedur a funkcí k zavedení. Implementace může předpokládat, že zde nejsou žádné další objekty.
+   * @param stms Seznam triggerů k zavedení. Implementace může předpokládat, že zde nejsou žádné další objekty.
    */
   public void load(final List<SplStatement> stms) {
-    final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms, EStmType.TRIGGER);
+    final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms);
     final List<SplStatement> triggeryKZavedeni = stms.stream().
-        filter(trg -> ! notChangedObjNames.contains(trg.getName()))
+        filter(trg -> ! notChangedObjNames.contains(trg.getNameLower()))
         .collect(Collectors.toList());
     log.info("TRIGGERS: changed {} + same {} = total {}",  triggeryKZavedeni.size(),  stms.size() - triggeryKZavedeni.size(), stms.size());
     // Triggery zavádíme paralelně.
