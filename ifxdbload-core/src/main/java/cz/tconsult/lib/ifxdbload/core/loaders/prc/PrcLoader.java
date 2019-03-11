@@ -2,14 +2,9 @@ package cz.tconsult.lib.ifxdbload.core.loaders.prc;
 
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.BadSqlGrammarException;
@@ -19,7 +14,6 @@ import org.springframework.lang.Nullable;
 
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.loaders.Loader0;
-import cz.tconsult.lib.ifxdbload.core.loaders.hasher.CatalogHasher;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 
@@ -27,21 +21,11 @@ public class PrcLoader extends Loader0 {
 
   private static final Logger log = LoggerFactory.getLogger(PrcLoader.class);
 
-  private static final String PROCEDURES_FROM_CATALOG = "select procid, owner, procname, isproc from sysprocedures where  mode!='o' and mode!='r' and mode!='d'order by procid";
-  private static final String PROCEDURES_BODY_FROM_CATALOG = "select data from sysprocbody where procid=? and datakey='T' order by seqno";
+  private final CatalogLoader catalogLoader;
 
-  private final Map<String, String> proceduresInDb = new HashMap<>();
-
-  private int skipped;
-  private int loaded;
-  private int reloaded;
-
-  private final CatalogHasher catalogHasher;
-
-  public PrcLoader(final LoadContext ctx, final ASchema schema) {
-    super(ctx, schema);
-    catalogHasher = new CatalogHasher(jt(), schema());
-    catalogHasher.createDbTableWithHashesIfNotExists(jt());
+  public PrcLoader(final LoadContext ctx) {
+    super(ctx);
+    catalogLoader = new CatalogLoader(jt());
   }
 
   /**
@@ -50,28 +34,9 @@ public class PrcLoader extends Loader0 {
    * první.
    */
   public void readFromCatalog() {
-
-    //final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms, EStmType.TRIGGER);
+    // FIXME [jaksik] upravit logování -- 11. 3. 2019 14:18:02 jaksik
     log.info("louduji z katalogu");
-
-    //final List<Map<String, Object>> procedures = jt().queryForList(PROCEDURES_FROM_CATALOG);
-
-    //procedures.stream().filter(p -> StringUtils.equals(StringUtils.trim((String) p.get("owner")), schema.toString())).forEach(p -> readProcedureBody(p));
-    //procedures.stream().forEach(p -> readProcedureBody(p));
-
-  }
-
-  private void readProcedureBody(final Map<String, Object> x) {
-
-    final Integer procid = (Integer) x.get("procid");
-    final String procname = ((String) x.get("procname")).toLowerCase();
-
-    final StringBuilder procbody = new StringBuilder();
-
-    jt().queryForList(PROCEDURES_BODY_FROM_CATALOG, procid).stream().forEach(b -> procbody.append(b.get("data")));
-
-    proceduresInDb.put(procname, procbody.toString().trim());
-
+    catalogLoader.readFromCatalog();
   }
 
   /**
@@ -83,24 +48,21 @@ public class PrcLoader extends Loader0 {
    */
   public void load(final List<SplStatement> stms) {
 
+    //nalezení procedur, které se mají být zavedeny
+    final List<SplStatement> proceduryKZavedeni = catalogLoader.getProcedures(stms);
 
-    final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms, EStmType.PROCEDURE);
-
-    final List<SplStatement> proceduryKZavedeni = stms.stream().
-        filter(trg -> ! notChangedObjNames.contains(trg.getName()))
-        .collect(Collectors.toList());
     log.info("PROCEDURES: changed {} + same {} = total {}",  proceduryKZavedeni.size(),  stms.size() - proceduryKZavedeni.size(), stms.size());
     // Procedury zavádíme paralelně.
     final AtomicInteger pocetChyb = new AtomicInteger(0);
-    proceduryKZavedeni.parallelStream()
+    proceduryKZavedeni
+    .stream()
+    //.parallelStream()
     .forEach(prc -> {
       log.debug("PROCEDURE --> \"{}\"", prc.getName());
       tranik().execute(status -> {
         dropProcedure(prc);
-
         try {
           createProcedure(prc);
-          catalogHasher.updateHashes(prc); // ve stejné tgransakci updatneme heše
         } catch (final BadSqlGrammarException e) {
           ctx().reportError(e, prc);
           status.setRollbackOnly(); // rolbackujeme
@@ -112,56 +74,24 @@ public class PrcLoader extends Loader0 {
     });
     log.info("PROCEDURES: loaded {} + error {} = total {}",  proceduryKZavedeni.size() - pocetChyb.get(),  pocetChyb.get(), proceduryKZavedeni.size());
 
-
-    /*
-    stms.stream().forEach(p -> loadProcedure(p));
-
-    log.info("Zavedeno: {}", loaded);
-    log.info("Přezavedeno: {}", reloaded);
-    log.info("Přeskočeno: {}", skipped);
-     */
-
   }
 
-  private void loadProcedure(final SplStatement procedure) {
-
-    final String procname = procedure.getName().toLowerCase();
-
-    if (proceduresInDb.containsKey(procname)) {
-
-      final String procbodyInDb = proceduresInDb.get(procname);
-      final String procbodyInSource = procedure.getText();
-
-
-      if (StringUtils.equalsAnyIgnoreCase(procbodyInDb, procbodyInSource)) {
-        skipped++;
-        log.debug("Přeskakuji (nezměněno) {}", procname);
-      } else {
-        reloaded++;
-        dropProcedure(procedure);
-        createProcedure(procedure);
-      }
-
-    } else {
-      loaded++;
-      createProcedure(procedure);
-    }
-
-  }
 
   private void dropProcedure(final SplStatement procedure) {
 
     final String procname = procedure.getName();
     final EStmType type = procedure.getStmType();
 
-    log.debug("Dropuji {}", procname);
-    jt().execute("DROP " + type + " " + procname);
+    // FIXME [jaksik] upravit logování -- 11. 3. 2019 14:18:15 jaksik
+    log.info("Dropuji {}", procname);
+    jt().execute("DROP " + type  + " IF EXISTS " + procname);
 
   }
 
   private void createProcedure(final SplStatement procedure) {
 
-    log.debug("Vytvářím {}", procedure.getName());
+    // FIXME [jaksik] upravit logování -- 11. 3. 2019 14:18:30 jaksik
+    log.info("Vytvářím {}", procedure.getName());
 
     final String sql = procedure.getText();
 
@@ -183,5 +113,7 @@ public class PrcLoader extends Loader0 {
     jt().execute(new ExecuteStatementCallback());
 
   }
+
+
 
 }

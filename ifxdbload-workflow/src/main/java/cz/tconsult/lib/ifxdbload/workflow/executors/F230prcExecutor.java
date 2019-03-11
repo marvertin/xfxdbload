@@ -1,6 +1,5 @@
 package cz.tconsult.lib.ifxdbload.workflow.executors;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,11 +43,8 @@ public class F230prcExecutor implements FazeExecutor {
 
   @Override
   public String execute(final LoadContext ctx) {
-    //    lofaze.getSoubors()
-    //    .spliterator()
-    final SplParser splParser = new SplParser();
 
-    final Instant str = Instant.now();
+    final SplParser splParser = new SplParser();
 
     final List<SplStatement> stms = lofaze.getSoubors().stream()
         .map(LoSoubor::getDataAsString)
@@ -56,8 +52,7 @@ public class F230prcExecutor implements FazeExecutor {
         .flatMap(ps -> ps.getStatements().stream())
         .collect(Collectors.toList());
 
-    final PrcLoader prcLoader = new PrcLoader(ctx.dc().getJt());
-    final PrcLoader prcLoader = new PrcLoader(ctx, aris);
+    final PrcLoader prcLoader = new PrcLoader(ctx);
     prcLoader.readFromCatalog();
     prcLoader.load(stms);
 
