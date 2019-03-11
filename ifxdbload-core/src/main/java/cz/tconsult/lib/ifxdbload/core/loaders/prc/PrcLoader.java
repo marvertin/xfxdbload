@@ -48,15 +48,15 @@ public class PrcLoader extends Loader0 {
    */
   public void load(final List<SplStatement> stms) {
 
-    //nalezení procedur, které se mají být zavedeny
-    final List<SplStatement> proceduryKZavedeni = catalogLoader.getProcedures(stms);
+    //nalezení procedur, které se mají být zavedeny - nové, změněné
+    final List<SplStatement> proceduryKZavedeni = catalogLoader.diff(stms);
 
     log.info("PROCEDURES: changed {} + same {} = total {}",  proceduryKZavedeni.size(),  stms.size() - proceduryKZavedeni.size(), stms.size());
     // Procedury zavádíme paralelně.
     final AtomicInteger pocetChyb = new AtomicInteger(0);
     proceduryKZavedeni
-    //.stream()
-    .parallelStream()
+    .stream()
+    //.parallelStream()
     .forEach(prc -> {
       log.debug("PROCEDURE --> \"{}\"", prc.getName());
       tranik().execute(status -> {

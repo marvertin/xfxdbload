@@ -40,6 +40,10 @@ public class CatalogLoader {
 
   private Map<String, String> proceduresInDb;
 
+  private int skipped;
+  private int reloaded;
+  private int loaded;
+
   /**
    * Načte z katalogu procedury a jejich těla
    */
@@ -70,8 +74,8 @@ public class CatalogLoader {
   }
 
 
-  public List<SplStatement> getProcedures(final List<SplStatement> stms) {
-    return stms.stream().filter(prc -> shouldLoad(prc)).collect(Collectors.toList());
+  public List<SplStatement> diff(final List<SplStatement> stms) {
+    return stms.stream().filter(this::shouldLoad).collect(Collectors.toList());
   }
 
   private boolean shouldLoad(final SplStatement prc) {
@@ -79,9 +83,51 @@ public class CatalogLoader {
     final String procname = prc.getName().toLowerCase();
     final String procbody = prc.getText().trim();
 
-    return proceduresInDb.containsKey(procname) ? StringUtils.equalsIgnoreCase(procbody, proceduresInDb.get(procname)) : true;
-
+    if (proceduresInDb.containsKey(procname)) {
+      final String procBodyDb = proceduresInDb.get(procname).trim();
+      if (StringUtils.equalsIgnoreCase(procbody, procBodyDb)) {
+        skipped++;
+        return false;
+      }
+      reloaded++;
+      return true;
+    } else {
+      loaded++;
+      return true;
+    }
   }
+
+
+  public int getSkipped() {
+    return skipped;
+  }
+
+
+  public void setSkipped(final int skipped) {
+    this.skipped = skipped;
+  }
+
+
+  public int getReloaded() {
+    return reloaded;
+  }
+
+
+  public void setReloaded(final int reloaded) {
+    this.reloaded = reloaded;
+  }
+
+
+  public int getLoaded() {
+    return loaded;
+  }
+
+
+  public void setLoaded(final int loaded) {
+    this.loaded = loaded;
+  }
+
+
 
 
 }
