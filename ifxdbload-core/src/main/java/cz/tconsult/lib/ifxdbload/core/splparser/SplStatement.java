@@ -30,6 +30,13 @@ public class SplStatement {
 
 
   public String getNameLower() {
+    if (name == null) {
+      System.err.println("////////////////////");
+      System.err.println(firstTokenLocator);
+      System.err.println(text);
+      System.err.println(stmType);
+      System.err.println("////////////////////");
+    }
     return name.toLowerCase();
   }
 }

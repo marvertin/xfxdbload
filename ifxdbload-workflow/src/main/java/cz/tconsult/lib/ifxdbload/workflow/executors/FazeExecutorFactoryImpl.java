@@ -18,6 +18,7 @@ public class FazeExecutorFactoryImpl implements FazeExecutorFactory {
     switch (faze) {
     case f230prc: return new F230prcExecutor();
     case f250trg: return new F250trgExecutor();
+    case f240vue: return new F240vueExecutor();
     default: return new DummyExecutor();
     }
 
