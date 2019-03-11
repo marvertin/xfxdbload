@@ -57,6 +57,7 @@ public class F230prcExecutor implements FazeExecutor {
         .collect(Collectors.toList());
 
     final PrcLoader prcLoader = new PrcLoader(ctx.dc().getJt());
+    final PrcLoader prcLoader = new PrcLoader(ctx, aris);
     prcLoader.readFromCatalog();
     prcLoader.load(stms);
 
