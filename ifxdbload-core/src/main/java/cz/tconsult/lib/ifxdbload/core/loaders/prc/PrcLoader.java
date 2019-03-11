@@ -55,8 +55,8 @@ public class PrcLoader extends Loader0 {
     // Procedury zavádíme paralelně.
     final AtomicInteger pocetChyb = new AtomicInteger(0);
     proceduryKZavedeni
-    .stream()
-    //.parallelStream()
+    //.stream()
+    .parallelStream()
     .forEach(prc -> {
       log.debug("PROCEDURE --> \"{}\"", prc.getName());
       tranik().execute(status -> {
