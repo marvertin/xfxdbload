@@ -1,0 +1,51 @@
+CREATE FUNCTION TW_SmsNahradKlice(AObsah LVARCHAR(4000), AOwner INT DEFAULT NULL, aNahradTajne INT DEFAULT 0) RETURNING LVARCHAR(40);
+  -- Funkce vytáhne email daného typu z číselníku a nahradí klíčové hodnoty
+  -- krome klicovych hodnot s prefixem PREFIX_, kde prefix je dan hodnotou registru TW/SMS/*/skrytPrefix  
+  -- předpokládá se že dříve bylo použito TW_SmsParamInit .. také viz. info v TW_SmsVytvor
+  --
+  define _obsahZbytek       VARCHAR(40);  --zpracovávaný text, zkracovaný až je zpracováno vše
+  define _obsahNahrazeno    VARCHAR(40);  --text s nahrazenýma hodnotama
+  
+  
+  define _zacatekZnak       CHAR(2); --znak začátku klíče
+  define _konecZnak         CHAR(2); --znak konce klíče
+  
+  define _poziceZac         INT;  --pozice prvního výskytu _zacatekZnak
+  define _poziceKon         INT;  --pozice prvního výskytu _konecZnak
+  
+  define _delkaZacatekZnak  INT;
+  define _delkaKonecZnak    INT;
+  
+  define _zacatekZnakKlice INT;
+  define _delkaKlice       INT;
+  
+  
+  define _klic         CHAR(20);
+  
+  --
+  -- inicializace
+  --
+  let _zacatekZnak = '<<';
+  let _konecZnak    = '>>';
+  let _delkaZacatekZnak = length(_zacatekZnak);
+  let _delkaKonecZnak = length(_konecZnak);
+  let _obsahNahrazeno = '';
+  let _obsahZbytek = AObsah;
+
+--
+--  Nahrazení klíče v textu
+--
+
+
+
+
+     if TW_SmsParamJeTajny(AOwner, _klic) = 1 AND aNahradTajne = 0 then
+       let _obsahNahrazeno = _obsahNahrazeno || TRIM(_zacatekZnak) || TWinternal_getOdtajnenyKlic(_klic) || TRIM(_konecZnak);
+     else 
+       let _obsahNahrazeno = _obsahNahrazeno || TRIM(TW_SmsParamGet(AOwner, TWinternal_getOdtajnenyKlic(_klic)));
+     end if
+
+
+
+  RETURN _obsahNahrazeno;
+END FUNCTION;
