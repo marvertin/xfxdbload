@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.loaders.vue.VueLoader;
+import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplParser;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
@@ -53,6 +54,7 @@ public class F240vueExecutor implements FazeExecutor {
         .map(LoSoubor::getDataAsString)
         .map(splParser::parse)
         .flatMap(ps -> ps.getStatements().stream())
+        .filter(spl -> spl.getStmType() == EStmType.VIEW)
         .collect(Collectors.toList());
 
     // TODO [veverka] řešit schema -- 7. 3. 2019 10:34:16 veverka

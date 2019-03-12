@@ -9,6 +9,7 @@ import cz.tconsult.dbloader.itf.EFileCategory;
  */
 public enum EFazeZavedeni {
 
+  // // TODO [veverka] Fáze není v návrhu, ale mohla by být potřeba -- 12. 3. 2019 7:49:53 veverka
   f020clean("Čištění", "Čištění schématu", EFileCategory.DBOBJ),
 
   f050before("Once skript - fáze 0before", "Zavádění once skriptů - fáze 0before", EFileCategory.ONCE),
@@ -19,8 +20,6 @@ public enum EFazeZavedeni {
 
   f210tmp("Temporární tabulka", "Zavádění temporárních tabulek", EFileCategory.DBOBJ),
 
-  f220pkg("Balík", "Zavádění packagů", EFileCategory.DBOBJ),
-
   f230prc("Procedura", "Zavádění procedur", EFileCategory.DBOBJ),
 
   f240vue("View", "Zavádění view", EFileCategory.DBOBJ),
@@ -30,8 +29,6 @@ public enum EFazeZavedeni {
   f255trgxml("Automatický trigger", "Zavádění automatických triggerů", EFileCategory.XMLTRIGER),
 
   f260afterobj("Fáze po zavedení objektu", "Zavádění - fáze po zavedení objektů", EFileCategory.ALWAYS),
-
-  f265materview("Materializované view", "Zavádění materializovaného view", EFileCategory.DBOBJ),
 
   f270reg("Registrace", "Zavádění registrací", EFileCategory.ALWAYS),
 

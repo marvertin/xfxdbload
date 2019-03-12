@@ -52,9 +52,6 @@ public final class FFaze {
       if (slozka.equals("tmp")) {
         return EFazeZavedeni.f210tmp;
       }
-      if (slozka.equals("pkg")) {
-        return EFazeZavedeni.f220pkg;
-      }
       if (slozka.equals("prc")) {
         return EFazeZavedeni.f230prc;
       }
@@ -63,9 +60,6 @@ public final class FFaze {
       }
       if (slozka.equals("trg")) {
         return EFazeZavedeni.f250trg;
-      }
-      if (slozka.equals("mview")) {
-        return EFazeZavedeni.f265materview;
       }
       if (slozka.equals("reg")) {
         return EFazeZavedeni.f270reg;

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ViewBodiesSaver {
 
+  private static final String INFORMIX_CATALOG_SYSVIEWS = "<informix/catalog/sysviews>/";
   private final JdbcTemplate jt;
 
   /**
@@ -38,9 +39,20 @@ public class ViewBodiesSaver {
     locatorFactory.createLocator("xxx", 0, 0, 0, 0, 0, 0);
 
     return Maps.transformEntries(views, (nazev, data) ->  new SplStatement(null, EStmType.VIEW, nazev, data,
-        locatorFactory.createLocator("<informix/catalog/sysviews>/" + nazev, 0, 0, 0, 0, 0, 0)));
+        locatorFactory.createLocator(INFORMIX_CATALOG_SYSVIEWS + nazev, 0, 0, 0, 0, 0, 0)));
   }
 
+
+  /**
+   * Zjistí, zda je view zavedeno z katalogu narozdíl od view ze zdrojáků.
+   * Apoň je zo zapouzdeno zde, kde tato view vznikají.
+   * je to trochu, ale jen trochu nečisté. Jinak by se musel zhabalit StmStatement.
+   * @param stm
+   * @return
+   */
+  public  static boolean viewIsFromCatalog(final SplStatement stm) {
+    return stm.getFirstTokenLocator().getInputSourceName().startsWith(INFORMIX_CATALOG_SYSVIEWS);
+  }
 
   @Data
   public static class Record {

@@ -31,11 +31,7 @@ public class SplStatement {
 
   public String getNameLower() {
     if (name == null) {
-      System.err.println("////////////////////");
-      System.err.println(firstTokenLocator);
-      System.err.println(text);
-      System.err.println(stmType);
-      System.err.println("////////////////////");
+      throw new NullPointerException("Chtěno jména po bezemenném objektu: " + this);
     }
     return name.toLowerCase();
   }

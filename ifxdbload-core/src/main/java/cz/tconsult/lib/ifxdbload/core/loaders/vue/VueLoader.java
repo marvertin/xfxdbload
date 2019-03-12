@@ -3,6 +3,7 @@ package cz.tconsult.lib.ifxdbload.core.loaders.vue;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,15 +58,71 @@ public class VueLoader extends Loader0 {
    */
   public void load(final List<SplStatement> stms) {
 
-    tranik().execute(status -> {
-      final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms);
-      final List<SplStatement> vueZeZdrojuKZavedeni = stms.stream().
-          filter(vue -> ! notChangedObjNames.contains(vue.getNameLower()))
-          .collect(Collectors.toList());
-      log.info("VIEWS: changed {} + same {} = total {}",  vueZeZdrojuKZavedeni.size(),  stms.size() - vueZeZdrojuKZavedeni.size(), stms.size());
+    final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms);
+    final List<SplStatement> vueZeZdrojuKZavedeni = stms.stream().
+        filter(vue -> ! notChangedObjNames.contains(vue.getNameLower()))
+        .collect(Collectors.toList());
+    log.info("VIEWS: changed {} + same {} = total {}",  vueZeZdrojuKZavedeni.size(),  stms.size() - vueZeZdrojuKZavedeni.size(), stms.size());
 
+    final List<Error> errors = loadAllViewsInTrans(vueZeZdrojuKZavedeni);
+
+    // Rozdělíme chyby na chyby view ze zdrojůl a na chyby view z katalogu
+    final Map<Boolean, List<Error>> parta = errors.stream().collect(Collectors.partitioningBy(err -> ViewBodiesSaver.viewIsFromCatalog(err.view)));
+    final List<Error> errorsFromCatalog = parta.get(true);
+    final List<Error> errorsFromSources = parta.get(true);
+
+    if (errorsFromSources.size() > 0) { // pokud máme nějaké chyby ze zdrojů
+      // tak můžeme ignorovat chyby z katalogu, ty mohou být indukované například tím, že view ze zdrojů bylo dropnuto, ale nezavedeno,
+      // pak se nepodařilo zavést view z katalogu
+
+      final Set<String> jménaViewZeZdrojuKtraChybovala = errorsFromSources.stream()
+          .map(err -> err.view.getNameLower())
+          .collect(Collectors.toSet());
+
+      // zredukujeme zaváděná voiew o ta, která jsou chybá
+      final List<SplStatement> vueZeZdrojuKZavedeniRedukovane =
+          vueZeZdrojuKZavedeni.stream()
+          .filter(vue -> errorsFromSources.contains(vue.getNameLower()))
+          .collect(Collectors.toList());
+
+      final List<Error> errors2 = loadAllViewsInTrans(vueZeZdrojuKZavedeniRedukovane);
+      if (errors2.size() > 0) {
+        log.error("Žádné view nebylo zavedeno ani napodruhé, neboť jsou chyby ve view, jenž nemáme ve zdrojácéch a při zavedení by byly dropnuty. Zřejmě se změnila definice některého z view tak, že existující view toto view používající již nebude možno zavést.");
+        reportErrors(errorsFromSources); // reportujeme puvodni chyby view, ktere se nepodarilo zavost
+        reportErrors(errors2);
+      } else {
+        log.info("VIEWS ZAVEDENA NAPODRUHE, ALE NE VSECHNA:  changed {} + same {} = total {}",  vueZeZdrojuKZavedeni.size(),  stms.size() - vueZeZdrojuKZavedeni.size(), stms.size());
+        reportErrors(errorsFromSources); // reportujeme puvodni chyby view, ktere se nepodarilo zavost
+      }
+    } else if (errorsFromCatalog.size() > 0) { // pokud máme chyby je z katalogu a ne ze zdrojů
+      log.error("Žádné view nebylo zavedeno, neboť jsou chyby ve view, jenž nemáme ve zdrojácéch a při zavedení by byly dropnuty. Zřejmě se změnila definice některého z view tak, že existující view toto view používající již nebude možno zavést.");
+      reportErrors(errors); // reportujeme všechny původní chyby
+    } else { // view se podařilo napoprvé zavést
+      log.info("VIEWS ZAVEDENA NAPOPRVE:  changed {} + same {} = total {}",  vueZeZdrojuKZavedeni.size(),  stms.size() - vueZeZdrojuKZavedeni.size(), stms.size());
+    }
+  }
+
+  private void reportErrors(final List<Error> errors) {
+    errors.forEach(res -> {
+      ctx().reportError(res.exc, res.view); // už víme, že všechno co zbylo, je s chybama
+    });
+  }
+
+  /**
+   * Kompletní zavedení seznamu view.
+   *  1. Nejdříve si schová katalog všech view v temtable.
+   *  2. Pak se všechna zuaváděná view podropují.
+   *  3. Zjistí se, která view se dropla, aniž by byla ve zdrojácích a do zdrojáků se přidají.
+   *  4. Vše se iteračně zavádí, dokud klesá počet chyb.
+   *  5. Provede se commit, pokud vše zavedeno nebo ROLBACK, pokud je nějaká chyna.
+   *  6. Vrac se seznam chyb.
+   *
+   * @param vueZeZdrojuKZavedeni View, která se mají skutečně zavést. Už se nebdue ovařovat, zda se view změnilo nebo ne, prostě se zavádí.
+   * @return View, která se nepovedlo zavést. Může osahovat i view, která nbyla ve vstupu, pokud je bylo nutné přezavést.
+   */
+  private List<Error> loadAllViewsInTrans(final List<SplStatement> vueZeZdrojuKZavedeni) {
+    return tranik().execute(status -> {
       // schovat view, ještě dřív než začneme
-      // // TODO [veverka] Vše v jediné transakci -- 11. 3. 2019 16:49:29 veverka
       viewBodiesSaver.copyViewBodiesToTempTable();
 
       // dropnout všechna view, která se budou zavádět
@@ -90,36 +147,51 @@ public class VueLoader extends Loader0 {
       final List<SplStatement> vueKZavedeni = ListUtils.union(vueZeZdrojuKZavedeni, droppedViews);
       //Lists.asList(first, rest)
 
-      final List<Result> results = tryLoadAllViews(vueKZavedeni, 0);
-      results.forEach(res -> {
-        ctx().reportError(res.exc.get(), res.view); // už víme, že všechno co zbylo, je s chybama
-      });
-
+      final List<Error> results = tryLoadAllViews(vueKZavedeni);
       final int pocetChyb = results.size();
       log.info("VIEWS: loaded {} + error {} = total {}",  vueKZavedeni.size() - pocetChyb,  pocetChyb, vueKZavedeni.size());
-
-      return null; // nepotřebujeme výsledek
+      if (pocetChyb > 0) { // při chybách rolbackujeme
+        status.setRollbackOnly();
+      }
+      return results;
     });
+
   }
 
-  private List<Result> tryLoadAllViews(final List<SplStatement> stms, final int početChybPřiMinulémPokusu) {
+  /**
+   * Pokusí se iteračnězavést všecna view, dokud se daří něco zavádět bez chyb. Pak vrátí pouze seznam chybujícíc view i s chybou.
+   * @param stms
+   * @return
+   */
+  private List<Error> tryLoadAllViews(final List<SplStatement> stms) {
+    return _tryLoadAllViews(stms, 0);
+  }
+
+  private List<Error> _tryLoadAllViews(final List<SplStatement> stms, final int početChybPřiMinulémPokusu) {
     log.info("VIEWS -> iteration, resulting {} views.", stms.size());
-    final List<Result> viewSChybama = stms.stream()  // žádný paralelismus, potřebujeme hezky všechno v jedné transakci.
+    final List<Error> viewSChybama = stms.stream()  // žádný paralelismus, potřebujeme hezky všechno v jedné transakci.
         .map(this::loadOneVue)              // tady se zavedou view
-        .filter(res -> res.exc.isPresent()) // jen, ty, kteří skočili špatně sem půjdou
+        .filter(Optional::isPresent) // jen, ty, kteří skočili špatně sem půjdou
+        .map(Optional::get)
         .collect(Collectors.toList());
     if (početChybPřiMinulémPokusu == viewSChybama.size()) {
       return viewSChybama; // už se počet chyb nezměnil, tak vracíme
     } else {
-      return tryLoadAllViews(viewSChybama.stream()
-          .map(Result::getView)
+      return _tryLoadAllViews(viewSChybama.stream()
+          .map(Error::getView)
           .collect(Collectors.toList()),
           viewSChybama.size());
     }
   }
 
 
-  private Result loadOneVue(final SplStatement vue) {
+  /**
+   * Zavede jedno jediné view a vrací empty, pokud se to povedlo, jinak zabalenou chybu.
+   * Metoda nedropuje view a neřídí transakce.
+   * @param vue
+   * @return
+   */
+  private Optional<Error> loadOneVue(final SplStatement vue) {
     try {
       log.debug("VIEWS --> \"{}\"", vue.getName());
 
@@ -130,10 +202,10 @@ public class VueLoader extends Loader0 {
         jt().execute(vue.getText());  // Vlastní zavedení view
         catalogHasher.updateHashes(vue); // ve stejné tgransakci updatneme heše
         log.debug("VIEWS <-- \"{}\" OK", vue.getName());
-        return new Result(vue, Optional.empty());
+        return Optional.empty();
       } catch (final DataAccessException e) {
         log.debug("VIEWS <-- \"{}\" !!!ERRRO!!", vue.getName());
-        return new Result(vue, Optional.of(e));
+        return Optional.of(new Error(vue, e));
       }
     } finally {
       //log.info("VIEWS <-- \"{}\"", vue.getName());
@@ -141,8 +213,8 @@ public class VueLoader extends Loader0 {
   }
 
   @Data
-  private static class Result {
+  private static class Error {
     private final SplStatement view;
-    private final Optional<DataAccessException> exc;
+    private final DataAccessException exc;
   }
 }
