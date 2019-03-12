@@ -55,8 +55,8 @@ public class PrcLoader extends Loader0 {
     // Procedury zavádíme paralelně.
     final AtomicInteger pocetChyb = new AtomicInteger(0);
     proceduryKZavedeni
-    .stream()
-    //.parallelStream()
+    //.stream()
+    .parallelStream()
     .forEach(prc -> {
       log.debug("PROCEDURE --> \"{}\"", prc.getName());
       tranik().execute(status -> {
@@ -83,7 +83,7 @@ public class PrcLoader extends Loader0 {
     final EStmType type = procedure.getStmType();
 
     // FIXME [jaksik] upravit logování -- 11. 3. 2019 14:18:15 jaksik
-    log.info("Dropuji {}", procname);
+    log.info("Dropuji {} THREAD[{}]", procname,Thread.currentThread().getName());
     jt().execute("DROP " + type  + " IF EXISTS " + procname);
 
   }
@@ -91,7 +91,7 @@ public class PrcLoader extends Loader0 {
   private void createProcedure(final SplStatement procedure) {
 
     // FIXME [jaksik] upravit logování -- 11. 3. 2019 14:18:30 jaksik
-    log.info("Vytvářím {}", procedure.getName());
+    log.info("Vytvářím {} THREAD[{}]", procedure.getName(), Thread.currentThread().getName());
 
     final String sql = procedure.getText();
 
@@ -110,7 +110,10 @@ public class PrcLoader extends Loader0 {
       }
     }
 
+
     jt().execute(new ExecuteStatementCallback());
+    log.info("HOTOVO. {}", procedure.getName());
+
 
   }
 
