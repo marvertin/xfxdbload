@@ -1,0 +1,125 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_InkArchTemp.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB46~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro Naplnění temporální tabulky pro přístup
+--  k datům archívu individuálních inkas z archívní databáze
+--VERZE: 3.0
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:
+--
+--AB_DoklArchTemp
+--====================================================================== */
+--
+--
+CREATE     PROCEDURE AB_InkArchTemp    (AOwner      Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\UCJADRO\AC
+-- vytvořeno 14.4.1998
+
+
+
+INSERT INTO AB_InkArch_Temp
+    SELECT  ser              ,
+            stav             ,
+            davka            ,
+            davkacc          ,
+            zdroj            ,
+            typ              ,
+            priorita         ,
+            datpor           ,
+            idtran           ,
+            castka           ,
+            valuta           ,
+            konstsym         ,
+            zprkli           ,
+            zprbank          ,
+            datsplatnost     ,
+            davkavznik       ,
+            seruhr           ,
+            serplatba        ,
+            serodm           ,
+            dbkonto          ,
+            dbident          ,
+            dbbanka          ,
+            dbspecsym        ,
+            dbvarsym         ,
+            dbtext           ,
+            crkonto          ,
+            crident          ,
+            crbanka          ,
+            crspecsym        ,
+            crvarsym         ,
+            crtext           ,
+            refuser          ,
+            reftime          ,
+            dokladbds        ,
+            poruser          ,
+            portime          ,
+            potvrduser       ,
+            potvrdtime       ,
+            1 ,
+            Aowner
+    FROM  AB_InkArch_View_A
+    WHERE ser in (SELECT ser FROM AB_InkArch_Temp2 WHERE owner = AOwner);
+
+
+
+    INSERT INTO AB_InkArch_Temp
+    SELECT  ser              ,
+            stav             ,
+            davka            ,
+            davkacc          ,
+            zdroj            ,
+            typ              ,
+            priorita         ,
+            datpor           ,
+            idtran           ,
+            castka           ,
+            valuta           ,
+            konstsym         ,
+            zprkli           ,
+            zprbank          ,
+            datsplatnost     ,
+            davkavznik       ,
+            seruhr           ,
+            serplatba        ,
+            serodm           ,
+            dbkonto          ,
+            dbident          ,
+            dbbanka          ,
+            dbspecsym        ,
+            dbvarsym         ,
+            dbtext           ,
+            crkonto          ,
+            crident          ,
+            crbanka          ,
+            crspecsym        ,
+            crvarsym         ,
+            crtext           ,
+            refuser          ,
+            reftime          ,
+            dokladbds        ,
+            poruser          ,
+            portime          ,
+            potvrduser       ,
+            potvrdtime       ,
+            0 ,
+            Aowner
+    FROM  AB_InkArch_View
+    WHERE ser in (SELECT ser FROM AB_InkArch_Temp1 WHERE owner = AOwner)
+            AND ser not in (SELECT ser FROM AB_InkArch_Temp2 WHERE owner = AOwner) ;
+
+
+end procedure;

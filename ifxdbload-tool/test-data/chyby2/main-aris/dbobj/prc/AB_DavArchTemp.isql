@@ -1,0 +1,85 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_DavArchTemp.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB50~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro Naplnění temporální tabulky pro přístup
+--  k datům dávek BDS z archívní databáze
+--VERZE: 3.0
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:
+--
+--AB_DavArchTemp
+--====================================================================== */
+--
+--
+CREATE     PROCEDURE AB_DavArchTemp    (AOwner      Int)
+-- verze - 3.0
+
+
+
+INSERT INTO AB_DavArch_Temp
+   SELECT   davka            ,
+            dokladtyp        ,
+            datprov          ,
+            stav             ,
+            pocporiz         ,
+            pocpotvrd        ,
+            pocauto          ,
+            pocman           ,
+            pocvymaz         ,
+            pocchyb          ,
+            openuser         ,
+            Opentime         ,
+            Closeuser        ,
+            Closetime        ,
+            Enduser          ,
+            Endtime          ,
+            Refuser          ,
+            Reftime          ,
+            1                ,
+            Aowner
+    FROM  AB_Davka_Prot_a
+    WHERE davka in (SELECT davka FROM AB_DavArch_Temp2
+       WHERE owner = AOwner);
+
+
+
+    INSERT INTO AB_DavArch_Temp
+      SELECT davka            ,
+            dokladtyp        ,
+            datprov          ,
+            stav             ,
+            pocporiz         ,
+            pocpotvrd        ,
+            pocauto          ,
+            pocman           ,
+            pocvymaz         ,
+            pocchyb          ,
+            openuser         ,
+            Opentime         ,
+            Closeuser        ,
+            Closetime        ,
+            Enduser          ,
+            Endtime          ,
+            Refuser          ,
+            Reftime          ,
+            0                ,
+            Aowner
+
+    FROM  AB_Davka_Prot
+    WHERE davka in (SELECT davka FROM AB_DavArch_Temp1 WHERE owner = AOwner)
+        AND davka not in (SELECT davka FROM AB_DavArch_Temp2 WHERE owner = AOwner) ;
+
+
+end procedure;

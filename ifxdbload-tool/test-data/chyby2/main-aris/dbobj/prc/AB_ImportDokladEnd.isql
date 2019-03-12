@@ -1,0 +1,6 @@
+CREATE PROCEDURE AB_ImportDokladEnd(AId Int)
+  -- procedura provede nastaveni importu na chyba pod stejnym ownerem   
+  
+  UPDATE ab_importdoklad_kart SET zprac = -2 WHERE refimportid = AId AND zprac = 0;
+  UPDATE ab_import_prot SET stav = 'E' WHERE id = AId AND stav <> 'C';
+end procedure;

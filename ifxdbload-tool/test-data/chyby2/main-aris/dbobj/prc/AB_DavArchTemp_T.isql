@@ -1,0 +1,147 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_DavArchTemp_T.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB49~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro Naplnění temporální tabulky pro přístup
+--  k datům dávek BDS z archívní databáze
+--VERZE: 3.0
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:               A B _ D A V A R C H T E M P _ T
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_DavArchTemp_T (AOwner      Int)
+-- verze - 3.0
+
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _davka      Int;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_davarchtemp_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+foreach c with hold for
+  SELECT davka
+  INTO _davka
+  FROM AB_DavArch_Temp2
+  WHERE owner = AOwner
+
+ INSERT INTO AB_DavArch_Temp
+      ( davka            ,
+            dokladtyp        ,
+            datprov          ,
+            stav             ,
+            pocporiz         ,
+            pocpotvrd        ,
+            pocauto          ,
+            pocman           ,
+            pocvymaz         ,
+            pocchyb          ,
+            openuser         ,
+            Opentime         ,
+            Closeuser        ,
+            Closetime        ,
+            Enduser          ,
+            Endtime          ,
+            Refuser          ,
+            Reftime          ,
+      arch)
+   SELECT   davka            ,
+            dokladtyp        ,
+            datprov          ,
+            stav             ,
+            pocporiz         ,
+            pocpotvrd        ,
+            pocauto          ,
+            pocman           ,
+            pocvymaz         ,
+            pocchyb          ,
+            openuser         ,
+            Opentime         ,
+            Closeuser        ,
+            Closetime        ,
+            Enduser          ,
+            Endtime          ,
+            Refuser          ,
+            Reftime          ,
+            1
+    FROM  AB_Davka_Prot_a
+     WHERE davka = _davka;
+
+  -- Kvůli UD1
+  UPDATE AB_DavArch_Temp
+     SET owner = AOwner
+   WHERE davka = _davka
+     and owner is null;
+
+end foreach;
+
+    INSERT INTO AB_DavArch_Temp
+      SELECT davka            ,
+            dokladtyp        ,
+            datprov          ,
+            stav             ,
+            pocporiz         ,
+            pocpotvrd        ,
+            pocauto          ,
+            pocman           ,
+            pocvymaz         ,
+            pocchyb          ,
+            openuser         ,
+            Opentime         ,
+            Closeuser        ,
+            Closetime        ,
+            Enduser          ,
+            Endtime          ,
+            Refuser          ,
+            Reftime          ,
+            0                ,
+            Aowner
+
+    FROM  AB_Davka_Prot
+    WHERE davka in (SELECT davka FROM AB_DavArch_Temp1 WHERE owner = AOwner)
+        AND davka not in (SELECT davka FROM AB_DavArch_Temp2 WHERE owner = AOwner) ;
+
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_davarchtemp_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

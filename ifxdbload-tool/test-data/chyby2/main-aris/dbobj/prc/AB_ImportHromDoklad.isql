@@ -1,0 +1,149 @@
+CREATE PROCEDURE AB_ImportHromDoklad(AId          Int,
+                                     ADokladTyp   INT)
+
+  -- procedura provede nacteni naimportovanych hromadnych BDS dokladu a prekonveruje do tmp tabulek pro editaci BDS dokladu
+  -- a pote provede vytvoreni noveho BDS dokladu 
+
+  DEFINE _dokladbds          LIKE ab_importhromsouhrn_kart.dokladbds;  
+  DEFINE _dokladtyp          LIKE ab_importhromsouhrn_kart.dokladtyp;
+  DEFINE _dbcr               LIKE ab_importhromsouhrn_kart.dbcr;   
+  DEFINE _zprac              LIKE ab_importhromsouhrn_kart.zprac;      
+  DEFINE _druh               LIKE ab_importhromsouhrn_kart.druh;
+  DEFINE _smer               LIKE ab_importhromsouhrn_kart.smer;   
+  DEFINE _datuct             LIKE ab_importhromsouhrn_kart.datuct;     
+  DEFINE _roksp              LIKE ab_importhromsouhrn_kart.roksp;      
+  DEFINE _valuta             LIKE ab_importhromsouhrn_kart.valuta;     
+  DEFINE _konstsym           LIKE ab_importhromsouhrn_kart.konstsym;   
+  DEFINE _ucet               LIKE ab_importhromsouhrn_kart.ucet;     
+  DEFINE _konto              LIKE ab_importhromsouhrn_kart.konto;    
+  DEFINE _sko                LIKE ab_importhromsouhrn_kart.sko;      
+  DEFINE _banka              LIKE ab_importhromsouhrn_kart.banka;
+  DEFINE _textsouhrn         LIKE ab_importhromsouhrn_kart.textsouhrn;  
+  DEFINE _prefixzak          LIKE ab_importhromsouhrn_kart.prefixzak;
+  DEFINE _varsym             LIKE ab_importhromsouhrn_kart.varsym;   
+  DEFINE _specsym            LIKE ab_importhromsouhrn_kart.specsym;  
+  DEFINE _naklstr            LIKE ab_importhromsouhrn_kart.naklstr;  
+  
+  DEFINE _Rradek             LIKE ab_importhromrozpis_kart.radek;
+  DEFINE _Rcastka            LIKE ab_importhromrozpis_kart.castka;
+  DEFINE _Rucet              LIKE ab_importhromrozpis_kart.ucet;
+  DEFINE _Rkonto             LIKE ab_importhromrozpis_kart.konto;
+  DEFINE _Rsko               LIKE ab_importhromrozpis_kart.sko;
+  DEFINE _Rbanka             LIKE ab_importhromrozpis_kart.banka;
+  DEFINE _Rroksp             LIKE ab_importhromrozpis_kart.roksp;
+  DEFINE _Rvaluta            LIKE ab_importhromrozpis_kart.valuta;
+  DEFINE _Rtextrozpis        LIKE ab_importhromrozpis_kart.textrozpis;
+  DEFINE _Rprefixzak         LIKE ab_importhromrozpis_kart.prefixzak;
+  DEFINE _Rnaklstr           LIKE ab_importhromrozpis_kart.naklstr;
+  DEFINE _Rkonstsym          LIKE ab_importhromrozpis_kart.konstsym;
+  DEFINE _Rvarsym            LIKE ab_importhromrozpis_kart.varsym;
+  DEFINE _Rspecsym           LIKE ab_importhromrozpis_kart.specsym;     
+  
+  DEFINE _pocet              INT;
+  DEFINE _castkaCelk         DEC(16, 2);     
+  DEFINE _hromprikaz         INT;  
+  
+  IF(ADokladTyp = 0) THEN
+    LET _dokladtyp = 'HB';
+  ELSE
+    LET _dokladtyp = 'HK';
+  END IF;  
+
+  SELECT dokladbds, zprac, dbcr, druh, smer, datuct, roksp, valuta, konstsym, ucet, konto, sko, banka, textsouhrn, prefixzak, varsym, specsym, naklstr
+  INTO _dokladbds, _zprac, _dbcr, _druh, _smer, _datuct, _roksp, _valuta, _konstsym, _ucet, _konto, _sko, _banka, _textsouhrn, _prefixzak, _varsym, _specsym, _naklstr
+  FROM ab_importhromsouhrn_kart
+  WHERE refimportid = AId AND zprac = 0;
+  
+  IF(_datuct IS NULL) THEN
+    LET _datuct = AP_DatProv();
+  END IF;    
+
+  IF(_valuta IS NULL) THEN
+    LET _valuta = _datuct;
+  END IF;    
+  
+  IF(_roksp IS NULL) THEN
+    LET _roksp = _valuta;
+  END IF;    
+
+  CALL AB_HromInit(AId);
+  
+  UPDATE tmp_AB_Souhrn_Kart
+  SET      
+    valuta          = _valuta,             
+    premRok         = _roksp,   
+    druh            = _druh,   
+    dbcr            = _dbcr,      
+    datUct          = _datuct,   
+    dokladTyp       = _dokladtyp,   
+    smer            = _smer,     
+    konstSym        = _konstsym,       
+    SKonto          = _konto,          
+    SKontopred      = AO_KontoPred(_konto),        
+    SKontozakl      = AO_KontoZakl(_konto),     
+    SSko            = _sko,
+    SUcet           = _ucet,
+    SCZ             = _prefixzak,
+    SNS             = _naklstr,
+    SBanka          = _banka,
+    SVarSym         = _varsym,
+    SSpecSym        = _specsym,
+    SText           = _textsouhrn
+  WHERE owner = AId;  
+
+  LET _pocet = 0;
+  LET _castkaCelk = 0;
+  FOREACH c1 WITH HOLD FOR
+    SELECT radek, castka, ucet, konto, sko, banka, roksp, valuta, textrozpis, prefixzak, naklstr, konstsym, varsym, specsym
+    INTO _Rradek, _Rcastka, _Rucet, _Rkonto, _Rsko, _Rbanka, _Rroksp, _Rvaluta, _Rtextrozpis, _Rprefixzak, _Rnaklstr, _Rkonstsym, _Rvarsym, _Rspecsym
+    FROM ab_importhromrozpis_kart
+    WHERE refdokladbds = _dokladbds
+    ORDER BY radek                       
+  
+    IF(_Rvaluta IS NULL) THEN
+      LET _Rvaluta = _datuct;
+    END IF;    
+    
+    IF(_Rroksp IS NULL) THEN
+      LET _Rroksp = _Rvaluta;
+    END IF;            
+        
+    IF(_pocet = 0) THEN
+      UPDATE tmp_AB_Rozpis_Kart
+      SET      
+        castka        = _Rcastka,
+        RKonto        = _Rkonto,
+        RKontopred    = AO_KontoPred(_Rkonto),  
+        RKontozakl    = AO_KontoZakl(_Rkonto),
+        RSko          = _Rsko,      
+        RUcet         = _Rucet,
+        RCZ           = _Rprefixzak,
+        RNS           = _Rnaklstr,
+        RBanka        = _Rbanka,
+        RVarSym       = _Rvarsym,
+        RSpecSym      = _Rspecsym,
+        RText         = _Rtextrozpis,     
+        valuta        = _Rvaluta,
+        premRok       = _Rroksp     
+      WHERE owner = AId;    
+    ELSE
+      INSERT INTO tmp_AB_Rozpis_Kart(dokladBDS, Owner, castka,RKonto, RKontopred, RKontozakl, RSko, RUcet, RCZ, RNS, RBanka, RVarSym, RSpecSym, RText, valuta, premRok)               
+      VALUES (1, AId,_Rcastka, _Rkonto, AO_KontoPred(_Rkonto), AO_KontoZakl(_Rkonto), _Rsko, _Rucet, _Rprefixzak, _Rnaklstr, _Rbanka, _Rvarsym, _Rspecsym, _Rtextrozpis, _Rvaluta, _Rroksp);
+    END IF;                          
+    
+    LET _pocet = _pocet + 1;
+    LET _castkaCelk = _castkaCelk + _Rcastka;
+  END FOREACH;
+  
+  UPDATE tmp_AB_Souhrn_Kart
+  SET      
+    pocet       = _pocet,
+    castkaCelk  = _castkaCelk
+  WHERE owner = AId; 
+  
+  CALL AB_HromInsertTest(AId, 1);
+  CALL AB_HromInsert(0, AId);
+  SELECT int1 INTO _hromprikaz FROM TW_retval_temp;  
+  UPDATE ab_importhromsouhrn_kart SET zprac = 1, refhromdoklad = _hromprikaz WHERE dokladbds = _dokladbds;    
+  UPDATE ab_import_prot SET stav = 'C' WHERE id = AId;  
+end procedure;

@@ -1,0 +1,100 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_Check.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB12~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru AB_Check
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 21.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--Procedura provede ověření částky, případně generuje chybový kód.
+--====================================================================== */
+--
+--
+CREATE     PROCEDURE AB_Check (ADokladCislo Int, ACastka Dec(16,2), AOwner Int default null)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB12~1
+-- vytvořeno 21.8.1997
+
+define        _davka       Int;
+define        _Castka      Dec(16,2);
+define        _DokladTyp   Char(2);
+define        _DbKonto     Dec(16,0);
+define        _RefUser     Char(20);
+DEFINE        _kodChyby    CHAR(4);
+
+define _crKonto      like AB_Doklad_Kart.crkonto;
+define _smlouva       Dec(16,2);
+define _tsml          Char(4); 
+define _tko           Char(2);
+
+ --set debug file to "Debug";
+--trace on;
+
+if AOwner is not null then
+  call AP_ErrorInit(AOwner);
+end if
+ 
+  SELECT DavkaVznik, Castka,DokladTyp, DbKonto, RefUser, CrKonto
+    INTO _Davka, _Castka, _DokladTyp, _DbKonto, _RefUser, _CrKonto
+   FROM  AB_Doklad_Kart
+    WHERE (dokladBDS = ADokladCislo);
+
+    begin
+    ON EXCEPTION in (-746)
+      if (_RefUser = AP_User()) then
+        {call tw-error(-13017,"Musí potvrzovat někdo jiný než autor poslední změny","AB020");}
+         call TW_RaiseError ('04064AB020TCUI', 'AB_Check:', 'Potvrzuje stejný uživatel jako je autor poslední změny!');
+      end if;
+    END EXCEPTION;
+    call TW_TestRole(".abpou_a");
+    end;
+
+
+    if (_Castka <> ACastka) then
+      {call tw-error(-13018,"Nesouhlasí ověřovací částka","AB021");}
+       call TW_RaiseError ('04065AB021TCUI', 'AB_Check:', 'Nesouhlasí ověřovací částka!');
+    else
+      let _Davka = AB_BatchInit (_DokladTyp,ADokladCislo,_Davka);
+      UPDATE AB_Doklad_Kart
+       SET (potvrzeno, potvrdUser, PotvrdTime) =
+            (1,AP_User(), Current Year to Second)
+      WHERE (DokladBDS = ADokladCislo);
+
+
+
+
+
+     if DbInfo("SQLCA.SQLERRD2")=0 then
+           {call TW-Message("AB004",ADokladCislo);}
+            call TW_ShowMessage ('04066AB004TCUI', 'AB_Check:', 'Doklad %1 nebyl potvrzen', ADokladCislo);
+     else
+          {call TW-Message("AB003",ADokladCislo);}
+           call TW_ShowMessage ('04067AB003TCUI', 'AB_Check:', 'Doklad %1 byl potvrzen', ADokladCislo);
+
+         UPDATE AB_Davka_prot
+               SET pocPotvrd = pocPotvrd+1
+               WHERE Davka = _Davka and DokladTyp = _DokladTyp;
+
+     end if;
+    end if;
+
+     -- test na exekuce
+     let _tko = (SELECT tko FROM ac_konto_mat WHERE konto = _dbKonto and stav <> 2);
+     let _smlouva, _tsml = EP_SmlouvaKon(_dbKonto,_tko);
+     
+     LET _kodChyby = AO_TestOpravneniPlatby(AOwner, _dbKonto, _tko, 2);
+
+-- trace off;
+end procedure;

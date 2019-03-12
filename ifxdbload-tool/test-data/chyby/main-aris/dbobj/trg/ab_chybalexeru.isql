@@ -1,0 +1,14 @@
+
+
+|!*
+
+1.3.3.2.1
+
+
+CREATE TRIGGER ab_chybalexeru insert on ab_doklad_kart
+  referencing new as new
+  for each row
+  (
+    execute procedure Ap_User(new.poruser) into poruser,
+    execute procedure Ap_User(new.refuser) into refuser    
+  );

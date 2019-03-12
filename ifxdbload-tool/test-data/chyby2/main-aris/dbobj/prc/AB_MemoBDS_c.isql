@@ -1,0 +1,72 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_MemoBDS_c.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB19~1.SQL
+--
+--POPIS: Modul obsahuje proceduru   AB_MemoBDS_c
+--VERZE: 3.0
+--
+--VYTVOŘENO: 8.9.1997
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+CREATE     PROCEDURE  AB_MemoBDS_c (AOwner Int)
+-- verze -   3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB19~1
+-- vytvořeno 8.9.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _ser Int;
+define _porUser      Char  (20);
+define _porTime      DateTime Year to Second;
+define _potvrdUser   Char  (20);
+define _potvrdTime   DateTime Year to Second;
+define _Title        Char  (100);
+define _Subtitle     Char  (100);
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_memobds_c') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+foreach c with hold for
+  SELECT ser ,Title,Subtitle,porUser,porTime,potvrdUser,potvrdTime
+    INTO _ser,_Title,_Subtitle,_porUser,_porTime,_potvrdUser,_potvrdTime
+    FROM tmp_AB_MemoBDS
+
+   INSERT INTO tmp_AC_Memo
+         (ser ,Owner,Title,Subtitle,porUser,porTime,
+         potvrdUser,potvrdTime)
+     VALUES(_ser,AOwner,_Title,_Subtitle,_porUser,_porTime,
+         _potvrdUser,_potvrdTime) ;
+end foreach;
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_memobds_c') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

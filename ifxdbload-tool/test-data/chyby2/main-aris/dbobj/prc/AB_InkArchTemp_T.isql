@@ -1,0 +1,206 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_InkArchTemp_T.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB47~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro Naplnění temporální tabulky pro přístup
+--  k datům archívu individuálních inkas z archívní databáze
+--VERZE: 3.0
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:               A B _ I N K A R C H T E M P _ T
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_InkArchTemp_T (AOwner      Int)
+-- verze - 3.0
+
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _ser      Int;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_inkarchtemp_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+foreach c with hold for
+  SELECT ser
+  INTO _ser
+  FROM AB_InkArch_Temp2
+  WHERE owner = AOwner
+
+ INSERT INTO AB_InkArch_Temp
+      (ser              ,
+            stav             ,
+            davka            ,
+            davkacc          ,
+            zdroj            ,
+            typ              ,
+            priorita         ,
+            datpor           ,
+            idtran           ,
+            castka           ,
+            valuta           ,
+            konstsym         ,
+            zprkli           ,
+            zprbank          ,
+            datsplatnost     ,
+            davkavznik       ,
+            seruhr           ,
+            serplatba        ,
+            serodm           ,
+            dbkonto          ,
+            dbident          ,
+            dbbanka          ,
+            dbspecsym        ,
+            dbvarsym         ,
+            dbtext           ,
+            crkonto          ,
+            crident          ,
+            crbanka          ,
+            crspecsym        ,
+            crvarsym         ,
+            crtext           ,
+            refuser          ,
+            reftime          ,
+            dokladbds        ,
+            poruser          ,
+            portime          ,
+            potvrduser       ,
+            potvrdtime       ,
+      arch)
+    SELECT  ser              ,
+            stav             ,
+            davka            ,
+            davkacc          ,
+            zdroj            ,
+            typ              ,
+            priorita         ,
+            datpor           ,
+            idtran           ,
+            castka           ,
+            valuta           ,
+            konstsym         ,
+            zprkli           ,
+            zprbank          ,
+            datsplatnost     ,
+            davkavznik       ,
+            seruhr           ,
+            serplatba        ,
+            serodm           ,
+            dbkonto          ,
+            dbident          ,
+            dbbanka          ,
+            dbspecsym        ,
+            dbvarsym         ,
+            dbtext           ,
+            crkonto          ,
+            crident          ,
+            crbanka          ,
+            crspecsym        ,
+            crvarsym         ,
+            crtext           ,
+            refuser          ,
+            reftime          ,
+            dokladbds        ,
+            poruser          ,
+            portime          ,
+            potvrduser       ,
+            potvrdtime       ,
+            1
+    FROM  AB_InkArch_View_A
+    WHERE ser = _ser;
+
+  -- Kvůli UD1
+  UPDATE AB_InkArch_Temp
+     SET owner = AOwner
+   WHERE ser = _ser
+     and owner is null;
+
+end foreach;
+
+    INSERT INTO AB_InkArch_Temp
+    SELECT  ser              ,
+            stav             ,
+            davka            ,
+            davkacc          ,
+            zdroj            ,
+            typ              ,
+            priorita         ,
+            datpor           ,
+            idtran           ,
+            castka           ,
+            valuta           ,
+            konstsym         ,
+            zprkli           ,
+            zprbank          ,
+            datsplatnost     ,
+            davkavznik       ,
+            seruhr           ,
+            serplatba        ,
+            serodm           ,
+            dbkonto          ,
+            dbident          ,
+            dbbanka          ,
+            dbspecsym        ,
+            dbvarsym         ,
+            dbtext           ,
+            crkonto          ,
+            crident          ,
+            crbanka          ,
+            crspecsym        ,
+            crvarsym         ,
+            crtext           ,
+            refuser          ,
+            reftime          ,
+            dokladbds        ,
+            poruser          ,
+            portime          ,
+            potvrduser       ,
+            potvrdtime       ,
+            0 ,
+            Aowner
+    FROM  AB_InkArch_View
+    WHERE ser in (SELECT ser FROM AB_InkArch_Temp1 WHERE owner = AOwner)
+            AND ser not in (SELECT ser FROM AB_InkArch_Temp2 WHERE owner = AOwner) ;
+
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_inkarchtemp_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

@@ -1,0 +1,18 @@
+CREATE PROCEDURE aris.tw_sessionInitFinlize_evi_prep ()
+   ON EXCEPTION IN (-958)
+      -- Tabulka už existuje - ignorujeme.
+   END EXCEPTION
+
+   CREATE TEMP TABLE tw_sessionInitFinlize_evi (
+      evtid       SERIAL,
+      poznamka    VARCHAR(255),
+      locked      integer,
+         
+      -- přihlašovací jméno uživatele v OS programu
+      clientLogin CHAR(128),
+      -- stanice, ze které se uživatel přihlašuje
+      clientHost CHAR(128),
+      -- kód programu, který inicializuje sezení
+      prgCode     CHAR(40)
+   );
+END PROCEDURE;

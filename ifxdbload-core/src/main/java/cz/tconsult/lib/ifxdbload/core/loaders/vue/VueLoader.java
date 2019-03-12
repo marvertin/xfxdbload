@@ -108,7 +108,7 @@ public class VueLoader extends Loader0 implements DbObjLoader {
 
   private void reportErrors(final List<Error> errors) {
     errors.forEach(res -> {
-      ctx().reportError(res.exc, res.view); // už víme, že všechno co zbylo, je s chybama
+      ctx().errorReporter().reportError(res.exc, res.view); // už víme, že všechno co zbylo, je s chybama
     });
   }
 

@@ -1,0 +1,117 @@
+CREATE     PROCEDURE AB_HromInit (AOwner Int)
+--/* ======================================================================
+--POPIS: Procedura vytvoří tabulku tmp_AB_Souhrn_Kart a tmp_AB_Rozpis_Kart a naplní ji prázdným záznamem
+--====================================================================== */
+--
+
+  define _odklVypl  integer;
+  define _datprov  Date;
+  
+  let _datprov = TW_RegGetKeyDate('AC','*','*','datuct');
+  
+  begin
+    on exception in (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+      DELETE FROM tmp_AB_Souhrn_Kart WHERE Owner = AOwner;
+    end exception;
+  
+  CREATE TEMP TABLE tmp_AB_Souhrn_Kart(
+   dokladBDS     Int
+  ,valuta        Date
+  ,premRok       DateTime Year to Year   --default Current Year to Year
+  ,datPlVypl     Date
+  ,druh          Char  (4)
+  ,dbcr          Int         default 1
+  ,pocet         Int         default 1
+  ,davkavznik    Int
+  ,datSplatnost  Date
+  ,datUct        Date
+  ,dokladTyp     Char  (2)   default 'HB'
+  ,hromPrikaz    Int
+  ,smer          integer     default 1
+  ,uhrInk        Char  (1)    default 'U'
+  ,priorita      integer     default 0
+  ,konstSym      Dec   (10,0)
+  ,zpozdVypl     integer     default 0
+  ,castkacelk    Dec   (16,2)
+  ,marketAkce    Char  (4)    default '____'
+  ,uziv1         integer     default 0
+  ,uziv2         integer     default 0
+  ,uziv3         integer     default 0
+  ,SKonto        Dec   (16,0)
+  ,SKontopred    Dec   (6,0)
+  ,SKontozakl    Dec   (10,0)
+  ,SKontoCh      Char(24)
+  ,SKontopredCh  Char(2)
+  ,SKontozaklCh  Char(22)
+  ,jekontoch     integer
+  ,SSko          Char  (4)
+  ,SUcet         Char  (9)
+  ,SCZ           Char  (3)
+  ,SNS           Char  (5)
+  ,SBanka        Dec   (7,0)
+  ,SVarSym       Dec   (10,0) default 9
+  ,SSpecSym      Dec   (10,0)
+  ,SText         Char  (20)
+  ,potvrzeno     integer     default 0
+  ,porUser       Char  (20)    default User
+  ,porTime       DateTime Year to Second   default Current Year to Second
+  ,refUser       Char  (20)    default User
+  ,refTime       DateTime Year to Second   default Current Year to Second
+  ,potvrdUser    Char  (20)
+  ,potvrdTime    DateTime Year to Second
+  ,owner         Int
+  ) WITH NO LOG;
+  
+  end;   --konec bloku osetrujciciho kolizi creatu tab Souhr
+  
+  
+  --zjisteni parametru odkladu vyplaty
+  let _odklVypl = TW_RegGetKey('AB', 'vypl', '*', 'zpozdvypl', 0);
+  
+  INSERT INTO tmp_AB_Souhrn_Kart(dokladBDS,hromprikaz,priorita,valuta,zpozdvypl,premrok, owner)
+     VALUES (1,0,0,_datprov,_odklvypl,Extend(_datprov, Year to Year), AOwner);
+  
+  begin
+    on exception in (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+      DELETE FROM tmp_AB_Rozpis_Kart WHERE Owner = AOwner;
+    end exception;
+  
+  CREATE TEMP TABLE tmp_AB_Rozpis_Kart(
+   dokladBDS     Int
+  ,castka        Dec   (16,2) default 0
+  ,RKonto        Dec   (16,0)
+  ,RKontopred    Dec   (6,0)
+  ,RKontozakl    Dec   (10,0)
+  ,RKontoCh      Char(24)
+  ,RKontopredCh  Char(2)
+  ,RKontozaklCh  Char(22)
+  ,RSko          Char  (4)
+  ,RUcet         Char  (9)
+  ,RCZ           Char  (3)
+  ,RNS           Char  (5)
+  ,RBanka        Dec   (7,0)
+  ,RVarSym       Dec   (10,0) default 9
+  ,RSpecSym      Dec   (10,0)
+  ,RText         Char  (20)
+  ,dokladTyp     Char  (2)    default 'HB'
+  ,valuta        Date
+  ,premRok       DateTime Year to Year
+  ,chyba         VarChar  (255,0)
+  ,owner         Int
+  ) WITH NO LOG;
+  
+  end;   --konec bloku osetrujciciho kolizi creatu tab Rozpis
+  
+  INSERT INTO tmp_AB_Rozpis_Kart(dokladBDS, Owner) VALUES (1, AOwner);
+  
+  if TW_RegGetKey('AC','typ','*','konto')='kontodec' then
+    UPDATE tmp_AB_Souhrn_Kart
+      SET jekontoch=0
+    WHERE dokladbds = 1 AND owner = AOwner;
+  else
+    UPDATE tmp_AB_Souhrn_Kart
+      SET jekontoch=1
+    WHERE dokladbds = 1 AND owner = AOwner;
+  end if;
+
+end procedure;

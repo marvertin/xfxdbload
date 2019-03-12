@@ -24,10 +24,11 @@ import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_VIEW;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_WORK;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.ListUtils;
 
@@ -37,6 +38,8 @@ import cz.tconsult.lib.spllexer.CSplLexer;
 import cz.tconsult.lib.spllexer.ESplTokenKeyword;
 import cz.tconsult.lib.spllexer.ESplTokenNoKeyword;
 import cz.tconsult.lib.tuples.Tuple2;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Parsruje Spl
@@ -74,15 +77,18 @@ public class SplParser {
     try {
       final List<LexerToken> tokens = lexer.lex(source.getData(), source.getName().toString());
       final List<SplStatement> result = parseAll(new TokenIterator<LexerToken>(tokens));
-      return new ParseredSource(source.getName(), result);
+      return new ParseredSource(source, result);
+    } catch (final YParseError e) {
+      // toto je výjimkka způsobená špatným tokenem, je prostě očekáváno něco jiného
+      return new ParseredSource(source, e.getBadToken());
     } catch (final Exception e) {
       // toto je výjika způsobená sšpatným parsrem, ne chybou v parsrovaném
       throw new RuntimeException("Parsing \"" + source.getName() + "\"", e);
     }
   }
 
-  private Tuple2<Optional<SplStatement>,  TokenIterator<LexerToken>> parseOneStatement(final TokenIterator<LexerToken> tokenIterator) {
-    final List<Object> badTokens = new LinkedList<>();
+  private Tuple2<Optional<SplStatement>,  TokenIterator<LexerToken>> parseOneStatement(final TokenIterator<LexerToken> tokenIterator) throws YParseError {
+    final Set<LexerToken> badTokens = new LinkedHashSet<>();
     for(final ParserTry t : tries) {
       try {
         final TokenIterator<LexerToken> ti = tokenIterator.copy(); // vždy zkoušíme na nové kopii, aby to jelo od začátku
@@ -92,8 +98,9 @@ public class SplParser {
         badTokens.add(e.getBadToken());
       }
     }
-    // TODO [veverka] parserové chyby nesmí shazovat -- 4. 3. 2019 13:16:45 veverka
-    throw new RuntimeException("PARSE SYNTAX ERROR on one of this tokens: " + new HashSet<>(badTokens));
+    // Je tam neznámý token, takže se parsrování souboru ukončí a nahlásí chyba. Nic z něj není k dispozici.
+    final Optional<LexerToken> lastToken = badTokens.stream().collect(Collectors.maxBy( (t1,t2) -> t1.getLocator().getBegPosition() -  t2.getLocator().getBegPosition()));
+    throw new YParseError(lastToken.get()); // jeden token tam určitě bude
   }
 
   /**
@@ -101,7 +108,7 @@ public class SplParser {
    * @param tokenIterator
    * @return
    */
-  private List<SplStatement> parseAll(final TokenIterator<LexerToken> tokenIterator) {
+  private List<SplStatement> parseAll(final TokenIterator<LexerToken> tokenIterator) throws YParseError {
     // elegantní funkcionální řešení, ale v Javě ta elegance moc nevynikne
     if (tokenIterator.isAtEnd()) {
       return Collections.emptyList();
@@ -112,6 +119,14 @@ public class SplParser {
     }
   }
 
+
+
+  @SuppressWarnings("serial")
+  @RequiredArgsConstructor
+  @Getter
+  private static class YParseError extends Exception {
+    private final LexerToken badToken;
+  }
 
   ///////// Parsery jednotlivých objektů //////
 

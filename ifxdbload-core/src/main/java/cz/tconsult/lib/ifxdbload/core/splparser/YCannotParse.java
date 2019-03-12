@@ -1,5 +1,6 @@
 package cz.tconsult.lib.ifxdbload.core.splparser;
 
+import cz.tconsult.lib.lexer.LexerToken;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,6 @@ class YCannotParse extends Exception {
    */
   private static final long serialVersionUID = -4594017227070937849L;
 
-  private final Object badToken;
+  private final LexerToken badToken;
 
 }

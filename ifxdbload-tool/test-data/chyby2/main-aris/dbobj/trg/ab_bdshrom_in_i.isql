@@ -1,0 +1,17 @@
+-- 2008/05/22 15:03:20
+-- Tento komentar byl vygenerovan pri migraci. Nasleduje komentar
+-- z puvodniho souboru, ktery obsahoval vice databazovych objektu a byl pri migraci rozdelen.
+-- Nepotrebne informace je mozno odstranit
+-- jeho konec je uvoze radkem "Konec komentare k modulu"
+--
+--Cibis\Aris-PaySys\Source\_Common\Triggers\Payment.trigs.spl
+-- Konec komentare k modulu
+
+
+--
+CREATE TRIGGER ab_bdshrom_in_i insert on ab_bdshrom_in
+  referencing new  as   new
+  for each row
+  (
+    execute procedure Ap_User(new.poruser) into poruser
+  );

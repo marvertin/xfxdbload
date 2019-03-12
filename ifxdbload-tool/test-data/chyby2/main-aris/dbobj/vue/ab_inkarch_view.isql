@@ -1,0 +1,14 @@
+-- Cibis\Aris-PaySys\Models\Data\view_ab_inkarch_view.RSTS_SKOB.sql
+create view ab_inkarch_view
+(ser, stav, davka, davkacc, zdroj, typ, priorita, datpor, idtran, castka,
+ valuta, konstsym, zprkli, zprbank, datsplatnost, davkavznik, seruhr, serplatba,
+ serodm, dbkonto, dbident, dbbanka, dbspecsym, dbvarsym, dbtext, crkonto,
+ crident, crbanka, crspecsym, crvarsym, crtext, refuser, reftime, dokladbds,
+ poruser, portime, potvrduser, potvrdtime, datfirstavizotisk, datfirstavizoexp)
+AS select x1.ser,x1.stav,x1.davka,x1.davkacc,x1.zdroj,x1.typ,x1.priorita,x1.datpor,x1.idtran,x1.castka,
+ x1.valuta,x1.konstsym,x1.zprkli,x1.zprbank,x1.datsplatnost,x1.davkavznik,x1.seruhr,x1.serplatba,
+ x1.serodm,x1.dbkonto,x1.dbident,x1.dbbanka,x1.dbspecsym,x1.dbvarsym,x1.dbtext,x1.crkonto,
+ x1.crident,x1.crbanka,x1.crspecsym,x1.crvarsym,x1.crtext,x1.refuser,x1.reftime,x0.dokladbds,
+ x0.poruser,x0.portime,x0.potvrduser,x0.potvrdtime,x1.datfirstavizotisk,x1.datfirstavizoexp
+from "aris".ab_doklad_arch x0,"aris".cz_zadost_den x1
+where((x0.ser=x1.ser)and(x0.dokladtyp='II'))

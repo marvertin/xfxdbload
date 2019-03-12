@@ -1,0 +1,91 @@
+CREATE PROCEDURE AB_DokladStranaTest(AdbKonto      Dec(16, 0),   
+                                     AdbSko        Char  (4),
+                                     AdbUcet       Char  (9),
+                                     AdbBanka      Dec(7, 0),
+                                     AcrKonto      Dec(16, 0),
+                                     AcrSko        Char  (4),
+                                     AcrUcet       Char  (9),
+                                     AcrBanka      Dec(7, 0),
+                                     ARozpis       VARCHAR(255) DEFAULT '',
+                                     AHDbcr        INT DEFAULT NULL)
+                                             
+  -- procedura otestuje mozne kombinace co lze zadat na db a cr strane
+  
+  DEFINE _identifikatorDB VARCHAR(255);
+  DEFINE _identifikatorCR VARCHAR(255);                                         
+                                                 
+  IF(AHDbcr IS NULL AND ARozpis = '') THEN
+    LET _identifikatorDB = '';
+    LET _identifikatorCR = '';
+  END IF;               
+  
+  IF(AHDbcr = -1) THEN
+    -- na souhrnu je debetni starna
+    LET _identifikatorDB = 'Souhrn: ';
+    LET _identifikatorCR = ARozpis;
+  ELIF(AHDbcr = 1) THEN
+    LET _identifikatorDB = ARozpis;
+    LET _identifikatorCR = 'Souhrn: ';          
+  END IF;                                    
+                                                 
+  -- je-li vyplněno Db konto, popř. podkonto, nesmí být vyplněn Db účet.
+  IF((AdbKonto IS NOT NULL OR AdbSko IS NOT NULL ) AND AdbUcet IS NOT NULL) THEN
+    call TWInternal_RaiseError ('127X111TCUI', 'AB_DokladStranaTest:', _identifikatorDB||'Nesmí být vyplněno DB konto/podkonto %1/%2 a zároveň DB účet %3.', AdbKonto, AdbSko, AdbUcet);
+  END IF;
+
+  -- je-li vyplněno Db banka, nesmí být vyplněno podkonto, ani účet
+  IF((AdbBanka IS NOT NULL ) AND (AdbUcet IS NOT NULL OR AdbSko IS NOT NULL)) THEN
+    call TWInternal_RaiseError ('127Z113TCUI', 'AB_DokladStranaTest:', _identifikatorDB||'Nesmí být vyplněno DB banka %1 a zároveň DB účet nebo podkonto %2.', AdbBanka, NVL(AdbUcet, '')||'/'||NVL(AdbSko, ''));
+  END IF;  
+  
+  -- je-li vyplněna DB banka musí být vyplněno konto
+  IF((AdbBanka IS NOT NULL ) AND (AdbKonto IS NULL)) THEN
+    call TWInternal_RaiseError ('127O440TCUI', 'AB_DokladStranaTest:', _identifikatorDB||'Je vyplněna DB banka a není vyplněno konto.');
+  END IF;  
+
+  -- je-li vyplněno Cr konto, popř. podkonto, nesmí být vyplněn Cr účet.
+  IF((ACrKonto IS NOT NULL OR ACrSko IS NOT NULL ) AND ACrUcet IS NOT NULL) THEN
+    call TWInternal_RaiseError ('127A114TCUI', 'AB_DokladStranaTest:', _identifikatorCR||'Nesmí být vyplněno CR konto/podkonto %1/%2 a zároveň CR účet %3.', ACrKonto, ACrSko, ACrUcet);
+  END IF;  
+  
+  -- je-li vyplněno Cr konto a banka, nesmí být vyplněno podkonto, ani účet
+  IF((ACrBanka IS NOT NULL ) AND (ACrUcet IS NOT NULL OR ACrSko IS NOT NULL)) THEN
+    call TWInternal_RaiseError ('127Z113TCUI', 'AB_DokladStranaTest:', _identifikatorCR||'Nesmí být vyplněno CR banka %1 a zároveň CR účet nebo podkonto %2.', ACrBanka, NVL(ACrUcet, '')||'/'||NVL(ACrSko, ''));
+  END IF;  
+  
+  -- je-li vyplněna CR banka musí být vyplněno konto
+  IF((ACrBanka IS NOT NULL ) AND (ACrKonto IS NULL)) THEN
+    call TWInternal_RaiseError ('127P441TCUI', 'AB_DokladStranaTest:', _identifikatorDB||'Je vyplněna CR banka a není vyplněno konto.');
+  END IF;    
+    
+  -- je-li vyplněn Db účet, nesmí být vyplněna Cr banka
+  IF(AdbUcet IS NOT NULL AND ACrBanka IS NOT NULL) THEN
+    call TWInternal_RaiseError ('127B115TCUI', 'AB_DokladStranaTest:', ARozpis||'Nesmí být vyplněn DB účet %1 a CR banka %2.', AdbUcet, ACrBanka);
+  END IF;
+
+  -- je-li vyplněn Cr účet, nesmí být vyplněna Db banka
+  IF(ACrUcet IS NOT NULL AND ADbBanka IS NOT NULL) THEN
+    call TWInternal_RaiseError ('127C116TCUI', 'AB_DokladStranaTest:', ARozpis||'Nesmí být vyplněn CR účet %1 a DB banka %2.', ACrUcet, ADbBanka);
+  END IF;
+    
+  -- je-li vyplněno Db konto a není vyplněna Db banka, musí konto existovat.
+  IF(AdbKonto IS NOT NULL AND ADbBanka IS NULL) THEN
+    IF(NOT EXISTS(SELECT 1 FROM ac_konto_mat WHERE konto = AdbKonto AND stav <> 2)) THEN
+      call TWInternal_RaiseError ('127D117TCUI', 'AB_DokladStranaTest:', _identifikatorDB||'DB konto %1 neexistuje.', AdbKonto);
+    END IF;
+  END IF;  
+  
+  -- je-li vyplněno Cr konto a není vyplněna Cr banka, musí konto existovat.
+  IF(ACrKonto IS NOT NULL AND ACrBanka IS NULL) THEN
+    IF(NOT EXISTS(SELECT 1 FROM ac_konto_mat WHERE konto = ACrKonto AND stav <> 2)) THEN
+      call TWInternal_RaiseError ('127E118TCUI', 'AB_DokladStranaTest:', _identifikatorCR||'CR konto %1 neexistuje.', ACrKonto);
+    END IF;
+  END IF;  
+    
+  -- je-li vyplněno Db konto a je vyplněna Db banka, musí číslo konta splňovat podmínky pro MPS
+    -- Testovano v nadrazene procedure
+    
+  -- je-li vyplněno Cr konto a je vyplněna Cr banka, musí číslo konta splňovat podmínky pro MPS
+    -- Testovano v nadrazene procedure
+      
+end procedure;

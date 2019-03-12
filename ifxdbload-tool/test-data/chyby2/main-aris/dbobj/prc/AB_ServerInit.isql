@@ -1,0 +1,139 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\RSTS_SKOB\AB_ServerInit.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB90~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro inicializaci tabulek BDS serveru
+--
+--VERZE: 3.00
+--
+--VYTVOŘENO: 19.9.1997
+--ZMĚNA:
+--   2007-09-04 BR: oddělení varainaty KONTODEC.
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--
+--
+--/* ======================================================================
+--
+--POPIS:
+--            A B _ S e r v e r I n i t
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_ServerInit (AHwnd Int)
+-- verze - 3.00
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\SERVER\PRAB90~1
+-- vytvořeno 19.9.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+
+--- Založení tabulky AB_ServDokl_Temp
+begin
+    on exception in (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+    end exception;
+
+ --   set debug file to "DEBUG";
+ --   trace on;
+
+      CREATE TEMP TABLE AB_ServDokl_Temp(
+        HWnd        Int,
+        Druh        Char(4),
+        Smer        integer,
+        Valuta      Date,
+        DatPlVypl   Date,
+        DatProv     Date default null,
+        RP          DateTime Year to Year,
+        Castka      Dec(16,2),
+        Priorita    integer,
+        KonstSym    Dec(10,0),
+            ZpozdVypl      integer,
+        DbKontoPred Dec(6,0),
+        DbKontoZakl Dec(10,0),
+        DbSko       Char(4),
+        DbUcet      Char(9),
+        DbCOobjekt  Char(10),
+        dbCz        Char(3),
+        dbNS        Char(5),
+        DbBanka     Dec(7,0),
+        DbVarSym    Dec(10,0),
+        DbSpecSym   Dec(10,0),
+        DbText      Char(20),
+        CrKontoPred Dec(6,0),
+        CrKontoZakl Dec(10,0),
+            CrKontopredCh Char(2),
+        CrKontozaklCh    Char(22),
+        CrSko       Char(4),
+        CrUcet      Char(9),
+        CrCOobjekt  Char(10),
+        crCZ        Char(3),
+        crNS        Char(5),
+        CrBanka     Dec(7,0),
+        CrVarSym    Dec(10,0),
+        CrSpecSym   Dec(10,0),
+        CrText      Char(20),
+        tstamp   DateTime Year to Second, PRIMARY KEY (HWnd)) WITH NO LOG;
+end;
+
+--- Založení tabulky AB_ServFlag_Temp
+begin
+    on exception in (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+    end exception;
+       CREATE TEMP TABLE AB_ServFlag_Temp(
+        HWnd        Int,
+        jeDruh      integer  default 0,
+        jeSmer      integer  default 0,
+        jeValuta    integer  default 1,
+        jeDatPlVypl integer  default 0,
+        jeDatProv   integer  default -1,
+        jeRP        integer  default 1,
+        jeCastka    integer  default 0,
+        jePriorita  integer  default 0,
+        jeKonstSym  integer  default 1,
+            jeZpozdVypl   integer  default 0,
+            jeLinkmarks integer  default -1,
+        jeDbKonto   integer  default 0,
+        jeDbSko     integer  default 0,
+        jeDbUcet    integer  default 0,
+        jeDbCOobjekt integer  default 0,
+        jeDbCZ      integer  default 0,
+        jeDbNS      integer  default 0,
+        jeDbBanka   integer  default 0,
+        jeDbVarSym  integer  default 0,
+        jeDbSpecSym integer  default 0,
+        jeDbText    integer  default 0,
+        jeCrKonto   integer  default 1,
+        jeCrKontoCh integer  default -1,
+        jeCrSko     integer  default -1,
+        jeCrUcet    integer  default 1,
+        jeCrCOobjekt integer  default -1,
+        jeCrCZ      integer  default -1,
+        jeCrNS      integer  default -1,
+        jeCrBanka   integer  default 1,
+            jeCrVarSym  integer  default 1,
+        jeCrSpecSym integer  default 1,
+        jeCrText    integer  default 1, PRIMARY KEY (HWnd)) WITH NO LOG;
+--trace off;
+end;
+
+--- Test, zda v tabulkách neexistuje záznam stejného HWnd
+if (Exists(SELECT * FROM AB_ServDokl_Temp WHERE HWnd = AHWnd) or Exists(SELECT * FROM AB_ServFlag_Temp WHERE HWnd = AHWnd)) then
+    {call TW-Error(-13020,"Nelze otevřít pořízení záznamu nad jednou úlohou dvakrát");}
+     call TW_RaiseError ('04144_NEW_TCUI', 'AB_ServerInit:', 'Nelze otevřít pořízení záznamu nad jednou úlohou dvakrát');
+end if;
+
+--set debug file to "DEBUG";
+--   trace on;
+--- Vložení nového řádku do obou tabulek
+INSERT INTO AB_ServDokl_Temp(HWnd) VALUES (AHWnd);
+INSERT INTO AB_ServFlag_Temp(HWnd) VALUES (AHWnd);
+
+--trace off;
+end procedure;

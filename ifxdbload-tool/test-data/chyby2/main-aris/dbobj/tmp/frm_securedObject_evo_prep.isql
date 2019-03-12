@@ -1,0 +1,13 @@
+CREATE PROCEDURE frm_securedObject_evo_prep ()
+   ON EXCEPTION IN (-958)
+      -- Tabulka už existuje - ignorujeme.
+   END EXCEPTION
+
+   CREATE TEMP TABLE frm_securedObject_evo (
+      evtid       INTEGER NOT NULL,
+      poznamka    VARCHAR(255),
+      locked      INTEGER DEFAULT 0 NOT NULL CHECK (locked IN (0, 1)),
+            
+      objectname  varchar(255)
+   ) WITH NO LOG;
+END PROCEDURE;

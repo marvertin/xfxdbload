@@ -1,0 +1,77 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\RSTS_SKOB\AB_ServerView_T.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB93~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro inicializaci tabulky BDS serveru při zobrazení
+--BDS dokladu
+--
+--VERZE: 3.00
+--
+--VYTVOŘENO: 19.9.1997
+--ZMĚNA:
+--   2007-09-04 BR: Oddělena varainta KONTODEC.
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--
+--/* ======================================================================
+--
+--POPIS:
+--            A B _ S e r v e r V i e w
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_ServerView ()
+-- verze - 3.00
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\SERVER\PRAB90~1
+-- vytvořeno 19.9.1997
+
+
+
+--- Založení tabulky AB_ServDokl_Temp
+begin
+    on exception in (-206)
+    end exception;
+    DROP TABLE AB_ServView_Temp;
+end;
+
+ CREATE TEMP TABLE AB_ServView_Temp(
+        Druh        Char(4),
+        Smer        integer,
+        Valuta      Date,
+        DatPlVypl   Date,
+        DatProv     Date,
+        RP          DateTime Year to Year,
+        Castka      Dec(16,2),
+        Priorita    integer,
+        KonstSym    Dec(10,0),
+        DbKontoPred Dec(6,0),
+        DbKontoZakl Dec(10,0),
+        DbSko       Char(4),
+        DbUcet      Char(9),
+        DbCOobjekt   Char(10),
+        DbBanka     Dec(7,0),
+        DbVarSym    Dec(10,0),
+        DbSpecSym   Dec(10,0),
+        DbText      Char(20),
+        CrKontoPred Dec(6,0),
+        CrKontoZakl Dec(10,0),
+        CrKontopredCh Char(2),
+        CrKontozaklCh  Char(22),
+        CrSko       Char(4),
+        CrUcet      Char(9),
+        CrCOobjekt   Char(10),
+        CrBanka     dec(7,0),
+        CrVarSym    Dec(10,0),
+        CrSpecSym   Dec(10,0),
+        CrText      Char(20),
+        Title       VarChar(255,0)
+  ) WITH NO LOG;
+
+INSERT INTO AB_ServView_Temp(Title) VALUES ("Bude zaúčtováno");
+
+end procedure;

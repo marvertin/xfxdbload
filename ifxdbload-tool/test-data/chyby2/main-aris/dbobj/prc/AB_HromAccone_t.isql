@@ -1,0 +1,119 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromAccone_t.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB36~1.SQL
+--
+--POPIS: Modul obsahuje proceduru AB_HromAccone_t
+--VERZE: 3.0
+--
+--VYTVOŘENO: 30.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS:
+--Procedura volá proceduru AB_Acountone.
+--Slouží k účtování hrom dokladu...
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HromAccone_t (aHromPrikaz Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB09~1
+-- vytvořeno 18.8.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _ser int;
+define _potvrzeno int;
+define _prvnidoklad int;
+define _dokladcislo int;
+define _pocet int;
+define _castkacelk Dec(16,2);
+define _dbcr integer ;
+define _davkaVznik Int;
+define _dokladTyp Char(2);
+define _porUser      Char  (20);
+define _porTime      DateTime Year to Second;
+define _potvrdUser   Char  (20);
+define _potvrdTime   DateTime Year to Second;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hromaccone_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+
+call AB_MemoBDSinit ();
+COMMIT WORK;
+BEGIN WORK;
+
+SELECT  prvnidoklad,pocet,castkacelk,dbcr,davkaVznik,dokladTyp,Poruser,portime,
+        potvrdUser, potvrdTime,potvrzeno
+  INTO _prvnidoklad, _pocet ,_castkacelk,_dbcr,_davkaVznik,_dokladTyp, _PorUser, _PorTime,
+       _PotvrdUser, _PotvrdTime,_potvrzeno
+  FROM AB_HromDokl_Kart
+  WHERE hromprikaz = aHromPrikaz;
+
+if (_Potvrzeno=0) then
+    {call tw-error(-13036,'Neověřený záznam',"AB048",_DokladCislo);}
+     call TW_RaiseError ('04071AB048TCUI', 'AB_HromAccone_t:', 'Neověřený záznam: doklad č. %1', _DokladCislo);
+end if;
+
+foreach c with hold for
+   SELECT DokladBDS
+     INTO _DokladCislo
+     FROM AB_Doklad_Kart
+    WHERE hromprikaz = aHromPrikaz
+
+  let _ser = AB_Accountone (_DokladCislo);
+
+   UPDATE  AB_Doklad_Arch
+     SET hromprikaz =  aHromPrikaz
+     WHERE dokladBds = _DokladCislo;
+
+end foreach;
+
+DELETE
+  FROM AB_hromDokl_Kart
+  WHERE hromprikaz = aHromPrikaz and dokladtyp= _dokladtyp;
+
+INSERT INTO AB_hromDokl_Arch
+    (ser, davkaVznik, dokladTyp, prvnidoklad, pocet, castkacelk,
+    dbcr, Poruser, portime, potvrdUser, potvrdTime, zauctuser, zaucttime)
+  VALUES(aHromPrikaz,_Davkavznik, _DokladTyp,_prvnidoklad,_pocet,_castkacelk,
+    _dbcr, _PorUser, _PorTime, _PotvrdUser, _PotvrdTime,AP_User(), CURRENT YEAR TO SECOND);
+
+UPDATE AB_Davka_Prot SET PocPotvrd=PocPotvrd-1
+  WHERE Davka = _Davkavznik and DokladTyp = _DokladTyp;
+
+UPDATE AB_Davka_Prot SET PocMan=PocMan+1
+  WHERE Davka = _Davkavznik and DokladTyp = _DokladTyp;
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hromaccone_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

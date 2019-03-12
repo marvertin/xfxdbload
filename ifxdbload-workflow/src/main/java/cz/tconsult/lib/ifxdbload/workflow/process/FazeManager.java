@@ -8,12 +8,11 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 
 import cz.tconsult.lib.ifxdbload.core.db.DbContext;
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.faze.EFazeZavedeni;
-import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
+import cz.tconsult.lib.ifxdbload.core.tw.ErrorReporter;
 import cz.tconsult.lib.ifxdbload.workflow.data.ADbkind;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoData;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoDbkind;
@@ -36,7 +35,7 @@ public class FazeManager {
   private final FazeExecutorFactory fazeExecutorFactory;
   private final DbContextFactory dbContextFactory;
 
-  private final ErrorReporter errorReporter = new ErrorReporter();
+  private final ErrorReporter errorReporter = new ErrorReporterImpl();
 
   /**
    * Provede zavdení dané množiny fází v daném exekučním kontextu.
@@ -111,9 +110,10 @@ public class FazeManager {
     }
 
     @Override
-    public void reportError(final DataAccessException exc, final SplStatement stm) {
-      errorReporter.reportError(exc, stm);
+    public ErrorReporter errorReporter() {
+      return errorReporter;
     }
+
 
   }
 

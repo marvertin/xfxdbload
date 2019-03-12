@@ -1,0 +1,80 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_BatchDone_T.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB02~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru AB_BatchDone
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 15.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:
+--
+--Procedura uzavře všechny otevřené dávky,nastaví stav = 1 (uzavřená).
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_BatchDone_T ()
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB02~1
+-- vytvořeno 15.8.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define UDavka     Int;
+define _DokladTyp Char(2);
+define _PocPoriz  Int;
+define _PocVymaz  Int;
+define _Akce      Int;
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+
+foreach c with hold for
+  SELECT  Davka, dokladTyp, pocporiz, pocvymaz
+    INTO  UDavka, _DokladTyp, _PocPoriz, _PocVymaz
+    FROM  AB_Davka_Prot
+   WHERE  stav = 0
+
+
+   let _Akce {= TW-Provden("AB",1,UDavka,"Uzavření dávky pro doklad typu "||_DokladTyp) ;}
+              = TW_ProvDen ("AB", 1, UDavka, 'Closing batch BDS for kind ' || nu(_DokladTyp));
+   if (_PocPoriz <> _PocVymaz )then
+      UPDATE AB_Davka_Prot
+         SET Stav      = 1,
+             CloseUser = AP_User(),
+             CloseTime = Current Year to Second
+      WHERE Current of C;
+   else
+      UPDATE AB_Davka_Prot
+         SET Stav = -1,
+             CloseUser = AP_User(),
+             CloseTime = Current Year to Second
+      WHERE Current of C;
+   end if;
+
+   COMMIT WORK;
+   BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+
+SET ISOLATION TO COMMITTED READ;
+
+end procedure;

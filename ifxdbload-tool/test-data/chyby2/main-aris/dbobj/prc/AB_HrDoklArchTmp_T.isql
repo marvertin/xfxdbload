@@ -1,0 +1,136 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HrDoklArchTmp_T.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB44~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru pro Naplnění temporální tabulky pro přístup
+--  k datům archívu hrom. BDS z archívní databáze
+--VERZE: 3.0
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:               A B _ H R D O K L A R C H T M P _ T
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HrDoklArchTmp_T (AOwner      Int)
+-- verze - 3.0
+
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _ser      Int;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hrdoklarchtmp_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+foreach c with hold for
+  SELECT ser
+  INTO _ser
+  FROM AB_HrDoklArch_Tmp2
+  WHERE owner = AOwner
+
+ INSERT INTO AB_HrDoklArch_Temp
+ (ser               ,
+   davkavznik        ,
+   dokladtyp         ,
+   prvnidoklad       ,
+   castkacelk        ,
+   pocet             ,
+   dbcr              ,
+   poruser           ,
+   portime           ,
+   potvrduser        ,
+   potvrdtime        ,
+   zauctuser         ,
+   zaucttime         ,
+   refuser           ,
+   reftime           ,
+  arch)
+    SELECT    ser   ,
+   davkavznik        ,
+   dokladtyp         ,
+   prvnidoklad       ,
+   castkacelk        ,
+   pocet             ,
+   dbcr              ,
+   poruser           ,
+   portime           ,
+   potvrduser        ,
+   potvrdtime        ,
+   zauctuser         ,
+   zaucttime         ,
+   refuser           ,
+   reftime           ,
+   1
+    FROM  AB_HromDokl_Arch_A
+       WHERE ser = _ser;
+
+  -- Kvůli UD1
+  UPDATE AB_HrDoklArch_Temp
+     SET owner = AOwner
+   WHERE ser = _ser
+     and owner is null;
+
+end foreach;
+    INSERT INTO AB_HrDoklArch_Temp
+    SELECT    ser    ,
+   davkavznik         ,
+   dokladtyp          ,
+   prvnidoklad        ,
+   castkacelk         ,
+   pocet              ,
+   dbcr               ,
+   poruser            ,
+   portime            ,
+   potvrduser         ,
+   potvrdtime         ,
+   zauctuser          ,
+   zaucttime          ,
+   refuser            ,
+   reftime            ,
+   0 ,
+   Aowner
+    FROM  AB_HromDokl_Arch
+    WHERE ser in (SELECT ser FROM AB_HrDoklArch_Tmp1 WHERE owner = AOwner)
+            AND ser not in (SELECT ser FROM AB_HrDoklArch_Tmp2 WHERE owner = AOwner) ;
+
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hrdoklarchtmp_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

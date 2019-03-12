@@ -1,0 +1,24 @@
+CREATE PROCEDURE tw_paramin_tmp__prep (aDropIfExists INTEGER DEFAULT 0)
+  -- Vytvoří dořasnou tabulku, pokud ještě neexistuje.
+  -- Nepovinným parametrem lze vynutit "převytvoření" tabulky, ale to
+  -- asi není nikdy nutné.
+  -- @since RN00270523, [2011-10-21 11:37, roztocil]
+  --
+  IF aDropIfExists <> 0 THEN
+    BEGIN
+       ON EXCEPTION IN (-206) END EXCEPTION WITH RESUME;
+       DROP TABLE tw_paramin_tmp;
+    END 
+  END IF
+  
+  BEGIN
+    ON EXCEPTION IN (-958) END EXCEPTION WITH RESUME;
+    
+    CREATE TEMP TABLE tw_paramin_tmp (
+      serno     SERIAL,
+      batchId   INTEGER,
+      paramName VARCHAR(100, 10),
+      paramData VARCHAR(255, 10)
+    );
+  END
+END PROCEDURE;

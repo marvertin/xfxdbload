@@ -1,0 +1,16 @@
+-- 2008/05/22 15:03:16
+-- Tento komentar byl vygenerovan pri migraci. Nasleduje komentar
+-- z puvodniho souboru, ktery obsahoval vice databazovych objektu a byl pri migraci rozdelen.
+-- Nepotrebne informace je mozno odstranit
+-- jeho konec je uvoze radkem "Konec komentare k modulu"
+--
+--Cibis\Aris-PaySys\Source\ObjDisp\Src\DOFINACC\AC_B_URPF.sql
+--/* ---------------------------------------------------------------------------
+--
+--Modul Obsahuje proceduru pro doložení zůstatku účtu se zkratkou URPF
+--
+-----------------------------------------------------------------------------*/
+-- Konec komentare k modulu
+
+
+EXECUTE PROCEDURE TW_ProcServiceNewReg("DOFINACC","AC_B_URPF");

@@ -1,0 +1,216 @@
+CREATE PROCEDURE AB_HromInsertTest (AOwner        Integer,
+                                    AImportBds    INT DEFAULT 0)
+
+define _dokladcislo  Int;
+define _dokladBDS    Int;
+define _mindokladBDS Int;
+define _hromprikaz   Int;
+define _Davka        Int;
+define _tko          Char (2);
+define _dbtko          Char (2);
+define _dnesnidat    Date;
+define _datPlVypl    Date   ;
+define _druh         Char (4);
+define _davkavznik   Int;
+define _datSplatnost Date;
+define _valuta       Date;
+define _Svaluta      Date;
+define _datUct       Date ;
+define _dokladTyp    Char  (2);
+define _smer         integer;
+define _uhrInk       Char  (1);
+define _priorita     integer;
+define _konstSym     Dec   (10,0);
+define _castka       Dec   (16,2);
+define _Acastka      Dec   (16,2);
+define _marketAkce   Char  (4);
+define _uziv1        integer;
+define _uziv2        integer;
+define _uziv3        integer;
+define _premRok      DateTime Year to Year;
+define _SpremRok     DateTime Year to Year;
+define _dbKonto      like vy_vyplban_kart.konto;
+define _dbKontopred  Dec   (6,0);
+define _dbKontozakl  Dec   (10,0);
+define _dbSko        Char  (4);
+define _dbUcet       Char  (9);
+define _dbCOobjekt   Char  (10);
+define _dbCz         Char  (3);
+define _dbNS         Char  (5);
+define _dbBanka      like AC_Bank_Cis.bankanum;
+define _dbVarSym     Dec   (10,0);
+define _dbSpecSym    Dec   (10,0);
+define _dbText       Char  (20);
+define _crKonto      like vy_vyplban_kart.konto;
+define _crKontopred  Dec   (6,0);
+define _crKontozakl  Dec   (10,0);
+define _crSko        Char  (4);
+define _crUcet       Char  (9);
+define _crCOobjekt   Char  (10);
+define _crCZ         Char  (3);
+define _crNS         Char  (5);
+define _crBanka      like AC_Bank_Cis.bankanum;
+define _crVarSym     Dec   (10,0);
+define _crSpecSym    Dec   (10,0);
+define _crText       Char  (20);
+define _chyba        VarChar  (255,0);
+define _potvrzeno    integer;
+define _porUser      Char  (20);
+define _porTime      DateTime Year to Second;
+define _refUser      Char  (20);
+define _refTime      DateTime Year to Second;
+define _potvrdUser   Char  (20);
+define _potvrdTime   DateTime Year to Second;
+define _stav         integer;
+define _hhromPrikaz  Int;
+define _hPrvnidoklad Int;
+define _hcastkaCelk  Dec   (16,2);
+define _hpocet       Int;
+define _hdbcr        integer;
+define _hpotvrzeno   integer;
+define _hdavkaVznik  Int;
+define _hdokladTyp   Char  (2);
+define _hporUser     Char  (20);
+define _hporTime     DateTime Year to Second;
+define _hrefUser     Char  (20);
+define _hrefTime     DateTime Year to Second;
+define _hpotvrdUser  Char  (20);
+define _hpotvrdTime  DateTime Year to Second;
+define _UcStav       integer;
+define _khromprikaz  INT;
+define _cislorozpis  integer;
+define _datprov      date;
+DEFINE _kodChyby     CHAR(4);
+
+define _CrKontopredCh  Char(2);
+define _CrKontozaklCh  Char(22);
+define _DbKontopredCh  Char(2);
+define _DbKontozaklCh  Char(22);
+define _jekontoCh     integer;
+
+define _presporenicc  integer;
+define _reals         Int;
+define _vratitVklad   integer;
+define _stupen        integer;
+
+define _rpocet        Int;
+define _rUcet       Char  (9);
+define _rBanka      like AC_Bank_Cis.bankanum;
+
+define _smlouva       Dec(16,2);
+define _tsml          Char(4); 
+
+call AP_ErrorInit(AOwner);
+
+
+SELECT datPlVypl,druh,dbcr ,pocet,davkavznik,datSplatnost ,datUct,
+       dokladTyp,smer,uhrInk,priorita,konstSym ,marketAkce,uziv1,
+       uziv2 ,uziv3  ,SKonto,SKontopred,SKontozakl,SSko,SUcet ,SNS,SCZ,
+       SKontopredCh,SKontozaklCh,jekontoCh,
+       SBanka,SVarSym,SSpecSym,SText,potvrzeno,porUser,porTime,
+       refUser,refTime,potvrdUser,potvrdTime,Premrok,Valuta
+  INTO _datplvypl,_druh,_hdbcr,_hpocet,_hdavkavznik,_datsplatnost,_datuct,
+       _dokladtyp,_smer,_uhrink,_priorita,_konstsym,_marketakce,_uziv1,
+       _uziv2,_uziv3,_DbKonto,_DbKontopred,_DbKontozakl,_DbSko,_DbUcet,_dbNS,_dbCZ,
+       _DbKontopredCh,_DbKontozaklCh,_jekontoCh,
+       _DbBanka,_DbVarSym,_DbSpecSym,_DbText,_hpotvrzeno,_hporUser,_hporTime,
+       _hrefUser,_hrefTime,_hpotvrdUser,_hpotvrdTime,_SPremrok,_SValuta
+FROM tmp_AB_Souhrn_Kart
+WHERE owner = AOwner;
+
+--kontroly na zadani               
+SELECT  count(*) INTO  _rpocet FROM tmp_AB_Rozpis_Kart WHERE owner = AOwner;
+SELECT  count(*) INTO  _rUcet FROM tmp_AB_Rozpis_Kart WHERE rucet is not null AND owner = AOwner;
+SELECT  count(*) INTO  _rBanka FROM tmp_AB_Rozpis_Kart WHERE rbanka is not null AND owner = AOwner;
+
+-- kontrola - zadání správného počtu dokladů
+if (_hpocet <> _rpocet) then
+  call AP_ErrorWrite (1,'221D29TCUI',AOwner,'Nesouhlasí počet dokladů!');
+end if;
+
+-- kontrola - banka vs ucet
+if (_DbUcet is not null or _rUcet > 0) and (_DbBanka is not null or _rBanka > 0) then 
+  call AP_ErrorWrite (1,'221E30TCUI',AOwner,'Nelze zadat zároveň účet i banku!');
+end if;
+
+let _DbKonto= AO_MergeKonto (_DbKontopred,_DbKontozakl);
+
+---test na presporeni CC
+if (_druh is null) OR (_hdbcr is null) then  --jeste nebyly zadany potrebne info, abych mohl provest test 
+elif (_hdbcr = 1) and ((_dbbanka is null) OR ( _dbbanka = TW_RegGetKey('CC','*','*','vlbanka'))) then     
+  --rozpisy jdou na souhrne konto
+  SELECT  sum(castka)
+     INTO  _hcastkacelk
+     FROM tmp_AB_Rozpis_Kart
+     WHERE owner = AOwner;
+   
+   let _tko = (SELECT tko FROM ac_konto_mat WHERE konto = _DbKonto and stav <> 2);
+   LET _kodChyby = AO_TestOpravneniPlatby(AOwner, _DbKonto, _tko, 2);
+   
+   -- test na presporeni - pokud je to zakazano, vznikne chyba
+   SELECT presporenicc INTO _presporenicc FROM ac_druh_cis WHERE druh = _druh;
+   if (_presporenicc > 0) then
+      let _reals = EP_RealKon(_DbKonto,_tko); 
+      let _vratitVklad = RS_VratVkladTest(_reals,_hcastkacelk);
+      if (_vratitVklad = 1) then      
+         if (_presporenicc = 2) then
+            let _stupen = 1;  --chyba při varování
+         else
+            let _stupen = 2;          
+         end if;
+         IF(AImportBds = 1 AND _stupen = 1) THEN
+           call TW_RaiseError ('127R443TCUI', 'AB_HromInsertTest:', 'Souhrn: Zaúčtováním dokladu dojde k přespoření na kontě %1 / %2',_DbKonto,_tko);
+         ELSE
+           call AP_ErrorWrite (_stupen,'220Y20TCUI',AOwner,'Zaúčtováním dokladu dojde k přespoření na kontě %1 / %2',_DbKonto,_tko);
+         END IF;  
+      end if;   
+   end if;            
+elif (_hdbcr = -1) then
+  let _dbtko = (SELECT tko FROM ac_konto_mat WHERE konto = _DbKonto and stav <> 2);
+  LET _kodChyby = AO_TestOpravneniPlatby(AOwner, _DbKonto, _dbtko, 2);
+  
+  -- souhrne konto jde na rozpisy
+  let _cislorozpis = 0;
+  foreach cc with hold for
+      SELECT dokladBDS,castka,RKontopred,RKontozakl,RSko ,RUcet,
+             RKontopredCh,RKontozaklCh,
+             RNS,RCZ,RBanka,RVarSym ,RSpecSym ,RText,Premrok,Valuta,chyba
+        INTO _dokladcislo,_castka,_CrKontopred,_CrKontozakl,_CrSko,_CrUcet,
+              _CrKontopredCh,_CrKontozaklCh,
+             _crNS,_crCZ,_CrBanka,_CrVarSym ,_CrSpecSym ,_CrText,_Premrok,_Valuta,_chyba
+        FROM tmp_AB_Rozpis_Kart
+        WHERE owner = AOwner
+      
+      let _cislorozpis = _cislorozpis + 1;
+      
+      -- test na exekuce  
+      let _CrKonto= AO_MergeKonto (_CrKontopred,_CrKontozakl);
+      let _tko = (SELECT tko FROM ac_konto_mat WHERE konto = _CrKonto and stav <> 2);
+        
+      let _smlouva, _tsml = EP_SmlouvaKon(_DbKonto,_dbtko);
+      
+      if NOT((_CrBanka is null) OR ( _CrBanka = TW_RegGetKey('CC','*','*','vlbanka'))) then
+         --doklady jdouci pryc z banky netreba testovat, hlasilo by to chybne chybu
+         CONTINUE FOREACH;
+      end if;
+      SELECT presporenicc INTO _presporenicc FROM ac_druh_cis WHERE druh = _druh;
+      if (_presporenicc > 0) then
+         let _reals = EP_RealKon(_CrKonto,_tko); 
+         let _vratitVklad = RS_VratVkladTest(_reals,_castka);
+         if (_vratitVklad = 1) then      
+            if (_presporenicc = 2) then
+               let _stupen = 1;  --chyba při varování
+            else
+               let _stupen = 2;          
+            end if;
+            IF(AImportBds = 1 AND _stupen = 1) THEN
+              call TW_RaiseError ('127S444TCUI', 'AB_HromInsertTest:', 'Rozpis %1: Zaúčtováním dokladu dojde k přespoření na kontě %2 / %3',_cislorozpis, _CrKonto,_tko);
+            ELSE
+              call AP_ErrorWrite (_stupen,'220D25TCUI',AOwner,'Zaúčtováním dokladu dojde k přespoření na kontě %1 / %2',_CrKonto,_tko);
+            END IF;  
+         end if;   
+      end if;              
+  end foreach;      
+end if;      
+      
+end procedure;

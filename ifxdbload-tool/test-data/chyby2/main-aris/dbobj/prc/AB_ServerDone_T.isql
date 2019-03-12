@@ -1,0 +1,45 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_ServerDone_T.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB92~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru transakčně překrývající proceduru AB_ServerDone.
+--Tato procedura je volána z BDS serveru na tlačítko STORNO
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 20.9.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--
+--POPIS:                     A B _ S e r v e r D o n e _ T
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_ServerDone_T (AHWnd Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\SERVER\PRAB92~1
+-- vytvořeno 20.9.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+call AB_ServerDone(AHWnd);
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+end procedure;

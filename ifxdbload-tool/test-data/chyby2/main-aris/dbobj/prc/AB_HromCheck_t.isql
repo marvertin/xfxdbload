@@ -1,0 +1,131 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromCheck_t.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB35~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru AB_HromCheck_t
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--POPIS:
+--
+--Procedura slouží k ověření částky - potvrzení dokladu
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HromCheck_t (AHromprikaz Int, ACastka Dec(16,2))
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB11~1
+-- vytvořeno 18.8.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define         _davka          Int;
+define         _prvnidoklad          Int;
+define        Adokladcislo          Int;
+define         _pocet          Int;
+define        _Castka      Dec(16,2);
+define        _DokladTyp   Char(2);
+define        _DbKonto     Dec(16,0);
+define        _User        Char(20);
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hromcheck_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+ SELECT DavkaVznik, CastkaCelk, DokladTyp,  refuser, prvnidoklad, pocet
+    INTO _Davka, _Castka, _DokladTyp,  _User, _prvnidoklad, _pocet
+   FROM  AB_HromDokl_Kart
+    WHERE (Hromprikaz = AHromprikaz);
+
+    begin
+    ON EXCEPTION in (-746)
+      if (_USer = AP_User()) then
+        {call tw-error(-13034,"Potvrzuje stejný uzivatel","AB046");}
+         call TW_RaiseError ('04073AB046TCUI', 'AB_HromCheck_t:', 'Potvrzuje stejný uzivatel');
+      end if;
+    END EXCEPTION;
+    call TW_Testrole(".abpou_a");
+    end;
+
+
+    if (_Castka <> ACastka) then
+      {call tw-error(-13035,"Nesouhlasí ověřovací částka","AB047");}
+       call TW_RaiseError ('04074AB047TCUI', 'AB_HromCheck_t:', 'Nesouhlasí ověřovací částka!');
+    else
+      let _Davka = AB_BatchInit (_DokladTyp,_prvnidoklad,_Davka);
+         foreach c with hold for
+            SELECT dokladBDS
+            INTO ADokladcislo
+            FROM AB_Doklad_Kart
+            WHERE (hromprikaz = AHromprikaz)
+
+         UPDATE AB_Doklad_Kart
+            SET (potvrzeno, potvrdUser, PotvrdTime) =
+               (1,AP_User(), Current Year to Second)
+         WHERE (dokladBDS =ADokladcislo );
+
+
+
+      end foreach ;
+      UPDATE AB_HromDokl_Kart
+            SET (potvrzeno, potvrdUser, PotvrdTime) =
+               (1,AP_User(), Current Year to Second)
+         WHERE (Hromprikaz = AHromprikaz);
+      if DbInfo("SQLCA.SQLERRD2")=0 then
+            {call TW-Message("AB004",AHromprikaz);}
+             call TW_ShowMessage ('04075AB004TCUI', 'AB_HromCheck_t:', 'Doklad %1 nebyl potvrzen', AHromprikaz);
+
+
+         else
+            {call TW-Message("AB003",AHromprikaz);}
+             call TW_ShowMessage ('04076AB003TCUI', 'AB_HromCheck_t:', 'Doklad %1 byl potvrzen', AHromprikaz);
+
+            UPDATE AB_Davka_prot
+               SET pocPotvrd = pocPotvrd+1
+               WHERE Davka = _Davka and DokladTyp = _DokladTyp;
+
+         end if;
+
+    end if;
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hromcheck_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

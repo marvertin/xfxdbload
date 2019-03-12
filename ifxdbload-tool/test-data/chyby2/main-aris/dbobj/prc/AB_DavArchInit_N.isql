@@ -1,0 +1,115 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_DavArch_N.SQL
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB48~1.SQL
+--
+--POPIS:
+--
+--VERZE: 3.00
+--
+--VYTVOŘENO: 22.1.1999
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_DavArchInit_N (AOwner Int)
+-- verze - 3.00
+
+define global TW_ErrSql, TW_ErrIsam Int default null;
+define global TW_ErrText VarChar (255) default null;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+-- osetreni vyjimek:
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+  call TW_ErrorNoTran ();
+END EXCEPTION;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_davarchinit_n') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_DavArch_Temp
+             WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_DavArch_Temp
+  (davka            integer,
+   dokladtyp        char(2),
+   datprov          date,
+   stav             integer,
+   pocporiz         integer,
+   pocpotvrd        integer,
+   pocauto           integer,
+   pocman           integer,
+   pocvymaz           integer,
+   pocchyb           integer,
+   openuser         char(20),
+   Opentime         Datetime Year to Second,
+   Closeuser        char(20),
+   Closetime        datetime Year to second,
+   Enduser          char(20),
+   Endtime          datetime year to second,
+   Refuser          char(20),
+   Reftime          datetime year to second,
+   arch             integer,
+   owner            Integer
+      ) WITH NO LOG;
+end;
+
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_DavArch_Temp1
+           WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_DavArch_Temp1
+(  davka                integer ,
+   arch                 integer,
+   owner                integer
+
+  ) WITH NO LOG;
+end;
+
+
+begin
+ON EXCEPTION IN (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+   DELETE FROM AB_DavArch_Temp2
+           WHERE Owner=AOwner;    --Owner=vlastník záznamu FE Handle
+END EXCEPTION;
+
+CREATE TEMP TABLE AB_DavArch_Temp2
+(  davka                integer,
+   arch                 integer,
+   owner                integer
+
+  ) WITH NO LOG;
+end;
+
+
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_davarchinit_n') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

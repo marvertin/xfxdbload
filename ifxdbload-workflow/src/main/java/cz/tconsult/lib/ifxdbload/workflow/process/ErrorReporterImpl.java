@@ -9,12 +9,17 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.TextStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 import cz.tconsult.lib.exception.FThrowable;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
+import cz.tconsult.lib.ifxdbload.core.tw.ErrorReporter;
+import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
 import cz.tconsult.lib.ifxdbload.core.tw.RowCol;
 import cz.tconsult.lib.ifxdbload.workflow.db.P6SpyExceptionEnrichmentEventListener;
+import cz.tconsult.lib.lexer.LexerToken;
 import cz.tconsult.lib.lexer.LexerTokenLocator;
 
 /**
@@ -22,16 +27,26 @@ import cz.tconsult.lib.lexer.LexerTokenLocator;
  * @author veverka
  *
  */
-public class ErrorReporter {
+public class ErrorReporterImpl implements ErrorReporter {
 
+
+  private static final Logger log = LoggerFactory.getLogger(ErrorReporterImpl.class);
+
+  @Override
+  public void reportError(final LexerToken badToken, final NamedString source) {
+    log.error("{} - {}", badToken, source);
+  }
+
+
+  @Override
   public synchronized void reportError(final DataAccessException exc, final SplStatement stm) {
     final int offset = P6SpyExceptionEnrichmentEventListener.pickErrorOffset(exc);
 
     final LexerTokenLocator locator = stm.getFirstTokenLocator();
     final RowCol startPoint = new RowCol(locator.getBegLineNumber(), locator.getBegColumnNumber());
     final String str = FSqlExcFormatter.format(exc, locator.getInputSourceName(), startPoint, stm.getText(), offset);
-    System.out.println(str);
 
+    log.error("{}", str);
   }
 
   /**
@@ -110,6 +125,14 @@ public class ErrorReporter {
 
   private String extractIfxErrInfoSql(final SQLException exc) {
     return exc.getErrorCode() + ": " + exc.getMessage();
+  }
+
+
+  @Override
+  public void reportSpravnyObjektNaNespravnemMiste(final SplStatement stm) {
+    log.error("reportSpravnyObjektNaNespravnemMiste: {}", stm);
+    //TODO [veverka] implementuj - vygenerovana metoda [veverka 15:47:38]
+
   }
 
 }

@@ -1,0 +1,94 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_BatchInit.sql
+--  /* ---------------------------------------------------------------------------
+--
+--    MODUL: PRAB01~1.SQL
+--
+--    POPIS:
+--    Modul obsahuje proceduru pro otevření dávky
+--
+--    VERZE: 3.0
+--
+--    VYTVOŘENO: 15.8.1997
+--    ZMĚNA:
+--
+--    CHYBY:
+--
+--    ---------------------------------------------------------------------------*/
+--
+--
+--  /* ======================================================================
+--
+--  POPIS:
+--   Procedura  AB_BatchInit vytváří dávku daného typu dokladu
+--    pro daného uživatele
+--
+--   Volané procedury a funkce
+--
+--   AP_NovaDavka
+--   TW_Provden
+--   TW_CanRole
+--
+--  ====================================================================== */
+CREATE     PROCEDURE AB_BatchInit (aDokladTyp Char(2),aDokladCislo Int default null, aDavkaCislo Int default null) returning Int;
+  -- verze - 3.0
+  -- v souboru PRAB01-AB_BatchInit
+  -- vytvořeno 15.8.1997
+  define _dnesnidat Date;
+  define _UdokladTyp Char(2);
+  define _UDavka Int;
+  define _Oblast Char(2);
+  define _Zprava Char(30);
+  define _User Char(20);
+  define _Int1 Int;
+
+-- set debug file to "Debug";
+--trace on;
+
+let _dnesnidat = TW_RegGetKeyDate("AC","*","*","datuct");
+
+-- Nový doklad BDS
+if (aDokladCislo is null)or (aDokladCislo = 0) then
+     -- zjistí se, zda existuje záznam pro daného uživatele, den a dokladu
+     SELECT davka,dokladTyp
+       INTO _UDavka, _UdokladTyp
+       FROM AB_Davka_Prot
+      WHERE datProv   = _dnesnidat  and
+            openUser  =  AP_User()       and
+            DokladTyp = aDokladTyp  and
+            Stav      = 0;
+
+     -- Když davka je null, zjistí se, zda existuje aspoň pro uživatele a den
+     if (_UdokladTyp is null) then
+          SELECT Min(davka)
+            INTO _UDavka
+            FROM AB_Davka_Prot
+            WHERE datProv  = _dnesnidat and
+                  openUser = AP_User()       and
+                  Stav     = 0;
+
+         -- Když ani teď neexistuje, potom se dělá nová dávka
+         --pro daného uživatele nebyla daný den vytvořena dávka
+         if (_UDavka is null) then
+            let _Oblast= "AB";
+            let _UDavka = AP_NovaDavka(_Oblast);
+            let _Int1 {= TW-Provden("AB",1,_UDavka,"Otevření dávky");}
+                       = TW_ProvDen ("AB", 1, _UDavka, 'Opening BDS batch');
+            INSERT INTO AB_Davka_Prot
+                   (Davka,DokladTyp,datProv,pocPoriz)
+            VALUES (_UDavka,aDokladTyp,_dnesnidat,1);
+         -- existuje dávka, ale pro jiný typ
+         else
+            INSERT INTO AB_Davka_Prot
+                   (Davka,DokladTyp,datProv,pocPoriz)
+            VALUES (_UDavka,aDokladTyp,_dnesnidat,0);
+         end if;
+     else
+     end if;
+else
+  let _Udavka = aDavkaCislo;
+end if;
+
+--trace off;
+return _Udavka;
+
+end procedure;

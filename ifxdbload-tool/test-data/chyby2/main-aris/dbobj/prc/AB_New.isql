@@ -1,0 +1,37 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_New.sql
+--/* ---------------------------------------------------------------------------
+--MODUL: PRAB04~1.SQL
+--
+--POPIS: Modul obsahuje proceduru AB_New
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--  20.2.2001  JR   doplneni prace s Ownerem v temp tabulce (dropovani tabulky je blbost)
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS: Procedura slouží k inicializaci tmp_AB_Doklad_Kart pro nový doklad daného typu
+-- Volané procedury a funkce:
+--  AB_BatchInit
+--  AB_KartInit
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_New (aDokladTyp Char(2),
+                       aOwner Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB04~1
+-- vytvořeno 18.8.1997
+
+define _dokladBDS Int;
+define _davka  Int;
+
+-- let _davka= AB_BatchInit(aDokladTyp, null,null);
+  call AB_KartInit(AOwner);
+
+  UPDATE tmp_AB_Doklad_Kart
+     SET dokladTyp = aDokladTyp
+     WHERE dokladbds = 0 AND owner = aOwner;
+
+end procedure;

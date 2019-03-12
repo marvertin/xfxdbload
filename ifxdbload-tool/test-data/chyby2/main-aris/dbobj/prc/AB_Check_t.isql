@@ -1,0 +1,67 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_Check_t.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL: PRAB13~1.SQL
+--
+--POPIS:
+--Modul obsahuje proceduru AB_Check_t
+--
+--VERZE: 3.0
+--
+--VYTVOŘENO: 18.8.1997
+--ZMĚNA:
+--
+--CHYBY:
+--
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--
+--POPIS:
+--
+--Procedura volá proceduru AB_Check. Slouží jako rozhraní FE a AB_Check
+-- při kontrole zadané částky.
+--
+-- Volané procedury a funkce:
+--  AB_Check
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_Check_t (aDokladCislo Int, aCastka Dec(16,2), aOwner Int default null)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB11~1
+-- vytvořeno 18.8.1997
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_check_t') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+  call AB_Check (aDokladCislo, aCastka, aOwner);
+
+COMMIT WORK;
+SET ISOLATION TO COMMITTED READ;
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_check_t') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+end procedure;

@@ -1,0 +1,23 @@
+CREATE PROCEDURE sec_extUsrMngRqInit_evo_init()
+   ON EXCEPTION IN (-958)
+     -- Tabulka už existuje, ignorujeme.
+   END EXCEPTION;
+
+   CREATE TEMP TABLE sec_extUsrMngRqInit_evo (
+     evtid     INTEGER PRIMARY KEY,
+     poznamka  VARCHAR(255),
+     locked    INTEGER NOT NULL CHECK (locked IN (0, 1)),
+     rqaction  VARCHAR(50, 10) NOT NULL CHECK (rqaction IN ('CREATE', 'DEACTIVATE', 'BLOCK', 'UNBLOCK', 'LOGINALIAS', 'NO_ACTION', 'FAILURE')),
+     acctype   VARCHAR(50, 10) NOT NULL CHECK (acctype IN ('CLIENT')),
+     userid    VARCHAR(64, 20),
+     firstname VARCHAR(24, 10),
+     lastname  VARCHAR(35, 20),
+     pin       CHAR(13),
+     pintype   CHAR(1),
+     ico       CHAR(10),
+     icoRole   VARCHAR(100) CHECK(icoRole IS NULL OR icoRole IN ('ON-BEHALF')),
+     email     VARCHAR(64, 30),
+     refperson INT,
+     reflegalbody INT
+   ) WITH NO LOG;
+END PROCEDURE;

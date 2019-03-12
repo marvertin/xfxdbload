@@ -1,8 +1,6 @@
 package cz.tconsult.lib.ifxdbload.core.db;
 
-import org.springframework.dao.DataAccessException;
-
-import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
+import cz.tconsult.lib.ifxdbload.core.tw.ErrorReporter;
 
 /**
  * Exekuční kontext, určuje především databázi, do které se zavádí.
@@ -25,6 +23,11 @@ public interface LoadContext {
    * @param exc
    * @param stm
    */
-  void reportError(DataAccessException exc, SplStatement stm);
+
+  /**
+   * Vrací objekt, který dokáže repoortovat chyby.
+   * @return
+   */
+  ErrorReporter errorReporter();
 
 }

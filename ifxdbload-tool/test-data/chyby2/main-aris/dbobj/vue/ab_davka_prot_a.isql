@@ -1,0 +1,2 @@
+-- Cibis\Aris-PaySys\Models\Data\view_ab_davka_prot_a.sql
+create view ab_davka_prot_a (davka, dokladtyp, openuser, datprov, stav, pocporiz, pocpotvrd, pocauto, pocman, pocvymaz, pocchyb, opentime, closeuser, closetime, enduser, endtime, refuser, reftime) AS select x0.davka,x0.dokladtyp,x0.openuser,x0.datprov,x0.stav,x0.pocporiz,x0.pocpotvrd,x0.pocauto,x0.pocman,x0.pocvymaz,x0.pocchyb,x0.opentime,x0.closeuser,x0.closetime,x0.enduser,x0.endtime,x0.refuser,x0.reftime from "aris".arch_ab_davka_prot x0

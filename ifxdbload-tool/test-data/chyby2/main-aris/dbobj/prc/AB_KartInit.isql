@@ -1,0 +1,112 @@
+CREATE     PROCEDURE AB_KartInit (AOwner Int)
+--/* ======================================================================
+--POPIS: Procedura vytvoří tabulku tmp_AB_Doklad_Kart a naplní ji prázdným záznamem
+--====================================================================== */
+--
+
+  define _odklVypl  integer;
+  define _datprov    Date;
+  
+  let _datprov = TW_RegGetKeyDate('AC','*','*','datuct');
+  
+  begin
+    on exception in (-310, -958 {*Informix 7.30, 9.21 Incompatibility *})
+      DELETE FROM tmp_AB_Doklad_Kart WHERE Owner = AOwner;
+    end exception;
+  
+    CREATE TEMP TABLE tmp_AB_Doklad_Kart(
+     dokladBDS           Int
+     ,datPlVypl          Date
+     ,druh               Char  (4)
+     ,davkavznik         Int
+     ,datSplatnost       Date
+     ,valuta             Date
+     ,datUct             Date
+     ,dokladTyp          Char  (2)    default 'IB'
+     ,hromPrikaz         Int
+     ,smer               integer     default 1
+     ,uhrInk             Char  (1)    default 'U'
+     ,priorita           integer     default 0
+     ,konstSym           Dec   (10,0)
+     ,zpozdVypl          integer     default 0
+     ,linkmark           Dec   (2,0)
+     ,castka             Dec   (16,2)
+     ,marketAkce         Char  (4)    default '____'
+     ,uziv1              integer     default 0
+     ,uziv2              integer     default 0
+     ,uziv3              integer     default 0
+     ,premRok            DateTime Year to Year   --default Current Year to Year
+     ,dbKontopred        Dec   (6,0)
+     ,dbKontozakl        Dec   (10,0)
+     ,dbSko              Char  (4)
+     ,dbUcet             Char  (9)
+     ,dbNS               Char  (5)
+     ,dbCZ               Char  (3)
+     ,dbBanka            Dec   (7,0)
+     ,dbVarSym           Dec   (10,0) default   9
+     ,dbSpecSym          Dec   (10,0)
+     ,dbText             Char  (20)
+     ,crKontopred        Dec   (6,0)
+     ,crKontozakl        Dec   (10,0)
+     ,crKontopredCh      Char  (2)
+     ,crKontozaklCh      Char  (22)
+     ,crSko              Char  (4)
+     ,crUcet             Char  (9)
+     ,crNS               Char  (5)
+     ,crCZ               Char  (3)
+     ,crBanka            Dec   (7,0)
+     ,crVarSym           Dec   (10,0) default 9
+     ,crSpecSym          Dec   (10,0)
+     ,crText             Char  (20)
+     ,chyba              VarChar  (255,0)
+     ,potvrzeno          integer     default 0
+     ,jekonto            integer     default 1
+     ,jekonstsym         integer     default 1
+     ,jebanka            integer     default 1
+     ,jekontoch          integer     default 0
+     ,jelinkmark         integer     default 0
+     ,jenostro           integer     default 0
+     ,porUser            Char  (20)    default User
+     ,porTime            DateTime Year to Second   default Current Year to Second
+     ,refUser            Char  (20)    default User
+     ,refTime            DateTime Year to Second   default Current Year to Second
+     ,potvrdUser         Char  (20)
+     ,potvrdTime         DateTime Year to Second
+     ,owner              Int
+     ) WITH NO LOG;
+  
+  end;   --konec bloku osetrujciciho kolizi creatu
+  
+  
+  --zjisteni parametru odkladu vyplaty
+  let _odklVypl = TW_RegGetKey('AB', 'vypl', '*', 'zpozdvypl', 0);
+  
+  INSERT INTO tmp_AB_Doklad_Kart(dokladBDS,valuta,zpozdvypl, premrok, owner)
+    VALUES (0,_datprov,_odklvypl, Extend(_datprov, Year to Year), AOwner);
+      
+  UPDATE tmp_AB_Doklad_Kart
+    set (jenostro,jebanka) = (0,1)
+  WHERE dokladbds = 0 AND owner = AOwner;
+  
+  
+  if TW_RegGetKey('AC','typ','*','konto')='kontodec' then
+    UPDATE tmp_AB_Doklad_Kart
+         set (jekonto,jekontoch) = (1,0)
+    WHERE dokladbds = 0 AND owner = AOwner;
+  else
+    UPDATE tmp_AB_Doklad_Kart
+      set (jekonto,jekontoch) = (0,1)
+    WHERE dokladbds = 0 AND owner = AOwner;
+  end if;
+  
+  
+  if TW_RegGetKey('AC','typ','*','konstsym')='linkmark' then
+    UPDATE tmp_AB_Doklad_Kart
+      set (jelinkmark,jekonstsym) = (1,0)
+    WHERE dokladbds = 0 AND owner = AOwner;
+  else
+    UPDATE tmp_AB_Doklad_Kart
+      set (jelinkmark,jekonstsym) = (0,1)
+    WHERE dokladbds = 0 AND owner = AOwner;
+  end if;
+end procedure;

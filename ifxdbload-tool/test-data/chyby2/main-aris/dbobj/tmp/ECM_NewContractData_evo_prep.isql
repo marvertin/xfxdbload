@@ -1,0 +1,23 @@
+CREATE PROCEDURE ECM_NewContractData_evo_prep ()
+   ON EXCEPTION IN (-958)
+      -- Tabulka už existuje - ignorujeme.
+   END EXCEPTION
+
+   CREATE TEMP TABLE ECM_NewContractData_Evo (
+      evtid       INTEGER NOT NULL,
+      poznamka    VARCHAR(255),
+      locked      INTEGER DEFAULT 0 NOT NULL CHECK (locked IN (0, 1)),
+         
+      smlouva DEC(16,0), --contractno
+      prijmeniklient  CHAR(35), --clientsurname
+      jmenoklient CHAR(24), --clientname
+      rc CHAR(10), --clientid
+      nazev CHAR(200), --companyname
+      ico CHAR(10), --ico
+      cisnavrh DEC(10,0), --savingdraftno
+      datnavrh DATE, --savingdraftdate
+      datuz DATE, --savingcontractdate
+      stav CHAR(1), --contractstate
+      objektid BIGINT --idobjektu smlouvy
+   ) WITH NO LOG;
+END PROCEDURE;

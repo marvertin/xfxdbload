@@ -1,0 +1,46 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromNew.sql
+--/* ---------------------------------------------------------------------------
+--MODUL: PRAB22~1.SQL
+--
+--POPIS: Modul obsahuje proceduru AB_HromNew
+--VERZE: 3.0
+--
+--VYTVOŘENO: 14.9.1997
+--ZMĚNA:
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--
+--/* ======================================================================
+--POPIS: Procedura slouží k inicializaci tmp_AB_Doklad_Kart pro nový doklad daného typu
+--
+-- Volané procedury a funkce:
+--  AB_BatchInit
+--  AB_HromInit
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HromNew (aDokladTyp Char(2),
+                           aOwner Int)
+-- verze - 3.0
+-- v souboru P:\ARSS\VYVOJ30\DATABA~1\PLATSTYK\AB\PRAB22~1
+-- vytvořeno 14.9.1997
+
+define _dokladBDS Int;
+define _davka  Int;
+
+-- let _davka= AB_BatchInit(aDokladTyp, null,null);
+
+  --vytvoření a init temp tabulek
+  call AB_HromInit(aOwner);
+
+  --nastavení pro dany typ dokladu - souhrn
+  UPDATE tmp_AB_Souhrn_Kart
+    SET dokladTyp = aDokladTyp
+    WHERE owner = aOwner;
+
+  --nastavení pro dany typ dokladu - rozpis
+  UPDATE tmp_AB_Rozpis_Kart
+    SET dokladTyp = aDokladTyp
+    WHERE owner = aOwner;
+
+end procedure;

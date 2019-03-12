@@ -1,0 +1,209 @@
+--Cibis\Aris-PaySys\Source\PayManu\Src\AB_HromInsertIn_D.sql
+--/* ---------------------------------------------------------------------------
+--
+--MODUL:
+--
+--POPIS: Modul obsahuje proceduru pro načtení hromadných dokladů BDS z Excelu pomocí datové pumpy
+--VERZE: 3.0
+--
+--VYTVOŘENO: 14.01.2002
+--ZMĚNA:
+--
+--
+--CHYBY:
+-----------------------------------------------------------------------------*/
+--/* ======================================================================
+--POPIS:                     A B _ H r o m I n s e r t I n _ D
+--====================================================================== */
+--
+CREATE     PROCEDURE AB_HromInsertIn_D ()
+        returning                        Int; -- počet celkem zpracovaných záznamů
+-- verze - 1.01
+--
+-- vytvořeno 14.01.2002
+
+define global TW_ErrSql  Int       default null;
+define global TW_ErrIsam Int       default null;
+define global TW_ErrText VarChar (255) default null;
+
+define _hromprikaz   Int;
+define _druh        Char(4);
+define _dbcr        integer;
+define _datUct      date;
+define _dokladtyp   Char(2);
+define _smer        integer;
+define _uhrInk      char(1);
+define _priorita    integer;
+define _konstSym    decimal(10,0);
+define _zpozdvypl   integer;
+define _marketAkce  Char(4);
+define _uziv1       integer;
+define _uziv2       integer;
+define _uziv3       integer;
+define _skonto      decimal(16,0);
+define _sucet       char(9);
+define _scz         char(3);
+define _sns         char(5);
+define _svarsym     decimal(10,0);
+define _sspecsym    decimal(10,0);
+define _stext       char(20);
+define _valuta      date;
+define _premrok     datetime year to year;
+define _chyba       varchar(255);
+define _poruser     char(20);
+define _portime     datetime year to second;
+
+define _castka      decimal(16,2);
+define _Rkonto      decimal(16,0);
+define _rucet       char(9);
+define _rcz         char(3);
+define _rns         char(5);
+define _rvarsym     decimal(10,0);
+define _rspecsym    decimal(10,0);
+define _rtext       char(20);
+define _pocet        Int;
+define _pocetcelk    Int;
+define _castkacelk   Dec(16,2);
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE integer DEFAULT 0;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ab_hrominsertin_d') = 1 then
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+/*set debug file to "mndebug.log";
+trace on; */
+
+SET ISOLATION TO REPEATABLE READ;
+BEGIN WORK;
+
+   call TW_BaseInit();                    -- kvůli proc. AB_HromInsert se inicializuje temp tabulka TW_RetVal_temp
+   let _pocet = 0;
+   --inicializace, temp tabulka pro načtení z dat. pumpy
+   call AB_HromInit (0) ;
+COMMIT WORK;
+BEGIN WORK;
+
+   foreach hromprikaz with hold for   -- < --------- Průchod  přes všechny doklady načtené datovou pumpou
+    SELECT hromprikaz, druh, dbcr, datUct, dokladtyp, smer, uhrInk, priorita, konstSym, zpozdvypl, marketAkce,
+            uziv1, uziv2, uziv3, skonto, sucet, scz, sns, svarsym, sspecsym, stext, valuta, premrok, chyba,
+            poruser, portime
+        INTO _hromprikaz, _druh, _dbcr, _datUct, _dokladtyp, _smer, _uhrInk, _priorita, _konstSym, _zpozdvypl, _marketAkce,
+            _uziv1, _uziv2, _uziv3, _skonto, _sucet, _scz, _sns, _svarsym, _sspecsym, _stext, _valuta, _premrok, _chyba,
+            _poruser, _portime
+        FROM AB_BDSHrom_In
+
+      begin
+        on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText   --  <--- Ošetření chyb
+                -- Je-li chybový kód = -213, uživatelsky přerušeno zpracování,
+                -- je ošetření chyby předáno do nadřízeného bloku a procedura
+                -- je ukončena. V opačném případě je nejprve proveden ROLLBACK
+                -- zmíněný chybový kód společně s textem je vložen do příslušného řádku v kartotéce.
+
+            begin
+                 --transaction not available.
+                 on exception in (-122)
+                 end exception
+                 ROLLBACK WORK;
+            end;
+
+            BEGIN WORK;
+
+            begin
+                --no update permission
+                on exception in (-273)
+                end exception;
+
+                UPDATE AB_BDSHrom_In
+                SET Chyba = TW_ErrSql||' '||TW_ErrIsam||' '||TW_LiterNull(TW_ErrText)
+                WHERE hromprikaz = _hromprikaz;
+             COMMIT WORK;
+             BEGIN WORK;
+            end
+        end exception;                                    -- < ----------- Konec ošetření chyb
+
+       --odstranení právě vložených záznamů z temp tabulek
+        DELETE FROM tmp_AB_Rozpis_Kart ;
+        DELETE FROM tmp_AB_Souhrn_Kart ;
+        let _pocetcelk = 0; -- inicializace počtu zpracovaných záznamů
+        let _castkacelk = 0 ; -- inicializace celkové částky zpracovaných záznamů
+
+        -- kontrola dat
+        IF _dbcr not in (1,-1) THEN
+            {Call TW-Error(-13000,"Souhrn: Atribut dbcr neni platny");}
+             Call TW_RaiseError ('04108_NEW_TCUI', 'AB_HromInsertIn_D:', 'Souhrn: Hodnota pole ''dbcr'' není platná.');
+        END IF;
+
+        IF (SELECT COUNT(*) FROM AB_BDSDokl_In WHERE hromprikaz = _hromprikaz) = 0 THEN
+            {Call TW-Error(-13000,"Souhrn: K hlavicce neexistuje zadny rozpis");}
+             Call TW_RaiseError ('04109_NEW_TCUI', 'AB_HromInsertIn_D:', 'Souhrn: K hlavičce neexistuje žádný rozpis.');
+        END IF;
+
+        IF _dokladtyp <> "HB" THEN
+            {Call TW-Error(-13000,"Souhrn: Atribut dokladtyp neni platny");}
+             Call TW_RaiseError ('04110_NEW_TCUI', 'AB_HromInsertIn_D:', 'Souhrn: Hodnota pole ''doklatyp'' není platná.');
+        END IF;
+
+        foreach rozpis with hold for          -- <------ načítání položek rozpisu dokladu
+          SELECT castka, Rkonto, rucet, rcz, rns, rvarsym, rspecsym,rtext, valuta, premrok
+            INTO _castka, _Rkonto, _rucet, _rcz, _rns, _rvarsym, _rspecsym, _rtext, _valuta, _premrok
+            FROM AB_BDSDokl_In
+           WHERE hromprikaz = _hromprikaz
+
+           INSERT INTO tmp_AB_Rozpis_Kart ( dokladbds,castka,RKontozakl,RUcet,RCZ,
+                                             RNS,RVarSym,RSpecSym,RText,dokladTyp,valuta,premRok,
+                                             owner )
+                                     VALUES (_pocetcelk,_castka,_Rkonto, _rucet, _rcz,   -- _pocetcelk do dokladbds pro odlišení prvního záznamů BDS
+                                            _rns, _rvarsym, _rspecsym, _rtext, _dokladTyp, _valuta, _premrok,
+                                            _hromprikaz);
+             let _pocetcelk = _pocetcelk + 1;
+             let _castkacelk = _castkacelk + _castka;
+
+        end foreach;                         -- <------ konec načítání položek rozpisu dokladu
+
+        --vložení hlavičky hromdokladu do temp tabulky
+        INSERT INTO tmp_AB_Souhrn_Kart( druh,dbcr,datUct,dokladTyp,smer,uhrInk,priorita,konstSym,zpozdVypl,marketAkce,
+                                        uziv1,uziv2,uziv3,SKontozakl,SUcet,SCZ,SNS,SVarSym,SSpecSym,SText,valuta,castkacelk,pocet,premrok,
+                                        porUser,porTime,owner,refUser,refTime )
+                                VALUES( _druh, _dbcr, _datUct, _dokladtyp, _smer, _uhrInk, _priorita, _konstSym, _zpozdvypl, _marketAkce,
+                                        _uziv1, _uziv2, _uziv3, _skonto, _sucet, _scz, _sns, _svarsym, _sspecsym, _stext, _valuta,_castkacelk,_pocetcelk,_premrok,
+                                        _poruser, _portime, _hromprikaz,AP_User(),current )
+                                        ;
+        -- vkládání do kartoték BDS
+        Call AB_HromInsert(0, _hromprikaz);
+
+        -- počet úspěšně zpracovaných
+        let _pocet = _pocet + 1;
+
+        --odstranění načteného hromadného dokladu
+        DELETE FROM AB_BDSHrom_In WHERE hromprikaz = _hromprikaz;
+        DELETE FROM AB_BDSDokl_In WHERE hromprikaz = _hromprikaz;
+
+        COMMIT WORK;
+        BEGIN WORK;
+      end;
+   end foreach;
+
+ COMMIT WORK;
+ SET ISOLATION TO COMMITTED READ;
+
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ab_hrominsertin_d') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+ return _pocet;
+
+end procedure;
