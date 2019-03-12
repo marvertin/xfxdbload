@@ -31,7 +31,7 @@ public class TrgLoader extends Loader0 {
 
   public TrgLoader(final LoadContext ctx) {
     super(ctx);
-    catalogHasher = new CatalogHasher(EnumSet.of(EStmType.TRIGGER), jt());
+    catalogHasher = new CatalogHasher(getSupportedTypes(), jt());
     catalogHasher.createDbTableWithHashesIfNotExists();
   }
 
@@ -40,6 +40,7 @@ public class TrgLoader extends Loader0 {
    * aby bylo možno zkontrolovat, zda nedošlo ke změně.
    * Je volána jako první. Ale jen při zavádění z loaderu. Při adhok zavádění z eclipsu se nevolá.
    */
+  @Override
   public void readAllFromCatalog() {
     catalogHasher.readFromCatalog();
   }
@@ -50,7 +51,10 @@ public class TrgLoader extends Loader0 {
    *
    * @param stms Seznam triggerů k zavedení. Implementace může předpokládat, že zde nejsou žádné další objekty.
    */
+  @Override
   public void load(final List<SplStatement> stms) {
+    checkSupportedTypes(stms);
+
     final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms);
     final List<SplStatement> triggeryKZavedeni = stms.stream().
         filter(trg -> ! notChangedObjNames.contains(trg.getNameLower()))
@@ -76,5 +80,10 @@ public class TrgLoader extends Loader0 {
       log.debug("TRIGGER <-- \"{}\"", trg.getName());
     });
     log.info("TRIGGERS: loaded {} + error {} = total {}",  triggeryKZavedeni.size() - pocetChyb.get(),  pocetChyb.get(), triggeryKZavedeni.size());
+  }
+
+  @Override
+  public EnumSet<EStmType> getSupportedTypes() {
+    return EnumSet.of(EStmType.TRIGGER);
   }
 }

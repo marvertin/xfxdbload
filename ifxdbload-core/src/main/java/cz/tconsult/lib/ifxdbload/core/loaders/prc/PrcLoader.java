@@ -2,6 +2,7 @@ package cz.tconsult.lib.ifxdbload.core.loaders.prc;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,7 +34,8 @@ public class PrcLoader extends Loader0 {
    * do mapy, aby bylo možno zkontrolovat, zda nedošlo ke změně. Je volána jako
    * první.
    */
-  public void readFromCatalog() {
+  @Override
+  public void readAllFromCatalog() {
     // FIXME [jaksik] upravit logování -- 11. 3. 2019 14:18:02 jaksik
     log.info("louduji z katalogu");
     catalogLoader.readFromCatalog();
@@ -46,7 +48,9 @@ public class PrcLoader extends Loader0 {
    * @param stms Seznam procedur a funkcí k zavedení. Implementace může
    *             předpokládat, že zde nejsou žádné další objekty.
    */
+  @Override
   public void load(final List<SplStatement> stms) {
+    checkSupportedTypes(stms);
 
     //nalezení procedur, které se mají být zavedeny - nové, změněné
     final List<SplStatement> proceduryKZavedeni = catalogLoader.diff(stms);
@@ -115,6 +119,11 @@ public class PrcLoader extends Loader0 {
     log.info("HOTOVO. {}", procedure.getName());
 
 
+  }
+
+  @Override
+  public EnumSet<EStmType> getSupportedTypes() {
+    return EnumSet.of(EStmType.PROCEDURE, EStmType.FUNCTION);
   }
 
 

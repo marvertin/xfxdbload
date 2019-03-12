@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
+import cz.tconsult.lib.ifxdbload.core.loaders.DbObjLoader;
 import cz.tconsult.lib.ifxdbload.core.loaders.Loader0;
 import cz.tconsult.lib.ifxdbload.core.loaders.hasher.CatalogHasher;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
@@ -25,7 +26,7 @@ import lombok.Data;
  * @author veverka
  *
  */
-public class VueLoader extends Loader0 {
+public class VueLoader extends Loader0 implements DbObjLoader {
 
 
   private static final Logger log = LoggerFactory.getLogger(VueLoader.class);
@@ -36,7 +37,7 @@ public class VueLoader extends Loader0 {
 
   public VueLoader(final LoadContext ctx) {
     super(ctx);
-    catalogHasher = new CatalogHasher(EnumSet.of(EStmType.VIEW), jt());
+    catalogHasher = new CatalogHasher(getSupportedTypes(), jt());
     catalogHasher.createDbTableWithHashesIfNotExists();
     viewBodiesSaver = new ViewBodiesSaver(jt());
   }
@@ -46,6 +47,7 @@ public class VueLoader extends Loader0 {
    * aby bylo možno zkontrolovat, zda nedošlo ke změně.
    * Je volána jako první. Ale jen při zavádění z loaderu. Při adhok zavádění z eclipsu se nevolá.
    */
+  @Override
   public void readAllFromCatalog() {
     catalogHasher.readFromCatalog();
   }
@@ -56,7 +58,9 @@ public class VueLoader extends Loader0 {
    *
    * @param stms Seznam view k zavedení. Implementace může předpokládat, že zde nejsou žádné další objekty.
    */
+  @Override
   public void load(final List<SplStatement> stms) {
+    checkSupportedTypes(stms);
 
     final Set<String> notChangedObjNames = catalogHasher.notChangedObjNames(stms);
     final List<SplStatement> vueZeZdrojuKZavedeni = stms.stream().
@@ -216,5 +220,10 @@ public class VueLoader extends Loader0 {
   private static class Error {
     private final SplStatement view;
     private final DataAccessException exc;
+  }
+
+  @Override
+  public EnumSet<EStmType> getSupportedTypes() {
+    return EnumSet.of(EStmType.VIEW);
   }
 }
