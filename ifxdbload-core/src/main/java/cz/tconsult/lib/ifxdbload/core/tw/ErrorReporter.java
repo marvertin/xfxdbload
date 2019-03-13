@@ -7,10 +7,10 @@ import cz.tconsult.lib.lexer.LexerToken;
 
 public interface ErrorReporter {
 
-  void reportError(final DataAccessException exc, final SplStatement stm);
+  void sql(final DataAccessException exc, final SplStatement stm);
 
-  void reportError(LexerToken badToken, NamedString source);
+  void parsing(LexerToken badToken, NamedString source);
 
-  void reportSpravnyObjektNaNespravnemMiste(SplStatement stm);
+  void goodObjectOnBadPlace(SplStatement stm);
 
 }

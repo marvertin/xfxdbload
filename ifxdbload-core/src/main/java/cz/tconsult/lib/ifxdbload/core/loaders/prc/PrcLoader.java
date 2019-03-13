@@ -68,7 +68,7 @@ public class PrcLoader extends Loader0 {
         try {
           createProcedure(prc);
         } catch (final BadSqlGrammarException e) {
-          ctx().errorReporter().reportError(e, prc);
+          ctx().errorReporter().sql(e, prc);
           status.setRollbackOnly(); // rolbackujeme
           pocetChyb.incrementAndGet();
         }

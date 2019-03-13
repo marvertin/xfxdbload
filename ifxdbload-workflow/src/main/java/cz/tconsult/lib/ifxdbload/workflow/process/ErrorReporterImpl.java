@@ -33,13 +33,13 @@ public class ErrorReporterImpl implements ErrorReporter {
   private static final Logger log = LoggerFactory.getLogger(ErrorReporterImpl.class);
 
   @Override
-  public void reportError(final LexerToken badToken, final NamedString source) {
+  public void parsing(final LexerToken badToken, final NamedString source) {
     log.error("{} - {}", badToken, source);
   }
 
 
   @Override
-  public synchronized void reportError(final DataAccessException exc, final SplStatement stm) {
+  public synchronized void sql(final DataAccessException exc, final SplStatement stm) {
     final int offset = P6SpyExceptionEnrichmentEventListener.pickErrorOffset(exc);
 
     final LexerTokenLocator locator = stm.getFirstTokenLocator();
@@ -129,7 +129,7 @@ public class ErrorReporterImpl implements ErrorReporter {
 
 
   @Override
-  public void reportSpravnyObjektNaNespravnemMiste(final SplStatement stm) {
+  public void goodObjectOnBadPlace(final SplStatement stm) {
     log.error("reportSpravnyObjektNaNespravnemMiste: {}", stm);
     //TODO [veverka] implementuj - vygenerovana metoda [veverka 15:47:38]
 

@@ -35,7 +35,7 @@ public abstract class DbObjExecutor0 extends FazeExecutor0 {
 
     for (final SplStatement stm : objekty.getNe()) {
       // TODO [veverka] pozicovat chybovou hlášku -- 12. 3. 2019 14:06:06 veverka
-      ctx.errorReporter().reportSpravnyObjektNaNespravnemMiste(stm);
+      ctx.errorReporter().goodObjectOnBadPlace(stm);
     }
     loader.readAllFromCatalog();
     loader.load(objekty.getAno());
@@ -47,7 +47,7 @@ public abstract class DbObjExecutor0 extends FazeExecutor0 {
 
   boolean filterAndReportErrors(final ParseredSource parsedSource, final LoadContext ctx) {
     if (parsedSource.hasParseError()) {
-      ctx.errorReporter().reportError(parsedSource.getBadToken(), parsedSource.getSource());
+      ctx.errorReporter().parsing(parsedSource.getBadToken(), parsedSource.getSource());
       return false;
     } else {
       return true;

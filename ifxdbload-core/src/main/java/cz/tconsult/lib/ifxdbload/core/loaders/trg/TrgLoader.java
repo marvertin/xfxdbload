@@ -71,7 +71,7 @@ public class TrgLoader extends Loader0 {
           jt().execute(trg.getText());  // Vlastní zavedení triggeru
           catalogHasher.updateHashes(trg); // ve stejné tgransakci updatneme heše
         } catch (final BadSqlGrammarException e) {
-          ctx().errorReporter().reportError(e, trg);
+          ctx().errorReporter().sql(e, trg);
           status.setRollbackOnly(); // rolbackujeme
           pocetChyb.incrementAndGet();
         }
