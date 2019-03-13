@@ -14,11 +14,11 @@ import org.springframework.jdbc.core.StatementCallback;
 import org.springframework.lang.Nullable;
 
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
-import cz.tconsult.lib.ifxdbload.core.loaders.Loader0;
+import cz.tconsult.lib.ifxdbload.core.loaders.DbObjLoader0;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 
-public class PrcLoader extends Loader0 {
+public class PrcLoader extends DbObjLoader0 {
 
   private static final Logger log = LoggerFactory.getLogger(PrcLoader.class);
 

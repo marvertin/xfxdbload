@@ -11,7 +11,7 @@ import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class Loader0 implements DbObjLoader {
+public abstract class DbObjLoader0 implements DbObjLoader {
 
   private final LoadContext ctx;
 

@@ -15,7 +15,7 @@ import org.springframework.dao.DataAccessException;
 
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
 import cz.tconsult.lib.ifxdbload.core.loaders.DbObjLoader;
-import cz.tconsult.lib.ifxdbload.core.loaders.Loader0;
+import cz.tconsult.lib.ifxdbload.core.loaders.DbObjLoader0;
 import cz.tconsult.lib.ifxdbload.core.loaders.hasher.CatalogHasher;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
@@ -26,7 +26,7 @@ import lombok.Data;
  * @author veverka
  *
  */
-public class VueLoader extends Loader0 implements DbObjLoader {
+public class VueLoader extends DbObjLoader0 implements DbObjLoader {
 
 
   private static final Logger log = LoggerFactory.getLogger(VueLoader.class);

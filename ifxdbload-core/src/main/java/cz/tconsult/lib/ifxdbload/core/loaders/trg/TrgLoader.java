@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.BadSqlGrammarException;
 
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
-import cz.tconsult.lib.ifxdbload.core.loaders.Loader0;
+import cz.tconsult.lib.ifxdbload.core.loaders.DbObjLoader0;
 import cz.tconsult.lib.ifxdbload.core.loaders.hasher.CatalogHasher;
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
@@ -21,7 +21,7 @@ import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
  * @author veverka
  *
  */
-public class TrgLoader extends Loader0 {
+public class TrgLoader extends DbObjLoader0 {
 
 
   private static final Logger log = LoggerFactory.getLogger(TrgLoader.class);
