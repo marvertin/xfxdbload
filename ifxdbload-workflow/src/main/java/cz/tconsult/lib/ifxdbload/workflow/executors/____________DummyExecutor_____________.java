@@ -8,7 +8,7 @@ import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
 import cz.tconsult.lib.ifxdbload.workflow.process.FazeExecutor;
 import cz.tconsult.lib.ifxdbload.workflow.process.InterFazeBoard;
 
-public class DummyExecutor implements FazeExecutor {
+public class ____________DummyExecutor_____________ implements FazeExecutor {
 
   private LoFaze lofaze;
 
