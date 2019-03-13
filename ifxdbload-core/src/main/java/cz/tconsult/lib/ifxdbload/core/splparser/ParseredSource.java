@@ -1,5 +1,6 @@
 package cz.tconsult.lib.ifxdbload.core.splparser;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
@@ -56,6 +57,12 @@ public class ParseredSource {
 
   public boolean hasParseError() {
     return badToken != null;
+  }
+
+  public String getFileNameOnly() {
+    // TODO [veverka] To tady není pěkn takhle kuchat. -- 13. 3. 2019 9:06:15 veverka
+    return Paths.get(source.getName().toString().replace('|', '/')).getFileName().toString();
+
   }
 
 }

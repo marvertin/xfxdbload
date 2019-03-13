@@ -1,10 +1,15 @@
 package cz.tconsult.lib.ifxdbload.core.loaders.once;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import cz.tconsult.lib.ifxdbload.core.db.DbContext;
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
+import cz.tconsult.lib.ifxdbload.core.splparser.ParseredSource;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -13,9 +18,10 @@ import lombok.RequiredArgsConstructor;
  *
  */
 @RequiredArgsConstructor
-public abstract class OnceLoaderImpl implements OnceLoader {
+public class OnceLoaderImpl implements OnceLoader {
 
   private final LoadContext ctx;
+  private Map<String, Long> checksums;
 
 
   protected DbContext dc() {
@@ -37,6 +43,27 @@ public abstract class OnceLoaderImpl implements OnceLoader {
 
   protected LoadContext ctx() {
     return ctx;
+  }
+
+  @Override
+  public void readAllFromCatalog() {
+    final XOnceScriptDao dao = new XOnceScriptDao(jt());
+    checksums = dao.readChecksums();
+  }
+
+  @Override
+  public void load(final List<ParseredSource> pss) {
+    final String sss = checksums.entrySet().stream().map(Object::toString).collect(Collectors.joining("\n"));
+    System.out.println(sss);
+
+    System.out.println("---------------------------------------------------");
+    pss.sort((x,y) -> x.getFileNameOnly().compareTo(y.getFileNameOnly()));
+
+    for (final ParseredSource ps : pss) {
+      System.out.println(ps.getFileNameOnly());
+    }
+    //TODO [veverka] implementuj - vygenerovana metoda [veverka 8:33:37]
+
   }
 
 

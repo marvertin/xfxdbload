@@ -1,12 +1,7 @@
 package cz.tconsult.lib.ifxdbload.core.tw;
 
 /**
- * Reprezentuje plnou cestu k souboru s záváděnými daty.
- * Je to důležitý údaj, podle nějž se určuje fáze zavádění.
- *
- * Například
- *
- *    dbobj/prc/cosi/ab_cdef.isql
+ * Reprezentuje jméno nějakého zdroje. Může to být plná cesta k souboru nebo v položce zipu
  *
  * @author veverka
  *
