@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B121801_RN00440538_3
+-- @TC:ONCE: DESCRIPTION = Chybná kontrola vyplnění pole Potvrzení o příjmu vystavil - Příjmení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CALL tw_regsetoraddkey('EO', 'creditrq', 'pracZarazeni', 'zamestnanec', 3, 1, 
+'Osoba',
+'Osoby pro úvěrovou žádost',
+'Pracovní zařazení',
+'Pracovní zařazení osoby – zaměstnanec');
+
+CALL tw_regsetoraddkey('EO', 'creditrq', 'pracZarazeni', 'podnikatel', 4, 1, 
+'Osoba',
+'Osoby pro úvěrovou žádost',
+'Pracovní zařazení',
+'Pracovní zařazení osoby – podnikatel');
+
+
+ROLLBACK WORK;
+
+--End of B121801_RN00440538_3

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B108121_RN00384907_3
+-- @TC:ONCE: DESCRIPTION = MIGR: Chyba -111 aris.eo_adresa_mat_f1 při provedení vložení insolvenčních spravců (FO). {DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO eo_psc_cis(psc, popis, platnost) VALUES('90877', 'Borský Mikuláš', 1);
+INSERT INTO eo_psc_cis(psc, popis, platnost) VALUES('72895', 'Moravská Ostrava', 1);
+INSERT INTO eo_psc_cis(psc, popis, platnost) VALUES('11668', 'Praha 1', 1);
+INSERT INTO eo_psc_cis(psc, popis, platnost) VALUES('30551', 'Plzeň', 1);
+
+ROLLBACK WORK;
+
+--End of B108121_RN00384907_3

@@ -1,0 +1,85 @@
+-- @TC:ONCE: ID = V2, B131731_36779_3
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- #Provádět přepočty bankovního EIR v noční závěrce#
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet', 1, 1);
+
+-- #Provádět přepočty bankovního EIR pro typ smlouvy#
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-SSFO', 1, 1);
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-SSPO', 1, 1);
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-SUFO', 1, 1);
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-PFSU', 1, 1);
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-PUSU', 1, 1);
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-SUPO', 1, 1);
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-PUPO', 1, 1);
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-PPSU', 1, 1);
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'provadet-KOME', 1, 1);
+
+-- #Maximální počet zpracovaných záznamů pro přepočet EIR - chybové#
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'maxPocetChyba', 1000, 1);
+
+-- #Maximální počet zpracovaných záznamů pro přepočet EIR - nezpracované#
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'provadeniPrepoctu', 'maxPocetNezprac', 1000, 1);
+
+-- #Částka technického řádku pro výpočet bankovního EIR spoření#
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'vypocet', 'castkaTechRadSpor', 1, 1);
+
+
+-- #Částka technického řádku pro výpočet bankovního EIR úvěru#
+Call TW_RegSetOrAddKey('EP', 'bankEIR', 'vypocet', 'castkaTechRadUver', 1, 1);
+
+
+-- #Počítat a zobrazovat EIR úvěru pro OZ#
+Call TW_RegDelKey('MO', 'modelCore', 'zobrazVysl', 'EIRuv-proOZ');
+
+
+-- #Počítat a zobrazovat EIR spoření pro OZ#
+Call TW_RegDelKey('MO', 'modelCore', 'zobrazVysl', 'EIRspor-proOZ');
+
+
+-- #Adresář pro import parametrů pro výpočet OP#
+Call TW_RegSetOrAddKey('RU', 'op', 'importPar', 'adresar', '', 1);
+
+
+-- #Adresář pro import pokladů pro výpočet OP pro konkrétní úvěry#
+Call TW_RegSetOrAddKey('RU', 'op', 'importPodInd', 'adresar', '', 1);
+
+
+-- #Metoda výpočtu OP#
+Call TW_RegSetOrAddKey('RU', 'op', 'metoda', '*', 'CNB', 0);
+
+
+-- #Datum načtení parametrů pro výpočet OP#
+Call TW_RegSetOrAddKey('RU', 'op', 'importPar', 'datum', '', 0);
+
+
+-- #Typ dluhu pro pojištění#
+Call TW_RegSetOrAddKey('RU', 'op', 'typdluhu', 'pojisteni', 320, 1);
+
+
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('OP_PD_AR', 0, 'HP-NT', 'RS*.txt', 'NONE', 1, 'OP - Export podkladů - Archivace', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('OP_PD_AR', 1, 'HP-NT', 'RS*.txt', 'NONE', 1, 'OP - Export podkladů - Archivace', '', '');
+
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('OP_PD_OU', 0, 'HP-NT', 'RS*.txt', 'NONE', 0, 'OP - Export podkladů', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('OP_PD_OU', 1, 'HP-NT', 'RS*.txt', 'NONE', 0, 'OP - Export podkladů', '', '');
+
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('OP_UC_AR', 0, 'HP-NT', 'RS*.txt', 'NONE', 1, 'OP - Export - účtování - Archivace', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('OP_UC_AR', 1, 'HP-NT', 'RS*.txt', 'NONE', 1, 'OP - Export - účtování - Archivace', '', '');
+
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('OP_UC_OU', 0, 'HP-NT', 'RS*.txt', 'NONE', 0, 'OP - Export - účtování', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('OP_UC_OU', 1, 'HP-NT', 'RS*.txt', 'NONE', 0, 'OP - Export - účtování', '', '');
+  
+ROLLBACK WORK;
+
+--End of B131731_36779_3

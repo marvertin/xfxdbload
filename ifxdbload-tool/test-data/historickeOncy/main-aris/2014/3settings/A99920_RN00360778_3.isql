@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A99920_RN00360778_3
+-- @TC:ONCE: DESCRIPTION = Metodické požadavky BRKI/NRKI {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update EP_SplSporModAkce_Cis 
+set ulozmodel = 1
+  , uloztok = 0
+where akce = 'USODSP'; 
+
+update EP_SplSporModAkce_Cis
+set uloztok = 1
+where akce <> 'USODSP' and  ulozmodel = 1;
+
+update EP_SplSporModAkce_Cis
+set uloztok = 0
+where akce <> 'USODSP' and  (ulozmodel = 0 or ulozmodel is null);
+
+ROLLBACK WORK;
+
+--End of A99920_RN00360778_3

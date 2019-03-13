@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B118840_RN00382782_3
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND uloha = 'creditrq-zaklad' AND funkce = 'podpisZad-zpusob';
+
+ROLLBACK WORK;
+
+--End of B118840_RN00382782_3

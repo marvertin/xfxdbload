@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, B130710_RSTS-3600_1-upom
+-- @TC:ONCE: DESCRIPTION = Doplnění exportu upomínek (dospořování + úvěry)
+BEGIN WORK;
+
+Alter table RU_Upom_Kart add pocsplpospl   Integer,
+                         add vysepristispl DECIMAL(16, 2);
+
+ROLLBACK WORK;
+--End of B130710_RSTS-3600_1-upom

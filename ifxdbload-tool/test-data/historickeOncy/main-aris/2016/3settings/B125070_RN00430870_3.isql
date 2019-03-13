@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B125070_RN00430870_3
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO tw_typobjserno_cis(tabulka, nazev, platnost) VALUES (
+  'seu_pokyncerppolozka_mat', 'Položka pokynu k čerpání', 1
+);
+
+update do_typdokumentutypobjektu_cis set tabulka = 'seu_pokyncerppolozka_mat'
+  where tabulka = 'seu_pokyncerp_mat' AND  uzivatelskypristup = 'EDITACE'
+;
+
+ROLLBACK WORK;
+
+--End of B125070_RN00430870_3

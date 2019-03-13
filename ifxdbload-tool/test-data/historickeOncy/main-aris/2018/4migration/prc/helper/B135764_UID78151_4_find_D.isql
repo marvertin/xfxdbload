@@ -1,0 +1,116 @@
+CREATE PROCEDURE B135764_UID78151_4_find_D()
+
+DEFINE _smlouva            DEC(16,0);
+DEFINE _tsml               CHAR(4);
+DEFINE _poradi             SMALLINT;
+DEFINE _fc_poradi          INTEGER;
+DEFINE _budoucinhz         DEC(16,2);
+DEFINE _nhz                DEC(16,2);
+DEFINE _hodfcproltv        DEC(16,2);
+DEFINE _cenaobvykla        DEC(16,2);
+DEFINE _fc_serno           BIGINT;
+DEFINE _suma_nhz_zajisteni DEC(16,2);
+DEFINE _pocetFc            INTEGER;
+
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+BEGIN
+   ON EXCEPTION IN(-206)
+   END EXCEPTION;
+  DROP TABLE B135764_UID78151_4;
+END;
+
+--zalozime ridici tabulku
+CREATE TABLE B135764_UID78151_4 (
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  INT,              --číslo chyby, jež na řádku nastala
+  ISAMErr INT,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VARCHAR(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SMALLINT,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  -- vlastní data
+  smlouva         DEC(16,0),
+  tsml            CHAR(4),
+  poradi          SMALLINT,
+  nhz             DEC(16,2),
+  budoucinhz      DEC(16,2),
+  fc_poradi       INTEGER,
+  hodfcproltv     DEC(16,2),
+  cenaobvykla     DEC(16,2),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--  Vyhledání (systém):
+--  Pro úvěrové smlouvy, které mají:
+--    stav = „L“
+--    hraniční LTV <> null
+--    celkové NHZP zajištění nemovitostí ve stavech A a C * hraniční LTV < výše úvěru (obdoba RK LTV)
+--    některý FC, který figuruje v zajištění ve stavu A, nebo C má budoucí cena (dle obchod. pravidla &Hodnota FC pro LTV&) hodnotu větší, než je cena obvyklá
+
+
+-- plneni ridici tabulky
+  FOREACH 
+    SELECT a.smlouva, a.tsml, a.poradi, a.nhz, a.celk_nhzp, a.cenaobvykla, a.fc_poradi, a.hodfcproltv, a.fc_serno
+    INTO    _smlouva,  _tsml,  _poradi,  _nhz, _budoucinhz, _cenaobvykla, _fc_poradi,  _hodfcproltv, _fc_serno
+    FROM (
+        SELECT z.smlouva, z.tsml, sml.ltvhranice, z.poradi, z.budoucinhz, z.hodnota AS nhz
+        , IMain_fcVyhodnotCenaObvykla(z.reffunkcnicelek) as cenaobvykla
+        , fc.poradi AS fc_poradi, fc.serno AS fc_serno
+        , IMain_getHodnotaFcProLtv(z.reffunkcnicelek) AS hodfcproltv   --&Hodnota FC pro LTV&
+        , COALESCE(CASE WHEN sml.datklop IS NULL AND z.tsml IN ('PFSU','PUSU','PPSU','PUPO') THEN sml.vysepu ELSE sml.vyse END, 0) AS vyseuveru
+        , NVL(EU_ZajGetNHZP(z.smlouva, z.tsml, z.poradi), 0) AS celk_nhzp        
+        FROM EU_Zajist_Mat z 
+        INNER JOIN EV_Vec_Mat v ON z.vec = v.vec
+        INNER JOIN EU_Sml_mat sml ON sml.smlouva = z.smlouva AND sml.tsml = z.tsml
+        INNER JOIN cev_funkcnicelek_mat fc ON fc.serno = z.reffunkcnicelek
+        WHERE sml.stav = 'L'
+        AND sml.ltvhranice IS NOT NULL
+        AND z.stav IN('A', 'C')
+    ) a
+    WHERE (celk_nhzp * a.ltvhranice) < vyseuveru
+    AND a.hodfcproltv > a.cenaobvykla
+    ORDER BY a.smlouva, a.tsml, a.poradi
+    
+    
+    let _pocetFc = (SELECT count(*) FROM eu_zajist_mat WHERE reffunkcnicelek = _fc_serno and stav IN('A', 'C')); 
+    
+    IF  _pocetFc = 1 THEN
+      let _budoucinhz = _hodfcproltv;
+    ELSE
+      let _suma_nhz_zajisteni = (SELECT sum(TW_Null0Money(hodnota)) from eu_zajist_mat WHERE reffunkcnicelek = _fc_serno and stav IN('A', 'C'));
+      IF _suma_nhz_zajisteni = 0 THEN
+        let _budoucinhz = _hodfcproltv / _pocetFc ;
+      ELSE
+        let _budoucinhz = (_hodfcproltv * TW_Null0Money(_nhz)) / _suma_nhz_zajisteni ;
+      END IF;
+    END IF; 
+
+    INSERT INTO B135764_UID78151_4(smlouva, tsml, poradi, nhz, cenaobvykla, fc_poradi, hodfcproltv, budoucinhz, zprac)
+    VALUES(_smlouva, _tsml, _poradi, _nhz, _cenaobvykla, _fc_poradi, _hodfcproltv, _budoucinhz, -1);
+  END FOREACH;
+  
+  
+--update EU_Zajist_Mat set budoucinhz = budoucinhz z find tabulky
+
+UPDATE STATISTICS HIGH FOR TABLE B135764_UID78151_4;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+END PROCEDURE;

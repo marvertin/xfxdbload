@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B114095_RN00375550_1
+-- @TC:ONCE: DESCRIPTION = Danění úroků vybraných PO {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  alter table pro_client
+  
+    --Určuje právní formu právnické osoby (vazba na číselník eo_formaprav_cis)
+    add juridicalform   Integer
+;
+
+--FK
+CREATE INDEX pro_client_i_f2 ON pro_client(juridicalform);
+ALTER TABLE pro_client ADD CONSTRAINT FOREIGN KEY(juridicalform) 
+  REFERENCES eo_formaprav_cis(formaprav) CONSTRAINT pro_client_f2
+;
+
+ROLLBACK WORK;
+
+--End of B114095_RN00375550_1

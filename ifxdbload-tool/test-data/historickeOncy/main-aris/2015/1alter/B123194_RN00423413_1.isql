@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, B123194_RN00423413_1
+-- @TC:ONCE: DESCRIPTION = Úpravy v modelování {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_simulatedresultinfo
+  DROP nobusiness
+;
+
+ALTER TABLE pro_simulatedresultinfo
+  
+  --příznak, zda je ovlivněn nastavením "Obchodní režim"
+  ADD affectedByBusinessMode   Integer  DEFAULT 0 before refuser,
+  
+  --příznak, zda patří do "Základní modelování"
+  ADD belongsToBasicPrint   Integer  DEFAULT 0 before refuser,
+  
+  --Sekce, do které patří daný výsledek
+  --S=Savings, B=Bridge Loan, C=Credit, R=Summary
+  ADD section   CHAR(1) before refuser,
+  
+  ADD CONSTRAINT CHECK (affectedbybusinessmode IN (0,1)) CONSTRAINT pro_simulatedresultinfo_daa9,
+  ADD CONSTRAINT CHECK (belongstobasicprint IN (0,1)) CONSTRAINT pro_simulatedresultinfo_daaa
+;
+
+--CHECKS
+ALTER TABLE pro_simulatedresultinfo
+ADD CONSTRAINT (CHECK (section in ('S', 'B', 'C', 'R')) CONSTRAINT pro_simulatedresultinfo_c1);
+
+ROLLBACK WORK;
+
+--End of B123194_RN00423413_1

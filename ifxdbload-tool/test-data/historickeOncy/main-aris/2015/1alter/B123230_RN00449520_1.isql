@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B123230_RN00449520_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření exportů nad úvěrovou smlouvou v Cibis Main. {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_expsml_den ADD   requestnumber   DECIMAL(16,0);
+
+ROLLBACK WORK;
+
+--End of B123230_RN00449520_1

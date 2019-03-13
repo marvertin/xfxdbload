@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, A42089_RN00283788_3
+-- @TC:ONCE: DESCRIPTION = RN00273329: Doplnìní pole Daòová úspora do výsledkù pøi modelování úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  call TW_RegDelKey ('AX','druhDane','danZPrijmu','*')
+;
+
+--#Druh danì pro daò z pøíjmu#
+--Vìcná oblast  Klientské úèetnictví
+--Funkcionalita Zdanìní
+--Skupina parametrù Tax kinds
+--Význam parametru  Druh danì dle èíselníku daní pro daò z pøíjmu.
+--Analytický typ  Business
+--Adresa parametru  AX / druhDane / danZPrijmu / *
+--Uživatelská zmìna Ano
+--Nastavení D
+--Defaultní hodnota D
+  call TW_RegDeclare('AX','druhDane','danZPrijmu','*', 'D', 1
+    , 'Klientské úèetnictví', 'Zdanìní', 'Tax kinds'
+    , 'Druh danì dle èíselníku daní pro daò z pøíjmu.', 1/*zobrazovat*/)
+;
+
+  --Funkcionalita: 'Srážková daò' -> 'Zdanìní'
+  update tw_Registr_Cis
+    set idfunkcionalita = TW_RegGetIDFunkcionalita('Zdanìní')
+    where Oblast='AX' and Uloha = 'prevod_PK' and Funkce = '*' and Udaj='druhop'
+;
+
+  --Funkcionalita: 'Srážková daò' -> 'Zdanìní'
+  update tw_Registr_Cis
+    set idfunkcionalita = TW_RegGetIDFunkcionalita('Zdanìní')
+    where Oblast='AX' and Uloha = 'prevod_PK' and Funkce = 'provkonto'
+;
+
+ROLLBACK WORK;
+
+--End of A42089_RN00283788_3

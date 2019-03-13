@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, A55431_RN00317080_3
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+update EP_SplSporModAkce_Cis set
+  vypeir = 0
+  where akce in ('UZDSPL', 'UZBONI', 'UZPRIZ', 'UZTUM1', 'UZTUM2') 
+;
+
+update EP_SplSporModAkce_Cis set
+ text = 'Úvìrová žádost - pøepoèet údajù (Sale)'
+ , ulozmodel = 0
+ where akce = 'UZDSPL'
+;
+
+update EP_SplSporModAkce_Cis set
+ ulozmodel = 0
+ where akce = 'UZPRIZ'
+;
+
+insert into EP_SplSporModAkce_Cis (
+    akce, text, platnost, manzrus, tokzrus
+  , autozrus, uzivint, ulozmodel, vyprpsn, vypeir
+) values (
+
+  'UZFINA', 'Úvìrová žádost - finální model (Sale)', 1, 0, 1
+, 1, 0, 1, 0, 1
+)
+;
+
+ROLLBACK WORK;
+
+--End of A55431_RN00317080_3

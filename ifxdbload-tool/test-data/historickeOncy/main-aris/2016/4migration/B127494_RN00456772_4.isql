@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, B127494_RN00456772_4
+-- @TC:ONCE: DESCRIPTION = SOLUS: Změna souvisí s novelou zákona {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- update rolí navázaných na úvěrovou smlouvu
+update eo_role_mat  
+set souhlassoluspredpersinfo = 2
+where (souhlassoluspredpersinfo is null or souhlassoluspredpersinfo = -1)
+  and exists (select 1 
+              from eu_sml_mat  
+              join ru_real_mat on ru_real_mat.smlouva = eu_sml_mat.smlouva and ru_real_mat.tsml = eu_sml_mat.tsml
+              where eu_sml_mat.smlouva = eo_role_mat.smlouva 
+                and eu_sml_mat.tsml = eo_role_mat.typ 
+                and eu_sml_mat.stav in ('A', 'B','C', 'D', 'L')
+                and ru_real_mat.klasif = 0);
+
+-- update rolí navázaných přes spořící smlouvu
+update eo_role_mat  
+set souhlassoluspredpersinfo = 2
+where (souhlassoluspredpersinfo is null or souhlassoluspredpersinfo = -1)
+  and exists (select 1 
+              from eu_sml_mat  
+              join ru_real_mat on ru_real_mat.smlouva = eu_sml_mat.smlouva and ru_real_mat.tsml = eu_sml_mat.tsml
+              where eu_sml_mat.smlspor = eo_role_mat.smlouva 
+                and eu_sml_mat.tsmlspor = eo_role_mat.typ 
+                and eu_sml_mat.stav in ('A', 'B','C', 'D', 'L')
+                and ru_real_mat.klasif = 0)
+ and typrole = 'KL';
+
+
+ROLLBACK WORK;
+
+--End of B127494_RN00456772_4

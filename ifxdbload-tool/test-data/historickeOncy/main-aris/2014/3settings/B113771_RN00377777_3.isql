@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B113771_RN00377777_3
+-- @TC:ONCE: DESCRIPTION = Rozšíření exportu pro dopisy o splátkách {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  DELETE FROM EX_Export_Cis WHERE typexp = 'MMS';
+  
+  INSERT INTO EX_Export_Cis(typexp, nazev, mesic, druhvzniku) VALUES('ZSD', 'Změna splácení a dospořování', 1, 0);
+
+  CALL TW_RegSetOrAddKey('EU', 'splKal', 'dopisy', 'genProTyp-SUFO', 1, 1, 'Úvěr', 'Splátkový kalendář úvěru', 'Dopisy o splátkách', 'Generovat podklady pro dopisy o splátkách pro SUFO');
+  CALL TW_RegSetOrAddKey('EU', 'splKal', 'dopisy', 'genProTyp-PUSU', 1, 1, 'Úvěr', 'Splátkový kalendář úvěru', 'Dopisy o splátkách', 'Generovat podklady pro dopisy o splátkách pro PUSU');
+  CALL TW_RegSetOrAddKey('EU', 'splKal', 'dopisy', 'genProTyp-PFSU', 1, 1, 'Úvěr', 'Splátkový kalendář úvěru', 'Dopisy o splátkách', 'Generovat podklady pro dopisy o splátkách pro PFSU');
+
+ROLLBACK WORK;
+
+--End of B113771_RN00377777_3

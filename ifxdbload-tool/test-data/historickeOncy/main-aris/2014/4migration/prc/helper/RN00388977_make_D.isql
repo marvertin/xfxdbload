@@ -1,0 +1,107 @@
+-----------------------------------------------------------------------------
+--
+--  Template migracni procedury pro featuru RN00388977
+--
+-----------------------------------------------------------------------------
+create PROCEDURE RN00388977_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _po              INTEGER;
+define _reftigertyp     INTEGER;
+define _cocunut         CHAR(20);
+define _pocetzamest     Integer;
+define _obrat           DECIMAL(16, 2);
+define _bilancnisuma    DECIMAL(16, 2);
+define _stav            Char(1);
+define _typos           Char(1);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00388977', 'RN00388977', 'Migrace: Tabulka specifických dat PO');
+  
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  po, reftigertyp, cocunut, pocetzamest, obrat, bilancnisuma
+   INTO  _ser, _po,_reftigertyp,_cocunut,_pocetzamest,_obrat,_bilancnisuma
+   FROM RN00388977
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00388977
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    let _stav, _typos = (SELECT stav, typos FROM eo_osoba_mat WHERE os = _po);
+    if (_stav is null) or (_typos = 'F') then
+      UPDATE RN00388977
+        SET(NumErr,ISAMErr,TextErr, zprac) = (-746, null, 'Právnická osoba č.' || _po || ' neexistuje', -2) WHERE ser=_ser;
+    elif  _stav = 'Z' then
+      UPDATE RN00388977
+        SET(NumErr,ISAMErr,TextErr, zprac) = (-746, null, 'Právnická osoba č.' || _po || ' je zrušená', -2) WHERE ser=_ser;
+    else
+      INSERT INTO eo_pospecifdata_mat(po, reftigertyp, cocunut, pocetzamest, obrat, bilancnisuma)
+        VALUES(_po,_reftigertyp,_cocunut,_pocetzamest,_obrat,_bilancnisuma);
+      --nastaví příznak zpracováno na 1
+      UPDATE RN00388977 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+    end if
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

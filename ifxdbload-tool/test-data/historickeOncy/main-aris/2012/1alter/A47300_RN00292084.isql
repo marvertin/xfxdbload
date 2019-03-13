@@ -1,0 +1,98 @@
+-- @TC:ONCE: ID = V2, A47300_RN00292084
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda 
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE eu_paramsplacdospor_cis (
+  id   SERIAL NOT NULL,
+  datod   DATE NOT NULL,
+  tos   CHAR(1),
+  tsml   CHAR(4),
+  variantapu   CHAR(10),
+  rozhdenzahdospor   CHAR(1),
+  posunzahdospor   Integer,
+  rozhdenzahsledosspor   CHAR(1),
+  aktzahdosporcerp   Integer NOT NULL,
+  dorovnatvklad   Integer NOT NULL,
+  rozhdenmesdospor   Integer,
+  rozhdenzahsplac   CHAR(1) NOT NULL,
+  posunzahsplac   Integer NOT NULL,
+  rozhdenzahsledosuv   CHAR(1) NOT NULL,
+  posunzahcerp   Integer NOT NULL,
+  rozhdenmessplac   Integer,
+  platnost   Integer NOT NULL,
+  poznamka   CHAR(160),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (aktzahdosporcerp IN (0,1)) CONSTRAINT eu_paramsplacdospor_cis_dosr,
+  CHECK (dorovnatvklad IN (0,1)) CONSTRAINT eu_paramsplacdospor_cis_doss,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_paramsplacdospor_cis_dosz
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_paramsplacdospor_cis_pk ON eu_paramsplacdospor_cis(id);
+ALTER TABLE eu_paramsplacdospor_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eu_paramsplacdospor_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX eu_paramsplacdospor_cis_u1 ON eu_paramsplacdospor_cis(datod,tos,tsml,variantapu);
+ALTER TABLE eu_paramsplacdospor_cis ADD CONSTRAINT (UNIQUE (datod,tos,tsml,variantapu) CONSTRAINT eu_paramsplacdospor_cis_u1);
+
+--CHECKS
+ALTER TABLE eu_paramsplacdospor_cis
+ADD CONSTRAINT (CHECK (tos in ('F', 'P')) CONSTRAINT eu_paramsplacdospor_cis_c1),
+ADD CONSTRAINT (CHECK (rozhdenzahdospor in ('C', 'P', 'U')) CONSTRAINT eu_paramsplacdospor_cis_c2),
+ADD CONSTRAINT (CHECK (rozhdenzahsledosspor in ('C', 'P', 'U')) CONSTRAINT eu_paramsplacdospor_cis_c3),
+ADD CONSTRAINT (CHECK (rozhdenzahsplac in ('C', 'P', 'U')) CONSTRAINT eu_paramsplacdospor_cis_c4),
+ADD CONSTRAINT (CHECK (rozhdenzahsledosuv in ('C', 'P')) CONSTRAINT eu_paramsplacdospor_cis_c5);
+
+----------------------------------------------------------------
+CREATE TABLE eu_paramsplacdospor_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  datod   DATE NOT NULL,
+  tos   CHAR(1),
+  tsml   CHAR(4),
+  variantapu   CHAR(10),
+  rozhdenzahdospor   CHAR(1),
+  posunzahdospor   Integer,
+  rozhdenzahsledosspor   CHAR(1),
+  aktzahdosporcerp   Integer,
+  dorovnatvklad   Integer,
+  rozhdenmesdospor   Integer,
+  rozhdenzahsplac   CHAR(1),
+  posunzahsplac   Integer,
+  rozhdenzahsledosuv   CHAR(1),
+  posunzahcerp   Integer,
+  rozhdenmessplac   Integer,
+  platnost   Integer NOT NULL,
+  poznamka   CHAR(160),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (aktzahdosporcerp IN (0,1)) CONSTRAINT eu_paramsplacdospor_acis_dosr,
+  CHECK (dorovnatvklad IN (0,1)) CONSTRAINT eu_paramsplacdospor_acis_doss,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_paramsplacdospor_acis_dosz
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_paramsplacdospor_acis_pk ON eu_paramsplacdospor_acis(idarch);
+ALTER TABLE eu_paramsplacdospor_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_paramsplacdospor_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+ROLLBACK WORK;

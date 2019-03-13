@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B130667_RSTS-3447_5
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+/*
+ TODO [havelka]: Zatím ponecháme, než se udělajáí dopady Sale, Web, Main [havelka;2017-03-24 17:37:52]
+ 
+Část proposalu: 
+Číselník koeficientů životních minim
+Evidence bude zrušena
+ 
+
+Jedná se o úlohu Číselníky\Osoby\Číselník koeficientů životních minim
+
+
+Upozornění:
+Je tam ještě úloha, která se jmnuje Životní minima, ta používá tabulku eo_zivminkoef_cis.
+ 
+*/
+
+drop table prodcoeflivmin;
+
+ROLLBACK WORK;
+
+--End of B130667_RSTS-3447_5

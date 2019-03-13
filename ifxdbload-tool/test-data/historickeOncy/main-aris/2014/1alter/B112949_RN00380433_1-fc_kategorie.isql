@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B112949_RN00380433_1-fc_kategorie
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Přeceňování {CUSTOMERREQUEST}
+BEGIN WORK;
+
+alter table cev_funkcnicelek_mat add refkategorie Integer before poruser;
+
+alter table cev_funkcnicelek_arch add refkategorie Integer before poruser;
+
+CREATE INDEX cev_funkcnicelek_mat_i_f2 ON cev_funkcnicelek_mat(refkategorie);
+ALTER TABLE cev_funkcnicelek_mat ADD CONSTRAINT FOREIGN KEY(refkategorie) REFERENCES cev_katnemovcenindx_cis(serno) CONSTRAINT cev_funkcnicelek_mat_f2;
+
+ROLLBACK WORK;
+--End of B112949_RN00380433_1-fc_kategorie

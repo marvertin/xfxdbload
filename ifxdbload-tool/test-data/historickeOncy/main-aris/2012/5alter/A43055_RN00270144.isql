@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A43055_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+ALTER TABLE aris.ab_davka_prot
+    DROP CONSTRAINT ab_davka_prot_c1;
+
+ALTER TABLE aris.ab_davka_prot
+    ADD CONSTRAINT ( CHECK (dokladtyp IN ('IB' ,'IK' ,'II','HB' ,'HK' ,'TP', 'TI' )) CONSTRAINT ab_davka_prot_c1 );
+
+ROLLBACK;

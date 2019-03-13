@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B125225_RN00443393_5
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE pro_bssimulationcase
+  drop constraint pro_bssimulationcase_c1
+;
+
+ALTER TABLE pro_bssimulationcase
+ADD CONSTRAINT (CHECK (resultTosMode in ('E','R')) CONSTRAINT pro_bssimulationcase_c1);
+
+ROLLBACK WORK;
+
+--End of B125225_RN00443393_5

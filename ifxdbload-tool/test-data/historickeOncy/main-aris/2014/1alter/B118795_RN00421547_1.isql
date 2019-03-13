@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B118795_RN00421547_1
+-- @TC:ONCE: DESCRIPTION = Export dat nad úvěrem: EN_ZASSML_EXP není ukončena zástava {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table EU_ExpZaj_Den add stavukonceni char(1);
+
+ROLLBACK WORK;
+
+--End of B118795_RN00421547_1

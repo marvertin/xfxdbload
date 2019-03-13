@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B108068_RN00384663_3
+-- @TC:ONCE: DESCRIPTION = Pri provedeni aktivace SIS nastala chyba {DEFECT}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('JE', 'AD', '*', 'maxLoginLength', 16, 1);
+
+ROLLBACK WORK;
+
+--End of B108068_RN00384663_3
+

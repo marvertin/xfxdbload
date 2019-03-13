@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A60274_RN00346918_3
+-- @TC:ONCE: DESCRIPTION = SALE: doplnenie kontrol sporeni (CR_102) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('ES', 'ukoncenismlouvy', '*', 'PrilohaLimit', 5000, 1, 'Spoøení', 'Ukonèení smlouvy SS', '', 'Limit pro výplatu s pøílohou', 1);
+
+ROLLBACK WORK;
+
+--End of A60274_RN00346918_3

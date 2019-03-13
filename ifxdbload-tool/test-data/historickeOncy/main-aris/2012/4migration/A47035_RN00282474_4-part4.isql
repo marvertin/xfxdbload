@@ -1,0 +1,54 @@
+-- @TC:ONCE: ID = V2, A47035_RN00282474_4-part4
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--4.  Unikátní èíslo pojistky
+--Systém u všech záznamù v matrice pojištìní pro pojištìní Uniqa nastaví: 
+--Èíslo pojistky  Sekvenènì vygenerovaný unikátní èíselný identifikátor
+--Pozn.: Pùvodní èíslo pojistky, které se rovnalo èíslu úvìrové smlouvy, bylo 
+--v A47035_RN00282474_4-part2 pøevedeno do Èíslo pojištìné úvìrové smlouvy.
+--Systém stanovené èíslo pojistky propaguje do všech návazných evidencí (kartotéka 
+--zmìn fází, kartotéka úhrad pojistného, evidence vstupních a výstupních dávek).
+--Systém nastaví parametr #Èíslo pojistky pro pojištìní UNIQA# na hodnotu nejvyššího pøidìleného èísla pojistky.
+
+CREATE SEQUENCE RN00282474_cisloPojistky_seq 
+   INCREMENT BY 1 START WITH 1
+;
+
+update ev_pojist_mat set cislopojist = RN00282474_cisloPojistky_seq.NEXTVAL
+  where vec in (select vec from ev_pojistcrp_mat)
+;
+
+call TW_regSetOrAddKey ('EV','*','pojistUNIQA','lastCisloPoj', RN00282474_cisloPojistky_seq.CURRVAL, 1)
+;
+
+DROP SEQUENCE RN00282474_cisloPojistky_seq
+;
+
+update ec_komcrp_kart set 
+  cislopojist = (select p.cislopojist from ev_pojist_mat p where p.vec = ec_komcrp_kart.vec)
+  where vec in (select vec from ev_pojistcrp_mat)
+;
+
+update ec_uhrpojist_kart set 
+  cislopojist = (select p.cislopojist from ev_pojist_mat p where p.vec = ec_uhrpojist_kart.vec)
+  where vec in (select vec from ev_pojistcrp_mat)
+;
+
+
+update ec_vystdav_rozp set 
+  cislopojist = (select MAX(p.cislopojist) from ec_komcrp_kart p
+                  where p.smlouva=ec_vystdav_rozp.smlouva and p.tsml=ec_vystdav_rozp.tsml
+                )
+;                
+
+update ec_vstdav_rozp set 
+  cislopojist = (select MAX(p.cislopojist) from ec_komcrp_kart p
+                  where p.smlouva=ec_vstdav_rozp.smlouva and p.tsml=ec_vstdav_rozp.tsml
+                )
+;                
+
+ROLLBACK WORK;
+
+--End of A47035_RN00282474_4-part4

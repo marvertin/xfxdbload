@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B133857_UID57723_3
+-- @TC:ONCE: DESCRIPTION = Vypočítat alternativní nabídku pro úvěrovou žádost {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO EP_SplSporModAkce_Cis (
+  akce, text, platnost, manzrus, tokzrus
+, autozrus, uzivint, ulozmodel, vyprpsn, vypdilcirpsn
+, zpusobautozrus, potlactokrpsn, ulozcashflow, vymaztokukonuv, vymaztokukonss
+, vymazmodelstorno, vymazmodelzamit) 
+VALUES (
+  'UZALTN', 'Úvěrová žádost - alternativní nabídka', '1', '0', 0
+  , 0, 0, 0, 0, 0
+  , 'I', 1, 0, 1, 1
+  , 1, 1)
+;
+
+
+ROLLBACK WORK;
+
+--End of B133857_UID57723_3

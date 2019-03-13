@@ -1,0 +1,21 @@
+Skript jsem zablokoval a zparchantěl, protože jsem vytvořil ONCE skript 
+1alter/B125731_RN00454782_1.isql, kterýžto sloupec "phase" odstraňuje.
+[polakm;2016-04-29 09:05:25]
+
+
+
+
+
+-- @Turbík <:ONCE: ID> = V2, B121458_RN00415479_5
+-- @Turbík <:ONCE: DESCRIPTION> = RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  ALTER TABLE ep_splspormodcashflow_den
+    MODIFY phase CHAR(1)
+;
+
+ROLLBACK WORK;
+
+--End of B121458_RN00415479_5

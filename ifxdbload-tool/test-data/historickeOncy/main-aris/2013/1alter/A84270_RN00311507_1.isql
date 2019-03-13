@@ -1,0 +1,50 @@
+-- @TC:ONCE: ID = V2, A84270_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_vympohl_mat ADD (
+  mimosouddohoda   Integer  DEFAULT 0 NOT NULL,
+  cyklus   Integer);
+
+ALTER TABLE eu_vympohl_mat
+ADD CONSTRAINT (CHECK (mimosouddohoda IN (0,1)) CONSTRAINT eu_vympohl_mat_di4i);
+
+ALTER TABLE eu_vympohl_arch ADD (
+  mimosouddohoda   Integer,
+  cyklus   Integer);
+
+ALTER TABLE eu_vympohl_arch
+ADD CONSTRAINT (CHECK (mimosouddohoda IN (0,1)) CONSTRAINT eu_vympohl_arch_di4k);
+
+ALTER TABLE eu_exekuce_mat ADD cyklus   Integer;
+
+ALTER TABLE eu_exekuce_arch ADD cyklus   Integer;
+
+ALTER TABLE eu_exekprikaz_mat ADD cyklus   Integer;
+
+ALTER TABLE eu_exekprikaz_arch ADD cyklus   Integer;
+
+ALTER TABLE eu_snimekvympohl_den ADD ( 
+  mimosouddohoda   Integer  DEFAULT 0 NOT NULL,
+  saldospor   DECIMAL(16, 2),
+  datukoncsporkonto   DATE,
+  datschrankasoud   CHAR(10),
+  cyklus   Integer,
+  zapoctsporcastka   DECIMAL(16, 2));
+
+ALTER TABLE eu_snimekvympohl_den DROP CONSTRAINT eu_snimekvympohl_den_c4;
+
+ALTER TABLE eu_snimekvympohl_den
+ADD CONSTRAINT (CHECK (mimosouddohoda IN (0,1)) CONSTRAINT eu_snimekvympohl_den_di4t),
+ADD CONSTRAINT (CHECK (akce in ('I', 'M', 'O', 'S', 'Z')) CONSTRAINT eu_snimekvympohl_den_c4);
+
+ALTER TABLE eu_snimekexekuce_den ADD cyklus   Integer;
+
+ALTER TABLE eu_snimekexekprikaz_den ADD ( 
+  datschrankaex   CHAR(10),
+  cyklus   Integer);
+
+ROLLBACK WORK;
+
+--End of A84270_RN00311507_1

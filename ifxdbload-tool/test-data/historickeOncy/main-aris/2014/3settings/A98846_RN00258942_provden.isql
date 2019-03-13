@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A98846_RN00258942_provden
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: 
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EO', 500, 'Tisk detailních informací o produktu <číslo smlouvy>/<typ smlouvy>', 1);
+
+
+ROLLBACK WORK;
+
+--End of A55703_RN00317080_3

@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, A57797_RN00333234_3
+-- @TC:ONCE: DESCRIPTION = Odlišné adresáøe pro pøíchozí/odchozí/prioritní/neprioritní platby {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('CC', '*', '*', 'ccintodirHP_PRIOR', TW_RegGetKey('CC', '*', '*', 'ccintodirHP'), 1, 'Platební styk', 'Mezibankovní platba', 'Receiving/sending CC file_CZ', 'adresáø pro export PRIOR dávky CC v UX', 1);
+call TW_RegSetOrAddKey('CC', '*', '*', 'ccintodirHP_NEPRIOR', TW_RegGetKey('CC', '*', '*', 'ccintodirHP'),  1, 'Platební styk', 'Mezibankovní platba', 'Receiving/sending CC file_CZ', 'adresáø pro export NEPRIOR dávky CC v UX', 1);
+
+call TW_RegDelKey('CC', '*', '*', 'ccintodirHP');
+call TW_RegDelKey('CC', '*', '*', 'ccintodirHP_D');
+
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_FR_IN_PRIOR', 0, 'NT-HP', 'NONE', 1, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_FR_IN_PRIOR', 1, 'NT-HP', 'NONE', 1, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_FR_IN_NEPRIOR', 0, 'NT-HP', 'NONE', 1, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_FR_IN_NEPRIOR', 1, 'NT-HP', 'NONE', 1, 'ERROR', 'Dávky z CC', '', '');
+  
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_IN_OU_PRIOR', 0, 'HP-NT', 'NONE', 1, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_IN_OU_PRIOR', 1, 'HP-NT', 'NONE', 1, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_IN_OU_NEPRIOR', 0, 'HP-NT', 'NONE', 1, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_IN_OU_NEPRIOR', 1, 'HP-NT', 'NONE', 1, 'ERROR', 'Dávky z CC', '', '');
+
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_IN_AR_PRIOR', 0, 'HP-NT', 'NONE', 0, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_IN_AR_PRIOR', 1, 'HP-NT', 'NONE', 0, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_IN_AR_NEPRIOR', 0, 'HP-NT', 'NONE', 0, 'ERROR', 'Dávky z CC', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, xlation, is_move, notification_email_level, title, src_dir, dst_dir)
+  VALUES('CC_IN_AR_NEPRIOR', 1, 'HP-NT', 'NONE', 0, 'ERROR', 'Dávky z CC', '', '');
+  
+DELETE FROM nt_xferattr_cis WHERE id in ('CC_FR_IN', 'CC_IN_AR', 'CC_IN_OU', 'CC_IN_OD', 'CC_IN_AD');
+
+ROLLBACK WORK;
+
+--End of A57797_RN00333234_3

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B122940_RN00423413_1-modelovani
+-- @TC:ONCE: DESCRIPTION = Úpravy v modelování {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_bssimulationcase add businessmode   Integer  DEFAULT 0 NOT NULL;
+
+alter table pro_bonita 
+  add  monthobligationoutofrsts    DECIMAL(16, 2) before countofadults;
+rename column pro_bonita.monthobligation to monthobligationatrsts;
+
+ROLLBACK WORK;
+
+--End of B122940_RN00423413_1-modelovani

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_4-02_cizi-klice-ciselniku-EU-UCELDOK-CIS
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- V databázích v prostøedí TC nemáme stejná data jako má RSTS, ta zajištìní 212 má, my ho v èíselníku nemáme.
+-- To je validní stav, se kterým si budeš muset poradit (naše data v èíselníku zajištìní mìnit nebudeme/nemùžeme).
+--
+-- Hlavac David, January 14, 2013 9:54 AM
+
+DELETE FROM eu_ucelDok_cis WHERE ucel NOT IN (SELECT ucel FROM eu_ucel_cis);
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_4-02_cizi-klice-ciselniku-EU-UCELDOK-CIS

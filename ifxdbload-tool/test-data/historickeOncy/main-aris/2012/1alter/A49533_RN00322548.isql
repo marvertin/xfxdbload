@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A49533_RN00322548
+-- @TC:ONCE: DESCRIPTION = Tvorba roèních výpisù na testu - programy nedobìhnou
+BEGIN WORK;
+
+ALTER TABLE tv_davka_work
+    ADD ErrSql INT, 
+    ADD ErrIsam INT, 
+    ADD ErrText VARCHAR(255);
+
+ROLLBACK WORK;
+
+--End of A49533_RN00322548

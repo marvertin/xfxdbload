@@ -1,0 +1,61 @@
+-- @TC:ONCE: ID = V2, A62759_RN00358120_1
+-- @TC:ONCE: DESCRIPTION = [mp] zesouladit sloupce ukládaného modelovacího pøípadu {ACTIVITY}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_contractstatus
+
+ --stavy spoøící smlouvy
+    --L=Uzavøená/úèinná smlouva [CONCLUDED_CONTRACT]
+    --X=Neúplný návrh [INCOMPLETE_PROPOSAL]
+    --B=Návrh [COMPLETE_PROPOSAL]
+    --D=Schválený návrh [APPROVED_PROPOSAL]
+    --S=Zrušená smlouva [CANCELED]
+    --V=Ukonèená smlouva [CLOSED]
+    --Z=Odmítnutá žádost/návrh [REFUSED]
+    --A=Žádost [APPLICATION]
+    --SKOB ještì:
+    --F=Potvrzená smlouva [CONFIRMED]
+    --G=Splacená smlouva [PAID_UP]
+    --H=Vyøazená smlouva [ELIMINATED]
+    ADD contractStatus CHAR(1) BEFORE priloha1,
+    
+    --<RN00176984>
+    ADD changedContractualHodnoticiCislo Dec(16,4)  BEFORE priloha1,
+    --</RN00176984>
+  
+    --<RN00187087>
+    --hodnotící èíslo posledního mìsíce z naètené ze smlouvy
+    ADD contractualHodnoticiCisloLastMonth Dec(16,4)  BEFORE priloha1,
+  
+    --datum poslední nabídky pøidìlení (ne volbou) naètené ze smlouvy
+    ADD posledniNabidkaNeVolbou DATE  BEFORE priloha1
+    --</RN00187087>
+;
+
+ALTER TABLE pro_contractdata
+
+    --<RN00177661>
+    --nárok na bonus 3, který se vyhodnotí podle B1
+    --a bude se pouze zobrazovat pøi naètení smlouvy
+    --pro simulaci se poziva b3narok a b3narokpred
+    ADD b3narokVyhodnoceny Int default 0,
+    ADD b3narokPredVyhodnoceny Int default 0,
+    --</RN00177661>
+  
+    --<RN00185060>
+    --datum otevøení spoøícího konta
+    ADD otevreniSporKonta DATE,
+  
+    --datum otevøení úvìrového konta  
+    ADD otevreniUverKonta DATE,
+    --</RN00185060>
+    
+    ADD b1zaklad_predfix DECIMAL(16, 2),
+    ADD b3zaklad_predfix DECIMAL(16, 2)
+;
+
+ROLLBACK WORK;
+
+--End of A62759_RN00358120_1

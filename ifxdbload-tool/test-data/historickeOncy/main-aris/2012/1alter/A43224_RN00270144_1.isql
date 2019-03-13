@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A43224_RN00270144_1
+-- @TC:ONCE: DESCRIPTION = [mp] Realizace zmìn modelování vzhledem ke žlutému kontu - Novy sporici produkt {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_tariff 
+  add typuctu   CHAR(1)  DEFAULT 'S' NOT NULL
+;
+
+--CHECKS
+ALTER TABLE pro_tariff
+ADD CONSTRAINT (CHECK (typUctu in ('S', 'P')) CONSTRAINT pro_tariff_c1);
+
+ROLLBACK WORK;
+
+--End of A43224_RN00270144_1

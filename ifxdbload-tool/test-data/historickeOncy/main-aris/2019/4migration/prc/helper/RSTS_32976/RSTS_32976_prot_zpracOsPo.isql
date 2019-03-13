@@ -1,0 +1,72 @@
+CREATE PROCEDURE RSTS_32976_prot_zpracOsPo(AOs INTEGER, ATyprole CHAR(2), ASmlouva DEC(16,0), ATsml CHAR(4))
+
+-- hlavní proměnné
+DEFINE _ebaDPDOsoba   INTEGER;
+DEFINE _RDT00dHodnota INTEGER;
+DEFINE _RDT00dStav CHAR(1);
+DEFINE _RD030dHodnota INTEGER;
+DEFINE _RD030dStav CHAR(1);
+DEFINE _RD060Hodnota INTEGER;
+DEFINE _RD060Stav CHAR(1);
+DEFINE _RD070Hodnota INTEGER;
+DEFINE _RD070Stav CHAR(1);
+DEFINE _RD080dHodnota INTEGER;
+DEFINE _RD080dStav CHAR(1);
+DEFINE _RD110Hodnota INTEGER;
+DEFINE _RD110Stav CHAR(1);
+DEFINE _RD120Hodnota INTEGER;
+DEFINE _RD120Stav CHAR(1);
+DEFINE _RD240Hodnota INTEGER;
+DEFINE _RD240Stav CHAR(1);
+DEFINE _S04Hodnota INTEGER;
+DEFINE _S04Stav CHAR(1);
+DEFINE _S05Hodnota INTEGER;
+DEFINE _S05Stav CHAR(1);
+DEFINE _S06dHodnota INTEGER;
+DEFINE _S06dStav CHAR(1);
+DEFINE _SDdHodnota INTEGER;
+DEFINE _SDdStav CHAR(1);
+
+-- pomocné proměnné
+DEFINE _id              INTEGER;
+DEFINE _maxdpd          INTEGER;
+DEFINE _totaldpd        INTEGER;
+DEFINE _nesplaccastka   DEC(16,2);
+DEFINE _datprvvyhodnoceni DATE;
+DEFINE _datvyhodnoceni    DATE;
+
+
+LET _id, _ebaDPDOsoba,  _nesplaccastka, _datprvvyhodnoceni, _datvyhodnoceni = EP_GetLastAllDPDEBA(AOs, 'P');
+
+-- indikátory START
+LET _RDT00dHodnota, _RDT00dStav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'RDT00d');
+LET _RD030dHodnota, _RD030dStav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'RD030d');
+LET _RD060Hodnota, _RD060Stav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'RD060');
+LET _RD070Hodnota, _RD070Stav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'RD070');
+LET _RD080dHodnota, _RD080dStav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'RD080d');
+LET _RD110Hodnota, _RD110Stav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'RD110');
+LET _RD120Hodnota, _RD120Stav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'RD120');
+LET _RD240Hodnota, _RD240Stav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'RD240');
+LET _S04Hodnota, _S04Stav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'S04');
+LET _S05Hodnota, _S05Stav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'S05');
+LET _S06dHodnota, _S06dStav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'S06d');
+LET _SDdHodnota, _SDdStav = CEP_AktHodnotaIndikator(AOs, NULL, NULL, 'SDd');
+-- indikátory END
+
+UPDATE RSTS_32976_Protokol_OS SET
+  ebaDPDOsoba = _ebaDPDOsoba
+, RDT00d = _RDT00dHodnota
+, RD030d = _RD030dHodnota
+, RD060 = _RD060Hodnota
+, RD070 = _RD070Hodnota
+, RD080d = _RD080dHodnota
+, RD110 = _RD110Hodnota
+, RD120 = _RD120Hodnota
+, RD240 = _RD240Hodnota
+, S04 = _S04Hodnota
+, S05 = _S05Hodnota
+, S06d = _S06dHodnota
+, SDd = _SDdHodnota
+WHERE smlouva = ASmlouva AND tsml = ATsml AND os = AOs AND typrole = ATypRole;
+
+END PROCEDURE;

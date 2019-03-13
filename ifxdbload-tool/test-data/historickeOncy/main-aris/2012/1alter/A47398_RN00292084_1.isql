@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A47398_RN00292084_1
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_contractData 
+    ADD crucialrepaymentday   Integer
+  , ADD crucialbridgesavingday   Integer
+;
+
+ROLLBACK WORK;
+
+--End of A47398_RN00292084_1

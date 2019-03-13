@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B127817_RN00458483_3
+-- @TC:ONCE: DESCRIPTION = Aktivacia elektronickych vypisov - opakovatelna MD {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis) VALUES ('EO',520,'Příprava nastavení elektronické komunikace');
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis) VALUES ('EO',521,'Provedení nastavení elektronické komunikace');
+
+ROLLBACK WORK;
+
+--End of B127817_RN00458483_3

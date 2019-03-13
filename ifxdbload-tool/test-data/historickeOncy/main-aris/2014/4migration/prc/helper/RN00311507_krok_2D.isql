@@ -1,0 +1,94 @@
+create procedure RN00311507_krok_2D()
+-- tvorba a naplnění řídící tabulky pro migraci vztahů insolvencí
+
+define _cj_IR Char(45);
+define _os Int;
+define _cjednaci Char(10);
+define _spojenoS Char(10);
+define _puvIR Char(45);
+define _os2 Int;
+define _cjednaci2 Char(10);
+define _puvIR2 Char(45);
+
+define _cisjednaciporadi Int;
+define _cisjednacirok Int;
+
+BEGIN WORK;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_2_vztah;
+end;
+
+-- řídící tabulka
+CREATE TABLE RN00311507_krok_2_vztah(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt default -1,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+
+                            --vlastni data - např. cislo osoby
+  cj_IR Char(45),
+
+  os1 Int,
+  cjednaci1 Char(10),
+
+  os2 Int,
+  cjednaci2 Char(10),
+  puvIR Char(45),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+-- vybereme insolvence ve vztahu
+foreach
+  SELECT cj_IR, os, cjednaci, spojenoS, puvIR
+  INTO _cj_IR, _os, _cjednaci, _spojenoS, _puvIR
+  FROM RN00311507_krok_2_data
+  ORDER BY ser
+  
+  if trim(_spojenoS) = '' then
+    let _spojenoS = null;
+  end if;
+  if trim(_puvIR) = '' then
+    let _puvIR = null;
+  end if;
+  
+  if _spojenoS is null and _puvIR is not null then
+    -- pouze jedna insolvence je evidována
+    if not exists(SELECT * FROM RN00311507_krok_2_vztah WHERE cj_IR = _cj_IR AND os1 = _os AND cjednaci1 = _cjednaci AND puvIR = _puvIR) then
+      INSERT INTO RN00311507_krok_2_vztah(cj_IR, os1, cjednaci1, puvIR) VALUES(_cj_IR, _os, _cjednaci, _puvIR);
+    end if;
+
+  elif _spojenoS is not null then
+    -- zkusíme dohledat druhou insolvenci ve vztahu
+    let _cisjednaciporadi = TW_StrToken(trim(_cjednaci), '/', 0);
+    let _cisjednacirok = TW_StrToken(trim(_cjednaci), '/', 1);
+
+    foreach
+      SELECT os, cjednaci, puvIR
+      INTO _os2, _cjednaci2, _puvIR2
+      FROM RN00311507_krok_2_data
+      WHERE cj_IR = _cj_IR AND cjednaci <> _cjednaci AND os <> _os AND spojenoS IS NOT NULL AND LTRIM(spojenoS, ' 0') = LTRIM(_cjednaci, ' 0')
+        AND ((_puvIR IS NULL AND puvIR IS NOT NULL AND TRIM(puvIR) <> '')
+          OR (_puvIR IS NULL AND (puvIR IS NULL OR TRIM(puvIR) = '') 
+            AND (TW_StrToken(TRIM(cjednaci), '/', 1) > _cisjednacirok OR (TW_StrToken(TRIM(cjednaci), '/', 1) = _cisjednacirok AND TW_StrToken(TRIM(cjednaci), '/', 0) > _cisjednaciporadi))))
+      
+      if _os2 is not null then
+        if not exists(SELECT * FROM RN00311507_krok_2_vztah WHERE cj_IR = _cj_IR AND os1 = _os AND cjednaci1 = _cjednaci AND os2 = _os2 AND cjednaci2 = _cjednaci2 AND puvIR = _puvIR2) then
+          INSERT INTO RN00311507_krok_2_vztah(cj_IR, os1, cjednaci1, os2, cjednaci2, puvIR) VALUES(_cj_IR, _os, _cjednaci, _os2, _cjednaci2, _puvIR2);
+        end if;
+      end if;
+    end foreach;
+  end if;
+  
+end foreach;
+
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_krok_2_vztah;
+
+COMMIT WORK;
+
+end procedure;

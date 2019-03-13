@@ -1,0 +1,85 @@
+-- @TC:ONCE: ID = V2, A41811_RN00270144_1
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+CREATE TABLE ao_inkaso_mat (
+  inkid   SERIAL NOT NULL,
+  konto   DECIMAL(16, 0) NOT NULL,
+  tko   CHAR(2) NOT NULL,
+  poradi   Integer NOT NULL,
+  stav   CHAR(1),
+  kontocizi   DECIMAL(16, 0) NOT NULL,
+  bankacizi   DECIMAL(7, 0),
+  varsym   DECIMAL(10,0)  DEFAULT 9,
+  specsym   DECIMAL(10,0),
+  inklimit   DECIMAL(16, 2),
+  mena   CHAR(3),
+  datplatnostod   DATE NOT NULL,
+  datplatnostdo   DATE,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  potvrdtime   datetime year to second,
+  potvrduser   CHAR(20),
+  zrustime   datetime year to second,
+  zrususer   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ao_inkaso_mat_pk ON ao_inkaso_mat(inkid);
+ALTER TABLE ao_inkaso_mat ADD CONSTRAINT PRIMARY KEY(inkid) CONSTRAINT ao_inkaso_mat_pk;
+
+--FK
+CREATE INDEX ao_inkaso_mat_i_f1 ON ao_inkaso_mat(konto,tko);
+ALTER TABLE ao_inkaso_mat ADD CONSTRAINT FOREIGN KEY(konto,tko) REFERENCES ac_konto_mat(konto,tko) CONSTRAINT ao_inkaso_mat_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ao_inkaso_mat_u1 ON ao_inkaso_mat(konto,tko,poradi);
+ALTER TABLE ao_inkaso_mat ADD CONSTRAINT (UNIQUE (konto,tko,poradi) CONSTRAINT ao_inkaso_mat_u1);
+
+--CHECKS
+ALTER TABLE ao_inkaso_mat
+ADD CONSTRAINT (CHECK (stav in ('A', 'B', 'Z')) CONSTRAINT ao_inkaso_mat_c1);
+
+CREATE TABLE ao_inkaso_arch (
+  archid   SERIAL NOT NULL,
+  inkid   INTEGER,
+  konto   DECIMAL(16, 0) NOT NULL,
+  tko   CHAR(2) NOT NULL,
+  poradi   Integer NOT NULL,
+  stav   CHAR(1),
+  kontocizi   DECIMAL(16, 0) NOT NULL,
+  bankacizi   DECIMAL(7, 0),
+  varsym   DECIMAL(10,0)  DEFAULT 9,
+  specsym   DECIMAL(10,0),
+  inklimit   DECIMAL(16, 2),
+  mena   CHAR(3),
+  datplatnostod   DATE NOT NULL,
+  datplatnostdo   DATE,
+  platnost   Integer,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  potvrdtime   datetime year to second,
+  potvrduser   CHAR(20),
+  zrustime   datetime year to second,
+  zrususer   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ao_inkaso_arch_d0uz
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ao_inkaso_arch_pk ON ao_inkaso_arch(archid);
+ALTER TABLE ao_inkaso_arch ADD CONSTRAINT PRIMARY KEY(archid) CONSTRAINT ao_inkaso_arch_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX ao_inkaso_arch_i1 ON ao_inkaso_arch(konto,tko);
+
+ROLLBACK WORK;
+

@@ -1,0 +1,152 @@
+-- Pøes temporální tabulku RN00238704_OSOBY_TMP vrátí seznam osob pro skóring dané žádosti èi smlouvy. 
+CREATE PROCEDURE  EP_GetScoringPersons (AScoringVariant char(3), 
+                                                                            ACreditRqNumber Integer,  
+                                                                            ACreditRqStatus Integer, 
+                                                                            ASmlouva Dec(16, 0), 
+                                                                            ATsml char(4), 
+                                                                            ARefTime DATE DEFAULT NULL)                                                                                                                                
+define _osId Integer;
+define _scoringCheckStatus char(1);
+define _xrole char(2);
+define _bic char(16);
+define _datprov DATE;
+
+define _zajnemov   Int;
+define _zajrucitel Int;  
+define _zajbezzaj  Int;
+define _zajostatni Int;
+
+define _provadet char(1);
+
+define _datzad     Date;
+define _vyse       Dec(16,2);
+define _variantapu Char(10);
+define _smlspor    Dec(16,0);
+define _tsmlspor   Char(4);
+
+define _procnaspor Dec(5,2);
+define _cc         Dec(16,2);
+define _reals      Int;
+define _realss     Int;
+define _uspcast    Dec(16,2);
+define _spprip     Dec(16,2);
+define _datnaroz Date;
+define _vek Int;
+define _reftime DATETIME YEAR TO SECOND;
+define _stav Char(1);
+define _rc Char(13);
+
+SELECT datprov INTO _datprov FROM AP_Status;
+
+if (ACreditRqNumber IS NOT NULL AND ASmlouva IS NULL AND ATsml IS  NULL) then    
+  -- Pøi stavu žádosti 5,10 nebo 20 jsou lidi s SC1 checking = 'P' odskórováni...Budeme je tedy pøeskórovávat.   
+  if (ACreditRqStatus IN (5, 6)) then -- pro žádosti v tìchto stavech nás zajímají pøenesené osoby.      
+     let _scoringCheckStatus = 'P';
+     -- Pøi SCA budeme skórovat osoby, co neprošli proti NoCheckrule. Mají tedy scoringStatus 'S'.   
+     if (AScoringVariant = 'SCA') then
+        let _scoringCheckStatus = 'S';
+     end if; 
+     foreach with hold
+        select pers_reg.id, pers_role.xrelcontrperstype, pers_reg.xbankidentnum, pers_reg.xpersonidentnum, TW_YearBetw(controlreg.xdatereqcreaction, pers_reg.xbirthdate)
+         INTO _osId, _xrole, _bic, _rc, _vek 
+          from creditrqcontrolreg controlreg, creditrqpersonreg pers_reg, creditrqrelcontrpersreg pers_role, creditrqpersoncontrolreg pers_control_reg 
+            where controlreg.xcreditrqnumber = ACreditRqNumber and controlreg.id = pers_reg.creditrqcontrolreg_id 
+              and pers_control_reg.creditrqpersonreg_id = pers_reg.id and pers_role.creditrqpersonreg_id = pers_reg.id 
+              and pers_control_reg.xsc1checking = _scoringCheckStatus and pers_control_reg.xtransferred = 1
+         INSERT INTO RN00238704_OSOBY_TMP(PersonID, PersonScoringVariant,
+                                                                                           PersonRole, PersonBIC,
+                                                                                           PersonIdent, PersonAge) VALUES(_osId, AScoringVariant, _xrole, EO_GetBic(_osId), _rc, _vek);      
+     end foreach;
+  else  -- pro žádosti v tìchto stavech nás zajímají všechny platné osoby...      
+    if (AScoringVariant = 'SC1') then
+        foreach with hold
+            select pers_reg.id, pers_role.xrelcontrperstype, pers_reg.xbankidentnum,  pers_reg.xpersonidentnum, TW_YearBetw(controlreg.xdatereqcreaction, pers_reg.xbirthdate)
+            INTO _osId, _xrole, _bic, _rc, _vek 
+            FROM creditrqcontrolreg controlreg, creditrqpersonreg pers_reg, 
+              creditrqrelcontrpersreg pers_role, creditrqpersoncontrolreg pers_control_reg
+                  where controlreg.xcreditrqnumber = ACreditRqNumber and controlreg.id = pers_reg.creditrqcontrolreg_id 
+                    and pers_control_reg.creditrqpersonreg_id = pers_reg.id and pers_control_reg.xsc1checking in ('P', 'N')  
+                    and pers_role.creditrqpersonreg_id = pers_reg.id 
+                    and pers_reg.xvalidity = 1 and pers_role.xvalidity = 1
+              INSERT INTO RN00238704_OSOBY_TMP(PersonID, PersonScoringVariant,
+                                                                                           PersonRole, PersonBIC,
+                                                                                           PersonIdent, PersonAge) VALUES(_osId, AScoringVariant, _xrole, EO_GetBic(_osId), _rc, _vek);      
+        end foreach;
+    else
+        foreach with hold
+            select pers_reg.id, pers_role.xrelcontrperstype, pers_reg.xbankidentnum, pers_reg.xpersonidentnum, TW_YearBetw(controlreg.xdatereqcreaction, pers_reg.xbirthdate) 
+            INTO _osId, _xrole, _bic, _rc, _vek 
+            FROM creditrqcontrolreg controlreg, creditrqpersonreg pers_reg, 
+              creditrqrelcontrpersreg pers_role, creditrqpersoncontrolreg pers_control_reg
+                  where controlreg.xcreditrqnumber = ACreditRqNumber and controlreg.id = pers_reg.creditrqcontrolreg_id 
+                    and pers_control_reg.creditrqpersonreg_id = pers_reg.id and pers_control_reg.xsc1checking = 'S'  
+                    and pers_role.creditrqpersonreg_id = pers_reg.id  
+                    and pers_reg.xvalidity = 1 and pers_role.xvalidity = 1
+              INSERT INTO RN00238704_OSOBY_TMP(PersonID, PersonScoringVariant,
+                                                                                           PersonRole, PersonBIC,
+                                                                                           PersonIdent, PersonAge) VALUES(_osId, AScoringVariant, _xrole, EO_GetBic(_osId), _rc, _vek);      
+        end foreach;          
+      end if;
+  end if;                      
+elif (ACreditRqNumber IS NULL AND ASmlouva IS NOT NULL AND ATsml IS  NOT NULL) then      
+  SELECT  datzad, CASE WHEN tsml IN ('PFSU', 'PUSU', 'PPSU') THEN vysepu ELSE vyse END, variantapu, smlspor, tsmlspor
+    INTO _datzad, _vyse, _variantapu, _smlspor, _tsmlspor
+    FROM EU_Sml_Mat
+    WHERE smlouva = ASmlouva AND tsml = ATsml;
+
+  -- uspoøená èástka
+  if _smlspor is not null then 
+    SELECT cc INTO _cc FROM ES_Sml_Mat WHERE smlouva = _smlspor AND typ = _tsmlspor;
+    SELECT reals, realn INTO _reals, _realss FROM RZ_Real_Mat WHERE smlouva = _smlspor AND tsml = _tsmlspor;
+
+    if _reals is not null then
+      let _uspcast = RS_GetUspCast(_reals, 1);
+      let _spprip = RZ_GetSPPrip(_realss);
+      let _procnaspor = 100 * (TW_Null0Money(_uspcast) + TW_Null0Money(_spprip)) / _cc ;
+    else
+      let _procnaspor = 0;
+    end if;
+
+  else
+    let _procnaspor = null;
+  end if;
+
+  -- pøíznaky pøevládajícího zajištìní
+  let _zajnemov, _zajrucitel, _zajbezzaj, _zajostatni = EU_ZajistPriznak(ASmlouva, ATsml);
+  let _provadet = 'S';
+      
+  foreach
+        SELECT r.os, r.typrole, r.reftime, r.stav INTO _osId, _xrole, _reftime, _stav 
+              FROM EO_Role_Mat r  
+              WHERE r.smlouva = ASmlouva AND (r.typ = ATsml OR r.typ = 'SSFO') AND date(r.portime) <= ARefTime  
+                 
+                 -- Pokud byla role menena po okamziku storna, over, ze pred stornem byla aktivni, pokud ne, role nas nezajima.
+                 if (date(_reftime) > AReftime) then
+                      -- Vytahni z archivu posledni stav role.
+                      let _stav = NULL;
+                      foreach
+                          select stav INTO _stav from eo_role_arch where smlouva = ASmlouva AND  (typ = ATsml OR typ = 'SSFO') AND date(reftime) <= ARefTime order by reftime DESC
+                          exit foreach;
+                      end foreach;                                                
+                 end if;                                         
+                -- Pokud je jiny nez aktivni, tak nas tato osoba na preskorovani nezajima.
+                 if (_stav <> 'A') then
+                          continue foreach;
+                 end if;                               
+                 SELECT datnaroz, rc INTO _datnaroz, _rc FROM EO_FO_Mat WHERE fo = _osId;
+                 -- @RN00291636: Zajimá mì vìk klienta v dobì zadání žádosti...        
+                 let _vek = TW_YearBetw(_datnaroz, _datzad);       
+                 -- Over, jak na tom osoba byla v okamziku akce proti ciselniku vyjimek z kontrol.
+                 let _provadet = EP_DatCheckNeeded(_datzad, 2, 'S', _vyse, ATsml, _variantapu, _procnaspor, _vek, 
+                                                                              _xrole, _zajnemov, _zajrucitel, _zajostatni, _zajbezzaj, ARefTime);                   
+                 if ((_provadet = 'N' AND AScoringVariant = 'SC2') OR (_provadet = 'S' AND AScoringVariant = 'SCB')) then
+                        INSERT INTO RN00238704_OSOBY_TMP(PersonID, PersonScoringVariant,
+                                                                                           PersonRole, PersonBIC,
+                                                                                           PersonIdent, PersonAge) VALUES(_osId, AScoringVariant, _xrole, EO_GetBic(_osId), _rc, _vek);                           
+                 end if;                      
+  end foreach;    
+                                                                                                                             
+else call TW_RaiseError ('421S12TCUI', 'EP_GetScoringPersons_C:', ' Nesprávnì zadané parametry pro naètení osob pro skóring. ');
+end if;
+
+END PROCEDURE;

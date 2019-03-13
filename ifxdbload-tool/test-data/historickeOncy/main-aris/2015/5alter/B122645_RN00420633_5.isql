@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B122645_RN00420633_5
+-- @TC:ONCE: DESCRIPTION = Úpravy ve vracení SP na MF {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+RENAME COLUMN sp_vratky_kart.duvod to informace;
+
+ROLLBACK WORK;
+
+--End of B122645_RN00420633_5

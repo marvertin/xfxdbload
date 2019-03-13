@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, B114714_RN00405606_4
+-- @TC:ONCE: DESCRIPTION = Insolvence - změna parametru sled. transakce
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+call RN00405606_find_D ();
+call RN00405606_make_D();
+
+
+--End of B109798_RN00390496_4

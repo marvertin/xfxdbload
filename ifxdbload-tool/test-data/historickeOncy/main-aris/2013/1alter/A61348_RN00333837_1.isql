@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A61348_RN00333837_1
+-- @TC:ONCE: DESCRIPTION = Øízení nabídky variant PÚ pro ÚŽ v Sale {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_variapu_cis
+  ADD nabizprouz   Integer,
+  ADD nabizod   DATE,
+  ADD nabizdo   DATE; 
+
+ALTER TABLE eu_variapu_acis
+  ADD nabizprouz   Integer,
+  ADD nabizod   DATE,
+  ADD nabizdo   DATE; 
+  
+ROLLBACK WORK;
+
+--End of A61348_RN00333837_1

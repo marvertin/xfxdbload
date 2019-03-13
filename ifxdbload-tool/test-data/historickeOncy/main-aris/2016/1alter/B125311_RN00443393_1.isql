@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B125311_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodh_den
+
+  -- Suma nákladů spojených s úvěrem mimo RSTS (dle CF)
+  -- Celková výše dalších nákladů placených mimo RSTS spojených s úvěrem
+  -- v v tabulkách modelování pojemnováno extraExpenses
+  add sumanakluvermimo   DECIMAL(16, 2),
+  
+  -- Celkové náklady souhrnné (dle CF)
+  add celknakldlecf   DECIMAL(16, 2),
+  
+  -- Celková zaplacená částka souhrnná (dle CF)
+  add celkzapldlecf   DECIMAL(16, 2),
+  
+  -- Celková výše úvěru souhrnná (pro ESIP)
+  add celkvyseuveruesip   DECIMAL(16, 2);
+  
+ROLLBACK WORK;
+
+--End of B125311_RN00443393_1

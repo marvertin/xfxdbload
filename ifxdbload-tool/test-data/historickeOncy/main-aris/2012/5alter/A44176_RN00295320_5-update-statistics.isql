@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A44176_RN00295320_5-update-statistics
+-- @TC:ONCE: DESCRIPTION = Doplnìní nových indexù (viz zátìžové testy CIBIS-Web) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+update statistics high for table ep_zadost_kart;
+update statistics high for table ep_zadrole;
+update statistics high for table ep_zadkomkanal;
+update statistics high for table ep_zadosoba;
+update statistics high for table ep_zadsmlss;
+update statistics high for table ep_zprava_kart;
+update statistics high for table ep_zpravaprijemce_kart;
+update statistics high for table es_kombpriloh_cis;
+
+ROLLBACK WORK;
+
+--End of A44176_RN00295320_5-update-statistics

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B112523_RN00398691_1-prazdne_casove_jednotky
+-- @TC:ONCE: DESCRIPTION = Main: pri vyzve rucitele sa nevytvorili ukoly {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE ep_ukoltyp_acis MODIFY caspocet integer;
+ALTER TABLE ep_ukoltyp_cis MODIFY caspocet integer;
+
+ALTER TABLE ep_ukoltyp_cis  DROP CONSTRAINT ep_ukoltyp_cis_c1;
+ALTER TABLE ep_ukoltyp_acis DROP CONSTRAINT ep_ukoltyp_acis_c1;
+
+ROLLBACK WORK;
+--End of B112523_RN00398691_1-prazdne_casove_jednotky

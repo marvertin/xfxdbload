@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B121517_RN00431956_1
+-- @TC:ONCE: DESCRIPTION = ECM: Webové služby vystavené pro volání z ECM (vyjma konfirmace dokumentů) {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE INDEX eo_sluzba_kart_i1 ON eo_sluzba_kart (po) ;
+
+ROLLBACK WORK;
+
+--End of B121517_RN00431956_1

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B126704_RN00451402_1
+-- @TC:ONCE: DESCRIPTION = Web/SIS: Povolit uživateli změnit přihlašovací jméno {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_sluzba_kart
+ DROP CONSTRAINT eosluzbakart_c_ctyp;
+ 
+ ALTER TABLE eo_sluzba_kart
+    ADD CONSTRAINT ( CHECK (typ IN ('MA' ,'MD' ,'IA' ,'ID','IB' ,'IO', 'LA' )) CONSTRAINT eosluzbakart_c_ctyp );
+
+ROLLBACK WORK;
+
+--End of B126704_RN00451402_1

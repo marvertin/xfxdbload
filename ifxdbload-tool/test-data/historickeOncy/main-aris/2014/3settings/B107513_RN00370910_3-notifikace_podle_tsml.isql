@@ -1,0 +1,51 @@
+-- @TC:ONCE: ID = V2, B107513_RN00370910_3-notifikace_podle_tsml
+-- @TC:ONCE: DESCRIPTION = Zrušení informačních SMS o změně stavu úvěru / čerpání pro právnické osoby na základě příznaku v DB registrech {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- Odstranění původních registrů z RN00322943
+-- #Notifikovat klienta při schválení úvěrového návrhu#
+call TW_RegDelKey('EO', 'notifikace', 'uver_schv_klient', 'povoleno');
+
+-- #Notifikovat obchodního zástupce při schválení úvěrového návrhu#
+  call TW_RegDelKey('EO', 'notifikace', 'uver_schv_oz', 'povoleno');
+
+-- #Notifikovat klienta při schválení úvěrového návrhu s podmínkou#
+call TW_RegDelKey('EO', 'notifikace', 'uver_pschv_klient', 'povoleno');
+
+-- #Notifikovat obchodního zástupce při schválení úvěrového návrhu s podmínkou#
+call TW_RegDelKey('EO', 'notifikace', 'uver_pschv_oz', 'povoleno');
+
+-- #Notifikovat klienta při čerpání úvěru#
+call TW_RegDelKey('EO', 'notifikace', 'uver_cerp_klient', 'povoleno');
+
+-- #Notifikovat obchodního zástupce při čerpání úvěru#
+call TW_RegDelKey('EO', 'notifikace', 'uver_cerp_oz', 'povoleno');
+
+
+-- Vytvoření nových podle RN00370910
+-- #Notifikovat klienta při schválení úvěrového návrhu <typ smlouvy>#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_schv_klient', 'PFSU','1',1);
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_schv_klient', 'SUFO','1',1);
+
+-- #Notifikovat obchodního zástupce při schválení úvěrového návrhu<typ smlouvy>#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_schv_oz', 'PFSU','1',1);
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_schv_oz', 'SUFO','1',1);
+
+-- #Notifikovat klienta při schválení úvěrového návrhu s podmínkou <typ smlouvy>#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_pschv_klient', 'PFSU','1',1);
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_pschv_klient', 'SUFO','1',1);
+
+-- #Notifikovat obchodního zástupce při schválení úvěrového návrhu s podmínkou <typ smlouvy>#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_pschv_oz', 'PFSU','1',1);
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_pschv_oz', 'SUFO','1',1);
+
+-- #Notifikovat klienta při čerpání úvěru <typ smlouvy>#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_cerp_klient', 'PFSU','1',1);
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_cerp_klient', 'SUFO','1',1);
+
+-- #Notifikovat obchodního zástupce při čerpání úvěru <typ smlouvy>#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_cerp_oz', 'PFSU','1',1);
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_cerp_oz', 'SUFO','1',1);
+
+ROLLBACK WORK;
+--End of B107513_RN00370910_3-notifikace_podle_tsml

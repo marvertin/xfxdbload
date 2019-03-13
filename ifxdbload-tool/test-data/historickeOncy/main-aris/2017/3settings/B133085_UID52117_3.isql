@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B133085_UID52117_3
+-- @TC:ONCE: DESCRIPTION = Nový záznam do číselníku vztahů mezi smlouvami {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ep_vzsmlsml_cis (vztah, text, poznamka, platnost) VALUES ('R', 'Prvním úvěrem se refinacuje druhý', null, 1);
+
+ROLLBACK WORK;
+
+--End of B133085_UID52117_3

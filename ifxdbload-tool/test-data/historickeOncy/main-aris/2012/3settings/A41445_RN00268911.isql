@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A41445_RN00268911
+-- @TC:ONCE: DESCRIPTION = Riesenie prilohy 121 - nastavení pùvodu v es_vkladakce_cis
+
+BEGIN WORK;
+
+SET TRIGGERS FOR es_vkladakce_cis DISABLED;
+SET TRIGGERS FOR es_vkladakce_acis DISABLED;
+
+UPDATE es_vkladakce_cis SET puvod = 'H' WHERE akce <> 0;
+UPDATE es_vkladakce_cis SET puvod = null WHERE akce = 0;
+
+UPDATE es_vkladakce_acis SET puvod = 'H' WHERE akce <> 0;
+UPDATE es_vkladakce_acis SET puvod = null WHERE akce = 0;
+
+SET TRIGGERS FOR es_vkladakce_cis ENABLED;
+SET TRIGGERS FOR es_vkladakce_acis ENABLED;
+
+
+ROLLBACK;

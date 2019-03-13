@@ -1,0 +1,147 @@
+-- @TC:ONCE: ID = V2, B133215_UID42572_1
+-- @TC:ONCE: DESCRIPTION = Evidovat dotazy na firmy do CRIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE pef_firmadotaz_den (
+  serno   BIGINT NOT NULL,
+  datdotaz   DATE,
+  ico   CHAR(10),
+  stat   VARCHAR(45),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmadotaz_den_pk ON pef_firmadotaz_den(serno);
+ALTER TABLE pef_firmadotaz_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmadotaz_den_pk;
+
+----------------------------------------------------------------
+CREATE TABLE pef_firmaodpoved_den (
+  serno   BIGINT NOT NULL,
+  reffirmadotaz   BIGINT NOT NULL,
+  vysledek   CHAR(1),
+  zpracovanedotazy   Integer,
+  zbyvajicidotazy   Integer,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmaodpoved_den_pk ON pef_firmaodpoved_den(serno);
+ALTER TABLE pef_firmaodpoved_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmaodpoved_den_pk;
+
+--FK
+CREATE INDEX pef_firmaodpoved_den_i_f1 ON pef_firmaodpoved_den(reffirmadotaz);
+ALTER TABLE pef_firmaodpoved_den ADD CONSTRAINT FOREIGN KEY(reffirmadotaz) REFERENCES pef_firmadotaz_den(serno) CONSTRAINT pef_firmaodpoved_den_f1;
+
+
+--CHECKS
+ALTER TABLE pef_firmaodpoved_den
+ADD CONSTRAINT (CHECK (vysledek in ('K', 'N', 'E')) CONSTRAINT pef_firmaodpoved_den_c1);
+
+----------------------------------------------------------------
+CREATE TABLE pef_firmaodpovedch_den (
+  serno   BIGINT NOT NULL,
+  reffirmaodpoved   BIGINT NOT NULL,
+  atributc   char(70),
+  atributd   char(70),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmaodpovedch_den_pk ON pef_firmaodpovedch_den(serno);
+ALTER TABLE pef_firmaodpovedch_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmaodpovedch_den_pk;
+
+--FK
+CREATE INDEX pef_firmaodpovedch_den_i_f1 ON pef_firmaodpovedch_den(reffirmaodpoved);
+ALTER TABLE pef_firmaodpovedch_den ADD CONSTRAINT FOREIGN KEY(reffirmaodpoved) REFERENCES pef_firmaodpoved_den(serno) CONSTRAINT pef_firmaodpovedch_den_f1;
+
+
+
+----------------------------------------------------------------
+CREATE TABLE pef_firmaodpovedd_den (
+  serno   BIGINT NOT NULL,
+  reffirmaodpoved   BIGINT NOT NULL,
+  ico   CHAR(10),
+  name   CHAR(100),
+  fulladdress   VARCHAR(255),
+  street   CHAR(100),
+  streetnumber   CHAR(8),
+  city   VARCHAR(60),
+  zip   CHAR(5),
+  country   VARCHAR(45),
+  dateofcreation   DATE,
+  vatregistrationdate   DATE,
+  vatcanceldate   DATE,
+  employeerange   VARCHAR(70),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmaodpovedd_den_pk ON pef_firmaodpovedd_den(serno);
+ALTER TABLE pef_firmaodpovedd_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmaodpovedd_den_pk;
+
+--FK
+CREATE INDEX pef_firmaodpovedd_den_i_f1 ON pef_firmaodpovedd_den(reffirmaodpoved);
+ALTER TABLE pef_firmaodpovedd_den ADD CONSTRAINT FOREIGN KEY(reffirmaodpoved) REFERENCES pef_firmaodpoved_den(serno) CONSTRAINT pef_firmaodpovedd_den_f1;
+
+
+
+----------------------------------------------------------------
+CREATE TABLE pef_firmaodpovedo_den (
+  serno   BIGINT NOT NULL,
+  reffirmaodpoved   BIGINT NOT NULL,
+  name   VARCHAR(70),
+  surname   VARCHAR(70),
+  dateofbirth   DATE,
+  startdate   DATE,
+  enddate   DATE,
+  position   CHAR(100),
+  fulladdress   VARCHAR(255),
+  street   CHAR(48),
+  streetnumber   CHAR(8),
+  city   VARCHAR(100),
+  zip   CHAR(5),
+  country   VARCHAR(45),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmaodpovedo_den_pk ON pef_firmaodpovedo_den(serno);
+ALTER TABLE pef_firmaodpovedo_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmaodpovedo_den_pk;
+
+--FK
+CREATE INDEX pef_firmaodpovedo_den_i_f1 ON pef_firmaodpovedo_den(reffirmaodpoved);
+ALTER TABLE pef_firmaodpovedo_den ADD CONSTRAINT FOREIGN KEY(reffirmaodpoved) REFERENCES pef_firmaodpoved_den(serno) CONSTRAINT pef_firmaodpovedo_den_f1;
+
+
+
+----------------------------------------------------------------
+CREATE TABLE pef_firmaodpovedv_den (
+  serno   BIGINT NOT NULL,
+  reffirmaodpoved   BIGINT NOT NULL,
+  code   CHAR(35),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmaodpovedv_den_pk ON pef_firmaodpovedv_den(serno);
+ALTER TABLE pef_firmaodpovedv_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmaodpovedv_den_pk;
+
+--FK
+CREATE INDEX pef_firmaodpovedv_den_i_f1 ON pef_firmaodpovedv_den(reffirmaodpoved);
+ALTER TABLE pef_firmaodpovedv_den ADD CONSTRAINT FOREIGN KEY(reffirmaodpoved) REFERENCES pef_firmaodpoved_den(serno) CONSTRAINT pef_firmaodpovedv_den_f1;
+
+
+
+ROLLBACK WORK;
+
+
+--End of B133215_UID42572_1

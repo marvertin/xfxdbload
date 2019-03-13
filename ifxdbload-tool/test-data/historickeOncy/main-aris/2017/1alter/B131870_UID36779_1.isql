@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B131870_UID36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ep_splspormodakce_cis
+ drop vypeir
+ , drop potlactokeir
+;
+
+alter table ep_splspormodakce_acis
+ drop vypeir
+ , drop potlactokeir
+;
+
+
+
+ROLLBACK WORK;
+
+--End of B131870_UID36779_1

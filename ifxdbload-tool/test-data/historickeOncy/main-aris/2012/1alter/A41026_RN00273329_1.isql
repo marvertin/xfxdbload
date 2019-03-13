@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, A41026_RN00273329_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní pole Daòová úspora do výsledkù pøi modelování úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_contractdata
+  --Typ splácení
+  --A=anuitní
+  --J=jistinné
+  add repaymentTypeForContract CHAR(1)
+;
+
+--CHECKS
+ALTER TABLE pro_contractdata
+ADD CONSTRAINT (CHECK (repaymentTypeForContract in ('A', 'J')) CONSTRAINT pro_contractdata_c5)
+;
+
+alter table pro_plannedfinancialflow
+  --Typ splácení
+  --A=anuitní
+  --J=jistinné
+  add repaymentType CHAR(1)
+;
+
+--CHECKS
+ALTER TABLE pro_plannedfinancialflow
+ADD CONSTRAINT (CHECK (repaymentType in ('A', 'J')) CONSTRAINT pro_plannedfinancialflow_c2)
+;
+
+ROLLBACK WORK;
+
+--End of A41026_RN00273329_1

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B121367_RN00420627_1
+-- @TC:ONCE: DESCRIPTION = Časové rozlišení pobytu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+
+ALTER TABLE eo_fozmpl_kart add pobytod date before pobyt;
+ALTER TABLE eo_fozmpl_kart ADD pobytdo date before pobyt;
+ALTER TABLE eo_fozmpl_kart add datumovereni date before pobyt;
+
+
+ROLLBACK WORK;
+
+--End of B121063_RN00420627_1

@@ -1,0 +1,107 @@
+-- @TC:ONCE: ID = V2, A59817_RN00347020_1-pridani_tab__solus_odpoved_old__atd
+-- @TC:ONCE: DESCRIPTION = dotaz Solus Sale - nedochází k návratu výsledkù dotazu {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE sol_odpoved_old (
+  id  SERIAL NOT NULL,
+  dotazid   Integer NOT NULL,
+  dotazreftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  odpovedid   CHAR(40) NOT NULL,
+  odpovedreftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  vystupnistatus   CHAR(1),
+  chybacislo   Integer,
+  chybapopis   CHAR(512),
+  chybasolusdatpopis   CHAR(512),
+  vysledek   Integer,
+  jmeno   CHAR(24),
+  prijmeni   CHAR(35),
+  priznak   CHAR(1),
+  datpriznak   DATE,
+  produkt   Integer,
+  pocetdluhcastek   Integer,
+  dluhpospl   DECIMAL(16, 2),
+  pocetzaznamua   Integer,
+  pocetzaznamub   Integer,
+  pocetzaznamuc   Integer,
+  pocetzaznamud   Integer,
+  pocetzaznamup   Integer,
+  pocetzaznamuu   Integer,
+  pocetzaznamuz   Integer,
+  blokacezaznamu   Integer,
+  nejvyssidluhpospl   DECIMAL(16, 2),
+  celkpocetdluhcastek   Integer,
+  celkdluhpospl   DECIMAL(16, 2),
+  oldreftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  oldrefuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (blokacezaznamu IN (0,1)) CONSTRAINT sol_odpoved_old_dcva
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX sol_odpoved_old_pk ON sol_odpoved_old(id);
+ALTER TABLE sol_odpoved_old ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT sol_odpoved_old_pk;
+
+--FK
+CREATE INDEX sol_odpoved_old_i_f1 ON sol_odpoved_old(dotazid);
+ALTER TABLE sol_odpoved_old ADD CONSTRAINT FOREIGN KEY(dotazid) REFERENCES sol_check(id) CONSTRAINT sol_odpoved_old_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+------------------------------
+
+CREATE TABLE sol_odpoveddetail_old (
+  id SERIAL NOT NULL,
+  dotazid   Integer NOT NULL,
+  poradi   Integer NOT NULL,
+  prvnidotaz   Integer,
+  produkt   Integer,
+  priznak   CHAR(1),
+  datpriznak   DATE,
+  jmeno   CHAR(24),
+  prijmeni   CHAR(35),
+  ulice   CHAR(45),
+  mesto   CHAR(45),
+  psc   CHAR(5),
+  datumtransakce   DATE,
+  pocetdluhcastek   Integer,
+  dluhpospl   DECIMAL(16, 2),
+  blokacezaznamu   Integer,
+  poznamka   VARCHAR(255),
+  partnerkod   Char(4),
+  partnernazev   CHAR(100),
+  dluhid   CHAR(35),
+  dluhdatumnahrani   DATE,
+  dluhposlakt   DATE,
+  chybacislo   Integer,
+  chybapopis   CHAR(512),
+  oldreftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  oldrefuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (prvnidotaz IN (0,1)) CONSTRAINT sol_odpoveddetail_old_dcw8,
+  CHECK (blokacezaznamu IN (0,1)) CONSTRAINT sol_odpoveddetail_old_dcva
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX sol_odpoveddetail_old_pk ON sol_odpoveddetail_old(id);
+ALTER TABLE sol_odpoveddetail_old ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT sol_odpoveddetail_old_pk;
+
+--FK
+CREATE INDEX sol_odpoveddetail_old_i_f1 ON sol_odpoveddetail_old(dotazid);
+ALTER TABLE sol_odpoveddetail_old ADD CONSTRAINT FOREIGN KEY(dotazid) REFERENCES sol_check(id) CONSTRAINT sol_odpoveddetail_old_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+ROLLBACK WORK;
+
+--End of A59817_RN00347020_1-pridani_tab__solus_odpoved_old__atd

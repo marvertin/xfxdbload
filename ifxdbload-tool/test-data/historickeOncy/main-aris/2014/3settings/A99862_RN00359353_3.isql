@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, A99862_RN00359353_3
+-- @TC:ONCE: DESCRIPTION = Změna vyhodnocování závazků osob pro ÚŽ {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegDelKey('EO', 'creditrq', 'rodVztah', 'manzel');
+call TW_RegDelKey('EO', 'creditrq', 'rodVztah', 'druh');
+
+call TW_RegSetOrAddKey('EO', 'vztahyOs', 'typyRodVztahu', 'manzelka', 3, 1, 'Osoba', 'Vztah mezi osobami', 'Typy rodinných vztahů', 'Rodinný vztah manžel/manželka');
+call TW_RegSetOrAddKey('EO', 'vztahyOs', 'typyRodVztahu', 'druzka', 5, 1, 'Osoba', 'Vztah mezi osobami', 'Typy rodinných vztahů', 'Rodinný vztah druh/družka');
+
+call TW_RegSetOrAddKey('EO', 'FINSIT', 'zavazky', 'zahrnoutRoliKL', 1, 1, 'Podpora pro produkt', 'Finanční situace role', 'Závazky', 'Zahrnout závazky osoby pro <typ role>');
+call TW_RegSetOrAddKey('EO', 'FINSIT', 'zavazky', 'zahrnoutRoliPR', 1, 1, 'Podpora pro produkt', 'Finanční situace role', 'Závazky', 'Zahrnout závazky osoby pro <typ role>');
+call TW_RegSetOrAddKey('EO', 'FINSIT', 'zavazky', 'zahrnoutRoliRU', 1, 1, 'Podpora pro produkt', 'Finanční situace role', 'Závazky', 'Zahrnout závazky osoby pro <typ role>');
+call TW_RegSetOrAddKey('EO', 'FINSIT', 'zavazky', 'zahrnoutRoliMK', 1, 1, 'Podpora pro produkt', 'Finanční situace role', 'Závazky', 'Zahrnout závazky osoby pro <typ role>');
+call TW_RegSetOrAddKey('EO', 'FINSIT', 'zavazky', 'zahrnoutRoliMP', 1, 1, 'Podpora pro produkt', 'Finanční situace role', 'Závazky', 'Zahrnout závazky osoby pro <typ role>');
+call TW_RegSetOrAddKey('EO', 'FINSIT', 'zavazky', 'zahrnoutRoliMR', 1, 1, 'Podpora pro produkt', 'Finanční situace role', 'Závazky', 'Zahrnout závazky osoby pro <typ role>');
+call TW_RegSetOrAddKey('EO', 'FINSIT', 'zavazky', 'zahrnoutRoliSD', 1, 1, 'Podpora pro produkt', 'Finanční situace role', 'Závazky', 'Zahrnout závazky osoby pro <typ role>');
+
+call TW_RegSetOrAddKey('EO', 'creditrq', 'zobrazeni', 'upresneniPartneru', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Zobrazení', 'Zobrazovat upřesnění partnerských sekcí osob v úvěrové žádosti');
+
+call TW_RegSetAnalytickyPopis('EO', 'creditrq', 'predani', 'rusitManzelskeVztahy', 'Osoba', 'Osoby pro úvěrovou žádost', 'Předání žádosti', 'Automaticky rušit konkurenční partnerské vztahy při předání ÚŽ', 1);
+
+ROLLBACK WORK;
+
+--End of A99862_RN00359353_3

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B124930_RN00436865_3
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - 3. část - ESIP, rozšíření exportů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into ep_splspormodakce_cis(akce,     text,                        platnost, manzrus, tokzrus, autozrus, uzivint, ulozmodel, vyprpsn, vypeir, potlactokeir, potlactokrpsn, ulozcashflow, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) 
+values                           ('USESIP', 'Model s podklady pro ESIP', 1,        1,       1,       0,        1,       1,         1,       0,      1,            1,             0,            1,              1,              1,                1);
+
+ROLLBACK WORK;
+
+--End of B124930_RN00436865_3

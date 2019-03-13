@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B126293_RN00451094_5
+-- @TC:ONCE: DESCRIPTION = Změna v nastavení konce fixace a automatický posun data fixace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table EU_ExpSml_Den
+  drop (variafixace, fixaceod, fixacedo);
+
+ROLLBACK WORK;
+
+--End of B126293_RN00451094_5

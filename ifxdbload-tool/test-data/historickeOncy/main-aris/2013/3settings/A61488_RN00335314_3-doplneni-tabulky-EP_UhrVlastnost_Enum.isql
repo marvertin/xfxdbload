@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A61488_RN00335314_3-doplneni-tabulky-EP_UhrVlastnost_Enum
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(44, 'Poèet dosažených mìsícù od data úèinnosti úvìru', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(45, 'Spotøebitelský úvìr', 'BOOLEAN', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(46, 'Varianta fixace úrokové sazby', 'INTEGER', 0, 0, 0);
+
+ROLLBACK WORK;
+
+--End of A61488_RN00335314_3-doplneni-tabulky-EP_UhrVlastnost_Enum

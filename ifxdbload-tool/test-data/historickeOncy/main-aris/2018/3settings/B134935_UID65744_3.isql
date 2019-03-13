@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134935_UID65744_3
+-- @TC:ONCE: DESCRIPTION = RSTS-18590: Upravit procesní funkci - když není požadováno potvrzení příjmů, tak nědělat verifikaci {STORY}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', 'pozadovane-dokumenty', 'dokumenty-k-prijmum', 'typy-dokumentu-PVP', '13, 14, 15, 16, 1174, 1175, 1176, 1177', 1,
+                       'Úvěr', 'Úvěrová žádost - požadované dokumenty', 'Dokumenty k příjmům', 'Typy dokumentů pro PVP');
+
+ROLLBACK WORK;
+
+--End of B134935_UID65744_3

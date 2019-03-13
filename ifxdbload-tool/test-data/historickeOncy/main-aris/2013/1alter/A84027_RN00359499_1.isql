@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A84027_RN00359499_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní údajù na výpisy z kont (o státní podpoøe) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+-- ###############################################################
+--       tv_head_den
+
+-- 9  tv_head_den-1/1       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE tv_head_den
+    ADD celknevycerpzakladsp DECIMAL(16, 2)   BEFORE koresp,
+    ADD celkevidsp      DECIMAL(16, 2)   BEFORE koresp;
+
+ROLLBACK WORK;
+
+--End of A84027_RN00359499_1

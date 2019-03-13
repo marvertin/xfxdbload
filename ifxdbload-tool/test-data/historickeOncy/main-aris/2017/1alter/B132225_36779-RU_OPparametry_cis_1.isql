@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B132225_36779-RU_OPparametry_cis_1
+-- @TC:ONCE: DESCRIPTION = RSTS-3518 Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+alter table ru_opparametry_cis modify treal CHAR(4) ;
+alter table ru_opparametry_cis modify stadiumifrs  Integer;
+alter table ru_opparametry_cis modify indikzajistnemo  Integer;
+alter table ru_opparametry_cis modify urg Decimal(16,2)  ;
+alter table ru_opparametry_cis modify stariuver  Integer;
+alter table ru_opparametry_cis modify dobadefaultu  Integer;
+alter table ru_opparametry_cis modify zbytksplat  Integer;
+
+alter table ru_opparametry_acis modify treal  CHAR(4);
+alter table ru_opparametry_acis modify stadiumifrs  Integer;
+alter table ru_opparametry_acis modify indikzajistnemo  Integer;
+alter table ru_opparametry_acis modify urg Decimal(16,2) ;
+alter table ru_opparametry_acis modify stariuver  Integer;
+alter table ru_opparametry_acis modify dobadefaultu  Integer;
+alter table ru_opparametry_acis modify zbytksplat  Integer;
+
+ROLLBACK WORK;
+
+--End of B132225_36779-RU_OPparametry_cis_1

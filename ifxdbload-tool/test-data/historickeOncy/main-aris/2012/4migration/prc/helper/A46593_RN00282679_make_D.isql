@@ -1,0 +1,97 @@
+-----------------------------------------------------------------------------
+--
+--  Template migracni procedury pro featuru RN00282679
+--
+-----------------------------------------------------------------------------
+create PROCEDURE A46593_RN00282679_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+define _realn Int;
+define _poradi Int;
+define _faze Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka ('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00282679');
+
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, realn, faze, poradi
+   INTO _ser, _realn, _faze, _poradi
+   FROM RN00282679
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00282679
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    UPDATE RU_Vyzva_Kart SET poplzapocten = 1 WHERE realn = _realn AND faze = _faze AND poradi = _poradi;
+
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00282679 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--algoritmus dokonceni migrace
+--...
+
+
+--zápis o ukonèení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukonèení migrace/datové manipulace RN00282679');
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

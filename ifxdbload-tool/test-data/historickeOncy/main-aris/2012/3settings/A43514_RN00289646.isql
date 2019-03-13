@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A43514_RN00289646
+-- @TC:ONCE: DESCRIPTION = Nový typ zprávy
+
+BEGIN WORK;
+
+update ep_sml_cis
+set text = 'Stavební spoøení FO'
+where tsml = 'SSFO';
+
+update ep_sml_cis
+set text = 'Stavební spoøení PO'
+where tsml = 'SSPO';
+    
+ROLLBACK WORK;

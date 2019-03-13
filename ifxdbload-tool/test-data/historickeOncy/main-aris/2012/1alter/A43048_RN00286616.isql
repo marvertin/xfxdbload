@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A43048_RN00286616
+-- @TC:ONCE: DESCRIPTION = Poøadí zprávy
+
+BEGIN WORK;
+
+ALTER TABLE EP_Zprava_Kart ADD (poradi   Integer);
+    
+ROLLBACK WORK;

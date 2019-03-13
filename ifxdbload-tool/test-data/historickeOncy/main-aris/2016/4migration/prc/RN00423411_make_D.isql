@@ -1,0 +1,184 @@
+create PROCEDURE RN00423411_make_D ()
+
+-- RN00423411
+-- Rozhodovací nástroj pro variantu PÚ {CUSTOMERREQUEST}
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--varianty k vazbam pro rozhodovaci nastroj
+--protoze je tam cizi klic na varianty a ne vsechny varianty z excelu jsou na vsech databazich,
+--udelano procedurou ve fazi 4migration
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'ZO') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1') 
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 1) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'ZO',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'ZOR') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 1) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'ZOR',1);
+END IF;
+     
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPRBU') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 3) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'FPRBU',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPRU') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 3)
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'FPRU',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPRRBU') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 3) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'FPRRBU',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPRRU') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 3)
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'FPRRU',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPUE') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 4) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'FPUE',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPUE90') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 4) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'FPUE90',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPU') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3)
+     AND odpovedod = '2'),'FPU',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FP90') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3)
+     AND odpovedod = '2'),'FP90',1);
+END IF;
+     
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPPU') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'FPPU',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPP90') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'FPP90',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FU') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2)),'FU',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'F90') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2)),'F90',1);
+END IF;
+                            
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPRB') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 7) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'GPRB',1);
+END IF;
+
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPR') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 7) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'GPR',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPBE') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 8) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'GPBE',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPUE') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 8) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'GPUE',1);
+END IF;
+     
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GP') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     SELECT serno,'GP',1 FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 9) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3)
+     AND odpovedod in ('1','2');
+END IF;
+      
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPB') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     SELECT serno,'GPB',1 FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 9) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3)
+     AND odpovedod in ('1','2');
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPP') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 10) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1)),'GPP',1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'G') > 0 THEN 
+    INSERT INTO eu_kritvariapurozhod_cis (refvazbarozhod,refvariapu,platnost)
+     VALUES ((SELECT serno FROM eu_vazbarozhod_cis WHERE refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+     AND refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 10) 
+     AND refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2)),'G',1);
+END IF;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, A61536_RN00335314_1
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE ep_splspormodstfee_den (
+  ser   SERIAL NOT NULL,
+  headser   INTEGER NOT NULL,
+  savingaccentryfee   DECIMAL(16, 2),
+  savingaccmaintenancefee   DECIMAL(16, 2),
+  savingaccstatementfee   DECIMAL(16, 2),
+  savingaccchangetarifffee   DECIMAL(16, 2),
+  savingaccincreasetafee   DECIMAL(16, 2),
+  bridgeloanacccontractionfee   DECIMAL(16, 2),
+  bridgeloanaccmaintenancefee   DECIMAL(16, 2),
+  bridgeloanaccstatementfee   DECIMAL(16, 2),
+  bridgeloanaccinsurancefee   DECIMAL(16, 2),
+  creditacccontractionfee   DECIMAL(16, 2),
+  creditaccmaintenancefee   DECIMAL(16, 2),
+  creditaccstatementfee   DECIMAL(16, 2),
+  creditaccinsurancefee   DECIMAL(16, 2)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splspormodstfee_den_pk ON ep_splspormodstfee_den(ser);
+ALTER TABLE ep_splspormodstfee_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splspormodstfee_den_pk;
+
+--FK
+CREATE INDEX ep_splspormodstfee_den_i_fk1 ON ep_splspormodstfee_den(headser);
+ALTER TABLE ep_splspormodstfee_den ADD CONSTRAINT FOREIGN KEY(headser) REFERENCES ep_splspormodh_den(ser) CONSTRAINT ep_splspormodstfee_den_fk1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+ROLLBACK WORK;
+
+--End of A61536_RN00335314_1

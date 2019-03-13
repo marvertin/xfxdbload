@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A47156_RN00282474_3
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE creditrqccontractreg SET
+  insurUniqaVariantId = tw_reggetKey('EV','*','pojistUNIQA','DefVar')
+where xinsuruniqa = 1
+;
+ROLLBACK WORK;
+
+--End of A47156_RN00282474_3

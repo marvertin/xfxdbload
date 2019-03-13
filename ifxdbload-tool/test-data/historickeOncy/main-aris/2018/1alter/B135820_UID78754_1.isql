@@ -1,0 +1,55 @@
+-- @TC:ONCE: ID = V2, B135820_UID78754_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24995: Zavést číselník "Interní druh pobytu"
+
+BEGIN WORK;
+
+CREATE TABLE eo_druhpobytinterni_cis (
+  id SERIAL NOT NULL,
+  nazev CHAR(60) NOT NULL,
+  refdruhpobytumf CHAR(1) NOT NULL,
+  stattrvaleadresy CHAR(8) NOT NULL,
+  omezenitypid CHAR(8) NOT NULL,
+  poznamka CHAR(70),
+  platnost INTEGER DEFAULT 1 NOT NULL,
+  reftime DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND,
+  refuser CHAR(20) DEFAULT USER,
+  portime CHAR(20) DEFAULT USER,
+  poruser CHAR(20) DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_druhpobytinterni_cis_dimo
+) LOCK MODE ROW;
+
+CREATE UNIQUE INDEX eo_druhpobytinterni_cis_pk ON eo_druhpobytinterni_cis(id);
+ALTER TABLE eo_druhpobytinterni_cis
+  ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_druhpobytinterni_cis_pk;
+
+CREATE INDEX eo_druhpobytinterni_cis_i_fk1 ON eo_druhpobytinterni_cis(refdruhpobytumf);
+ALTER TABLE eo_druhpobytinterni_cis
+  ADD CONSTRAINT FOREIGN KEY(refdruhpobytumf) REFERENCES eo_residence_cis(xcode) CONSTRAINT eo_druhpobytinterni_cis_fk1;
+
+ALTER TABLE eo_druhpobytinterni_cis
+  ADD CONSTRAINT (CHECK (stattrvaleadresy IN ('CR', 'MIMO_CR')) CONSTRAINT eo_druhpobytinterni_cis_c1),
+  ADD CONSTRAINT (CHECK (omezenitypid IN ('RC', 'RC_ICC')) CONSTRAINT eo_druhpobytinterni_cis_c2);
+
+CREATE TABLE eo_druhpobytinterni_acis (
+  idarch SERIAL NOT NULL,
+  id INTEGER NOT NULL,
+  nazev CHAR(60) NOT NULL,
+  refdruhpobytumf CHAR(1) NOT NULL,
+  stattrvaleadresy CHAR(8) NOT NULL,
+  omezenitypid CHAR(8) NOT NULL,
+  poznamka CHAR(70),
+  platnost INTEGER DEFAULT 1 NOT NULL,
+  reftime DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND,
+  refuser CHAR(20) DEFAULT USER,
+  portime CHAR(20) DEFAULT USER,
+  poruser CHAR(20) DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_druhpobytinterni_acis_dimo
+) LOCK MODE ROW;
+
+CREATE UNIQUE INDEX eo_druhpobytinterni_acis_pk ON eo_druhpobytinterni_acis(idarch);
+ALTER TABLE eo_druhpobytinterni_acis
+  ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_druhpobytinterni_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B135820_UID78754_1

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B114308_RN00382583_1
+-- @TC:ONCE: DESCRIPTION = Pravidelný přepočet aktuálního data splatnosti i pro úvěry PO {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+drop trigger ep_splspormodh_den_d;
+drop trigger EP_SplSporModSH_Den_d;
+
+ROLLBACK WORK;
+
+--End of B114308_RN00382583_1

@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B132092_RSTS-10462_3
+-- @TC:ONCE: DESCRIPTION = Logovat do provozního deníku
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EO', 1101, 'Změnit údaje o fyzické osobě', 1);
+                            
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EO', 1102, 'Vytvořit komunikační kanál', 1);
+                            
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EO', 1103, 'Změnit komunikační kanál', 1);
+                            
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EO', 1104, 'Odstranit komunikační kanál', 1);
+                            
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 1101, 'Vytvořit účel', 1);
+                            
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 1102, 'Změnit účel', 1);
+                            
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 1103, 'Zrušit účel', 1);
+
+ROLLBACK WORK;
+
+--End of B132092_RSTS-10462_3

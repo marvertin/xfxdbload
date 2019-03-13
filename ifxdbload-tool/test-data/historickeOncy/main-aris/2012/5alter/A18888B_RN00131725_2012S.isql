@@ -1,0 +1,25 @@
+--V1,ID:A18888B_RN00131725_2012S
+BEGIN WORK; 
+
+create unique index admuserrecordcmp_i_u2 on adm_userrecord_cmp
+	(
+	tw_lower (userrecordid) , 
+	uidorder 
+	);
+
+create unique index tw0042_group_i_u1 on adm_group
+	(
+	tw_lower (id) 
+	);
+
+create index tw_uroles_cis_i3 on tw_uroles_cis 
+  (
+    tw_lower(rolename)
+  );
+
+create index twurolescis_i_u1 on tw_uroles_cis 
+  (
+    tw_lower(username)
+  );
+
+ROLLBACK;

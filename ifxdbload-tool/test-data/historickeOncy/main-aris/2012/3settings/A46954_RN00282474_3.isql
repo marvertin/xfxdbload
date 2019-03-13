@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, A46954_RN00282474_3
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- #IÈO pojišovny UNIQA# 
+call TW_RegSetOrAddKey('EV', '*', 'pojistUNIQA', 'ICO', 49240480, 1, 
+                       'Podpora pro produkt', 'Vìci pro zajištìní úvìru', 'Objects', 'Udává která pojišovna z èíselníku pojišoven je pojišovnou UNIQA.');
+
+-- #Defaultní varianta pojištìní UNIQA# 
+call TW_RegSetOrAddKey('EV', '*', 'pojistUNIQA', 'DefVar', 1, 1, 
+                       'Podpora pro produkt', 'Vìci pro zajištìní úvìru', 'Objects', 'Udává jaká varianta pojištìní se má defaultnì nabídnout pøi pojištìní UNIQA.');
+                       
+-- #Èíslo pojistky pro pojištìní UNIQA#
+call TW_RegSetOrAddKey('EV', '*', 'pojistUNIQA', 'lastCisloPoj', 0, 1, 
+                       'Podpora pro produkt', 'Vìci pro zajištìní úvìru', 'Objects', 'Udává poslední pouité èíslo v èíselné øadì unikátních identifikátorù pojištìní UNIQA.');
+
+-- #Doba pro uchování informací o chybách ze zpracování pojištìní#
+call TW_RegSetOrAddKey('EV', '*', 'pojistUNIQA', 'dobaUchovChyb', 366, 1, 
+                       'Podpora pro produkt', 'Vìci pro zajištìní úvìru', 'Objects', 'Minimální doba (ve dnech), po kterou jsou v deníku informací o zpracování pojištìní uchovávány zalogované záznamy o chybách.');
+
+call TW_RegDelKey('EV', 'pojistCRP', '*', 'pojPristup');
+
+-- #Pojištìní pøistupitele#
+call TW_RegSetOrAddKey('EV', 'pojistUNIQA', '*', 'pojPristup', 1, 1, 
+                       'Podpora pro produkt', 'Vìci pro zajištìní úvìru', 'Objects', 'Udává, zda má bıt pojištìn klient nebo pøistupitel.');
+                       
+INSERT INTO ev_varpojist_cis (id, nazev, extident, tvec, druh, platnost, datumod)
+VALUES (1, 'Varianta A', 'A', 'P', 'C', 1, (select min(datpotv) from ev_pojistcrp_mat where datpotv is not null));                                              
+
+ROLLBACK WORK;
+
+--End of A46954_RN00282474_3

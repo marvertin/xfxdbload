@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A48504_RN00312403
+-- @TC:ONCE: DESCRIPTION = Platby v úlohách vymáhání
+
+BEGIN WORK;
+
+alter table eu_sledtranvym_den
+  modify text char(60);
+  
+alter table EU_SnimekVymPohl_Den
+  modify textposplspor char(60)
+  , modify textposluver char(60);  
+
+  
+
+ROLLBACK WORK;
+
+--End of A48504_RN00312403

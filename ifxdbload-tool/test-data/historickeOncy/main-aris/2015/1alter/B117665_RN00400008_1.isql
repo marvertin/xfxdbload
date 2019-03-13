@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B117665_RN00400008_1
+-- @TC:ONCE: DESCRIPTION = Souhrnný kontrolní znak OP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_prukaz_arch ADD kontrznak Char(1) before poruser;
+
+ALTER TABLE eo_prukaz_mat ADD kontrznak Char(1) before poruser;
+
+ALTER TABLE eo_fozmpl_kart ADD kontrznak Char(1) before formser;
+
+ROLLBACK WORK;
+
+--End of B117665_RN00400008_1

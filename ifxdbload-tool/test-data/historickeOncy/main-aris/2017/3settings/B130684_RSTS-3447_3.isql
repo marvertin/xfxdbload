@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B130684_RSTS-3447_3
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+BEGIN WORK;
+
+--korekce, protože se dodatečně zjistilo, že DSTI je vlastně v procentech
+UPDATE eu_prijemhranice_cis set hranicedsti = hranicedsti / 100
+;
+
+ROLLBACK WORK;
+
+--End of B130684_RSTS-3447_3
+
+
+
+
+
+
+
+
+
+

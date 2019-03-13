@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, A40179_RN00229280
+-- @TC:ONCE: DESCRIPTION = Zefektivnìní tøídìní klientské korespondence
+
+BEGIN WORK;
+
+CREATE TABLE es_zpusobkor_acis (
+    idarch          SERIAL   NOT NULL,
+    zpusobkor       Integer   NOT NULL,
+    nazev           CHAR(40)   NOT NULL,
+    tisk            Integer   NOT NULL,
+    poznamka        CHAR(160)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (tisk IN (0,1)) CONSTRAINT es_zpusobkor_acis_du0x,
+    CHECK (platnost IN (0,1)) CONSTRAINT es_zpusobkor_acis_du0z
+) LOCK MODE ROW;
+
+CREATE unique INDEX es_zpusobkor_acis_pk ON es_zpusobkor_acis (idarch) ;
+
+ALTER TABLE es_zpusobkor_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT es_zpusobkor_acis_pk;
+
+CREATE TABLE es_zpusobkor_cis (
+    zpusobkor       Integer   NOT NULL,
+    nazev           CHAR(40)   NOT NULL,
+    tisk            Integer   NOT NULL,
+    poznamka        CHAR(160)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (tisk IN (0,1)) CONSTRAINT es_zpusobkor_cis_du0o,
+    CHECK (platnost IN (0,1)) CONSTRAINT es_zpusobkor_cis_du0q
+) LOCK MODE ROW;
+
+CREATE unique INDEX es_zpusobkor_cis_pk ON es_zpusobkor_cis (zpusobkor) ;
+
+ALTER TABLE es_zpusobkor_cis
+    ADD CONSTRAINT PRIMARY KEY (zpusobkor)  CONSTRAINT es_zpusobkor_cis_pk;
+
+
+ROLLBACK WORK;

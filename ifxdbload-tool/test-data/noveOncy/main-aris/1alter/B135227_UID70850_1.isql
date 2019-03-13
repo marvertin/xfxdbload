@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135227_UID70850_1
+-- @TC:ONCE: DESCRIPTION = RSTS-21277: Při schválení úvěrů se neaktualizuje NHZ {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+CREATE INDEX eu_zajist_mat_i5 ON eu_zajist_mat(refoptimsmlouva,refoptimtsml);
+
+ROLLBACK WORK;
+
+--End of B135227_UID70850_1

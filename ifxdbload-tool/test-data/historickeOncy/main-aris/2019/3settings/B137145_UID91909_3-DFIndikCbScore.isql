@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B137145_UID91909_3-DFIndikCbScore
+-- @TC:ONCE: DESCRIPTION = RSTS-32238: IMPL (java, BE): RSTS-32104_Indikátory k ratingům {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+-- tw_registr_cis
+call TW_RegSetOrAddKey('EU', 'default', 'indik', 'RD120Prah', 200, 1, 'Úvěr', 'Default', 'Indikátory', 'Hranice CB skóre pro default', 1);
+call TW_RegSetOrAddKey('EU', 'default', 'indik', 'RD120Chyba', 16, 1, 'Úvěr', 'Default', 'Indikátory', 'Chybový kód CB skóre', 1);
+
+ROLLBACK WORK;
+
+--End of B137145_UID91909_3-DFIndikCbScore

@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A56858_RN00214648_5-hypo
+-- @TC:ONCE: DESCRIPTION = Odstranìní funkcionality související se soubìžným provozem StarBuildu a CIBISu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+drop table hypo_role_imp;
+drop table hypo_role;
+drop table hypo_osoby_imp;
+drop table hypo_osoby;
+drop table hypo_spor_imp;
+drop table hypo_spor;
+drop table hypo_uver_imp;
+drop table hypo_uver;
+
+drop table hypo_info_imp;
+drop table hypo_info;
+
+drop table hypo_imp_errors;
+
+ROLLBACK WORK;
+
+--End of A56858_RN00214648_5-hypo

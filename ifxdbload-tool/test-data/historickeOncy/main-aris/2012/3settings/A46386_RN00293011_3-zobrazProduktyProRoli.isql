@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A46386_RN00293011_3-zobrazProduktyProRoli
+-- @TC:ONCE: DESCRIPTION = CIBIS-Web: Zobrazení rolí {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('EP', 'role', 'web', 'zobrazitRU', 1, 1, 'Podpora pro produkt', 'Role osob', 'Typy rolí na webu', 'Zobrazit produkty pro roli <typ role> na webu');
+call tw_regsetoraddkey('EP', 'role', 'web', 'zobrazitZL', 1, 1, 'Podpora pro produkt', 'Role osob', 'Typy rolí na webu', 'Zobrazit produkty pro roli <typ role> na webu');        
+call tw_regsetoraddkey('EP', 'role', 'web', 'zobrazitPR', 1, 1, 'Podpora pro produkt', 'Role osob', 'Typy rolí na webu', 'Zobrazit produkty pro roli <typ role> na webu');
+call tw_regsetoraddkey('EP', 'role', 'web', 'zobrazitDP', 1, 1, 'Podpora pro produkt', 'Role osob', 'Typy rolí na webu', 'Zobrazit produkty pro roli <typ role> na webu');
+call tw_regsetoraddkey('EP', 'role', 'web', 'zobrazitSD', 1, 1, 'Podpora pro produkt', 'Role osob', 'Typy rolí na webu', 'Zobrazit produkty pro roli <typ role> na webu');
+call tw_regsetoraddkey('EP', 'role', 'web', 'zobrazitMR', 1, 1, 'Podpora pro produkt', 'Role osob', 'Typy rolí na webu', 'Zobrazit produkty pro roli <typ role> na webu');
+call tw_regsetoraddkey('EP', 'role', 'web', 'zobrazitMP', 1, 1, 'Podpora pro produkt', 'Role osob', 'Typy rolí na webu', 'Zobrazit produkty pro roli <typ role> na webu');
+call tw_regsetoraddkey('EP', 'role', 'web', 'zobrazitMK', 1, 1, 'Podpora pro produkt', 'Role osob', 'Typy rolí na webu', 'Zobrazit produkty pro roli <typ role> na webu');
+
+ROLLBACK WORK;
+
+--End of A46386_RN00293011_3-zobrazProduktyProRoli

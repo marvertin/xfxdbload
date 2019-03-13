@@ -1,0 +1,55 @@
+-- @TC:ONCE: ID = V2, B122487_RN00426130_1
+-- @TC:ONCE: DESCRIPTION = Požadavek k SP - Komunikace s MF{CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+-- ###############################################################
+-- sp_valuty_cis
+
+CREATE TABLE sp_valuty_cis (
+    serno           SERIAL  NOT NULL,
+    rok             DATETIME YEAR TO YEAR NOT NULL,                              
+    datvalsp1       DATE,                             
+    datvalsp2       DATE,                             
+    platnost        Integer DEFAULT 1  NOT NULL,
+    poznamka        CHAR(70),
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW;
+
+--  sp_valuty_cis  [CREATE.INDEX]
+CREATE unique INDEX sp_valuty_cis_pk ON sp_valuty_cis (serno) ;
+
+-- sp_valuty_cis       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_valuty_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT sp_valuty_cis_pk;
+
+-- ###############################################################
+CREATE TABLE sp_valuty_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           Integer  NOT NULL,
+    rok             DATETIME YEAR TO YEAR NOT NULL,                              
+    datvalsp1       DATE,                             
+    datvalsp2       DATE,                             
+    platnost        Integer DEFAULT 1  NOT NULL,
+    poznamka        CHAR(70),
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW;
+
+--  sp_valuty_acis  [CREATE.INDEX]
+CREATE unique INDEX sp_valuty_acis_pk ON sp_valuty_acis (idarch) ;
+
+-- sp_valuty_acis       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_valuty_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT sp_valuty_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B122487_RN00426130_1
+
+

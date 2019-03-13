@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B130603_RSTS-5838_3
+-- @TC:ONCE: DESCRIPTION = gener. hlášku v insolvenci přepojit na DB registr datové schránky (RSTS-2934) {DEFECT}
+
+BEGIN WORK;
+
+--#E-mail banky#
+Call tw_regSetOrAddKey('AP', 'banka', '*', 'email', 'rsts@rsts.cz', 1/*Lze editovat*/);
+
+
+ROLLBACK WORK;
+
+--End of B130603_RSTS-5838_3

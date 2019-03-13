@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43642_RN00290751_3
+-- @TC:ONCE: DESCRIPTION = USP: Poplatek za rezervaci zdrojù {DEFECT}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'splat', 'expDop', 'uhrRezZdr', 'REZZDR', 1, 'Úvìr', 'Splátka úvìru', 'Credit Repayment', 'Poplatek za rezervaci zdrojù pro dopisy o splátce úvìru');
+
+ROLLBACK WORK;
+
+--End of A43642_RN00290751_3

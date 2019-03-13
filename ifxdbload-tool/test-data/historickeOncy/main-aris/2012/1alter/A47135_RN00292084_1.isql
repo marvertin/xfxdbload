@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A47135_RN00292084_1
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- ###############################################################
+--       ac_ocsaldo_den
+
+-- 1  ac_ocsaldo_den-1/1       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ac_ocsaldo_den
+    ADD saldo           DECIMAL(16, 2) DEFAULT 0  NOT NULL BEFORE reftime,
+    ADD preplatek       DECIMAL(16, 2) DEFAULT 0  NOT NULL BEFORE reftime,
+    ADD poznamka        VARCHAR(255)   BEFORE reftime,
+    MODIFY platnost     INTEGER DEFAULT 1  NOT NULL;
+
+ROLLBACK WORK;
+
+--End of A47135_RN00292084_1

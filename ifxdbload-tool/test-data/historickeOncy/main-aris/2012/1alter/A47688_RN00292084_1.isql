@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A47688_RN00292084_1
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_contractStatus
+  add firstWithdrawalDate DATE
+;
+
+alter table pro_contractData
+    DROP creditLoanWithdrawalDelayInMonths
+  , DROP bridgeLoanWithdrawalDelayInMonths
+;
+
+alter table pro_contractData
+
+    add repaymentDelayInMonths int
+  , add bridgeSavingsDelayInMonths int
+  , add firstWithdrawalDelayInMonths int
+;
+
+ROLLBACK WORK;
+
+--End of A47688_RN00292084_1

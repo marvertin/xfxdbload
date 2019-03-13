@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B125291_RN00443393_5
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+drop procedure if exists SI_simulate
+;
+drop procedure if exists SI_simulateRpsnEirRateTypes
+;
+drop procedure if exists SI_EngineImpl$simulate
+;
+drop procedure if exists SI_EngineImpl$simulateRpsnEir
+;
+drop procedure if exists SI_FRpsnCalc$calcCreditRpsn
+;
+drop procedure if exists SI_FRpsnCalc$calcRpsn
+;
+drop procedure if exists SI_FRpsnCalc$calcCreditRpsn
+;
+
+ROLLBACK WORK;
+
+--End of B125291_RN00443393_5

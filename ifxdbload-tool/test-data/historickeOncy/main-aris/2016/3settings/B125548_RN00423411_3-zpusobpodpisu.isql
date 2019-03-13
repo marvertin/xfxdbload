@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B125548_RN00423411_3-zpusobpodpisu
+-- @TC:ONCE: DESCRIPTION = Rozhodovací nástroj pro variantu PÚ {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- Doplním všechny způsoby podpisu pro dokumenty dotazníku, protože všechny jsou povoleny.
+insert into do_zpusobpodeptypdokskup_cis(reftypdokumentuskupina, zpusobpodep, platnost)
+  select tds.serno, zp.zpusobpodep, 1
+    from do_typdokumentuskupina_cis tds
+        inner join DO_TypDokumentu_CIS td on td.doktyp = tds.doktyp,
+        do_zpusobpodepisovani_cis zp
+    where repcode like 'EU31_' and skupina = 1 and zp.platnost = 1;
+
+ROLLBACK WORK;
+--End of B125548_RN00423411_3-zpusobpodpisu

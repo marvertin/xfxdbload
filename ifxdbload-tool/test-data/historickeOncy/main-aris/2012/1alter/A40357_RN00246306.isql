@@ -1,0 +1,117 @@
+-- @TC:ONCE: ID = V2, A40357_RN00246306
+-- @TC:ONCE: DESCRIPTION = Vypoøádání v Cibis Main
+
+BEGIN WORK;
+
+ALTER TABLE  ES_Problem_Cis ADD evidence CHAR(1)  before pl ;
+
+DROP INDEX es_navprb_kart_p;
+ALTER TABLE aris.es_navprb_kart  DROP CONSTRAINT ( es_navprb_kart_p ) ;
+   
+ALTER TABLE  es_navprb_kart ADD evidence CHAR(1)  default 'N' before poradi;
+
+CREATE unique INDEX es_navprb_kart_p ON es_navprb_kart(smlouva, typ, evidence,poradi) ;
+
+ALTER TABLE  es_navprb_kart
+      ADD CONSTRAINT PRIMARY KEY (smlouva, typ, evidence, poradi)  CONSTRAINT  es_navprb_kart_p;
+
+CREATE TABLE rz_storno_arch ( 
+    ser              SERIAL NOT NULL,
+    realn            INTEGER ,
+    poradi           INTEGER ,
+    stav             CHAR(1),
+    zpusob           CHAR(1),
+    uplprav          SMALLINT,
+    datzad           DATE,
+    datprov          DATE,
+    datplanprov      DATE,
+    priorita         CHAR(10),
+    duvod            SMALLINT,
+    podduvod         SMALLINT,
+    typ              CHAR(1),
+    vyplsp           SMALLINT,
+    vyplprisp        SMALLINT,
+    mena             CHAR(3),
+    uspcastka        DECIMAL(16,2),
+    spmf             DECIMAL(16,2),
+    spar             DECIMAL(16,2),
+    prispevky        DECIMAL(16,2),
+    uhrzrus          DECIMAL(16,2),
+    uhrucet          DECIMAL(16,2),
+    uhrvypis         DECIMAL(16,2),
+    vyplata          INTEGER,
+    prevoduhr        SMALLINT,
+    prevodcastka     DECIMAL(16,2),
+    pripsatbsp       SMALLINT,
+    vratuhrvstup     SMALLINT,
+    preuroc          DECIMAL(5,2),
+    cispodm          SMALLINT,
+    varianta         SMALLINT,
+    tvorvzor         SMALLINT,
+    prevod           SMALLINT,
+    kontoprev        DECIMAL(16,0),
+    tkoprev          CHAR(2),
+    castkaprev       DECIMAL(16,2),
+    datfirsttisk     DATE,
+    datlasttisk      DATE,
+    uhrvstuppred     DECIMAL(16,2),
+    uhrvstupsplac    DECIMAL(16,2),
+    zrusvink         SMALLINT,
+    zruszajist       SMALLINT,
+    bonus0           DECIMAL(16,2),
+    bonus1           DECIMAL(16,2),
+    bonus2           DECIMAL(16,2),
+    bonus3           DECIMAL(16,2),
+    navuser          CHAR(20),
+    navtime          DATETIME YEAR to SECOND,
+    potvuser         CHAR(20),
+    potvtime         DATETIME YEAR to SECOND,
+    provuser         CHAR(20),
+    provtime         DATETIME YEAR to SECOND,
+    refuser          CHAR(20),
+    reftime          DATETIME YEAR to SECOND,
+    zpusobuhrucet    CHAR(1),
+    zpusobuhrzrus    CHAR(1),
+    zpusobuhrvypis   CHAR(1),
+    tuhrzrus         CHAR(8),
+    procuhrzrus      DECIMAL(6,2),
+    prispvrat        DECIMAL(16,2),
+    ciszad           DECIMAL(10,0),
+    uhrstorno        DECIMAL(16,2),
+    urokstorno       DECIMAL(16,2),
+    ozast            DECIMAL(16,0),
+    ozorg            CHAR(8),
+    datumsepsani     DATE,
+    kontrpodpis      INTEGER ,
+    kontrpodpisuser  CHAR(20),
+    kontrpodpistime  DATETIME YEAR to SECOND,
+    chybaopravnenioz INTEGER,
+    kontroprozuser   CHAR(20),
+    kontroproztime   DATETIME YEAR to SECOND,
+    oznevyplneno     INTEGER,
+    ozneakt          INTEGER,
+    kontrcastka      INTEGER,
+    oznecertif       INTEGER,
+    klientzletily    INTEGER,
+    srazdanprispevky DECIMAL(16,2),
+    b0srazdan        DECIMAL(16,2),
+    b1srazdan        DECIMAL(16,2),
+    b2srazdan        DECIMAL(16,2),
+    b3srazdan        DECIMAL(16,2),
+    datukon          DATE,
+    expresvypl       INTEGER,
+    zpusobukon       CHAR(1),
+    priloha1         INTEGER,
+    priloha2         INTEGER,
+    priloha3         INTEGER,
+    priloha4         INTEGER,
+    zpdatplanprov    CHAR(1),
+    aktkontaktuid    INTEGER
+ ) LOCK MODE ROW;
+
+CREATE unique INDEX rz_storno_arch_p ON rz_storno_arch(ser) ;
+
+ALTER TABLE  rz_storno_arch
+      ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT  rz_storno_arch_p;
+
+ROLLBACK WORK;

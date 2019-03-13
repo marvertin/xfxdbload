@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B114430_RN00403189_3
+-- @TC:ONCE: DESCRIPTION = DB registry divně zařazené {DEFECT}
+
+
+BEGIN WORK;
+
+  -- 3/ K parametru JE/LD/*/baseDistingName doplnit název #Bundle for system users and groups on LDAP server# a zařadit jej do správné hierarchie: "Správa uživatelů / Správa oprávnění / Technological".
+  Call TW_RegAktAnalytickyPopis('JE', 'LD', '*', 'baseDistingName', 'Správa uživatelů','Správa oprávnění','Technological','Bundle for system users and groups on LDAP server', 1); 
+
+
+  -- 4/ Parametry AP/*/prostredi_... zařadit do správné hierarchie "Správa systému / Služby pro správu systému / Společné parametry"
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_prod', 'text', 'Správa systému','Služby pro správu systému','Společné parametry', 'Popis produkčního prostředí systému', 1); 
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_test', 'text', 'Správa systému','Služby pro správu systému','Společné parametry', 'Popis testovacího prostředí systému' , 1);
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_prod', 'MainDatabase', 'Správa systému','Služby pro správu systému','Společné parametry','Jméno produkční databáze', 1); 
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_test', 'RGB-R', 'Správa systému','Služby pro správu systému','Společné parametry','Barevné pozadí datových položek – R – test', 1);
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_test', 'RGB-G', 'Správa systému','Služby pro správu systému','Společné parametry','Barevné pozadí datových položek – G – test', 1);
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_test', 'RGB-B', 'Správa systému','Služby pro správu systému','Společné parametry','Barevné pozadí datových položek – B – test', 1); 
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_prod', 'RGB-R', 'Správa systému','Služby pro správu systému','Společné parametry','Barevné pozadí datových položek – R – prod', 1);
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_prod', 'RGB-G', 'Správa systému','Služby pro správu systému','Společné parametry','Barevné pozadí datových položek – G – prod', 1);
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_prod', 'RGB-B', 'Správa systému','Služby pro správu systému','Společné parametry','Barevné pozadí datových položek – B – prod', 1);
+  Call TW_RegSetAnalytickyPopis('AP', '*', 'prostredi_prod', 'MainServer', 'Správa systému','Služby pro správu systému','Společné parametry','Jméno provozního serveru', 1); 
+
+  -- 5/ Parametr es/*/priloha/default_cesta zrušit. Jedná se o překlep, správná adresa je ES/*/....
+  call TW_RegDelKey('es', '*', 'priloha', 'default_cesta');
+  
+
+ROLLBACK WORK;
+
+--End of B114430_RN00403189_3

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B120896_RN00427988_1
+-- @TC:ONCE: DESCRIPTION = Externí kontroly - rozšíření poznámky v Cibis-sale i Cibis-Main {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table eu_contractchecking_kart modify documentnote lvarchar(1020);
+alter table eu_contractchecking_kart modify firmnote lvarchar(1020);
+alter table eu_contractchecking_kart modify incomenote lvarchar(1020);
+alter table eu_contractchecking_kart modify telephonenote lvarchar(1020);
+
+ROLLBACK WORK;
+
+--End of B120896_RN00427988_1

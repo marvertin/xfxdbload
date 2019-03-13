@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A59857_RN00317080_RN00347481
+-- @TC:ONCE: DESCRIPTION = Nastavení èíselníkù
+
+BEGIN WORK;
+
+update eu_zajist_cis set verejnynazev = 'Pojištìní úvìru UNIQA' where zajist = TW_RegGetKey('EU','*','zajist','pojistUQ');
+
+ROLLBACK WORK;
+
+--End of A59857_RN00317080_RN00347481

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B131909_UID36779_3
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update ac_marketakce_cis set kompenzaceuhr = 1
+ where marketakce in ('121','125','126','182','183','185','186', '187')
+;
+
+ROLLBACK WORK;
+
+--End of B131908_UID36779_3

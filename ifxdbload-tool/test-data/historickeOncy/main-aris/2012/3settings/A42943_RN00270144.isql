@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A42943_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+  call tw_regsetoraddkey('CC', '*', '*', 'povolprior', 1, 1, 
+  'Platební styk', 'Mezibankovní platba', 'Interbank payment', 'Povolovat dávky prioritních plateb');
+
+ROLLBACK WORK;

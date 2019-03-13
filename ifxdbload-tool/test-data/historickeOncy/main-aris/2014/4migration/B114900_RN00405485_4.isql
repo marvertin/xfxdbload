@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B114900_RN00405485_4
+-- @TC:ONCE: DESCRIPTION = chyba v nastavení kontrol SC v Mainu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  UPDATE NoCheckRule SET xproductvariant = null WHERE trim(xproductvariant) = ''; 
+
+ROLLBACK WORK;
+
+--End of B114900_RN00405485_4

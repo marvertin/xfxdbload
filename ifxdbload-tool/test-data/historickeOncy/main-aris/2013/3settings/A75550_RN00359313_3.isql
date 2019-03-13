@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A75550_RN00359313_3
+-- @TC:ONCE: DESCRIPTION = u PO - potvrzení smlouvy chybí možnost úhrady za uzavøení smlouvy {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', 'PPSU', 'POTV', 'provuhr', 1, 1, 'Úvìr', 'Úvìrová smlouva', 'Management of credit contract', 'Poplatek za smlouvu pøi potvrzení', 1);
+call TW_RegSetOrAddKey('EU', 'SUPO', 'POTV', 'provuhr', 1, 1, 'Úvìr', 'Úvìrová smlouva', 'Management of credit contract', 'Poplatek za smlouvu pøi potvrzení', 1);
+call TW_RegSetOrAddKey('EU', 'KOME', 'POTV', 'provuhr', 1, 1, 'Úvìr', 'Úvìrová smlouva', 'Management of credit contract', 'Poplatek za smlouvu pøi potvrzení', 1);
+
+ROLLBACK WORK;
+
+--End of A75550_RN00359313_3

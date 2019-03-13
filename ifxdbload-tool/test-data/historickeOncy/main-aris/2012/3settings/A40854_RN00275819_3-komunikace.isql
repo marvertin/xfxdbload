@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, A40854_RN00275819_3-komunikace
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost)
+  VALUES('EVYPIS_VYTVVYP', 'EVYPS - Vytvoøení výpisu', 'rsts@rsts.cz', 'RSTS', 'e-Výpis: Vytvoøení výpisu', 
+  'Byl vytvoøen výpis z úètu è. <<UCET>>, k dispozici je na adrese: <<URL>>',
+   null, 0, 5, 24, 0, 'A', 1, 1);
+  
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, 
+   maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost)
+  VALUES('K_DOTAZ_NAB', 'Dotaz k nabídce', null, null, null, null, null, 0,
+  5, 24, 0, 'A', 1, 1);
+  
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, 
+   maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost)
+  VALUES('K_AKCTP_NAB', 'Akceptace nabídky', null, null, null, null, null, 0,
+  5, 24, 0, 'A', 1, 1);
+  
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, 
+   maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost)
+  VALUES('K_ODMN_NAB', 'Odmítnutí nabídky', null, null, null, null, null, 0,
+  5, 24, 0, 'A', 1, 1);
+  
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, 
+   maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost)
+  VALUES('K_OBECNY_DOT', 'Obecný dotaz', null, null, null, null, null, 0,
+  5, 24, 0, 'A', 1, 1);
+
+ROLLBACK WORK;
+

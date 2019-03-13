@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B122980_RN00420633_5
+-- @TC:ONCE: DESCRIPTION = Úpravy ve vracení SP na MF {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter TABLE sp_vratka_exp 
+    drop rok
+;
+
+alter TABLE sp_vchstr_imp 
+    drop rok
+;
+
+alter TABLE sp_vchd_imp 
+    drop rok
+;
+
+ROLLBACK WORK;
+
+--End of B122980_RN00420633_5

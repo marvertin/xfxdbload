@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135758_UID75139_1
+-- @TC:ONCE: DESCRIPTION = RSTS-23286: Povinný odhad dle nastavení registru {EPIC}
+
+BEGIN WORK;
+
+--#Vyžadovat povinné zadání odhadu pro existující nemovitost#
+call TW_RegSetOrAddKey('EU', 'creditRq', 'zajisteni', 'povin-zad-odhadu', 1);
+
+ROLLBACK WORK;
+
+--End of B135758_UID75139_1

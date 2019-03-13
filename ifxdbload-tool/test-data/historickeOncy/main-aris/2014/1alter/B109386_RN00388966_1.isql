@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B109386_RN00388966_1
+-- @TC:ONCE: DESCRIPTION = Insolvence  - údaj o platnosti role {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE EP_SnimProduktInsolv_Den ADD stavrole CHAR(1);
+
+ROLLBACK WORK;
+
+--End of B109386_RN00388966_1

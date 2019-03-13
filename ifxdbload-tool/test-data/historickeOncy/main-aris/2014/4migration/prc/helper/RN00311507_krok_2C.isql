@@ -1,0 +1,494 @@
+create procedure RN00311507_krok_2C()
+-- vytvoření záznamů insolvenčního řízení a produktů
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+
+define _os Int;
+define _cjednaci Char(10);
+define _cj_IR Char(45);
+
+define _sernoins like EP_Insolvence_Mat.serno;
+define _spisznsenat like EP_Insolvence_Mat.spisznsenat;
+define _spisznrejstrik like EP_Insolvence_Mat.spisznrejstrik;
+define _spisznbc like EP_Insolvence_Mat.spisznbc;
+define _spisznrocnik like EP_Insolvence_Mat.spisznrocnik;
+define _cisjednaciporadi like EP_Insolvence_Mat.cisjednaciporadi;
+define _cisjednacirok like EP_Insolvence_Mat.cisjednacirok;
+define _stav like EP_Insolvence_Mat.stav;
+define _refreferent like EP_Insolvence_Mat.refreferent;
+define _refsoud like EP_Insolvence_Mat.refsoud;
+define _poznamka like EP_Insolvence_Mat.poznamka;
+define _datzahajeni like EP_Insolvence_Mat.datzahajeni;
+define _datzamitnuti like EP_Insolvence_Mat.datzamitnuti;
+define _datukonceni like EP_Insolvence_Mat.datukonceni;
+define _datpravmocizamit like EP_Insolvence_Mat.datpravmocizamit;
+define _datupadek like EP_Insolvence_Mat.datupadek;
+define _datsplatkal like EP_Insolvence_Mat.datsplatkal;
+define _datkonkurz like EP_Insolvence_Mat.datkonkurz;
+define _datzpenezeni like EP_Insolvence_Mat.datzpenezeni;
+define _datodvolani like EP_Insolvence_Mat.datodvolani;
+define _datprezkum like EP_Insolvence_Mat.datprezkum;
+define _veritelvybor like EP_Insolvence_Mat.veritelvybor;
+define _datoddluz like EP_Insolvence_Mat.datoddluz;
+define _refinsolvspravce like EP_Insolvence_Mat.refinsolvspravce;
+define _insolvspravcekonto like EP_Insolvence_Mat.insolvspravcekonto;
+define _insolvspravcebanka like EP_Insolvence_Mat.insolvspravcebanka;
+define _portime like EP_Insolvence_Mat.portime;
+define _poruser like EP_Insolvence_Mat.poruser;
+define _reftime like EP_Insolvence_Mat.reftime;
+define _refuser like EP_Insolvence_Mat.refuser;
+
+define _sernoprod like EP_ProduktInsolv_Mat.serno;
+define _smlouva like EP_ProduktInsolv_Mat.smlouva;
+define _tsml like EP_ProduktInsolv_Mat.tsml;
+define _typrole like EP_ProduktInsolv_Mat.typrole;
+
+define _sernopohl like EP_PohlInsolv_Mat.serno;
+define _stopurok like EP_PohlInsolv_Mat.stopurok;
+define _stoppopl like EP_PohlInsolv_Mat.stoppopl;
+define _stopupom like EP_PohlInsolv_Mat.stopupom;
+define _stopvypis like EP_PohlInsolv_Mat.stopvypis; 
+define _jistina like EP_PohlInsolv_Mat.jistina;
+define _beurok like EP_PohlInsolv_Mat.beurok;
+define _saurok like EP_PohlInsolv_Mat.saurok;
+define _pohluhr like EP_PohlInsolv_Mat.pohluhr;
+define _pokuta like EP_PohlInsolv_Mat.pokuta;
+define _poplpoj like EP_PohlInsolv_Mat.poplpoj;
+define _poplsoud like EP_PohlInsolv_Mat.poplsoud;
+define _prihlaseno like EP_PohlInsolv_Mat.prihlaseno;
+
+define _pocdnuupadekpredani like EP_NeprihlPohlInsolv_Mat.pocdnuupadekpredani;
+define _datpredozu like EP_NeprihlPohlInsolv_Mat.datpredozu;
+
+define _sernoprihlpohl like EP_PrihlPohlInsolv_Mat.serno;
+define _pocdnuupadekprihl like EP_PrihlPohlInsolv_Mat.pocdnuupadekprihl;
+define _datprihl like EP_PrihlPohlInsolv_Mat.datprihl;
+define _vysepohl like EP_PrihlPohlInsolv_Mat.vysepohl;
+define _cispohl like EP_PrihlPohlInsolv_Mat.cispohl; 
+define _typprihlnezaj like EP_PrihlPohlInsolv_Mat.typprihlnezaj;
+define _typprihlzajss like EP_PrihlPohlInsolv_Mat.typprihlzajss;
+define _typprihlzajnem like EP_PrihlPohlInsolv_Mat.typprihlzajnem;
+define _typprihlzajmaj like EP_PrihlPohlInsolv_Mat.typprihlzajmaj;
+define _zajveritel like EP_PrihlPohlInsolv_Mat.zajveritel;
+
+define _datprvspl like EP_NavratPrihlPohl_Mat.datprvspl;
+define _datpredpokyn like EP_NavratPrihlPohl_Mat.datpredpokyn;
+define _datpokyn like EP_NavratPrihlPohl_Mat.datpokyn;
+define _datzalobaurceni like EP_NavratPrihlPohl_Mat.datzalobaurceni;
+define _datzalobaprodej like EP_NavratPrihlPohl_Mat.datzalobaprodej;
+
+define _konto like RU_Real_Mat.konto;
+define _tko like RU_Real_Mat.tko;
+
+define _datprihlpom Date;
+define _datzahajenipom Date;
+define _datupadekpom Date;
+define _datoddluzpom Date;
+define _datkonkurzpom Date;
+define _datprezkumpom Date;
+define _datsplatkalpom Date;
+define _datzpenezenipom Date;
+define _datzamitnutipom Date;
+define _datpravmocizamitpom Date;
+define _datodvolanipom Date;
+define _datukoncenipom Date;
+define _refreferentpom Char(2);
+define _refinsolvspravcepom Int;
+define _insolvspravcebankapom Dec(7,0);
+define _insolvspravcekontopom Dec(16,0);
+
+define _prihlAnoNe Char(3);
+
+define _stavpom Char(1);
+define _pocet Int;
+define _typrolepom Char(2);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_2C');
+
+SET TRIGGERS FOR EP_Insolvence_Mat DISABLED;
+SET TRIGGERS FOR EP_ProduktInsolv_Mat DISABLED;
+SET TRIGGERS FOR EP_PohlInsolv_Mat DISABLED;
+SET TRIGGERS FOR EP_NeprihlPohlInsolv_Mat DISABLED;
+SET TRIGGERS FOR EP_PrihlPohlInsolv_Mat DISABLED;
+SET TRIGGERS FOR EP_NavratPrihlPohl_Mat DISABLED;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, os, cjednaci, cj_IR
+   INTO  _ser, _os, _cjednaci, _cj_IR
+   FROM RN00311507_krok_2_insolv
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_2_insolv
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    if _os is null or _cjednaci is null or trim(_cjednaci) = '' or _cj_IR is null or trim(_cj_IR) = '' then
+      -- bez správně vyplněné identifikace nebude záznam zpracován
+      INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+      VALUES(_ser, 'Nekorektní identifikace insolvenčního řízení (osoba: ' || nvl(_os, '') || ', číslo jednací: ' || trim(_cjednaci) || ', číslo ISIR: ' || trim(_cj_IR) || ').');
+    else
+      -- pomocná tabulka pro záznamy zpracovávané insolvence
+      begin
+        on exception IN(-206)
+        end exception;
+        DROP TABLE RN00311507_krok_2_data_temp;
+      end;
+      
+      SELECT * FROM RN00311507_krok_2_data WHERE os = _os AND cjednaci = _cjednaci AND cj_IR = _cj_IR INTO TEMP RN00311507_krok_2_data_temp;
+      
+      SELECT MIN(zahajeni_IR), MIN(upadek), MIN(oddluzeni), MIN(konkurz), MIN(prezkum), MIN(splkalend), MIN(majpodstata), MIN(zamitIN), MIN(zamitINPM), MIN(odvolZamitIN), MIN(SkonceniIRkonkurz),
+        MIN(prihlaska), MIN(referent), MAX(NVL(CASE WHEN TRIM(LOWER(vervybor)) = 'ano' THEN 1 ELSE 0 END, 0)), MIN(ID_IS), MIN(VlozeniZaznamu),
+        MAX(zahajeni_IR), MAX(upadek), MAX(oddluzeni), MAX(konkurz), MAX(prezkum), MAX(splkalend), MAX(majpodstata), MAX(zamitIN), MAX(zamitINPM), MAX(odvolZamitIN), MAX(SkonceniIRkonkurz),
+        MAX(referent), MAX(ID_IS), MAX(PrihlAnoNe)
+      INTO _datzahajeni, _datupadek, _datoddluz, _datkonkurz, _datprezkum, _datsplatkal, _datzpenezeni, _datzamitnuti, _datpravmocizamit, _datodvolani, _datukonceni,
+        _datprihlpom, _refreferent, _veritelvybor, _refinsolvspravce, _portime,
+        _datzahajenipom, _datupadekpom, _datoddluzpom, _datkonkurzpom, _datprezkumpom, _datsplatkalpom, _datzpenezenipom, _datzamitnutipom, _datpravmocizamitpom, _datodvolanipom, _datukoncenipom,
+        _refreferentpom, _refinsolvspravcepom, _prihlAnoNe
+      FROM RN00311507_krok_2_data_temp;
+      
+      SELECT MIN(banka_IS), MIN(AO_MergeKonto(predcisli_IS, cislo_IS)),
+        MAX(banka_IS), MAX(AO_MergeKonto(predcisli_IS, cislo_IS))
+      INTO _insolvspravcebanka, _insolvspravcekonto,
+        _insolvspravcebankapom, _insolvspravcekontopom
+      FROM RN00311507_krok_2_data_temp
+      WHERE ID_IS = _refinsolvspravce;
+      
+      -- upozornění na různá data u produktů téže insolvence
+      if _datzahajeni <> _datzahajenipom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data zahájení: ' || TW_DateToChar(_datzahajeni) || ', ' || TW_DateToChar(_datzahajenipom));
+      end if;
+      if _datupadek <> _datupadekpom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data úpadku: ' || TW_DateToChar(_datupadek) || ', ' || TW_DateToChar(_datupadekpom));
+      end if;
+      if _datoddluz <> _datoddluzpom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data oddlužení: ' || TW_DateToChar(_datoddluz) || ', ' || TW_DateToChar(_datoddluzpom));
+      end if;
+      if _datkonkurz <> _datkonkurzpom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data konkurzu: ' || TW_DateToChar(_datkonkurz) || ', ' || TW_DateToChar(_datkonkurzpom));
+      end if;
+      if _datprezkum <> _datprezkumpom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data přezkumného jednání: ' || TW_DateToChar(_datprezkum) || ', ' || TW_DateToChar(_datprezkumpom));
+      end if;
+      if _datsplatkal <> _datsplatkalpom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data splátkového kalendáře: ' || TW_DateToChar(_datsplatkal) || ', ' || TW_DateToChar(_datsplatkalpom));
+      end if;
+      if _datzpenezeni <> _datzpenezenipom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data zpeněžení majetkové podstaty: ' || TW_DateToChar(_datzpenezeni) || ', ' || TW_DateToChar(_datzpenezenipom));
+      end if;
+      if _datzamitnuti <> _datzamitnutipom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data zamítnutí: ' || TW_DateToChar(_datzamitnuti) || ', ' || TW_DateToChar(_datzamitnutipom));
+      end if;
+      if _datpravmocizamit <> _datpravmocizamitpom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data nabytí právní moci zamítnutí: ' || TW_DateToChar(_datpravmocizamit) || ', ' || TW_DateToChar(_datpravmocizamitpom));
+      end if;
+      if _datodvolani <> _datodvolanipom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data odvolání: ' || TW_DateToChar(_datodvolani) || ', ' || TW_DateToChar(_datodvolanipom));
+      end if;
+      if _datukonceni <> _datukoncenipom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení data ukončení: ' || TW_DateToChar(_datukonceni) || ', ' || TW_DateToChar(_datukoncenipom));
+      end if;
+      if _refreferent <> _refreferentpom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení referentů: ' || _refreferent || ', ' || _refreferentpom);
+      end if;
+      if _refinsolvspravce <> _refinsolvspravcepom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení insolvenčních správců: ' || to_char(_refinsolvspravce) || ', ' || to_char(_refinsolvspravcepom));
+      end if;
+      if _insolvspravcebanka <> _insolvspravcebankapom or _insolvspravcekonto <> _insolvspravcekontopom then
+        INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+        VALUES(_ser, 'Nekonzistentní nastavení účtu insolvenčního správce: ' || to_char(_insolvspravcekonto) || '/' || to_char(_insolvspravcebanka) || ', ' || to_char(_insolvspravcekontopom) || '/' || to_char(_insolvspravcebankapom));
+      end if;
+      
+      let _refsoud, _spisznsenat, _spisznrejstrik, _spisznbc, _spisznrocnik = EP_SlozkyCisJednaciISIR(trim(_cj_IR));
+      let _cisjednaciporadi = TW_StrToken(trim(_cjednaci), '/', 0);
+      let _cisjednacirok = TW_StrToken(trim(_cjednaci), '/', 1);
+      
+      if _datpravmocizamit is not null then
+        let _stav = 'Z';
+      elif _datprihlpom is null and _datupadek is not null and _prihlAnoNe = 'Ne' and _datukoncenipom is null then
+        let _stav = 'N';
+      elif _datukonceni is not null then
+        let _stav = 'U';
+      elif _datupadek is not null and _datkonkurz is not null and _datupadek = _datkonkurz and _datprihlpom is not null then
+        let _stav = 'Q';
+      elif _datupadek is not null and _datprihlpom is not null and _datsplatkal is null and _datzpenezeni is null and _datkonkurz is null then
+        let _stav = 'P';
+      elif _datsplatkal is not null and _datzpenezeni is null and _datkonkurz is null then
+        let _stav = 'L';
+      elif _datzpenezeni is not null and _datsplatkal is null and _datkonkurz is null then
+        let _stav = 'M';
+      elif _datsplatkal is not null and _datzpenezeni is not null and _datsplatkal = _datzpenezeni and _datkonkurz is null then
+        let _stav = 'J';
+      elif _datkonkurz is not null and _datupadek is not null and _datkonkurz <> _datupadek then
+        let _stav = 'K';
+      elif _datupadek is not null and _datkonkurz is not null and _datupadek = _datkonkurz then
+        let _stav = 'E';
+      elif _datupadek is not null then
+        let _stav = 'D';
+      else
+        let _stav = 'A';
+      end if;
+      
+      let _poznamka = 'Poznámka migrována k produktu.';
+      
+      let _poruser = 'migrace';
+      let _reftime, _refuser = _portime, _poruser;
+      
+      INSERT INTO EP_Insolvence_Mat(spisznsenat, spisznrejstrik, spisznbc, spisznrocnik, cisjednaciporadi, cisjednacirok, 
+        stav, refosoba, refreferent, refsoud, poznamka,  
+        datzahajeni, datzamitnuti, datukonceni, datpravmocizamit, datupadek, datsplatkal,  
+        datkonkurz, datzpenezeni, datodvolani, datprezkum, veritelvybor, 
+        datoddluz, 
+        refinsolvspravce, insolvspravcekonto, insolvspravcebanka,  
+        portime, poruser, reftime, refuser)
+      VALUES(_spisznsenat, _spisznrejstrik, _spisznbc, _spisznrocnik, _cisjednaciporadi, _cisjednacirok,
+        _stav, _os, _refreferent, _refsoud, _poznamka,
+        _datzahajeni, _datzamitnuti, _datukonceni, _datpravmocizamit, _datupadek, _datsplatkal, 
+        _datkonkurz, _datzpenezeni, _datodvolani, _datprezkum, _veritelvybor,
+        _datoddluz,
+        _refinsolvspravce, _insolvspravcekonto, _insolvspravcebanka,
+        _portime, _poruser, _reftime, _refuser);
+      
+      let _sernoins = TW_LastSer();
+      
+      let _cispohl = 0;
+      foreach
+        SELECT sml_SS, poznamky, predanoOZU, prihlaska, NVL(vyse_pohl, 0), zastava, zastava3osoby, zajisteniss,
+          PrvniSplatka, splKalZV, pokynZV, ZalobaPohl, ZalobaNem
+        INTO _smlouva, _poznamka, _datpredozu, _datprihl, _vysepohl, _typprihlzajnem, _typprihlzajmaj, _typprihlzajss, 
+          _datprvspl, _datpredpokyn, _datpokyn, _datzalobaurceni, _datzalobaprodej
+        FROM RN00311507_krok_2_data_temp
+        
+        let _tsml = null;
+        foreach
+          SELECT p.tsml INTO _tsml 
+          FROM EP_Sml_Mat p JOIN EU_Sml_Mat s ON p.smlouva = s.smlouva AND p.tsml = s.tsml
+          WHERE p.smlouva = _smlouva AND p.tsml NOT IN ('SSFO', 'SSPO') AND s.stav NOT IN ('S', 'V', 'Z')
+          ORDER BY id DESC
+          exit foreach;
+        end foreach;
+        if _tsml is null then
+          foreach
+            SELECT p.tsml INTO _tsml 
+            FROM EP_Sml_Mat p JOIN EU_Sml_Mat s ON p.smlouva = s.smlouva AND p.tsml = s.tsml
+            WHERE p.smlouva = _smlouva AND p.tsml NOT IN ('SSFO', 'SSPO') AND s.stav IN ('S', 'V', 'Z')
+            ORDER BY id DESC
+            exit foreach;
+          end foreach;
+        end if;
+        
+        if _tsml is null then
+          call TW_RaiseError('107C122TCUI', 'RN00311507_krok_2C', 'Smlouva %1 není v systému evidována.', _smlouva);
+        end if;
+
+        -- pomocná tabulka pro role smlouvy
+        begin
+          on exception IN(-206)
+          end exception;
+          DROP TABLE RN00311507_krok_2_role_temp;
+        end;
+        
+        SELECT * FROM EO_Role_Mat WHERE os = _os AND smlouva = _smlouva AND typ = _tsml INTO TEMP RN00311507_krok_2_role_temp;
+        if not exists(SELECT * FROM RN00311507_krok_2_role_temp WHERE typrole = 'KL') then
+          INSERT INTO RN00311507_krok_2_role_temp
+          SELECT * FROM EO_Role_Mat WHERE os = _os AND smlouva = _smlouva AND typrole = 'KL' AND os = EP_KlientSml(_smlouva, _tsml);
+        end if;
+        
+        let _typrole, _stavpom = null, null;
+        foreach
+          SELECT stav, COUNT(*), MIN(typrole)
+          INTO _stavpom, _pocet, _typrolepom
+          FROM RN00311507_krok_2_role_temp
+          GROUP BY stav
+          ORDER BY DECODE(stav, 'A', 1, 'U', 2, 3)
+
+          if _pocet = 1 then
+            let _typrole = _typrolepom;
+            
+            if _stavpom = 'Z' then
+              INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+              VALUES(_ser, 'Pro smlouvu ' || _smlouva || '/' || _tsml || ' vybrána zrušená role ' || _typrole || '.');
+            end if;
+          elif _pocet > 1 then
+            if _stavpom <> 'Z' then
+              foreach
+                SELECT typrole INTO _typrole FROM RN00311507_krok_2_role_temp WHERE stav = _stavpom ORDER BY DECODE(typrole, 'KL', 1, 'MK', 2, 'SD', 3, 'MS', 4, 'PR', 5, 'MP', 6, 'RU', 7, 'MR', 8, 'ZL', 9, 10)
+                exit foreach;
+              end foreach;
+            else
+              INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+              VALUES(_ser, 'Pro smlouvu ' || _smlouva || '/' || _tsml || ' existují pouze zrušené role. Nebyla vybrána žádná z nich.');
+            end if;
+          end if;
+          
+          if _typrole is not null then
+            exit foreach;
+          end if;
+        end foreach;
+        
+        if _stavpom is null then
+          INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+          VALUES(_ser, 'Pro smlouvu ' || _smlouva || '/' || _tsml || ' není evidována žádná role.');
+        end if;
+        
+        -- pokud se nepodařilo určit typ role, je zaevidována technická role
+        if _typrole is null then
+          let _typrole = '__';
+
+          if _stavpom <> 'Z' then
+            INSERT INTO RN00311507_krok_2_insolv_log(ser, text)
+            VALUES(_ser, 'Pro smlouvu ' || _smlouva || '/' || _tsml || ' nebyla vybrána žádná role.');
+          end if;
+        end if;
+        
+        INSERT INTO EP_ProduktInsolv_Mat(refinsolv, smlouva, tsml, refosoba, typrole, poznamka, platnost, reftime, refuser)
+        VALUES(_sernoins, _smlouva, _tsml, _os, _typrole, _poznamka, 1, _reftime, _refuser);
+        
+        let _sernoprod = TW_LastSer();
+        
+        let _prihlaseno = 0;
+        if _datprihl is not null then
+          let _prihlaseno = 1;
+        end if;
+        
+        SELECT stoppopl, stopupom, konto, tko INTO _stoppopl, _stopupom, _konto, _tko FROM RU_Real_Mat WHERE realn = EP_RealSml(_smlouva, _tsml);
+        
+        SELECT tvorbavypiszastav INTO _stopvypis FROM AC_Konto_Mat WHERE konto = _konto AND tko = _tko;
+        
+        let _stopurok = 1;
+        if exists(SELECT * FROM UR_Konto_Mat WHERE konto = _konto AND tko = _tko AND pl = 1 AND (UR_BazeGet(indexbaze) + odchylka) <> 0) then
+          let _stopurok = 0;
+        end if;
+        
+        if _prihlaseno = 0 then
+          let _jistina, _beurok, _saurok, _pohluhr, _pokuta, _poplpoj, _poplsoud = null, null, null, null, null, null, null;
+        else
+          let _jistina, _beurok, _saurok, _pohluhr, _pokuta, _poplpoj, _poplsoud = EP_VysePohlInsolv(_smlouva, _tsml, _datupadek);
+        end if;
+        
+        INSERT INTO EP_PohlInsolv_Mat(refproduktinsolv, stopurok, stoppopl, stopupom, stopvypis, 
+          jistina, beurok, saurok, pohluhr, pokuta, poplpoj, poplsoud, prihlaseno, platnost, reftime, refuser)
+        VALUES(_sernoprod, NVL(_stopurok, 0), NVL(_stoppopl, 0), NVL(_stopupom, 0), NVL(_stopvypis, 0), 
+          _jistina, _beurok, _saurok, _pohluhr, _pokuta, _poplpoj, _poplsoud, _prihlaseno, 1, _reftime, _refuser);
+        
+        let _sernopohl = TW_LastSer();
+        
+        if _prihlaseno = 0 then
+          -- nepříhlášená pohledávka
+          let _pocdnuupadekpredani = null;
+          if _datpredozu is not null and _datupadek is not null then
+            let _pocdnuupadekpredani = _datpredozu - _datupadek;
+          end if;
+         
+          INSERT INTO EP_NeprihlPohlInsolv_Mat(refpohlinsolv, pocdnuupadekpredani, datpredozu, reftime, refuser)
+          VALUES(_sernopohl, _pocdnuupadekpredani, _datpredozu, _reftime, _refuser);
+        
+        else
+          -- přihlášená pohledávka
+          let _pocdnuupadekprihl = null;
+          if _datprihl is not null and _datupadek is not null then
+            let _pocdnuupadekprihl = _datprihl - _datupadek;
+          end if;
+          
+          let _cispohl = _cispohl + 1;
+          
+          let _typprihlnezaj, _zajveritel = 1, 0;
+          if _typprihlzajss <> 0 or _typprihlzajnem <> 0 then
+            let _typprihlnezaj, _zajveritel = 0, 1;
+          end if;
+
+          INSERT INTO EP_PrihlPohlInsolv_Mat(refpohlinsolv, pocdnuupadekprihl, datprihl, vysepohl, aktvysepohl, cispohl, 
+            typprihlnezaj, typprihlzajss, typprihlzajnem, typprihlzajmaj, typprihlzajruc, 
+            podmpohl, zajveritel, splatpohl, vykonpohl, popreno, reftime, refuser)
+          VALUES(_sernopohl, _pocdnuupadekprihl, _datprihl, _vysepohl, _vysepohl, _cispohl, 
+            _typprihlnezaj, _typprihlzajss, _typprihlzajnem, _typprihlzajmaj, 0, 
+            0, _zajveritel, 0, 0, 0, _reftime, _refuser);
+          
+          let _sernoprihlpohl = TW_LastSer();
+          
+          if _stav in ('J', 'K', 'L', 'M', 'O', 'P', 'Q', 'R') or 
+            (_datprvspl is not null or _datpredpokyn is not null or _datpokyn is not null or _datzalobaurceni is not null or _datzalobaprodej is not null) then
+            INSERT INTO EP_NavratPrihlPohl_Mat(refprihlpohl, datprvspl, datpredpokyn, datpokyn, datzalobaurceni, datzalobaprodej, platnost, reftime, refuser)
+            VALUES(_sernoprihlpohl, _datprvspl, _datpredpokyn, _datpokyn, _datzalobaurceni, _datzalobaprodej, 1, _reftime, _refuser);
+          end if;
+        end if;
+      end foreach;
+
+      --nastaví příznak na zpracováno +1
+      UPDATE RN00311507_krok_2_insolv SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+    end if;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--algoritmus dokonceni migrace
+--...
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_2C');
+
+SET TRIGGERS FOR EP_Insolvence_Mat ENABLED;
+SET TRIGGERS FOR EP_ProduktInsolv_Mat ENABLED;
+SET TRIGGERS FOR EP_PohlInsolv_Mat ENABLED;
+SET TRIGGERS FOR EP_NeprihlPohlInsolv_Mat ENABLED;
+SET TRIGGERS FOR EP_PrihlPohlInsolv_Mat ENABLED;
+SET TRIGGERS FOR EP_NavratPrihlPohl_Mat ENABLED;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

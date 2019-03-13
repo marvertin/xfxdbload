@@ -1,0 +1,120 @@
+-- @TC:ONCE: ID = V2, A47305_RN00292084_3
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#poznámka do kalendáøù pøi potvrzení úvìrové smlouvy#
+--Vìcná oblast  Úvìry
+--Funkcionalita Úvìrová smlouva
+--Skupina parametrù Management of credit contract
+--Význam parametru  Text automaticky vkládaný do poznámky vkladového a splátkového kalendáøe pøi jejich aktivaci v rámci potvrzení úvìrové smlouvy.
+--Analytický typ  Business
+--Adresa parametru  EU/*/POTV/textnote
+--Uživatelská zmìna Ano
+--Nastavení <prázdné>
+--Defaultní hodnota <prázdné>
+CALL TW_RegSetOrAddKey('EU', '*', 'POTV', 'textnote', NULL, 1)
+;
+
+--#poznámka do kalendáøù pøi prvním èerpání úvìru#
+--Vìcná oblast  Úvìry
+--Funkcionalita Úvìrová smlouva
+--Skupina parametrù Management of credit contract
+--Význam parametru  Text automaticky vkládaný do poznámky vkladového a splátkového kalendáøe pøi jejich aktivaci v rámci prvního èerpání úvìru.
+--Analytický typ  Business
+--Adresa parametru  EU/*/1CERP/textnote
+--Uživatelská zmìna Ano
+--Nastavení <prázdné>
+--Defaultní hodnota <prázdné>
+CALL TW_RegSetOrAddKey('EU', '*', '1CERP', 'textnote', NULL, 1)
+;
+
+--#dùvod automatického odkladu splácení#
+--Vìcná oblast  Úvìry
+--Funkcionalita Úvìrová smlouva
+--Skupina parametrù Management of credit contract
+--Význam parametru  Dùvod, který se nastaví pøi automatické aktivaci kontrol splácení do intervalu pro odklad ve splátkovém kalendáøi.
+--Analytický typ  Business
+--Adresa parametru  EU/*/odklad/duvod
+--Uživatelská zmìna Ano
+--Nastavení 3
+--Defaultní hodnota <prázdné>
+CALL TW_RegSetOrAddKey('EU', '*', 'odklad', 'duvod', 3, 1)
+;
+
+--#limit pro nesplacené dospoøování pøi PÚ v mìsíci#
+--Vìcná oblast  Úvìry
+--Funkcionalita Splátka nesplacená ve lhùtì
+--Skupina parametrù Not paid credit repayments
+--Význam parametru  Limit pro nesplacené vklady povinného dospoøování pøi PÚ v mìsíci
+--Analytický typ  Business
+--Adresa parametru  RU/*/nespsmldospor/limit
+--Uživatelská zmìna Ano
+--Nastavení 0.00
+--Defaultní hodnota <prázdné>
+CALL TW_RegSetOrAddKey('RU', '*', 'nespsmldospor', 'limit', 0, 1)
+;
+
+--#vytvoøení realizace pøi potvrzení <tsml>#
+--Vìcná oblast  Úvìr
+--Funkcionalita Úvìrová smlouva
+--Skupina parametrù Management of credit contract
+--Význam parametru  Pøíznak, zda se má pøi potvrzení smlouvy vytvoøit realizace úvìru
+--Analytický typ  Business
+--Adresa parametru  EU/<typ_smlouvy, *>/potvr/vytvreal
+--Uživatelská zmìna Ano
+--Nastavení EU/PFSU/potvr/vytvreal = 1 
+--EU/PPSU/potvr/vytvreal = 1 
+--EU/KOME/potvr/vytvreal = 1 
+--Defaultní hodnota 0 – Ne
+CALL TW_RegSetOrAddKey('EU', 'PFSU', 'potvr', 'vytvreal', 1, 1)
+;
+CALL TW_RegSetOrAddKey('EU', 'PPSU', 'potvr', 'vytvreal', 1, 1)
+;
+CALL TW_RegSetOrAddKey('EU', 'KOME', 'potvr', 'vytvreal', 1, 1)
+;
+
+--#otevøení realizace pøi potvrzení <tsml>#
+--Vìcná oblast  Úvìr
+--Funkcionalita Úvìrová smlouva
+--Skupina parametrù Management of credit contract
+--Význam parametru  Pøíznak, zda se má pøi potvrzení smlouvy otevøít realizace úvìru
+--Analytický typ  Business
+--Adresa parametru  EU/<typ_smlouvy, *>/potvr/otevreal
+--Uživatelská zmìna Ano
+--Nastavení EU/PFSU/potvr/otevreal = 1 
+--EU/PPSU/potvr/otevreal = 1 
+--EU/KOME/potvr/otevreal = 1 
+--Defaultní hodnota 0 – Ne
+CALL TW_RegSetOrAddKey('EU', 'PFSU', 'potvr', 'otevreal', 1, 1)
+;
+CALL TW_RegSetOrAddKey('EU', 'PPSU', 'potvr', 'otevreal', 1, 1)
+;
+CALL TW_RegSetOrAddKey('EU', 'KOME', 'potvr', 'otevreal', 1, 1)
+;
+
+--#Editovat variantu splátky#
+--(Existující analytický parametr. Bude pouze zavedeno pro další typy smluv.)
+--Vìcná oblast  Úvìry
+--Funkcionalita Splátkový kalendáø
+--Skupina parametrù Schedule of Credit Repayments
+--Význam parametru  Limit pro nesplacené vklady povinného dospoøování pøi PÚ v mìsíci
+--Analytický typ  Business
+--Adresa parametru  EU/<typ smlouvy>/splatint/EditVariantaSplatky
+--Uživatelská zmìna Ano
+--Nastavení EU/PFSU/splatint/EditVariantaSplatky = 1
+--EU/PUSU/splatint/EditVariantaSplatky = 1
+--EU/SUFO/splatint/EditVariantaSplatky = 1
+--Defaultní hodnota 0
+CALL TW_RegSetOrAddKey('EU', 'PFSU', 'splatint', 'EditVariantaSplatky', 1, 1)
+;
+CALL TW_RegSetOrAddKey('EU', 'PUSU', 'splatint', 'EditVariantaSplatky', 1, 1)
+;
+CALL TW_RegSetOrAddKey('EU', 'SUFO', 'splatint', 'EditVariantaSplatky', 1, 1)
+;
+
+
+ROLLBACK WORK;
+
+--End of A47305_RN00292084_3

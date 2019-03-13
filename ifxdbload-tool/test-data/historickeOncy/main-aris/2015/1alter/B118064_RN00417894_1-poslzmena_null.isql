@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, B118064_RN00417894_1-poslzmena_null
+-- @TC:ONCE: DESCRIPTION = Nelze dokončit FC {CUSTOMERREQUEST}
+BEGIN WORK;
+
+alter table ev_indexcen_mat modify poslzmena smallint;
+
+ROLLBACK WORK;
+--End of B118064_RN00417894_1-poslzmena_null

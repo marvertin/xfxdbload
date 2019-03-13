@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A46410_RN00249565_1
+-- @TC:ONCE: DESCRIPTION = Zmìna kontroly telefonních a mobilních èísel v komunikaèních kanálech. {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  ALTER TABLE eo_komkanal_acis
+    ADD typkontrola     CHAR(20)   BEFORE poznamka,
+    ADD zobrazitwww     Integer    DEFAULT 1 NOT NULL BEFORE poznamka;
+    
+  ALTER TABLE eo_komkanal_acis
+    ADD CONSTRAINT CHECK (zobrazitwww IN (0,1)) CONSTRAINT eo_komkanal_acis_d87z;
+    
+  ALTER TABLE eo_komkanal_cis
+    ADD typkontrola     CHAR(20)   BEFORE poznamka,
+    ADD zobrazitwww     Integer    DEFAULT 1  NOT NULL BEFORE poznamka;
+    
+  ALTER TABLE eo_komkanal_cis
+    ADD CONSTRAINT CHECK (zobrazitwww IN (0,1)) CONSTRAINT eo_komkanal_cis_d87x;          
+
+ROLLBACK WORK;
+
+--End of A46410_RN00249565_1

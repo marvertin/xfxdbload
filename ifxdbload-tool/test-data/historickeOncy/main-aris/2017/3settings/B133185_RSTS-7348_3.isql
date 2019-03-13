@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B133185_RSTS-7348_3
+-- @TC:ONCE: DESCRIPTION = Napojení na CRIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call tw_regDelKey('EP', 'CEE', 'WS', 'CasovyLimit');
+
+call tw_regDelKey('EP', 'CEE', 'WS', 'Heslo');
+
+call tw_regDelKey('EP', 'CEE', 'WS', 'Jmeno');
+
+call tw_regDelKey('EP', 'CEE', 'WS', 'KoncovyBod');
+
+ROLLBACK WORK;
+
+--End of B133185_RSTS-7348_3

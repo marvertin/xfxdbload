@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A54916_RN00312345_3
+-- @TC:ONCE: DESCRIPTION = Nìkolik úprav aplikace CIBIS-web {CUSTOMERREQUEST}
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost) VALUES('EO', 101, 'Zobrazení èíselníku notifikací <id_uživ>', 1);
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost) VALUES('EO', 102, 'Editace èíselníku notifikací <id_uživ>; id nastavení: <id_nastavení>', 1);
+
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost) VALUES('EP', 100, 'Zmìna mobil-SIS <id_uživ>', 1);
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost) VALUES('EP', 101, 'Zmìna email-SIS <id_uživ>', 1);
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost) VALUES('EP', 102, 'Zmìna transakèního úètu <id_uživ>', 1);
+
+ROLLBACK WORK;
+--End of A54916_RN00312345_3

@@ -1,0 +1,78 @@
+-- @TC:ONCE: ID = V2, B132891_UID50224_3
+-- @TC:ONCE: DESCRIPTION = Migrace založení časového rozlišení číselníku variant PÚ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GP';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPB';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'ZO';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'ZOR';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPP';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPUE';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPBE';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'FU';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPRB';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPR';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'F90';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'G';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'FUE';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'FRBU';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'FRU';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'FRRBU';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'FRRU';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'FUE90';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPVBU';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GSU';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPSU';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPSUP';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPRSP';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'GPRS';
+UPDATE eu_variapu_cis SET platnost = 0 WHERE varid = 'FSU90';
+
+INSERT INTO eu_xvariapu_cis(refvarid, kontrsaldosscerp, minsaldosscerp, klientnabizet, nabizprouz, nabizod,       nabizdo,         podepsatbiom, vysepubiom, platnostdo, platnostod,    zaklursazba, sankursazba, referminursazba, koefzivmin) 
+VALUES                     ('HY',     0,                null,           1,             1,          mdy(4,1,2018), mdy(12,31,2100), 0,            null,       null,       mdy(4,1,2018), 1.75,         8,          1.79,            1);
+
+INSERT INTO eu_xvariapu_cis(refvarid, kontrsaldosscerp, minsaldosscerp, klientnabizet, nabizprouz, nabizod,       nabizdo,         podepsatbiom, vysepubiom, platnostdo, platnostod,    zaklursazba, sankursazba, referminursazba, koefzivmin)
+VALUES                     ('RE',     0,                null,           1,             1,          mdy(4,1,2018), mdy(12,31,2100), 1,            1000000,    null,       mdy(4,1,2018), 3.73,         8,          3.84,            1);
+
+
+INSERT INTO eu_xvariapu_cis (refvarid, platnostod, nabizprouz, nabizod, nabizdo, kontrsaldosscerp, minsaldosscerp, podepsatbiom, vysepubiom, klientnabizet) 
+SELECT varid, mdy(1,1,1994), NVL(nabizprouz, 0), nabizod, nabizdo, NVL(kontrsaldosscerp, 0), minsaldosscerp, NVL(podepsatbiom, 0), vysepubiom, NVL(klientnabizet,0) FROM eu_variapu_cis WHERE varid NOT IN ('HY', 'RE');
+
+UPDATE eu_xvariapu_cis SET klientnabizet = 0 WHERE refvarid = 'GP';
+UPDATE eu_xvariapu_cis SET klientnabizet = 0 WHERE refvarid = 'FU';
+UPDATE eu_xvariapu_cis SET klientnabizet = 0 WHERE refvarid = 'GPSU';
+
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GP';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPB';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'ZO';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'ZOR';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPP';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPUE';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPBE';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'FU';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPRB';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPR';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'F90';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'G';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'FUE';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'FRBU';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'FRU';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'FRRBU';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'FRRU';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'FUE90';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GSU';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPSU';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPSUP';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPRSP';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'GPRS';
+UPDATE eu_xvariapu_cis SET nabizprouz = 0 WHERE refvarid = 'FSU90';
+
+UPDATE eu_xvariapu_cis SET naklnadomos = 5600;
+
+DELETE FROM EU_ExpSml_Den;
+
+ROLLBACK WORK;
+
+--End of B132891_UID50224_3

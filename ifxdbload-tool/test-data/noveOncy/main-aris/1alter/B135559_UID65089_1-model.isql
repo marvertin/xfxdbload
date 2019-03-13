@@ -1,0 +1,65 @@
+-- @TC:ONCE: ID = V2, B135559_UID65089_1-model
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodh_den 
+  ADD docerpani   Integer  DEFAULT 0,
+  ADD docerpanidatum   DATE,
+  ADD CONSTRAINT CHECK (docerpani IN (0,1)) CONSTRAINT ep_splspormodh_den_d5xe;
+
+ALTER TABLE EP_ExpSplSporModH_Den 
+  ADD docerpani   Integer  DEFAULT 0,
+  ADD docerpanidatum   DATE;
+  
+CREATE TABLE ep_splexpozicevyvoj_den (
+  ser   SERIAL NOT NULL,
+  refsplspormodsh   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  typ   CHAR(4) NOT NULL,
+  poradi   Integer NOT NULL,
+  datvytv   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splexpozicevyvoj_den_pk ON ep_splexpozicevyvoj_den(ser);
+ALTER TABLE ep_splexpozicevyvoj_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splexpozicevyvoj_den_pk;
+
+--FK
+CREATE INDEX ep_splexpozicevyvoj_den_i_f1 ON ep_splexpozicevyvoj_den(refsplspormodsh);
+ALTER TABLE ep_splexpozicevyvoj_den ADD CONSTRAINT FOREIGN KEY(refsplspormodsh) REFERENCES ep_splspormodsh_den(ser) CONSTRAINT ep_splexpozicevyvoj_den_f1;
+
+--INDEXES
+CREATE INDEX ep_splexpozicevyvoj_den_i1 ON ep_splexpozicevyvoj_den(smlouva,typ,poradi);
+
+
+CREATE TABLE ep_splexpozice_den (
+  ser   SERIAL NOT NULL,
+  refsplexpozicevyvoj   INTEGER NOT NULL,
+  obdobi   Integer,
+  vyseexpozice   DECIMAL(16,2)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splexpozice_den_pk ON ep_splexpozice_den(ser);
+ALTER TABLE ep_splexpozice_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splexpozice_den_pk;
+
+--FK
+CREATE INDEX ep_splexpozice_den_i_f1 ON ep_splexpozice_den(refsplexpozicevyvoj);
+ALTER TABLE ep_splexpozice_den ADD CONSTRAINT FOREIGN KEY(refsplexpozicevyvoj) REFERENCES ep_splexpozicevyvoj_den(ser) CONSTRAINT ep_splexpozice_den_f1;
+
+
+ALTER TABLE ep_splspormodakce_cis
+  ADD genvyvojexpozice   Integer  DEFAULT 0,
+  ADD CONSTRAINT CHECK (genvyvojexpozice IN (0,1)) CONSTRAINT ep_splspormodakce_cis_d5xv;
+
+ALTER TABLE ep_splspormodakce_acis
+  ADD genvyvojexpozice   Integer  DEFAULT 0,
+  ADD CONSTRAINT CHECK (genvyvojexpozice IN (0,1)) CONSTRAINT ep_splspormodakce_acis_d5xu;
+  
+ROLLBACK WORK;
+
+--End of B135559_UID65089_1

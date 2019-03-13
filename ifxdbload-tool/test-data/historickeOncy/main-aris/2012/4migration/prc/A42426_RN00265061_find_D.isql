@@ -1,0 +1,57 @@
+create procedure A42426_RN00265061_find_D()
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00265061_2;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00265061_2(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+
+  --vlastní data
+  datvypoc   date, 
+  fo               int, 
+  smlouva     dec(16,0),
+  typ             char(4),
+  typrole       char(2),  
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+insert into RN00265061_2 (datvypoc, fo, smlouva, typ, typrole, zprac)
+  select datvypoc, fo, smlouva, typ, typrole, -1
+    from eo_finsit_mat;
+   
+COMMIT WORK;
+BEGIN WORK;
+      
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00265061_2;
+
+--konec transakce pripravy
+COMMIT WORK;
+end procedure;

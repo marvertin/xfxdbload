@@ -1,0 +1,137 @@
+create procedure RN00311507_krok_1C_PO()
+-- vytvoření PO a insolvenčních správců
+
+define _ser           Int;
+define _davka         Int;
+define _akce          Int;
+define _nazev         Char(100);
+define _ulice         Char(45);
+define _psc           Char(6);
+define _mesto         Char(60);
+define _cp            Char(12);
+define _cpopis        Char(8);
+define _corient       Char(8);
+define _po            Int;
+define _ico           Char(10);
+define _refser        Int;
+define _ic            Int;
+define _id_cibis      int;
+define _serno         Int;
+define _pozice        Int;
+define _sernoadresa   Int;
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_1C_PO');
+call tw_baseinit();
+
+--set debug file to '/home/aris/RN00311507_krok_1C_PO.isql.dbg';
+--trace on;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, po, refser, ico
+     INTO _ser,_po,_refser,_ico
+     FROM RN00311507_krok_1_PO
+    WHERE zprac < 0
+    ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_1_PO
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    -- algoritmus migrace
+    -- načtu údaje o PO 
+    SELECT  nazev, ulice, psc, mesto, cp, ic, id_cibis
+      INTO _nazev,_ulice,_psc,_mesto,_cp,_ic,_id_cibis
+      FROM RN00311507_krok_1_PO_data
+     WHERE ser = _refser;
+    -- pokud PO v CIBISu neexistuje, musíme jí vytvořit
+    if  _po = 0 then 
+      
+      let _psc = replace(_psc, ' ', '');
+      
+      let _pozice = instr(_cp, '/',1,1);
+      if _pozice >0 then
+        let _cpopis = substr(_cp, 1, _pozice-1);
+        let _corient = trim(substr(_cp, _pozice+1));
+      else
+        let _cpopis = _cp;
+        let _corient = null;
+      end if
+       
+      call EO_POInit(999);
+      call EO_POLoad(999); -- load dělám kvůli načtení defaultů
+      
+      UPDATE EO_PO_Temp SET
+        ( ico, nazevmajitel,   ad2,   ad3, psc, cpopis, corient, formaprav,  cinnostdruh)
+        =
+        (_ico,       _nazev,_ulice,_mesto,_psc,_cpopis,_corient, 111,          0)
+       WHERE owner = 999;  
+      
+      call EO_POSave(999, 0, 1);
+      let _po = (SELECT int1 FROM tw_retval_temp);
+    end if 
+    
+    
+    -- vytvořím insolvenčního správce
+    INSERT INTO EO_InsolvSpravce_Cis(serno, refosoba, ic, poznamka, platnost)
+      VALUES(_id_cibis, _po, _ic, 'migrace', 1);
+      
+    INSERT INTO EO_Adresa_Mat(ulice, cpopis, corient, obec, psc, stat)
+      VALUES(_ulice, _cpopis, _corient, _mesto, replace(_psc, ' ', ''), 'CZ');
+      
+    let _sernoadresa = TW_LastSer();
+      
+    INSERT INTO EO_OsobaAdresa_Mat(refosoba, refadresa, typadresy, platnost)
+      VALUES(_po, _sernoadresa, 'AS', 1);
+
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00311507_krok_1_PO SET po = _po, zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_1C_PO');
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136036_UID80044_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25720: Umožnit zadávat pro občanské průkazy SK kód série dokladu v CIBIS-Central {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_prukaz_arch ADD serprukaz Char(10) before druhprukaz;
+ALTER TABLE eo_prukaz_mat ADD serprukaz Char(10) before druhprukaz;
+
+ALTER TABLE eo_druhprukaz_acis ADD oznacser Integer DEFAULT 0 NOT NULL before poznamka;
+ALTER TABLE eo_druhprukaz_cis ADD oznacser Integer DEFAULT 0 NOT NULL before poznamka;
+
+ROLLBACK WORK;
+
+--End of B136036_UID80044_1

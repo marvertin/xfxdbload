@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B121039_RN00433931_3-komkan
+-- @TC:ONCE: DESCRIPTION = [sv] Impl.BE: RN00421310 Rozšíření úvěrových rolí pro verifikaci příjmů a zaměstnavatele/firmy + změna v kontrole telefonů {ACTIVITY}
+
+
+BEGIN WORK;
+
+UPDATE eo_komkanal_cis SET kontruz = 0 WHERE kanal not in (1,2, 4,10);
+UPDATE eo_komkanal_cis SET kontruz = 1 WHERE kanal in (1,2, 4,10);
+
+UPDATE eo_komkanal_cis SET kontruzporadi = 1 WHERE kanal = 2;
+UPDATE eo_komkanal_cis SET kontruzporadi = 2 WHERE kanal = 1;
+UPDATE eo_komkanal_cis SET kontruzporadi = 3 WHERE kanal = 10;
+UPDATE eo_komkanal_cis SET kontruzporadi = 4 WHERE kanal = 4;
+
+UPDATE eo_komkanal_cis SET akceptuz = 0 WHERE kanal not in (1,2,10);
+UPDATE eo_komkanal_cis SET akceptuz = 1 WHERE kanal in (1,2,10);
+
+DELETE FROM tw_registr_cis WHERE oblast = 'EO' and uloha = 'osoba' and funkce = 'komkanal-akceptUZ';
+
+ROLLBACK WORK;
+
+--End of B121039_RN00433931_3-komkan

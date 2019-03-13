@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A92288_RN00351926
+-- @TC:ONCE: DESCRIPTION = Pøikládání dokumentu v práci s klientem
+
+
+BEGIN WORK;
+
+INSERT INTO do_typobjektu_cis(zkratka,popis,poznamka,tabulka,platnost) VALUES ('produkt','Produkt v centrální evidenci', null,'ep_sml_mat',1);
+
+SET TRIGGERS do_dokumentvevidenci_den_iref DISABLED;
+
+ROLLBACK WORK;
+
+--End of A92288_RN00351926

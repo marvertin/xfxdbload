@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B130075_RN00451095_3
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetKey('EU', 'splat', 'mimoradnaSplatka', 'typUhr', 'POMIMHS');
+
+ROLLBACK WORK;
+
+--End of B130075_RN00451095_3

@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B134755_UID64237_1-varpuasazby
+-- @TC:ONCE: DESCRIPTION = RSTS-17905: Varianty PÚ a sazby - dokončení {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_contractData ADD (
+  xbridgeloanvariantchar   char(10) before xbridgeloanvariant
+);
+
+update pro_contractData 
+set xbridgeloanvariantchar =  (select xbridgeloanvariantid from pro_bridgeloanvariant b where b.id= xbridgeloanvariant);
+
+ALTER TABLE pro_contractData drop xbridgeloanvariant ;
+
+RENAME COLUMN pro_contractData.xbridgeloanvariantchar TO xbridgeloanvariant;
+
+RENAME TABLE pro_bridgeloanvariant TO old_pro_bridgeloanvariant;
+
+ROLLBACK WORK;
+
+--End of B134755_UID64237_1-varpuasazby

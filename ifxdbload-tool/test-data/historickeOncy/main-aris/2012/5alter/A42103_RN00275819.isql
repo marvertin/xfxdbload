@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A42103_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál - zprávy {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table eo_sluzba_kart
+  drop (jmeno, prijmeni, rc, typid);
+
+ROLLBACK;

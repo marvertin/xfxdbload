@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135791_UID43793_3-repcode
+-- @TC:ONCE: DESCRIPTION = RSTS-7906: Úprava v potvrzeních o úrocích a ve výpisech z kont {REQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO rr_reptype_cis(repcode, area, repkind, reptype, repvar, repname, exportdir, savewithoutpreview )
+  VALUES('UP001','UP', '00', '1', 0, 'Potvrzení o úrocích - Main','', 0);
+  
+INSERT INTO rr_xreptype_cis(refrepcode, datod, poznamka, predloha, cesta, soubor, platnost)
+  VALUES('UP001', ap_datprov(), 'Potvrzení o úrocích - Main', 'J', '', 'UP001.jrxml', 1);
+  
+ROLLBACK WORK;
+
+--End of B135791_UID43793_3-repcode

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A61860_RN00356234_1
+-- @TC:ONCE: DESCRIPTION = Nelze uložit návrh na upomínku dokumentù k úèelovosti {DEFECT}
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP PROCEDURE RU_UpUcel_K_Te', -674);
+call TW_ExecSql('DROP TRIGGER ru_upucel_kart_inst', -634);
+call TW_ExecSql('DROP TRIGGER ru_upucel_k_inst', -634);
+call TW_ExecSql('DROP TRIGGER ru_upucel_kart_updt', -634);
+call TW_ExecSql('DROP TRIGGER ru_upucel_k_updt', -634);
+
+ROLLBACK WORK;
+
+--End of A61860_RN00356234_1

@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, B112628_RN00385429_6
+-- @TC:ONCE: DESCRIPTION = Odstranění aplikace CIBIS-Rm {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ CALL tw_execSql('drop procedure bl_baselexrun', -111);                         
+ CALL tw_execSql('drop procedure bl_creditsnotkome', -111);                     
+ CALL tw_execSql('drop procedure bl_ext201_getkontosmlouvy', -111);             
+ CALL tw_execSql('drop procedure bl_ext201_getmenasmlouvy', -111);              
+ CALL tw_execSql('drop procedure bl_ext201_gettkosmlouvy', -111);               
+ CALL tw_execSql('drop procedure bl_ext202_getkontosmlouvy', -111);             
+ CALL tw_execSql('drop procedure bl_ext202_getmenasmlouvy', -111);              
+ CALL tw_execSql('drop procedure bl_ext202_gettkosmlouvy', -111);               
+ CALL tw_execSql('drop procedure bl_ext203_getkontosmlouvy', -111);             
+ CALL tw_execSql('drop procedure bl_ext203_getmenasmlouvy', -111);              
+ CALL tw_execSql('drop procedure bl_ext203_gettkosmlouvy', -111);               
+ CALL tw_execSql('drop procedure bl_ext204_getkontosmlouvy', -111);             
+ CALL tw_execSql('drop procedure bl_ext204_getmenasmlouvy', -111);              
+ CALL tw_execSql('drop procedure bl_ext204_gettkosmlouvy', -111);               
+ CALL tw_execSql('drop procedure bl_updatecounterpartystatistics', -111);       
+ CALL tw_execSql('drop procedure bl_updatecreditriskmitigantstatistics', -111); 
+ CALL tw_execSql('drop procedure bl_updatecustomeracountbyglstatistics', -111); 
+ CALL tw_execSql('drop procedure bl_updateexposurestatistics', -111);           
+ CALL tw_execSql('drop procedure bl_updatespecificprovisionstatistics', -111);  
+ CALL tw_execSql('drop procedure bl_updcounterpartystats', -111);               
+ CALL tw_execSql('drop procedure bl_updcreditriskmitigantstats', -111);         
+ CALL tw_execSql('drop procedure bl_updcustomeracountbyglstats', -111);         
+ CALL tw_execSql('drop procedure bl_updspecificprovisionstats', -111);          
+ 
+  
+ROLLBACK WORK;
+
+--End of B112628_RN00385429_6

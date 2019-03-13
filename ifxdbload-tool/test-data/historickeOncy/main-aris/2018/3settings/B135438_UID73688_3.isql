@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135438_UID73688_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22708: URGENTNI:   Čerpání - chyba LTV (bez zajištění) {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'zajist', 'kontrolaProdLTVvzdy', 'PFSU', 1, 1, 'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Vždy kontrovat hraniční LTV při čerpání <typ_smlouvy>');
+
+ROLLBACK WORK;
+
+--End of B135438_UID73688_3

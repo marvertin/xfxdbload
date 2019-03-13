@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B124991_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodakce_cis 
+
+  -- Vypočítat dílčí RPSN
+  -- Určuje, zda počítat dílčí RPSN za jednotlivé fáze úvěru
+  ADD vypdilcirpsn   Integer  DEFAULT 0 BEFORE vypeir,
+  ADD CONSTRAINT CHECK (vypdilcirpsn IN (0,1)) CONSTRAINT ep_splspormodakce_cis_dw2q;
+
+ALTER TABLE ep_splspormodakce_acis 
+
+  -- Vypočítat dílčí RPSN
+  -- Určuje, zda počítat dílčí RPSN za jednotlivé fáze úvěru
+  ADD vypdilcirpsn   Integer  DEFAULT 0 BEFORE vypeir,
+  ADD CONSTRAINT CHECK (vypdilcirpsn IN (0,1)) CONSTRAINT ep_splspormodakce_acis_dw2r;
+    
+ROLLBACK WORK;
+
+--End of B124991_RN00443393_1

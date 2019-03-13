@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A83401_RN00363151_3
+-- @TC:ONCE: DESCRIPTION = Rozdíl CHCKBLC {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_emailtyp_cis(zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, platnost, maxpocetpriloh)
+SELECT 'CC_CHYBOVA_VETA', 'Chybové vìty importu CC', odesilatel, odesilateljmeno, 'Chybové vìty pøi importu CC', 'Byla pøijato <<pocet_vet>> chybových vìt v dávce CC <<id_davky>>.\n============================================================\n <<text_chyby>>', odkaz, maxpriloh, maxpokusu, maxinterval, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, platnost, maxpocetpriloh 
+FROM tw_emailtyp_cis WHERE zkratka = 'CHYBA_CC_IMP';
+
+
+INSERT INTO tw_smstyp_cis(zkratka, popis, textsms, plnasms, ignorovatcas, platnost )
+SELECT 'CC_CHYBOVA_VETA', 'Chybové vìty importu CC', 'Byla pøijato <<pocet_vet>> chybových vìt v dávce CC <<id_davky>>.', plnasms, ignorovatcas, 1 
+FROM tw_smstyp_cis WHERE zkratka = 'CHYBA_CC_IMP';
+
+
+ROLLBACK WORK;
+
+--End of A83401_RN00363151_3

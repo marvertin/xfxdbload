@@ -1,0 +1,49 @@
+-- @TC:ONCE: ID = V2, B121792_RN00415479_3
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+update ep_typpohybumodel_cis set amorttabletopast = 'Vklad', amorttabletoplan = 'Očekávaný vklad' where typpohybumodel = 'V';
+update ep_typpohybumodel_cis set amorttabletopast = 'Čerpání', amorttabletoplan = 'Plánované čerpání' where typpohybumodel = 'C';
+update ep_typpohybumodel_cis set amorttabletopast = 'Splátka', amorttabletoplan = 'Očekávaná splátka' where typpohybumodel = 'R';
+update ep_typpohybumodel_cis set amorttabletopast = 'Státní podpora', amorttabletoplan = 'Očekávaná státní podpora' where typpohybumodel = 'S';
+update ep_typpohybumodel_cis set amorttabletopast = 'Výplata přeplatku', amorttabletoplan = 'Výplata přeplatku' where typpohybumodel = 'Z';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úhrada za uzavření smlouvy', amorttabletoplan = 'Úhrada za uzavření smlouvy' where typpohybumodel = 'A';
+update ep_typpohybumodel_cis set amorttabletopast = 'Vklad', amorttabletoplan = 'Očekávaný vklad' where typpohybumodel = 'B';
+update ep_typpohybumodel_cis set amorttabletopast = 'Splátka', amorttabletoplan = 'Očekávaná splátka' where typpohybumodel = 'Q';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úrok', amorttabletoplan = 'Očekávaný úrok' where typpohybumodel = 'U';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úrokový bonus', amorttabletoplan = 'Úrokový bonus' where typpohybumodel = 'W';
+update ep_typpohybumodel_cis set amorttabletopast = 'Daň z bonusu', amorttabletoplan = 'Daň z bonusu' where typpohybumodel = '#';
+update ep_typpohybumodel_cis set amorttabletopast = 'Daň z úroku', amorttabletoplan = 'Daň z úroku' where typpohybumodel = 'D';
+update ep_typpohybumodel_cis set amorttabletopast = 'Vrácená státní podpora', amorttabletoplan = 'Vrácená státní podpora' where typpohybumodel = 'T';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úhrada za smlouvu o úvěru', amorttabletoplan = 'Úhrada za smlouvu o úvěru' where typpohybumodel = 'E';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úhrada za výpis ', amorttabletoplan = 'Plánovaná úhrada za výpis' where typpohybumodel = 'F';
+update ep_typpohybumodel_cis set amorttabletopast = 'Bonus', amorttabletoplan = 'Bonus' where typpohybumodel = 'I';
+update ep_typpohybumodel_cis set amorttabletopast = 'Bonus', amorttabletoplan = 'Bonus' where typpohybumodel = 'J';
+update ep_typpohybumodel_cis set amorttabletopast = 'Bonus', amorttabletoplan = 'Bonus' where typpohybumodel = 'G';
+update ep_typpohybumodel_cis set amorttabletopast = 'Bonus', amorttabletoplan = 'Bonus' where typpohybumodel = 'K';
+update ep_typpohybumodel_cis set amorttabletopast = 'Bonus', amorttabletoplan = 'Bonus' where typpohybumodel = 'L';
+update ep_typpohybumodel_cis set amorttabletopast = 'Bonus', amorttabletoplan = 'Bonus' where typpohybumodel = 'O';
+update ep_typpohybumodel_cis set amorttabletopast = 'Daň z bonusu', amorttabletoplan = 'Daň z bonusu' where typpohybumodel = '$';
+update ep_typpohybumodel_cis set amorttabletopast = 'Daň z bonusu', amorttabletoplan = 'Daň z bonusu' where typpohybumodel = '%';
+update ep_typpohybumodel_cis set amorttabletopast = 'Daň z bonusu', amorttabletoplan = 'Daň z bonusu' where typpohybumodel = '^';
+update ep_typpohybumodel_cis set amorttabletopast = 'Daň z bonusu', amorttabletoplan = 'Daň z bonusu' where typpohybumodel = '&';
+update ep_typpohybumodel_cis set amorttabletopast = 'Daň z bonusu', amorttabletoplan = 'Daň z bonusu' where typpohybumodel = '*';
+update ep_typpohybumodel_cis set amorttabletopast = 'Daň z bonusu', amorttabletoplan = 'Daň z bonusu' where typpohybumodel = '@';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úhrada za správu', amorttabletoplan = 'Plánovaná úhrada za správu' where typpohybumodel = 'N';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úhrada za zvýšení CČ', amorttabletoplan = 'Úhrada za zvýšení CČ' where typpohybumodel = 'X';
+update ep_typpohybumodel_cis set amorttabletopast = 'Vypořádání', amorttabletoplan = 'Vypořádání' where typpohybumodel = 'Y';
+update ep_typpohybumodel_cis set amorttabletopast = 'Státní podpora', amorttabletoplan = 'Očekávaná státní podpora' where typpohybumodel = '1';
+update ep_typpohybumodel_cis set amorttabletopast = 'Státní podpora', amorttabletoplan = 'Očekávaná státní podpora' where typpohybumodel = '2';
+update ep_typpohybumodel_cis set amorttabletopast = 'Zůstatek spoření', amorttabletoplan = 'Budoucí zůstatek spoření' where typpohybumodel = '3';
+update ep_typpohybumodel_cis set amorttabletopast = 'Zůstatek spoření', amorttabletoplan = 'Budoucí zůstatek spoření' where typpohybumodel = '4';
+update ep_typpohybumodel_cis set amorttabletopast = 'Pojištění UNIQA', amorttabletoplan = 'Plánované pojištění UNIQA' where typpohybumodel = '5';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úhrada za změnu tarifu', amorttabletoplan = 'Úhrada za změnu tarifu' where typpohybumodel = '6';
+update ep_typpohybumodel_cis set amorttabletopast = 'Ostatní úhrady ', amorttabletoplan = 'Plánované ostatní úhrady' where typpohybumodel = 'P';
+update ep_typpohybumodel_cis set amorttabletopast = 'Vklad', amorttabletoplan = 'Očekávaný vklad' where typpohybumodel = '9';
+update ep_typpohybumodel_cis set amorttabletopast = 'Vklad', amorttabletoplan = 'Očekávaný vklad' where typpohybumodel = '!';
+update ep_typpohybumodel_cis set amorttabletopast = 'Úrok z prodlení', amorttabletoplan = 'Úrok z prodlení' where typpohybumodel = 'a';
+
+ROLLBACK WORK;
+
+--End of B121792_RN00415479_3

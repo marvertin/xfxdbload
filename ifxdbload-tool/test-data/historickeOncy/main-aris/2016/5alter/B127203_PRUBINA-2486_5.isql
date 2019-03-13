@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B127203_PRUBINA-2486_5
+-- @TC:ONCE: DESCRIPTION = 05a-alter: EP_SplSporModB_Den
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B127102_RN00457271_5
+
+BEGIN WORK;
+
+  ALTER TABLE EP_SplSporModB_Den MODIFY ser BIGSERIAL;
+  
+  INSERT INTO ep_splspormodsh_den (stav) VALUES ('A');
+  
+  INSERT INTO ep_splspormodh_den (headser) SELECT MAX(ser) FROM ep_splspormodsh_den;
+  
+  INSERT INTO EP_SplSporModB_Den (ser, headser) SELECT 2147484000, MAX(ser) FROM ep_splspormodh_den;
+  
+  DELETE FROM EP_SplSporModB_Den WHERE ser = 2147484000;  
+  
+  DELETE FROM ep_splspormodh_den WHERE ser = (SELECT MAX(ser) FROM ep_splspormodh_den);
+  
+  DELETE FROM ep_splspormodsh_den WHERE ser = (SELECT MAX(ser) FROM ep_splspormodsh_den);
+
+ROLLBACK WORK;
+
+--End of B127203_PRUBINA-2486_5

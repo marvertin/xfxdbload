@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, B108164_RN00385768_1
+-- @TC:ONCE: DESCRIPTION = Předělat výčet stavů insolvence na dropdown nad číselníkem {DEFECT}
+
+BEGIN WORK;
+
+CREATE TABLE ep_stavinsolv_cis (
+  stav   CHAR(1) NOT NULL,
+  popis   CHAR(100) NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_stavinsolv_cis_pk ON ep_stavinsolv_cis(stav);
+ALTER TABLE ep_stavinsolv_cis ADD CONSTRAINT PRIMARY KEY(stav) CONSTRAINT ep_stavinsolv_cis_pk;
+
+CREATE TABLE ep_stavinsolv_acis (
+  idarch   SERIAL NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  popis   CHAR(100) NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_stavinsolv_acis_pk ON ep_stavinsolv_acis(idarch);
+ALTER TABLE ep_stavinsolv_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_stavinsolv_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B108164_RN00385768_1

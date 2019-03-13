@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B135172_UID66823_3-registry
+-- @TC:ONCE: DESCRIPTION = RSTS-19216: Vyhodnocení údajů z CRIBIS pro požadované dokumenty {STORY}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EO', 'EvidenceFirem', 'CRIBIS', 'NotifVarKodPrijemce', null, 1, 'Osoba', 'Evidence firem', 'Dotazy do CRIBIS', 'Příjemci notifikace e-mailu neexistence varovného kódu firmy', 1)
+;
+call TW_RegSetOrAddKey('EO', 'EvidenceFirem', 'CRIBIS', 'NotivVarKodTypEmail', 'CRIBIS_VARKOD_NOTIF', 1, 'Osoba', 'Evidence firem', 'Dotazy do CRIBIS', 'Typ notifikačního e-mailu neexistence varovného kódu firmy', 1)
+;
+call TW_RegSetOrAddKey('EO', 'EvidenceFirem', 'CRIBIS', 'VarKodStatOrgUrad', 'A0FBSB', 1, 'Osoba', 'Evidence firem', 'Varovné kódy', 'Varovný kód – Statutární orgán s adresou na městském úřadě', 1)
+;
+call TW_RegSetOrAddKey('EO', 'EvidenceFirem', 'CRIBIS', 'VarKodNespolDPH', 'ND', 1, 'Osoba', 'Evidence firem', 'Varovné kódy', 'Varovný kód – Nespolehlivý plátce DPH', 1)
+;
+call TW_RegSetOrAddKey('EO', 'EvidenceFirem', 'CRIBIS', 'VarKodFirmaVirtAdr', 'A001', 1, 'Osoba', 'Evidence firem', 'Varovné kódy', 'Varovný kód – Firma sídlí na virtuální adrese', 1)
+;
+
+ROLLBACK WORK;
+
+--End of B135172_UID66823_3-registry

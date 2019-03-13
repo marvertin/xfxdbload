@@ -1,0 +1,40 @@
+create procedure RN00311507_krok_6A()
+-- tvorba a naplnění řídící tabulky pro tvorbu snímků insolvence
+
+define _sernoins Int;
+
+BEGIN WORK;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_6_snim;
+end;
+
+-- řídící tabulka
+CREATE TABLE RN00311507_krok_6_snim(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt default -1,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+
+                            --vlastni data - např. cislo osoby
+  sernoins Int,
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+-- vybereme insolvence ve vztahu
+foreach
+  SELECT serno INTO _sernoins FROM EP_Insolvence_Mat ORDER BY serno
+  
+  INSERT INTO RN00311507_krok_6_snim(sernoins) VALUES(_sernoins);
+end foreach;
+
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_krok_6_snim;
+
+COMMIT WORK;
+
+end procedure;

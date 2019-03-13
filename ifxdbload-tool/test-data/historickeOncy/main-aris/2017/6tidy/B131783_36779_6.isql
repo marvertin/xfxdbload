@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B131783_36779_6
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_ExecSql('drop function SI_CntrSysPars$isSavingEirForAgent', -674);
+call TW_ExecSql('drop function SI_CntrSysPars$isCreditEirForAgent', -674);
+
+ROLLBACK WORK;
+
+--End of B131783_36779_6

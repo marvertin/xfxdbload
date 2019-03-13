@@ -1,0 +1,13 @@
+create PROCEDURE RN00400175_uhrada_make_D (ATuhr Char(8), ACharakter Char(1), ATsml Char(4), 
+                                            ATreal Char(4), ADatOd Date, ADatodNew Date)
+
+define _defpar int;
+
+SELECT defpar INTO _defpar FROM ep_uhrdefpar_cis WHERE tuhr = ATuhr and charakter = ACharakter and tsml = ATsml and datod = ADatod;
+
+UPDATE ep_uhrdefpar_cis SET datod = ADatOdNew WHERE defpar = _defpar;
+
+UPDATE ep_uhrsazeb_cis SET datod = ADatOdNew WHERE defpar = _defpar AND (TW_NullEmpty(treal) = TW_NullEmpty(ATreal))  AND datod = ADatod;                   
+                                                               
+
+end procedure;

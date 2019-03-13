@@ -1,0 +1,143 @@
+CREATE PROCEDURE RSTS_2905_zpracStavSplaceni(ARealn    INT)
+                                    
+  DEFINE GLOBAL G_MONITOR_ON INTEGER DEFAULT 0;                                    
+  DEFINE _logovat   INT;
+  
+  DEFINE _klasifreal        INT;
+  DEFINE _klasif            INT; 
+  DEFINE _datum             DATE;
+  DEFINE _klasifrealpred    INT;
+  DEFINE _datumpred         DATE;
+  DEFINE _pocetVyleceni     INT;  
+  DEFINE _datumDefault      DATE;
+  DEFINE _datumVyleceni     DATE;
+  DEFINE _indikator         INT;
+  DEFINE _stadiumifrs       INT;
+  DEFINE _provtime          DATETIME YEAR TO SECOND;
+  DEFINE _klasklient        INT;
+  DEFINE _minDatum          DATE;
+  DEFINE _maxDatum          DATE;
+  DEFINE _datumVyhodnoceni  DATE;
+  DEFINE _klasifMin         INT;
+  DEFINE _klasifIndik       INT;
+   
+  BEGIN
+    ON EXCEPTION IN(-206)
+    END EXCEPTION;
+    
+    DROP TABLE rsts_2905_stavsplaceni_tmp;
+  END;
+  
+  --zalozime temp tabulku pro evidenci DPD
+  CREATE TEMP TABLE rsts_2905_stavsplaceni_tmp(
+    realn             int,
+    poradi            serial,
+    datvyhodnoceni    date,     
+    indikdefault      int,
+    datdefault        date,
+    datvyleceni       date,
+    pocetvyleceni     int,
+    stadiumifrs       int
+  )LOCK MODE ROW;    
+   
+  CALL tw_monitor_init(ARealn,'MigraceStavSplaceni');
+  LET _logovat = 0;   
+
+  LET _pocetVyleceni  = 0;
+  LET _klasifrealpred = 0;
+  LET _datumpred      = NULL; 
+  LET _datumDefault   = NULL;
+  LET _datumVyleceni  = NULL;
+  LET _indikator      = 0;
+  LET _stadiumifrs    = 1;
+  LET _klasif         = 0;
+  LET _klasifMin      = 0;
+  LET _klasifIndik    = 0;
+  
+  SELECT MIN(datprvvyhodnoceni), MAX(datvyhodnoceni) 
+  INTO _minDatum, _maxDatum
+  FROM ep_dpdevid_den WHERE realuv = ARealn;
+  
+  LET _datumVyhodnoceni = TW_LastDayOf(_minDatum, 'M');
+  WHILE(_datumVyhodnoceni <= _maxDatum)
+    INSERT INTO rsts_2905_stavsplaceni_tmp (realn, datvyhodnoceni, indikdefault, datdefault, datvyleceni, pocetvyleceni, stadiumifrs)
+    VALUES(ARealn, _datumVyhodnoceni, 0, NULL, NULL, 0, 1);      
+    
+    LET _datumVyhodnoceni = TW_LastDayOf(_datumVyhodnoceni + 1 UNITS DAY, 'M');
+  END WHILE;   
+                                  
+  FOREACH c1 WITH HOLD FOR
+    SELECT klasifreal, klasif, datum, provtime, klasifMin
+    INTO _klasifreal, _klasif, _datum, _provtime, _klasifMin 
+    FROM ru_klasif_kart
+    WHERE
+      realn = ARealn AND
+      stav = 'C'
+    ORDER BY
+      poradi
+      
+    SELECT datdefault, datvyleceni INTO _datumDefault, _datumVyleceni 
+    FROM rsts_2905_stavsplaceni_tmp
+    WHERE
+      realn = ARealn AND
+      datvyhodnoceni = (SELECT MAX(datvyhodnoceni) FROM rsts_2905_stavsplaceni_tmp 
+                        WHERE
+                          realn = ARealn AND
+                          datvyhodnoceni < _datum);  
+    
+    -- indikator defaultu
+    LET _klasklient = RSTS_2905_klientStavSplaceni(ARealn, _provtime);
+    LET _klasifIndik = TW_MaxInt(_klasifReal, _klasifMin);
+    IF(_klasifIndik <= 1 AND _klasklient <= 1) THEN
+      LET _indikator = 0;
+    ELIF(_klasifIndik <= 1 AND _klasklient > 1) THEN
+      LET _indikator = 1;
+    ELIF(_klasifIndik > 1 AND _klasklient <= 1) THEN
+      LET _indikator = 2;
+    ELSE
+      LET _indikator = 3;
+    END IF;  
+    
+    -- defaulty
+    IF(_klasifreal IN (2, 3, 4) AND _klasifrealpred IN (0, 1)) THEN
+      LET _datumDefault = _datum;
+    END IF;
+    
+    IF(_klasifreal IN (0, 1) AND _klasifrealpred IN (2, 3, 4)) THEN
+      --LET _datumDefault = NULL;
+      LET _datumVyleceni = _datum;
+      LET _pocetVyleceni = _pocetVyleceni + 1;
+    END IF;    
+    
+    -- stadium IFRS
+    IF(_klasif = 0) THEN
+      LET _stadiumifrs = 1;
+    ELIF(_klasif = 1) THEN
+      LET _stadiumifrs = 2;  
+    ELSE
+      LET _stadiumifrs = 3;
+    END IF;
+    
+    LET _klasifrealpred = _klasifreal;
+    LET _datumpred      = _datum;  
+    
+    UPDATE rsts_2905_stavsplaceni_tmp 
+    SET
+      indikdefault  = _indikator,
+      datdefault    = _datumDefault, 
+      datvyleceni   = _datumVyleceni,
+      pocetvyleceni = _pocetVyleceni,
+      stadiumifrs   = _stadiumifrs
+    WHERE
+      datvyhodnoceni >= _datum;            
+        
+  END FOREACH;       
+  
+  INSERT INTO ru_stavsplaceni_den (realn, poradi, datvyhodnoceni, indikdefault, datdefault, datvyleceni, pocetvyleceni, stadiumifrs)
+    SELECT
+      realn, poradi, datvyhodnoceni, indikdefault, datdefault, datvyleceni, pocetvyleceni, stadiumifrs
+    FROM rsts_2905_stavsplaceni_tmp;    
+  
+  CALL tw_monitor_finish();  
+  
+END PROCEDURE;

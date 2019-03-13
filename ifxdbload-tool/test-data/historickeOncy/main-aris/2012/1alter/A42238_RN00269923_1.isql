@@ -1,0 +1,225 @@
+-- @TC:ONCE: ID = V2, A42238_RN00269923_1
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  ---eu_snimekvympohl_den----------------------------
+  CREATE TABLE eu_snimekvympohl_den (
+    ser   SERIAL NOT NULL,
+    smlouva   DECIMAL(16, 0) NOT NULL,
+    tsml   CHAR(4) NOT NULL,
+    akce   CHAR(1) NOT NULL,
+    datvytv   DATE NOT NULL,
+    poradi   Integer NOT NULL,
+    stav   CHAR(1) NOT NULL,
+    datsledod   DATE,
+    datsleddo   DATE,
+    zarazeni   CHAR(1),
+    vyrazeni   CHAR(1),
+    datprechodovp   DATE,
+    datdopis   DATE,
+    poznpozdni   Char(500),
+    datuzndluh   DATE,
+    cisjednaci   CHAR(20),
+    uzndluhmimosoud   DECIMAL(16, 2),
+    datpromlceni   DATE,
+    datpredsoud   DATE,
+    refprav   Char(2),
+    poznsoud   Char(500),
+    datzaloba   DATE,
+    datpredvolani   DATE,
+    caspredvolani   Datetime Hour to Minute,
+    datrozhodsoud   DATE,
+    cisnabyvtitul   Char(15),
+    datpravmoci   DATE,
+    datvykon   DATE,
+    datsplatpm   DATE,
+    datpocsplacpm   DATE,
+    uzndluhsoud   DECIMAL(16, 2),
+    poplsoud   DECIMAL(16, 2),
+    priznnaklsoud   DECIMAL(16, 2),
+    datzastrizeni   DATE,
+    datpredext   DATE,
+    datukonext   DATE,
+    poznext   Char(500),
+    soud   INTEGER,
+    zaradtime   datetime year to second,
+    zaraduser   CHAR(20),
+    vyradtime   datetime year to second,
+    vyraduser   CHAR(20),
+    pozdvymtime   datetime year to second,
+    pozdvymuser   CHAR(20),
+    soudvymtime   datetime year to second,
+    soudvymuser   CHAR(20),
+    portimevympohl   datetime year to second,
+    poruservympohl   CHAR(20),
+    treal   Char(4),
+    typidkl   CHAR(1),
+    identkl   CHAR(13),
+    nazevkl   Char(200),
+    datzanikkl   DATE,
+    stavsml   CHAR(1),
+    datukoncsml   DATE,
+    fazevym   CHAR(1),
+    ref3   Char(2),
+    ref4   Char(2),
+    zvlrezim   INTEGER,
+    datzvlrezim   DATE,
+    prizinsolv   Integer,
+    prizsoud   Integer,
+    prizexekuce   Integer,
+    prizextvym   Integer,
+    datdelikvence   DATE,
+    datmaxdluhpospl   DATE,
+    pocetdnipospl   Integer,
+    klasif   Integer,
+    klasifreal   Integer,
+    klasifmin   Integer,
+    saldovyzvakl   DECIMAL(16, 2),
+    datsplvyzvakl   DATE,
+    saldovyzvaru   DECIMAL(16, 2),
+    datsplvyzvaru   DATE,
+    saldoprvym   DECIMAL(16, 2),
+    datprovprvym   DATE,
+    odppohlsaldo   DECIMAL(16, 2),
+    datprovodppohl   DATE,
+    odppohltyp   CHAR(1),
+    saldo   DECIMAL(16, 2),
+    dluhpospl   DECIMAL(16, 2),
+    dluhjist   DECIMAL(16, 2),
+    dluhprislus   DECIMAL(16, 2),
+    nedoplatekspor   DECIMAL(16, 2),
+    summesuver   DECIMAL(16, 2),
+    datuctposluver   DATE,
+    textposluver   CHAR(20),
+    splatka   DECIMAL(16, 2),
+    summesspor   DECIMAL(16, 2),
+    datuctposplspor   DATE,
+    textposplspor   CHAR(20),
+    vklad   DECIMAL(16, 2),
+    roleprsd   Integer,
+    zajruceni   Integer,
+    zajnemov   Integer,
+    reziminsolv   INTEGER,
+    datnastaveniinsolv   DATE,
+    datzastaveniinsolv   DATE,
+    poznamkainsolv   Char(500),
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    refuser   CHAR(20)  DEFAULT USER NOT NULL
+  ) EXTENT SIZE 1536 NEXT SIZE 1536 lock mode row;
+  
+  --PK
+  CREATE UNIQUE INDEX eu_snimekvympohl_den_pk ON eu_snimekvympohl_den(ser);
+  ALTER TABLE eu_snimekvympohl_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT eu_snimekvympohl_den_pk;
+  
+  --FK
+  CREATE INDEX eu_snimekvympohl_den_i_f1 ON eu_snimekvympohl_den(smlouva,tsml);
+  ALTER TABLE eu_snimekvympohl_den ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_snimekvympohl_den_f1;
+  CREATE INDEX eu_snimekvympohl_den_i_f2 ON eu_snimekvympohl_den(refprav);
+  ALTER TABLE eu_snimekvympohl_den ADD CONSTRAINT FOREIGN KEY(refprav) REFERENCES ep_referent_cis(zkratka) CONSTRAINT eu_snimekvympohl_den_f2;
+  CREATE INDEX eu_snimekvympohl_den_i_f3 ON eu_snimekvympohl_den(soud);
+  ALTER TABLE eu_snimekvympohl_den ADD CONSTRAINT FOREIGN KEY(soud) REFERENCES eo_soud_cis(id) CONSTRAINT eu_snimekvympohl_den_f3;
+  CREATE INDEX eu_snimekvympohl_den_i_f4 ON eu_snimekvympohl_den(zvlrezim);
+  ALTER TABLE eu_snimekvympohl_den ADD CONSTRAINT FOREIGN KEY(zvlrezim) REFERENCES ru_zvlrezim_cis(rezim) CONSTRAINT eu_snimekvympohl_den_f4;
+  CREATE INDEX eu_snimekvympohl_den_i_f5 ON eu_snimekvympohl_den(reziminsolv);
+  ALTER TABLE eu_snimekvympohl_den ADD CONSTRAINT FOREIGN KEY(reziminsolv) REFERENCES eo_insolvence_cis(id) CONSTRAINT eu_snimekvympohl_den_f5;
+  
+  --INDEXES
+  CREATE INDEX eu_snimekvympohl_den_i1 ON eu_snimekvympohl_den(smlouva,tsml,poradi);
+  
+  --UNIQUE INDEXES
+  
+  --CHECKS
+  ALTER TABLE eu_snimekvympohl_den
+  ADD CONSTRAINT (CHECK (stav in ('B', 'I', 'P', 'S', 'U', 'V')) CONSTRAINT eu_snimekvympohl_den_c1),
+  ADD CONSTRAINT (CHECK (zarazeni in ('A', 'M')) CONSTRAINT eu_snimekvympohl_den_c2),
+  ADD CONSTRAINT (CHECK (vyrazeni in ('A', 'M')) CONSTRAINT eu_snimekvympohl_den_c3),
+  ADD CONSTRAINT (CHECK (akce in ('M', 'S', 'Z')) CONSTRAINT eu_snimekvympohl_den_c4);
+  ---eu_snimekvympohl_den----------------------------
+
+  ---eu_snimekexekuce_den----------------------------
+  CREATE TABLE eu_snimekexekuce_den (
+    ser   SERIAL NOT NULL,
+    snimekvympohlser   INTEGER NOT NULL,
+    cisjednaciexek   CHAR(20),
+    datzapis   DATE,
+    uzndluh   DECIMAL(16, 2),
+    datzastav   DATE,
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    refuser   CHAR(20)  DEFAULT USER NOT NULL
+  )lock mode row;
+  
+  --PK
+  CREATE UNIQUE INDEX eu_snimekexekuce_den_pk ON eu_snimekexekuce_den(ser);
+  ALTER TABLE eu_snimekexekuce_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT eu_snimekexekuce_den_pk;
+  
+  --FK
+  CREATE INDEX eu_snimekexekuce_den_i_f1 ON eu_snimekexekuce_den(snimekvympohlser);
+  ALTER TABLE eu_snimekexekuce_den ADD CONSTRAINT FOREIGN KEY(snimekvympohlser) REFERENCES eu_snimekvympohl_den(ser) CONSTRAINT eu_snimekexekuce_den_f1;
+  ---eu_snimekexekuce_den----------------------------
+
+  ---eu_snimekexekprikaz_den----------------------------
+  CREATE TABLE eu_snimekexekprikaz_den (
+    ser   SERIAL NOT NULL,
+    snimekexekuceser   INTEGER NOT NULL,
+    poradi   Integer NOT NULL,
+    stav   CHAR(1) NOT NULL,
+    cisprikaz   CHAR(20),
+    datnavrh   DATE,
+    datnarizeni   DATE,
+    poznamka   VARCHAR(255),
+    exekutor   INTEGER,
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    refuser   CHAR(20)  DEFAULT USER NOT NULL
+  )lock mode row;
+  
+  --PK
+  CREATE UNIQUE INDEX eu_snimekexekprikaz_den_pk ON eu_snimekexekprikaz_den(ser);
+  ALTER TABLE eu_snimekexekprikaz_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT eu_snimekexekprikaz_den_pk;
+  
+  --FK
+  CREATE INDEX eu_snimekexekprikaz_den_i_f2 ON eu_snimekexekprikaz_den(exekutor);
+  ALTER TABLE eu_snimekexekprikaz_den ADD CONSTRAINT FOREIGN KEY(exekutor) REFERENCES eo_exekutor_cis(id) CONSTRAINT eu_snimekexekprikaz_den_f2;
+  CREATE INDEX eu_snimekexekprikaz_den_i_f1 ON eu_snimekexekprikaz_den(snimekexekuceser);
+  ALTER TABLE eu_snimekexekprikaz_den ADD CONSTRAINT FOREIGN KEY(snimekexekuceser) REFERENCES eu_snimekexekuce_den(ser) CONSTRAINT eu_snimekexekprikaz_den_f1;
+  
+  --INDEXES
+  
+  --UNIQUE INDEXES
+  CREATE UNIQUE INDEX eu_snimekexekprikaz_den_u1 ON eu_snimekexekprikaz_den(snimekexekuceser,poradi);
+  ALTER TABLE eu_snimekexekprikaz_den ADD CONSTRAINT (UNIQUE (snimekexekuceser,poradi) CONSTRAINT eu_snimekexekprikaz_den_u1);
+  
+  --CHECKS
+  ALTER TABLE eu_snimekexekprikaz_den
+  ADD CONSTRAINT (CHECK (stav in ('A', 'Z')) CONSTRAINT eu_snimekexekprikaz_den_c1);
+  ---eu_snimekexekprikaz_den----------------------------
+  
+  ---eu_snimeksledtranvym_den----------------------------  
+  CREATE TABLE eu_snimeksledtranvym_den (
+    ser   SERIAL NOT NULL,
+    snimekvympohlser   INTEGER NOT NULL,
+    sledtranvymser   INTEGER NOT NULL,
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    refuser   CHAR(20)  DEFAULT USER
+  )lock mode row;
+  
+  --PK
+  CREATE UNIQUE INDEX eu_snimeksledtranvym_den_pk ON eu_snimeksledtranvym_den(ser);
+  ALTER TABLE eu_snimeksledtranvym_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT eu_snimeksledtranvym_den_pk;
+  
+  --FK
+  CREATE INDEX eu_snimeksledtranvym_den_i_f2 ON eu_snimeksledtranvym_den(sledtranvymser);
+  ALTER TABLE eu_snimeksledtranvym_den ADD CONSTRAINT FOREIGN KEY(sledtranvymser) REFERENCES eu_sledtranvym_den(ser) CONSTRAINT eu_snimeksledtranvym_den_f2;
+  CREATE INDEX eu_snimeksledtranvym_den_i_f1 ON eu_snimeksledtranvym_den(snimekvympohlser);
+  ALTER TABLE eu_snimeksledtranvym_den ADD CONSTRAINT FOREIGN KEY(snimekvympohlser) REFERENCES eu_snimekvympohl_den(ser) CONSTRAINT eu_snimeksledtranvym_den_f1;
+  
+  --INDEXES
+  
+  --UNIQUE INDEXES
+  CREATE UNIQUE INDEX eu_snimeksledtranvym_den_u1 ON eu_snimeksledtranvym_den(snimekvympohlser,sledtranvymser);
+  ALTER TABLE eu_snimeksledtranvym_den ADD CONSTRAINT (UNIQUE (snimekvympohlser,sledtranvymser) CONSTRAINT eu_snimeksledtranvym_den_u1);
+  ---eu_snimeksledtranvym_den----------------------------
+
+ROLLBACK WORK;
+
+--End of A42238_RN00269923_1

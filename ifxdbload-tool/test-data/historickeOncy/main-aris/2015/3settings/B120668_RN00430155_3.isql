@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B120668_RN00430155_3
+-- @TC:ONCE: DESCRIPTION = Nastavení sazebníku {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO rp_real_cis (treal, text) VALUES ('PLPO', 'Platební spoření PO');
+
+ROLLBACK WORK;
+
+--End of B120668_RN00430155_3

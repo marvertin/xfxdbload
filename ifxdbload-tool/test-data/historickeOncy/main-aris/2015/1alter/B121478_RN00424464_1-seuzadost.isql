@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B121478_RN00424464_1-seuzadost
+-- @TC:ONCE: DESCRIPTION = Úpravy v Sale – úvěrová žádost {CUSTOMERREQUEST}
+BEGIN WORK;
+
+  Alter table Seu_Zadost_Mat Add (
+    zmenaosobtime   DATETIME YEAR TO SECOND Before poruser,
+    zmenauvertime   DATETIME YEAR TO SECOND Before poruser,
+    zmenasportime   DATETIME YEAR TO SECOND Before poruser,
+    kontrosobtime   DATETIME YEAR TO SECOND Before poruser,
+    kontruvertime   DATETIME YEAR TO SECOND Before poruser,
+    kontrsportime   DATETIME YEAR TO SECOND Before poruser,
+    overenpodpisdopln   Integer Before vygenzadost);
+
+  Alter table Seu_Zadost_Arch Add (
+    zmenaosobtime   DATETIME YEAR TO SECOND Before poruser,
+    zmenauvertime   DATETIME YEAR TO SECOND Before poruser,
+    zmenasportime   DATETIME YEAR TO SECOND Before poruser,
+    kontrosobtime   DATETIME YEAR TO SECOND Before poruser,
+    kontruvertime   DATETIME YEAR TO SECOND Before poruser,
+    kontrsportime   DATETIME YEAR TO SECOND Before poruser,
+    overenpodpisdopln   Integer Before vygenzadost);
+
+ROLLBACK WORK;
+--End of B121478_RN00424464_1-seuzadost

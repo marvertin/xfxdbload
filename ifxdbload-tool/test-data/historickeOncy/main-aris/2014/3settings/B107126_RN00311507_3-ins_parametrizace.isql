@@ -1,0 +1,82 @@
+-- @TC:ONCE: ID = V2, B107126_RN00311507_3-ins_parametrizace
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- #Typ dluhu pro insolvenci - pojištění UNIQA#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'typdluhu', 'uniqa', 320, 1);
+
+-- #Typ dluhu pro insolvenci - soudní poplatky#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'typdluhu', 'soudnipoplatky', 360, 1);
+
+-- #Insolvence: implicitní složka pro generování přihlášky pohledávky#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'prihlaska', 'exportfolder', null, 1);
+
+-- #Verze formuláře přihlášky pohledávky#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'prihlaska', 'verzeformulare', '3–d', 1);
+
+-- #Insolvence: provozní konto pro generování přihlášky#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'prihlaska', 'provoznikonto', '81509', 1);
+
+-- #Typ vztahu mezi insolvencemi - spojení věcí#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'vztah', 'spojeniveci', 1, 1);
+
+-- #Provést vinkulaci vkladů i pro roli zákonný zástupce#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'vinkulace', 'zakonnyzastupce', 0, 1);
+
+-- #Insolvence – distribuční zvl. rež.#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'rezimy', 'distribucniRezim', null, 1);
+
+-- #Číslo popisné banky#
+Call TW_RegSetOrAddKey('AP', 'banka', '*', 'cislopopisne', '2747', 1);
+
+-- #Číslo orientační banky#
+Call TW_RegSetOrAddKey('AP', 'banka', '*', 'cisloorientacni', '99', 1);
+
+-- #E-mail banky#
+Call TW_RegSetOrAddKey('AP', 'banka', '*', 'email', null, 1);
+
+-- #Akceptovat <typ zvláštního režimu úvěru> pro report insolvence - <položka>#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM1-41', 1);
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM1-41', 1);
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM4-43', 1);
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM5-52', 1);
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM6-44', 1);
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM7-57', 1);
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM8-46', 1);
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM9-41', 1);
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM10-48', 1);
+
+
+-- #Typ úkolu pro předání úvěru do soudního vymáhání#
+Call TW_RegSetOrAddKey('RU', 'sprVym', 'ukoly', 'prevodDoSoud', (Select serno From EP_UkolTyp_Cis Where nazev = 'Termín pro podání žaloby'), 1);
+
+-- #Sledovat <typ_role> pro správu vymáhané pohledávky#
+Call TW_RegSetOrAddKey('RU', 'sprVym', 'zobrazeniRole', 'KL', 1, 1);
+Call TW_RegSetOrAddKey('RU', 'sprVym', 'zobrazeniRole', 'MK', 1, 1);
+Call TW_RegSetOrAddKey('RU', 'sprVym', 'zobrazeniRole', 'PR', 1, 1);
+Call TW_RegSetOrAddKey('RU', 'sprVym', 'zobrazeniRole', 'MP', 1, 1);
+Call TW_RegSetOrAddKey('RU', 'sprVym', 'zobrazeniRole', 'RU', 1, 1);
+Call TW_RegSetOrAddKey('RU', 'sprVym', 'zobrazeniRole', 'MR', 1, 1);
+Call TW_RegSetOrAddKey('RU', 'sprVym', 'zobrazeniRole', 'SD', 1, 1);
+
+-- oprava překlepu
+Update EP_UkolTyp_Cis Set nazev = 'Promlčecí lhůta k výzvě pro fázi 1' Where nazev = 'Promlčecí lhůta k vývě pro fázi 1';
+Update EP_UkolTyp_Cis Set nazev = 'Promlčecí lhůta k výzvě pro fázi 2' Where nazev = 'Promlčecí lhůta k vývě pro fázi 2';
+
+-- #Typ úkolu pro splatnost výzvy ke splacení v 1. fázi#
+Call TW_RegSetOrAddKey('RU', 'vyzva', 'ukoly', 'splatnostVyzvy1', (Select serno From EP_UkolTyp_Cis Where nazev = 'Termín splatnosti výzvy pro fázi 1'), 1);
+
+-- #Typ úkolu pro splatnost výzvy ke splacení v 2. fázi#
+Call TW_RegSetOrAddKey('RU', 'vyzva', 'ukoly', 'splatnostVyzvy2', (Select serno From EP_UkolTyp_Cis Where nazev = 'Termín splatnosti výzvy pro fázi 2'), 1);
+
+-- #Typ úkolu pro promlčecí lhůtu výzvy ke splacení v 1. fázi#
+Call TW_RegSetOrAddKey('RU', 'vyzva', 'ukoly', 'promlcLhutaVyzvy1', (Select serno From EP_UkolTyp_Cis Where nazev = 'Promlčecí lhůta k výzvě pro fázi 1'), 1);
+
+-- #Typ úkolu pro promlčecí lhůtu výzvy ke splacení v 2. fázi#
+Call TW_RegSetOrAddKey('RU', 'vyzva', 'ukoly', 'promlcLhutaVyzvy2', (Select serno From EP_UkolTyp_Cis Where nazev = 'Promlčecí lhůta k výzvě pro fázi 2'), 1);
+
+-- #Typ úkolu pro promlčecí lhůtu k podání žaloby#
+Call TW_RegSetOrAddKey('RU', 'vyzva', 'ukoly', 'promlcLhutaZaloba', (Select serno From EP_UkolTyp_Cis Where nazev = 'Promlčecí lhůta k podání žaloby'), 1);
+
+ROLLBACK WORK;
+--End of B107126_RN00311507_3-ins_parametrizace

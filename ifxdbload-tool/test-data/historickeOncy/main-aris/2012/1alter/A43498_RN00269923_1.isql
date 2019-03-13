@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43498_RN00269923_1
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE rn00269923_vym_pohl MODIFY ssoud Char(10);
+
+ROLLBACK WORK;
+
+--End of A43498_RN00269923_1

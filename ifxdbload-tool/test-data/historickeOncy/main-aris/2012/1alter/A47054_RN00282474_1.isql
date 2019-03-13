@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A47054_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table PRO_ContractData
+
+  --varianta pojištìní UNIQA
+  ADD insurVariantId   INTEGER,
+  
+  --Zda byla variantaId naètena bìhem naèítání informací o smlouvì
+  ADD insurvariantidloaded   Integer  DEFAULT 0 NOT NULL,
+  ADD CONSTRAINT CHECK (insurvariantidloaded IN (0,1)) CONSTRAINT pro_contractdata_dpko,
+  
+  --Rozhodné datum pro pojistné
+  ADD insurCrucialDate   DATE
+;
+
+ROLLBACK WORK;
+
+--End of A47054_RN00282474_1

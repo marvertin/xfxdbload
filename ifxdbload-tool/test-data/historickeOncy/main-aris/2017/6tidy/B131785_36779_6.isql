@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B131785_36779_6
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_ExecSql('drop procedure SI_ModlerMain$_makeCorrOper', -674);
+
+ROLLBACK WORK;
+
+--End of B131785_36779_6

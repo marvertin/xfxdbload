@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B115194_RN00384921_3
+-- @TC:ONCE: DESCRIPTION = Main: Vytvoření nového exportu z kartotéky vypořádání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ex_export_cis(typexp, nazev, mesic, druhvzniku) VALUES('AUK','Avízo o přijetí návrhu na ukončení smlouvy SS',0,0);
+
+call TW_RegSetOrAddKey('RZ', 'storno', 'exportAUK', 'createSSFO', 1, 1, 'Spoření', 'Vypořádání stavebního spoření', 'Building saving settlement', 'Vytvářet export AUK při vytvoření návrhu na vypořádání SSFO');
+call TW_RegSetOrAddKey('RZ', 'storno', 'exportAUK', 'createSSPO', 1, 1, 'Spoření', 'Vypořádání stavebního spoření', 'Building saving settlement', 'Vytvářet export AUK při vytvoření návrhu na vypořádání SSPO');
+call TW_RegSetOrAddKey('RZ', 'storno', 'exportAUK', 'confirmSSFO', 1, 1, 'Spoření', 'Vypořádání stavebního spoření', 'Building saving settlement', 'Vytvářet export AUK při potvrzení návrhu na vypořádání SSFO');
+call TW_RegSetOrAddKey('RZ', 'storno', 'exportAUK', 'confirmSSPO', 1, 1, 'Spoření', 'Vypořádání stavebního spoření', 'Building saving settlement', 'Vytvářet export AUK při potvrzení návrhu na vypořádání SSPO');
+
+ROLLBACK WORK;
+
+--End of B115194_RN00384921_3

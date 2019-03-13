@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B126398_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_zahrnutipohybucfmodel_cis
+  ADD includesavings   Integer  DEFAULT 0 BEFORE note,
+  ADD CONSTRAINT CHECK (includesavings IN (0,1)) CONSTRAINT ep_zahrnutipohybucfmodel_cis_d4at;
+
+ALTER TABLE ep_zahrnutipohybucfmodel_acis
+  ADD includesavings   Integer  DEFAULT 0 BEFORE note,
+  ADD CONSTRAINT CHECK (includesavings IN (0,1)) CONSTRAINT ep_zahrnutipohybucfmodel_acis_d4at;
+
+ROLLBACK WORK;
+
+--End of B126398_RN00451080_1

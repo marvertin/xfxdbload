@@ -1,0 +1,116 @@
+-- @TC:ONCE: ID = V2, B129418_RSTS-2951_1
+-- @TC:ONCE: DESCRIPTION = RN00457749-Centrální evidence exekucí
+
+
+BEGIN WORK;
+
+CREATE TABLE ep_ceedotaz_den (
+  serno   SERIAL NOT NULL,
+  typid   CHAR(1),
+  rc   CHAR(20),
+  datdotaz   DATE,
+  akcedotaz   Integer,
+  fo   Integer,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  cislouz   Integer,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ceedotaz_den_pk ON ep_ceedotaz_den(serno);
+ALTER TABLE ep_ceedotaz_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ceedotaz_den_pk;
+
+--FK
+CREATE INDEX ep_ceedotaz_den_i_f1 ON ep_ceedotaz_den(fo);
+ALTER TABLE ep_ceedotaz_den ADD CONSTRAINT FOREIGN KEY(fo) REFERENCES eo_osoba_mat(os) CONSTRAINT ep_ceedotaz_den_f1;
+CREATE INDEX ep_ceedotaz_den_i_f2 ON ep_ceedotaz_den(smlouva,tsml);
+ALTER TABLE ep_ceedotaz_den ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT ep_ceedotaz_den_f2;
+
+--CHECKS
+ALTER TABLE ep_ceedotaz_den
+ADD CONSTRAINT (CHECK (akcedotaz in (1,2,3,4,5)) CONSTRAINT ep_ceedotaz_den_c1);
+
+
+
+CREATE TABLE ep_ceeodpovedh_den (
+  serno   SERIAL NOT NULL,
+  refceedotaz   INTEGER NOT NULL,
+  vysledek   CHAR(1),
+  obtainedrequests   Integer,
+  remainingrequests   Integer,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ceeodpovedh_den_pk ON ep_ceeodpovedh_den(serno);
+ALTER TABLE ep_ceeodpovedh_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ceeodpovedh_den_pk;
+
+--FK
+CREATE INDEX ep_ceeodpovedh_den_i_f1 ON ep_ceeodpovedh_den(refceedotaz);
+ALTER TABLE ep_ceeodpovedh_den ADD CONSTRAINT FOREIGN KEY(refceedotaz) REFERENCES ep_ceedotaz_den(serno) CONSTRAINT ep_ceeodpovedh_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ep_ceeodpovedh_den
+ADD CONSTRAINT (CHECK (vysledek in ('K', 'N', 'E')) CONSTRAINT ep_ceeodpovedh_den_c1);
+
+CREATE TABLE ep_ceeodpovedd_den (
+  serno   SERIAL NOT NULL,
+  refceeodpovedh   INTEGER NOT NULL,
+  code   CHAR(35),
+  ex_number   CHAR(35),
+  cause_id   CHAR(10),
+  document   VARCHAR(255),
+  legal_name   CHAR(100),
+  typeos   CHAR(100),
+  nameos   CHAR(100),
+  surname   CHAR(100),
+  company_name   CHAR(100),
+  birth_date   DATE,
+  address   CHAR(100),
+  addresstype   CHAR(100),
+  street   CHAR(100),
+  city   CHAR(100),
+  zip   CHAR(10),
+  identification_number   CHAR(10),
+  creation_date   DATE,
+  change_date   DATE,
+  last_change   VARCHAR(255),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ceeodpovedd_den_pk ON ep_ceeodpovedd_den(serno);
+ALTER TABLE ep_ceeodpovedd_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ceeodpovedd_den_pk;
+
+--FK
+CREATE INDEX ep_ceeodpovedd_den_i_f1 ON ep_ceeodpovedd_den(refceeodpovedh);
+ALTER TABLE ep_ceeodpovedd_den ADD CONSTRAINT FOREIGN KEY(refceeodpovedh) REFERENCES ep_ceeodpovedh_den(serno) CONSTRAINT ep_ceeodpovedd_den_f1;
+
+CREATE TABLE ep_ceeodpovederr_den (
+  serno   SERIAL NOT NULL,
+  refceeodpovedh   INTEGER NOT NULL,
+  atributc   char(70),
+  atributd   char(70),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ceeodpovederr_den_pk ON ep_ceeodpovederr_den(serno);
+ALTER TABLE ep_ceeodpovederr_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ceeodpovederr_den_pk;
+
+--FK
+CREATE INDEX ep_ceeodpovederr_den_i_f1 ON ep_ceeodpovederr_den(refceeodpovedh);
+ALTER TABLE ep_ceeodpovederr_den ADD CONSTRAINT FOREIGN KEY(refceeodpovedh) REFERENCES ep_ceeodpovedh_den(serno) CONSTRAINT ep_ceeodpovederr_den_f1;
+
+ROLLBACK WORK;
+
+--End of B129418_RSTS-2951_1

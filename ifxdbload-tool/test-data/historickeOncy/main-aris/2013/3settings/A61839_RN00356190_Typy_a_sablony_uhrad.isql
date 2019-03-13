@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, A61839_RN00356190_Typy_a_sablony_uhrad
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST} - parametrizace
+
+BEGIN WORK;
+
+UPDATE ep_uhrdefpar_cis SET nazev = 'Vedení úètu spoøení PO - sleva' where defpar = 525;
+UPDATE ep_uhrdefpar_cis SET nazev = 'Vedení úètu spoøení FO - sleva' where defpar = 526;
+UPDATE ep_uhrdefpar_cis SET nazev = 'Pøedèasné zrušení smlouvy - sleva' where defpar = 527;
+UPDATE ep_uhrdefpar_cis SET nazev = 'Pøedèasné zrušení smlouvy - sleva' where defpar = 528;
+UPDATE ep_uhrdefpar_cis SET nazev = 'Zrušení smlouvy dohodou - sleva' where defpar = 529;
+UPDATE ep_uhrdefpar_cis SET nazev = 'Zrušení smlouvy dohodou - sleva' where defpar = 530;
+
+UPDATE ep_uhrdefpar_cis SET nazev = 'Úhrada za zrušení smlouvy - po VD - sleva' where defpar = 535;
+UPDATE ep_uhrdefpar_cis SET nazev = 'Úhrada za zrušení smlouvy - po VD - sleva' where defpar = 536;
+UPDATE ep_uhrdefpar_cis SET nazev = 'Úhrada za zrušení smlouvy dohodou - po VD - sleva' where defpar = 537;
+UPDATE ep_uhrdefpar_cis SET nazev = 'Úhrada za zrušení smlouvy dohodou - po VD - sleva' where defpar = 538;
+
+ROLLBACK WORK;
+
+--End of A61839_RN00356190_Typy_a_sablony_uhrad

@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_1-01_zmeny-v-ciselniku-EU-ZAJISTDOK-CIS
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CALL tw_addSerialColumn('eu_zajistdok_cis', 'serno', 'zajist');
+
+ALTER TABLE eu_zajistdok_cis
+  DROP    poradi,
+  MODIFY  poznamka    CHAR(160),
+  ADD     platnostod  DATE                        BEFORE portime,
+  ADD     platnostdo  DATE                        BEFORE portime,
+  ADD     platnost    INTEGER DEFAULT 1 NOT NULL  BEFORE portime
+;
+
+ALTER TABLE eu_zajistdok_acis
+  DROP    poradi,
+  ADD     serno       INTEGER           BEFORE zajist,
+  MODIFY  poznamka    CHAR(160),
+  ADD     platnostod  DATE              BEFORE portime,
+  ADD     platnostdo  DATE              BEFORE portime,
+  ADD     platnost    INTEGER DEFAULT 1 BEFORE portime
+;
+
+CREATE UNIQUE INDEX eu_zajistdok_cis_pk ON eu_zajistdok_cis(serno);
+ALTER TABLE eu_zajistdok_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_zajistdok_cis_pk;
+
+ALTER TABLE eu_zajistdok_cis
+  ADD CONSTRAINT (CHECK (platnostOd IS NULL OR platnostDo IS NULL OR platnostOd <= platnostDo) CONSTRAINT eu_zajistdok_cis_c2);
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_1-01_zmeny-v-ciselniku-EU-ZAJISTDOK-CIS

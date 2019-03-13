@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B133378_UID56258_3
+-- @TC:ONCE: DESCRIPTION = Ukončit blokaci osoby {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1004, 'Ukončit blokaci osoby', null, 1);
+
+ROLLBACK WORK;
+
+--End of B133378_UID56258_3

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B127695_RN00455396_1
+-- @TC:ONCE: DESCRIPTION = Integrace registru RÚIAN do CIBISu
+
+
+BEGIN WORK;
+
+alter table ep_aktadrmista_den 
+  add pocetdotcenychadres Integer DEFAULT 0 BEFORE pocchybejiciobec ;  
+ROLLBACK WORK;
+
+
+--End of B127695_RN00455396_1

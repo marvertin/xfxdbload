@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B108166_RN00385768_3
+-- @TC:ONCE: DESCRIPTION = Předělat výčet stavů insolvence na dropdown nad číselníkem {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('A', 'Zahájená');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('D', 'Úpadek');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('E', 'Úpadek - konkurz');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('J', 'Splátkový kalendář / Zpeněžení majetkové podstaty');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('K', 'Konkurz');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('L', 'Splátkový kalendář');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('M', 'Zpeněžení majetkové podstaty');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('N', 'Nepřihlášená pohledávka');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('O', 'Popřená pohledávka');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('P', 'Přihlášená pohledávka');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('Q', 'Přihlášená pohledávka - konkurz');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('R', 'Popřená pohledávka - konkurz');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('S', 'Stornovaná');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('U', 'Ukončená');
+INSERT INTO EP_StavInsolv_Cis(stav, popis) VALUES('Z', 'Zamítnutá');
+
+ROLLBACK WORK;
+
+--End of B108166_RN00385768_3

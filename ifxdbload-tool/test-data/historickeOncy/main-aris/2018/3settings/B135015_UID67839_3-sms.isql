@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B135015_UID67839_3-sms
+-- @TC:ONCE: DESCRIPTION = RSTS-19701: Notifikace o zpracování žádosti v CIBIS-Central {STORY}
+
+BEGIN WORK;
+
+update TW_SMSTyp_Cis set textsms = 'Vase zadost o uver <<CISLO_SS>> byla stornována. Raiffeisen stavebni sporitelna'
+  where zkratka = 'UVER_STORNO_KLIENT'
+;
+
+update TW_SMSTyp_Cis set textsms = 'Zadost o uver <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla stornovana. Raiffeisen stavebni sporitelna'
+  where zkratka = 'UVER_STORNO_OZ'
+;
+
+update TW_SMSTyp_Cis set textsms = 'Zadost o uver <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla zamitnuta. Raiffeisen stavebni sporitelna'
+  where zkratka = 'UVER_ZAMIT_OZ'
+;
+
+update TW_SMSTyp_Cis set textsms = 'Vase zadost o uver <<CISLO_SS>> byla zamitnuta. Raiffeisen stavebni sporitelna'
+  where zkratka = 'UVER_ZAMIT_KLIENT'
+;
+
+insert into TW_SMSTyp_Cis(zkratka, popis
+  , textsms
+) values ('UVER_POKRAC_OZ', 'Úvěrová žádost - vrácení ÚŽ k zadání pro OZ'
+  , 'Je mozne pokracovat v zadani uveru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>. Raiffeisen stavebni sporitelna'
+);
+
+ROLLBACK WORK;
+
+--End of B135015_UID67839_3-sms

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B130762_40317_1
+-- @TC:ONCE: DESCRIPTION = Migrace DPD
+
+BEGIN WORK;
+
+CREATE INDEX rz_real_mat_i6 ON rz_real_mat(realvu);
+
+ROLLBACK WORK;
+
+--End of B130527_RSTS-3086_1

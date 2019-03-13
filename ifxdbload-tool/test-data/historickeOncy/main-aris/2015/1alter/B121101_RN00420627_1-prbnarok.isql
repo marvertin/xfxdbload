@@ -1,0 +1,194 @@
+-- @TC:ONCE: ID = V2, B121101_RN00420627_1-prbnarok
+-- @TC:ONCE: DESCRIPTION = Časové rozlišení pobytu {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       sp_prbnarokosoba_arch
+
+-- 13  sp_prbnarokosoba_arch-1/3       [CREATE.TABLE]
+CREATE TABLE sp_prbnarokosoba_arch (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER  ,
+    os              Integer  ,
+    poznamka        CHAR(200)  ,
+    platnost        Integer  ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    CHECK (platnost IN (0,1)) CONSTRAINT sp_prbnarokosoba_arch_c1
+) LOCK MODE ROW
+;
+
+-- 14  sp_prbnarokosoba_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_prbnarokosoba_arch_pk ON sp_prbnarokosoba_arch (idarch) ;
+
+-- 15  sp_prbnarokosoba_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_prbnarokosoba_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT sp_prbnarokosoba_arch_pk;
+
+-- ###############################################################
+--       sp_prbnarokosoba_mat
+
+-- 16  sp_prbnarokosoba_mat-1/5       [CREATE.TABLE]
+CREATE TABLE sp_prbnarokosoba_mat (
+    serno           SERIAL   NOT NULL,
+    os              Integer   NOT NULL,
+    poznamka        CHAR(200)  ,
+    platnost        Integer   NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT sp_prbnarokosoba_mat_c1
+) LOCK MODE ROW
+;
+
+-- 17  sp_prbnarokosoba_mat-2/5       [CREATE.INDEX]
+CREATE unique INDEX sp_prbnarokosoba_mat_pk ON sp_prbnarokosoba_mat (serno) ;
+
+-- 18  sp_prbnarokosoba_mat-3/5       [CREATE.INDEX]
+CREATE INDEX sp_prbnarokosoba_mat_i_f1 ON sp_prbnarokosoba_mat (os) ;
+
+-- 19  sp_prbnarokosoba_mat-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_prbnarokosoba_mat
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT sp_prbnarokosoba_mat_pk;
+
+-- ###############################################################
+--       sp_prbnaroksml_arch
+
+-- 24  sp_prbnaroksml_arch-1/3       [CREATE.TABLE]
+CREATE TABLE sp_prbnaroksml_arch (
+    idarch          SERIAL   NOT NULL,
+    serno           Integer  ,
+    refprbosoba     Integer  ,
+    smlouva         DECIMAL(16, 0)  ,
+    tsml            CHAR(4)  ,
+    poznamka        CHAR(200)  ,
+    platnost        Integer  ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    CHECK (platnost IN (0,1)) CONSTRAINT sp_prbnaroksml_arch_c1
+) LOCK MODE ROW
+;
+
+-- 25  sp_prbnaroksml_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_prbnaroksml_arch_pk ON sp_prbnaroksml_arch (idarch) ;
+
+-- 26  sp_prbnaroksml_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_prbnaroksml_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT sp_prbnaroksml_arch_pk;
+
+-- ###############################################################
+--       sp_prbnaroksml_mat
+
+-- 27  sp_prbnaroksml_mat-1/7       [CREATE.TABLE]
+CREATE TABLE sp_prbnaroksml_mat (
+    serno           SERIAL   NOT NULL,
+    refprbosoba     INTEGER   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    poznamka        CHAR(200)  ,
+    platnost        Integer   NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT sp_prbnaroksml_mat_c1
+) LOCK MODE ROW
+;
+
+-- 28  sp_prbnaroksml_mat-2/7       [CREATE.INDEX]
+CREATE unique INDEX sp_prbnaroksml_mat_pk ON sp_prbnaroksml_mat (serno) ;
+
+-- 29  sp_prbnaroksml_mat-3/7       [CREATE.INDEX]
+CREATE INDEX sp_prbnaroksml_mat_i_f1 ON sp_prbnaroksml_mat (refprbosoba) ;
+
+-- 30  sp_prbnaroksml_mat-4/7       [CREATE.INDEX]
+CREATE INDEX sp_prbnaroksml_mat_i_f2 ON sp_prbnaroksml_mat (smlouva,tsml) ;
+
+-- 31  sp_prbnaroksml_mat-5/7       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_prbnaroksml_mat
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT sp_prbnaroksml_mat_pk;
+
+-- ###############################################################
+--       sp_prbnarokroksp_arch
+
+-- 20  sp_prbnarokroksp_arch-1/1       [CREATE.TABLE]
+CREATE TABLE sp_prbnarokroksp_arch (
+    idarch          SERIAL   NOT NULL,
+    serno           Integer  ,
+    refprbsml       INTEGER  ,
+    roksp           datetime year to year  ,
+    naroksp         Integer  ,
+    poznamka        CHAR(200)  ,
+    platnost        Integer  ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    CHECK (naroksp IN (0,1)) CONSTRAINT sp_prbnarokroksp_arch_c1,
+    CHECK (platnost IN (0,1)) CONSTRAINT sp_prbnarokroksp_arch_c2
+) LOCK MODE ROW
+;
+
+-- ###############################################################
+--       sp_prbnarokroksp_mat
+
+-- 21  sp_prbnarokroksp_mat-1/3       [CREATE.TABLE]
+CREATE TABLE sp_prbnarokroksp_mat (
+    serno           SERIAL   NOT NULL,
+    refprbsml       INTEGER  ,
+    roksp           datetime year to year  ,
+    naroksp         Integer   NOT NULL,
+    poznamka        CHAR(200)  ,
+    platnost        Integer   NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (naroksp IN (0,1)) CONSTRAINT sp_prbnarokroksp_mat_c1,
+    CHECK (platnost IN (0,1)) CONSTRAINT sp_prbnarokroksp_mat_c2
+) LOCK MODE ROW
+;
+
+-- 22  sp_prbnarokroksp_mat-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_prbnarokroksp_mat_pk ON sp_prbnarokroksp_mat (serno) ;
+
+-- 23  sp_prbnarokroksp_mat-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_prbnarokroksp_mat
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT sp_prbnarokroksp_mat_pk;
+
+
+--XXX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX
+
+
+-- ###############################################################
+--       sp_prbnarokosoba_mat
+
+-- 32  sp_prbnarokosoba_mat-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE sp_prbnarokosoba_mat
+    ADD CONSTRAINT FOREIGN KEY (os) REFERENCES eo_osoba_mat(os)  CONSTRAINT sp_prbnarokosoba_mat_f1;
+
+-- ###############################################################
+--       sp_prbnaroksml_mat
+
+-- 33  sp_prbnaroksml_mat-6/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE sp_prbnaroksml_mat
+    ADD CONSTRAINT FOREIGN KEY (refprbosoba) REFERENCES sp_prbnarokosoba_mat(serno)  CONSTRAINT sp_prbnaroksml_mat_f1;
+
+-- 34  sp_prbnaroksml_mat-7/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE sp_prbnaroksml_mat
+    ADD CONSTRAINT FOREIGN KEY (smlouva,tsml) REFERENCES es_sml_mat(smlouva,typ)  CONSTRAINT sp_prbnaroksml_mat_f2;
+
+ALTER TABLE sp_prbnarokroksp_mat
+    ADD CONSTRAINT FOREIGN KEY (refprbsml) REFERENCES sp_prbnaroksml_mat(serno)  CONSTRAINT sp_prbnarokroksp_mat_f1;
+
+
+ROLLBACK WORK;
+
+--End of B121101_RN00420627_1-prbnarok

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B137131_UID91682_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32121: Nemov: Příznak "společné části věci" pro parcelu do exportu úvěrové smlouvy
+
+
+BEGIN WORK;
+
+alter table cev_expennem_den add spolcastveci integer;
+
+alter table cev_expennem_den add constraint (check (spolcastveci IN (0,1)) constraint cev_expennem_den_dc45);
+
+ROLLBACK WORK;
+
+--End of B137131_UID91682_1

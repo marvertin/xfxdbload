@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136057_UID80921_1
+-- @TC:ONCE: DESCRIPTION = RSTS-26170: Analyzovat další dopady zavedení více dokladů {TASK}
+
+BEGIN WORK;
+
+call TW_ExecSQL('DROP VIEW eo_fodetail_v', -206);
+call TW_ExecSQL('DROP VIEW ICeu_fo_v', -206);
+call TW_ExecSQL('DROP FUNCTION EO_IsPersonDataChange', -674);
+
+ROLLBACK WORK;
+
+--End of B136057_UID80921_1

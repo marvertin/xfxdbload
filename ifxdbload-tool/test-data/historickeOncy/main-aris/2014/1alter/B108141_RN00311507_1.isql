@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B108141_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE EP_SnimPohlInsolv_Den MODIFY (
+  jistdospl   DECIMAL(16, 2),
+  jistpospl   DECIMAL(16, 2),
+  beurokdospl   DECIMAL(16, 2),
+  beurokpospl   DECIMAL(16, 2),
+  saurokdospl   DECIMAL(16, 2),
+  saurokpospl   DECIMAL(16, 2),
+  pohluhrdospl   DECIMAL(16, 2),
+  pohluhrpospl   DECIMAL(16, 2),
+  pokutadospl   DECIMAL(16, 2),
+  pokutapospl   DECIMAL(16, 2),
+  poplpojdospl   DECIMAL(16, 2),
+  poplpojpospl   DECIMAL(16, 2),
+  poplsouddospl   DECIMAL(16, 2),
+  poplsoudpospl   DECIMAL(16, 2)
+);
+
+ROLLBACK WORK;
+--End of B108141_RN00311507_1

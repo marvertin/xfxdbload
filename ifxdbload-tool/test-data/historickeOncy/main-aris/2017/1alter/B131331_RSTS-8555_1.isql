@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B131331_RSTS-8555_1
+-- @TC:ONCE: DESCRIPTION = dávka SOLUS skončila chybou
+
+
+BEGIN WORK;
+
+alter table sol_veta_den
+  add idsolusold char(35) before prijmeni;
+
+ROLLBACK WORK;
+
+--End of B131331_RSTS-8555_1

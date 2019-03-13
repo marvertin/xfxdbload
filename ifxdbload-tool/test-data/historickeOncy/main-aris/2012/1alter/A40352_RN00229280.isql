@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A40352_RN00229280
+-- @TC:ONCE: DESCRIPTION = Zefektivnìní tøídìní klientské korespondence
+
+BEGIN WORK;
+
+alter table ES_ExpSml_Den add koresp int default 0;
+
+ROLLBACK WORK;

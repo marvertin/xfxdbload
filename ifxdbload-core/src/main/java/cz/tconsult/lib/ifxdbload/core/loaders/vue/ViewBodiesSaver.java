@@ -39,6 +39,7 @@ public class ViewBodiesSaver {
     locatorFactory.createLocator("xxx", 0, 0, 0, 0, 0, 0);
 
     return Maps.transformEntries(views, (nazev, data) ->  new SplStatement(null, EStmType.VIEW, nazev, data,
+        null, // žádné heše se nepočítají při zavádění view
         locatorFactory.createLocator(INFORMIX_CATALOG_SYSVIEWS + nazev, 0, 0, 0, 0, 0, 0)));
   }
 

@@ -1,0 +1,11 @@
+ -- @TC:ONCE: ID = V2, A42707_RN00285558
+-- @TC:ONCE: DESCRIPTION = pridani registru na defaultni cestu k dokumentum priloh
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('ES', '*', 'priloha', 'default_cesta', '', 1,  'Spoøení', 'Parametry SS', 'Business', 'Defaultní lokalita pro výbìr souboru s pøílohou');
+  
+ROLLBACK WORK;
+
+--End of A42707_RN00285558
+ 

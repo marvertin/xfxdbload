@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B135923_UID80039_3_eo_prukaz
+-- @TC:ONCE: DESCRIPTION = RSTS-25716: Umožnit zadat více dokladů totožnosti v CIBIS-Main {STORY}
+
+
+BEGIN WORK;
+
+  set triggers for eo_prukaz_arch disabled;
+  set triggers for eo_prukaz_mat disabled;
+
+-- 202  eo_prukaz_arch-2/4       [UPDATE.COLUMN]
+  UPDATE eo_prukaz_arch SET priorita = 1;
+
+-- 206  eo_prukaz_mat-2/4       [UPDATE.COLUMN]
+  UPDATE eo_prukaz_mat SET priorita = 1;
+
+  set triggers for eo_prukaz_arch enabled;
+  set triggers for eo_prukaz_mat enabled;
+
+
+ROLLBACK WORK;
+
+--End of B135923_UID80039_3

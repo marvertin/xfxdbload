@@ -1,0 +1,76 @@
+-- @TC:ONCE: ID = V2, A93119_RN00311507_3-naplneni_ciselniku
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- Èíselník úloh
+Insert into EP_Uloha_Cis (id, nazev, platnost) Values ('SPRINSOLV', 'Správa insolvence', 1);
+Insert into EP_Uloha_Cis (id, nazev, platnost) Values ('SPRVYMPOHL', 'Správa vymáhané pohledávky', 1);
+Insert into EP_Uloha_Cis (id, nazev, platnost) Values ('VYZVAKESPL', 'Výzva ke splacení úvìru', 1);
+
+-- Èíselník funkcí
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZAHAJIT',    'Zahájit insolvenci',                 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZMENIT',     'Zmìnit insolvenci',                  1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZAMITNOUT',  'Zamítnout insolvenci',               1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'STORNOVAT',  'Stornovat insolvenci',               1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZADUPADEK',  'Zadat úpadek',                       1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZADUPKON',   'Zadat úpadek - konkurz',             1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'PRIHLPOHL',  'Pøihlásit pohledávku',               1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'NEPRIHLPOH', 'Nepøihlašovat pohledávku',           1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'GENPRIHL',   'Generovat pøihlášku pohledávky',     1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'POPRPOHL',   'Popøít pohledávku',                  1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'UZNATPOHL',  'Uznat pohledávku',                   1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZADSPLKAL',  'Zadat splátkový kalendáø',           1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZADZPENEZ',  'Zadat zpenìžení majetkové podstaty', 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZADKALZPEN', 'Zadat splátkový kalendáø / zpenìžení majetkové podstaty', 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZADKONKURZ', 'Zadat konkurz',                      1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'PRIPOHKON',  'Pøihlásit pohledávku - konkurz',     1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'POPRPOHKON', 'Popøít pohledávku - konkurz',        1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'UZNPOHKON',  'Uznat pohledávku - konkurz',         1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'UKONCIT',    'Ukonèit insolvenci',                 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZADOBZIV',   'Zadat obživnutí insolvence',         1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'SPOJIT',     'Spojit insolvenci',                  1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'EXPORTOVAT', 'Exportovat insolvenci',              1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'VYTREPORT',  'Vytvoøit report insolvence',         1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZARADIT',    'Zaøadit novou smlouvu',              1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZMENIT',     'Zmìnit',                             1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'ZMENITSTAV', 'Zmìnit stav',                        1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UlohaFunkce_Cis (refuloha, id, nazev, platnost) Select serno, 'EXPORTOVAT', 'Export',                             1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+
+-- Èíselník typù úkolù
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Kontrola stavu insolvenèního øízení bez úpadku, odmítnutí nebo ukonèení', 'M', 6, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín pro podání pøihlášky do insolvenèního øízení', 'D', 15, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín pro zpùsob øešení úpadku', 'M', 6, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín pro zpùsob øešení oddlužení', 'M', 6, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Kontrola první splátky dle splátkového kalendáøe', 'D', 30, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Kontrola plnìní splátkového kalendáøe', 'M', 3, 20, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Kontrolní termín pro pokyn zajištìného vìøitele', 'R', 1, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Koneèný termín pro pokyn zajištìného vìøitele', 'R', 4, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín pro skonèení insolvenèního øízení', 'R', 5, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRINSOLV';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, poznamka, platnost) Select 'Termín splatnosti výzvy pro fázi 1', 'X', 0, 1, serno, 'Hlavní dlužník', 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, poznamka, platnost) Select 'Termín splatnosti výzvy pro fázi 2', 'X', 0, 1, serno, 'Ruèitel', 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín pro podání žaloby', 'D', 9, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Promlèecí lhùta k vývì pro fázi 1', 'M', 42, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Promlèecí lhùta k vývì pro fázi 2', 'M', 42, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Promlèecí lhùta k podání žaloby', 'M', 42, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín vrácení dohod', 'X', 0, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín dopisù', 'X', 0, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín ústních dohod', 'X', 0, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+Insert into EP_UkolTyp_Cis (nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost) Select 'Termín pro podání návrhu na naøízení exekuce', 'X', 0, 1, serno, 1 From EP_Uloha_Cis Where id = 'SPRVYMPOHL';
+--             ^ EP_UkolTyp_Cis - casjednotka. caspocet not null, ale podle proposalu tam nìkde chcou null hodnoty
+--             v EP_UkolReakce_Cis - názvy v EP_UkolTyp_Cis jsou oøíznuté (delší než poèet znakù v tabulce) [smid;2014-01-07 08:28:48]
+
+-- Èíselník reakcí typu úkolu na funkci úlohy
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZAHAJIT' and ut.nazev = 'Termín splatnosti výzvy pro fázi 2';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADUPADEK' and ut.nazev like 'Termín pro podání pøihlášky do inso%';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADUPADEK' and ut.nazev = 'Termín pro zpùsob øešení úpadku';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADUPADEK' and ut.nazev = 'Termín pro zpùsob øešení oddlužení';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADSPLKAL' and ut.nazev like 'Kontrola první splátky dle splátkov%';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADSPLKAL' and ut.nazev like 'Kontrola plnìní splátkového kalendá%';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADSPLKAL' and ut.nazev like 'Kontrolní termín pro pokyn zajištìn%';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADSPLKAL' and ut.nazev like 'Koneèný termín pro pokyn zajištìnéh%';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'V', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADSPLKAL' and ut.nazev like 'Termín pro skonèení insolvenèního ø%';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'Z', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADKONKURZ' and ut.nazev = 'Promlèecí lhùta k vývì pro fázi 1';
+Insert into EP_UkolReakce_Cis (reffunkce, refukoltyp, reakce, platnost) Select uf.serno, ut.serno, 'Z', 1 From EP_UlohaFunkce_Cis uf, EP_UkolTyp_Cis ut Where uf.id = 'ZADSPLKAL' and ut.nazev = 'Promlèecí lhùta k vývì pro fázi 2';
+
+ROLLBACK WORK;
+--End of A93119_RN00311507_3-naplneni_ciselniku

@@ -1,0 +1,89 @@
+-- @TC:ONCE: ID = V2, B116237_RN00375554_1
+-- @TC:ONCE: DESCRIPTION = Doplnit do modelování posuzování bonity {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+ALTER  TABLE pro_client
+  --Typ ID klienta
+  add xClientIdType CHAR(1)  DEFAULT 'R' NOT NULL BEFORE xsalutation
+;
+
+ALTER  TABLE pro_client
+
+  --Typ ID zákonného zástupce 
+  add legalReprIdType CHAR(1)  DEFAULT 'R' NOT NULL BEFORE legalreprbirthdate
+;
+
+--CHECKS
+ALTER TABLE pro_client
+  ADD CONSTRAINT (CHECK (XClientIdType in ('R', 'I', 'H')) CONSTRAINT pro_client_c4),
+  ADD CONSTRAINT (CHECK (legalReprIdType in ('R', 'I', 'H')) CONSTRAINT pro_client_c5)
+;
+
+CREATE TABLE pro_bonita (
+
+  id   SERIAL NOT NULL,
+  
+  --Vazba na modelovací případ
+  bssimulationcase_id   Integer NOT NULL,
+  
+  --ID partnera klienta - typicky konkrétní RČ
+  partnerId   CHAR(10),
+  
+  --Typ ID partnera klienta (např. 'R' pro "RČ")
+  partnerIdType   CHAR(1)  DEFAULT 'R' NOT NULL,
+  
+  --Měsíční závazky za ekonomickou jednotku
+  monthObligation   DECIMAL(16, 2),
+  
+  --Počet osob v domácnosti - dospělí
+  countOfadults   Integer,
+  
+  --Počet osob v domácnosti - děti do 6 let
+  countOf0to6   Integer,
+  
+  --Počet osob v domácnosti - děti od 6 do 10 let
+  countOf6to10   Integer,
+  
+  --Počet osob v domácnosti - děti od 10 do 15 let
+  countOf10to15   Integer,
+  
+  --Počet osob v domácnosti - děti od 15 do 26 let
+  countOf15to26   Integer
+)lock mode row
+;
+
+--PK
+CREATE UNIQUE INDEX pro_bonita_pk ON pro_bonita(id);
+ALTER TABLE pro_bonita ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_bonita_pk
+;
+
+--FK
+CREATE INDEX pro_bonita_i_f1 ON pro_bonita(bssimulationcase_id);
+ALTER TABLE pro_bonita ADD CONSTRAINT FOREIGN KEY(bssimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_bonita_f1
+;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE pro_bonita
+  ADD CONSTRAINT (CHECK (partnerIdType in ('R', 'I', 'H')) CONSTRAINT pro_bonita_c1)
+;
+
+ALTER TABLE pro_bssimulationcase
+
+   --Vyhodnocovat bonitu (Ano/Ne) – defaultně Ne
+   ADD evalFinancialStanding   Integer  DEFAULT 0 NOT NULL
+;
+
+ALTER TABLE pro_bssimulationcase
+
+  ADD CONSTRAINT (CHECK (evalfinancialstanding IN (0,1)) CONSTRAINT pro_bssimulationcase_dwxc)
+;
+
+ROLLBACK WORK;
+
+--End of B116237_RN00375554_1

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B123773_RN00430870_3
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO do_skupina_cis (skupina,nazev) VALUES (10,'Úvěrová smluvní dokumentace');
+
+ROLLBACK WORK;
+
+--End of B123773_RN00430870_3

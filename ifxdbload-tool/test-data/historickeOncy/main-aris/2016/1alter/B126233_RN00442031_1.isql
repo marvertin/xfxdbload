@@ -1,0 +1,75 @@
+-- @TC:ONCE: ID = V2, B126233_RN00442031_1
+-- @TC:ONCE: DESCRIPTION = Úvěry: Evidence a provázanost příloh (marketingových akcí) k úvěrům {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_priloha_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  refpriloha   INTEGER NOT NULL,
+  datzadani   DATE,
+  poznamka   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  refdatprov   DATE NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_priloha_arch_d23b
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_priloha_arch_pk ON eu_priloha_arch(idarch);
+ALTER TABLE eu_priloha_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_priloha_arch_pk;
+
+--INDEXES
+CREATE INDEX eu_priloha_arch_i1 ON eu_priloha_arch(smlouva,tsml);
+
+CREATE TABLE eu_priloha_mat (
+  serno   BIGINT NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  refpriloha   INTEGER NOT NULL,
+  datzadani   DATE,
+  poznamka   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  refdatprov   DATE NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_priloha_mat_d23b
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_priloha_mat_pk ON eu_priloha_mat(serno);
+ALTER TABLE eu_priloha_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_priloha_mat_pk;
+
+--FK
+CREATE INDEX eu_priloha_mat_i1 ON eu_priloha_mat(smlouva,tsml);
+ALTER TABLE eu_priloha_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_priloha_mat_f1;
+
+CREATE TABLE eu_exppriloha_den (
+  id_index   Integer NOT NULL,
+  id_poradi   Integer NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  cisloprilohy   INTEGER NOT NULL,
+  nazevprilohy   CHAR(40) NOT NULL,
+  datumzadani   DATE,
+  poznamka   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_exppriloha_den_d23b
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_exppriloha_den_pk ON eu_exppriloha_den(id_index,id_poradi);
+ALTER TABLE eu_exppriloha_den ADD CONSTRAINT PRIMARY KEY(id_index,id_poradi) CONSTRAINT eu_exppriloha_den_pk;
+
+--INDEXES
+CREATE INDEX eu_exppriloha_den_i1 ON eu_exppriloha_den(smlouva,tsml);
+
+ROLLBACK WORK;
+
+--End of B126233_RN00442031_1

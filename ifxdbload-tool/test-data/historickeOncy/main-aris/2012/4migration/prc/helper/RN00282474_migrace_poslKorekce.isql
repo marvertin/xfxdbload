@@ -1,0 +1,61 @@
+--Cibis\Aris-Object\Source\Object\Src\_EV_PojCRPKorekce.sql
+--
+--***************
+--***************
+--
+CREATE     PROCEDURE RN00282474_migrace_poslKorekce ()
+
+  define _vec           Int;
+  define _smlouva       Dec(16,0);
+  define _tsml          Char(4);
+  define _stav          Char(1);
+  define _datnav        Date;
+
+-- Oprava druhu pojištìní v evidenci pojištìní ---------------------------------
+  UPDATE EV_Pojist_Mat SET druh = 'C'
+    WHERE vec in (SELECT vec FROM EV_PojistCRP_Mat);
+
+-- Doplnìní evidence pojištìní ÈRP pro neúplné definice zajištìní --------------
+  SELECT vec FROM EV_Pojist_Mat ev
+    WHERE druh = 'C' AND NOT EXISTS (SELECT * FROM EV_PojistCRP_Mat WHERE vec = ev.vec)
+    INTO TEMP EV_PojCRP_Temp;
+
+  INSERT INTO EV_PojistCRP_Mat (vec, stav, datnav)
+    SELECT vec, 'B', (SELECT datprov FROM AP_Status) FROM EV_PojCRP_Temp;
+
+  DROP TABLE EV_PojCRP_Temp;
+
+-- Zmìna stavu evidence pojištìní ÈRP pro pøípady obnovení úvìru po jeho stornu
+  foreach with hold
+    SELECT ev.vec, ev.datnav INTO _vec, _datnav
+      FROM EU_Zajist_Mat eu, EV_PojistCRP_Mat ev
+      WHERE eu.vec = ev.vec AND eu.stav in ('A', 'B', 'C') AND ev.stav not in ('B', 'D', 'L')
+
+    let _stav = (SELECT stav FROM EV_PojistCRP_Arch WHERE vec = _vec
+        AND ser = (SELECT max(ser) FROM EV_PojistCRP_Arch WHERE vec = _vec));
+
+    if _stav = 'B' then
+      let _datnav = (SELECT datprov FROM AP_Status);
+    end if;
+
+    UPDATE EV_PojistCRP_Mat SET stav = _stav, datnav = _datnav WHERE vec = _vec;
+  end foreach;
+
+-- Doplnìní èísel pojistných smluv v evidenci pojištìní ------------------------
+  foreach
+    SELECT vec INTO _vec
+      FROM EV_Pojist_Mat WHERE druh = 'C' AND cislopojist IS NULL
+
+    let _smlouva, _tsml = EV_PojCRPSmlouva(_vec);
+
+    UPDATE EV_Pojist_Mat SET cislopojist = _smlouva WHERE vec = _vec;
+  end foreach;
+
+-- Ukonèení všech pojištìní ÈRP pro zrušené nebo ukonèené zajištìní ------------
+  UPDATE EV_PojistCRP_Mat SET stav = 'Z' WHERE stav in ('B', 'D')
+    AND (SELECT Count(*) FROM EU_Zajist_Mat WHERE vec = EV_PojistCRP_Mat.vec AND stav in ('A', 'B', 'C')) = 0;
+
+  UPDATE EV_PojistCRP_Mat SET stav = 'V' WHERE stav = 'L'
+    AND (SELECT Count(*) FROM EU_Zajist_Mat WHERE vec = EV_PojistCRP_Mat.vec AND stav in ('A', 'B', 'C')) = 0;
+
+end procedure

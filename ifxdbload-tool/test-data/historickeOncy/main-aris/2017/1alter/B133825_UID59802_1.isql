@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B133825_UID59802_1
+-- @TC:ONCE: DESCRIPTION = Zohledňovat historické záznamy ve varovných kódech CRIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pef_firmavarovani_cis
+  ADD hist       Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD datvznik   DATE BEFORE refuser,
+  ADD datkonec   DATE BEFORE refuser;
+  
+ALTER TABLE pef_firmaodpovedv_den
+  ADD hist       Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD wdate      DATE BEFORE refuser,
+  ADD wenddate   DATE BEFORE refuser;
+  
+ROLLBACK WORK;
+
+--End of B133825_UID59802_1

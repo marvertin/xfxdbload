@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B136348_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_fo_arch ADD reftigertyp INT;
+
+ALTER TABLE eo_fo_mat ADD reftigertyp INT;
+
+ALTER TABLE eo_tigertyp_cis
+ADD CONSTRAINT PRIMARY KEY (serno) CONSTRAINT  eo_tigertyp_cis_pk;  -- z nějakého důvodu tam chybí constraint PK...
+
+CREATE INDEX eo_fo_mat_i_f2 ON eo_fo_mat(reftigertyp);
+ALTER TABLE eo_fo_mat ADD CONSTRAINT FOREIGN KEY(reftigertyp) REFERENCES eo_tigertyp_cis(serno) CONSTRAINT eo_fo_mat_f2;
+
+ROLLBACK WORK;
+
+--End of B136348_UID77507_1

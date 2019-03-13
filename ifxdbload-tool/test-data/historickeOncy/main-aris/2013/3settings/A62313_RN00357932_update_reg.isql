@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A62313_RN00357932_update_reg
+-- @TC:ONCE: DESCRIPTION = RN00355161 Pøedpis pro celé RN customizace má podivnou podobu {DEFECT}
+
+BEGIN WORK;
+
+CALL TW_RegAktAnalytickyPopis('TW','login','AutorizSMSLimit','CIBIS-Sale','Správa systému','Správa uživatelského prostøedí (WWW)','Pøihlášení','Limit pro zaslání autorizaèní SMS pøi pøihlášení do aplikace <aplikace>',1);      
+
+ROLLBACK WORK;
+
+--End of A61796_RN00355161_RN00322943_update_reg

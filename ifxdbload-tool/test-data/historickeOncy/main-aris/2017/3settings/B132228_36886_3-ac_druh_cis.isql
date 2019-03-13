@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B132228_36886_3-ac_druh_cis
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO AC_Druh_Cis (druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost) VALUES ('CR01', 'I', 'U', '0', 0, 558, 9, null, null, 'převod čas. rozlišení', 'BU  ', null, null, 'převod čas. rozlišení', 'BU  ', null, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 'jednorázový převod čas. rozlišení', null, 0, 1, 0, 1);
+
+INSERT INTO AC_Druh_Cis (druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost) VALUES ('CR02', 'I', 'U', '0', 0, 558, 9, null, null, 'převod čas. rozlišení', 'BU  ', null, null, 'převod čas. rozlišení', 'BU  ', null, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 'hromadný převod čas. rozlišení', null, 0, 1, 0, 1);
+
+INSERT INTO AC_Druh_Cis (druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost) VALUES ('CR03', 'I', 'U', '0', 0, 558, 9, null, null, 'převod čas. rozlišení', 'BU  ', null, null, 'převod čas. rozlišení', 'BU  ', null, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 'předčasný převod čas. rozlišení', null, 0, 1, 0, 1);
+
+INSERT INTO AC_Druh_Cis (druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost) VALUES ('CR04', 'I', 'U', '0', 0, 558, 9, null, null, 'přemapování čas. rozlišení', 'BU  ', null, null, 'přemapování čas. rozlišení', 'BU  ', null, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 'přemapování čas. rozlišení', null, 0, 1, 0, 1);
+
+INSERT INTO AC_Druh_Cis (druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost) VALUES ('CR05', 'I', 'U', '0', 0, 558, 9, null, null, 'storno čas. rozlišení', 'BU  ', null, null, 'storno čas. rozlišení', 'BU  ', null, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 'storno čas. rozlišení', null, 0, 1, 0, 1);
+
+ROLLBACK WORK;
+
+--End of B132228_36886_3-ac_druh_cis

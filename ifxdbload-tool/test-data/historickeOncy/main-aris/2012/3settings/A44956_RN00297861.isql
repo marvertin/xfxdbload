@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A44956_RN00297861
+-- @TC:ONCE: DESCRIPTION = Výpoèet UZ pro ZK
+
+BEGIN WORK;
+
+UPDATE ur_typ_cis SET normsazba = 0 WHERE tko in ('SS','PS') and typurok = 'ZV';
+
+ROLLBACK WORK;

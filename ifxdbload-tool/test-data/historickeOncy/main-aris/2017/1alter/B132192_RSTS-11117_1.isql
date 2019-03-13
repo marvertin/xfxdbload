@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B132192_RSTS-11117_1
+-- @TC:ONCE: DESCRIPTION = SZ1154 - export dat nad US_neexistující atribut {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE EU_ContractChecking_Den
+  ADD ceestatus CHAR(1) BEFORE dstistatus,
+  ADD ceeresult char(1) BEFORE dstistatus, 
+  ADD ceeannul int BEFORE dstistatus, 
+  ADD ceenote varchar(255) BEFORE dstistatus,
+  
+  ADD CONSTRAINT CHECK (ceestatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_den_dz2f,
+  ADD CONSTRAINT CHECK (ceeannul IN (0,1)) CONSTRAINT eu_contractchecking_den_dz2h;
+
+ROLLBACK WORK;
+
+--End of B132192_RSTS-11117_1

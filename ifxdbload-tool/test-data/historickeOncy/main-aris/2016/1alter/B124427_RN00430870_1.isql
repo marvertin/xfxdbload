@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B124427_RN00430870_1
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE RU_Cerp_Kart ADD (cislopokynusale   Integer,
+                              kategoriecerp   CHAR(1),
+                              uzivpredanisale   CHAR(20),
+                              caspredanisale   datetime year to second,
+                              externioz2   CHAR(16)
+                             );
+
+ALTER TABLE EU_SpecPodm_Mat ADD (cerprealn   Integer,
+                                 cerpporadi   Integer
+                                );
+                                
+ALTER TABLE EU_SpecPodm_Arch ADD (cerprealn   Integer,
+                                  cerpporadi   Integer
+                                 );
+
+ROLLBACK WORK;
+
+--End of B124427_RN00430870_1

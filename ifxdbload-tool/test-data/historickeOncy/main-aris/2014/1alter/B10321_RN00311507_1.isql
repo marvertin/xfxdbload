@@ -1,0 +1,135 @@
+-- @TC:ONCE: ID = V2, B10321_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP TABLE EP_ObjSledTran_Den', -206);
+call TW_ExecSql('DROP TABLE EP_SledTran_Den', -206);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_sledtran_den (
+  serno   SERIAL NOT NULL,
+  serop   INTEGER NOT NULL,
+  druh   CHAR(4) NOT NULL,
+  konto   DECIMAL(16, 0) NOT NULL,
+  tko   CHAR(2) NOT NULL,
+  kontoproti   DECIMAL(16, 0),
+  banka   DECIMAL(7, 0),
+  ucet   CHAR(9),
+  typ   CHAR(1) NOT NULL,
+  castka   DECIMAL(16, 2) NOT NULL,
+  datuct   DATE NOT NULL,
+  valuta   DATE NOT NULL,
+  textkonto   CHAR(20),
+  textproti   CHAR(20),
+  varsym   DECIMAL(10,0),
+  specsym   DECIMAL(10,0),
+  sledvymah   Integer NOT NULL,
+  sledinsolv   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (sledvymah IN (0,1)) CONSTRAINT ep_sledtran_den_dj4p,
+  CHECK (sledinsolv IN (0,1)) CONSTRAINT ep_sledtran_den_dj4q
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_sledtran_den_pk ON ep_sledtran_den(serno);
+ALTER TABLE ep_sledtran_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_sledtran_den_pk;
+
+--INDEXES
+CREATE INDEX ep_sledtran_den_i2 ON ep_sledtran_den(datuct);
+CREATE INDEX ep_sledtran_den_i1 ON ep_sledtran_den(serop);
+
+--CHECKS
+ALTER TABLE ep_sledtran_den
+ADD CONSTRAINT (CHECK (typ in ('O', 'P', 'S', 'T')) CONSTRAINT ep_sledtran_den_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_objsledtran_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refobjekt   INTEGER NOT NULL,
+  objekttyp   Char(6) NOT NULL,
+  refsledtran   INTEGER NOT NULL,
+  cyklus   Integer,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_objsledtran_arch_d90d
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_objsledtran_arch_pk ON ep_objsledtran_arch(idarch);
+ALTER TABLE ep_objsledtran_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_objsledtran_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_objsledtran_arch_i1 ON ep_objsledtran_arch(serno);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_objsledtran_mat (
+  serno   SERIAL NOT NULL,
+  refobjekt   INTEGER NOT NULL,
+  objekttyp   Char(6) NOT NULL,
+  refsledtran   INTEGER NOT NULL,
+  cyklus   Integer,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_objsledtran_mat_d90c
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_objsledtran_mat_pk ON ep_objsledtran_mat(serno);
+ALTER TABLE ep_objsledtran_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_objsledtran_mat_pk;
+
+--FK
+CREATE INDEX ep_objsledtran_mat_i_f1 ON ep_objsledtran_mat(refsledtran);
+ALTER TABLE ep_objsledtran_mat ADD CONSTRAINT FOREIGN KEY(refsledtran) REFERENCES ep_sledtran_den(serno) CONSTRAINT ep_objsledtran_mat_f1;
+
+--INDEXES
+CREATE INDEX ep_objsledtran_mat_i1 ON ep_objsledtran_mat(refobjekt,objekttyp);
+
+--CHECKS
+ALTER TABLE ep_objsledtran_mat
+ADD CONSTRAINT (CHECK (objekttyp in ('SPRVYM', 'SNIVYM', 'SNIINS', 'OSOBA', 'INSSPR', 'SML')) CONSTRAINT ep_objsledtran_mat_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_snimobjsledtran_den (
+  serno   SERIAL NOT NULL,
+  refsledtran   INTEGER NOT NULL,
+  refobjsledtran   INTEGER NOT NULL,
+  refobjsledtransml   INTEGER,
+  platnostsml   Integer,
+  productid   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  refobjsledtranos   INTEGER,
+  platnostos   Integer,
+  refosoba   INTEGER,
+  refobjsledtraninsspr   INTEGER,
+  platnostinsspr   Integer,
+  refinsolvspravce   INTEGER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnostsml IN (0,1)) CONSTRAINT ep_snimobjsledtran_den_dd6y,
+  CHECK (platnostos IN (0,1)) CONSTRAINT ep_snimobjsledtran_den_dd6z,
+  CHECK (platnostinsspr IN (0,1)) CONSTRAINT ep_snimobjsledtran_den_dd70
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_snimobjsledtran_den_pk ON ep_snimobjsledtran_den(serno);
+ALTER TABLE ep_snimobjsledtran_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_snimobjsledtran_den_pk;
+
+--FK
+CREATE INDEX ep_snimobjsledtran_den_i_f1 ON ep_snimobjsledtran_den(refsledtran);
+ALTER TABLE ep_snimobjsledtran_den ADD CONSTRAINT FOREIGN KEY(refsledtran) REFERENCES ep_sledtran_den(serno) CONSTRAINT ep_snimobjsledtran_den_f1;
+CREATE INDEX ep_snimobjsledtran_den_i_f2 ON ep_snimobjsledtran_den(refobjsledtran);
+ALTER TABLE ep_snimobjsledtran_den ADD CONSTRAINT FOREIGN KEY(refobjsledtran) REFERENCES ep_objsledtran_mat(serno) CONSTRAINT ep_snimobjsledtran_den_f2;
+
+ROLLBACK WORK;
+
+--End of B10321_RN00311507_1

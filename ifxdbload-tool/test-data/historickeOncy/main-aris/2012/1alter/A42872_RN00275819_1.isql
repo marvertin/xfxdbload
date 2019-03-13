@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A42872_RN00275819_1
+-- @TC:ONCE: DESCRIPTION = Odstranit nepoužívaný bsDateFrom
+
+BEGIN WORK;
+
+alter table pro_bssimulationcase
+ drop xbsdatefrom
+;
+
+ROLLBACK WORK;
+
+--End of A42872_RN00275819_1

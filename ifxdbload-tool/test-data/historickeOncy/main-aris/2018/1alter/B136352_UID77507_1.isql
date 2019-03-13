@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136352_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_fincodemap_acis ADD typostiger CHAR(2) BEFORE dobost;
+ALTER TABLE ep_fincodemap_acis ADD stadiumifrs SMALLINT BEFORE odepsano;
+
+ALTER TABLE ep_fincodemap_cis ADD typostiger CHAR(2) BEFORE dobost;
+ALTER TABLE ep_fincodemap_cis ADD stadiumifrs SMALLINT BEFORE odepsano; 
+
+ROLLBACK WORK;
+
+--End of B136352_UID77507_1

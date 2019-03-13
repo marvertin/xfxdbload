@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, B124210_RN00430870_3
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#Limit pro výši zálohového čerpání#
+CALL TW_RegSetKey('EU', 'withdrawal', 'zalcerp', 'limit', '500000');
+
+--#Úroveň kontroly datum vystavení dokladu#
+CALL TW_RegSetKey('EU', 'withdrawal', 'datumvystaveni', 'errorlevel', '1');
+
+--#Úroveň kontroly nesplněné specifické podmínky#
+CALL TW_RegSetKey('EU', 'withdrawal', 'specpodm', 'errorlevel', '1');
+
+--#Úroveň kontroly nesplacení vstupní úhrady#
+CALL TW_RegSetKey('EU', 'withdrawal', 'vstupniuhrada', 'errorlevel', '1');
+
+--#Povolen biometrický podpis pokynu k čerpání#
+--Podepisovat požadavek na pokyn k čerpání prostřednictvím biometrického podpisu
+CALL TW_RegSetKey('EU', 'withdrawal', 'podpis', 'povolBiom', '1');
+
+--#Lhůta pro automatické storno požadavku na pokyn k čerpání#
+CALL TW_RegSetKey('EU', 'withdrawal', 'zrus', 'LhutaDni', '30');
+
+--#Specifická podmínka pro pokyn k čerpání typu zálohové čerpání#
+CALL TW_RegSetKey('EU', 'withdrawal', 'predani', 'SpecPodm', '');
+
+--#URL pro sazebník RSTS#
+CALL TW_RegSetKey('EU', 'withdrawal', 'sazebnik', 'URL', '');
+
+--#Zástupný referent  pro předání dokumentů do ARCIS#
+CALL TW_RegSetKey('EU', 'packageofdoc', 'predani', 'fakereferent', '');
+
+--#Lhůta pro automatické storno balíčku dokladů#
+CALL TW_RegSetKey('EU', 'packageofdoc', 'zrus', 'LhutaDni', '30');
+
+--#Skupina dokumentů pro Pokyn k čerpání#
+CALL TW_RegSetKey('EU', 'withdrawal', 'Dokumenty', 'skupina', '11');
+
+--#Skupina dokumentů pro Balíček dokladů#
+CALL TW_RegSetKey('EU', 'packageofdoc', 'Dokumenty', 'skupina', '12');
+
+
+ROLLBACK WORK;
+
+--End of B124210_RN00430870_3

@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B123829_RN00436364_3
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+DELETE FROM tw_registr_cis
+  where oblast = 'EU' and uloha = 'creditrq' and funkce = 'predani-default' 
+    and udaj like 'fixaceSazeb-%'
+;
+
+DELETE FROM tw_registr_cis
+  where oblast = 'EU' and uloha = 'creditrq' and funkce = 'predani-default' 
+    and udaj like 'variantaFixace-%'
+;
+
+call Tw_RegSetOrAddKey('EU','contract','hypoSmernice','prevodPriFix', 1)
+;
+call Tw_RegSetOrAddKey('MO','modelCore','doplnkRPSN','pouzitUsporCastku', 1)
+;
+call Tw_RegSetOrAddKey('MO','modelCore','doplnkRPSN','miminDelkaFix', 60)
+;
+call Tw_RegSetOrAddKey('EU','*','zajist','dalsiNakladyPo', 0)
+;
+
+ROLLBACK WORK;
+
+--End of B123829_RN00436364_3

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B132892_UID50229_3
+-- @TC:ONCE: DESCRIPTION = Parametrizace variant PÚ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND ULOHA = 'zajist' AND UDAJ = 'maxVyseNezajUver';
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND ULOHA = 'zajist' AND FUNKCE = '*' AND UDAJ = 'refVyseNezajUver';
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND ULOHA = 'zajist' AND FUNKCE = '*' AND UDAJ = 'maxVyseNezajUver';
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND ULOHA = 'zajist' AND FUNKCE = '*' AND UDAJ = 'kontrRHZPcerp';
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND ULOHA = 'zajist' AND FUNKCE = '*' AND UDAJ = 'kontrBudRHZPcerp';
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND ULOHA = 'zajist' AND UDAJ = 'priorBudRHZPcerp';
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND ULOHA = 'zajist' AND UDAJ = 'priorRHZPcerp';
+
+ROLLBACK WORK;
+
+--End of B132892_UID50229_3

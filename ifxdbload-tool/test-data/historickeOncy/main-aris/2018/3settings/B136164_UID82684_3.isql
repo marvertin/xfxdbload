@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B136164_UID82684_3
+-- @TC:ONCE: DESCRIPTION = Dotazník na výběr účelu a zajištění v CIBIS-Sale
+
+BEGIN WORK;
+
+INSERT INTO do_typdokumentutypobjektu_cis ( doktyp,tabulka,uzivatelskypristup,platnost,kvalitadok, poradi,explicitgener, platnostod, nekontrolovatkvalitu)
+VALUES(2150, 'seu_checklistitem_mat', 'ZOBRAZENI', 1, 'OVERENA_KOPIE', 0, 1, mdy(9,1,2018),0);
+
+INSERT INTO do_typdokumentutypobjektu_cis ( doktyp,tabulka,uzivatelskypristup,platnost,kvalitadok, poradi,explicitgener, platnostod, nekontrolovatkvalitu)
+VALUES(2151, 'seu_checklistitem_mat', 'ZOBRAZENI', 1, 'OVERENA_KOPIE', 0, 1, mdy(9,1,2018),0);
+
+INSERT INTO do_typdokumentutypobjektu_cis ( doktyp,tabulka,uzivatelskypristup,platnost,kvalitadok, poradi,explicitgener, platnostod, nekontrolovatkvalitu)
+VALUES(2152, 'seu_checklistitem_mat', 'ZOBRAZENI', 1, 'OVERENA_KOPIE', 0, 1, mdy(9,1,2018),0);
+
+INSERT INTO do_typdokumentutypobjektu_cis ( doktyp,tabulka,uzivatelskypristup,platnost,kvalitadok, poradi,explicitgener, platnostod, nekontrolovatkvalitu)
+VALUES(2153, 'seu_checklistitem_mat', 'ZOBRAZENI', 1, 'OVERENA_KOPIE', 0, 1, mdy(9,1,2018),0);
+
+ROLLBACK WORK;
+
+--End of B136164_UID82684_3

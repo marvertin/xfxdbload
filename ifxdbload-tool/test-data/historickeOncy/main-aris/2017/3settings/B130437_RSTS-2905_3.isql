@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B130437_RSTS-2905_3
+-- @TC:ONCE: DESCRIPTION = IFRS - Doplnění polí souvisejících s projektem IFRS9_IRBA
+
+BEGIN WORK;
+
+call tw_regSetOrAddKey('ES', 'vklad', 'rozhden', '*', 0, 1, 'Spoření', 'Vklady na spoření', 'Deposit schedule', 'Rozhodný den vkladu <den_v_měsíci>');
+
+call tw_regSetOrAddKey('EU', 'splatka', 'rozhden', '*', 0, 1, 'Úvěr', 'Splátkový kalendář úvěru', 'Schedule of Credit Repayments', 'Rozhodný den splátky <den_v_měsíci>');
+
+ROLLBACK WORK;
+
+--End of B130437_RSTS-2905_3

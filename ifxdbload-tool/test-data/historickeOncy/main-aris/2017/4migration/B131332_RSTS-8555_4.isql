@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B131332_RSTS-8555_4
+-- @TC:ONCE: DESCRIPTION = dávka SOLUS skončila chybou
+
+
+BEGIN WORK;
+
+update sol_veta_den
+set idsolusold = idsolus;
+
+ROLLBACK WORK;
+
+--End of B131332_RSTS-8555_4

@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, B125395_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE EP_ExpSplSporModH_Den ADD (
+  
+  -- Vyhodnocení dílčích RPSN
+  -- Určuje, zda při spuštění modelu bylo požadováno vyhodnotit dílčí RPSN úvěru (RPSN PÚ a RPSN SÚ)
+  vypdilcirpsn   Integer BEFORE eir,
+  
+  -- Pro CF k doplňkovému RPSN použit typ sazby
+  -- Určuje, zda při sestavení pro CF k výpočtu doplňkové RPSN systém vycházel z definic číselníku (a dalších pravidel) určených primárně pro souhrnné RPSN nebo RPSNpu nebo RPSNsu
+  doplnrpsncfsazba   char(2),
+  
+  -- Suma nákladů spojených s úvěrem mimo RSTS (dle CF)
+  -- Celková výše dalších nákladů placených mimo RSTS spojených s úvěrem
+  -- v v tabulkách modelování pojemnováno extraExpenses
+  sumanakluvermimoeir   DECIMAL(16, 2),
+  
+  -- Celkové náklady souhrnné (dle CF)
+  celknakldlecfeir   DECIMAL(16, 2),
+  
+  -- Celková výše úvěru souhrnná (pro ESIP)
+  celkvyseuveruesipeir   DECIMAL(16, 2),
+  
+  sumanakluvermimorpsn  DECIMAL(16, 2),
+  celknakldlecfrpsn     DECIMAL(16, 2),
+  celkvyseuveruesiprpsn DECIMAL(16, 2)
+  )
+;
+
+ROLLBACK WORK;
+
+--End of B125395_RN00443393_1

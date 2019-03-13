@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A46240_RN00294644_3-poznamkaNovaSmlouva
+-- @TC:ONCE: DESCRIPTION = Dodateèné úpravy CIBIS-web - 1.etapa {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE ep_typzadost_cis SET poznamka = 'Do 2 dnù Vás budeme telefonicky kontaktovat a dojednáme schùzku s kurýrem k podpisu smlouvy.' WHERE typzadost = 'F';
+
+ROLLBACK WORK;
+--End of A46240_RN00294644_3-poznamkaNovaSmlouva

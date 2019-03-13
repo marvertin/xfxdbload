@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B125700_RN00454146_3-regdel
+-- @TC:ONCE: DESCRIPTION = Doplnění rozhodovacího nástroje pro variantu PÚ o vyhodnocení spořící historie {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- #informační text pokud Procedura Úvěrová historie klienta úrovně 2 ANO#
+Call TW_RegDelKey('EU', 'creditrq', 'rozhodNastroj', 'infoTxtProcHist2Ano');
+
+-- #informační text pokud Procedura Úvěrová historie klienta úrovně 2 NE#
+Call TW_RegDelKey('EU', 'creditrq', 'rozhodNastroj', 'infoTxtProcHist2Ne');
+
+-- #informační text pokud Procedura Úvěrová historie klienta úrovně 1 ANO#
+Call TW_RegDelKey('EU', 'creditrq', 'rozhodNastroj', 'infoTxtProcHist1Ano');
+
+-- #informační text pokud Procedura Úvěrová historie klienta úrovně 1 NE#
+Call TW_RegDelKey('EU', 'creditrq', 'rozhodNastroj', 'infoTxtProcHist1Ne');
+
+ROLLBACK WORK;
+--End of B125700_RN00454146_3-regdel

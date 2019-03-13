@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B122059_RN00420635_1-zrcadlosp
+-- @TC:ONCE: DESCRIPTION = Žádost o uvolnění SP zadržované MF {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table sp_zrcmf_mat add blokovano Dec(16,2);
+
+ROLLBACK WORK;
+
+--End of B122059_RN00420635_1-zrcadlosp

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B133399_RSTS-13562_1
+-- @TC:ONCE: DESCRIPTION = Dodatky - migrace "stav" - vznik označení účinnosti HS
+
+
+BEGIN WORK;
+
+  
+ALTER TABLE eu_sml_mat
+  DROP CONSTRAINT eu_sml_mat_c49,
+  ADD CONSTRAINT CHECK (vznikpodhs in ('ODPOCATKU','FIXACI','DODATKEM','PREKLOPENI')) CONSTRAINT eu_sml_mat_c49;
+
+
+ROLLBACK WORK;
+
+--End of B133399_RSTS-13562_1
+

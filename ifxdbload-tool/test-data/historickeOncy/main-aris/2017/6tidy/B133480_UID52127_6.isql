@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B133480_UID52127_6
+-- @TC:ONCE: DESCRIPTION = Úprava funkce rizikových subjektů + nová RK Rizikový subjekt
+
+BEGIN WORK;
+
+drop procedure EU_CCheckingRizSubjProved_T;
+drop procedure EU_CCheckingRizSubjLog;
+drop procedure EU_KontrolaRizSubj;
+
+ROLLBACK WORK;
+--End of B133480_UID52127_6

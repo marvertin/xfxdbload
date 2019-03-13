@@ -1,0 +1,57 @@
+
+
+CREATE PROCEDURE A42849_RN00269923_find_D()
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00269923_exekSpor;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00269923_exekSpor(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt DEFAULT 0,  -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+
+  --vlastní data 
+  realn     Int,
+  poradi    Smallint, 
+  exekutor  Int,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+insert into RN00269923_exekSpor (realn, poradi, exekutor) 
+  select realn, poradi, exekutor from rs_exekprikaz_mat;
+   
+COMMIT WORK;
+BEGIN WORK;
+      
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00269923_exekSpor;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

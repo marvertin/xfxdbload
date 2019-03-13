@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, B123778_RN00430870_1
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table eu_variapu_cis 
+  add podepsatbiom   Integer  DEFAULT 0,
+  add vysepubiom   DECIMAL(16,2),
+  add CONSTRAINT  CHECK (podepsatbiom IN (0,1)) CONSTRAINT eu_variapu_cis_dnz0;
+
+alter table eu_variapu_acis 
+  add podepsatbiom   Integer  DEFAULT 0,
+  add vysepubiom   DECIMAL(16,2);
+
+alter table eu_sml_arch
+  add zpusobpodpisuusd   char(7),
+  add reklamaceusd   CHAR(1),
+  add odmitnutiusd   Integer  DEFAULT 0;
+  
+alter table eu_sml_mat
+  add zpusobpodpisuusd   char(7),
+  add reklamaceusd   CHAR(1),
+  add odmitnutiusd   Integer  DEFAULT 0,
+  add CONSTRAINT CHECK (odmitnutiusd IN (0,1)) CONSTRAINT eu_sml_mat_dnz6,
+  add CONSTRAINT CHECK (zpusobpodpisuusd IN ('BIOMETR','ZASPOST')) CONSTRAINT eu_sml_mat_c47,
+  add CONSTRAINT CHECK (reklamaceusd in ('A', 'N', 'V')) CONSTRAINT eu_sml_mat_c48;
+
+ROLLBACK WORK;
+
+--End of B123778_RN00430870_1

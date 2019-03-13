@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A57611_RN00342422_3
+-- @TC:ONCE: DESCRIPTION = Chyba parametrizace ep_splspormodakce_cis {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE EP_SplSporModAkce_Cis SET (vyprpsn, vypeir) = (1, 0) WHERE akce = 'UZFINA';
+
+ROLLBACK WORK;
+
+--End of A57611_RN00342422_3

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B131857_36779_3_opuct
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+set triggers for ru_opuct_kart disabled;
+
+update ru_opuct_kart set serno = tw_nextserno();
+
+set triggers for ru_opuct_kart enabled;
+
+insert into tw_serno (serno, tabulka)
+select serno, 'ru_opuct_kart' from ru_opuct_kart;
+
+ROLLBACK WORK;
+
+--End of B131857_36779_3_opuct

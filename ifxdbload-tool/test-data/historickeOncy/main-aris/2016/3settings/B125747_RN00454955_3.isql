@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B125747_RN00454955_3
+-- @TC:ONCE: DESCRIPTION = HS: Duplicitní záznam v číselníku přirazení variant fixací pro KOME {DEFECT}
+
+
+BEGIN WORK;
+
+DELETE FROM EU_VarUrokFixPrirad_Cis WHERE tsml = 'KOME' AND refvariaurokfixace = 8 AND platnostod = MDY(11, 1, 2012);
+
+ROLLBACK WORK;
+
+--End of B125747_RN00454955_3

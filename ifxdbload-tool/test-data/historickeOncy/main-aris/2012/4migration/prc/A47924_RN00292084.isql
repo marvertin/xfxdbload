@@ -1,0 +1,109 @@
+-- @TC:ONCE: ID = V2, A47924_RN00292084
+-- @TC:ONCE: LOAD_UNLESS_LOADED = A47386_RN00292084
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+create procedure A47924_RN00292084()
+
+define _smlouva like eu_sml_mat.smlouva;
+define _tsml like eu_sml_mat.tsml;
+define _os like EO_Role_Mat.os;
+define _typOs like EO_Osoba_Mat.typos;
+define _posunzahsplac like EU_SplatKal_Mat.posunzahsplac;
+define _rozhdenmessplac like EU_SplatKIn_Mat.rozhden;
+define _rozhdenzahdospor like EU_SplatKal_Mat.rozhdenzahdospor;
+define _posunzahdospor like EU_SplatKal_Mat.posunzahdospor;
+define _rozhdenzahsledosspor like EU_SplatKal_Mat.rozhdenzahsledosspor;
+define _aktzahdosporcerp like EU_SplatKal_Mat.aktzahdosporcerp;
+define _posunzahcerp like EU_CerpKal_Mat.posunzahcerp;
+define _poradi like EU_SplatKIn_Mat.poradi;
+define _pocetmesplatnost like EU_SplatKIn_Mat.pocetmesplatnost;
+
+foreach
+  select smlouva, tsml
+   into _smlouva,_tsml
+   from eu_sml_mat
+   where stav <= 'L'
+   
+   let _os = EP_KlientSml(_smlouva,_tsml);
+   let _typOs = EO_GetTypOs(_os);
+   
+   select rozhden
+    into _rozhdenmessplac
+    from EU_SplatKIn_Mat
+    where smlouva = _smlouva and tsml = _tsml
+      and uroven = 0 
+      and poradi = (select max(poradi) from EU_SplatKIn_Mat 
+                      where smlouva = _smlouva and tsml = _tsml and uroven = 0 and stav = 'A')
+   ;
+    
+   if _typOs == 'F' then
+   
+    let _aktzahdosporcerp = 0;
+    let _posunzahsplac = 1;
+    let _posunzahcerp = 1;
+    
+    if _rozhdenmessplac is null then
+    
+      let _rozhdenmessplac = 25;
+    end if;
+   
+   elif _typOs == 'P' then
+   
+    let _aktzahdosporcerp = 1;
+    let _posunzahsplac = 0;
+    let _posunzahcerp = 0;
+   else
+      call TW_RaiseError('473N85TCUI', 'RN00292084_initialMigr:'
+        , 'Neoèekávaný typ osoby "%1"!', _typOs);
+   end if;
+   
+   if _tsml == 'KOME' then
+   
+    let _posunzahsplac = 0;
+   end if;
+
+   select poradi, pocetmesplatnost
+    into _poradi, _pocetmesplatnost
+    from EU_SplatKIn_Mat
+    where smlouva = _smlouva and tsml = _tsml and uroven = 1 and stav = 'O' and odlozzplatneni = 1 and variantasplatky = 'O' and splatka = 0;
+   
+   if _poradi is not null then
+     let _posunzahsplac = _pocetmesplatnost;
+     
+     update EU_SplatKIn_Mat set stav = 'Z' where smlouva = _smlouva and tsml = _tsml and uroven = 1 and poradi = _poradi;
+   end if;
+   
+   let _rozhdenzahdospor = null;
+   let _posunzahdospor = null;
+   let _rozhdenzahsledosspor = null;
+   if _tsml in ('PUSU', 'PFSU', 'PUPO', 'PPSU') then
+     let _rozhdenzahdospor = 'P';
+     let _posunzahdospor = 1;
+     let _rozhdenzahsledosspor = 'P';
+   else
+     let _aktzahdosporcerp = 0;
+   end if;
+   
+   update EU_SplatKal_Mat set
+        rozhdenzahdospor = _rozhdenzahdospor
+      , posunzahdospor = _posunzahdospor
+      , rozhdenzahsledosspor = _rozhdenzahsledosspor
+      , aktzahdosporcerp = _aktzahdosporcerp
+      , dorovnatvklad = 0
+      , rozhdenmesdospor = NULL
+      , manzahdospor = 0
+      , rozhdenzahsplac = 'C'
+      , posunzahsplac = _posunzahsplac
+      , rozhdenzahsledosuv = 'P'
+      , rozhdenmessplac = _rozhdenmessplac
+      , manzahsplac = 0
+     where smlouva = _smlouva and tsml = _tsml
+    ;
+    
+    update EU_CerpKal_Mat set
+      posunzahcerp = _posunzahcerp
+     where smlouva = _smlouva and tsml = _tsml
+    ;
+end foreach;
+
+end procedure;

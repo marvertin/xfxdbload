@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_5-02_smallint-to-integer-na-ciselniku-EU-UCELDOK-CIS
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE eu_ucelDok_cis
+  MODIFY  ucel  SMALLINT  NOT NULL,
+  MODIFY  dok   INTEGER   NOT NULL,
+  MODIFY  faze  INTEGER
+;
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_5-02_smallint-to-integer-na-ciselniku-EU-UCELDOK-CIS

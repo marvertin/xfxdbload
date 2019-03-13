@@ -1,0 +1,72 @@
+create PROCEDURE RSTS_4712_find_D()
+  
+  --povinne globalni promenne
+  DEFINE GLOBAL TW_ErrSql   Int          default null;
+  DEFINE GLOBAL TW_ErrIsam  Int          default null;
+  DEFINE GLOBAL TW_ErrText  VarChar(255) default null;
+    
+  DEFINE _konto         dec(16, 0);
+  DEFINE _tko           char(2);
+  DEFINE _zdrojser      INT;
+  
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  
+  --izolacni uroven bude dirty read
+  SET ISOLATION TO DIRTY READ;
+  
+  BEGIN WORK;
+  
+  --zruseni tabulky pokud jiz existuje
+  begin
+     on exception IN(-206)
+     end exception;
+    DROP TABLE rsts_4712;
+  end;
+  
+  --zalozime ridici tabulku
+  CREATE TABLE rsts_4712(
+    Ser     Serial NOT NULL,  --číslo řádku
+    sid     int,              -- SID paralelního běhu
+    zprac   int,              -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                              -- -1- prošlo fázi find - výběr kont
+                              -- -2- chyba ve fázi make
+                              --  2- prošlo fází make                        
+    konto     dec(16,0),
+    tko       char(2),
+    zdrojser  int,
+    starttime   DATETIME YEAR to FRACTION(5),
+    finishtime  DATETIME YEAR to FRACTION(5),
+
+    NumErr  Int,              --číslo chyby, jež na řádku nastala
+    ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+    TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  
+    PRIMARY KEY(Ser)
+  )LOCK MODE ROW;
+  
+  COMMIT WORK;
+  
+  BEGIN WORK;
+  
+  FOREACH c2 WITH HOLD FOR
+    SELECT konto, tko, zdrojser INTO _konto, _tko, _zdrojser 
+    FROM ac_konto_mat 
+    WHERE
+      stav <> 2 AND
+      jearchivovano = 1        
+      
+    INSERT INTO rsts_4712 (konto, tko, zdrojser, zprac)
+    VALUES (_konto, _tko, _zdrojser, -1);       
+  END FOREACH;    
+  
+  COMMIT WORK;     
+  
+  BEGIN WORK;
+  UPDATE STATISTICS HIGH FOR TABLE rsts_4712;
+  CALL tw_para_clean('rsts_4712_make_D');
+  COMMIT WORK;
+
+end procedure;

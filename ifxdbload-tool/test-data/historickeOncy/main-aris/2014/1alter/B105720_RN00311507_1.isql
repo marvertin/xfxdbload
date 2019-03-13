@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, B105720_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eo_insolvspravce_cis ADD (
+  telefon   CHAR(45) BEFORE poznamka,
+  email   CHAR(45) BEFORE poznamka
+);
+
+ALTER TABLE eo_insolvspravce_acis ADD (
+  telefon   CHAR(45) BEFORE poznamka,
+  email   CHAR(45) BEFORE poznamka
+);
+
+ALTER TABLE eu_snimekvympohl_den ADD datukoncdospor   DATE;
+
+ALTER TABLE eu_exekprikaz_mat DROP CONSTRAINT eu_exekprikaz_mat_u1;
+DROP INDEX eu_exekprikaz_mat_u1;
+
+ALTER TABLE eu_snimekexekprikaz_den DROP CONSTRAINT eu_snimekexekprikaz_den_u1;
+DROP INDEX eu_snimekexekprikaz_den_u1;
+
+ALTER TABLE ep_paraminsolv_cis DROP (zvlrezim, stavvympohl);
+ALTER TABLE ep_paraminsolv_acis DROP (zvlrezim, stavvympohl);
+
+ALTER TABLE ep_paraminsolv_cis DROP CONSTRAINT ep_paraminsolv_cis_f3;
+DROP INDEX ep_paraminsolv_cis_i_f3;
+
+CREATE INDEX ep_paraminsolv_cis_i_f2 ON ep_paraminsolv_cis(funkce);
+ALTER TABLE ep_paraminsolv_cis ADD CONSTRAINT FOREIGN KEY(funkce) REFERENCES ep_ulohafunkce_cis(serno) CONSTRAINT ep_paraminsolv_cis_f2;
+
+ROLLBACK WORK;
+
+--End of B105720_RN00311507_1

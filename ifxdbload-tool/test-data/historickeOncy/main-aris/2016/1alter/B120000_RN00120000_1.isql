@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B120000_RN00120000_1
+-- @TC:ONCE: DESCRIPTION = temporary index
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+create index aris.cl_contract_arch_TEMP1 on aris.cl_contract_arch(contractnumber);
+
+ROLLBACK WORK;
+
+--B120000_RN00120000_1

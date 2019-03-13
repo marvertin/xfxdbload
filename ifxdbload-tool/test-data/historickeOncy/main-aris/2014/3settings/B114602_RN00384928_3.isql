@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B114602_RN00384928_3
+-- @TC:ONCE: DESCRIPTION = Main/Sale: Souhlas s údaji pro partnery (Doplnění a rozšíření) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO eo_blockingreason_cis(reason, description, blockingtype, validity)
+  VALUES((SELECT MAX(reason) + 1 FROM eo_blockingreason_cis), 'Klient nepotvrdil souhlas s oslovením', 'P', 1);
+  
+call Tw_RegSetOrAddKey('EO','osoba','nesouhlas','blokace', (SELECT MAX(reason) FROM eo_blockingreason_cis), 1, 'Osoba', 'Evidence osoby', 'Persons', 'Kód blokace osoby při nesouhlasu s oslovením');
+
+
+
+ROLLBACK WORK;
+
+--End of B114602_RN00384928_3

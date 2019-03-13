@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B127737_RSTS-1908_1
+-- @TC:ONCE: DESCRIPTION = TR1: Nová koncepce archivace - pilot {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ac_sepabody_den MODIFY idtran VARCHAR(35);
+
+ALTER TABLE cz_Zadost_den MODIFY zdrojserplatba  Integer  DEFAULT 0 NOT NULL;
+
+ROLLBACK WORK;
+
+--End of B127737_RSTS-1908_1

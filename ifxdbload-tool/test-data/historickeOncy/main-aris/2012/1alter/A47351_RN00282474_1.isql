@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A47351_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù
+
+BEGIN WORK;
+
+-- vytvoreni triggeru bylo presunuto do xml definice, ale stream2db si s existujicima definicema nejak neporadi
+-- proto to dropuji tady takto natvrdo
+drop trigger eu_zajcrpsazba_cis_i;
+drop trigger eu_zajcrpsazba_cis_u;
+
+ROLLBACK WORK;
+
+--End of A46984_RN00282474_1

@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B123506_RN00436364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table eu_varurokfixprirad_cis
+  modify platnost int default 1 not null
+  , modify nabizetsale int default 0 not null
+  , modify fazeuveru char(1);
+
+alter table eu_varurokfixprirad_acis
+  modify platnost int default 1 not null
+  , modify nabizetsale int default 0 not null
+  , modify fazeuveru char(1);
+
+ALTER TABLE eu_varurokfixprirad_cis
+ADD CONSTRAINT (CHECK (fazeuveru in ('P', 'S', 'K')) CONSTRAINT eu_varurokfixprirad_cis_c1);
+
+ROLLBACK WORK;
+
+--End of B123506_RN00436364_1

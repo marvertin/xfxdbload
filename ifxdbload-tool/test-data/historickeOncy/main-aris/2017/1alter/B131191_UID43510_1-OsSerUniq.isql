@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B131191_UID43510_1-OsSerUniq
+-- @TC:ONCE: DESCRIPTION = Finanční situace osoby v úvěrovém případu - evidence základ
+
+
+BEGIN WORK;
+
+-- zavedeni UNIQUE CONSTRAIN nad sernek tabulky eo_osoba_mat.
+-- Tento sloupec neni bohuzel historicky primarnik klicem, ale mi ho pouzivame jako cizi klic v novych evidencich
+-- a prave nato je zapotrebi tento constraint.
+
+CREATE UNIQUE INDEX eo_osoba_mat_u1 ON eo_osoba_mat(serno);
+ALTER TABLE eo_osoba_mat ADD CONSTRAINT (UNIQUE (serno) CONSTRAINT eo_osoba_mat_u1);
+
+
+ROLLBACK WORK;
+
+--End of B131191_UID43510_1-OsSerUniq

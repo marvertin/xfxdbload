@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A61615_RN00335314
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- #Typ poplatku pro stupeò upomínky specifických podmínek#
+call TW_RegSetKey('EU', 'remspco', '4', 'tuhr', null);
+
+-- #Typ úhrady upomínky# # (úvìrová upomínka)
+call TW_RegSetKey('RU', 'upom', '4', 'tuhr', null);
+
+-- #typ úhrady pro upomínku <stupeò upomínky># (upomínka dospoøování) 
+call TW_RegSetKey('RS', 'upom', '4', 'tuhr', null);
+
+-- #Typ úhrady za upomínku dokladu úèelovosti#
+call TW_RegSetKey('RU', 'upomUcel', '*', 'typUhrada', null);
+call TW_RegSetKey('RU', 'upomUcel', '1', 'typUhrada', null);
+call TW_RegSetKey('RU', 'upomUcel', '2', 'typUhrada', null);
+call TW_RegSetKey('RU', 'upomUcel', '3', 'typUhrada', null);
+call TW_RegSetKey('RU', 'upomUcel', '4', 'typUhrada', null);
+ 
+ROLLBACK WORK;
+
+--End of A61615_RN00335314

@@ -1,0 +1,172 @@
+-- @TC:ONCE: ID = V2, B136165_UID82684_3
+-- @TC:ONCE: DESCRIPTION = Dotazník na výběr účelu a zajištění v CIBIS-Sale
+
+BEGIN WORK;
+
+update cpd_pozdokumenty_cis set typdokumentu = 2151 where serno = 10;
+
+update cpd_pozdokumenty_cis set typdokumentu = 828 where serno = 26;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 27;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 16;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 17;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 18;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 19;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 20;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 21;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 22;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 23;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 29;
+
+update cpd_pozdokumenty_cis set platnost = 0 where serno = 240111457;
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL',76,153,1, 0, 1 );
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL',77,154,1, 0 ,1 );
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL',55,1105,1, 0 ,1 );
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,65  ,1105  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1184  ,1106  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,65  ,1106  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,58   ,1107  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55   ,1107  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,2152  ,1107 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,2150  ,1108 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55 ,1108 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,59  ,1108   ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55  ,1207  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,2150  ,1207  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55  ,1208  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,2150 ,1208  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,62  ,1208  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1181  ,1209  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55 ,1209   ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1182 ,1209 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1181 ,1210  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55 ,1210  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1182 ,1210  ,1 ,1 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55 ,1211  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,83  ,1211  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,84  ,1211 ,1 ,1 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1180 ,1211  ,1 ,1 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55 ,1212 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,83  ,1212 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,84 ,1212 ,1 ,1 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1180 ,1212 ,1 ,1 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,55 ,1213  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,58  ,1213  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,69 ,1213 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1183 ,1231  ,1 ,1 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,53 ,1231 , 1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,92 ,1303 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,105 ,1303  ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,2153 ,1401 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,56  ,1401 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,67 ,1405 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1183 ,1405 ,1 ,1 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,58 ,1406 ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1183 ,1406   ,1 ,1 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,67 ,1407   ,1 ,0 ,1);
+
+INSERT INTO cpd_pozdokumenty_cis (typobjektu,typdokumentu,typucelu,checklist,funkce,platnost)
+VALUES('UCEL'  ,1183 ,1407  ,1 ,1 ,1);
+
+ROLLBACK WORK;
+
+--End of B136165_UID82684_3

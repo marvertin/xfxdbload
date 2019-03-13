@@ -1,0 +1,35 @@
+CREATE PROCEDURE RSTS_4712_zprac(AKonto     DEC(16, 0),
+                                 ATko       CHAR(2),
+                                 AZdrojSer  INT,
+                                 ASerDM     INT)
+                                    
+  DEFINE _nalezeno    INT;
+  DEFINE _serObj      INT;
+  
+  LET _nalezeno = 0;
+  IF(EXISTS(SELECT 1 FROM ac_memobody_den_a arch 
+            WHERE
+              arch.konto = AKonto AND arch.tko = ATko AND
+              arch.ser NOT IN (SELECT ser FROM ac_memobody_den WHERE ser = arch.ser))) 
+  THEN
+    LET _nalezeno = 1;
+  END IF;
+  
+  -- pokud jde o HYPO konto, jeste otestuju i predmigracni memorial
+  IF(AZdrojSer = 1 AND _nalezeno = 0) THEN
+    IF(EXISTS(SELECT 1 FROM ac_memobodypredmigr_view_a arch 
+              WHERE
+                arch.konto = AKonto AND arch.tko = ATko AND
+                arch.ser NOT IN (SELECT ser FROM ac_memobodypredmigr_den WHERE ser = arch.ser))) 
+    THEN
+      LET _nalezeno = 1;
+    END IF;  
+  END IF;
+  
+  IF(_nalezeno = 0) THEN
+    UPDATE ac_konto_mat SET jearchivovano = 0 WHERE konto = AKonto AND tko = ATko;
+    LET _serObj = TW_DM_VlozObjekt(ASerDM, 'T', 'ac_konto_mat', 'U', AKonto, ATko);
+    CALL TW_DM_VlozData(_serObj, 'jearchivovano', 1, NULL, 0, NULL);
+  END IF;    
+  
+END PROCEDURE;

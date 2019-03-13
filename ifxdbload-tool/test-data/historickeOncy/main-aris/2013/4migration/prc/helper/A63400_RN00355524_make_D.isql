@@ -1,0 +1,126 @@
+-----------------------------------------------------------------------------
+--
+--  Template migracni procedury pro featuru RN00355524
+--
+-----------------------------------------------------------------------------
+create PROCEDURE A63400_RN00355524_make_D (-- vstupni paramtery
+                                    ABezTransakci integer default 0,    -- slouzi k testovacim ucelum,
+                                                                        -- kdy si uzivatel sam ridi transakce
+                                                                        -- muze pouzivat i zakaznik
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+define _smlouva      Dec(16,0);
+define _tsml         Char(4);
+define _os           Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+   BEGIN WORK;
+end if;
+
+--záznam o spuštìní migrace/datové manipulace do provozního deníku a protokolu migraci/datovych manipulaci.
+let _serDM = TW_DM_Start('RN00355524', 'RN00355524', 'Migrace: Anonymizovaná osoba v platné roli');
+
+
+if ABezTransakci = 0 then
+   COMMIT WORK;
+   BEGIN WORK;
+end if;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, smlouva, tsml, os
+      INTO _ser, _smlouva, _tsml, _os
+    FROM RN00355524
+    WHERE zprac < 0
+      ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00355524
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+
+    --vlastni algoritmus migrace
+    UPDATE eo_role_mat set stav ='U' where smlouva = _smlouva and typ = _tsml and os = _os and stav = 'A'; 
+    -- zaznam o zmenenem objektu
+    
+    let _serObjekt = TW_DM_VlozObjekt(_serDM, 'T', 'eo_role_mat', 'U', _smlouva, _tsml);
+    -- nepovinne, ulozeni informace o zmenenych hodnotach
+    call TW_DM_VlozData(_serObjekt, 'stav', 'A', null,'U');
+    --konec algoritmu migrace
+
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00355524 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--algoritmus dokonceni migrace
+--...
+
+
+--zápis o ukonèení migrace do provozního deníku a protokolu migraci/datovych manipulaci.
+call TW_DM_End(_serDM);
+INSERT INTO  db_info (kdo, co) VALUES (USER, 'Migrace: Anonymizovaná osoba v platné roli'); 
+
+-- ukonèení trasování
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+  trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+end procedure;

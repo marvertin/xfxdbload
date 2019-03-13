@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B126397_RN00451080_5
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+-- zatím nebudeme dropovat
+
+BEGIN WORK;
+
+alter table ep_typpohybumodel_cis
+  drop (amorttabletopast, amorttabletoplan);
+
+ROLLBACK WORK;
+
+--End of B126397_RN00451080_5

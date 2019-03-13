@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A41950_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+ALTER TABLE ur_baze_cis drop metoda;
+ALTER TABLE ur_baze_acis drop metoda;
+
+ROLLBACK;

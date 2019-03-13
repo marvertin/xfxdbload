@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, B135845_UID79185_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25268: Parametrizace číselníku měn {STORY}
+
+BEGIN WORK;
+
+insert into ac_mena_cis (mena, popis, oznaceni) values ('EUR', 'Euro', '€');
+insert into ac_mena_cis (mena, popis, oznaceni) values ('USD', 'Americký dolar', '$');
+insert into ac_mena_cis (mena, popis, oznaceni) values ('AUD', 'Australský dolar', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('BRL', 'Brazilský real', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('BGN', 'Bulharský lev', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('CNY', 'Čínské renminbi', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('DKK', 'Dánská koruna', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('PHP', 'Filipínské peso', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('HKD', 'Honkongský dolar', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('HRK', 'Chorvatská kuna', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('INR', 'Indická rupie', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('IDR', 'Indonézská rupie', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('ILS', 'Izraelský šekel', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('JPY', 'Japonský jen', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('ZAR', 'Jihoafrická rand', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('KRW', 'Korejský won', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('CAD', 'Kanadský dolar', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('HUF', 'Maďarský forint', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('MYR', 'Malajsijský ringgit', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('MXN', 'Mexické peso', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('XDR', 'SDR', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('NOK', 'Norská koruna', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('NZD', 'Novozélandský dolar', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('PLN', 'Polská zlotý', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('RON', 'Rumunské nové leu', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('RUB', 'Ruský rubl', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('SGD', 'Singapurský dolar', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('SEK', 'Švédská koruna', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('CHF', 'Švýcarský frank', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('THB', 'Thajský baht', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('TRY', 'Turecká lira', null);
+insert into ac_mena_cis (mena, popis, oznaceni) values ('GBP', 'Britská libra', 'Ł');
+
+ROLLBACK WORK;
+
+--End of B135845_UID79185_3

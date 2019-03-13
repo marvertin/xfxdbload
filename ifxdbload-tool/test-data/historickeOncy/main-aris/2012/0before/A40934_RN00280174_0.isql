@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A40934_RN00280174_0
+-- @TC:ONCE: DESCRIPTION = Procedures TCSQLERROR: -705: Cannot drop/modify procedure (aris.tw_lower). {DEFECT}
+
+BEGIN WORK;
+
+drop index admuserrecordcmp_i_u2;
+drop index tw0042_group_i_u1;
+
+ROLLBACK WORK;
+
+--End of A40934_RN00280174_0

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135859_UID57405_1-eu_expesipisk_den
+-- @TC:ONCE: DESCRIPTION = RSTS-14468: Zjednotiť datové typy v tabulkách {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+alter table eu_expesipisk_den modify ursazba dec(5, 2);
+
+ROLLBACK WORK;
+
+--End of B135859_UID57405_1-eu_expesipisk_den

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B127524_RN00457847_5
+-- @TC:ONCE: DESCRIPTION = Předejít technických rizikům spojeným s tabulkami modelu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodsh_den MODIFY NEXT SIZE  142592;
+ALTER TABLE ep_splspormodb_den MODIFY NEXT SIZE  4776832;
+
+ROLLBACK WORK;
+
+--End of B127524_RN00457847_5

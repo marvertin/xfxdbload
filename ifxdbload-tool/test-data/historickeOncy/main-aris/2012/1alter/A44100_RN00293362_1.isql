@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A44100_RN00293362_1
+-- @TC:ONCE: DESCRIPTION = Modelování - výbìr tarifu {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_tariff
+ add externaltariffname   CHAR(40)
+;
+
+ROLLBACK WORK;
+
+--End of A44100_RN00293362_1

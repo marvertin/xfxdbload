@@ -1,0 +1,48 @@
+-- @TC:ONCE: ID = V2, B136116_UID82065_3-specUdaje
+-- @TC:ONCE: DESCRIPTION = RSTS-26702: Špatný výpočet uznatelné částky {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v EUR (eurech)           ' WHERE  serno = 5;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v GBP (britských librách)' WHERE  serno = 6;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v USD (amer. dolarech)   ' WHERE  serno = 7;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v cizí měně              ' WHERE  serno = 8;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v CAD (kanad. dolarech)  ' WHERE  serno = 9;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v AUD (austral. dolarech)' WHERE  serno = 10;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v NZD (novozél. dolarech)' WHERE  serno = 11;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v HUF (maďar. forintech) ' WHERE  serno = 12;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v PLN (polských zlotých) ' WHERE  serno = 13;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v CHF (švýcar. francích) ' WHERE  serno = 14;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v DKK (dánských korunách)' WHERE  serno = 15;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v ISK (island. korunách) ' WHERE  serno = 16;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v NOK (norských korunách)' WHERE  serno = 17;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v SEK (švéd. korunách)   ' WHERE  serno = 18;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v ILS (izrael. šekelech) ' WHERE  serno = 19;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v JPY (japonských jenech)' WHERE  serno = 20;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v KRW (korejských wonech)' WHERE  serno = 21;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v SAR (saud. riyalech)   ' WHERE  serno = 22;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v TRY (tureckých lirách) ' WHERE  serno = 23;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v CLP (chilských pesech) ' WHERE  serno = 24;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v MXN (mexických pesech) ' WHERE  serno = 25;
+UPDATE EU_TypSpecUdaj_Cis SET nazev = 'příjem v THB (thajských bahtech)' WHERE  serno = 26;
+
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v BRL (brazilských realech)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v BGN (bulharských leva)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v CNY (čínských renminbi)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v PHP (filipínských peso)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v HKD (honkongských dol.)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v HRK (chorvatských kunách)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v INR (indických rupiích)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v IDR (indonézských rupiích)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v ZAR (jihoafr. randech)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v MYR (malajsij. riggitech)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v XDR (SDR)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v RON (rumun. nových leu)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v RUB (ruských rublech)', null, 'F', 1);
+INSERT INTO EU_TypSpecUdaj_Cis (nazev, popis, typosoby, platnost) VALUES ('příjem v SGD (singapurských dol.)', null, 'F', 1);
+
+
+ROLLBACK WORK;
+
+--End of B136116_UID82065_3

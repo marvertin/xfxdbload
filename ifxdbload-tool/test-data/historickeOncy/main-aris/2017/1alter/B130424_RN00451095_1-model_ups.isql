@@ -1,0 +1,155 @@
+-- @TC:ONCE: ID = V2, B130424_RN00451095_1-model_ups
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_bssimulationcase ADD  loadedaddinfol   Integer  DEFAULT 0 NOT NULL CHECK (loadedaddinfol IN (0,1)) CONSTRAINT pro_bssimulationcase_dy5d;
+
+
+----------------------------------------------------------------
+CREATE TABLE pro_addinfol (
+  id   SERIAL NOT NULL,
+  bssimulationcase_id   Integer NOT NULL,
+  possiblereasoncosts    Integer,
+  saldobeforelastrepay   DECIMAL(16, 2),
+  datelastrepayreasoncosts   DATE,
+  contractrepayactualphase   DECIMAL(16, 2),
+  contractrepaypu   DECIMAL(16, 2),
+  repaybyschedule   DECIMAL(16, 2),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (possiblereasoncosts  IN (0,1)) CONSTRAINT pro_addinfol_dy5r
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_addinfol_pk ON pro_addinfol(id);
+ALTER TABLE pro_addinfol ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_addinfol_pk;
+
+--FK
+CREATE INDEX pro_addinfol_i_f1 ON pro_addinfol(bssimulationcase_id);
+ALTER TABLE pro_addinfol ADD CONSTRAINT FOREIGN KEY(bssimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_addinfol_f1;
+
+
+----------------------------------------------------------------
+CREATE TABLE pro_paraml (
+  id   SERIAL NOT NULL,
+  bssimulationcase_id   Integer NOT NULL,
+  simulreasoncostsactualmonth   Integer  DEFAULT 1 NOT NULL,
+  simulreasoncostsnextmonths   Integer  DEFAULT 1 NOT NULL,
+  simulreasoncostspremrepaymonth   Integer  DEFAULT 1 NOT NULL,
+  cappingreasoncosts   Integer  DEFAULT 0 NOT NULL,
+  userreasoncostspremrepay   DECIMAL(16, 2),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (simulreasoncostsactualmonth IN (0,1)) CONSTRAINT pro_paraml_dy6j,
+  CHECK (simulreasoncostsnextmonths IN (0,1)) CONSTRAINT pro_paraml_dy6k,
+  CHECK (simulreasoncostspremrepaymonth IN (0,1)) CONSTRAINT pro_paraml_dy6l,
+  CHECK (cappingreasoncosts IN (0,1)) CONSTRAINT pro_paraml_dy6m
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_paraml_pk ON pro_paraml(id);
+ALTER TABLE pro_paraml ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_paraml_pk;
+
+--FK
+CREATE INDEX pro_paraml_i_f1 ON pro_paraml(bssimulationcase_id);
+ALTER TABLE pro_paraml ADD CONSTRAINT FOREIGN KEY(bssimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_paraml_f1;
+
+
+----------------------------------------------------------------
+CREATE TABLE pro_fixcal (
+  id   SERIAL NOT NULL,
+  bssimulationcase_id   Integer NOT NULL,
+  ordernumber   Integer,
+  datefrom   DATE,
+  dateto   DATE,
+  refvarurokfixace   INTEGER,
+  status   CHAR(1),
+  creditphase   CHAR(1),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_fixcal_pk ON pro_fixcal(id);
+ALTER TABLE pro_fixcal ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_fixcal_pk;
+
+--FK
+CREATE INDEX pro_fixcal_i_f1 ON pro_fixcal(bssimulationcase_id);
+ALTER TABLE pro_fixcal ADD CONSTRAINT FOREIGN KEY(bssimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_fixcal_f1;
+CREATE INDEX pro_fixcal_i_f2 ON pro_fixcal(refvarurokfixace);
+ALTER TABLE pro_fixcal ADD CONSTRAINT FOREIGN KEY(refvarurokfixace) REFERENCES eu_variaurokfixace_cis(ser) CONSTRAINT pro_fixcal_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE pro_fixcal
+ADD CONSTRAINT (CHECK (status in ('P', 'Z')) CONSTRAINT pro_fixcal_c1),
+ADD CONSTRAINT (CHECK (creditPhase in ('P', 'S', 'K')) CONSTRAINT pro_fixcal_c2);
+
+
+----------------------------------------------------------------
+CREATE TABLE pro_prepaidrepay (
+  id   SERIAL NOT NULL,
+  bssimulationcase_id   Integer NOT NULL,
+  ordernumber   Integer,
+  repaymaturitydate   DATE,
+  repayamount   DECIMAL(16, 2),
+  creditphase   CHAR(1),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_prepaidrepay_pk ON pro_prepaidrepay(id);
+ALTER TABLE pro_prepaidrepay ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_prepaidrepay_pk;
+
+--FK
+CREATE INDEX pro_prepaidrepay_i_f1 ON pro_prepaidrepay(bssimulationcase_id);
+ALTER TABLE pro_prepaidrepay ADD CONSTRAINT FOREIGN KEY(bssimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_prepaidrepay_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE pro_prepaidrepay
+ADD CONSTRAINT (CHECK (creditPhase in ('P', 'S', 'K')) CONSTRAINT pro_prepaidrepay_c1);
+
+
+----------------------------------------------------------------
+CREATE TABLE pro_repaycal (
+  id   SERIAL NOT NULL,
+  bssimulationcase_id   Integer NOT NULL,
+  ordernumber   Integer,
+  datefrom   DATE,
+  dateto   DATE,
+  repayamount   DECIMAL(16, 2),
+  intervallevel   CHAR(1),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_repaycal_pk ON pro_repaycal(id);
+ALTER TABLE pro_repaycal ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_repaycal_pk;
+
+--FK
+CREATE INDEX pro_repaycal_i_f1 ON pro_repaycal(bssimulationcase_id);
+ALTER TABLE pro_repaycal ADD CONSTRAINT FOREIGN KEY(bssimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_repaycal_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE pro_repaycal
+ADD CONSTRAINT (CHECK (intervalLevel in ('S', 'U')) CONSTRAINT pro_repaycal_c1);
+
+
+ROLLBACK WORK;
+
+--End of B130424_RN00451095_1-model_ups

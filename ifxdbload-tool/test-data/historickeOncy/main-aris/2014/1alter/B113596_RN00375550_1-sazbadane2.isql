@@ -1,0 +1,84 @@
+-- @TC:ONCE: ID = V2, B113596_RN00375550_1-sazbadane2
+-- @TC:ONCE: DESCRIPTION = Danění úroků vybraných PO {CUSTOMERREQUEST}
+
+
+
+BEGIN WORK;
+
+ALTER TABLE ax_sazba_acis
+    ADD druhoper    CHAR(4)   BEFORE reftime,
+    ADD danucet     CHAR(9)   BEFORE reftime
+;
+
+
+ALTER TABLE ax_sazba_cis
+    ADD druhoper    CHAR(4)   BEFORE reftime,
+    ADD danucet     CHAR(9)   BEFORE reftime
+;
+
+--FK
+CREATE INDEX ax_sazba_cis_i_f2 ON ax_sazba_cis(druhoper)
+;
+ALTER TABLE ax_sazba_cis ADD CONSTRAINT FOREIGN KEY(druhoper) REFERENCES ac_druh_cis(druh) CONSTRAINT ax_sazba_cis_f2
+;
+CREATE INDEX ax_sazba_cis_i_f3 ON ax_sazba_cis(danucet)
+;
+ALTER TABLE ax_sazba_cis ADD CONSTRAINT FOREIGN KEY(danucet) REFERENCES ac_ucet_mat(ucet) CONSTRAINT ax_sazba_cis_f3
+;
+
+----------------------------------------------------------------
+CREATE TABLE ax_sazbaformaprav_acis (
+  idarch   SERIAL NOT NULL,
+  ser   Integer NOT NULL,
+  refsazba   INTEGER NOT NULL,
+  refformaprav   INTEGER NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ax_sazbaformaprav_acis_dzp4
+)lock mode row
+;
+
+--PK
+CREATE UNIQUE INDEX ax_sazbaformaprav_acis_pk ON ax_sazbaformaprav_acis(idarch)
+;
+ALTER TABLE ax_sazbaformaprav_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ax_sazbaformaprav_acis_pk
+;
+
+----------------------------------------------------------------
+CREATE TABLE ax_sazbaformaprav_cis (
+  ser   SERIAL NOT NULL,
+  refsazba   INTEGER NOT NULL,
+  refformaprav   INTEGER NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ax_sazbaformaprav_cis_dzox
+)lock mode row
+;
+
+--PK
+CREATE UNIQUE INDEX ax_sazbaformaprav_cis_pk ON ax_sazbaformaprav_cis(ser)
+;
+ALTER TABLE ax_sazbaformaprav_cis ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ax_sazbaformaprav_cis_pk
+;
+
+--FK
+CREATE INDEX ax_sazbaformaprav_cis_i_f1 ON ax_sazbaformaprav_cis(refsazba)
+;
+ALTER TABLE ax_sazbaformaprav_cis ADD CONSTRAINT FOREIGN KEY(refsazba) REFERENCES ax_sazba_cis(ser) CONSTRAINT ax_sazbaformaprav_cis_f1
+;
+CREATE INDEX ax_sazbaformaprav_cis_i_f2 ON ax_sazbaformaprav_cis(refformaprav)
+;
+ALTER TABLE ax_sazbaformaprav_cis ADD CONSTRAINT FOREIGN KEY(refformaprav) REFERENCES eo_formaprav_cis(formaprav) CONSTRAINT ax_sazbaformaprav_cis_f2
+;
+
+
+
+--End of B113596_RN00375550_1-sazbadane
+
+;
+
+ROLLBACK WORK;
+
+--End of B113596_RN00375550_1-sazbadane2

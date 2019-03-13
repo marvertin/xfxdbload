@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A43534_RN00289261
+-- @TC:ONCE: DESCRIPTION = Nový typ soudu pro vymáhání
+
+CREATE PROCEDURE A43534_RN00289261 ()
+
+  define _id Int;
+  define _os Int;
+  
+  SELECT NVL(MAX(id), 0) + 1 INTO _id FROM EO_Soud_Cis;
+  
+  let _os = A43186_ZalozOsobu('48135313', 'Rozhodèí soud', 'Dlouhá', '', '13', 'Praha 1', '11000');
+  
+  INSERT INTO EO_Soud_Cis(id, osoba, typ, platnost) VALUES(_id, _os, 'R', 1);
+
+END PROCEDURE;

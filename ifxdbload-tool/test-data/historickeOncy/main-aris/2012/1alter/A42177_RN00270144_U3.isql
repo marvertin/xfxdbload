@@ -1,0 +1,65 @@
+-- @TC:ONCE: ID = V2, A42177_RN00270144_U3
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt - U3
+
+BEGIN WORK;
+
+ALTER TABLE es_sml_arch
+    ADD indexbazesz     Integer   BEFORE priloha3,
+    ADD odchylkaursz    DECIMAL(5,2)   BEFORE priloha3,
+    ADD periodaursz     CHAR(1)   BEFORE priloha3,
+    MODIFY vznik           CHAR(1) DEFAULT 'N'  NOT NULL ;            
+
+ALTER TABLE es_sml_mat
+    ADD indexbazesz     Integer        BEFORE odchylkauru,
+    ADD odchylkaursz    DECIMAL(5,2)   BEFORE odchylkauru,
+    ADD periodaursz     CHAR(1)        BEFORE odchylkauru;
+
+--       es_transucet_arch
+CREATE TABLE es_transucet_arch (
+    zmena           SERIAL   NOT NULL,
+    smlouva         DECIMAL(16, 0)  ,
+    tsml            CHAR(4)  ,
+    priorita        Integer  ,
+    stav            CHAR(1)  ,
+    konto           DECIMAL(16, 0)  ,
+    banka           DECIMAL(7, 0)  ,
+    datumzm         DATE,   
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL
+) LOCK MODE ROW
+;
+
+CREATE unique INDEX es_transucet_arch_pk ON es_transucet_arch (zmena) ;
+
+CREATE INDEX es_transucet_arch_i1 ON es_transucet_arch (smlouva,tsml) ;
+
+ALTER TABLE es_transucet_arch
+    ADD CONSTRAINT PRIMARY KEY (zmena)  CONSTRAINT es_transucet_arch_pk;
+
+--       es_transucet_mat
+CREATE TABLE es_transucet_mat (
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    priorita        Integer   NOT NULL,
+    stav            CHAR(1)   NOT NULL,
+    konto           DECIMAL(16, 0)   NOT NULL,
+    banka           DECIMAL(7, 0)   NOT NULL,
+    datumzm         DATE   NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (stav in ('A','Z')) CONSTRAINT es_transucet_mat_c1
+) LOCK MODE ROW
+;
+
+CREATE unique INDEX es_transucet_mat_pk ON es_transucet_mat (smlouva,tsml,priorita) ;
+
+CREATE INDEX es_transucet_mat_i1 ON es_transucet_mat (smlouva,tsml) ;
+
+ALTER TABLE es_transucet_mat
+    ADD CONSTRAINT PRIMARY KEY (smlouva,tsml,priorita)  CONSTRAINT es_transucet_mat_pk;
+
+ALTER TABLE es_transucet_mat
+    ADD CONSTRAINT FOREIGN KEY (smlouva,tsml) REFERENCES es_sml_mat(smlouva,typ)  CONSTRAINT es_transucet_mat_f1;
+
+  
+ROLLBACK WORK;

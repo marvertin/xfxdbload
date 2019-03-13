@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43403_RN00282453
+-- @TC:ONCE: DESCRIPTION = Oprava nastaveni editovatelnosti registru
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'registrace', 'REGISTRACNI', 1);
+    
+ROLLBACK WORK;
+
+ 

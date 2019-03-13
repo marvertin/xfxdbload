@@ -1,0 +1,291 @@
+CREATE PROCEDURE RSTS_32976_prot_zpracSmlPred(ASer INT, ASmlouva DEC(16,0), ATsml CHAR(4), ASmlSpor DEC(16,0), ATsmlSpor CHAR(4))
+
+-- hlavní proměnné
+DEFINE _realn             INTEGER;
+DEFINE _treal             CHAR(4);
+DEFINE _stavreal          CHAR(1);
+DEFINE _klasifReal        INT;
+DEFINE _klasifUver        INT;
+DEFINE _klasifSdruz       INT;
+DEFINE _klasifMinReal     INT;
+DEFINE _klasifMinKlient   INT;
+DEFINE _klasifSmlouva     INT;
+DEFINE _klasifStop        INT;
+DEFINE _klasifVysledna    INT;
+DEFINE _klasifNejhorsi5   INT;
+DEFINE _datVymZajist      DATE;
+DEFINE _zvlrezimText      CHAR(40);
+DEFINE _vyzvaDatProv      DATE;
+DEFINE _odpPohlDatProv    DATE;
+DEFINE _odpPohlEkZtrata   DEC(16,2);
+DEFINE _dodRestrStav      CHAR(10);
+DEFINE _dodRestrDatPodpis DATE;
+DEFINE _dodRestrDatMigr   DATE;
+DEFINE _dodRestrDatOd     DATE;
+DEFINE _dodRestrDatDo     DATE;
+DEFINE _konto             DEC(16,0);
+DEFINE _tko               CHAR(4);
+DEFINE _mapKodPred        CHAR(20);
+DEFINE _saldoCelkem       DEC(16,2);
+DEFINE _saldoRozvaha      DEC(16,2);
+DEFINE _saldoPodrozvaha   DEC(16,2);
+DEFINE _indikDefaultPred  INTEGER;
+DEFINE _datDefaultPred    DATE;
+DEFINE _rstsDPDUver       INTEGER;
+DEFINE _rstsDPDSouhrn     INTEGER;
+DEFINE _rstsDPDSporeni    INTEGER;
+DEFINE _klasifSpor        INT;
+DEFINE _indikDefaultSpor  INTEGER;
+DEFINE _stadiumifrsPred   INTEGER;
+DEFINE _individualparam   INT;
+
+-- pomocné proměnné
+DEFINE _datProv         DATE;
+DEFINE _datProv5        DATE;
+DEFINE _klient          INTEGER;
+DEFINE _poradi          INT;
+DEFINE _stav            CHAR(1);
+DEFINE _datum           DATE;
+DEFINE _zvlrezim        INT;
+DEFINE _id              INTEGER;
+DEFINE _maxdpd          INTEGER;
+DEFINE _totaldpd        INTEGER;
+DEFINE _nesplaccastka   DEC(16,2);
+DEFINE _datprvvyhodnoceni DATE;
+DEFINE _datvyhodnoceni    DATE;
+DEFINE _saldo             DEC(16,2); 
+DEFINE _saldoRozPred      DEC(16,2); 
+DEFINE _saldoRozPo        DEC(16,2); 
+DEFINE _saldoPodrozPred   DEC(16,2);  
+DEFINE _saldoPodrozPo     DEC(16,2);
+DEFINE _typ                   CHAR(1);
+DEFINE _castkaOdpDUJist       DEC(16,2);
+DEFINE _castkaOdpDNJist       DEC(16,2);
+DEFINE _castkaOdpDUPohlUhr    DEC(16,2);
+DEFINE _castkaOdpDNPohlUhr    DEC(16,2);
+DEFINE _castkaOdpDUPokuta     DEC(16,2);
+DEFINE _castkaOdpDNPokuta     DEC(16,2);
+DEFINE _castkaOdpDUUrokBe     DEC(16,2);
+DEFINE _castkaOdpDNUrokBe     DEC(16,2);
+DEFINE _castkaOdpDUUrokSa     DEC(16,2);
+DEFINE _castkaOdpDNUrokSa     DEC(16,2);
+DEFINE _castkaOdpDUPojisteni  DEC(16,2);
+DEFINE _castkaOdpDNPojisteni  DEC(16,2);
+DEFINE _celkVyseOdpisu        DEC(16,2);
+DEFINE _castkapost            DEC(16,2);
+
+
+LET _datProv = ap_datprov();
+LET _datProv5 = ADD_MONTHS(_datProv, -60);
+
+let _realn = EP_RealSml(ASmlouva, ATsml);
+
+SELECT treal, stav, klasifreal, klasifuv, klasifsdruz, klasifmin, klasif, zvlrezim, konto, tko, stopklasif   
+INTO _treal, _stavreal, _klasifReal, _klasifUver, _klasifSdruz, _klasifMinReal, _klasifVysledna, _zvlrezim, _konto, _tko, _klasifStop
+FROM RU_Real_Mat
+WHERE realn = _realn;
+
+LET _klient = EP_Klientsml(ASmlouva, ATsml);
+SELECT klasklient INTO _klasifMinKlient FROM EO_Osoba_Mat WHERE os = _klient;
+
+let _klasifSmlouva = null;
+FOREACH
+  SELECT klasifsml INTO _klasifSmlouva FROM RU_Klasif_den WHERE realn = _realn ORDER BY ser DESC
+  EXIT FOREACH;
+END FOREACH;
+
+-- Nejhorší výsledná klasifikace za posledních 5 let START
+SELECT MAX(klasif)
+INTO _klasifNejhorsi5
+FROM RU_Real_Arch
+WHERE realn = _realn
+AND reftime > _datProv5;
+
+-- pokud není v archivu, převezme se z matriky, třeba i null
+IF _klasifNejhorsi5 IS NULL THEN
+  LET _klasifNejhorsi5 = _klasifVysledna;
+ELSE
+  LET _klasifNejhorsi5 = TW_MaxInt(_klasifVysledna, _klasifNejhorsi5);
+END IF;
+-- Nejhorší výsledná klasifikace za posledních 5 let END
+
+-- Vymožené zajištění-datum převodu do V  START
+let _datVymZajist = null;
+foreach
+  SELECT poradi, CAST(reftime AS DATE) INTO _poradi, _datum FROM EU_Zajist_Mat WHERE smlouva = ASmlouva AND tsml = ATsml AND stav = 'V'
+  
+  if _datVymZajist is null or _datum < _datVymZajist then
+    let _datVymZajist = _datum;
+  end if;
+  
+  foreach
+    SELECT stav, CAST(reftime AS DATE) INTO _stav, _datum FROM EU_Zajist_Arch WHERE smlouva = ASmlouva AND tsml = ATsml AND poradi = _poradi ORDER BY ser DESC
+    
+    if _stav = 'V' then
+      if _datum < _datVymZajist then
+        let _datVymZajist = _datum;
+      end if;
+    else
+      exit foreach;
+    end if;
+  end foreach;
+end foreach;
+-- Vymožené zajištění-datum převodu do V  END
+
+SELECT to_char(rezim) || ', ' || text INTO _zvlrezimText FROM RU_ZvlRezim_Cis WHERE rezim = _zvlrezim;
+
+SELECT MAX(datprov) 
+INTO _vyzvaDatProv
+FROM RU_Vyzva_Kart
+WHERE realn IN(
+  SELECT realn
+  FROM RU_Real_Mat
+  WHERE smlouva = ASmlouva
+  AND tsml = ATsml
+)
+AND stav = 'C';
+
+--Odpis pohledávky -ekon.ztráta START
+let _odpPohlEkZtrata = null;
+
+SELECT datprov, typ,  castkapost
+,  castkaOdpDUJist,  castkaOdpDNJist,  castkaOdpDUPohlUhr,  castkaOdpDNPohlUhr
+,  castkaOdpDUPokuta,  castkaOdpDNPokuta,  castkaOdpDUUrokBe,  castkaOdpDNUrokBe
+,  castkaOdpDUUrokSa,  castkaOdpDNUrokSa,  castkaOdpDUPojisteni,  castkaOdpDNPojisteni  
+INTO _odpPohlDatProv, _typ, _castkapost
+, _castkaOdpDUJist, _castkaOdpDNJist,  _castkaOdpDUPohlUhr, _castkaOdpDNPohlUhr
+, _castkaOdpDUPokuta, _castkaOdpDNPokuta, _castkaOdpDUUrokBe, _castkaOdpDNUrokBe
+, _castkaOdpDUUrokSa, _castkaOdpDNUrokSa, _castkaOdpDUPojisteni, _castkaOdpDNPojisteni
+FROM RU_OdpPohl_Kart
+WHERE realn = _realn AND poradi = (SELECT MAX(poradi) FROM RU_Odppohl_kart WHERE realn = _realn AND stav = 'C');
+
+IF _typ IN ('O','X') THEN
+  LET _celkVyseOdpisu =
+      nvl(_castkaOdpDUJist, 0)
+    + nvl(_castkaOdpDNJist, 0)
+    + nvl(_castkaOdpDUPohlUhr, 0)
+    + nvl(_castkaOdpDNPohlUhr, 0)
+    + nvl(_castkaOdpDUPokuta, 0)
+    + nvl(_castkaOdpDNPokuta, 0)
+    + nvl(_castkaOdpDUUrokBe, 0)
+    + nvl(_castkaOdpDNUrokBe, 0)
+    + nvl(_castkaOdpDUUrokSa, 0)
+    + nvl(_castkaOdpDNUrokSa, 0)
+    + nvl(_castkaOdpDUPojisteni, 0)
+    + nvl(_castkaOdpDNPojisteni, 0)
+  ;
+  IF _celkVyseOdpisu > 0 THEN
+    -- Vypočítá ekonomickou ztrátu EL = (výše odpisu celkem) / (výše odpisu celkem + výše postoupené pohledávky) * 100
+    let _odpPohlEkZtrata = _celkVyseOdpisu / (_celkVyseOdpisu + _castkapost) * 100;
+  END IF;
+END IF;
+--Odpis pohledávky -ekon.ztráta END
+
+let _dodRestrStav, _dodRestrDatPodpis, _dodRestrDatMigr, _dodRestrDatOd, _dodRestrDatDo = null ,null ,null ,null, null;
+FOREACH
+  SELECT        stav,          datpodpis,      datplatnost,  datzahajrestr,   datukonrestr
+  INTO _dodRestrStav, _dodRestrDatPodpis, _dodRestrDatMigr, _dodRestrDatOd, _dodRestrDatDo
+  FROM EU_DodatekHead_mat
+  WHERE kategoriezm = 'RESTRUKTUR'
+  AND smlouva = ASmlouva
+  AND tsml = ATsml
+  ORDER BY poradi DESC
+  EXIT FOREACH;
+END FOREACH;
+IF _dodRestrStav <> 'MIGRACE' THEN
+  LET _dodRestrDatMigr = NULL;
+END IF;
+
+let _mapKodPred, _saldoCelkem, _saldoRozvaha, _saldoPodrozvaha = null, null, null, null;
+IF _konto IS NOT NULL AND _tko IS NOT NULL THEN
+  SELECT mapkod INTO _mapKodPred FROM AC_Konto_Mat WHERE konto = _konto AND tko = _tko;
+
+  SELECT SUM(saldo) INTO _saldoCelkem FROM AC_Sko_Mat WHERE konto = _konto AND tko = _tko;
+
+  -- Salda START
+  SELECT SUM(CASE WHEN stavpodroz = 'R' THEN castkaakt ELSE 0 END), SUM(CASE WHEN stavpodroz <> 'R' THEN castkaakt ELSE 0 END)
+  INTO _saldoRozPred, _saldoPodrozPred
+  FROM ah_predsplatdluh_kart 
+  WHERE konto = _konto 
+  AND tko = _tko
+  AND stav IN ('A', 'B');
+
+  SELECT SUM(CASE WHEN stavpodroz = 'R' THEN castkaakt ELSE 0 END), SUM(CASE WHEN stavpodroz <> 'R' THEN castkaakt ELSE 0 END)
+  INTO _saldoRozPo, _saldoPodrozPo
+  FROM ah_posplatdluh_kart 
+  WHERE konto = _konto 
+  AND tko = _tko
+  AND stav IN ('A', 'B');
+
+  IF _saldoRozPred IS NOT NULL OR _saldoRozPo IS NOT NULL THEN
+    LET _saldoRozvaha = -1 * (nvl(_saldoRozPred, 0) + nvl(_saldoRozPo, 0));
+  END IF;
+  IF _saldoPodrozPred IS NOT NULL OR _saldoPodrozPo IS NOT NULL THEN
+    LET _saldoPodrozvaha = -1 * (nvl(_saldoPodrozPred, 0) + nvl(_saldoPodrozPo, 0));
+  END IF;
+  -- Salda END
+END IF;
+
+let _indikDefaultPred, _datDefaultPred, _stadiumifrsPred = null, null, null;
+FOREACH
+  SELECT charakterdefault, datdefault, stadiumifrs INTO _indikDefaultPred, _datDefaultPred, _stadiumifrsPred FROM RU_Stavsplaceni_den WHERE realn = _realn ORDER BY poradi DESC
+  EXIT FOREACH;
+END FOREACH;
+
+LET _id, _rstsDPDUver, _maxDpd, _totalDpd, _nesplacCastka, _datprvVyhodnoceni, _datVyhodnoceni = EP_GetLastAllDPD(_realn, 'L');
+LET _id, _rstsDPDSouhrn, _maxDpd, _totalDpd, _nesplacCastka, _datprvVyhodnoceni, _datVyhodnoceni  = EP_GetLastAllDPD(_realn, 'S');
+LET _id, _rstsDPDSporeni, _maxDpd, _totalDpd, _nesplacCastka, _datprvVyhodnoceni, _datVyhodnoceni = EP_GetLastAllDPD(_realn, 'D');
+
+let _klasifSpor, _indikDefaultSpor = null, null;
+FOREACH
+  SELECT realklasif, indikdefault INTO _klasifSpor, _indikDefaultSpor FROM RS_Stavsplaceni_den WHERE realn = EP_RealSml(ASmlSpor, ATsmlSpor) ORDER BY poradi DESC
+  EXIT FOREACH;
+END FOREACH;
+
+let _individualparam = null;
+foreach
+  SELECT individualniparam INTO _individualparam FROM RU_OP_Kart WHERE smlouva = ASmlouva AND tsml = ATSml AND stav = 'C' ORDER BY serno DESC
+  exit foreach;
+end foreach;
+
+UPDATE RSTS_32976_Protokol_Sml SET 
+  realn = _realn
+, treal = _treal
+, stavreal = _stavreal
+, stadiumifrsPred = _stadiumifrsPred
+, klasifReal = _klasifReal
+, klasifUver = _klasifUver
+, klasifSdruz = _klasifSdruz
+, klasifMinReal = _klasifMinReal
+, klasifMinKlient = _klasifMinKlient
+, klasifSmlouva = _klasifSmlouva
+, klasifStop = _klasifStop
+, klasifVysledna = _klasifVysledna
+, klasifNejhorsi5 = _klasifNejhorsi5
+, datVymZajist = _datVymZajist
+, zvlrezimText = _zvlrezimText
+, vyzvaDatProv = _vyzvaDatProv
+, odpPohlDatProv = _odpPohlDatProv
+, odpPohlEkZtrata = _odpPohlEkZtrata
+, dodRestrStav = _dodRestrStav
+, dodRestrDatPodpis = _dodRestrDatPodpis
+, dodRestrDatMigr = _dodRestrDatMigr
+, dodRestrDatOd = _dodRestrDatOd
+, dodRestrDatDo = _dodRestrDatDo
+, konto = _konto
+, tko = _tko
+, mapKodPred = _mapKodPred
+, saldoCelkem = _saldoCelkem
+, saldoRozvaha = _saldoRozvaha
+, saldoPodrozvaha = _saldoPodrozvaha
+, indikDefaultPred = _indikDefaultPred
+, datDefaultPred = _datDefaultPred
+, rstsDPDUver = _rstsDPDUver
+, rstsDPDSouhrn = _rstsDPDSouhrn
+, rstsDPDSporeni = _rstsDPDSporeni
+, klasifSpor = _klasifSpor
+, indikDefaultSpor = _indikDefaultSpor
+, individualparam = _individualparam
+WHERE ser = ASer;
+
+END PROCEDURE;

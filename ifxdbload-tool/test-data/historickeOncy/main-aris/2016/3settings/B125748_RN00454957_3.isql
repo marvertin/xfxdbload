@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B125748_RN00454957_3
+-- @TC:ONCE: DESCRIPTION = HS: Doplnit přiřazení variant fixací {DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO EU_VarUrokFixPrirad_Cis(refvariaurokfixace, platnostod, platnost, nabizetsale, fazeuveru, tsml) 
+VALUES (8, MDY(1, 1, 1994), 1, 0, 'P', 'PPSU');
+
+ROLLBACK WORK;
+
+--End of B125748_RN00454957_3

@@ -1,0 +1,5 @@
+CREATE PROCEDURE B135325_UID71591_drop ()
+
+DROP TABLE IF EXISTS ISal_dataBalDoklZadatKontr_Temp;
+
+end procedure;

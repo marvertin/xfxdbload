@@ -1,0 +1,76 @@
+create PROCEDURE RN00405606_find_D ()
+
+define _ser          Int;
+
+define _sernosledtran int;
+define _konto         dec(16, 0);
+define _tko           char(2);
+define _kontoproti    dec(16,0);
+define _banka         dec(7,0);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00405606;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00405606(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+
+  sernosledtran   int,
+  konto           dec(16,0), 
+  tko             char(2),
+  kontoproti      dec(16,0),
+  banka           dec(7,0),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+--plnime ridici tabulku
+foreach cc1 with hold for
+    select distinct t.serno,        t.konto, t.tko, t.kontoproti, t.banka 
+    into            _sernosledtran,  _konto,  _tko, _kontoproti,   _banka
+    from ep_sledtran_den t 
+    join ep_objsledtran_mat i on t.serno = i.refsledtran and i.objekttyp = 'INSSPR' and i.platnost = 1
+    left join ep_objsledtran_mat p on t.serno = p.refsledtran and p.objekttyp = 'OSOBA' and p.platnost = 1
+    WHERE t.sledinsolv = 1 
+
+    INSERT INTO RN00405606( sernosledtran,  konto,  tko,  kontoproti,  banka, zprac)
+    VALUES                (_sernosledtran, _konto, _tko, _kontoproti, _banka, -1);
+
+   COMMIT WORK;
+   BEGIN WORK;
+
+  end foreach;
+  
+  
+UPDATE STATISTICS HIGH FOR TABLE RN00405606;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

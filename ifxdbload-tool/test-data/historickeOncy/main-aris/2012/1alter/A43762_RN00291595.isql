@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, A43762_RN00291595
+-- @TC:ONCE: DESCRIPTION = Vytvoøení zprávy bez uvedení pøíjemce jen na smlouvu 
+
+BEGIN WORK;
+
+ALTER TABLE ep_zpravaprijemce_kart DROP CONSTRAINT ep_zpravaprijemce_kart_pk;
+
+ALTER TABLE ep_zpravaprijemce_kart
+    ADD id              SERIAL NOT NULL   BEFORE zpravaid;
+
+
+ALTER TABLE ep_zpravaprijemce_kart
+    MODIFY os              INTEGER;
+
+
+CREATE unique INDEX ep_zpravaprijemce_kart_pk ON ep_zpravaprijemce_kart (id) ;
+
+
+ALTER TABLE ep_zpravaprijemce_kart
+    ADD CONSTRAINT PRIMARY KEY (id)  CONSTRAINT ep_zpravaprijemce_kart_pk;
+
+
+DROP INDEX ep_zpravareakce_den_i_fk1;
+
+ROLLBACK WORK;

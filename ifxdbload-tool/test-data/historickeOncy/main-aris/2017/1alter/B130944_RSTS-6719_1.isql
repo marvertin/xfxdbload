@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B130944_RSTS-6719_1
+-- @TC:ONCE: DESCRIPTION = dávka do CRU: došlo k chybnému přečíslování pohledávky
+
+
+BEGIN WORK;
+
+alter table ep_davkacruvetau_kart
+  add typ char(4) before konto
+  , add smlspor dec(16, 0) before konto;
+
+ROLLBACK WORK;
+
+--End of B130944_RSTS-6719_1

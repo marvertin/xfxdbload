@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A40331_RN00229280_1
+-- @TC:ONCE: DESCRIPTION = Zefektivnìní tøídìní klientské korespondence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  alter table tv_head_den add koresp int default 0;
+    
+ROLLBACK WORK;
+
+--End of A40331_RN00229280_1

@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A42982_RN00269254
+-- @TC:ONCE: DESCRIPTION = Nový webový produkt - oprava customizace
+BEGIN WORK;
+
+update es_urpremie_cis
+set den = mdy(12,31, year(rok))
+  , povolenoposkpu = 1
+  , povolenoposksu = 1
+  , cilovekontoprim = 'S'
+  , cilovekontoalt = '0'
+  , zaoktyp = 'P'
+  , zaokpresnost = 0;
+  
+update es_urpremiefix_cis
+set koefzezustatku = 0
+  , limitmin = 0;
+
+ROLLBACK WORK;
+

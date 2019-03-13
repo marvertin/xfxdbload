@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, A49785_RN00324082_1
+-- @TC:ONCE: DESCRIPTION = Chyba pøi uložení Šekové poukázky {DEFECT}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       as_dokl_kart
+
+-- 2  as_dokl_kart-1/1       [ALTER.COLUMN]
+ALTER TABLE as_dokl_kart
+    MODIFY adresat         CHAR(40)                                  /* previouse: ... : ... : NOT NULL */,
+    MODIFY prijemce        CHAR(40)                                  /* previouse: ... : ... : NOT NULL */,
+    MODIFY obec            CHAR(40)                                  /* previouse: ... : ... : NOT NULL */,
+    MODIFY ulice           CHAR(40)                                  /* previouse: ... : ... : NOT NULL */;
+
+
+ROLLBACK WORK;
+
+--End of A49785_RN00324082_1

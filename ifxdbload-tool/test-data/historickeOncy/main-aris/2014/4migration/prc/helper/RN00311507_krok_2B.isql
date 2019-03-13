@@ -1,0 +1,60 @@
+create procedure RN00311507_krok_2B()
+-- tvorba a naplnění řídící tabulky pro migraci insolvencí
+
+BEGIN WORK;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_2_insolv;
+end;
+
+-- řídící tabulka
+CREATE TABLE RN00311507_krok_2_insolv(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt default -1,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+
+                            --vlastni data - např. cislo osoby
+  os Int,
+  cjednaci Char(10),
+  cj_IR Char(45),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+begin
+  on exception IN(-319)
+  end exception;
+  DROP INDEX RN00311507_krok_2_insolv_log_i1;
+end;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_2_insolv_log;
+end;
+
+-- logovací tabulka (problémy, informace, ...)
+CREATE TABLE RN00311507_krok_2_insolv_log(
+  Ser Int, -- seriál z RN00311507_krok_2_insolv
+  text Varchar(255)
+)LOCK MODE ROW;
+
+CREATE INDEX RN00311507_krok_2_insolv_log_i1 ON RN00311507_krok_2_insolv_log(ser);
+
+-- update statistik je až zde, protože data byla naplněna do řídící tabulky z excelu
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_krok_2_data;
+
+-- vybereme unikátní trojice údajů: osoba (tj. seriál osoby), číslo jednací ISIR, číslo jednací banky
+INSERT INTO RN00311507_krok_2_insolv(os, cjednaci, cj_IR)
+SELECT DISTINCT os, cjednaci, cj_IR FROM RN00311507_krok_2_data;
+
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_krok_2_insolv;
+
+COMMIT WORK;
+
+end procedure;

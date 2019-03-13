@@ -1,0 +1,595 @@
+-- @TC:ONCE: ID = V2, A83231_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE rs_vinkulace_kart MODIFY poradi Integer NOT NULL;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_insolvence_mat (
+  serno   SERIAL NOT NULL,
+  spisznsenat   CHAR(10) NOT NULL,
+  spisznrejstrik   Char(5) NOT NULL,
+  spisznbc   CHAR(10) NOT NULL,
+  spisznrocnik   Char(4) NOT NULL,
+  cisjednaciporadi   Integer,
+  cisjednacirok   Integer,
+  stav   CHAR(1) NOT NULL,
+  cyklus   Integer NOT NULL,
+  refosoba   INTEGER NOT NULL,
+  refreferent   Char(2) NOT NULL,
+  refsoud   INTEGER NOT NULL,
+  poznamka   LVarchar(2000),
+  zpusobukonceni   CHAR(1),
+  refduvstorno   INTEGER,
+  datzahajeni   DATE NOT NULL,
+  datzamitnuti   DATE,
+  datukonceni   DATE,
+  datstorno   DATE,
+  datupadek   DATE,
+  datoddluzeni   DATE,
+  datkonkurz   DATE,
+  datzpenezeni   DATE,
+  datodvolani   DATE,
+  datprezkum   DATE,
+  prezkumjednani   Integer  DEFAULT 0 NOT NULL,
+  bankavsezpohl   Integer  DEFAULT 0 NOT NULL,
+  veritelvybor   Integer  DEFAULT 0 NOT NULL,
+  datodstoupvybor   DATE,
+  datusnesschval   DATE,
+  datvedomsplnoddluz   DATE,
+  datnavrhosvoboz   DATE,
+  datusnesukonc   DATE,
+  datusnesosvoboz   DATE,
+  datusnesrozvrh   DATE,
+  datschvalzaver   DATE,
+  refinsolvspravce   INTEGER,
+  insolvspravcekonto   DECIMAL(16, 0),
+  insolvspravcebanka   DECIMAL(7, 0),
+  insolvspravcespecsym   DECIMAL(10,0),
+  refinfoduv   INTEGER,
+  zahajtime   datetime year to second,
+  zahajuser   CHAR(20),
+  upadtime   datetime year to second,
+  upaduser   CHAR(20),
+  stornotime   datetime year to second,
+  stornouser   CHAR(20),
+  zamittime   datetime year to second,
+  zamituser   CHAR(20),
+  prihlpohltime   datetime year to second,
+  prihlpohluser   CHAR(20),
+  genprihltime   datetime year to second,
+  genprihluser   CHAR(20),
+  splatkaltime   datetime year to second,
+  splatkaluser   CHAR(20),
+  konkurztime   datetime year to second,
+  konkurzuser   CHAR(20),
+  ukontime   datetime year to second,
+  ukonuser   CHAR(20),
+  obzivtime   datetime year to second,
+  obzivuser   CHAR(20),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (prezkumjednani IN (0,1)) CONSTRAINT ep_insolvence_mat_dbcp,
+  CHECK (bankavsezpohl IN (0,1)) CONSTRAINT ep_insolvence_mat_dbcq,
+  CHECK (veritelvybor IN (0,1)) CONSTRAINT ep_insolvence_mat_dbcr
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_insolvence_mat_pk ON ep_insolvence_mat(serno);
+ALTER TABLE ep_insolvence_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_insolvence_mat_pk;
+
+--FK
+CREATE INDEX ep_insolvence_mat_i_f1 ON ep_insolvence_mat(refosoba);
+ALTER TABLE ep_insolvence_mat ADD CONSTRAINT FOREIGN KEY(refosoba) REFERENCES eo_osoba_mat(os) CONSTRAINT ep_insolvence_mat_f1;
+CREATE INDEX ep_insolvence_mat_i_f2 ON ep_insolvence_mat(refreferent);
+ALTER TABLE ep_insolvence_mat ADD CONSTRAINT FOREIGN KEY(refreferent) REFERENCES ep_referent_cis(zkratka) CONSTRAINT ep_insolvence_mat_f2;
+CREATE INDEX ep_insolvence_mat_i_f3 ON ep_insolvence_mat(refsoud);
+ALTER TABLE ep_insolvence_mat ADD CONSTRAINT FOREIGN KEY(refsoud) REFERENCES eo_soud_cis(id) CONSTRAINT ep_insolvence_mat_f3;
+CREATE INDEX ep_insolvence_mat_i_f4 ON ep_insolvence_mat(refinsolvspravce);
+ALTER TABLE ep_insolvence_mat ADD CONSTRAINT FOREIGN KEY(refinsolvspravce) REFERENCES eo_insolvspravce_cis(serno) CONSTRAINT ep_insolvence_mat_f4;
+CREATE INDEX ep_insolvence_mat_i_f5 ON ep_insolvence_mat(refinfoduv);
+ALTER TABLE ep_insolvence_mat ADD CONSTRAINT FOREIGN KEY(refinfoduv) REFERENCES eo_infoduvos_mat(info) CONSTRAINT ep_insolvence_mat_f5;
+CREATE INDEX ep_insolvence_mat_i_f6 ON ep_insolvence_mat(refduvstorno);
+ALTER TABLE ep_insolvence_mat ADD CONSTRAINT FOREIGN KEY(refduvstorno) REFERENCES ep_stornoinsolv_cis(serno) CONSTRAINT ep_insolvence_mat_f6;
+
+--INDEXES
+CREATE INDEX ep_insolvence_mat_i1 ON ep_insolvence_mat(spisznsenat);
+CREATE INDEX ep_insolvence_mat_i2 ON ep_insolvence_mat(spisznbc);
+CREATE INDEX ep_insolvence_mat_i3 ON ep_insolvence_mat(spisznrocnik);
+CREATE INDEX ep_insolvence_mat_i4 ON ep_insolvence_mat(cisjednacirok,cisjednaciporadi);
+
+--CHECKS
+ALTER TABLE ep_insolvence_mat
+ADD CONSTRAINT (CHECK (stav in ('A','D','K','L','N','P','S','U','Z')) CONSTRAINT ep_insolvence_mat_c1),
+ADD CONSTRAINT (CHECK (zpusobukonceni in ('K','S','Z')) CONSTRAINT ep_insolvence_mat_c2);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_insolvence_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  spisznsenat   CHAR(10) NOT NULL,
+  spisznrejstrik   Char(5) NOT NULL,
+  spisznbc   CHAR(10) NOT NULL,
+  spisznrocnik   Char(4) NOT NULL,
+  cisjednaciporadi   Integer,
+  cisjednacirok   Integer,
+  stav   CHAR(1) NOT NULL,
+  cyklus   Integer NOT NULL,
+  refosoba   INTEGER NOT NULL,
+  refreferent   Char(2) NOT NULL,
+  refsoud   INTEGER NOT NULL,
+  poznamka   LVarchar(2000),
+  zpusobukonceni   CHAR(1),
+  refduvstorno   INTEGER,
+  datzahajeni   DATE NOT NULL,
+  datzamitnuti   DATE,
+  datukonceni   DATE,
+  datstorno   DATE,
+  datupadek   DATE,
+  datoddluzeni   DATE,
+  datkonkurz   DATE,
+  datzpenezeni   DATE,
+  datodvolani   DATE,
+  datprezkum   DATE,
+  prezkumjednani   Integer  DEFAULT 0 NOT NULL,
+  bankavsezpohl   Integer  DEFAULT 0 NOT NULL,
+  veritelvybor   Integer  DEFAULT 0 NOT NULL,
+  datodstoupvybor   DATE,
+  datusnesschval   DATE,
+  datvedomsplnoddluz   DATE,
+  datnavrhosvoboz   DATE,
+  datusnesukonc   DATE,
+  datusnesosvoboz   DATE,
+  datusnesrozvrh   DATE,
+  datschvalzaver   DATE,
+  refinsolvspravce   INTEGER,
+  insolvspravcekonto   DECIMAL(16, 0),
+  insolvspravcebanka   DECIMAL(7, 0),
+  insolvspravcespecsym   DECIMAL(10,0),
+  refinfoduv   INTEGER,
+  zahajtime   datetime year to second,
+  zahajuser   CHAR(20),
+  upadtime   datetime year to second,
+  upaduser   CHAR(20),
+  stornotime   datetime year to second,
+  stornouser   CHAR(20),
+  zamittime   datetime year to second,
+  zamituser   CHAR(20),
+  prihlpohltime   datetime year to second,
+  prihlpohluser   CHAR(20),
+  genprihltime   datetime year to second,
+  genprihluser   CHAR(20),
+  splatkaltime   datetime year to second,
+  splatkaluser   CHAR(20),
+  konkurztime   datetime year to second,
+  konkurzuser   CHAR(20),
+  ukontime   datetime year to second,
+  ukonuser   CHAR(20),
+  obzivtime   datetime year to second,
+  obzivuser   CHAR(20),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (prezkumjednani IN (0,1)) CONSTRAINT ep_insolvence_arch_dbcp,
+  CHECK (bankavsezpohl IN (0,1)) CONSTRAINT ep_insolvence_arch_dbcq,
+  CHECK (veritelvybor IN (0,1)) CONSTRAINT ep_insolvence_arch_dbcr
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_insolvence_arch_pk ON ep_insolvence_arch(idarch);
+ALTER TABLE ep_insolvence_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_insolvence_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_insolvence_arch_i1 ON ep_insolvence_arch(serno);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_insolvvinkul_mat (
+  serno   SERIAL NOT NULL,
+  refinsolv   INTEGER NOT NULL,
+  refrealn   INTEGER NOT NULL,
+  refporadi   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_insolvvinkul_mat_pk ON ep_insolvvinkul_mat(serno);
+ALTER TABLE ep_insolvvinkul_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_insolvvinkul_mat_pk;
+
+--FK
+CREATE INDEX ep_insolvvinkul_mat_i_f1 ON ep_insolvvinkul_mat(refinsolv);
+ALTER TABLE ep_insolvvinkul_mat ADD CONSTRAINT FOREIGN KEY(refinsolv) REFERENCES ep_insolvence_mat(serno) CONSTRAINT ep_insolvvinkul_mat_f1;
+CREATE INDEX ep_insolvvinkul_mat_i_f2 ON ep_insolvvinkul_mat(refrealn,refporadi);
+ALTER TABLE ep_insolvvinkul_mat ADD CONSTRAINT FOREIGN KEY(refrealn,refporadi) REFERENCES rs_vinkulace_kart(realn,poradi) CONSTRAINT ep_insolvvinkul_mat_f2;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_insolvvinkul_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refinsolv   INTEGER NOT NULL,
+  refrealn   INTEGER NOT NULL,
+  refporadi   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_insolvvinkul_arch_pk ON ep_insolvvinkul_arch(idarch);
+ALTER TABLE ep_insolvvinkul_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_insolvvinkul_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_insolvvinkul_arch_i1 ON ep_insolvvinkul_arch(serno);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_vztahinsolv_mat (
+  serno   SERIAL NOT NULL,
+  typ   Integer NOT NULL,
+  refinsolv1   INTEGER NOT NULL,
+  refinsolv2   INTEGER NOT NULL,
+  datplatod   DATE NOT NULL,
+  datplatdo   DATE,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_vztahinsolv_mat_deq6
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_vztahinsolv_mat_pk ON ep_vztahinsolv_mat(serno);
+ALTER TABLE ep_vztahinsolv_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_vztahinsolv_mat_pk;
+
+--FK
+CREATE INDEX ep_vztahinsolv_mat_i_f1 ON ep_vztahinsolv_mat(refinsolv1);
+ALTER TABLE ep_vztahinsolv_mat ADD CONSTRAINT FOREIGN KEY(refinsolv1) REFERENCES ep_insolvence_mat(serno) CONSTRAINT ep_vztahinsolv_mat_f1;
+CREATE INDEX ep_vztahinsolv_mat_i_f2 ON ep_vztahinsolv_mat(refinsolv2);
+ALTER TABLE ep_vztahinsolv_mat ADD CONSTRAINT FOREIGN KEY(refinsolv2) REFERENCES ep_insolvence_mat(serno) CONSTRAINT ep_vztahinsolv_mat_f2;
+
+--CHECKS
+ALTER TABLE ep_vztahinsolv_mat
+ADD CONSTRAINT (CHECK (typ in (1)) CONSTRAINT ep_vztahinsolv_mat_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_vztahinsolv_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  typ   Integer NOT NULL,
+  refinsolv1   INTEGER NOT NULL,
+  refinsolv2   INTEGER NOT NULL,
+  datplatod   DATE NOT NULL,
+  datplatdo   DATE,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_vztahinsolv_arch_deq6
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_vztahinsolv_arch_pk ON ep_vztahinsolv_arch(idarch);
+ALTER TABLE ep_vztahinsolv_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_vztahinsolv_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_vztahinsolv_arch_i1 ON ep_vztahinsolv_arch(serno);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_produktinsolv_mat (
+  serno   SERIAL NOT NULL,
+  refinsolv   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  refosoba   INTEGER NOT NULL,
+  typrole   CHAR(2) NOT NULL,
+  cyklus   Integer NOT NULL,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_produktinsolv_mat_deqi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_produktinsolv_mat_pk ON ep_produktinsolv_mat(serno);
+ALTER TABLE ep_produktinsolv_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_produktinsolv_mat_pk;
+
+--FK
+CREATE INDEX ep_produktinsolv_mat_i_f1 ON ep_produktinsolv_mat(refinsolv);
+ALTER TABLE ep_produktinsolv_mat ADD CONSTRAINT FOREIGN KEY(refinsolv) REFERENCES ep_insolvence_mat(serno) CONSTRAINT ep_produktinsolv_mat_f1;
+CREATE INDEX ep_produktinsolv_mat_i_f2 ON ep_produktinsolv_mat(refosoba);
+ALTER TABLE ep_produktinsolv_mat ADD CONSTRAINT FOREIGN KEY(refosoba) REFERENCES eo_osoba_mat(os) CONSTRAINT ep_produktinsolv_mat_f2;
+
+--INDEXES
+CREATE INDEX ep_produktinsolv_mat_i1 ON ep_produktinsolv_mat(smlouva,tsml,refosoba,typrole);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_produktinsolv_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refinsolv   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  refosoba   INTEGER NOT NULL,
+  typrole   CHAR(2) NOT NULL,
+  cyklus   Integer NOT NULL,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_produktinsolv_arch_deqi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_produktinsolv_arch_pk ON ep_produktinsolv_arch(idarch);
+ALTER TABLE ep_produktinsolv_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_produktinsolv_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_produktinsolv_arch_i1 ON ep_produktinsolv_arch(serno);
+CREATE INDEX ep_produktinsolv_arch_i2 ON ep_produktinsolv_arch(refinsolv);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_pohlinsolv_mat (
+  serno   SERIAL NOT NULL,
+  refproduktinsolv   INTEGER NOT NULL,
+  stopurok   Integer NOT NULL,
+  stoppopl   Integer NOT NULL,
+  stopupom   Integer NOT NULL,
+  stopvypis   Integer NOT NULL,
+  poplpojdospl   DECIMAL(16, 2) NOT NULL,
+  poplpojpospl   DECIMAL(16, 2) NOT NULL,
+  poplsouddospl   DECIMAL(16, 2) NOT NULL,
+  poplsoudpospl   DECIMAL(16, 2) NOT NULL,
+  pohlupadek   DECIMAL(16, 2) NOT NULL,
+  prihlaseno   Integer,
+  cyklus   Integer NOT NULL,
+  realn   INTEGER NOT NULL,
+  dluhinfoporadi   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (stopurok IN (0,1)) CONSTRAINT ep_pohlinsolv_mat_dey0,
+  CHECK (stoppopl IN (0,1)) CONSTRAINT ep_pohlinsolv_mat_dey1,
+  CHECK (stopupom IN (0,1)) CONSTRAINT ep_pohlinsolv_mat_dey2,
+  CHECK (stopvypis IN (0,1)) CONSTRAINT ep_pohlinsolv_mat_dey3,
+  CHECK (prihlaseno IN (0,1)) CONSTRAINT ep_pohlinsolv_mat_dey9
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_pohlinsolv_mat_pk ON ep_pohlinsolv_mat(serno);
+ALTER TABLE ep_pohlinsolv_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_pohlinsolv_mat_pk;
+
+--FK
+CREATE INDEX ep_pohlinsolv_mat_i_f1 ON ep_pohlinsolv_mat(refproduktinsolv);
+ALTER TABLE ep_pohlinsolv_mat ADD CONSTRAINT FOREIGN KEY(refproduktinsolv) REFERENCES ep_produktinsolv_mat(serno) CONSTRAINT ep_pohlinsolv_mat_f1;
+CREATE INDEX ep_pohlinsolv_mat_i_f2 ON ep_pohlinsolv_mat(realn,dluhinfoporadi);
+ALTER TABLE ep_pohlinsolv_mat ADD CONSTRAINT FOREIGN KEY(realn,dluhinfoporadi) REFERENCES ru_dluhinfo_den(realn,poradi) CONSTRAINT ep_pohlinsolv_mat_f2;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_pohlinsolv_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refproduktinsolv   INTEGER NOT NULL,
+  stopurok   Integer NOT NULL,
+  stoppopl   Integer NOT NULL,
+  stopupom   Integer NOT NULL,
+  stopvypis   Integer NOT NULL,
+  poplpojdospl   DECIMAL(16, 2) NOT NULL,
+  poplpojpospl   DECIMAL(16, 2) NOT NULL,
+  poplsouddospl   DECIMAL(16, 2) NOT NULL,
+  poplsoudpospl   DECIMAL(16, 2) NOT NULL,
+  pohlupadek   DECIMAL(16, 2) NOT NULL,
+  prihlaseno   Integer,
+  cyklus   Integer NOT NULL,
+  realn   INTEGER NOT NULL,
+  dluhinfoporadi   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (stopurok IN (0,1)) CONSTRAINT ep_pohlinsolv_arch_dey0,
+  CHECK (stoppopl IN (0,1)) CONSTRAINT ep_pohlinsolv_arch_dey1,
+  CHECK (stopupom IN (0,1)) CONSTRAINT ep_pohlinsolv_arch_dey2,
+  CHECK (stopvypis IN (0,1)) CONSTRAINT ep_pohlinsolv_arch_dey3,
+  CHECK (prihlaseno IN (0,1)) CONSTRAINT ep_pohlinsolv_arch_dey9
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_pohlinsolv_arch_pk ON ep_pohlinsolv_arch(idarch);
+ALTER TABLE ep_pohlinsolv_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_pohlinsolv_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_pohlinsolv_arch_i1 ON ep_pohlinsolv_arch(serno);
+CREATE INDEX ep_pohlinsolv_arch_i2 ON ep_pohlinsolv_arch(refproduktinsolv);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_neprihlpohlinsolv_mat (
+  serno   SERIAL NOT NULL,
+  refpohlinsolv   INTEGER NOT NULL,
+  datpredozu   DATE,
+  refnepodprihl   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_neprihlpohlinsolv_mat_pk ON ep_neprihlpohlinsolv_mat(serno);
+ALTER TABLE ep_neprihlpohlinsolv_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_neprihlpohlinsolv_mat_pk;
+
+--FK
+CREATE INDEX ep_neprihlpohlinsolv_mat_i_f1 ON ep_neprihlpohlinsolv_mat(refpohlinsolv);
+ALTER TABLE ep_neprihlpohlinsolv_mat ADD CONSTRAINT FOREIGN KEY(refpohlinsolv) REFERENCES ep_pohlinsolv_mat(serno) CONSTRAINT ep_neprihlpohlinsolv_mat_f1;
+CREATE INDEX ep_neprihlpohlinsolv_mat_i_f2 ON ep_neprihlpohlinsolv_mat(refnepodprihl);
+ALTER TABLE ep_neprihlpohlinsolv_mat ADD CONSTRAINT FOREIGN KEY(refnepodprihl) REFERENCES ep_nepodprihl_cis(serno) CONSTRAINT ep_neprihlpohlinsolv_mat_f2;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_neprihlpohlinsolv_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refpohlinsolv   INTEGER NOT NULL,
+  datpredozu   DATE,
+  refnepodprihl   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_neprihlpohlinsolv_arch_pk ON ep_neprihlpohlinsolv_arch(idarch);
+ALTER TABLE ep_neprihlpohlinsolv_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_neprihlpohlinsolv_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_neprihlpohlinsolv_arch_i1 ON ep_neprihlpohlinsolv_arch(serno);
+CREATE INDEX ep_neprihlpohlinsolv_arch_i2 ON ep_neprihlpohlinsolv_arch(refpohlinsolv);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_prihlpohlinsolv_mat (
+  serno   SERIAL NOT NULL,
+  refpohlinsolv   INTEGER NOT NULL,
+  datprihl   DATE NOT NULL,
+  vysepohl   DECIMAL(16, 2) NOT NULL,
+  cispohl   Integer NOT NULL,
+  typprihlnezaj   Integer NOT NULL,
+  typprihlzajss   Integer NOT NULL,
+  typprihlzajnem   Integer NOT NULL,
+  typprihlzajmaj   Integer NOT NULL,
+  typprihlzajruc   Integer NOT NULL,
+  podmpohl   Integer NOT NULL,
+  splatpohl   Integer NOT NULL,
+  vykonpohl   Integer NOT NULL,
+  popreno   Integer NOT NULL,
+  refpoprprihl   INTEGER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (typprihlnezaj IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfe2,
+  CHECK (typprihlzajss IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfe3,
+  CHECK (typprihlzajnem IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfe4,
+  CHECK (typprihlzajmaj IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfe5,
+  CHECK (typprihlzajruc IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfe6,
+  CHECK (podmpohl IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfe7,
+  CHECK (splatpohl IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfe8,
+  CHECK (vykonpohl IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfe9,
+  CHECK (popreno IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_mat_dfea
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_prihlpohlinsolv_mat_pk ON ep_prihlpohlinsolv_mat(serno);
+ALTER TABLE ep_prihlpohlinsolv_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_prihlpohlinsolv_mat_pk;
+
+--FK
+CREATE INDEX ep_prihlpohlinsolv_mat_i_f1 ON ep_prihlpohlinsolv_mat(refpohlinsolv);
+ALTER TABLE ep_prihlpohlinsolv_mat ADD CONSTRAINT FOREIGN KEY(refpohlinsolv) REFERENCES ep_pohlinsolv_mat(serno) CONSTRAINT ep_prihlpohlinsolv_mat_f1;
+CREATE INDEX ep_prihlpohlinsolv_mat_i_f2 ON ep_prihlpohlinsolv_mat(refpoprprihl);
+ALTER TABLE ep_prihlpohlinsolv_mat ADD CONSTRAINT FOREIGN KEY(refpoprprihl) REFERENCES ep_poprprihl_cis(serno) CONSTRAINT ep_prihlpohlinsolv_mat_f2;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_prihlpohlinsolv_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refpohlinsolv   INTEGER NOT NULL,
+  datprihl   DATE NOT NULL,
+  vysepohl   DECIMAL(16, 2) NOT NULL,
+  cispohl   Integer NOT NULL,
+  typprihlnezaj   Integer NOT NULL,
+  typprihlzajss   Integer NOT NULL,
+  typprihlzajnem   Integer NOT NULL,
+  typprihlzajmaj   Integer NOT NULL,
+  typprihlzajruc   Integer NOT NULL,
+  podmpohl   Integer NOT NULL,
+  splatpohl   Integer NOT NULL,
+  vykonpohl   Integer NOT NULL,
+  popreno   Integer NOT NULL,
+  refpoprprihl   INTEGER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (typprihlnezaj IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfe2,
+  CHECK (typprihlzajss IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfe3,
+  CHECK (typprihlzajnem IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfe4,
+  CHECK (typprihlzajmaj IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfe5,
+  CHECK (typprihlzajruc IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfe6,
+  CHECK (podmpohl IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfe7,
+  CHECK (splatpohl IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfe8,
+  CHECK (vykonpohl IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfe9,
+  CHECK (popreno IN (0,1)) CONSTRAINT ep_prihlpohlinsolv_arch_dfea
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_prihlpohlinsolv_arch_pk ON ep_prihlpohlinsolv_arch(idarch);
+ALTER TABLE ep_prihlpohlinsolv_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_prihlpohlinsolv_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_prihlpohlinsolv_arch_i1 ON ep_prihlpohlinsolv_arch(serno);
+CREATE INDEX ep_prihlpohlinsolv_arch_i2 ON ep_prihlpohlinsolv_arch(refpohlinsolv);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_splatkalinsolv_mat (
+  serno   SERIAL NOT NULL,
+  refprihlpohl   INTEGER NOT NULL,
+  cisveritel   Integer NOT NULL,
+  zajveritel   Integer NOT NULL,
+  datsplatkal   DATE NOT NULL,
+  datprvspl   DATE,
+  datpredpokyn   DATE,
+  datpokyn   DATE,
+  formapokyn   CHAR(1),
+  refnepodpokyn   INTEGER,
+  cyklus   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (zajveritel IN (0,1)) CONSTRAINT ep_splatkalinsolv_mat_dfeh
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splatkalinsolv_mat_pk ON ep_splatkalinsolv_mat(serno);
+ALTER TABLE ep_splatkalinsolv_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_splatkalinsolv_mat_pk;
+
+--FK
+CREATE INDEX ep_splatkalinsolv_mat_i_f1 ON ep_splatkalinsolv_mat(refprihlpohl);
+ALTER TABLE ep_splatkalinsolv_mat ADD CONSTRAINT FOREIGN KEY(refprihlpohl) REFERENCES ep_prihlpohlinsolv_mat(serno) CONSTRAINT ep_splatkalinsolv_mat_f1;
+CREATE INDEX ep_splatkalinsolv_mat_i_f2 ON ep_splatkalinsolv_mat(refnepodpokyn);
+ALTER TABLE ep_splatkalinsolv_mat ADD CONSTRAINT FOREIGN KEY(refnepodpokyn) REFERENCES ep_nepodpokyn_cis(serno) CONSTRAINT ep_splatkalinsolv_mat_f2;
+
+--CHECKS
+ALTER TABLE ep_splatkalinsolv_mat
+ADD CONSTRAINT (CHECK (formapokyn in ('D','P')) CONSTRAINT ep_splatkalinsolv_mat_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_splatkalinsolv_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refprihlpohl   INTEGER NOT NULL,
+  cisveritel   Integer NOT NULL,
+  zajveritel   Integer NOT NULL,
+  datsplatkal   DATE NOT NULL,
+  datprvspl   DATE,
+  datpredpokyn   DATE,
+  datpokyn   DATE,
+  formapokyn   CHAR(1),
+  refnepodpokyn   INTEGER,
+  cyklus   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (zajveritel IN (0,1)) CONSTRAINT ep_splatkalinsolv_arch_dfeh
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splatkalinsolv_arch_pk ON ep_splatkalinsolv_arch(idarch);
+ALTER TABLE ep_splatkalinsolv_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_splatkalinsolv_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_splatkalinsolv_arch_i1 ON ep_splatkalinsolv_arch(serno);
+CREATE INDEX ep_splatkalinsolv_arch_i2 ON ep_splatkalinsolv_arch(refprihlpohl);
+
+ROLLBACK WORK;
+
+--End of A83231_RN00311507_1

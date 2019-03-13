@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B134460_UID61862_1-bonita
+-- @TC:ONCE: DESCRIPTION = Bonita {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_bonita  
+  DROP countofadults,
+  DROP countof0to6, 
+  DROP countof6to10, 
+  DROP countof10to15, 
+  DROP countof15to26,
+  ADD obligationatrsts   DECIMAL(16, 2) BEFORE refuser,
+  ADD obligationoutofrsts   DECIMAL(16, 2) BEFORE refuser,
+  ADD countofpersons   Integer BEFORE refuser;
+
+ROLLBACK WORK;
+
+--End of B134460_UID61862_1-bonita

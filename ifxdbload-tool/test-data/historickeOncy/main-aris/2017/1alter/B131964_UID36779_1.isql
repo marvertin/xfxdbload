@@ -1,0 +1,71 @@
+-- @TC:ONCE: ID = V2, B131964_UID36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE ep_beirfronta_kart (
+  ser   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  stav   CHAR(1) NOT NULL,
+  datzaraz   date,
+  datzprac   date,
+  numerr   Integer,
+  isamerr   Integer,
+  texterr   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_beirfronta_kart_pk ON ep_beirfronta_kart(ser);
+ALTER TABLE ep_beirfronta_kart ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_beirfronta_kart_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX ep_beirfronta_kart_i1 ON ep_beirfronta_kart(smlouva,tsml);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ep_beirfronta_kart
+ADD CONSTRAINT (CHECK (stav in ('N', 'P', 'E', 'V')) CONSTRAINT ep_beirfronta_kart_c1);
+
+---------------------------------
+CREATE TABLE ep_beirfronta_arch (
+  idarch   SERIAL NOT NULL,
+  ser   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  stav   CHAR(1) NOT NULL,
+  datzaraz   date,
+  datzprac   date,
+  numerr   Integer,
+  isamerr   Integer,
+  texterr   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_beirfronta_arch_pk ON ep_beirfronta_arch(idarch);
+ALTER TABLE ep_beirfronta_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_beirfronta_arch_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+
+ROLLBACK WORK;
+
+--End of B131964_UID36779_1

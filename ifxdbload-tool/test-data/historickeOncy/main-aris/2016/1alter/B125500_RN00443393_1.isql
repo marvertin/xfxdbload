@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B125500_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE eu_expesipu_den 
+  ADD bridgeloanaccinsurancefee   DECIMAL(16, 2),
+  ADD creditaccinsurancefee   DECIMAL(16, 2);
+  
+ROLLBACK WORK;
+
+--End of B125500_RN00443393_1

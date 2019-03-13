@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B130736_RSTS-2951_1
+-- @TC:ONCE: DESCRIPTION = RN00457749-Centrální evidence exekucí
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_ceedotaz_den DROP CONSTRAINT ep_ceedotaz_den_f2;
+
+ROLLBACK WORK;
+
+--End of B130736_RSTS-2951_1

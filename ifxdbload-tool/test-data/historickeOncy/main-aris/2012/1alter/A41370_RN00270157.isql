@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, A41370_RN00270157
+-- @TC:ONCE: DESCRIPTION = CMZRB {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CREATE TABLE eu_pobockycmzrb_cis (
+  kod   SERIAL NOT NULL,
+  nazev   CHAR(40),
+  ulice   CHAR(45),
+  cpopis   Integer,
+  corient   Integer,
+  mesto   CHAR(45),
+  psc   CHAR(5),
+  telefon   CHAR(20),
+  fax   CHAR(20),
+  email   VARCHAR(255),
+  poznamka   CHAR(70),
+  platnost   Integer,
+  refuser   CHAR(20) DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_pobockycmzrb_cis_d6wt
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_pobockycmzrb_cis_pk ON eu_pobockycmzrb_cis(kod);
+ALTER TABLE eu_pobockycmzrb_cis ADD CONSTRAINT PRIMARY KEY(kod) CONSTRAINT eu_pobockycmzrb_cis_pk;
+
+
+CREATE TABLE eu_zarukycmzrb_mat (
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  smlouvadotace   CHAR(20),
+  pobockacmzrb   INTEGER,
+  platnost   Integer,
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_zarukycmzrb_mat_d6z6
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_zarukycmzrb_mat_pk ON eu_zarukycmzrb_mat(smlouva,tsml);
+ALTER TABLE eu_zarukycmzrb_mat ADD CONSTRAINT PRIMARY KEY(smlouva,tsml) CONSTRAINT eu_zarukycmzrb_mat_pk;
+
+
+ROLLBACK;

@@ -1,0 +1,378 @@
+
+
+CREATE PROCEDURE EU_RN00269923_VymPohl_make_D(ADebugFile    Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                              ABezTransakci int default 0)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+
+define _smlouva           Dec(16,0);
+define _tsml              char(4);
+
+define _stav              CHAR(1);
+define _sledovanodo       DATE;
+define _pdatprechoddoovp  DATE;
+define _pdatoslovdop      DATE;
+define _ppoznamka         LVARCHAR(2000);
+define _pdatuznanidluhu   DATE;
+define _pvyseuzndluhu     DECIMAL(16,2);
+define _pdatpromlceni     DATE;
+define _sdatpredsoud      DATE;
+define _scislojednaci     CHAR(20);
+define _sdatzastsoud      DATE;
+define _srefprav          CHAR(2);
+define _spoznamka         LVARCHAR(2000);
+define _sdatpodanizaloby  DATE;
+define _sdatcaspredvolani DATETIME YEAR TO MINUTE;
+define _sdatrozhodsoudu   DATE;
+define _scisnabyvtit      CHAR(50);
+define _sdatnabpm         DATE;
+define _sdatvykonav       DATE;
+define _sdatsplatdlepm    DATE;
+define _sdatpocsplacdlepm DATE;
+define _ssoud             CHAR(10);
+define _suznanydluh       DECIMAL(16,2);
+define _ssoudpopl         DECIMAL(16,2);
+define _spriznsoudnakl    DECIMAL(16,2);
+define _ireziminsolv      INTEGER;
+define _idatumnastinsolv  DATE;
+define _ipoznamka         LVARCHAR(2000);
+define _ecjexezapisu      VARCHAR(20);
+define _edatexezapisu     DATE;
+define _edatzastaveniexe  DATE;
+define _euznanavyse       DECIMAL(16,2);
+define _extdatpredani     DATE;
+define _extdatukonc       DATE;
+define _extpoznamka       LVARCHAR(2000);
+
+
+define _realn             Int;
+define _zvlrezim          Int;
+define _skupzvlrezim      Int;
+define _skupinaPozdni     Int;
+define _skupinaSoudni     Int;
+define _skupinaInsolv     Int;
+define _datsledod         DATE;
+define _vyrazeni          CHAR(1);
+define _datpredvolani     DATE;
+define _caspredvolani     DATETIME Hour to minute;
+define _idPOSoudu         Int;
+define _idSoudu           Int;
+define _zaradtime         DateTime Year to Second;
+define _zaraduser         Char(20);
+define _vyradtime         DateTime Year to Second;
+define _vyraduser         Char(20);
+define _portime           DateTime Year to Second;
+define _poruser           Char(20);
+
+
+define _datprov           DATE;
+define _stavSml           Char(1);
+define _datUkoncSml       DATE;
+define _vymPohlSer        Integer;
+define _exekuceSer        Integer;
+  
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if (ABezTransakci = 0) then
+  BEGIN WORK;
+end if;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka ('EU');
+let _Akce = TW_Provden('EU', 0, _Davka, 'Zahájení migrace vymáhaných pohledávek RN00269923');
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, smlouva, stav, sledovanoDo, pdatPrechodDoOVP, pdatOslovDop, ppoznamka, pdatUznaniDluhu, 
+           pvyseUznDluhu, pdatPromlceni, sdatPredSoud, scisloJednaci, sdatZastSoud, srefPrav, spoznamka, 
+           sdatPodaniZaloby, sdatCasPredvolani, sdatRozhodSoudu, scisNabyvTit, sdatNabPM, sdatVykonav, 
+           sdatSplatDlePM, sdatPocSplacDlePM, sSoud, sUznanyDluh, sSoudPopl, sPriznSoudNakl, iRezimInsolv, 
+           iDatumNastInsolv, iPoznamka, eCJExeZapisu, edatExeZapisu, edatZastaveniExe, eUznanaVyse, 
+           extDatPredani, extDatUkonc, extPoznamka   
+     INTO  _ser, _smlouva, _stav, _sledovanoDo, _pdatPrechodDoOVP, _pdatOslovDop, _ppoznamka, _pdatUznaniDluhu, 
+           _pvyseUznDluhu, _pdatPromlceni, _sdatPredSoud, _scisloJednaci, _sdatZastSoud, _srefPrav, _spoznamka, 
+           _sdatPodaniZaloby, _sdatCasPredvolani, _sdatRozhodSoudu, _scisNabyvTit, _sdatNabPM, _sdatVykonav, 
+           _sdatSplatDlePM, _sdatPocSplacDlePM, _sSoud, _sUznanyDluh, _sSoudPopl, _sPriznSoudNakl, _iRezimInsolv, 
+           _iDatumNastInsolv, _iPoznamka, _eCJExeZapisu, _edatExeZapisu, _edatZastaveniExe, _eUznanaVyse, 
+           _extDatPredani, _extDatUkonc, _extPoznamka
+     FROM RN00269923_vym_pohl
+    WHERE zprac <= 0
+ ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00269923_vym_pohl
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+
+    --vlastni algoritmus migrace 
+    
+    -- prázdné textové øetìzce pøevedeme na null
+    if trim(_stav) = '' then
+      let _stav = null;
+    end if;
+    if trim(_ppoznamka) = '' then
+      let _ppoznamka = null;
+    end if;
+    if trim(_scislojednaci) = '' then
+      let _scislojednaci = null;
+    end if;
+    if trim(_srefprav) = '' then
+      let _srefprav = null;
+    end if;
+    if trim(_spoznamka) = '' then
+      let _spoznamka = null;
+    end if;
+    if trim(_scisnabyvtit) = '' then
+      let _scisnabyvtit = null;
+    end if;
+    if trim(_ssoud) = '' then
+      let _ssoud = null;
+    end if;
+    if trim(_ipoznamka) = '' then
+      let _ipoznamka = null;
+    end if;
+    if trim(_ecjexezapisu) = '' then
+      let _ecjexezapisu = null;
+    end if;
+    if trim(_extpoznamka) = '' then
+      let _extpoznamka = null;
+    end if;
+     
+    SELECT datprov INTO _datprov FROM AP_Status; 
+    
+    -- systém vyhledá platnou (èi poslední ukonèenou) smlouvu s daným èíslem
+    let _tsml, _stavSml, _datUkoncSml = 
+      (SELECT tsml, stav, datUkonc FROM eu_sml_mat WHERE smlouva = _smlouva and stav in ('L'));
+    if _tsml is null then
+      let _tsml, _stavSml, _datUkoncSml =   
+      (SELECT tsml, stav, datUkonc 
+       FROM eu_sml_mat 
+       WHERE smlouva = _smlouva and stav = 'V' and datukonc =
+         (SELECT max(datukonc) FROM eu_sml_mat WHERE smlouva = _smlouva and stav = 'V'));
+       --ORDER BY stav, datukonc DESC);      
+    end if;
+    
+    if _tsml is null then 
+      call TW_RaiseError('427B19TCUI','EU_RN00269923_VymPohl_make_D','Nenalezena ani platná ani ukonèená smlouva s daným èíslem');
+    end if;
+    
+    let _realn = EP_RealSml(_smlouva, _tsml);
+    
+    let _zvlrezim = (SELECT zvlrezim FROM ru_real_mat WHERE realn = _realn);  
+    
+    -- pokud nebylo nastaveno importem, systém urèí dle zvláštního režimu Pozdní vymáhání, Soudní vymáhání nebo Vymáhání – 
+    -- insolvence (pokud by byl teoreticky nastaven jiný režim než z tìchto skupiny, nastaví Soudní vymáhání). 
+    -- Pokud je smlouva ukonèená systém nastaví stav Smlouva ukonèena.    
+    if _stav is null then
+    
+      if _stavSml = 'V' then
+      
+        let _stav = 'U';
+      
+      else
+      
+        let _skupzvlrezim = RU_SkupZvlRezim(_zvlrezim);
+
+        let _skupinaPozdni = TW_RegGetKey('RU','sprVym','rezimy','skupinaPozdni');
+        let _skupinaSoudni = TW_RegGetKey('RU','sprVym','rezimy','skupinaSoudni');
+        let _skupinaInsolv = TW_RegGetKey('RU','sprVym','rezimy','skupinaInsolv');
+      
+        IF (_skupzvlrezim IS NULL OR _skupzvlrezim NOT IN (_skupinaPozdni, _skupinaSoudni, _skupinaInsolv)) THEN
+          let _skupzvlrezim = _skupinaSoudni;
+        END IF;
+      
+        let _stav = DECODE(_skupzvlrezim, _skupinaInsolv, 'I', 
+                                          _skupinaSoudni, 'S',
+                                          _skupinaPozdni, 'P');    
+      end if;
+      
+    else
+    
+      if _stav = 'V' then
+        let _stav = 'B';
+      elif _stav = 'X' then
+        let _stav = 'V';
+      else
+        call TW_RaiseError('434W42TCUI','EU_RN00269923_VymPohl_make_D','Vyplnìn by mìl být pouze stav V nebo X, jinak stav nevyplòovat, systém si ho dopoèítá sám');    
+      end if;
+
+      -- pokud byl v excelu nastaven stav, ale smlouva je již ukonèená, pøenastavíme stav a datum sledováno do
+      if _stavSml = 'V' then
+        let _stav = 'U';
+        let _sledovanoDo = TW_MinDate(NVL(_sledovanoDo, _datUkoncSml), _datUkoncSml);
+      end if;
+    end if;
+    
+    -- datum provedení prvního pøevodu do vymáhání (pokud by proveden nebyl, tak aktuální datum migrace)    
+    let _datsledod = RU_GetDatProvPrVym(_smlouva, _tsml);
+    if _datsledod is null then
+      let _datsledod = _datprov;
+    end if;   
+    
+    -- Pokud nebylo naplnìno importem, pak: Je-li ukonèena smlouva, pak datum ukonèení smlouvy. 
+    -- Je-li stav vym. pohl. Vráceno do bìžného režimu nebo Vyøazeno, znovu nezaøazovat, pak aktuální datum migrace.
+    if _sledovanoDo is null then
+      if _stavSml = 'V' then
+        let _sledovanoDo = _datUkoncSml;
+      else
+        if _stav in ('B','V') then
+          let _sledovanoDo = _datprov;
+        end if;
+      end if;
+    end if;
+    
+    let _vyrazeni = null;
+    if _sledovanoDo is not null then
+      let _vyrazeni = 'A';
+    end if;
+    
+    let _datpredvolani = null;
+    let _caspredvolani = null;
+    if _sdatCasPredvolani is not null then
+      -- automatické konverze to poøeší
+      let _datpredvolani = _sdatcaspredvolani;
+      let _caspredvolani = _sdatcaspredvolani;
+    end if;
+    
+    let _idSoudu = null;
+    if _sSoud is not null then
+      let _idPOSoudu = EO_GetIDFromRcIco(_sSoud, 'PO');
+      let _idSoudu = (SELECT id FROM eo_soud_cis WHERE osoba = _idPOSoudu AND platnost = 1);
+      IF _idSoudu is null THEN
+        call TW_RaiseError('434U40TCUI', 'EU_RN00269923_VymPohl_make_D', 'Neexistuje platný soud z èíselníku soudù pro osobu %1.', _idPOSoudu);
+      END IF;
+    end if;
+    
+    if _iRezimInsolv is not null then
+      if not Exists(SELECT * FROM eo_insolvence_cis WHERE id = _iRezimInsolv and platnost = 1) then
+        call TW_RaiseError('434V41TCUI', 'EU_RN00269923_VymPohl_make_D', 'Neexistuje platný režim insolvence s id %1.', _iRezimInsolv);
+      end if;
+    end if;
+    
+    if _srefPrav is not null then
+      if not Exists(SELECT * FROM ep_referent_cis WHERE zkratka = _srefPrav and platnost = 1) then
+        call TW_RaiseError('436C56TCUI', 'EU_RN00269923_VymPohl_make_D', 'Neexistuje platný referent se zkratkou %1.', _srefPrav);
+      end if;
+    end if;
+    
+    if _pdatUznaniDluhu is not null and _pdatPromlceni is null then
+      let _pdatPromlceni = TW_AddMonths(_pdatUznaniDluhu, TW_RegGetKey('RU', 'sprVym', 'udaje', 'promlceniDohody', 45));
+    end if;
+
+    let _zaradtime, _zaraduser = TW_CurrentRef();
+    
+    let _vyradtime, _vyraduser = null, null;
+    if _stav in ('B','V','U') then
+      let _vyradtime, _vyraduser = TW_CurrentRef();
+    end if;
+    
+    let _portime, _poruser = TW_CurrentRef();  
+    
+    INSERT INTO EU_VymPohl_Mat (
+       smlouva, tsml, stav, datsledod, datsleddo, zarazeni, vyrazeni, datprechodovp, datdopis, poznpozdni,
+       datuzndluh, cisjednaci, uzndluhmimosoud, datpromlceni, datpredsoud, refprav, poznsoud,
+       datzaloba, datpredvolani, caspredvolani, datrozhodsoud, cisnabyvtitul, datpravmoci, datvykon,
+       datsplatpm, datpocsplacpm, uzndluhsoud, poplsoud, priznnaklsoud, datzastrizeni, datpredext,
+       datukonext, poznext, soud, zaradtime, zaraduser, vyradtime, vyraduser, portime, poruser              
+    ) VALUES (
+       _smlouva, _tsml, _stav, _datsledod, _sledovanoDo, 'A', _vyrazeni, _pdatPrechodDoOVP, _pdatOslovDop, _ppoznamka,
+       _pdatUznaniDluhu, _scisloJednaci, _pvyseUznDluhu, _pdatPromlceni, _sdatPredSoud, _srefPrav, _spoznamka,
+       _sdatPodaniZaloby, _datpredvolani, _caspredvolani, _sdatRozhodSoudu, _scisNabyvTit, _sdatNabPM, _sdatVykonav,
+       _sdatSplatDlePM, _sdatPocSplacDlePM, _sUznanyDluh, _sSoudPopl, _sPriznSoudNakl, _sdatZastSoud, _extDatPredani,
+       _extDatUkonc, _extPoznamka, _idSoudu, _zaradtime, _zaraduser, _vyradtime, _vyraduser, _portime, _poruser      
+    );
+    
+    -- Zjištìní pøiøazeného seriálu.
+    let _vymPohlSer = TW_LastSer();        
+    
+    if (_iRezimInsolv is not null OR _iDatumNastInsolv is not null OR _iPoznamka is not null) then
+      INSERT INTO EU_Insolvence_Mat (
+        smlouva, tsml, rezim, datnastaveni, poznamka, stav, portime, poruser
+      ) VALUES (
+        _smlouva, _tsml, _iRezimInsolv, _iDatumNastInsolv, _iPoznamka, 'A', _portime, _poruser  
+      );
+    end if;
+    
+    if Exists(SELECT * FROM RN00269923_exek_prik WHERE smlouva = _smlouva) or 
+      _eCJExeZapisu is not null or _edatExeZapisu is not null or _eUznanaVyse is not null or _edatZastaveniExe is not null then
+    
+      INSERT INTO EU_Exekuce_Mat (
+        vympohlser, cisjednaciexek, datzapis, uzndluh, datzastav, portime, poruser             
+      ) VALUES (
+        _vymPohlSer, _eCJExeZapisu, _edatExeZapisu, _eUznanaVyse, _edatZastaveniExe, _portime, _poruser    
+      );
+    
+      -- Zjištìní pøiøazeného seriálu.
+      let _exekuceSer = TW_LastSer();
+    
+      call EU_RN00269923_ExekPrikazy(_exekuceSer, _smlouva);
+    
+    end if;
+    
+    call EU_RN00269923_SledPlatby(_smlouva, _tsml, _pdatPrechodDoOVP, _sledovanoDo);
+    
+    --konec algoritmu migrace
+
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00269923_vym_pohl SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null WHERE ser = _ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--zápis o ukonèení migrace do provozního deníku
+let _Akce = TW_Provden('EU', 1, _Davka, 'Ukonèení migrace vymáhaných pohledávek RN00269923');
+
+if (PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+if (ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+END PROCEDURE;

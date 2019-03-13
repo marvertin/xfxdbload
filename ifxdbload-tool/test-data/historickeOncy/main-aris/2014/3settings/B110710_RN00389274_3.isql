@@ -1,0 +1,142 @@
+-- @TC:ONCE: ID = V2, B110710_RN00389274_3
+-- @TC:ONCE: DESCRIPTION = Insolvence: Vytváření úkolů na základě více vlastností/parametrů {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE EP_UkolReakce_Cis SET platnost = 0 WHERE refukoltyp = (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Termín pro skončení insolvenčního řízení') 
+  AND reffunkce = (SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat splátkový kalendář');
+
+UPDATE EP_UkolReakce_Cis SET platnost = 0 WHERE refukoltyp = (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Kontrolní termín pro pokyn zajištěného věřitele') 
+  AND reffunkce = (SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat splátkový kalendář');
+
+UPDATE EP_UkolReakce_Cis SET platnost = 0 WHERE refukoltyp = (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Konečný termín pro pokyn zajištěného věřitele') 
+  AND reffunkce = (SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat splátkový kalendář');
+
+UPDATE EP_UkolReakce_Cis SET platnost = 0 WHERE refukoltyp = (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Termín pro podání přihlášky do insolvenčního řízení') 
+  AND reffunkce = (SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat úpadek');
+
+UPDATE EP_UkolTyp_Cis SET caspocet = 6, pocetvytvukol = 10 WHERE nazev = 'Kontrola plnění splátkového kalendáře';
+UPDATE EP_UkolTyp_Cis SET nazev = 'Rozhodnutí o insolvenčním návrhu' WHERE nazev = 'Kontrola stavu insolvenčního řízení bez úpadku, odmítnutí nebo ukončení';
+UPDATE EP_UkolTyp_Cis SET nazev = 'Podat pokyn zajištěného věřitele' WHERE nazev = 'Kontrolní termín pro pokyn zajištěného věřitele';
+UPDATE EP_UkolTyp_Cis SET nazev = 'Přihlášení pohledávky - exekuce', caspocet = 12 WHERE nazev = 'Termín pro podání přihlášky do insolvenčního řízení';
+
+INSERT INTO EP_UkolTyp_Cis(nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost)
+VALUES('Řešení úpadku', 'M', 6, 1, (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV'), 1);
+
+INSERT INTO EP_UkolTyp_Cis(nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost)
+VALUES('Zamítnutí v právní moci', 'M', 3, 1, (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV'), 1);
+
+INSERT INTO EP_UkolTyp_Cis(nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost)
+VALUES('Přihlášení pohledávky', 'D', 7, 1, (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV'), 1);
+
+INSERT INTO EP_UkolTyp_Cis(nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost)
+VALUES('Promlčení dohody', 'D', 1, 1, (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRVYMPOHL'), 1);
+
+INSERT INTO EP_UkolTyp_Cis(nazev, casjednotka, caspocet, pocetvytvukol, refuloha, platnost)
+VALUES('Promlčení nároku z rozhodnutí', 'M', 108, 1, (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRVYMPOHL'), 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat konkurz'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Kontrola první splátky dle splátkového kalendáře'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat konkurz'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Kontrola plnění splátkového kalendáře'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat úpadek'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Rozhodnutí o insolvenčním návrhu'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zamítnout insolvenci'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Rozhodnutí o insolvenčním návrhu'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Ukončit insolvenci'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Rozhodnutí o insolvenčním návrhu'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Stornovat insolvenci'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Rozhodnutí o insolvenčním návrhu'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Přihlásit pohledávku'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Řešení úpadku'),
+       'V', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat splátkový kalendář'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Řešení úpadku'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat zpeněžení majetkové podstaty'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Řešení úpadku'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat splátkový kalendář / zpeněžení majetkové podstaty'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Řešení úpadku'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zadat konkurz'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Řešení úpadku'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Ukončit insolvenci'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Termín pro skončení insolvenčního řízení'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Zamítnout insolvenci'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Zamítnutí v právní moci'),
+       'Z', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Přihlásit pohledávku'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Přihlášení pohledávky - exekuce'),
+       'S', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Přihlásit pohledávku'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Přihlášení pohledávky'),
+       'S', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Nepřihlašovat pohledávku'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Přihlášení pohledávky - exekuce'),
+       'S', 1);
+
+INSERT INTO EP_UkolReakce_Cis(reffunkce, refukoltyp, reakce, platnost)
+VALUES((SELECT serno FROM EP_UlohaFunkce_Cis WHERE refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV') AND nazev = 'Nepřihlašovat pohledávku'),
+       (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Přihlášení pohledávky'),
+       'S', 1);
+
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'kontrola1splatky', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Kontrola první splátky dle splátkového kalendáře'), 1);
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'kontrolaSplKalend', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Kontrola plnění splátkového kalendáře'), 1);
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'skonceniIR', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Termín pro skončení insolvenčního řízení'), 1);
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'zamitnutiPravMoci',(SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Zamítnutí v právní moci'), 1);
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'podatPokZajVer', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Podat pokyn zajištěného věřitele'), 1);
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'konTermPokZajVer', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Konečný termín pro pokyn zajištěného věřitele'), 1);
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'prihlPohlExek', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Přihlášení pohledávky - exekuce'), 1);
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'prihlPohl', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Přihlášení pohledávky'), 1);
+call TW_RegSetOrAddKey('RU', 'sprVym', 'ukoly', 'promlcDohody', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Promlčení dohody'), 1);
+call TW_RegSetOrAddKey('RU', 'sprVym', 'ukoly', 'promlcNarokuRozh', (SELECT serno FROM EP_UkolTyp_Cis WHERE nazev = 'Promlčení nároku z rozhodnutí'), 1);
+
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'prihlPohlExek-10', 1, 1,
+'Úvěr', 'Vymáhání úvěru', 'Úkoly', 'Přihlášení pohledávky - exekuce: <typ zvláštního režimu úvěru>');
+
+call TW_RegSetOrAddKey('EP', 'insolvence', 'ukoly', 'prihlPohlExek-48', 1, 1,
+'Úvěr', 'Vymáhání úvěru', 'Úkoly', 'Přihlášení pohledávky - exekuce: <typ zvláštního režimu úvěru>');
+
+ROLLBACK WORK;
+
+--End of B110710_RN00389274_3

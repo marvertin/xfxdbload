@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B114607_RN00384928_4
+-- @TC:ONCE: DESCRIPTION = Main/Sale: Souhlas s údaji pro partnery (Doplnění a rozšíření) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+LOCK TABLE eo_fo_mat IN EXCLUSIVE MODE;
+
+UPDATE eo_fo_mat SET blockingreason = 1 WHERE blockingreason is not null;
+
+UPDATE eo_fo_mat SET blockingreason = 0 WHERE blockingreason is null;
+
+ROLLBACK WORK;
+
+--End of B114607_RN00384928_4

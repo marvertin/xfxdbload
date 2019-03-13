@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, A57022_RN00340990_3
+-- @TC:ONCE: DESCRIPTION = ⁄è/z·klad: Upravit parametrizaci a spouötÏnÌ telefonick˝ch kontrol pro prescoring a standardnÌ {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),'PFSU',null,null,null,null,null,null,null,null,'E',1,null,AP_DatProv(),null,null,'S','1','CZK');
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),'SUFO',null,null,null,null,null,null,null,null,'E',1,null,AP_DatProv(),null,null,'P','1','CZK');
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),'PFSU',null,null,null,null,null,null,null,null,'H',1,null,AP_DatProv(),null,null,'S','1','CZK');
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),'SUFO',null,null,null,null,null,null,null,null,'H',1,null,AP_DatProv(),null,null,'P','1','CZK');
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),'PFSU',null,null,null,null,null,null,null,null,'M',1,null,AP_DatProv(),null,null,'S','1','CZK');
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),'SUFO',null,null,null,null,null,null,null,null,'M',1,null,AP_DatProv(),null,null,'P','1','CZK');
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),'PFSU',null,null,null,null,null,null,null,null,'P',1,null,AP_DatProv(),null,null,'S','1','CZK');
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),'SUFO',null,null,null,null,null,null,null,null,'P',1,null,AP_DatProv(),null,null,'P','1','CZK');
+
+ROLLBACK WORK;
+
+--End of A57022_RN00340990_3

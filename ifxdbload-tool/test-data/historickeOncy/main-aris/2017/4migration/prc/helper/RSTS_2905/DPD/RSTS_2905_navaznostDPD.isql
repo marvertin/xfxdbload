@@ -1,0 +1,69 @@
+CREATE PROCEDURE RSTS_2905_navaznostDPD(AKonto    DEC(16, 0),
+                                        ATko      CHAR(2),
+                                        ARealn    INT,
+                                        ADatOtev  DATE, 
+                                        ADatUzav  DATE,
+                                        ALogovat  INT) 
+
+  DEFINE _nesplaccastka             DEC(16, 2);
+  DEFINE _datvyhodnoceni            DATE;
+  DEFINE _datprvvyhodnoceni         DATE;
+  DEFINE _currentDPD                INT;
+  DEFINE _nesplaccastkaPred         DEC(16, 2);
+  DEFINE _datvyhodnoceniPred        DATE;
+  DEFINE _datprvvyhodnoceniPred     DATE;
+  DEFINE _datvyhodnoceniLoop        DATE;
+  DEFINE _currentDPDPred            INT;
+  DEFINE _currentDPDLoop            INT;  
+  DEFINE _id                        INT;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'NavaznostDPD'); END IF;  
+  
+  LET _nesplaccastkaPred      = NULL;   
+  LET _datvyhodnoceniPred     = NULL;
+  LET _datprvvyhodnoceniPred  = NULL;
+  LET _currentDPDPred         = NULL;
+  
+  FOREACH c1 WITH HOLD FOR
+    SELECT nesplaccastka, datvyhodnoceni, datprvvyhodnoceni, currentDPD, id
+    INTO _nesplaccastka, _datvyhodnoceni, _datprvvyhodnoceni, _currentDPD, _id 
+    FROM rsts_2905_dpdevid  
+    ORDER BY
+      datvyhodnoceni
+    
+    LET _currentDPDLoop = 1;   
+      
+    IF((_currentDPD > 0 AND TW_AddMonths(TW_FirstDayOf(_datvyhodnoceni, 'M'), -1) <= _datvyhodnoceniPred)) 
+    THEN
+      DELETE FROM rsts_2905_dpdevid WHERE datvyhodnoceni BETWEEN _datvyhodnoceniPred + 1 AND _datvyhodnoceni - 1 and currentDPD = 0;
+      
+      LET _datvyhodnoceniLoop = _datvyhodnoceniPred + 1; 
+      LET _currentDPDLoop     = _currentDPDPred + 1;
+      WHILE(_datvyhodnoceniLoop <= _datvyhodnoceni - 1)
+        INSERT INTO rsts_2905_dpdevid (reals, datvyhodnoceni, typvyhodnoceni, currentdpd, datprvvyhodnoceni, nesplaccastka)
+        VALUES(ARealn, _datvyhodnoceniLoop, 'D', _currentDPDLoop, _datvyhodnoceniLoop, _nesplaccastkaPred);
+        
+        LET _currentDPDLoop = _currentDPDLoop + 1;
+        LET _datvyhodnoceniLoop = _datvyhodnoceniLoop + 1;
+      END WHILE;
+      
+
+      --UPDATE rsts_2905_dpdevid SET currentDPD = _currentDPDLoop WHERE id = _id;
+    END IF;  
+    
+    IF(_currentDPD > 0) THEN
+      LET _currentDPDPred         = _currentDPD;
+      LET _datvyhodnoceniPred     = _datvyhodnoceni;
+      LET _nesplaccastkaPred      = _nesplaccastka;
+      LET _datprvvyhodnoceniPred  = _datprvvyhodnoceni;
+    END IF;
+     
+  END FOREACH;
+  
+  -- zaverecny posun currentdpd o 1, a vymazani nesplaccastka u dpd 0
+  UPDATE rsts_2905_dpdevid SET currentDPD = currentDPD - 1 WHERE currentDPD > 0;
+  UPDATE rsts_2905_dpdevid SET nesplaccastka = 0 WHERE currentDPD = 0; 
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;  
+     
+END PROCEDURE;

@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A48372_RN00315328
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù
+-- @TC:ONCE: LOAD_UNLESS_LOADED = A46867_RN00282474_1
+
+BEGIN WORK;
+
+  ALTER TABLE ev_pojist_mat ADD CONSTRAINT FOREIGN KEY(varianta) REFERENCES ev_varpojist_cis(id) CONSTRAINT ev_pojist_mat_f2;
+
+ROLLBACK;

@@ -1,0 +1,57 @@
+-- @TC:ONCE: ID = V2, B124247_RN00430870_3
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, keepinterval
+  , bulkprint, bulkprintsave, bulkprintformat, formatchange, savewithoutpreview) VALUES (
+  'EU300', 'EU', '30', '0', 0, 'Pokyn k čerpání', 1
+  , 0, 0, 'PDF', 0, 1)
+;
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, keepinterval
+  , bulkprint, bulkprintsave, bulkprintformat, formatchange, savewithoutpreview) VALUES (
+  'EU301', 'EU', '30', '1', 0, 'Seznam dokladů pro pokyn k čerpání', 1
+  , 0, 0, 'PDF', 0, 1)
+;
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, keepinterval
+  , bulkprint, bulkprintsave, bulkprintformat, formatchange, savewithoutpreview) VALUES (
+  'EU302', 'EU', '30', '2', 0, 'Balíček dokladů k zálohovému čerpání', 1
+  , 0, 0, 'PDF', 0, 1)
+;
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, keepinterval
+  , bulkprint, bulkprintsave, bulkprintformat, formatchange, savewithoutpreview) VALUES (
+  'EU303', 'EU', '30', '3', 0, 'Balíček dokladů k účelovému použití UČ', 1
+  , 0, 0, 'PDF', 0, 1)
+;
+
+INSERT INTO rr_xreptype_cis (refrepcode, datod, predloha, soubor) 
+  VALUES ('EU300', mdy(1, 1, 2016), 'J', 'EU300.jrxml')
+;
+INSERT INTO rr_xreptype_cis (refrepcode, datod, predloha, soubor) 
+  VALUES ('EU301', mdy(1, 1, 2016), 'J', 'EU301.jrxml')
+;
+INSERT INTO rr_xreptype_cis (refrepcode, datod, predloha, soubor) 
+  VALUES ('EU302', mdy(1, 1, 2016), 'J', 'EU302.jrxml')
+;
+INSERT INTO rr_xreptype_cis (refrepcode, datod, predloha, soubor) 
+  VALUES ('EU303', mdy(1, 1, 2016), 'J', 'EU303.jrxml')
+;
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, sirka, vyska, platnost, xpos, ypos) 
+  VALUES ((select serno from rr_xreptype_cis where refrepcode = 'EU300'), 1, 129, 50, 1, 0, 0)
+;
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, sirka, vyska, platnost, xpos, ypos) 
+  VALUES ((select serno from rr_xreptype_cis where refrepcode = 'EU300'), 2, 129, 50, 1, 0, 0)
+;
+
+insert into do_skupina_cis (skupina, nazev, platnost)
+  values(11, 'Sale: Pokyn k čerpání', 1)
+;
+insert into do_skupina_cis (skupina, nazev, platnost)
+  values(12, 'Sale: Balíček dokladů', 1)
+;
+
+ROLLBACK WORK;
+
+--End of B124247_RN00430870_3

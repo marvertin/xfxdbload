@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, B113778_RN00377777_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření exportu pro dopisy o splátkách {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  CREATE TABLE ex_zsd_kart (
+    ser   SERIAL NOT NULL,
+    smlouva   DECIMAL(16, 0) NOT NULL,
+    tsml   CHAR(4) NOT NULL,
+    smlouvass   DECIMAL(16, 0),
+    tsmlss   CHAR(4),
+    konto   DECIMAL(16, 0),
+    kontoss   DECIMAL(16, 0),
+    referent1   Char(2),
+    referent2   Char(2),
+    typzmeny   Integer NOT NULL,
+    splatka   DECIMAL(16, 2),
+    datprvnisplatky   DATE,
+    poradisplatkal   Integer,
+    urovensplatkal   Integer,
+    vysedospor   DECIMAL(16, 2),
+    datprvnihovkladu   DATE,
+    poradivkladkal   Integer,
+    urovenvkladkal   Integer,
+    datvznik   DATE NOT NULL,
+    portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    poruser   CHAR(20)  DEFAULT USER NOT NULL,
+    datexp   DATE
+  )lock mode row;
+  
+  --PK
+  CREATE UNIQUE INDEX ex_zsd_kart_pk ON ex_zsd_kart(ser);
+  ALTER TABLE ex_zsd_kart ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ex_zsd_kart_pk;
+  
+  --FK
+  
+  --INDEXES
+  CREATE INDEX ex_zsd_kart_i1 ON ex_zsd_kart(smlouva,tsml,portime);
+
+   CALL tw_execSql('drop table ex_mms_kart', -206);
+   CALL tw_execSql('drop table eu_splat_kart', -206);
+
+ROLLBACK WORK;
+
+--End of B113778_RN00377777_1

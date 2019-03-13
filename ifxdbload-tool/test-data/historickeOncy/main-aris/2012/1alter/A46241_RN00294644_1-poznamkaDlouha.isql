@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A46241_RN00294644_1-poznamkaDlouha
+-- @TC:ONCE: DESCRIPTION = Dodateèné úpravy CIBIS-web - 1.etapa {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_typzadost_cis    MODIFY poznamka        CHAR(160) ;
+ALTER TABLE ep_typzadost_acis    MODIFY poznamka        CHAR(160) ;
+
+ROLLBACK WORK;
+
+--End of A46241_RN00294644_1-poznamkaDlouha

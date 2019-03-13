@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B110571_RN00380435_3
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Číselníky {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- Musí se spustit před spuštěním MCodeListUpdateru
+-- Druhy věcí
+Update ev_druhvec_cis Set platnost = 0 Where tvec = 'N';
+Insert into ev_druhvec_cis (tvec, druh, text) Values ('R', 'S', 'Stavba');
+Insert into ev_druhvec_cis (tvec, druh, text) Values ('R', 'J', 'Jednotka');
+Insert into ev_druhvec_cis (tvec, druh, text) Values ('R', 'P', 'Parcela');
+Insert into ev_druhvec_cis (tvec, druh, text) Values ('R', 'R', 'Právo stavby');
+
+ROLLBACK WORK;
+--End of B110571_RN00380435_3-pred_nastrojem

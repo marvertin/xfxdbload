@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, B110545_RN00391829_1
+-- @TC:ONCE: DESCRIPTION = Insolvence - sečtené položky pohledávky {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_pohlinsolv_mat ADD (
+  jistina   DECIMAL(16, 2) BEFORE prihlaseno,
+  beurok   DECIMAL(16, 2) BEFORE prihlaseno,
+  saurok   DECIMAL(16, 2) BEFORE prihlaseno,
+  pohluhr   DECIMAL(16, 2) BEFORE prihlaseno,
+  pokuta   DECIMAL(16, 2) BEFORE prihlaseno,
+  poplpoj   DECIMAL(16, 2) BEFORE prihlaseno,
+  poplsoud   DECIMAL(16, 2) BEFORE prihlaseno
+);
+
+ALTER TABLE ep_pohlinsolv_arch ADD (
+  jistina   DECIMAL(16, 2) BEFORE prihlaseno,
+  beurok   DECIMAL(16, 2) BEFORE prihlaseno,
+  saurok   DECIMAL(16, 2) BEFORE prihlaseno,
+  pohluhr   DECIMAL(16, 2) BEFORE prihlaseno,
+  pokuta   DECIMAL(16, 2) BEFORE prihlaseno,
+  poplpoj   DECIMAL(16, 2) BEFORE prihlaseno,
+  poplsoud   DECIMAL(16, 2) BEFORE prihlaseno
+);
+
+ALTER TABLE ep_snimpohlinsolv_den ADD (
+  jistina   DECIMAL(16, 2) BEFORE prihlaseno,
+  beurok   DECIMAL(16, 2) BEFORE prihlaseno,
+  saurok   DECIMAL(16, 2) BEFORE prihlaseno,
+  pohluhr   DECIMAL(16, 2) BEFORE prihlaseno,
+  pokuta   DECIMAL(16, 2) BEFORE prihlaseno,
+  poplpoj   DECIMAL(16, 2) BEFORE prihlaseno,
+  poplsoud   DECIMAL(16, 2) BEFORE prihlaseno
+);
+
+ROLLBACK WORK;
+
+--End of B110545_RN00391829_1

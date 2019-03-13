@@ -1,0 +1,33 @@
+CREATE PROCEDURE RSTS_2905_sdruzeneDPD(AKonto    DEC(16, 0),
+                                       ATko      CHAR(2),
+                                       ARealn    INT,
+                                       ADatOtev  DATE,
+                                       ADatUzav  DATE,
+                                       ATReal    CHAR(4))
+                                    
+  DEFINE GLOBAL G_MONITOR_ON INTEGER DEFAULT 0;                                    
+  DEFINE _logovat   INT; 
+   
+  CALL tw_monitor_init(ARealn,'MigraceDPD');
+  LET _logovat = 0;
+                                 
+  -- inicializace temp tabulek  
+  IF(G_MONITOR_ON = 1 ) THEN LET _logovat = _logovat + 100; END IF;                                     
+  CALL RSTS_2905_initDPD(AKonto, ATko, ARealn, NULL, _logovat, 4, ADatUzav);       
+        
+  -- doplneni uverovych intervalu
+  IF(G_MONITOR_ON = 1 ) THEN LET _logovat = _logovat + 100; END IF;
+  CALL RSTS_2905_sdruzeneUverDPD(ARealn, ADatUzav, _logovat);
+  
+  -- zpracovani odvozenych zaznamu maxDPD, totalDPD
+  IF(G_MONITOR_ON = 1 ) THEN LET _logovat = _logovat + 100; END IF;
+  CALL RSTS_2905_odvozeneDPD(AKonto, ATko, ARealn, ATReal, -1, _logovat);            
+          
+  -- presun dat z temp tabulek do pevnych evidenci
+  IF(G_MONITOR_ON = 1 ) THEN LET _logovat = _logovat + 100; END IF;
+  CALL RSTS_2905_finishDPD(ARealn, -1, _logovat, 4);
+  
+  
+  CALL tw_monitor_finish();  
+  
+END PROCEDURE;

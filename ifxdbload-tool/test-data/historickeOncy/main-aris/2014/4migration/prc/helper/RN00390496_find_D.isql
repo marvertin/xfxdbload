@@ -1,0 +1,60 @@
+create PROCEDURE RN00390496_find_D ()
+
+define _ser          Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00390496;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00390496(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+
+  smlouva    Dec(16,0),         -- číslo smlouvy
+  tsml       Char(4),           -- typ smlouvy
+  poradi     Int,               -- pořadí akce v evidenci
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+--plnime ridici tabulku
+
+-- 1)   Kartotéka změn SS - Pokud v kartotéce změn smluv SS v Main je evidován (nezobrazovaný) odkaz do evidence žádostí   
+INSERT INTO RN00390496 (smlouva, tsml, poradi, zprac)
+  SELECT a.smlouva, a.tsml, max(b.poradi), -1 FROM eu_sml_mat a
+    JOIN eu_contractchecking_kart b ON a.smlouva = b.smlouva and a.tsml = b.tsml
+   WHERE a.stav not in ('S','V','Z') and b.stav <> 'Z'
+     and b.dokladmvstatus is null and b.dokladmvresult is null and b.rizsubjektstatus is null and b.rizsubjektresult is null
+   GROUP BY a.smlouva, a.tsml;
+  
+UPDATE STATISTICS HIGH FOR TABLE RN00390496;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

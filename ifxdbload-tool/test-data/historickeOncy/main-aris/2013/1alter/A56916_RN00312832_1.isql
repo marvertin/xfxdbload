@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A56916_RN00312832_1
+-- @TC:ONCE: DESCRIPTION = Modelování úhrady za elektronický výpis v CIBIS-Sale a CIBIS-Web (SIS) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_client
+ADD electroniccoresp Integer DEFAULT 0 not null;
+
+ALTER TABLE pro_client
+ADD CONSTRAINT (CHECK (electroniccoresp IN (0,1)) CONSTRAINT pro_client_dizg);
+
+ROLLBACK WORK;
+
+--End of A56916_RN00312832_1

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A42100_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eo_sluzba_kart 
+  ADD po          INT     BEFORE poradi
+  , ADD typsluzby CHAR(3) BEFORE typ
+  , ADD CONSTRAINT CHECK (typsluzby IN ('SMS', 'SIS')) CONSTRAINT eo_sluzba_kart_c_typsluzby
+  ;
+
+RENAME COLUMN eo_sluzba_kart.os TO fo;
+  
+ROLLBACK WORK;
+
+--End of A41970_RN00275819_1

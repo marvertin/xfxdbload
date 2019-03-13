@@ -1,0 +1,59 @@
+-- @TC:ONCE: ID = V2, B132139_36886_1-acr_casoverozliseni_kart
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE acr_casoverozliseni_kart (
+  serno   BIGINT NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  serpredpis   INTEGER NOT NULL,
+  valuta   DATE NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  castkacelkem   DECIMAL(16, 2) NOT NULL,
+  castkaakt   DECIMAL(16, 2) NOT NULL,
+  typ   CHAR(1) NOT NULL,
+  druh   CHAR(1) NOT NULL,
+  obdobiod   DATE,
+  obdobido   DATE,
+  coobjekt   CHAR(10),
+  ucetcr   CHAR(9) NOT NULL,
+  ucetnaklvynos   CHAR(9) NOT NULL,
+  datumposlprevod   DATE,
+  refserno   BIGINT NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX acr_casoverozliseni_kart_pk ON acr_casoverozliseni_kart(serno);
+ALTER TABLE acr_casoverozliseni_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT acr_casoverozliseni_kart_pk;
+
+--FK
+CREATE INDEX acr_casoverozliseni_kart_i_f1 ON acr_casoverozliseni_kart(smlouva,tsml);
+ALTER TABLE acr_casoverozliseni_kart ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES ep_sml_mat(smlouva,tsml) CONSTRAINT acr_casoverozliseni_kart_f1;
+CREATE INDEX acr_casoverozliseni_kart_i_f2 ON acr_casoverozliseni_kart(serpredpis);
+ALTER TABLE acr_casoverozliseni_kart ADD CONSTRAINT FOREIGN KEY(serpredpis) REFERENCES ac_uchead_den(ser) CONSTRAINT acr_casoverozliseni_kart_f2;
+CREATE INDEX acr_casoverozliseni_kart_i_f3 ON acr_casoverozliseni_kart(ucetcr);
+ALTER TABLE acr_casoverozliseni_kart ADD CONSTRAINT FOREIGN KEY(ucetcr) REFERENCES ac_ucet_mat(ucet) CONSTRAINT acr_casoverozliseni_kart_f3;
+CREATE INDEX acr_casoverozliseni_kart_i_f4 ON acr_casoverozliseni_kart(ucetnaklvynos);
+ALTER TABLE acr_casoverozliseni_kart ADD CONSTRAINT FOREIGN KEY(ucetnaklvynos) REFERENCES ac_ucet_mat(ucet) CONSTRAINT acr_casoverozliseni_kart_f4;
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX acr_casoverozliseni_kart_u1 ON acr_casoverozliseni_kart(refserno);
+ALTER TABLE acr_casoverozliseni_kart ADD CONSTRAINT (UNIQUE (refserno) CONSTRAINT acr_casoverozliseni_kart_u1);
+
+--CHECKS
+ALTER TABLE acr_casoverozliseni_kart
+ADD CONSTRAINT (CHECK (stav IN ('A', 'B', 'C', 'D', 'S')) CONSTRAINT acr_casoverozliseni_kart_c1),
+ADD CONSTRAINT (CHECK (druh IN ('N', 'V')) CONSTRAINT acr_casoverozliseni_kart_c2),
+ADD CONSTRAINT (CHECK (typ IN ('U', 'P', 'A')) CONSTRAINT acr_casoverozliseni_kart_c3);
+
+ROLLBACK WORK;
+
+--End of B132139_36886_1-acr_casoverozliseni_kart

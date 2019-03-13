@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B114784_RN00405903_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření exportu pro dopisy o splátkách {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  ALTER TABLE EX_ZSD_Kart ADD regcissml CHAR(15) BEFORE smlouvass;
+
+ROLLBACK WORK;
+
+--End of B114784_RN00405903_1

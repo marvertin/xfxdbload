@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B128999_RSTS-3411_1
+-- @TC:ONCE: DESCRIPTION = Zmena bazovej urokovej sadzby do buducna
+
+BEGIN WORK;
+
+ALTER TABLE ur_global_cis 
+  ADD poruser   CHAR(20)  DEFAULT USER NOT NULL before refuser,
+  ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL before refuser;
+
+ALTER TABLE ur_global_acis 
+  ADD poruser   CHAR(20)  DEFAULT USER NOT NULL before refuser,
+  ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL before refuser;  
+  
+ROLLBACK WORK;
+
+--End of B128999_RSTS-3411_1

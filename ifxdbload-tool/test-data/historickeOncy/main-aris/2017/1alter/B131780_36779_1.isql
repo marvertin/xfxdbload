@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B131780_36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_bssimulationcase
+    drop resulttosmode
+  , drop calcsavingseir
+  , drop calccrediteir
+;
+
+alter table pro_bssimulationcase
+    --Vynutit ukončení fáze spoření před přespořením CČ
+    --Určuje, zda při modelování spoření vynutit ukončení spoření před dosažením přespoření CČ.
+    add finishSavBeforeOversav   Integer/*boolean*/  DEFAULT 0
+  , add constraint CHECK (finishSavBeforeOversav IN (0,1)) CONSTRAINT pro_bssimulationcase_dwki
+;
+ 
+ROLLBACK WORK;
+
+--End of B131780_36779_1

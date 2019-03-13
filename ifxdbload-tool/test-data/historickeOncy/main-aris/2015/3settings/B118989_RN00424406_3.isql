@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B118989_RN00424406_3
+-- @TC:ONCE: DESCRIPTION = ÚŽ - varainta procesu - smlouva z Mainu {DEFECT}
+
+
+BEGIN WORK;
+
+update do_typdokumentutypobjektu_cis 
+set explicitgener = 0
+where explicitgener is null;
+
+ROLLBACK WORK;
+
+--End of B118989_RN00424406_3

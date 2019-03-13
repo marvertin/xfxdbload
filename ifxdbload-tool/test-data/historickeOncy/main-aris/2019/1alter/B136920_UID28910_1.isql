@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B136920_UID28910_1
+-- @TC:ONCE: DESCRIPTION = RSTS-2754: Nabídka sazeb při refixu - poloautomatizace {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_kalendarfixaci_mat 
+  ADD indivsazba   Integer  DEFAULT 0 BEFORE poruser
+  , ADD CONSTRAINT CHECK (indivsazba IN (0,1)) CONSTRAINT eu_kalendarfixaci_mat_d9wf;
+
+ALTER TABLE eu_kalendarfixaci_arch 
+  ADD indivsazba   Integer  DEFAULT 0 BEFORE poruser
+  , ADD CONSTRAINT CHECK (indivsazba IN (0,1)) CONSTRAINT eu_kalendarfixaci_arch_d9wg;
+    
+ROLLBACK WORK;
+
+--End of B136920_UID28910_1

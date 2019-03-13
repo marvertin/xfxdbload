@@ -1,0 +1,100 @@
+-- @TC:ONCE: ID = V2, B136152_UID82795_1
+-- @TC:ONCE: DESCRIPTION = RSTS-27145: Otázky, odpovědi a vazby {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eu_otazkarozhod_acis ADD typodpoved CHAR(15);
+
+ALTER TABLE eu_otazkarozhod_cis ADD typodpoved CHAR(15);
+
+ALTER TABLE eu_otazkarozhod_cis
+ADD CONSTRAINT (CHECK (typodpoved IN ('RADIOBUTTON','DROPDOWN','POLEVYPLN','VYSLPROC')) CONSTRAINT eu_otazkarozhod_cis_c1);
+
+ALTER TABLE eu_sadavazebrozhod_acis ADD urceni CHAR(10);
+
+ALTER TABLE eu_sadavazebrozhod_cis ADD urceni CHAR(10);
+
+ALTER TABLE eu_sadavazebrozhod_cis
+ADD CONSTRAINT (CHECK (urceni in ('VARIANTAPU','UCEL','ZAJISTENI')) CONSTRAINT eu_sadavazebrozhod_cis_c2);
+
+CREATE TABLE eu_ucelrozhod_cis (
+  serno   SERIAL NOT NULL,
+  refvazbarozhod   INTEGER NOT NULL,
+  refucel   INTEGER NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_ucelrozhod_cis_dp69
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_ucelrozhod_cis_pk ON eu_ucelrozhod_cis(serno);
+ALTER TABLE eu_ucelrozhod_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_ucelrozhod_cis_pk;
+
+--FK
+CREATE INDEX eu_ucelrozhod_cis_i_f2 ON eu_ucelrozhod_cis(refucel);
+ALTER TABLE eu_ucelrozhod_cis ADD CONSTRAINT FOREIGN KEY(refucel) REFERENCES eu_ucel_cis(ucel) CONSTRAINT eu_ucelrozhod_cis_f2;
+CREATE INDEX eu_ucelrozhod_cis_i_f1 ON eu_ucelrozhod_cis(refvazbarozhod);
+ALTER TABLE eu_ucelrozhod_cis ADD CONSTRAINT FOREIGN KEY(refvazbarozhod) REFERENCES eu_vazbarozhod_cis(serno) CONSTRAINT eu_ucelrozhod_cis_f1;
+
+CREATE TABLE eu_ucelrozhod_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refvazbarozhod   INTEGER NOT NULL,
+  refucel   INTEGER NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_ucelrozhod_acis_dp69
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_ucelrozhod_acis_pk ON eu_ucelrozhod_acis(idarch);
+ALTER TABLE eu_ucelrozhod_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_ucelrozhod_acis_pk;
+
+CREATE TABLE eu_zajistrozhod_cis (
+  serno   SERIAL NOT NULL,
+  refvazbarozhod   INTEGER NOT NULL,
+  refzajist   smallint NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_zajistrozhod_cis_dp69
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_zajistrozhod_cis_pk ON eu_zajistrozhod_cis(serno);
+ALTER TABLE eu_zajistrozhod_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_zajistrozhod_cis_pk;
+
+--FK
+CREATE INDEX eu_zajistrozhod_cis_i_f1 ON eu_zajistrozhod_cis(refvazbarozhod);
+ALTER TABLE eu_zajistrozhod_cis ADD CONSTRAINT FOREIGN KEY(refvazbarozhod) REFERENCES eu_vazbarozhod_cis(serno) CONSTRAINT eu_zajistrozhod_cis_f1;
+CREATE INDEX eu_zajistrozhod_cis_i_f2 ON eu_zajistrozhod_cis(refzajist);
+ALTER TABLE eu_zajistrozhod_cis ADD CONSTRAINT FOREIGN KEY(refzajist) REFERENCES eu_zajist_cis(zajist) CONSTRAINT eu_zajistrozhod_cis_f2;
+
+CREATE TABLE eu_zajistrozhod_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refvazbarozhod   INTEGER NOT NULL,
+  refzajist   smallint NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_zajistrozhod_acis_dp69
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_zajistrozhod_acis_pk ON eu_zajistrozhod_acis(idarch);
+ALTER TABLE eu_zajistrozhod_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_zajistrozhod_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B136152_UID82795_1

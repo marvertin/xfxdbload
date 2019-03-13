@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, B114294_RN00382583_1
+-- @TC:ONCE: DESCRIPTION = Pravidelný přepočet aktuálního data splatnosti i pro úvěry PO {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ep_splspormodakce_acis
+
+--The autodelete type when autodelete flag is ON: enum - I=invalidate, D=delete
+--Způsob automatického zrušení předchozích modelů
+--Parametr určuje, jak naložit se starším modelem (pro stejnou smlouvu a se stejným typem akce) při vzniku nového.
+--  Pokud je parametr Automatické zrušení předchozích modelů nastaven na Ano, pak parametr Způsob automatického zrušení 
+--  předchozích modelů upřesňuje, zda dojde pouze k evidenčnímu zneplatnění nebo k skutečnému nevratnému vymazání
+--  záznamů z DB
+  add zpusobAutoZrus   CHAR(1)
+;
+
+alter table ep_splspormodakce_cis
+
+--The autodelete type when autodelete flag is ON: enum - I=invalidate, D=delete
+--Způsob automatického zrušení předchozích modelů
+--Parametr určuje, jak naložit se starším modelem (pro stejnou smlouvu a se stejným typem akce) při vzniku nového.
+--  Pokud je parametr Automatické zrušení předchozích modelů nastaven na Ano, pak parametr Způsob automatického zrušení 
+--  předchozích modelů upřesňuje, zda dojde pouze k evidenčnímu zneplatnění nebo k skutečnému nevratnému vymazání
+--  záznamů z DB
+  add zpusobAutoZrus   CHAR(1)  DEFAULT 'I' NOT NULL
+;
+
+--CHECKS
+ALTER TABLE ep_splspormodakce_cis
+ADD CONSTRAINT (CHECK (zpusobAutoZrus in ('I', 'D')) CONSTRAINT ep_splspormodakce_cis_c1);
+
+ROLLBACK WORK;
+--End of B114294_RN00382583_1

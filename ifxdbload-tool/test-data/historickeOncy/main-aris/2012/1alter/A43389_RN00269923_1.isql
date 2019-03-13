@@ -1,0 +1,87 @@
+-- @TC:ONCE: ID = V2, A43389_RN00269923_1
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE rn00269923_vym_pohl ( 
+    ser               SERIAL NOT NULL,          
+    NumErr            Int,              --èíslo chyby, jež na øádku nastala
+    ISAMErr           Int,              --èíslo ISAM chyby, jež na øádku nastala
+    TextErr           VarChar(255),     --textový popis chyby, jež na øádku nastala
+    zprac             SmallInt DEFAULT 0,
+    
+    smlouva           DECIMAL(16,0),
+    stav              CHAR(1),
+    sledovanodo       DATE,
+    pdatprechoddoovp  DATE,
+    pdatoslovdop      DATE,
+    ppoznamka         CHAR(500),
+    pdatuznanidluhu   DATE,
+    pvyseuzndluhu     DECIMAL(16,2),
+    pdatpromlceni     DATE,
+    sdatpredsoud      DATE,
+    scislojednaci     CHAR(20),
+    sdatzastsoud      DATE,
+    srefprav          CHAR(2),
+    spoznamka         CHAR(500),
+    sdatpodanizaloby  DATE,
+    sdatcaspredvolani DATETIME YEAR TO MINUTE,
+    sdatrozhodsoudu   DATE,
+    scisnabyvtit      CHAR(15),
+    sdatnabpm         DATE,
+    sdatvykonav       DATE,
+    sdatsplatdlepm    DATE,
+    sdatpocsplacdlepm DATE,
+    ssoud             INTEGER,
+    suznanydluh       DECIMAL(16,2),
+    ssoudpopl         DECIMAL(16,2),
+    spriznsoudnakl    DECIMAL(16,2),
+    ireziminsolv      INTEGER,
+    idatumnastinsolv  DATE,
+    ipoznamka         CHAR(500),
+    ecjexezapisu      VARCHAR(20),
+    edatexezapisu     DATE,
+    edatzastaveniexe  DATE,
+    euznanavyse       DECIMAL(16,2),
+    extdatpredani     DATE,
+    extdatukonc       DATE,
+    extpoznamka       CHAR(500) 
+);
+
+CREATE UNIQUE INDEX rn00269923_vym_pohl_pk
+    ON rn00269923_vym_pohl (smlouva);
+    
+ALTER TABLE rn00269923_vym_pohl ADD CONSTRAINT PRIMARY KEY(smlouva) CONSTRAINT rn00269923_vym_pohl_pk;    
+
+
+CREATE TABLE aris.rn00269923_exek_prik (
+    smlouva           DECIMAL(16,0),
+    poradi            Int,
+    cisloPrikazu      CHAR(20),
+    exekutor          CHAR(20),
+    datNavrhNaVykon   DATE,
+    datNarizeniVykonu DATE,
+    poznamka          VARCHAR(255)
+);
+
+CREATE TABLE aris.rn00269923_exekutori (
+    ser               SERIAL NOT NULL,          
+    NumErr            Int,              --èíslo chyby, jež na øádku nastala
+    ISAMErr           Int,              --èíslo ISAM chyby, jež na øádku nastala
+    TextErr           VarChar(255),     --textový popis chyby, jež na øádku nastala
+    zprac             SmallInt DEFAULT 0,
+    
+    cisloExekutora    CHAR(20),
+    poznamka          VARCHAR(255)
+);
+
+CREATE UNIQUE INDEX rn00269923_exekutori_pk
+    ON rn00269923_exekutori (cisloExekutora);
+    
+ALTER TABLE rn00269923_exekutori ADD CONSTRAINT PRIMARY KEY(cisloExekutora) CONSTRAINT rn00269923_exekutori_pk;
+
+ALTER TABLE EO_Exekutor_Cis MODIFY osoba Int;
+
+ROLLBACK WORK;
+
+--End of A43389_RN00269923_1

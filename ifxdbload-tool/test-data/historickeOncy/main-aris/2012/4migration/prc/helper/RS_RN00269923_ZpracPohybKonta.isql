@@ -1,0 +1,53 @@
+
+CREATE PROCEDURE RS_RN00269923_ZpracPohybKonta(
+    AKonto      DEC(16,0), 
+    ATko        CHAR(2), 
+    AAkce       VARCHAR(20),   -- PLATBA_IN, PLATBA_OUT, STORNO_IN, STORNO_OUT  
+    ASerZauct   INTEGER  DEFAULT NULL,  -- parametr úèetních událostí (u storna pùvodní operace)
+    AStornovanySer       INTEGER  DEFAULT NULL,  -- parametr úèetních událostí storna (STORNO_IN, STORNO_OUT)
+    AStornovanyZdrojser  INTEGER  DEFAULT NULL   -- parametr úèetních událostí storna (STORNO_IN, STORNO_OUT)
+)  
+
+  define _valutaSplatky  DATE;
+  define _datuct         DATE;
+  define _valuta         DATE;
+  define _saldoPYMT      DEC(16,2);
+  define _smlouva        DEC(16,0);
+  define _tsml           CHAR(4);
+  define _smlouvauver    DEC(16,0);
+  define _tsmluver       CHAR(4);
+  define _vytvorsnimek   INTEGER;
+ 
+  --
+  -- Vytvoøení èasového snímku vymáhané pohledávky 
+  --
+  let _smlouva, _tsml = EP_SmlouvaKon(AKonto, ATko);
+  
+  -- existuje sledovaná podøízená úvìrová smlouva
+  -- existuje platná vazba  spoøící - úvìrová smlouva
+  FOREACH
+    EXECUTE PROCEDURE EP_VyberVzSml(_smlouva, _tsml, 'S', -1) 
+       INTO _smlouvauver, _tsmluver 
+    
+    IF NOT EXISTS(SELECT 1 FROM eu_sml_mat 
+                   WHERE smlouva =  _smlouvauver AND tsml = _tsmluver
+                     AND smlspor =  _smlouva AND tsmlspor = _tsml)
+    THEN
+      CONTINUE FOREACH;
+    END IF;
+           
+    -- test, zda vytvorit snimek pro pohyb
+    let _vytvorsnimek = RU_ZpracPohybSnimVymPohl(AAkce, ASerZauct, AStornovanySer, AStornovanyZdrojser);
+  
+    IF (_vytvorsnimek <> 0)
+    THEN
+      call EU_RN00269923_SnimekVymPohl('S', _smlouvauver, _tsmluver, AKonto, ATko, ASerZauct,
+           DECODE (AAkce, 'PLATBA_IN' , 'P',
+                          'PLATBA_OUT', 'O',
+                          'STORNO_IN',  'S',
+                          'STORNO_OUT', 'T')); 
+    END IF;    
+  
+  END FOREACH;
+     
+END PROCEDURE;

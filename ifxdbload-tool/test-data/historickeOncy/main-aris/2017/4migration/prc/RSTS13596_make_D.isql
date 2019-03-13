@@ -1,0 +1,30 @@
+create PROCEDURE RSTS13596_make_D ()
+
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+define _dodatekref bigint;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+FOREACH SELECT dodatekref INTO _dodatekref FROM eu_akc_kart WHERE stav = 'S' AND dodatekref is not null
+
+  UPDATE eu_dodatekhead_mat set stav = 'ZRUSENY' WHERE serno = _dodatekref AND stav <> 'ZRUSENY';
+
+END FOREACH 
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B123491_RN00448449_3-kontrolaprukazu_main
+-- @TC:ONCE: DESCRIPTION = Neprobíhá kontrola dokladů na MV {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- #Adresa pro komunikaci s Ministerstvem vnitra z CIBIS-MAIN#
+CALL tw_regSetOrAddKey('EP', 'rizsubjekt', 'kontrolaprukazu', 'webaddressMain', 'http://aplikace.mvcr.cz/neplatne-doklady/doklady.aspx', 1);
+
+-- #Proxy server použitý pro komunikaci s Ministerstvem vnitra z CIBIS-MAIN#
+CALL tw_regSetOrAddKey('EP', 'rizsubjekt', 'kontrolaprukazu', 'proxyMain', null, 1);
+
+ROLLBACK WORK;
+--End of B123491_RN00448449_3-kontrolaprukazu_main

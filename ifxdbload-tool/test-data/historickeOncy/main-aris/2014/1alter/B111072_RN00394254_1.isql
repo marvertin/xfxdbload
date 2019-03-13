@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B111072_RN00394254_1
+-- @TC:ONCE: DESCRIPTION = nelze překlopit více jak 2 úvěry v jeden měsíc {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+DROP TABLE eo_skupprep_kart;
+
+CREATE TABLE eo_skupprep_kart (
+  seqno   SERIAL NOT NULL,
+  osoba   INTEGER NOT NULL,
+  skupina   Integer
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_skupprep_kart_pk ON eo_skupprep_kart(seqno);
+ALTER TABLE eo_skupprep_kart ADD CONSTRAINT PRIMARY KEY(seqno) CONSTRAINT eo_skupprep_kart_pk;
+
+--INDEXES
+CREATE INDEX eo_skupprep_kart_i1 ON eo_skupprep_kart(osoba);
+CREATE INDEX eo_skupprep_kart_i2 ON eo_skupprep_kart(skupina);
+
+ROLLBACK WORK;
+
+--End of B111072_RN00394254_1

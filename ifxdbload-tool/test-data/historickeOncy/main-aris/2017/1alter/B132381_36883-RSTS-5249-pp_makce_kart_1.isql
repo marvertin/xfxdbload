@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B132381_36883-RSTS-5249-pp_makce_kart_1
+-- @TC:ONCE: DESCRIPTION = IMPL: BE Spoření {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pp_makce_kart ADD datumstorna DATE BEFORE navuser;
+
+ROLLBACK WORK;
+
+--End of B132381_36883-RSTS-5249-pp_makce_kart_1

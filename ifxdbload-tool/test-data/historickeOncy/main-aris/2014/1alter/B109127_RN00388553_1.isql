@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B109127_RN00388553_1
+-- @TC:ONCE: DESCRIPTION = Insolvence - design 1 {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE EP_SnimProduktInsolv_Den ADD (
+  typidos   CHAR(1),
+  identos   CHAR(13)
+);
+
+ROLLBACK WORK;
+
+--End of B109127_RN00388553_1

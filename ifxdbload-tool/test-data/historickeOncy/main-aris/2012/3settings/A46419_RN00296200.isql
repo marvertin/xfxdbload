@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A46419_RN00296200
+-- @TC:ONCE: DESCRIPTION = CIBIS-Web: Zobrazení implicitního správce klienta
+
+BEGIN WORK;
+
+-- #Implicitní finanèní poradce pro CIBIS-Web#
+call TW_RegSetOrAddKey('EO', 'web', 'ozast', 'default', null, 1, 'Osoba', 'Evidence osoby', 'Finanèní poradce', 'Obsahuje èíslo OZ, dle kterého budou zobrazeny údaje finanèního poradce.');
+
+ROLLBACK WORK;
+

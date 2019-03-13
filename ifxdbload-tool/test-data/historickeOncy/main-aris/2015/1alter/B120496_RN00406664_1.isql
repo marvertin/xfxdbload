@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B120496_RN00406664_1
+-- @TC:ONCE: DESCRIPTION = Komunikační kanály {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table eo_komkanal_cis add zobrazitos int default 0 not null before poznamka;
+alter table eo_komkanal_acis add zobrazitos int before poznamka;
+
+
+ROLLBACK WORK;
+
+--End of B120496_RN00406664_1

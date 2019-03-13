@@ -1,0 +1,8 @@
+--V1,ID:A18888_RN00131725_2012S
+BEGIN WORK; 
+
+drop index admuserrecordcmp_i_u2;
+drop index tw0042_group_i_u1;
+drop index tw_uroles_cis_i3;
+drop index twurolescis_i_u1;
+ROLLBACK;

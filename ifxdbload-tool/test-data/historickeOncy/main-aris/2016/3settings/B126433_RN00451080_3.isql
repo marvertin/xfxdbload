@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B126433_RN00451080_3
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+Set Triggers For rr_podpisovepole_cis Disabled;
+Set Triggers For rr_xreptype_cis Disabled;
+Set Triggers For rr_reptype_cis Disabled;
+
+delete from rr_podpisovepole_cis where refxreptype in (select serno from rr_xreptype_cis where refrepcode = 'EU011');
+delete from rr_xreptype_cis where refrepcode = 'EU011';
+delete from rr_reptype_cis where repcode = 'EU011';
+
+Set Triggers For rr_podpisovepole_cis enabled;
+Set Triggers For rr_xreptype_cis enabled;
+Set Triggers For rr_reptype_cis enabled;
+
+ROLLBACK WORK;
+
+--End of B126433_RN00451080_3

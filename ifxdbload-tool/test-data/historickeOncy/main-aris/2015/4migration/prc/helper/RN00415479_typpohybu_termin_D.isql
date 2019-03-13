@@ -1,0 +1,14 @@
+create PROCEDURE RN00415479_typpohybu_termin_D()
+
+BEGIN WORK;
+
+CREATE INDEX ep_splspormodb_den_i_f2 ON ep_splspormodb_den (typpoh) ;
+
+ALTER TABLE ep_splspormodb_den ADD CONSTRAINT FOREIGN KEY(typpoh) REFERENCES ep_typpohybumodel_cis(typpohybumodel) CONSTRAINT ep_splspormodb_den_f2;
+
+ALTER TABLE ep_splspormodb_den
+    DROP specifikace;
+        
+COMMIT WORK;
+
+end procedure;

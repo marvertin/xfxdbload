@@ -1,0 +1,23 @@
+CREATE FUNCTION RSTS_2905_maxDPD(ADatVyhodnoceni    DATE,
+                                 AObdobiNum         INT) 
+  RETURNING INT
+  
+  DEFINE _maxDPD    INT;
+  DEFINE _startDate DATE;
+   
+  LET _startDate = TW_AddMonths(ADatVyhodnoceni, -AObdobiNum) + 1;
+  --LET _maxDPD = (SELECT MAX(maxdpd) FROM (SELECT MAX(datvyhodnoceni) - MIN(CASE WHEN datprvvyhodnoceni > _startDate THEN datprvvyhodnoceni ELSE _startDate END) + 1 maxdpd
+  --                                        FROM rsts_2905_dpdevid b
+  --                                        WHERE
+  --                                          b.maxdpdskupina IS NOT NULL AND
+  --                                          b.datvyhodnoceni BETWEEN _startDate AND ADatVyhodnoceni
+  --                                        GROUP BY 
+  --                                          b.maxdpdskupina));
+  
+  LET _maxDPD = (SELECT MAX(currentdpd) FROM rsts_2905_dpdevid b
+                WHERE
+                  b.datvyhodnoceni BETWEEN _startDate AND ADatVyhodnoceni);
+
+  RETURN NVL(_maxDPD, 0);
+  
+END FUNCTION;

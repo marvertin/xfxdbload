@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B126432_RN00451080_3
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update ep_splspormodakce_cis 
+set platnost = 0
+where akce in ('UZTUM1', 'UZTUM2', 'USTUMK');
+
+ROLLBACK WORK;
+
+--End of B126432_RN00451080_3

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B120497_RN00406664_3
+-- @TC:ONCE: DESCRIPTION = Komunikační kanály
+
+
+BEGIN WORK;
+
+insert into eo_komkanal_cis (kanal, popis,typkontrola,pl,zobrazitwww,zobrazitos) VALUES ((SELECT max(kanal) FROM eo_komkanal_cis) + 1,'E-mail OZ pro výpis','EMAIL',1,0,1);
+insert into eo_komkanal_cis (kanal, popis,typkontrola,pl,zobrazitwww,zobrazitos) VALUES ((SELECT max(kanal) FROM eo_komkanal_cis) + 1,'Telefon OZ pro výpis','TELEFON',1,0,1);
+insert into eo_komkanal_cis (kanal, popis,typkontrola,pl,zobrazitwww,zobrazitos) VALUES ((SELECT max(kanal) FROM eo_komkanal_cis) + 1,'Mobil OZ pro výpis','MOBIL',1,0,1);
+
+call TW_RegSetOrAddKey('EO', 'osoba', 'komkanal', 'emailOZvypis', (SELECT kanal FROM eo_komkanal_cis WHERE popis = 'E-mail OZ pro výpis'), 1, 'Osoba', 'Komunikační kanál k osobě', 'Mapování komunikačních kanálů', 'Komunikační kanál pro e-mail OZ pro výpis');
+call TW_RegSetOrAddKey('EO', 'osoba', 'komkanal', 'telefonOZvypis', (SELECT kanal FROM eo_komkanal_cis WHERE popis = 'Telefon OZ pro výpis'), 1, 'Osoba', 'Komunikační kanál k osobě', 'Mapování komunikačních kanálů', 'Komunikační kanál pro telefon OZ pro výpis');
+call TW_RegSetOrAddKey('EO', 'osoba', 'komkanal', 'mobilOZvypis', (SELECT kanal FROM eo_komkanal_cis WHERE popis = 'Mobil OZ pro výpis'), 1, 'Osoba', 'Komunikační kanál k osobě', 'Mapování komunikačních kanálů', 'Komunikační kanál pro mobil OZ pro výpis');
+
+
+ROLLBACK WORK;
+
+--End of B119003_RN00423574_3

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B127417_RN00452833_4
+-- @TC:ONCE: DESCRIPTION = Úpravy v Sale – úvěrová žádost (Prescoring, Elektronický odhad, Souhlas s úhradami) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE EU_Sml_Mat SET ukonyuhrada = 0 WHERE stav IN ('A', 'B', 'C', 'D', 'L');
+
+ROLLBACK WORK;
+
+--End of B127417_RN00452833_4

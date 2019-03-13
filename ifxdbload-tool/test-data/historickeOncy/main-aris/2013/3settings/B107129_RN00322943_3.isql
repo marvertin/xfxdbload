@@ -1,0 +1,53 @@
+-- @TC:ONCE: ID = V2, B107129_RN00322943_3
+-- @TC:ONCE: DESCRIPTION = Dodateèné požadavky v rámci redesign CIBIS-sale {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- #Notifikovat klienta pøi chybì zpracování platebního pøíkazu#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'neprprikazu', 'povoleno','1',1);
+
+-- #Notifikovat uživatele pøi zmìnì hesla#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'zmena_hesla', 'povoleno','1',1);
+
+-- #Notifikovat uživatele pøi zmìnì transakèního úètu#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'zmena_trnuctu', 'povoleno','1',1);
+
+-- #Notifikovat uživatele pøi zmìnì mobil-SIS#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'zmena_mobil-SIS', 'povoleno','1',1);
+
+-- #Notifikovat uživatele pøi zmìnì email-SIS#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'zmena_email-SIS', 'povoleno','1',1);
+
+
+-- RN00322943 [smid;2013-09-04 10:37:34]
+-- #Notifikovat klienta pøi schválení úvìrového návrhu#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_schv_klient', 'povoleno','1',1);
+
+-- #Notifikovat obchodního zástupce pøi schválení úvìrového návrhu#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_schv_oz', 'povoleno','1',1);
+
+-- #Notifikovat klienta pøi schválení úvìrového návrhu s podmínkou#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_pschv_klient', 'povoleno','1',1);
+
+-- #Notifikovat obchodního zástupce pøi schválení úvìrového návrhu s podmínkou#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_pschv_oz', 'povoleno','1',1);
+
+-- #Notifikovat klienta pøi zamítnutí úvìrového návrhu#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_zamit_klient', 'povoleno','1',1);
+
+-- #Notifikovat obchodního zástupce pøi zamítnutí úvìrového návrhu#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_zamit_oz', 'povoleno','1',1);
+
+-- #Notifikovat klienta pøi storno úvìru#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_storno_klient', 'povoleno','1',1);
+
+-- #Notifikovat obchodního zástupce pøi storno úvìru#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_storno_oz', 'povoleno','1',1);
+
+-- #Notifikovat klienta pøi èerpání úvìru#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_cerp_klient', 'povoleno','1',1);
+
+-- #Notifikovat obchodního zástupce pøi èerpání úvìru#
+call TW_RegSetOrAddKey('EO', 'notifikace', 'uver_cerp_oz', 'povoleno','1',1);
+
+ROLLBACK WORK;
+--End of B107129_RN00322943_3

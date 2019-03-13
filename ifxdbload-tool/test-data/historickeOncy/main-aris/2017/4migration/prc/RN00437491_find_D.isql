@@ -1,0 +1,299 @@
+create PROCEDURE RN00437491_find_D ()
+
+define _ser          Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00437491;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00437491(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  kodwsnv     int, 
+  statprisl  char(2),
+  popis char(45),
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--plnime ridici tabulku
+
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (4,'AF','Afghánská islámská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (248,'AX','Provincie Alandy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (8,'AL','Albánská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (12,'DZ','Alžírská demokratická a lidová republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (16,'AS','Území Americká Samoa',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (850,'VI','Americké Panenské ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (20,'AD','Andorrské knížectví',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (24,'AO','Angolská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (660,'AI','Anguilla',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (10,'AQ','Antarktida',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (28,'AG','Antigua a Barbuda',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (32,'AR','Argentinská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (51,'AM','Arménská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (533,'AW','Aruba',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (36,'AU','Australské společenství',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (44,'BS','Bahamské společenství',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (48,'BH','Království Bahrajn',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (50,'BD','Bangladéšská lidová republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (52,'BB','Barbados',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (56,'BE','Belgické království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (84,'BZ','Belize',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (204,'BJ','Beninská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (60,'BM','Bermudy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (64,'BT','Bhútánské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (68,'BO','Mnohonárodní stát Bolívie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (535,'BQ','Bonaire, Svatý Eustach a Saba',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (70,'BA','Bosna a Hercegovina',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (72,'BW','Botswanská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (74,'BV','Bouvetův ostrov',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (76,'BR','Brazilská federativní republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (92,'VG','Britské Panenské ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (86,'IO','Britské území v Indickém oceánu',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (96,'BN','Stát Brunej Darussalam',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (100,'BG','Bulharská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (854,'BF','Burkina Faso',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (108,'BI','Burundská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (112,'BY','Běloruská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (152,'CL','Chilská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (191,'HR','Chorvatská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (184,'CK','Cookovy ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (531,'CW','Curaçao',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (180,'CD','Demokratická republika Kongo',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (212,'DM','Dominické společenství',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (214,'DO','Dominikánská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (262,'DJ','Džibutská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (208,'DK','Dánské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (818,'EG','Egyptská arabská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (218,'EC','Ekvádorská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (232,'ER','Stát Eritrea',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (233,'EE','Estonská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (231,'ET','Etiopská federativní demokratická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (234,'FO','Faerské ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (238,'FK','Falklandské ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (242,'FJ','Fidžijská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (608,'PH','Filipínská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (246,'FI','Finská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (250,'FR','Francouzská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (254,'GF','Region Francouzská Guyana',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (258,'PF','Francouzská Polynésie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (260,'TF','Teritorium Francouzská jižní a antarktická území',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (266,'GA','Gabonská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (270,'GM','Gambijská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (288,'GH','Ghanská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (292,'GI','Gibraltar',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (308,'GD','Grenadský stát',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (268,'GE','Gruzie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (304,'GL','Grónsko',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (312,'GP','Region Guadeloupe',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (316,'GU','Teritorium Guam',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (320,'GT','Guatemalská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (831,'GG','Bailiwick Guernsey',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (324,'GN','Guinejská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (624,'GW','Republika Guinea-Bissau',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (328,'GY','Guyanská kooperativní republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (332,'HT','Republika Haiti',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (334,'HM','Heardův ostrov a MacDonaldovy ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (340,'HN','Honduraská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (344,'HK','Zvláštní administrativní oblast Čínské lidové republiky Hongkong',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (356,'IN','Indická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (360,'ID','Indonéská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (372,'IE','Irsko',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (368,'IQ','Irácká republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (352,'IS','Islandská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (380,'IT','Italská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (376,'IL','Stát Izrael',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (388,'JM','Jamajka',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (392,'JP','Japonsko',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (887,'YE','Jemenská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (832,'JE','Bailiwick Jersey',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (710,'ZA','Jihoafrická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (239,'GS','Jižní Georgie a Jižní Sandwichovy ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (728,'SS','Jihosúdánská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (400,'JO','Jordánské hášimovské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (136,'KY','Kajmanské ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (116,'KH','Kambodžské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (120,'CM','Kamerunská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (124,'CA','Kanada',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (132,'CV','Kapverdská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (634,'QA','Stát Katar',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (398,'KZ','Republika Kazachstán',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (404,'KE','Keňská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (296,'KI','Republika Kiribati',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (166,'CC','Území Kokosové (Keelingovy) ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (170,'CO','Kolumbijská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (174,'KM','Komorský svaz',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (178,'CG','Konžská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (408,'KP','Korejská lidově demokratická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (410,'KR','Korejská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (95,'XK','Kosovská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (188,'CR','Kostarická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (192,'CU','Kubánská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (414,'KW','Kuvajtský stát',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (196,'CY','Kyperská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (417,'KG','Kyrgyzská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (418,'LA','Laoská lidově demokratická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (426,'LS','Lesothské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (422,'LB','Libanonská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (434,'LY','Libyjský stát',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (430,'LR','Liberijská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (438,'LI','Lichtenštejnské knížectví',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (440,'LT','Litevská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (428,'LV','Lotyšská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (442,'LU','Lucemburské velkovévodství',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (446,'MO','Zvláštní administrativní oblast Čínské lidové republiky Macao',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (450,'MG','Madagaskarská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (807,'MK','Bývalá jugoslávská republika Makedonie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (458,'MY','Malajsie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (454,'MW','Malawiská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (462,'MV','Maledivská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (466,'ML','Republika Mali',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (470,'MT','Maltská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (833,'IM','Ostrov Man',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (504,'MA','Marocké království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (584,'MH','Republika Marshallovy ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (474,'MQ','Region Martinik',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (480,'MU','Mauricijská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (478,'MR','Mauritánská islámská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (175,'YT','Departementní společenství Mayotte',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (348,'HU','Maďarsko',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (581,'UM','Menší odlehlé ostrovy USA',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (484,'MX','Spojené státy mexické',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (583,'FM','Federativní státy Mikronésie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (498,'MD','Moldavská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (492,'MC','Monacké knížectví',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (496,'MN','Mongolsko',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (500,'MS','Montserrat',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (508,'MZ','Mosambická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (104,'MM','Republika Myanmarský svaz',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (516,'NA','Namibijská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (520,'NR','Republika Nauru',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (524,'NP','Nepálská federativní demokratická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (562,'NE','Nigerská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (566,'NG','Nigerijská federativní republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (558,'NI','Nikaragujská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (570,'NU','Niue',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (528,'NL','Nizozemsko',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (574,'NF','Území Norfolk',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (578,'NO','Norské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (540,'NC','Nová Kaledonie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (554,'NZ','Nový Zéland',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (276,'DE','Spolková republika Německo',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (512,'OM','Sultanát Omán',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (585,'PW','Republika Palau',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (275,'PS','Palestinská autonomní území',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (591,'PA','Panamská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (598,'PG','Nezávislý stát Papua Nová Guinea',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (600,'PY','Paraguayská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (604,'PE','Peruánská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (612,'PN','Pitcairnovy ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (384,'CI','Republika Pobřeží slonoviny',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (616,'PL','Polská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (630,'PR','Portorické společenství',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (620,'PT','Portugalská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (586,'PK','Pákistánská islámská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (40,'AT','Rakouská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (226,'GQ','Republika Rovníková Guinea',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (642,'RO','Rumunsko',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (643,'RU','Ruská federace',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (646,'RW','Rwandská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (638,'RE','Region Réunion',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (666,'PM','Územní společenství Saint Pierre a Miquelon',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (222,'SV','Salvadorská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (882,'WS','Nezávislý stát Samoa',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (674,'SM','Republika San Marino',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (682,'SA','Království Saúdská Arábie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (686,'SN','Senegalská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (580,'MP','Společenství Severní Mariany',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (690,'SC','Seychelská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (694,'SL','Republika Sierra Leone',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (702,'SG','Singapurská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (703,'SK','Slovenská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (705,'SI','Slovinská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (706,'SO','Somálská federativní republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (784,'AE','Stát Spojené arabské emiráty',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (840,'US','Spojené státy americké',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (688,'RS','Srbská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (140,'CF','Středoafrická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (740,'SR','Surinamská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (654,'SH','Svatá Helena, Ascension a Tristan da Cunha',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (662,'LC','Svatá Lucie',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (652,'BL','Společenství Svatý Bartoloměj',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (659,'KN','Federace Svatý Kryštof a Nevis',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (663,'MF','Společenství Svatý Martin',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (534,'SX','Svatý Martin (NL)',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (678,'ST','Demokratická republika Svatý Tomáš a Princův ostrov',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (670,'VC','Svatý Vincenc a Grenadiny',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (748,'SZ','Svazijské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (729,'SD','Súdánská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (760,'SY','Syrská arabská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (834,'TZ','Tanzanská sjednocená republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (158,'TW','Čínská republika (Tchaj-wan)',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (764,'TH','Thajské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (768,'TG','Tožská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (772,'TK','Tokelau',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (776,'TO','Království Tonga',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (780,'TT','Republika Trinidad a Tobago',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (788,'TN','Tuniská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (792,'TR','Turecká republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (795,'TM','Turkmenistán',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (796,'TC','Ostrovy Turks a Caicos',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (798,'TV','Tuvalu',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (762,'TJ','Republika Tádžikistán',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (800,'UG','Ugandská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (804,'UA','Ukrajina',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (858,'UY','Uruguayská východní republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (860,'UZ','Republika Uzbekistán',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (548,'VU','Republika Vanuatu',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (336,'VA','Vatikánský městský stát',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (826,'GB','Spojené království Velké Británie a Severního Irska',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (862,'VE','Bolívarovská republika Venezuela',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (704,'VN','Vietnamská socialistická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (162,'CX','Území Vánoční ostrov',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (626,'TL','Demokratická republika Východní Timor',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (876,'WF','Teritorium Wallisovy ostrovy a Futuna',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (894,'ZM','Zambijská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (716,'ZW','Zimbabwská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (732,'EH','Saharská arabská demokratická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (90,'SB','Šalomounovy ostrovy',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (724,'ES','Španělské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (744,'SJ','Špicberky a Jan Mayen',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (144,'LK','Šrílanská demokratická socialistická republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (752,'SE','Švédské království',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (756,'CH','Švýcarská konfederace',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (31,'AZ','Ázerbájdžánská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (148,'TD','Čadská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (499,'ME','Černá Hora',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (203,'CZ','Česká republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (156,'CN','Čínská lidová republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (364,'IR','Íránská islámská republika',-1);
+INSERT INTO RN00437491 (kodwsnv,statprisl,popis,zprac) VALUES (300,'GR','Řecká republika',-1);
+
+UPDATE STATISTICS HIGH FOR TABLE RN00437491;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

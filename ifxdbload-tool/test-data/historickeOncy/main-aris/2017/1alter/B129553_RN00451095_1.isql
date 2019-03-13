@@ -1,0 +1,97 @@
+-- @TC:ONCE: ID = V2, B129553_RN00451095_1
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eu_prumernasazba_acis
+
+-- 33  eu_prumernasazba_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_prumernasazba_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    nazev           CHAR(35)   NOT NULL,
+    datplat         DATE   NOT NULL,
+    sazba           DECIMAL(6, 2)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1 ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_prumernasazba_acis_dszw
+) LOCK MODE ROW
+;
+
+-- 34  eu_prumernasazba_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_prumernasazba_acis_pk ON eu_prumernasazba_acis (idarch) ;
+
+-- 35  eu_prumernasazba_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_prumernasazba_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_prumernasazba_acis_pk;
+
+-- ###############################################################
+--       eu_prumernasazba_cis
+
+-- 36  eu_prumernasazba_cis-1/4       [CREATE.TABLE]
+CREATE TABLE eu_prumernasazba_cis (
+    serno           SERIAL   NOT NULL,
+    nazev           CHAR(35)   NOT NULL,
+    datplat         DATE   NOT NULL,
+    sazba           DECIMAL(6, 2)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1 ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_prumernasazba_cis_dszw
+) LOCK MODE ROW
+;
+
+-- 37  eu_prumernasazba_cis-2/4       [CREATE.INDEX]
+CREATE unique INDEX eu_prumernasazba_cis_pk ON eu_prumernasazba_cis (serno) ;
+
+-- 38  eu_prumernasazba_cis-3/4       [CREATE.INDEX]
+CREATE INDEX eu_prumernasazba_cis_i1 ON eu_prumernasazba_cis (datplat) ;
+
+-- 39  eu_prumernasazba_cis-4/4       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_prumernasazba_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_prumernasazba_cis_pk;
+
+
+-- ###############################################################
+--       eu_variaurokfixace_acis
+
+-- 71  eu_variaurokfixace_acis-1/2       [CREATE.COLUMN]
+ALTER TABLE eu_variaurokfixace_acis
+    ADD ucelnakladypu   Integer   BEFORE platnost,
+    ADD ucelnakladysu   Integer   BEFORE platnost,
+    ADD mimoradnaspl    Integer   BEFORE platnost;
+
+-- 72  eu_variaurokfixace_acis-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eu_variaurokfixace_acis
+    ADD CONSTRAINT CHECK (ucelnakladypu IN (0,1)) CONSTRAINT eu_variaurokfixace_acis_d3pr,
+    ADD CONSTRAINT CHECK (ucelnakladysu IN (0,1)) CONSTRAINT eu_variaurokfixace_acis_d3ps,
+    ADD CONSTRAINT CHECK (mimoradnaspl IN (0,1)) CONSTRAINT eu_variaurokfixace_acis_d3pt;
+
+-- ###############################################################
+--       eu_variaurokfixace_cis
+
+-- 73  eu_variaurokfixace_cis-1/2       [CREATE.COLUMN]
+ALTER TABLE eu_variaurokfixace_cis
+    ADD ucelnakladypu   Integer  BEFORE platnost,
+    ADD ucelnakladysu   Integer  BEFORE platnost,
+    ADD mimoradnaspl    Integer  BEFORE platnost;
+
+-- 74  eu_variaurokfixace_cis-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eu_variaurokfixace_cis
+    ADD CONSTRAINT CHECK (ucelnakladypu IN (0,1)) CONSTRAINT eu_variaurokfixace_cis_d3po,
+    ADD CONSTRAINT CHECK (ucelnakladysu IN (0,1)) CONSTRAINT eu_variaurokfixace_cis_d3pp,
+    ADD CONSTRAINT CHECK (mimoradnaspl IN (0,1)) CONSTRAINT eu_variaurokfixace_cis_d3pq;
+
+
+ROLLBACK WORK;
+
+--End of B129553_RN00451095_1

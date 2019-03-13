@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, B122120_RN00400175_1-ImportZmenUrSazeb
+-- @TC:ONCE: DESCRIPTION = Main: Hromadná změna úrokové sazby ve fázi spoření nad vybraným portfoliem smluv {CUSTOMERREQUEST}
+BEGIN WORK;
+
+    CREATE TABLE ES_ImportZmenUrSazeb_Mat (
+      radek   Integer,           -- číslo řádku v CSV souboru
+      smlouva Dec(16,0),         --  Smlouva 
+      typ Char(4),               --  Typ smlouvy 
+      old_vop Integer,           --  Aktuální VOP (na smlouvě) 
+      old_tarif Integer,         --  Aktuální tarif (na smlouvě) 
+      old_indexbazes  SmallInt,  --  Aktuální odchylka úrokové sazby spoření (na smlouvě)  
+      old_odchylkaurs Dec(5,2),  --  Aktuální bázová sazba spoření (na smlouvě)  
+      old_periodaurs  Char(1),   --  Aktuální perioda  úrokové sazby spoření (na smlouvě)  M, Q, P, R
+      old_indexbazeu  SmallInt,  --  Aktuální odchylka úrokové sazby úvěru (na smlouvě)  
+      old_odchylkauru Dec(5,2),  --  Aktuální bázová sazba úvěru (na smlouvě)  
+      old_periodauru  Char(1),   --  Aktuální perioda  úrokové sazby úvěru (na smlouvě)  M, Q, P, R
+      new_indexbazes  SmallInt,  --  Nová odchylka úrokové sazby spoření 
+      new_odchylkaurs Dec(5,2),  --  Nová bázová sazba spoření 
+      new_periodaurs  Char(1),   --  Nová perioda  úrokové sazby spoření M, Q, P, R
+      new_indexbazeu  SmallInt,  --  Nová odchylka úrokové sazby úvěru 
+      new_odchylkauru Dec(5,2),  --  Nová bázová sazba úvěru 
+      new_periodauru  Char(1),   --  Nová perioda  úrokové sazby úvěru M, Q, P, R
+      datplanprov Date,          --  Datum plánovaného provedení 
+      datnavzm  Date,            --  Datum návrhu změny  
+      datplatnostod Date,        --  Datum platnosti změny od  
+      priloha Integer,           --  Příloha 
+      owner   Char(255)
+    );
+
+ROLLBACK WORK;
+--End of B122120_RN00400175_1-ImportZmenUrSazeb

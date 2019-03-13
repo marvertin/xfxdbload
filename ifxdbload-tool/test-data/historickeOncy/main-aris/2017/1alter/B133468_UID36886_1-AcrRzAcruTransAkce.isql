@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, B133468_UID36886_1-AcrRzAcruTransAkce
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+CREATE TABLE acr_rzacrutransakce_prot (
+  serno   SERIAL NOT NULL,
+  refbeh   INTEGER NOT NULL,
+  typ   CHAR(3) NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  runerr   Integer  DEFAULT 0 NOT NULL,
+  starttime   datetime year to second,
+  endtime   datetime year to second,
+  excid   VARCHAR(255),
+  numerr   Integer,
+  texterr   VARCHAR(255),
+  errortime   datetime year to second,
+  akttime   datetime year to second,
+  stavtime   datetime year to second  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (runerr IN (0,1)) CONSTRAINT acr_rzacrutransakce_prot_d2w6
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX acr_rzacrutransakce_prot_pk ON acr_rzacrutransakce_prot(serno);
+ALTER TABLE acr_rzacrutransakce_prot ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT acr_rzacrutransakce_prot_pk;
+
+--FK
+CREATE INDEX acr_rzacrutransakce_prot_i_fk1 ON acr_rzacrutransakce_prot(refbeh);
+ALTER TABLE acr_rzacrutransakce_prot ADD CONSTRAINT FOREIGN KEY(refbeh) REFERENCES acr_rzacrutransbeh_prot(serno) CONSTRAINT acr_rzacrutransakce_prot_fk1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+
+ROLLBACK WORK;
+
+--End of B133468_UID36886_1-AcrRzAcruTransAkce

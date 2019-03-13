@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A42764_RN00285966
+-- @TC:ONCE: DESCRIPTION = Pridat zavazek do eo_finsit_arch
+
+BEGIN WORK;
+
+ALTER TABLE eo_finsit_arch ADD zavazek decimal(16,2) before refuser;
+
+
+    
+ROLLBACK WORK;

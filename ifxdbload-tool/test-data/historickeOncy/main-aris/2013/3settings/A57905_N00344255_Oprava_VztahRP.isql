@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A57905_N00344255_Oprava_VztahRP
+-- @TC:ONCE: DESCRIPTION = Chybný text v èíselníku
+
+BEGIN WORK;
+
+UPDATE eo_vztahos_cis SET popis = 'Rodinný pøíslušník' WHERE typvztah = 'RP';
+
+ROLLBACK WORK;
+
+--End of A57905_N00344255_Oprava_VztahRP

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B133157_UID52126_5-RizSubjektVysledek
+-- @TC:ONCE: DESCRIPTION = V evidenci výsledků kontrol rizikového subjektu evidovat číslo revize a OK/KO - jen BE {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_rizsubjektkontr_den MODIFY vysledek Char(3) NOT NULL;
+ALTER TABLE ep_rizsubjektkontr_den ADD CONSTRAINT CHECK(vysledek IN ('ERR', 'KOT', 'KOM', 'OKI')) CONSTRAINT ep_rizsubjektkontr_den_c1;
+
+ALTER TABLE ep_rizsubjektkontr_den MODIFY xold_vysledek INT;
+
+ROLLBACK WORK;
+
+--End of B133157_UID52126_5-RizSubjektVysledek

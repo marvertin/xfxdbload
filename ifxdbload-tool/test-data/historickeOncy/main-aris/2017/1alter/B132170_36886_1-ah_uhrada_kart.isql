@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B132170_36886_1-ah_uhrada_kart
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ah_uhrada_kart ADD   serno BIGINT BEFORE reftime;
+
+ROLLBACK WORK;
+
+--End of B132170_36886_1-ah_uhrada_kart

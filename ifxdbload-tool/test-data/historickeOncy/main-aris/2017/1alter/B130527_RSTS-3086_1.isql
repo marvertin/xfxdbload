@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B130527_RSTS-3086_1
+-- @TC:ONCE: DESCRIPTION = CRM {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_bssimulationcase
+
+  --UID neklienta – nepovinná vazba na evidenci neklientů
+  add refNonClient BIGINT,
+  
+  --Příjmení neklienta
+  add nonClientSureName   CHAR(35)
+;
+
+alter table pro_client
+
+  --UID osoby, pro kterou je model uložen, z centrální evidence osob
+  add clientUid   BIGINT
+;
+
+ROLLBACK WORK;
+
+--End of B130527_RSTS-3086_1

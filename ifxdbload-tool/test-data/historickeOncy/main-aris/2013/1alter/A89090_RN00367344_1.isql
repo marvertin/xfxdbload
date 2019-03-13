@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, A89090_RN00367344_1
+-- @TC:ONCE: DESCRIPTION = chyba constain tabulka eu_contractchecking_den {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eucontractcheckingden_c_checkingstatus_ur2status;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eucontractcheckingden_c_checkingstatus_sc2status;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eucontractcheckingden_c_checkingstatus_documentstatus;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eucontractcheckingden_c_checkingstatus_incomestatus;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eu_contractchecking_den_dvqk;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eucontractcheckingden_c_checkingstatus_firmstatus;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eucontractcheckingden_c_checkingstatus_propertystatus;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eucontractcheckingden_c_checkingstatus_telephonestatus;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eu_contractchecking_den_dcrp;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eucontractcheckingden_c_checkingstatus_rdstatus;
+ALTER TABLE eu_contractchecking_den DROP CONSTRAINT eu_contractchecking_den_djhq;
+
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (ur2status IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eucontractcheckingden_c_checkingstatus_ur2status );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (telephonestatus IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eucontractcheckingden_c_checkingstatus_telephonestatus );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (sc2status IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eucontractcheckingden_c_checkingstatus_sc2status );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (rdstatus IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eucontractcheckingden_c_checkingstatus_rdstatus );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (propertystatus IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eucontractcheckingden_c_checkingstatus_propertystatus );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (incomestatus IN ('P' ,'N' ,'S','R', 'A' )) CONSTRAINT eucontractcheckingden_c_checkingstatus_incomestatus );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (firmstatus IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eucontractcheckingden_c_checkingstatus_firmstatus );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (documentstatus IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eucontractcheckingden_c_checkingstatus_documentstatus );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (cb2status IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eu_contractchecking_den_dvqk );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (bonita2status IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eu_contractchecking_den_djhq );
+ALTER TABLE eu_contractchecking_den    ADD CONSTRAINT ( CHECK (sl2status IN ('P' ,'N' ,'S' ,'R', 'A' )) CONSTRAINT eu_contractchecking_den_dcrp );
+
+ROLLBACK WORK;
+
+--End of A89090_RN00367344_1

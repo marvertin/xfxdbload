@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B124671_RN00430870_1
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table EU_ExpSml_Den
+  add zpusobpodpisuusd   char(7),
+  add reklamaceusd   CHAR(1),
+  add odmitnutiusd   Integer;
+  
+ROLLBACK WORK;
+
+--End of B124671_RN00430870_1

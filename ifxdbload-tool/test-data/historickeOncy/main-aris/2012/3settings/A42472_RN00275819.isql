@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A42472_RN00275819
+-- @TC:ONCE: DESCRIPTION = Odpis a postoupení nevymáhaných a neklasifikovaných úvìrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO eo_vztahos_cis(typvztah, popis, typos1,typos2, vlivklasif, poznamka, platnost) VALUES('SZ', 'Statutární zástupce', 'F','F',0,null,1);
+
+ROLLBACK WORK;
+
+--End of A42472_RN00275819
+ 

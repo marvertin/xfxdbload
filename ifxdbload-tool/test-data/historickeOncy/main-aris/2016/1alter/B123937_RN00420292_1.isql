@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B123937_RN00420292_1
+-- @TC:ONCE: DESCRIPTION = Vytvoření návrhu vypořádání úvěru po jeho splacení. {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ru_zvlrezim_acis ADD nevytvautvypor   Integer BEFORE PORTIME;
+
+ALTER TABLE ru_zvlrezim_cis ADD nevytvautvypor   Integer  DEFAULT 0 NOT NULL BEFORE PORTIME;
+
+ALTER TABLE eu_zajist_acis ADD nepotvautvypor   Integer;
+
+ALTER TABLE eu_zajist_cis ADD nepotvautvypor   Integer  DEFAULT 0 NOT NULL; 
+
+
+ROLLBACK WORK;
+
+--End of B123937_RN00420292_1

@@ -1,0 +1,105 @@
+CREATE PROCEDURE RSTS_32976_prot_zpracOsPred(AOs INTEGER, ATyprole CHAR(2), ASmlouva DEC(16,0), ATsml CHAR(4))
+
+-- hlavní proměnné
+DEFINE _idos                CHAR(13);
+DEFINE _typid               CHAR(1);
+DEFINE _formapravText       CHAR(40);
+DEFINE _tigertypText        CHAR(40);
+DEFINE _rstsDPDOsoba        INTEGER;
+DEFINE _klasifMin        INTEGER;
+DEFINE _klasifVysledna           INTEGER;
+DEFINE _klasifNejhorsiMin5  INTEGER;
+DEFINE _klasifNejhorsi5     INTEGER;
+DEFINE _insolvenceStav      CHAR(1);
+DEFINE _pocetExekPoNabPM   INTEGER;
+DEFINE _datumUmrti          DATE;
+DEFINE _seznamOstUveru      LVARCHAR(4000);
+
+-- pomocné proměnné
+DEFINE _datProv       DATE;
+DEFINE _datProv5      DATE;
+DEFINE _smlouva       DEC(16,0);
+DEFINE _tsml          CHAR(4);
+DEFINE _id              INTEGER;
+DEFINE _maxdpd          INTEGER;
+DEFINE _totaldpd        INTEGER;
+DEFINE _nesplaccastka   DEC(16,2);
+DEFINE _datprvvyhodnoceni DATE;
+DEFINE _datvyhodnoceni    DATE;
+
+
+LET _datProv = ap_datprov();
+LET _datProv5 = ADD_MONTHS(_datProv, -60);
+
+LET _idos = EO_GetIDOs(AOs);
+let _typid = EO_GetTypIdOs(AOs);
+
+SELECT to_char(formaprav) || ', ' || popis INTO _formapravText FROM EO_FormaPrav_Cis WHERE formaprav = EO_GetFormapravOs(AOs);
+
+SELECT to_char(serno) || ', ' || nazev INTO _tigertypText FROM EO_TigerTyp_Cis WHERE serno = EO_GetTigerType(AOs);
+
+LET _id, _rstsDPDOsoba, _maxDpd, _totalDpd, _nesplacCastka, _datprvVyhodnoceni, _datVyhodnoceni = EP_GetLastAllDPD(AOs, 'P');
+
+SELECT klasifikace, klasklient
+INTO  _klasifVysledna, _klasifMin
+FROM EO_Osoba_Mat
+WHERE os = AOs;
+  
+-- nejhorší minimální klas. za posledních 5 let START
+-- nejhorší klas. za posledních 5 let START
+SELECT MAX(klasifikace), MAX(klasklient)
+INTO  _klasifNejhorsi5, _klasifNejhorsiMin5
+FROM EO_Osoba_Arch
+WHERE os = AOs
+AND reftime > _datProv5;
+
+
+IF _klasifNejhorsi5 IS NULL THEN
+  LET _klasifNejhorsi5 = _klasifVysledna;
+ELSE
+  LET _klasifNejhorsi5 = TW_MaxInt(_klasifVysledna, _klasifNejhorsi5);
+END IF;
+
+IF _klasifNejhorsiMin5 IS NULL THEN
+  LET _klasifNejhorsiMin5 = _klasifMin;
+ELSE
+  LET _klasifNejhorsiMin5 = TW_MaxInt(_klasifMin, _klasifNejhorsiMin5);
+END IF;
+
+let _insolvenceStav = null;
+foreach
+  SELECT stav INTO _insolvenceStav FROM EP_Insolvence_mat WHERE refosoba = AOs AND stav <> 'S' ORDER BY serno DESC
+  EXIT foreach; 
+END foreach;
+
+SELECT COUNT(*) INTO _pocetExekPoNabPM FROM RS_Exekprikaz_mat WHERE klient = AOs AND stav = 1;
+IF _pocetExekPoNabPM = 0 THEN
+  LET _pocetExekPoNabPM = NULL;
+END IF;
+
+SELECT datzanik INTO _datumUmrti FROM EO_Osoba_Mat WHERE os = AOs;
+
+let _seznamOstUveru = '';
+foreach EXECUTE FUNCTION CEP_VyhodnotitPohlOsDefault(AOs) INTO _smlouva, _tsml
+  -- řetězení
+  IF _smlouva <> ASmlouva THEN
+    LET _seznamOstUveru = _seznamOstUveru || _smlouva || '/' || _tsml  || ' ';
+  END IF;
+END foreach;
+ 
+IF _seznamOstUveru = '' THEN
+  LET _seznamOstUveru = NULL;
+ELSE
+  LET _seznamOstUveru = trim(_seznamOstUveru);
+END IF;
+
+INSERT INTO RSTS_32976_Protokol_OS(os, typrole, smlouva, tsml, idos, typid, formapravText, tigertypText, rstsDPDOsoba
+  , klasifMin, klasifVysledna, klasifNejhorsiMin5, klasifNejhorsi5
+  , insolvenceStav, pocetExekPoNabPM, datumUmrti, seznamOstUveru
+)
+VALUES(AOs, ATyprole, ASmlouva, ATsml, _idos, _typid, _formapravText, _tigertypText, _rstsDPDOsoba
+  , _klasifMin, _klasifVysledna, _klasifNejhorsiMin5, _klasifNejhorsi5
+  , _insolvenceStav, _pocetExekPoNabPM, _datumUmrti, _seznamOstUveru
+);
+
+END PROCEDURE;

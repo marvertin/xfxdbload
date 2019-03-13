@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B125706_RN00454558_5
+-- @TC:ONCE: DESCRIPTION = Při rozúčtování SP se neprovedl převod BU->BUZA {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE sp_pripisy_kart
+    MODIFY dozadani Integer NOT NULL;
+
+ROLLBACK WORK;
+
+--End of B125706_RN00454558_5

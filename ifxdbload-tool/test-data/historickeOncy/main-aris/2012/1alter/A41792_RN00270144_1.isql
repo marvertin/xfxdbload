@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A41792_RN00270144_1
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+  alter table ac_konto_mat add minzustatek decimal(16,2) before portime;
+  alter table ac_konto_mat add maxzustatek decimal(16,2) before portime;
+
+  alter table ac_konto_arch add minzustatek decimal(16,2) before portime;
+  alter table ac_konto_arch add maxzustatek decimal(16,2) before portime;
+
+ROLLBACK WORK;
+

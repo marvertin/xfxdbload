@@ -1,0 +1,125 @@
+create procedure RN00311507_krok_5_Make()
+-- napojení/vytvoření vinkulací k insolvencím
+
+define _ser               Int;
+define _davka             Int;
+define _akce              Int;
+define _serinsolv         Int;
+define _os                Int;
+define _smlouva           Dec(16,0);
+define _tsml              Char(4);
+define _typrole           Char(2);
+define _poznamka          Varchar(255);
+define _vinkulace         Int;
+define _poradi            Int;
+define _reals             Int;
+define _stav              Char(1);
+define _konto             Dec(16,0);
+define _tko               Char(2);
+  
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_5');
+let _vinkulace = tw_reggetkey('EO','CREDIBILITY','lock','kind');
+
+--set debug file to '/home/aris/RN00311507_krok_1C_PO.isql.dbg';
+--trace on;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, os, smlouva, tsml, serinsolv, poznamka, typrole
+     INTO _ser,_os,_smlouva,_tsml,_serinsolv,_poznamka,_typrole
+     FROM RN00311507_krok_5
+    WHERE zprac < 0
+    ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_5
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+        
+      --INSERT INTO RN00311507_krok_5_log(ser, text)
+      --  VALUES(_ser, 'TW_ErrSql: ' || TW_ErrSql || ' TW_ErrIsam: ' || TW_ErrIsam || ' TW_ErrText: ' || TW_ErrText);
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    -- vlastni algoritmus migrace
+    -- zjistím, zda pro daný produkt existuje vinkulace vkladu "dotazy na důvěryhodnost"
+    -- pokud ano - zaeviduji vazbu
+    -- pokud ne  - vytvořím novou vinkulaci a zaeviduji vazbu
+    let _reals = (SELECT reals FROM rz_real_mat WHERE smlouva = _smlouva and tsml = _tsml);
+    if exists(SELECT 1 FROM rs_vinkulace_kart WHERE realn = _reals and vinkulace = _vinkulace) then
+      foreach
+        SELECT poradi INTO _poradi
+          FROM rs_vinkulace_kart
+         WHERE realn = _reals and vinkulace = _vinkulace
+         
+         INSERT INTO ep_insolvvinkul_mat(refinsolv, refrealn, refporadi)
+           VALUES(_serinsolv, _reals, _poradi);
+      end foreach
+    elif exists(SELECT 1 FROM eo_role_mat WHERE os = _os and smlouva = _smlouva and typ = _tsml and typrole = _typrole and stav = 'A') then
+      SELECT stav, konto, tko INTO _stav, _konto, _tko FROM rs_real_mat WHERE realn = _reals;
+      if _stav = 'A' then
+        if exists(SELECT 1 FROM AC_Konto_Mat WHERE konto = _konto AND tko = _tko AND stav IN (0,1,3)) then
+          call RS_ProvVinkAk (_reals, _vinkulace, null, null, null, null, null, null,_poznamka);
+          let _poradi = (SELECT MAX(poradi) FROM rs_vinkulace_kart WHERE realn = _reals);
+          INSERT INTO ep_insolvvinkul_mat(refinsolv, refrealn, refporadi)
+            VALUES(_serinsolv, _reals, _poradi);
+            
+          -- zaevidujeme záznam nově vytvořenou vinkulaci, včetně vazby na záznam insolvence
+          INSERT INTO RN00311507_krok_5_log(ser, text)
+            VALUES(_ser, 'Smlouva: ' ||_smlouva || '/' || _tsml || ' Insolvence: '|| _serinsolv ||' - vytvořena vinkulace s pořadím ' || _poradi);
+        else
+          INSERT INTO RN00311507_krok_5_log(ser, text)
+            VALUES(_ser, 'Smlouva: ' ||_smlouva || '/' || _tsml || ' Insolvence: '|| _serinsolv ||' - vinkulace nebyla vytvořena z důvodu neexistence platného konta');
+        end if;
+      else
+        INSERT INTO RN00311507_krok_5_log(ser, text)
+          VALUES(_ser, 'Smlouva: ' ||_smlouva || '/' || _tsml || ' Insolvence: '|| _serinsolv ||' - vinkulace nebyla vytvořena z důvodu neexistence otevřeného spoření');
+      end if;
+    end if
+    
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00311507_krok_5 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_5');
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

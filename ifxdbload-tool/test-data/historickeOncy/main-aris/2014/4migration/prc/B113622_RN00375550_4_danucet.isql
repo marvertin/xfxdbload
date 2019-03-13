@@ -1,0 +1,12 @@
+Create Procedure B113622_RN00375550_4_danucet()
+
+  -- ulozeni do acis
+  update ax_dantyp_cis set danucet = danucet WHERE danucet is not null;
+
+  UPDATE ax_sazba_cis
+   SET druhoper = (SELECT druhoper FROM ax_dantyp_cis WHERE ser = ax_sazba_cis.sertyp),
+       danucet  = (SELECT danucet  FROM ax_dantyp_cis WHERE ser = ax_sazba_cis.sertyp)
+   WHERE sertyp in (SELECT ser FROM ax_dantyp_cis WHERE danucet is not null); 
+
+
+end Procedure;

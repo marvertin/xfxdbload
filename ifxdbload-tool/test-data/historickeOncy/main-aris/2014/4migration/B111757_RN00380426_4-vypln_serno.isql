@@ -1,0 +1,45 @@
+-- @TC:ONCE: ID = V2, B111757_RN00380426_4-vypln_serno
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+--serno pro eu_zajist_mat
+
+set triggers for eu_zajist_mat disabled;
+
+update eu_zajist_mat set serno = tw_nextserno() where serno is null;
+
+set triggers for eu_zajist_mat enabled;
+
+insert into tw_serno (serno, tabulka)
+  select serno, 'eu_zajist_mat' from eu_zajist_mat where serno not in (select serno from tw_serno where tabulka = 'eu_zajist_mat');
+
+set triggers for eu_zajist_arch disabled;
+
+update eu_zajist_arch
+  set serno = (select serno from eu_zajist_mat mat where mat.poradi = eu_zajist_arch.poradi and mat.smlouva = eu_zajist_arch.smlouva and mat.tsml = eu_zajist_arch.tsml)
+  where serno is null;
+
+set triggers for eu_zajist_arch enabled;
+
+
+--serno pro eu_ucel_mat
+
+set triggers for eu_ucel_mat disabled;
+
+update eu_ucel_mat set serno = tw_nextserno() where serno is null;
+
+set triggers for eu_ucel_mat enabled;
+
+insert into tw_serno (serno, tabulka)
+  select serno, 'eu_ucel_mat' from eu_ucel_mat where serno not in (select serno from tw_serno where tabulka = 'eu_ucel_mat');
+
+set triggers for eu_ucel_arch disabled;
+
+update eu_ucel_arch
+  set serno = (select serno from eu_ucel_mat mat where mat.poradi = eu_ucel_arch.poradi and mat.smlouva = eu_ucel_arch.smlouva and mat.tsml = eu_ucel_arch.tsml)
+  where serno is null;
+
+set triggers for eu_ucel_arch enabled;
+
+ROLLBACK WORK;
+--End of B111757_RN00380426_4-vypln_serno

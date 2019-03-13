@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B132138_36886_1-acr_ucet_acis
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE acr_ucet_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  mapkod   Char(20) NOT NULL,
+  typobj   CHAR(1) NOT NULL,
+  typmaj   CHAR(2),    
+  ucet   CHAR(9) NOT NULL,
+  poznamka   CHAR(160),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX acr_ucet_acis_pk ON acr_ucet_acis(idarch);
+ALTER TABLE acr_ucet_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT acr_ucet_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B132138_36886_1-acr_ucet_acis

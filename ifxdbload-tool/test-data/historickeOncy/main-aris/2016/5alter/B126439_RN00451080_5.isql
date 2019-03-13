@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B126439_RN00451080_5
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+-- zatím nebudeme dropovat
+
+BEGIN WORK;
+
+alter table ep_splspormodSh_den
+  drop (tisktime, tiskuser, datprvtisk, datposltisk, poctisk);
+
+ROLLBACK WORK;
+
+--End of B126439_RN00451080_5

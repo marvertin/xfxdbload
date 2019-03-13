@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B125400_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_expsplspormodcf_den 
+
+  -- Typ sazby
+  -- Určuje, zda příslušné řádky cash-flow jsou souhrnné RPSN/EIR anebo pro dílčí RPSN PÚ resp. RPSN SÚ
+  ADD  typsazby   char(2);
+
+ROLLBACK WORK;
+
+--End of B125400_RN00443393_1

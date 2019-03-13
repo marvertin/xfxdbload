@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B119269_RN00382782_1
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE INDEX rs_exekprikaz_mat_i1 ON rs_exekprikaz_mat(klient);
+
+ROLLBACK WORK;
+
+--End of B119269_RN00382782_1

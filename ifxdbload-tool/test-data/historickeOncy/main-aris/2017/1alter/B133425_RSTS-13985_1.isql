@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B133425_RSTS-13985_1
+-- @TC:ONCE: DESCRIPTION = dodatky_vazba mezi nákladem a zajištěním EU_ESIP_N {CUSTOMERREQUEST}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B133424_RSTS-13985_1
+
+
+BEGIN WORK;
+
+-- 16  ep_splspormodee_den-1/1       [CREATE.COLUMN]
+ALTER TABLE ep_splspormodee_den
+  ADD refzajisteni    BigInt before expensetype;
+  
+--       eu_expesipn_den
+
+-- 37  eu_expesipn_den-1/1       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_expesipn_den
+  ADD refzajisteni    Integer;
+  
+ROLLBACK WORK;
+
+--End of B133425_RSTS-13985_1

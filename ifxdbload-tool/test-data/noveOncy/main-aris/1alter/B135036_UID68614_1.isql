@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135036_UID68614_1
+-- @TC:ONCE: DESCRIPTION = RSTS-20012: Pád účetní EOM {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+ALTER TABLE eu_vypocetltv_den MODIFY (
+  jmenovatel   DECIMAL(16, 2),
+  odpocitanahodnota   DECIMAL(16, 2)
+);
+
+ROLLBACK WORK;
+
+--End of B135036_UID68614_1

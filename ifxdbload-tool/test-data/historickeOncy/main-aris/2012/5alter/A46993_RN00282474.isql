@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A46993_RN00282474
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù
+
+BEGIN WORK;
+
+DROP TABLE eu_zajcrpsazba_cis_toDrop;
+
+ROLLBACK;

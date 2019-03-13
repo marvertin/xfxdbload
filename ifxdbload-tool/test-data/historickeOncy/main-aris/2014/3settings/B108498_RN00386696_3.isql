@@ -1,0 +1,42 @@
+-- @TC:ONCE: ID = V2, B108498_RN00386696_3
+-- @TC:ONCE: DESCRIPTION = Insolvence: nejsou naplněny číselníky insolvence {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Ins.správcem pravost','tzn. pohledávka nevznikla,zanikla nebom je zcela promlčena.',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Ins.správcem výše','tzn. pohledávka je nižší než přihlášená',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Ins.správcem pořadí','tzn. pohledávka není zajištěná přohlášeným způsobem',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Dlužníkem pravost','tzn. pohledávka nevznikla,zanikla nebom je zcela promlčena.',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Dlužníkem výše','tzn. pohledávka je nižší než přihlášená',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Dlužníkem pořadí','tzn. pohledávka není zajištěná přohlášeným způsobem',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Věřitelem pravost','tzn. pohledávka nevznikla,zanikla nebom je zcela promlčena.',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Věřitelem výše','tzn. pohledávka je nižší než přihlášená',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Věřitelem pořadí','tzn. pohledávka není zajištěná přohlášeným způsobem',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Částečné popření','tzn. je popřena některá z pohledávek nebo část pohledávky',1);
+INSERT INTO ep_duvpoprprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvpoprprihl_cis)
+  ,'Jiné','důvod uveden v poznámce',1);
+
+ROLLBACK WORK;
+
+--End of B108498_RN00386696_3

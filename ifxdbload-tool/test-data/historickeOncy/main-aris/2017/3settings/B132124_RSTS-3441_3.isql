@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B132124_RSTS-3441_3
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení
+
+
+BEGIN WORK;
+
+UPDATE eu_zajist_mat  SET datplatod = (SELECT datsml FROM eu_sml_mat  WHERE eu_sml_mat.smlouva  = eu_zajist_mat.smlouva AND eu_sml_mat.tsml = eu_zajist_mat.tsml);
+
+ROLLBACK WORK;
+
+--End of B132124_RSTS-3441_3

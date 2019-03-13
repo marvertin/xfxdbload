@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A97395_RN00360507_5
+-- @TC:ONCE: DESCRIPTION = Zavedení blacklistů pro podporu řízení rizik {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP TRIGGER ep_prukaz_acis_d', -634);
+call TW_ExecSql('DROP TRIGGER ep_prukaz_cis_d', -634);
+
+ROLLBACK WORK;
+
+--End of A97395_RN00360507_5

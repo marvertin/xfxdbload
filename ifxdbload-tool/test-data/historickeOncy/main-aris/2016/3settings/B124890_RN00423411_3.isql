@@ -1,0 +1,99 @@
+-- @TC:ONCE: ID = V2, B124890_RN00423411_3
+-- @TC:ONCE: DESCRIPTION = Rozhodovací nástroj pro variantu PÚ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+--ciselnik reportu
+INSERT INTO rr_reptype_cis ( repcode, area, repkind, reptype, repvar, repname, exportdir, bulkprintdir, keepinterval,                
+                             bulkprint, bulkprintsave, bulkprintformat,formatchange, savewithoutpreview ) 
+                    VALUES ('EU310', 'EU', '31', '0', 0, 'Dokument pro ÚŽ - doporučení varianty PÚ', null, null, 1, 0, 0, 'PDF', 0, 1);
+
+INSERT INTO rr_reptype_cis ( repcode, area, repkind, reptype, repvar, repname, exportdir, bulkprintdir, keepinterval,                
+                             bulkprint, bulkprintsave, bulkprintformat,formatchange, savewithoutpreview ) 
+                    VALUES ('EU311', 'EU', '31', '1', 0, 'Dokument pro ÚŽ - doporučení varianty PÚ na žádost klienta ', null, null, 1, 0, 0, 'PDF', 0, 1);
+
+INSERT INTO rr_reptype_cis ( repcode, area, repkind, reptype, repvar, repname, exportdir, bulkprintdir, keepinterval,                
+                             bulkprint, bulkprintsave, bulkprintformat,formatchange, savewithoutpreview ) 
+                    VALUES ('EU312', 'EU', '31', '2', 0, 'Dokument pro ÚŽ - doporučení varianty SÚ', null, null, 1, 0, 0, 'PDF', 0, 1);
+
+
+--ciselnik reportu - casove rozliseni
+INSERT INTO rr_xreptype_cis ( refrepcode, datod, datdo, poznamka, predloha, cesta, soubor,  interniid, externiid, platnost) 
+                     VALUES ('EU310', mdy(1, 1, 2016), null, null, 'J', null, 'EU310.jrxml', null, null, 1);
+
+INSERT INTO rr_xreptype_cis ( refrepcode, datod, datdo, poznamka, predloha, cesta, soubor,  interniid, externiid, platnost)
+                     VALUES ('EU311', mdy(1, 1, 2016), null, null, 'J', null, 'EU311.jrxml', null, null, 1);
+
+INSERT INTO rr_xreptype_cis ( refrepcode, datod, datdo, poznamka, predloha, cesta, soubor,  interniid, externiid, platnost)
+                     VALUES ('EU312', mdy(1, 1, 2016), null, null, 'J', null, 'EU312.jrxml', null, null, 1);
+
+
+--ciselnik dokumentu
+INSERT INTO DO_TypDokumentu_CIS ( text, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany) 
+                         VALUES ('Dokument pro ÚŽ - doporučení varianty PÚ', null, 1, null, null, null, null, 1, 'EU310', 1, 1);
+
+
+INSERT INTO DO_TypDokumentu_CIS ( text, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany) 
+                         VALUES ('Dokument pro ÚŽ - doporučení varianty PÚ na žádost klienta ', null, 1, null, null, null, null, 1, 'EU311', 1, 1);
+
+
+INSERT INTO DO_TypDokumentu_CIS ( text, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany) 
+                         VALUES ('Dokument pro ÚŽ - doporučení varianty SÚ', null, 1, null, null, null, null, 1, 'EU312', 1, 1);
+
+
+-- vazba typ dokumentu - typ objektu
+INSERT INTO DO_TypDokumentuTypObjektu_CIS ( doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo)  
+VALUES ((SELECT doktyp FROM DO_TypDokumentu_CIS WHERE repcode = 'EU310'), 'seu_zadost_mat', 'NEPRISTUPNY', null, '1', null, null, 1, mdy(1, 1, 2016), null);
+
+INSERT INTO DO_TypDokumentuTypObjektu_CIS ( doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo) 
+VALUES ((SELECT doktyp FROM DO_TypDokumentu_CIS WHERE repcode = 'EU311'), 'seu_zadost_mat', 'NEPRISTUPNY', null, '1', null, null, 1, mdy(1, 1, 2016), null);
+
+INSERT INTO DO_TypDokumentuTypObjektu_CIS ( doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo) 
+VALUES ((SELECT doktyp FROM DO_TypDokumentu_CIS WHERE repcode = 'EU312'), 'seu_zadost_mat', 'NEPRISTUPNY', null, 1, null, null, 1, mdy(1, 1, 2016), null);
+
+
+--podpisove pole
+--TODO dodelat / nastavit pole xpos, ypos
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU310' AND platnost = 1 ), 1, 0, 0, 129, 50, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU310' AND platnost = 1 ), 2, 0, 0, 129, 50, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU310' AND platnost = 1 ), 3, 0, 0, 129, 50, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU311' AND platnost = 1 ), 1, 0, 0, 129, 50, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU311' AND platnost = 1 ), 2, 0, 0, 129, 50, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU311' AND platnost = 1 ), 3, 0, 0, 129, 50, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU312' AND platnost = 1 ), 1, 0, 0, 129, 50, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU312' AND platnost = 1 ), 2, 0, 0, 129, 50, null, 1);
+
+INSERT INTO rr_podpisovepole_cis (refxreptype, poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+VALUES ((SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'EU312' AND platnost = 1 ), 3, 0, 0, 129, 50, null, 1);
+
+--zarazeni dokkumentu do skupiny
+INSERT INTO DO_TypDokumentuSkupina_CIS (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis) --povolený způsob podepsání pro dokument ve skupině: ""podpis na papír, zaslání poštou"" + případně uvést omezení na variantu procesu, povolený způsob podepsání pro dokument ve skupině: ""biometrický podpis""+ případně uvést omezení na variantu procesu, povolený způsob podepsání pro dokument ve skupině:podpis na papír, zaslání elektronicky, povolený způsob podepsání pro dokument ve skupině:podpis na papír, ověření na centrále - vido + případně uvést omezení na variantu procesu)
+                               VALUES ((SELECT doktyp FROM DO_TypDokumentu_CIS WHERE repcode = 'EU310'), 1, null, null, '1', 'P', 0, null, null); --, 1, 1, 1, 1)
+
+INSERT INTO DO_TypDokumentuSkupina_CIS (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis) --povolený způsob podepsání pro dokument ve skupině: ""podpis na papír, zaslání poštou"" + případně uvést omezení na variantu procesu, povolený způsob podepsání pro dokument ve skupině: ""biometrický podpis""+ případně uvést omezení na variantu procesu, povolený způsob podepsání pro dokument ve skupině:podpis na papír, zaslání elektronicky, povolený způsob podepsání pro dokument ve skupině:podpis na papír, ověření na centrále - vido + případně uvést omezení na variantu procesu)
+                               VALUES ((SELECT doktyp FROM DO_TypDokumentu_CIS WHERE repcode = 'EU311'), 1, null, null, '1', 'P', 0, null, null); --, 1, 1, 1, 1)
+
+INSERT INTO DO_TypDokumentuSkupina_CIS (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis) --povolený způsob podepsání pro dokument ve skupině: ""podpis na papír, zaslání poštou"" + případně uvést omezení na variantu procesu, povolený způsob podepsání pro dokument ve skupině: ""biometrický podpis""+ případně uvést omezení na variantu procesu, povolený způsob podepsání pro dokument ve skupině:podpis na papír, zaslání elektronicky, povolený způsob podepsání pro dokument ve skupině:podpis na papír, ověření na centrále - vido + případně uvést omezení na variantu procesu)
+                               VALUES ((SELECT doktyp FROM DO_TypDokumentu_CIS WHERE repcode = 'EU312'), 1, null, null, '1', 'P', 0, null, null); --, 1, 1, 1, 1)
+
+
+ROLLBACK WORK;
+
+--End of B124890_RN00423411_3

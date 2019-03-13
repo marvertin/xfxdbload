@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, A47313_RN00292084_1
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE PRO_GlobalBaseParameters
+  DROP XCreditRepaymentCrucialDate
+;
+
+CREATE TABLE pro_startrepayandsav (
+  id   SERIAL NOT NULL,
+  globalbaseparameters_id   INTEGER,
+  mirroredid   INTEGER,
+  tos   CHAR(1),
+  tsml   CHAR(4),
+  posunzahcerp   Integer NOT NULL,
+  variantapu   CHAR(10),
+  dorovnatvklad   Integer NOT NULL,
+  posunzahsplac   Integer NOT NULL,
+  posunzahdospor   Integer,
+  rozhdenmessplac   Integer,
+  rozhdenmesdospor   Integer,
+  CHECK (dorovnatvklad IN (0,1)) CONSTRAINT pro_startrepayandsav_doss
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_startrepayandsav_pk ON pro_startrepayandsav(id);
+ALTER TABLE pro_startrepayandsav ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_startrepayandsav_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX pro_startrepayandsav_i1 ON pro_startrepayandsav(globalbaseparameters_id,mirroredid);
+
+
+ROLLBACK WORK;
+
+--End of A47313_RN00292084_1

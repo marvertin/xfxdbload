@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A41316_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál - zprávy {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CREATE TABLE ep_dotazoblast_cis (
+  id   SERIAL NOT NULL,
+  typoblasti   CHAR(45),
+  popis   CHAR(35),
+  zkratka   Char(4),
+  email   VARCHAR(255),
+  poznamka   CHAR(70),
+  platnost   Integer,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_dotazoblast_cis_d6hu
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_dotazoblast_cis_pk ON ep_dotazoblast_cis(id);
+ALTER TABLE ep_dotazoblast_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ep_dotazoblast_cis_pk;
+
+ROLLBACK;

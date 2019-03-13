@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B127707_RN00457828_3-biztyp22
+-- @TC:ONCE: DESCRIPTION = Zmena QR kódu u formulářů na ukončení vytvořených v Cibis-Sale {CUSTOMERREQUEST}
+BEGIN WORK;
+
+Update do_typdokumentu_cis
+  Set biztyp = 22
+  Where doktyp in (TW_RegGetKey('ES', 'ukoncenismlouvy', 'generDok', 'ukoncSS-dohoda'),
+                   TW_RegGetKey('ES', 'ukoncenismlouvy', 'generDok', 'ukoncSS-dohoda-r')
+                  );
+
+ROLLBACK WORK;
+--End of B127707_RN00457828_3-biztyp22

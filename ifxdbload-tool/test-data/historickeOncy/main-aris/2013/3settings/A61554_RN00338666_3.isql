@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A61554_RN00338666_3
+-- @TC:ONCE: DESCRIPTION = Zmìna dávky UNIQA - nové vlastnosti pro urèení provizí
+BEGIN WORK;
+
+INSERT INTO ec_ramsmlpoj_cis(ramsmlpoj, poznamka, platnostod, platnost) VALUES('1080500001', 'Stará rámcová smlouva', MDY(1, 1, 2001), 1);
+INSERT INTO ec_ramsmlpoj_cis(ramsmlpoj, poznamka, platnostod, platnost) VALUES('1080500012', 'Støed rámcová smlouva', MDY(1, 1, 2002), 1);
+INSERT INTO ec_ramsmlpoj_cis(ramsmlpoj, poznamka, platnostod, platnost) VALUES('1080500050', 'Nová rámcová smlouva', MDY(1, 1, 2003), 1);
+
+execute procedure TW_RegSetOrAddKey('EC', 'komCRP', '*', 'lhutaPoCerp', 2, 1);
+
+execute procedure TW_RegSetOrAddKey('EC', 'komCRP', '*', 'lhutaPrepoj', 3, 1);
+
+ROLLBACK WORK;

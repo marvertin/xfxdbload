@@ -1,0 +1,406 @@
+-- @TC:ONCE: ID = V2, A40271_RN00246306_1
+-- @TC:ONCE: DESCRIPTION = Uprava vyporadani v Cibis Main 2 {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- ###############################################################
+--       vy_vypl_arch
+
+-- 5  vy_vypl_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vypl_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplata         INTEGER   NOT NULL,
+      nahrazen        Integer  ,
+      poplmimo        Integer  ,
+      bezpopl         Integer  ,
+      stav            CHAR(1)   NOT NULL,
+      castka          DECIMAL(16, 2)  ,
+      kontodb         DECIMAL(16, 0)  ,
+      tkodb           CHAR(2)  ,
+      ucetdb          CHAR(9)  ,
+      varsymdb        DECIMAL(10,0)  ,
+      textdb          CHAR(20)  ,
+      druhop          CHAR(4)  ,
+      valuta          DATE  ,
+      roksp           DATE  ,
+      rozdilvaluta    Integer DEFAULT 0  NOT NULL,
+      rozdilroksp     Integer DEFAULT 0  NOT NULL,
+      fname           VARCHAR(200)  ,
+      fdatetime       datetime year to second  ,
+      mena            CHAR(3)   NOT NULL,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      CHECK (rozdilvaluta IN (0,1)) CONSTRAINT vy_vypl_arch_dhpz,
+      CHECK (rozdilroksp IN (0,1)) CONSTRAINT vy_vypl_arch_dhq0
+  ) LOCK MODE ROW
+  ;
+
+-- 6  vy_vypl_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vypl_arch_pk ON vy_vypl_arch (idarch) ;
+
+-- 7  vy_vypl_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vypl_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vypl_arch_pk;
+
+-- ###############################################################
+--       vy_vyplban_arch
+
+-- 9  vy_vyplban_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vyplban_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplatazp       INTEGER   NOT NULL,
+      castkavypl      DECIMAL(16, 2)  ,
+      expspoj         Integer   NOT NULL,
+      konto           DECIMAL(16, 0)  ,
+      banka           DECIMAL(7, 0)  ,
+      konstsym        DECIMAL(10,0)  ,
+      varsym          DECIMAL(10,0)  ,
+      specsym         DECIMAL(10,0)  ,
+      text            CHAR(20)  ,
+      zpozvypl        Integer  ,
+      odklvypl        Integer DEFAULT 1 ,
+      dopredvaluta    Integer DEFAULT 0 ,
+      urokbonif       Integer DEFAULT 0 ,
+      castkabonif     DECIMAL(16, 2)  ,
+      opervypl        Integer  ,
+      zdrojser        Integer   NOT NULL,
+      operbonif       Integer  ,
+      roksp           Integer  ,
+      valuta          DATE  ,
+      owntypmajitel   CHAR(1)  ,
+      ownnazevmajitel CHAR(45)  ,
+      ownulice        CHAR(45)  ,
+      ownpsc          CHAR(5)  ,
+      ownmesto        CHAR(45)  ,
+      ownident        CHAR(13)  ,
+      ownstate        CHAR(2)  ,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      deltime         DateTime Year to Second,
+      deluser         Char(20),            
+      CHECK (odklvypl IN (0,1)) CONSTRAINT vy_vyplban_arch_dhp3,
+      CHECK (dopredvaluta IN (0,1)) CONSTRAINT vy_vyplban_arch_dhp4,
+      CHECK (urokbonif IN (0,1)) CONSTRAINT vy_vyplban_arch_dhp5
+  ) LOCK MODE ROW
+  ;
+
+-- 10  vy_vyplban_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vyplban_arch_pk ON vy_vyplban_arch (idarch) ;
+
+-- 11  vy_vyplban_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vyplban_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vyplban_arch_pk;
+
+-- ###############################################################
+--       vy_vyplipb_arch
+
+-- 13  vy_vyplipb_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vyplipb_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplatazp       INTEGER   NOT NULL,
+      castkavypl      DECIMAL(16, 2)  ,
+      expspoj         Integer   NOT NULL,
+      adresat         CHAR(40)  ,
+      prijemce        CHAR(40)  ,
+      varsym          DECIMAL(10,0)  ,
+      obec            CHAR(40)  ,
+      ulice           CHAR(40)  ,
+      psc             CHAR(5)  ,
+      text1           CHAR(20)  ,
+      text2           CHAR(25)  ,
+      opervypl        Integer  ,
+      zdrojser        Integer   NOT NULL,
+      castkapopl      DECIMAL(16, 2)  ,
+      operpopl        Integer  ,
+      castkahal       DECIMAL(16, 2)  ,
+      operhal         Integer  ,
+      zdrojhal        Integer  ,
+      zdrojserhal     Integer   NOT NULL,
+      zdrojpopl       Integer  ,
+      zdrojserpopl    Integer   NOT NULL,
+      kontonahr       DECIMAL(16, 0)  ,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      deltime         DateTime Year to Second,
+      deluser         Char(20)            
+  ) LOCK MODE ROW
+  ;
+
+-- 14  vy_vyplipb_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vyplipb_arch_pk ON vy_vyplipb_arch (idarch) ;
+
+-- 15  vy_vyplipb_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vyplipb_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vyplipb_arch_pk;
+
+-- ###############################################################
+--       vy_vyplkon_arch
+
+-- 18  vy_vyplkon_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vyplkon_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplatazp       INTEGER   NOT NULL,
+      castkavypl      DECIMAL(16, 2)  ,
+      konto           DECIMAL(16, 0)  ,
+      tko             CHAR(2)  ,
+      sko             CHAR(4)  ,
+      varsym          DECIMAL(10,0)  ,
+      text            CHAR(20)  ,
+      opervypl        Integer  ,
+      zdrojser        Integer   NOT NULL,
+      roksp           Integer  ,
+      valuta          DATE  ,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      deltime         DateTime Year to Second,
+      deluser         Char(20)                  
+  ) LOCK MODE ROW
+  ;
+
+-- 19  vy_vyplkon_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vyplkon_arch_pk ON vy_vyplkon_arch (idarch) ;
+
+-- 20  vy_vyplkon_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vyplkon_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vyplkon_arch_pk;
+
+-- ###############################################################
+--       vy_vyplpkl_arch
+
+-- 22  vy_vyplpkl_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vyplpkl_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplatazp       INTEGER   NOT NULL,
+      castkavypl      DECIMAL(16, 2)  ,
+      opervypl        Integer  ,
+      zdrojser        Integer   NOT NULL,
+      castkahal       DECIMAL(16, 2)  ,
+      operhal         Integer  ,
+      zdrojserhal     Integer   NOT NULL,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      deltime         DateTime Year to Second,
+      deluser         Char(20)            
+  ) LOCK MODE ROW
+  ;
+
+-- 23  vy_vyplpkl_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vyplpkl_arch_pk ON vy_vyplpkl_arch (idarch) ;
+
+-- 24  vy_vyplpkl_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vyplpkl_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vyplpkl_arch_pk;
+
+
+-- ###############################################################
+--       vy_vyplpko_arch
+
+-- 26  vy_vyplpko_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vyplpko_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplatazp       INTEGER   NOT NULL,
+      castkavypl      DECIMAL(16, 2)  ,
+      konto           DECIMAL(16, 0)  ,
+      expspoj         Integer   NOT NULL,
+      identos         CHAR(10)  ,
+      nazevos         CHAR(45)  ,
+      opervypl        Integer  ,
+      zdrojser        Integer   NOT NULL,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      deltime         DateTime Year to Second,
+      deluser         Char(20)            
+  ) LOCK MODE ROW
+  ;
+
+-- 27  vy_vyplpko_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vyplpko_arch_pk ON vy_vyplpko_arch (idarch) ;
+
+-- 28  vy_vyplpko_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vyplpko_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vyplpko_arch_pk;
+
+-- ###############################################################
+--       vy_vyplpos_arch
+
+-- 31  vy_vyplpos_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vyplpos_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplatazp       INTEGER   NOT NULL,
+      castkavypl      DECIMAL(16, 2)  ,
+      expspoj         Integer   NOT NULL,
+      pohlavi         Integer  ,
+      ad1             CHAR(45)  ,
+      ad2             CHAR(45)  ,
+      ad3             CHAR(45)  ,
+      ad4             CHAR(45)  ,
+      ad5             CHAR(45)  ,
+      psc             CHAR(5)  ,
+      opervypl        Integer  ,
+      zdrojser        Integer   NOT NULL,
+      castkapopl      DECIMAL(16, 2)  ,
+      operpopl        Integer  ,
+      zdrojserpopl    Integer   NOT NULL,
+      castkahal       DECIMAL(16, 2)  ,
+      operhal         Integer  ,
+      zdrojserhal     Integer   NOT NULL,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      deltime         DateTime Year to Second,
+      deluser         Char(20),            
+      CHECK (pohlavi IN (0,1)) CONSTRAINT vy_vyplpos_arch_dhm1
+  ) LOCK MODE ROW
+  ;
+
+-- 32  vy_vyplpos_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vyplpos_arch_pk ON vy_vyplpos_arch (idarch) ;
+
+-- 33  vy_vyplpos_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vyplpos_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vyplpos_arch_pk;
+
+-- ###############################################################
+--       vy_vypluct_arch
+
+-- 35  vy_vypluct_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vypluct_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplatazp       INTEGER   NOT NULL,
+      castkavypl      DECIMAL(16, 2)  ,
+      ucet            CHAR(9)  ,
+      varsym          DECIMAL(10,0)  ,
+      text            CHAR(20)  ,
+      opervypl        Integer  ,
+      zdrojser        Integer   NOT NULL,
+      joinfeat        Integer DEFAULT 0  NOT NULL,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      deltime         DateTime Year to Second,
+      deluser         Char(20),      
+      CHECK (joinfeat IN (0,1)) CONSTRAINT vy_vypluct_arch_dhmp
+  ) LOCK MODE ROW
+  ;
+
+-- 36  vy_vypluct_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vypluct_arch_pk ON vy_vypluct_arch (idarch) ;
+
+-- 37  vy_vypluct_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vypluct_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vypluct_arch_pk;
+
+-- ###############################################################
+--       vy_vyplzpusob_arch
+
+-- 39  vy_vyplzpusob_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE vy_vyplzpusob_arch (
+      idarch          SERIAL   NOT NULL,
+      vyplatazp       INTEGER   NOT NULL,
+      vyplata         INTEGER   NOT NULL,
+      zpusob          CHAR(1)   NOT NULL,
+      castkazp        DECIMAL(16, 2)  ,
+      proczp          DECIMAL(6, 2)  ,
+      prim            Integer DEFAULT 1  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      deluser   CHAR(20)  DEFAULT USER,
+      deltime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,      
+      CHECK (zpusob  IN ('B','K','L','P','I','R','U','S','H','M')) CONSTRAINT vy_vyplzpusob_arch_dhqv,
+      CHECK (prim IN (0,1)) CONSTRAINT vy_vyplzpusob_arch_dhqy
+  ) LOCK MODE ROW
+  ;
+
+-- 40  vy_vyplzpusob_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX vy_vyplzpusob_arch_pk ON vy_vyplzpusob_arch (idarch) ;
+
+-- 41  vy_vyplzpusob_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE vy_vyplzpusob_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT vy_vyplzpusob_arch_pk;
+
+-- ###############################################################
+--       in_ink_arch
+
+-- 1  in_ink_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE in_ink_arch (
+      idarch          SERIAL   NOT NULL,
+      ink             INTEGER   NOT NULL,
+      zpusob          CHAR(1)  ,
+      stav            CHAR(1)   NOT NULL,
+      castka          DECIMAL(16, 2)  ,
+      mena            CHAR(3)   NOT NULL,
+      kontocr         DECIMAL(16, 0)  ,
+      tkocr           CHAR(2)  ,
+      ucetcr          CHAR(9)  ,
+      varsymcr        DECIMAL(10,0)  ,
+      textcr          CHAR(20)  ,
+      druhop          CHAR(4)  ,
+      valuta          DATE  ,
+      roksp           DATE  ,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL,
+      CHECK (zpusob  IN ('B','K','L','P','I','R','U','S','H','M')) CONSTRAINT in_ink_arch_dhk5
+  ) LOCK MODE ROW
+  ;
+
+-- 2  in_ink_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX in_ink_arch_pk ON in_ink_arch (idarch) ;
+
+-- 3  in_ink_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE in_ink_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT in_ink_arch_pk;
+
+-- ###############################################################
+--       in_inkkon_arch
+
+-- 7  in_inkkon_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE in_inkkon_arch (
+      idarch          SERIAL   NOT NULL,
+      ink             Integer   NOT NULL,
+      castkaink       DECIMAL(16, 2)  ,
+      konto           DECIMAL(16, 0)  ,
+      tko             CHAR(2)  ,
+      sko             CHAR(4)  ,
+      typdluhu        Integer  ,
+      varsym          DECIMAL(10,0)  ,
+      text            CHAR(20)  ,
+      operink         Integer  ,
+      zdrojserink     Integer   NOT NULL,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL
+  ) LOCK MODE ROW
+  ;
+
+-- 8  in_inkkon_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX in_inkkon_arch_pk ON in_inkkon_arch (idarch) ;
+
+-- 9  in_inkkon_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE in_inkkon_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT in_inkkon_arch_pk;
+
+-- ###############################################################
+--       in_inkuct_arch
+
+-- 11  in_inkuct_arch-1/3       [CREATE.TABLE]
+  CREATE TABLE in_inkuct_arch (
+      idarch          SERIAL   NOT NULL,
+      ink             Integer   NOT NULL,
+      castkaink       DECIMAL(16, 2)  ,
+      ucet            CHAR(9)  ,
+      varsym          DECIMAL(10,0)  ,
+      text            CHAR(20)  ,
+      operink         Integer  ,
+      zdrojserink     Integer   NOT NULL,
+      reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+      refuser         CHAR(20) DEFAULT USER  NOT NULL           
+  ) LOCK MODE ROW
+  ;
+
+-- 12  in_inkuct_arch-2/3       [CREATE.INDEX]
+  CREATE unique INDEX in_inkuct_arch_pk ON in_inkuct_arch (idarch) ;
+
+-- 13  in_inkuct_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+  ALTER TABLE in_inkuct_arch
+      ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT in_inkuct_arch_pk;
+
+ROLLBACK WORK;
+
+--End of A40271_RN00246306_1

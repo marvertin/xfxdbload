@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, B132668_RSTS-12352_3
+-- @TC:ONCE: DESCRIPTION = IFRS - účty HUK {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update AC_Ucet_Mat
+set stav = 0
+where ucet in ('226132', '249999', '751999', '753401', '753411', '753421', '753431', '753441', '753451', '754621', '226137');
+
+
+update AC_Ucet_Mat
+set popis = '3_FO_AKCE_ČR'
+  , poznamka = 'Vklady.kl.spl.na pož. 3_FO_náklady_kl.akce_ČR'
+where ucet = '226137';
+
+update AC_Ucet_Mat
+set popis = '1_FO_AKCE_ČR'
+  , poznamka = 'Vklady kl.se splatností 1_FO_náklady_kl.akce_ČR'
+where ucet = '227137';
+
+update AC_Ucet_Mat
+set popis = '2_FO_AKCE_ČR'
+  , poznamka = 'Vklady.kl.s výp. lhůtou 2_FO_náklady_kl.akce_ČR'
+where ucet = '228137';
+
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664903', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_R_JIST-PR', 'Postoupení retail jistina - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664904', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_R_ÚROK-PR', 'Postoupení retail úrok - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664905', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_R_POPL-PR', 'Postoupení retail poplatek - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664906', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_R_POJIS-PR', 'Postoupení retail pojištění - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664913', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_R_JIST-NKR-PR', 'Postoupení retail jistina - nekryté - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664914', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_R_ÚROK-NKR-PR', 'Postoupení retail úrok - nekryté - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664915', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_R_POPL-NKR-PR', 'Postoupení retail poplatek - nekryté - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664916', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_R_POJIS-NKR-PR', 'Postoupení retail pojištění - nekryté - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664923', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_NR_JIST-PR', 'Postoupení non-retail jistina - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664924', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_NR_ÚROK-PR', 'Postoupení non-retail úrok - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664925', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_NR_POPL-PR', 'Postoupení non-retail poplatek - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664926', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_NR_POJIS-PR', 'Postoupení non-retail pojištění - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664933', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_NR_JIST-NKR-PR', 'Postoupení non-retail jistina - nekryté - promlč', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664934', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_NR_ÚROK-NKR-PR', 'Postoupení non-retail úrok - nekryté - promlčené', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664935', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_NR_POPL-NKR-PR', 'Postoupení non-retail poplatek - nekryté - promlč', null, 0, 0);
+insert into AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) values ('664936', 'N', 0, null, null, 1, 1, 0, 1, null, null, 'CZK', 'POST_NR_POJIS-NKR-PR', 'Postoupení non-retail pojištění - nekryté - promlč', null, 0, 0);
+
+
+ROLLBACK WORK;
+
+--End of B132668_RSTS-12352_3

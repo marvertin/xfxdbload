@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B128033_RN00458594_1
+-- @TC:ONCE: DESCRIPTION = RN00458594 - Rozšíření exportů nad úvěrovou smlouvou
+
+
+BEGIN WORK;
+
+alter table eo_exprole_den
+   add statprisl CHAR(2);  
+   
+alter table eu_expsml_den
+   add obchzastskup   Integer,
+   add agenttipico   CHAR(13),
+   add agenttiptyp   CHAR(10),
+   add agenttipskup   Integer,
+   add agentputico   CHAR(13),
+   add agentputtyp   CHAR(10),
+   add agentputskup   Integer,
+   add ozastoverico   CHAR(13),
+   add ozastovertyp   CHAR(10),
+   add ozastoverskup   Integer;   
+   
+ROLLBACK WORK;
+
+--End of B128033_RN00458594_1

@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A41208_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál - zprávy {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE ep_zpravadavka_prot MODIFY (zdroj VARCHAR(10), zrustime DATETIME YEAR TO SECOND);
+
+ALTER TABLE ep_zpravadavka_prot ADD (odesuser   CHAR(20),
+  odestime   DATETIME YEAR TO SECOND);
+  
+ALTER TABLE ep_zprava_kart MODIFY (druh VARCHAR(10), 
+                                   stav VARCHAR(10), 
+                                   platnostod DATETIME YEAR TO SECOND, 
+                                   platnostdo DATETIME YEAR TO SECOND,
+                                   odestime DATETIME YEAR TO SECOND,
+                                   zrustime DATETIME YEAR TO SECOND);
+                                   
+ALTER TABLE ep_zpravareakce_den MODIFY (typ VARCHAR(10));                                   
+
+ROLLBACK;

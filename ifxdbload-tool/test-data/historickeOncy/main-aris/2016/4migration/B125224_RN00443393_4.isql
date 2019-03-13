@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B125224_RN00443393_4
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- M1 - Migrace parametrů v hlavičce uložených modelovacích případů v Sale
+
+--refuser musí být zachován, nechceme aby se tam prdnul ten co provádí migraci
+--na refuserovi záleží, jestli se uložený modelovací případ zobrazí externistovi....
+set triggers for pro_bssimulationcase disabled;
+
+update pro_bssimulationcase
+set resultTosMode = case when resultTosMode = 'N' then 'R' else resultTosMode end
+  , calcsavingseir = 1
+  , calcsavingsrpsn = 1
+  , calccrediteir = 1
+  , calccreditrpsn = 1
+  , calccreditrpsnbrphase = 0
+  , calccreditrpsncrphase  = 0
+;
+
+set triggers for pro_bssimulationcase enabled;
+
+ROLLBACK WORK;
+
+--End of B125224_RN00443393_4

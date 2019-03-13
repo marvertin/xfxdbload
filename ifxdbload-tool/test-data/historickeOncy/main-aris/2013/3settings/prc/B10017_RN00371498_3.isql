@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B10017_RN00371498_3
+-- @TC:ONCE: DESCRIPTION = Velký poèet výjimek {CUSTOMERREQUEST}
+create procedure B10017_RN00371498_3()
+
+define _id int;
+
+  foreach select id into _id from pro_bssimulationcase where reftime < '2013-11-30 13:30:00' --datum uvedení do provozu verze 2013S
+  
+    call MO_SimulCaseDelete(_id);
+  end foreach;
+  
+end procedure;
+--End of B10017_RN00371498_3

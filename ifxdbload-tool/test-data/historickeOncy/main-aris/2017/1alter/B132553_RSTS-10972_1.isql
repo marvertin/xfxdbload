@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B132553_RSTS-10972_1
+-- @TC:ONCE: DESCRIPTION = TF001622 - Problematické zahrnování závazků do výpočtu ÚA, DSTI a DTI {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_platnostzavazku_acis 
+  ADD zahrnsumaci   Integer  DEFAULT 0 BEFORE platnost,
+  ADD CONSTRAINT CHECK (zahrnsumaci IN (0,1)) CONSTRAINT eo_platnostzavazku_acis_d1sq;
+
+ALTER TABLE eo_platnostzavazku_cis 
+  ADD zahrnsumaci   Integer  DEFAULT 0 BEFORE platnost,
+  ADD CONSTRAINT CHECK (zahrnsumaci IN (0,1)) CONSTRAINT eo_platnostzavazku_cis_d1sp;
+
+ROLLBACK WORK;
+
+--End of B132553_RSTS-10972_1

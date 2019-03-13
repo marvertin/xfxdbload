@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B125059_RN00430870_1
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table seu_pokyncerppolozka_mat
+  add poradi integer before refvyplmisto
+;
+
+alter table seu_pokyncerppolozka_arch
+  add poradi integer before refvyplmisto
+;
+
+ROLLBACK WORK;
+
+--End of B125059_RN00430870_1

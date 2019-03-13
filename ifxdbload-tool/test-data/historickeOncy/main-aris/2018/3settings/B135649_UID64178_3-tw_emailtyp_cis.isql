@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135649_UID64178_3-tw_emailtyp_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-17861: Notifikační upozornění – uzavřená smlouva o úvěru {REQUEST}
+
+BEGIN WORK;
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+VALUES ('UVER_POTVR_KLIENT', 'Informace o potvrzení úvěrové smlouvy - klient', 'rsts@rsts.cz', 'RSTS', 'Vaše žádost o úvěr <<CISLO_SS>> byla uzavřena.', 'Vaše úvěrová smlouva č. <<CISLO_SS>> na částku <<VYSE_UVERU>> byla úspěšně uzavřena. Raiffeisen stavební spořitelna ', null, 0, 1, 24, null, null, null, 0, 'A', 0, 1, 1);
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+VALUES ('UVER_POTVR_OZ_INT', 'Informace o potvrzení úvěrové smlouvy - OZ - interní', 'rsts@rsts.cz', 'RSTS', 'Žádost o úvěr <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla uzavřena.', 'Úvěrová smlouva č. <<CISLO_SS>> na částku <<VYSE_UVERU>> pro klienta <<JMENO_PRIJMENI>> byla úspěšně uzavřena. Raiffeisen stavební spořitelna', null, 0, 1, 24, null, null, null, 0, 'A', 0, 1, 1);
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+VALUES ('UVER_POTVR_OZ_EXT', 'Informace o potvrzení úvěrové smlouvy - OZ - externí', 'rsts@rsts.cz', 'RSTS', 'Žádost o úvěr <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla uzavřena.', 'Úvěrová smlouva č. <<CISLO_SS>> na částku <<VYSE_UVERU>> pro klienta <<JMENO_PRIJMENI>> byla úspěšně uzavřena. Raiffeisen stavební spořitelna', null, 0, 1, 24, null, null, null, 0, 'A', 0, 1, 1);
+
+ROLLBACK WORK;
+
+--End of B135649_UID64178_3-tw_emailtyp_cis

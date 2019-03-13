@@ -1,0 +1,95 @@
+CREATE PROCEDURE B135644_UID76209_4_find_D ()
+
+DEFINE _smlouva             DEC(16,0);
+DEFINE _tsml                CHAR(4);
+DEFINE _castka              DEC(16,2);
+DEFINE _realn               INTEGER;
+DEFINE _stadiumifrsPuvodni  INTEGER;
+DEFINE _stadiumifrs         INTEGER;
+DEFINE _prevrealn           INTEGER;
+DEFINE _prevprevrealn       INTEGER;
+DEFINE _pomrealn            INTEGER;
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+BEGIN
+   ON EXCEPTION IN(-310)
+   END EXCEPTION;
+   CREATE TABLE B135644_UID76209_work( realn INT);
+END;
+
+
+--zruseni tabulky pokud jiz existuje
+BEGIN
+   ON EXCEPTION IN(-206)
+   END EXCEPTION;
+  DROP TABLE B135644_UID76209_4;
+END;
+
+--zalozime ridici tabulku
+CREATE TABLE B135644_UID76209_4 (
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  INT,              --číslo chyby, jež na řádku nastala
+  ISAMErr INT,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VARCHAR(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SMALLINT,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  -- vlastní data
+  smlouva       DEC(16,0),
+  tsml          CHAR(4),
+  realn         INT,
+  stadiumifrs   INT,
+  castka        DEC(16,2),
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--  Budou vyhledány všechny úvěrové smlouvy, které mají nenulovou výše OP (rezervy) k příslibu čerpaného úvěru.
+
+-- plneni ridici tabulky
+  FOREACH 
+    SELECT DISTINCT smlouva, tsml INTO _smlouva, _tsml FROM EU_Sml_mat ORDER BY smlouva, tsml
+    
+    SELECT sum(castka * smer)
+    INTO  _castka
+    FROM RU_OPUct_Kart
+    WHERE smlouva = _smlouva
+    AND tsml = _tsml
+    AND typDluhu = 8
+    AND stav = 'C'
+    AND TW_Null0(oper) = 0;
+
+    
+    IF _castka > 0 THEN
+      LET _realn = EP_RealSml (_smlouva, _tsml);
+      IF NOT EXISTS (SELECT 1 FROM B135644_UID76209_work WHERE realn = _realn) THEN
+        IF _realn IS NULL THEN
+          LET _stadiumifrs = 1;
+        ELSE
+          LET _stadiumifrs = RU_OpGetStadiumIfrsStad(_realn);
+        END IF;
+        INSERT INTO B135644_UID76209_4(smlouva, tsml, realn, stadiumifrs, castka, zprac)
+        VALUES(_smlouva, _tsml, _realn, _stadiumifrs, _castka, -1);
+      END IF
+    END IF;
+    
+  END FOREACH;
+
+UPDATE STATISTICS HIGH FOR TABLE B135644_UID76209_4;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+END PROCEDURE;

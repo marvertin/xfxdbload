@@ -1,0 +1,90 @@
+Create Procedure B107362_RN00311507_sled_tran()
+
+-- Migrace sledovaných transakcí
+
+Define _ser like EU_SledTranVym_Den.ser;
+Define _vympohlser like EU_SledTranVym_Den.vympohlser;
+Define _serop like EU_SledTranVym_Den.serop;
+Define _druh like EU_SledTranVym_Den.druh;
+Define _konto like EU_SledTranVym_Den.konto;
+Define _tko like EU_SledTranVym_Den.tko;
+Define _kontoproti like EU_SledTranVym_Den.kontoproti;
+Define _banka like EU_SledTranVym_Den.banka;
+Define _ucet like EU_SledTranVym_Den.ucet;
+Define _typ like EU_SledTranVym_Den.typ;
+Define _castka like EU_SledTranVym_Den.castka;
+Define _datuct like EU_SledTranVym_Den.datuct;
+Define _valuta like EU_SledTranVym_Den.valuta;
+Define _text like EU_SledTranVym_Den.text;
+Define _varsym like EU_SledTranVym_Den.varsym;
+Define _specsym like EU_SledTranVym_Den.specsym;
+Define _reftime like EU_SledTranVym_Den.reftime;
+Define _refuser like EU_SledTranVym_Den.refuser;
+
+Define _int Int;
+Define _textkonto Char(20);
+Define _textproti Char(20);
+Define _newserno Int;  -- serno vytvořené transakce
+Define _newsernosml Int; -- serno objektu typu smlouva sledující transakci
+Define _newsernosnim Int; -- serno vloženého záznamu do EP_ObjSledTran_Mat pro snímek
+Define _smlouva like EU_VymPohl_Mat.smlouva;
+Define _tsml like EU_VymPohl_Mat.tsml;
+Define _cyklus like EU_VymPohl_Mat.cyklus;
+
+Define _snimekvympohlser like EU_SnimekSledTranVym_Den.snimekvympohlser;
+
+Set Triggers For EP_SledTran_Den Disabled;
+Set Triggers For EP_ObjSledTran_Mat Disabled;
+Set Triggers For EP_SnimObjSledTran_Den Disabled;
+
+ForEach
+  Select ser, vympohlser, serop, druh, konto, tko, kontoproti, banka, ucet, typ, castka, datuct, valuta, varsym, specsym, reftime, refuser
+      into _ser, _vympohlser, _serop, _druh, _konto, _tko, _kontoproti, _banka, _ucet, _typ, _castka, _datuct, _valuta, _varsym, _specsym, _reftime, _refuser
+    From EU_SledTranVym_Den
+    Order by ser
+
+  Select smlouva, tsml, cyklus into _smlouva, _tsml, _cyklus From EU_VymPohl_Mat Where ser = _vympohlser;
+
+  If _smlouva is null then -- Ošetření nekonzistentních dat.
+    Continue ForEach;
+  end If;
+
+  Let _int = Case when _typ in ('P', 'T') then 1 else -1 end;
+  Select text, pr_text into _textkonto, _textproti
+    From AO_Obrat_View
+    Where ser = _serop and konto = _konto and tko = _tko and dbcr = _int and (konto <> pr_konto or pr_konto is null);
+
+  Insert into EP_SledTran_Den (serop, druh, konto, tko, kontoproti, banka, ucet, typ, castka, datuct, valuta, textkonto, textproti, varsym, specsym, sledvymah, sledinsolv, reftime, refuser)
+    Values (_serop, _druh, _konto, _tko, _kontoproti, _banka, _ucet, _typ, _castka, _datuct, _valuta, _textkonto, _textproti, _varsym, _specsym, 1, 0, _reftime, _refuser);
+
+  Let _newserno = TW_LastSer();
+
+  Insert into EP_ObjSledTran_Mat (refobjekt, objekttyp, refsledtran, cyklus, platnost, reftime, refuser)
+    Values (_vympohlser, 'SPRVYM', _newserno, _cyklus, 1, _reftime, _refuser);
+
+  Select id into _int From EP_Sml_Mat Where smlouva = _smlouva and tsml = _tsml;
+
+  Insert into EP_ObjSledTran_Mat (refobjekt, objekttyp, refsledtran, cyklus, platnost, reftime, refuser)
+    Values (_int, 'SML', _newserno, null, 1, _reftime, _refuser);
+
+  Let _newsernosml = TW_LastSer();
+  ForEach
+    Select snimekvympohlser, reftime, refuser into _snimekvympohlser, _reftime, _refuser From EU_SnimekSledTranVym_Den Where sledtranvymser = _ser Order by ser
+
+    Select cyklus into _cyklus From EU_SnimekVymPohl_Den Where ser = _snimekvympohlser;
+
+    Insert into EP_ObjSledTran_Mat (refobjekt, objekttyp, refsledtran, cyklus, platnost, reftime, refuser)
+      Values (_snimekvympohlser, 'SNIVYM', _newserno, _cyklus, 1, _reftime, _refuser);
+
+    Let _newsernosnim = TW_LastSer();
+
+    Insert into EP_SnimObjSledTran_Den (Refsledtran, Refobjsledtran, Refobjsledtransml, Platnostsml, Productid, Smlouva, tsml, reftime, refuser)
+      Values (_newserno, _newsernosnim, _newsernosml, 1, _int, _smlouva, _tsml, _reftime, _refuser);
+  end ForEach;
+end ForEach;
+
+Set Triggers For EP_SledTran_Den Enabled;
+Set Triggers For EP_ObjSledTran_Mat Enabled;
+Set Triggers For EP_SnimObjSledTran_Den Enabled;
+
+end Procedure;

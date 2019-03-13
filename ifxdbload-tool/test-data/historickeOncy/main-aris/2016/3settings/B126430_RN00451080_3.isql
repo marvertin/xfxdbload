@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B126430_RN00451080_3
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegDelKey('EA', 'archivace', '*', 'tab_umor');
+call TW_RegDelKey('EA', 'archivace', 'doc_type', 'tab_umor');
+call TW_RegDelKey('EA', 'archivace', '*', 'loader');
+call TW_RegDelKey('EA', 'archivace', '*', 'cekani');
+call TW_RegDelKey('EA', 'archivace', 'doc_type_new', 'tab_umor');
+call TW_RegDelKey('EA', 'archivace', 'annotation_new', 'tab_umor');
+
+ROLLBACK WORK;
+
+--End of B126430_RN00451080_3

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B133743_RSTS-14844_3
+-- @TC:ONCE: DESCRIPTION = Main: problemove nesporiace zmluvy a register maxdodace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO RZ_EOD_Cis(id, description, actiontype, dayreaction, monthreaction, yearreaction)
+  VALUES(71,'Zpracování problémové smlouvy SS', 'P', 'W', 'W', 'W');
+
+ROLLBACK WORK;
+
+--End of B133743_RSTS-14844_3

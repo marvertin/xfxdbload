@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136043_UID80921_1
+-- @TC:ONCE: DESCRIPTION = RSTS-26170: Analyzovat další dopady zavedení více dokladů {TASK}
+
+BEGIN WORK;
+
+ALTER TABLE eo_prukazzmpl_kart ADD prukaz INTEGER BEFORE cisprukaz;
+
+--FK
+CREATE INDEX eo_prukazzmpl_kart_i_f3 ON eo_prukazzmpl_kart(prukaz);
+ALTER TABLE eo_prukazzmpl_kart ADD CONSTRAINT FOREIGN KEY(prukaz) REFERENCES eo_prukaz_mat(prukaz) CONSTRAINT eo_prukazzmpl_kart_f3;
+
+ROLLBACK WORK;
+
+--End of B136043_UID80921_1

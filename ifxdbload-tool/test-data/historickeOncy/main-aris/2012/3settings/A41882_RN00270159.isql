@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A41882_RN00270159
+-- @TC:ONCE: DESCRIPTION = CMZRB {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO eu_pobockycmzrb_cis(nazev, ulice, cpopis, corient, mesto, psc, telefon, fax, email, platnost)
+VALUES ('Poboèka Praha', 'Jeruzalémská', 964, 4, 'Praha 1', '11000', '255721111', '255721584', 'infoAB@cmzrb.cz', 1);
+
+INSERT INTO eu_pobockycmzrb_cis(nazev, ulice, cpopis, corient, mesto, psc, telefon, fax, email, platnost)
+VALUES ('Poboèka Brno', 'Hlinky', 120, 47, 'Brno', '60300', '538702111', '538702110', 'infoBM@cmzrb.cz', 1);
+
+INSERT INTO eu_pobockycmzrb_cis(nazev, ulice, cpopis, corient, mesto, psc, telefon, fax, email, platnost)
+VALUES ('Poboèka Ostrava', 'Pøívozská', 133, 4, 'Ostrava', '70177', '597583111', '597583110', 'infoOV@cmzrb.cz', 1);
+
+INSERT INTO eu_pobockycmzrb_cis(nazev, ulice, cpopis, corient, mesto, psc, telefon, fax, email, platnost)
+VALUES ('Poboèka Hradec Králové', 'Elišèino nábøeží', 777, 3, 'Hradec Králové', '50003', '498774111', '498774110', 'infoHK@cmzrb.cz', 1);
+
+INSERT INTO eu_pobockycmzrb_cis(nazev, ulice, cpopis, corient, mesto, psc, telefon, fax, email, platnost)
+VALUES ('Poboèka Plzeò', 'Bezruèova', 147, 8, 'Plzeò', '30376', '378775111', '378775110', 'infoPM@cmzrb.cz', 1);
+
+
+ROLLBACK;

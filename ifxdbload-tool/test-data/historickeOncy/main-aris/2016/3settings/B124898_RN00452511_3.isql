@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B124898_RN00452511_3
+-- @TC:ONCE: DESCRIPTION = HS: Nedochází k přepočtům dalších nákladů při schválení úvěru {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE EU_TypDalsiNakl_Cis SET algoritmus = 'VYPOCNASLV' WHERE algoritmus = 'A1';
+UPDATE EU_TypDalsiNakl_Cis SET algoritmus = 'VYPOCOVPOD' WHERE algoritmus = 'A2';
+
+ROLLBACK WORK;
+
+--End of B124898_RN00452511_3

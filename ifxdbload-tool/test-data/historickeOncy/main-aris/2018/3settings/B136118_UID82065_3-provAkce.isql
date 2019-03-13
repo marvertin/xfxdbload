@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136118_UID82065_3-provAkce
+-- @TC:ONCE: DESCRIPTION = RSTS-26702: Špatný výpočet uznatelné částky {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, poznamka, platnost) VALUES ('AC', 9, 'Import kurzovního lístku', null, 1);
+
+
+ROLLBACK WORK;
+
+--End of B136118_UID82065_3

@@ -1,0 +1,103 @@
+CREATE function EP_DatRealSml (ADatAkce date, ASmlouva Dec(16,0), ATSml Char(4),
+    ATReal Char(4) DEFAULT NULL, AAktivReal integer DEFAULT 0)
+  returning Int {real};
+
+  define _real Int;
+  define _stav Char(1);
+  define _stavSml Char(1);
+  define _datotev date;
+  define _reftime date;
+  define _reftimeSml date;
+  define _datzadSml date;
+  
+  let _real = null;
+
+-- Zjištìní aktuální realizace ke smlouvì --------------------------------------
+  if ATSml in ('PUSU', 'PFSU', 'PUPO', 'SUFO', 'SUPO', 'KOME', 'PPSU') then
+    foreach
+      SELECT realn, stav, datotev, date(reftime) INTO _real, _stav, _datotev, _reftime
+      FROM RU_Real_Mat WHERE smlouva = ASmlouva AND tsml = ATsml ORDER BY realn DESC
+      --zaznam z matriky realizaci odpovida datu akce
+      if _reftime <= ADatAkce then
+        select stav, date(reftime), datzad into _stavSml, _reftimeSml, _datzadSml from eu_sml_mat where smlouva = ASmlouva and tsml = ATsml;
+        --zaznam z matriky smluv odpovida datu akce a
+        --neni ve stavu A,B,C,D a _datotev >= _datzadSml OR _datotev IS NULL 
+        if _stavsml not in ('A', 'B', 'C', 'D') and (_datotev >= _datzadSml OR _datotev IS NULL) and _reftimeSml <= ADatAkce then
+          if _stav not in ('V', 'Z') then
+            exit foreach;
+          end if;
+          let _real = null;
+        --zaznam z matriky smluv neodpovida datu akce ... projdu archiv
+        elif _reftimeSml > ADatAkce then
+          let _stavSml = null;
+          foreach select stav, date(reftime), datzad into _stavSml, _reftimeSml, _datzadSml from eu_sml_arch where smlouva = ASmlouva and tsml = ATsml and date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavSml is not null and _stavsml not in ('A', 'B', 'C', 'D') and (_datotev >= _datzadSml OR _datotev IS NULL) then
+            if _stav not in ('V', 'Z') then
+              exit foreach;
+            end if;
+            let _real = null;
+          else
+            let _real = null;
+          end if
+        end if;
+      else -- _reftime > ADatAkce
+        let _stav = null;
+        foreach SELECT stav, datotev INTO _stav, _datotev
+                  FROM RU_Real_Arch WHERE realn = _real and date(reftime) <= ADatAkce order by reftime desc
+          exit foreach;        
+        end foreach;
+        if _stav is not null then
+          select stav, date(reftime), datzad into _stavSml, _reftimeSml, _datzadSml from eu_sml_mat where smlouva = ASmlouva and tsml = ATsml;
+          --zaznam z matriky smluv odpovida datu akce a
+          --neni ve stavu A,B,C,D a _datotev >= _datzadSml OR _datotev IS NULL 
+          if _stavsml not in ('A', 'B', 'C', 'D') and (_datotev >= _datzadSml OR _datotev IS NULL) and _reftimeSml <= ADatAkce then
+            if _stav not in ('V', 'Z') then
+              exit foreach;
+            end if;
+            let _real = null;
+          --zaznam z matriky smluv neodpovida datu akce ... projdu archiv
+          elif _reftimeSml > ADatAkce then
+            let _stavSml = null;
+            foreach select stav, date(reftime), datzad into _stavSml, _reftimeSml, _datzadSml from eu_sml_arch where smlouva = ASmlouva and tsml = ATsml and date(reftime) <= ADatAkce order by reftime desc
+              exit foreach;
+            end foreach;
+            if _stavSml is not null and _stavsml not in ('A', 'B', 'C', 'D') and (_datotev >= _datzadSml OR _datotev IS NULL) then
+              if _stav not in ('V', 'Z') then
+                exit foreach;
+              end if;
+              let _real = null;
+            else
+              let _real = null;
+            end if
+          end if;
+        else
+          let _real = null;
+        end if;
+      end if;
+    end foreach;
+  elif (ATSml in ('SSFO', 'SSPO')) then
+    SELECT realn INTO _real FROM RS_Real_Mat WHERE smlouva = ASmlouva AND tsml = ATSml and date(reftime) <= ADatAkce;
+    if _real is null then
+      foreach 
+        SELECT realn INTO _real FROM RS_Real_Arch 
+          WHERE smlouva = _smlouva AND tsml = _tsml and date(reftime) <= ADatAkce 
+          ORDER BY reftime desc
+        exit foreach;
+      end foreach;
+    end if;
+  elif (ATSml = 'BZFO') then
+    SELECT realn INTO _real FROM rb_real_mat WHERE smlouva = ASmlouva AND tsml = ATSml and date(reftime) <= ADatAkce;
+    if _real is null then
+      foreach 
+        SELECT realn INTO _real FROM RB_Real_Arch 
+          WHERE smlouva = _smlouva AND tsml = _tsml and date(reftime) <= ADatAkce 
+          ORDER BY reftime desc
+        exit foreach;
+      end foreach;
+    end if;
+  end if;
+
+  return _real;
+end function

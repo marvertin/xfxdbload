@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136389_UID85746_1
+-- @TC:ONCE: DESCRIPTION = RSTS-29049: IFRS - vektorové OP {ACCEPTATION_DEFECT}
+
+BEGIN WORK;
+
+alter table ep_splexpozice_den 
+  add obdobido   datetime year to day before vyseexpozice
+;
+
+ROLLBACK WORK;
+
+--End of B136389_UID85746_1

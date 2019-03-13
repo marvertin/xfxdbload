@@ -1,0 +1,56 @@
+-- @TC:ONCE: ID = V2, B123920_RN00420292_1
+-- @TC:ONCE: DESCRIPTION = Vytvoření návrhu vypořádání úvěru po jeho splacení. {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE vy_kontaktneklucet_cis (
+  id   SERIAL NOT NULL,
+  konto   DECIMAL(16, 0) NOT NULL,
+  banka   DECIMAL(7, 0) NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  majitel   VARCHAR(255) NOT NULL,
+  poznamka   VARCHAR(255),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT vy_kontaktneklucet_cis_doca
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX vy_kontaktneklucet_cis_pk ON vy_kontaktneklucet_cis(id);
+ALTER TABLE vy_kontaktneklucet_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT vy_kontaktneklucet_cis_pk;
+
+--FK
+CREATE INDEX vy_kontaktneklucet_cis_i_f1 ON vy_kontaktneklucet_cis(banka);
+ALTER TABLE vy_kontaktneklucet_cis ADD CONSTRAINT FOREIGN KEY(banka) REFERENCES ac_bank_cis(bankanum) CONSTRAINT vy_kontaktneklucet_cis_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX vy_kontaktneklucet_cis_u1 ON vy_kontaktneklucet_cis(konto,banka);
+ALTER TABLE vy_kontaktneklucet_cis ADD CONSTRAINT (UNIQUE (konto,banka) CONSTRAINT vy_kontaktneklucet_cis_u1);
+
+CREATE TABLE vy_kontaktneklucet_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  konto   DECIMAL(16, 0) NOT NULL,
+  banka   DECIMAL(7, 0) NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  majitel   VARCHAR(255) NOT NULL,
+  poznamka   VARCHAR(255),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT vy_kontaktneklucet_acis_doca
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX vy_kontaktneklucet_acis_pk ON vy_kontaktneklucet_acis(idarch);
+ALTER TABLE vy_kontaktneklucet_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT vy_kontaktneklucet_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B123920_RN00420292_1

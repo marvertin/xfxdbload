@@ -1,0 +1,115 @@
+create PROCEDURE B128045_RSTS_2620_makess_D (-- vstupni paramtery
+                              ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _smlspor      Dec(16,0);
+define _tsmlspor     Char(4);
+define _datukon      Date;
+define _kontoss      Dec(16,0);
+define _tkoss        Char(2);
+  
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_2620', 'MOU_makess', 'Migrace vklad.kalendářů a opakovaného salda');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  smlspor,  tsmlspor
+   INTO  _ser, _smlspor, _tsmlspor
+   FROM RSTS_2620_VklOcSaldo
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulky
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS_2620_VklOcSaldo
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)  
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    let _datukon = (SELECT MAX(datuzav) 
+                      FROM RU_Real_Mat 
+                     WHERE smlouva IN (SELECT smlouva from EU_Sml_Mat WHERE smlspor = _smlspor and tsmlspor = _tsmlspor) 
+                       AND tsml IN (SELECT tsml from EU_Sml_Mat WHERE smlspor = _smlspor and tsmlspor = _tsmlspor)
+                       AND treal in ('PUFO','PUPO')
+                   );       
+    
+    --Pokud existují platné intervaly vkladového kalendáře, systém u nich nastaví Datum do na datum ukončení realizace PÚ
+    UPDATE ES_VkladKIn_Mat set  datdo = _datukon
+     WHERE smlouva = _smlspor and tsml = _tsmlspor and stav = 'A' and ((datdo IS NULL OR datdo > _datukon) and datod <= _datukon);
+
+    --neexistuje zadna otevrena realizace k dane smlouve
+    IF NOT EXISTS ( SELECT 1 FROM RU_Real_Mat
+                     WHERE smlouva  in (SELECT smlouva from eu_sml_mat WHERE smlspor = _smlspor and tsmlspor = _tsmlspor) 
+                       AND tsml     in (SELECT tsml from eu_sml_mat WHERE smlspor = _smlspor and tsmlspor = _tsmlspor)  
+                       AND stav NOT IN ('V','Z','P') ) THEN
+                   
+       --Pokud je sledováno očekávané saldo na kontě spoření, tak jeho sledování zneplatní
+       LET _kontoss,_tkoss = EP_KontoTkoSml (_smlspor, _tsmlspor); 
+       UPDATE AC_OcSaldo_Den SET platnost = 0 WHERE konto = _kontoss and tko = _tkoss;
+
+    END IF    
+        
+    --nastaví příznak zpracováno na 1
+    UPDATE RSTS_2620_VklOcSaldo SET zprac = 1, datukonpu = _datukon, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

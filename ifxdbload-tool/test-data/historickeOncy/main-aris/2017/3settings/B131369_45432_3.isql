@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B131369_45432_3
+-- @TC:ONCE: DESCRIPTION = OPRAVA: RSTS-8715_REAL: smlspor
+
+
+BEGIN WORK;
+
+UPDATE eu_sml_mat SET smlspor = NULL, tsmlspor = NULL WHERE tsml='KOME' AND smlspor IS NOT NULL;
+    
+ROLLBACK WORK;
+
+--End of B131369_45432_3

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B115241_RN00392676_4
+-- @TC:ONCE: DESCRIPTION = Nemovitosti 2. fáze: odhadci a black list {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO EP_RizSubjekt_Mat(reftyp, hodnota1, hodnota2, platnost) 
+  SELECT TW_RegGetKey('EP', 'rizsubjekt', 'typ', 'nezadouciodhadce'), znalecid, trim(EO_GetCeleJmeno(titulpred, jmeno, prijmeni, titulza, 1)), 1 
+    FROM EO_Znalec_Cis 
+    WHERE platnost = 1 AND nezadouci = 1 
+    ORDER BY znalecid;
+
+ROLLBACK WORK;
+
+--End of B115241_RN00392676_4

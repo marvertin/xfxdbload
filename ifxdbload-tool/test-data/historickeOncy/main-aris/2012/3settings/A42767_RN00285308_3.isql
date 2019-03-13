@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A42767_RN00285308_3
+-- @TC:ONCE: DESCRIPTION = Nelze provést manuální parametrizaci registru JE/LD/*/securityCredentials {DEFECT}
+
+BEGIN WORK;
+
+  UPDATE tw_registr_cis
+     SET lzeeditovat = 1
+   WHERE oblast='JE' AND uloha='LD' AND funkce='*' AND udaj='securityCredentials'; 
+
+ROLLBACK WORK;
+
+--End of A42767_RN00285308_3

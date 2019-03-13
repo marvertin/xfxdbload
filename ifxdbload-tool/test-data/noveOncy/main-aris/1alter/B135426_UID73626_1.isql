@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135426_UID73626_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22675: Výkonnost: Optimalizovat proceduru SEP_RozpracovanePozadavky {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+CREATE INDEX seu_pokyncerp_mat_i1 ON seu_pokyncerp_mat(smlouva,tsml);
+
+ROLLBACK WORK;
+
+--End of B135426_UID73626_1

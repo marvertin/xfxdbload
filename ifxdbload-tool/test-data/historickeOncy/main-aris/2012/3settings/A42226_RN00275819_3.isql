@@ -1,0 +1,73 @@
+-- @TC:ONCE: ID = V2, A42226_RN00275819_3
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ss', 'mimor_vypis_zpopl',
+        1,
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný zpoplatnìný výpis z konta typu SS');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ps', 'mimor_vypis_zpopl',
+        51,
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný zpoplatnìný výpis z konta typu PS');
+
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca', 'mimor_vypis_zpopl',
+        401,
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný zpoplatnìný výpis z konta typu CA');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ss', 'mimor_vypis',
+        2,
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný nezpoplatnìný výpis z konta typu SS');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ps', 'mimor_vypis',
+        52,
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný nezpoplatnìný výpis z konta typu PS');
+
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca', 'mimor_vypis',
+        402,
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný nezpoplatnìný výpis z konta typu CA');
+
+call tw_regsetoraddkey(
+        'EO','ENVIRONMENT','VZTAHYOS','STATUTARNIZASTUPCE',
+        'SZ',
+        1,
+        'Osoby',
+        'Vztahy mezi osobami',
+        'Definice vztahù mezi osobami',
+        'Typ vztahu mezi osobami pro statutárního zástupce PO');
+
+ROLLBACK WORK;
+
+--End of A42226_RN00275819_3

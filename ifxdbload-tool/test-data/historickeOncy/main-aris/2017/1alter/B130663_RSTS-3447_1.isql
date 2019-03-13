@@ -1,0 +1,51 @@
+-- @TC:ONCE: ID = V2, B130663_RSTS-3447_1
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_finsit_arch
+    ADD osobadapfo      DECIMAL(16,2)  ,
+    ADD partnerdapfo    DECIMAL(16,2)  ,
+    ADD osobadappo      DECIMAL(16,2)  ,
+    ADD partnerdappo    DECIMAL(16,2)  ,
+    ADD hranicedsti     DECIMAL(6, 2)  ,
+    ADD pomersplatekprijmu DECIMAL(16,2)  ,
+    ADD splnenodsti     Integer DEFAULT 0  NOT NULL,
+    ADD pomerdluhuprijmu DECIMAL(16,2)  ,
+    ADD hranicedti      DECIMAL(6, 2)  ,
+    ADD splnenodti      Integer DEFAULT 0  NOT NULL,
+    ADD aktuvermimorsts DECIMAL(16,2)  ,
+    ADD aktuverursts    DECIMAL(16,2)  ,
+    ADD splnenminprijemej Integer DEFAULT 0  NOT NULL,
+    ADD mesvydajepreszm DECIMAL(16,2);
+    
+ALTER TABLE eo_finsit_arch
+    ADD CONSTRAINT CHECK (splnenodti IN (0,1)) CONSTRAINT eo_finsit_arch_d1wf,
+    ADD CONSTRAINT CHECK (splnenodsti IN (0,1)) CONSTRAINT eo_finsit_arch_d1wc,
+    ADD CONSTRAINT CHECK (splnenminprijemej IN (0,1)) CONSTRAINT eo_finsit_arch_d1wi;
+
+ALTER TABLE eo_finsit_mat
+    ADD osobadapfo      DECIMAL(16,2)  ,
+    ADD partnerdapfo    DECIMAL(16,2)  ,
+    ADD osobadappo      DECIMAL(16,2)  ,
+    ADD partnerdappo    DECIMAL(16,2)  ,
+    ADD hranicedsti     DECIMAL(6, 2)  ,
+    ADD pomersplatekprijmu DECIMAL(16,2)  ,
+    ADD splnenodsti     Integer DEFAULT 0  NOT NULL,
+    ADD pomerdluhuprijmu DECIMAL(16,2)  ,
+    ADD hranicedti      DECIMAL(6, 2)  ,
+    ADD splnenodti      Integer DEFAULT 0  NOT NULL,
+    ADD aktuvermimorsts DECIMAL(16,2)  ,
+    ADD aktuverursts    DECIMAL(16,2)  ,
+    ADD splnenminprijemej Integer DEFAULT 0  NOT NULL,
+    ADD mesvydajepreszm DECIMAL(16,2);
+
+ALTER TABLE eo_finsit_mat
+    ADD CONSTRAINT CHECK (splnenodti IN (0,1)) CONSTRAINT eo_finsit_mat_d1w0,
+    ADD CONSTRAINT CHECK (splnenodsti IN (0,1)) CONSTRAINT eo_finsit_mat_d1vx,
+    ADD CONSTRAINT CHECK (splnenminprijemej IN (0,1)) CONSTRAINT eo_finsit_mat_d1w4;
+
+ROLLBACK WORK;
+
+--End of B130663_RSTS-3447_1

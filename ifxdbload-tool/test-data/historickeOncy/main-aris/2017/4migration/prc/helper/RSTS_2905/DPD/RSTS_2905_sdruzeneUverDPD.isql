@@ -1,0 +1,42 @@
+CREATE PROCEDURE RSTS_2905_sdruzeneUverDPD(ARealn     INT,
+                                           ADatUzav   DATE,
+                                           ALogovat   INT DEFAULT 0)
+
+  DEFINE _realuv            int;
+  DEFINE _reals             int;
+  DEFINE _poradi            int;
+  DEFINE _datvyhodnoceni    date;     
+  DEFINE _typvyhodnoceni    char(1);
+  DEFINE _currentdpd        int;
+  DEFINE _maxdpd            int;
+  DEFINE _totaldpd          int;
+  DEFINE _nesplaccastka     dec(16, 2);
+  DEFINE _datprvvyhodnoceni     date;
+  DEFINE _datprvvyhodnoceniOld  date;
+  DEFINE _id                    INT;      
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'SdruzeneUverDPD'); END IF;
+  
+  LET _datprvvyhodnoceniOld = NULL;
+  FOREACH c1 WITH HOLD FOR
+    SELECT id, datprvvyhodnoceni INTO _id, _datprvvyhodnoceni 
+    FROM rsts_2905_dpdevid 
+    WHERE
+      realuv = ARealn AND
+      typvyhodnoceni = 'S'
+    ORDER BY 
+      datprvvyhodnoceni DESC   
+    
+    IF(_datprvvyhodnoceniOld IS NOT NULL) THEN
+      UPDATE rsts_2905_dpdevid SET datvyhodnoceni = _datprvvyhodnoceniOld - 1 
+      WHERE id = _id;
+    ELSE
+      UPDATE rsts_2905_dpdevid SET datvyhodnoceni = NVL(ADatUzav, AP_DatProv()) 
+      WHERE id = _id;  
+    END IF;
+    
+    LET _datprvvyhodnoceniOld = _datprvvyhodnoceni;
+  END FOREACH 
+    
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;  
+END PROCEDURE;

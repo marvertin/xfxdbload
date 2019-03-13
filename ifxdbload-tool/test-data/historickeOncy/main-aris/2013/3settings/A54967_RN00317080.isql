@@ -1,0 +1,50 @@
+-- @TC:ONCE: ID = V2, A54967_RN00317080
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Žádost - základ
+
+BEGIN WORK;
+
+update eu_ucel_cis set verejnynazev = 'Pøevod èlenských práv k družstvenímu bytu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 1;
+update eu_ucel_cis set nabizetprouz = 0, typzadost= 'O' where ucel = 70;
+update eu_ucel_cis set nabizetprouz = 0, typzadost= 'O' where ucel = 71;
+update eu_ucel_cis set nabizetprouz = 0, typzadost= 'O' where ucel = 72;
+update eu_ucel_cis set verejnynazev = 'Výstavba bytu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 111;
+update eu_ucel_cis set verejnynazev = 'Stavební úpravy nebytového prostoru na byt', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 112;
+update eu_ucel_cis set verejnynazev = 'Výstavba domu - døevostavba', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 115;
+update eu_ucel_cis set verejnynazev = 'Výstavba domu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 116;
+update eu_ucel_cis set verejnynazev = 'Výstavba domu na cizím pozemku', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 117;
+update eu_ucel_cis set verejnynazev = 'Koupì stavebního pozemku', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 118;
+update eu_ucel_cis set verejnynazev = 'Koupì nebytového objektu-zmìna užívání', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 120;
+update eu_ucel_cis set verejnynazev = 'Koupì bytu do osobního vlastnictví', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 121;
+update eu_ucel_cis set verejnynazev = 'Koupì bytu do osobního vlastnictví-privatizace', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 122;
+update eu_ucel_cis set verejnynazev = 'Úhrada èlenského podílu družstva', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 123;
+update eu_ucel_cis set verejnynazev = 'Úhrada èlenského podílu družstva-privatizace  ', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 124;
+update eu_ucel_cis set verejnynazev = 'Koupì bytu do osobního vlastnictví-developer', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 125;
+update eu_ucel_cis set verejnynazev = 'Koupì domu do osobního vlastnictví', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 126;
+update eu_ucel_cis set verejnynazev = 'Koupì domu do osobního vlastnictví-developer', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 127;
+update eu_ucel_cis set verejnynazev = 'Koupì pozemku pod stavbou', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 128;
+update eu_ucel_cis set verejnynazev = 'Koupì objektu nezapsaného jako bydlení obsahujícímu byt', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 129;
+update eu_ucel_cis set verejnynazev = 'Modernizace/údržba bytu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'B' where ucel = 131;
+update eu_ucel_cis set verejnynazev = 'Zmìna stavby, stavební úpravy-SVJ', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'D' where ucel = 132;
+update eu_ucel_cis set verejnynazev = 'Modernizace/údržba domu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'D' where ucel = 136;
+update eu_ucel_cis set verejnynazev = 'Úhrada podílu na úpravì spoleèných èástí domu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'D' where ucel = 137;
+update eu_ucel_cis set verejnynazev = 'Ostatní', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 140;
+update eu_ucel_cis set verejnynazev = 'Odložený úèel', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 141;
+update eu_ucel_cis set verejnynazev = 'Úhrada závazku u nebankovního subjektu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 150;
+update eu_ucel_cis set verejnynazev = 'Úhrada závazku u banky', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 151;
+update eu_ucel_cis set verejnynazev = 'Úhrada závazku u Raiffeisenbank', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 152;
+update eu_ucel_cis set verejnynazev = 'Vypoøádání SJM', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 153;
+update eu_ucel_cis set verejnynazev = 'Zúžení SJM', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 154;
+update eu_ucel_cis set verejnynazev = 'Vypoøádání dìdictví', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 155;
+update eu_ucel_cis set verejnynazev = 'EKO - výstavba bytu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 1110;
+update eu_ucel_cis set verejnynazev = 'EKO-stavební úpravy nebytového prostoru na byt', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 1120;
+update eu_ucel_cis set verejnynazev = 'EKO-výstavba domu - døevostavba', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 1150;
+update eu_ucel_cis set verejnynazev = 'EKO-výstavba domu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 1160;
+update eu_ucel_cis set verejnynazev = 'EKO-výstavba domu na cizím pozemku', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'V' where ucel = 1170;
+update eu_ucel_cis set verejnynazev = 'Získání bytu, stavby pro bydlení dražbou', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'K' where ucel = 1201;
+update eu_ucel_cis set verejnynazev = 'Splacení investièního úvìru v bytovém družstvu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'O' where ucel = 1231;
+update eu_ucel_cis set verejnynazev = 'EKO-modernizace/údržba bytu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'B' where ucel = 1310;
+update eu_ucel_cis set verejnynazev = 'EKO-modernizace/údržba domu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'D' where ucel = 1360;
+update eu_ucel_cis set verejnynazev = 'EKO-úhrada podílu na úpravì spoleèných èástí domu', nabizetprouz = 1, nabizetod=mdy(1,1,2013), typzadost= 'D' where ucel = 1370;
+
+    
+ROLLBACK WORK;

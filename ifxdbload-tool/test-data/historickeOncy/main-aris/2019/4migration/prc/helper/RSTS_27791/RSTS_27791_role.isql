@@ -1,0 +1,133 @@
+create procedure RSTS_27791_role(AOs Int, ASmlouvaSS Dec(16,0), ASmlouvaUv Dec(16,0), ATypVyhodnoceni Char(1))
+-- příprava pomocné evidence s rolemi pro vytvoření skupin smluv dle rolí
+-- skupina = smlouvy dané osoby pro vyhodnocení spoření a úvěrů; do skupiny nebudeme počítat zadanou smlouvu
+--           úvěry, kde je osoba v roli KL, MK, PR pro vyhodnocení osob
+define _os Int;
+define _typrole Char(2);
+define _smlouva Dec(16,0);
+define _typ Char(4);
+define _stav Char(1);
+define _smlouvaSS Dec(16,0);
+define _smlouvaUv Dec(16,0);
+define _datpor Date;
+define _datukon Date;
+define _klient Int;
+
+define _os1 Int;
+define _os2 Int;
+define _reftime Datetime Year to Second;
+define _reftimeold Datetime Year to Second;
+
+
+DELETE FROM RSTS_27791_role_Tmp;
+
+if ATypVyhodnoceni in ('D', 'L') then
+  foreach
+    SELECT r.os, r.typrole, r.smlouva, r.typ, r.stav, EXTEND(r.portime, Year to Day)
+    INTO _os, _typrole, _smlouva, _typ, _stav, _datpor
+    FROM EO_Role_Mat r
+    WHERE r.os = AOs AND r.typrole = 'KL' AND r.stav IN ('A', 'U') AND r.smlouva NOT IN (NVL(ASmlouvaSS,0), NVL(ASmlouvaUv,0))
+    
+    let _smlouvaSS, _smlouvaUv, _datukon = null, null, null;
+    
+    if _typ IN ('SSFO', 'SSPO') then
+      let _smlouvaSS = _smlouva;
+      foreach
+        SELECT smlouva INTO _smlouvaUv FROM EU_Sml_Mat WHERE smlspor = _smlouva AND tsmlspor = _typ ORDER BY poradi DESC
+        exit foreach;
+      end foreach;
+  
+    else
+      let _smlouvaUv = _smlouva;
+      SELECT smlspor INTO _smlouvaSS FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _typ;
+    end if;
+    
+    if _stav = 'U' then
+      let _datukon = EO_GetDatUkoncRole(_os, _smlouva, _typ, _typrole);
+    end if;
+    
+    INSERT INTO RSTS_27791_role_Tmp(os, typrole, smlouvass, smlouvauv, datpor, datukon)
+    VALUES(_os, _typrole, _smlouvaSS, _smlouvaUv, _datpor, _datukon);
+  end foreach;
+
+elif ATypVyhodnoceni = 'P' then
+  -- role
+  foreach
+    SELECT r.os, r.typrole, r.smlouva, r.typ, r.stav, EXTEND(r.portime, Year to Day)
+    INTO _os, _typrole, _smlouva, _typ, _stav, _datpor
+    FROM EO_Role_Mat r
+    WHERE r.os = AOs AND r.typrole IN ('KL', 'MK', 'PR') AND r.stav IN ('A', 'U')
+    
+    let _smlouvaSS, _smlouvaUv, _datukon = null, null, null;
+    
+    if _typ IN ('SSFO', 'SSPO') then
+      let _smlouvaSS = _smlouva;
+      foreach
+        SELECT smlouva INTO _smlouvaUv FROM EU_Sml_Mat WHERE smlspor = _smlouva AND tsmlspor = _typ ORDER BY poradi DESC
+        exit foreach;
+      end foreach;
+  
+    else
+      let _smlouvaUv = _smlouva;
+      SELECT smlspor INTO _smlouvaSS FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _typ;
+    end if;
+    
+    if _stav = 'U' then
+      let _datukon = EO_GetDatUkoncRole(_os, _smlouva, _typ, _typrole);
+    end if;
+    
+    -- u role přistupitele si zjistíme klienta příslušné smlouvy
+    let _klient = null;
+    if _typrole = 'PR' then
+      let _klient = EP_KlientSml(_smlouva, _typ);
+    end if;
+    
+    INSERT INTO RSTS_27791_role_Tmp(os, typrole, smlouvass, smlouvauv, datpor, datukon, klient)
+    VALUES(_os, _typrole, _smlouvaSS, _smlouvaUv, _datpor, _datukon, _klient);
+  end foreach;
+  
+  -- rodinné vztahy
+  foreach
+    SELECT os1, os2, NVL(datplatnostod, EXTEND(portime, Year to Day)), datplatnostdo, stav
+    INTO _os1, _os2, _datpor, _datukon, _stav
+    FROM EO_VztahOs_Mat
+    WHERE (os1 = AOs OR os2 = AOs) AND typvztah = 'RP' AND stav IN ('A', 'D') AND vztahrod = TW_RegGetKey('EO', 'vztahyOs', 'typyRodVztahu', 'druzka')
+    
+    if _stav = 'D' and _datukon is null then
+      let _reftimeold = null;
+      foreach
+        SELECT reftime, stav
+        INTO _reftime, _stav
+        FROM EO_VztahOs_Arch
+        WHERE os1 = _os1 AND os2 = _os2 AND typvztah = 'RP'
+        ORDER BY reftime DESC, ser DESC
+        
+        if _stav <> 'D' then
+          let _datukon = EXTEND(_reftimeold, Year to Day);
+          exit foreach;
+        end if;
+        
+        let _reftimeold = _reftime;
+      end foreach;
+    end if;
+    
+    if AOs = _os1 then
+      let _os = _os2;
+    else
+      let _os = _os1;
+    end if;
+
+    INSERT INTO RSTS_27791_vztah_Tmp(os, datpor, datukon)
+    VALUES(_os, _datpor, _datukon);
+  end foreach;
+end if;
+
+-- údaje realizací pro úvěrové smlouvy
+DELETE FROM RSTS_27791_real_Tmp;
+
+INSERT INTO RSTS_27791_real_Tmp(realn, smlouva, konto, tko, datotev, datuzav)
+SELECT realn, smlouva, konto, tko, datotev, datuzav
+FROM RU_Real_Mat
+WHERE smlouva IN (SELECT smlouvauv FROM RSTS_27791_role_Tmp) AND tko = 'CA';
+
+end procedure;

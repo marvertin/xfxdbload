@@ -1,0 +1,18 @@
+create procedure B136155_UID82795_4_otazka()
+
+define _serno Int;
+define _typodpoved Char(15);
+
+foreach
+  SELECT serno INTO _serno FROM eu_otazkarozhod_cis WHERE typodpoved IS NULL
+  
+  SELECT MIN(typodpoved) INTO _typodpoved FROM eu_odpovedrozhod_cis WHERE serno IN (SELECT refodpovedrozhod FROM eu_vazbarozhod_cis WHERE refotazkarozhod = _serno);
+  
+  if _typodpoved = 'DEFTEXT' then
+    let _typodpoved = 'RADIOBUTTON';
+  end if;
+  
+  UPDATE eu_otazkarozhod_cis SET typodpoved = _typodpoved WHERE serno = _serno;
+end foreach;
+
+end procedure;

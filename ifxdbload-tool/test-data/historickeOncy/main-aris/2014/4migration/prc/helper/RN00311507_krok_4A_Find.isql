@@ -1,0 +1,94 @@
+create procedure RN00311507_krok_4A_Find()
+-- vytvoření tabulky pronapojení záznamu insolvence na informaci o důvěryhodnosti
+define _os              Int;
+define _sernoinsolv     Int;
+define _datzahajeni     Date;
+define _infotyp         Int;
+define _info            Int;
+define _serno           Int;
+
+BEGIN WORK;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_4A_log;
+end;
+
+-- logovací tabulka (problémy, informace, ...)
+CREATE TABLE RN00311507_krok_4A_log(
+  Ser Int, -- seriál z RN00311507_krok_2_insolv
+  text Varchar(255)
+)LOCK MODE ROW;
+
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_4A;
+end;
+
+CREATE TABLE RN00311507_krok_4A(
+  Ser               Serial NOT NULL,  --číslo řádku
+  NumErr            Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr           Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr           VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac             SmallInt default -1,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  os                Int,
+  sernoinsolv       Int,
+  info              Int,
+  datzahajeni       Date,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+-- naplníme řící tabulku migrace - krok 4A
+let _infotyp = tw_reggetkey('EO','CREDIBILITY','informationtype','insolvence');
+
+foreach
+  SELECT  refosoba,  serno, datzahajeni, serno
+    INTO _os, _sernoinsolv,_datzahajeni,_serno
+    FROM EP_Insolvence_Mat ORDER BY refosoba, datzahajeni
+    
+  -- hledáme info o důvěryhodnosti:
+  -- a)jejíž datum je shodné s datem zahájení insolvenčního řízení a která zároveň nemá evidovanou vazbu na jiné insolvenční řízení
+  let _info = null;
+  foreach
+    SELECT info INTO _info
+      FROM eo_infoduvos_mat WHERE os = _os and infotyp = _infotyp and platnost = 1 and datum = _datzahajeni
+     ORDER BY info
+     
+    if not exists(SELECT 1 FROM ep_insolvence_mat WHERE refinfoduv = _info and serno <> _serno)
+     and not exists(SELECT 1 FROM RN00311507_krok_4A WHERE info = _info and sernoinsolv <> _serno) then
+      exit foreach;
+    end if
+    let _info = null;
+  end foreach
+  
+  -- b) pokud taková informace neexistuje, pak s nejmenším datem, která zároveň nemá evidovanou vazbu na jiné insolvenční řízení
+  if _info is null then
+    foreach
+      SELECT info INTO _info
+        FROM eo_infoduvos_mat WHERE os = _os and infotyp = _infotyp and platnost = 1
+       ORDER BY datum, info
+       
+      if not exists(SELECT 1 FROM ep_insolvence_mat WHERE refinfoduv = _info and serno <> _serno)
+        and not exists(SELECT 1 FROM RN00311507_krok_4A WHERE info = _info and sernoinsolv <> _serno) then
+        exit foreach;
+      end if
+    let _info = null;
+    end foreach
+  end if
+  
+  -- c) pokud taková informace o důvěryhodnosti neexistuje, pak systém vytvoří novou informaci o důvěryhodnosti
+  if _info is null then
+    let _info = -1; -- příznak k vytvoření nové informace
+  end if 
+  
+  INSERT INTO RN00311507_krok_4A(os, sernoinsolv, info, datzahajeni) VALUES(_os,_sernoinsolv,_info,_datzahajeni);
+end foreach
+
+COMMIT WORK;
+
+end procedure;

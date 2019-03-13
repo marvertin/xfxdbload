@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, B110509_RN00384526_VOP_cis
+-- @TC:ONCE: DESCRIPTION = Rozšíření číselníku VOP o atribut “Příznak existence litery SIS” {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE es_vop_cis ADD literasis smallint   DEFAULT 0 NOT NULL;
+ALTER TABLE es_vop_acis ADD literasis smallint    DEFAULT 0 NOT NULL;
+
+ROLLBACK WORK;
+--End of B110509_RN00384526_VOP_cis

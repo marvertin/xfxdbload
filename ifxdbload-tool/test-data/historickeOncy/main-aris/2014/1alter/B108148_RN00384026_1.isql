@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B108148_RN00384026_1
+-- @TC:ONCE: DESCRIPTION = nevyplněné datum splatnosti {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE PRO_BridgeLoanVariant 
+  ADD platnost   INT DEFAULT 1;
+
+ROLLBACK WORK;
+
+--End of B108148_RN00384026_1

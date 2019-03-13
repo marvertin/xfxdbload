@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A61874_RN00335314_5
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  -- #Výše úhrady za vedení úètu za skuteènì vedené dny#
+  call TW_RegDelKey('EP','UHR','vypocet','veductdny');
+  
+  -- #Úhrada poplatku za uzavøení smlouvy pøi schválení smlouvy#
+  call TW_RegDelKey('EU', '*', 'popuzsm', 'stavdl');
+  
+  -- #Výše poplatku pro stupeò upomínky specifických podmínek#:
+  call TW_RegDelKey('EU', 'remspco', '1' , 'popl');
+  call TW_RegDelKey('EU', 'remspco', '2' , 'popl');
+  call TW_RegDelKey('EU', 'remspco', '3' , 'popl');
+  call TW_RegDelKey('EU', 'remspco', '4' , 'popl');
+  call TW_RegDelKey('EU', 'remspco', '5' , 'popl');
+
+ROLLBACK WORK;
+
+--End of A61874_RN00335314_5

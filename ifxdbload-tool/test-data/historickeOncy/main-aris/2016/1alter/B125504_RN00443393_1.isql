@@ -1,0 +1,64 @@
+-- @TC:ONCE: ID = V2, B125504_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE EU_ExpSml_Den
+
+  -- Celkové náklady souhrnné (dle CF)
+  add celknakldlecfschv   DECIMAL(16, 2),
+  add celknakldlecf       DECIMAL(16, 2),
+  
+  -- Celková výše úvěru souhrnná (pro ESIP)
+  add celkvyseuveruesipschv DECIMAL(16, 2),
+  add celkvyseuveruesip     DECIMAL(16, 2),
+  
+  -- Počet vkladů SS při PÚ
+  add   pocvklsspuschv  Integer,
+  add   pocvklsspu      Integer,
+  
+  -- RPSN PÚ
+  add rpsnpuschv  DECIMAL(6, 2),
+  add rpsnpu      DECIMAL(6, 2),
+  
+  -- RPSN SÚ
+  add rpsnsuschv  DECIMAL(6, 2),
+  add rpsnsu      DECIMAL(6, 2),
+  
+  -- Celkové náklady PÚ (dle CF)
+  add celknaklpudlecfschv DECIMAL(16, 2),
+  add celknaklpudlecf     DECIMAL(16, 2),
+  
+  -- Celkové náklady SÚ (dle CF)
+  add celknaklsudlecfschv DECIMAL(16, 2),
+  add celknaklsudlecf     DECIMAL(16, 2),
+  
+  -- Celková zaplacená částka PÚ (dle CF)
+  add celkzaplpudlecfschv DECIMAL(16, 2),
+  add celkzaplpudlecf     DECIMAL(16, 2),
+  
+  -- Celková zaplacená částka SÚ (dle CF)
+  add celkzaplsudlecfschv DECIMAL(16, 2),
+  add celkzaplsudlecf     DECIMAL(16, 2),
+  
+  -- Celková výše PÚ (pro ESIP)
+  add celkvysepuesipschv  DECIMAL(16, 2),
+  add celkvysepuesip      DECIMAL(16, 2),
+  
+  -- Celková výše SÚ (pro ESIP)
+  add celkvysesuesipschv  DECIMAL(16, 2),
+  add celkvysesuesip      DECIMAL(16, 2),
+  
+  -- Suma nákladů spojených s úvěrem mimo RSTS pro PÚ (dle CF)
+  add sumanakluvermimopudlecfschv DECIMAL(16, 2),
+  add sumanakluvermimopudlecf     DECIMAL(16, 2),
+  
+  -- Suma nákladů spojených s úvěrem mimo RSTS pro SÚ (dle CF)
+  add sumanakluvermimosudlecfschv DECIMAL(16, 2),
+  add sumanakluvermimosudlecf     DECIMAL(16, 2);
+
+ROLLBACK WORK;
+
+--End of B125504_RN00443393_1

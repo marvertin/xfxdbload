@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A61829_RN00335314_1
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table pro_fee
+
+    DROP savingAccMaintenanceFee
+  , DROP savingAccStatementFee
+  , DROP bridgeLoanAccContractionFee
+  , DROP bridgeLoanAccMaintenanceFee
+  , DROP bridgeLoanAccStatementFee
+  , DROP creditAccContractionFee
+  , DROP creditAccMaintenanceFee
+  , DROP creditAccStatementFee
+  , DROP changedVopSavingAccMaintenanceFee
+  , DROP changedVopSavingAccStatementFee
+;
+
+ROLLBACK WORK;
+
+--End of A61829_RN00335314_1

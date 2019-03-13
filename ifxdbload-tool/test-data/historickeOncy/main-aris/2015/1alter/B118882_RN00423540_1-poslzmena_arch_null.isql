@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, B118882_RN00423540_1-poslzmena_arch_null
+-- @TC:ONCE: DESCRIPTION = opraveny once - chyba {DEFECT}
+BEGIN WORK;
+
+alter table ev_indexcen_arch modify poslzmena smallint;
+
+ROLLBACK WORK;
+--End of B118882_RN00423540_1-poslzmena_arch_null

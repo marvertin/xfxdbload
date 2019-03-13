@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A41053_RN00273329_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní pole Daòová úspora do výsledkù pøi modelování úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+
+ROLLBACK WORK;
+
+--End of A41053_RN00273329_1

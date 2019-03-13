@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, B126709_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+    CREATE TABLE eu_expesipisk_den (
+      id_index    Integer NOT NULL,
+      smlouva     DECIMAL(16, 0) NOT NULL,
+      tsml        CHAR(4) NOT NULL,
+      odbod       datetime YEAR TO MONTH,
+      odbdo       datetime YEAR TO MONTH,
+      faze        CHAR(1),
+      poradi      Integer,
+      typobdobi   CHAR(1),
+      typradku    Integer,
+      popis       CHAR(255),
+      vysecerp    DECIMAL(16,2),
+      ursazba     DECIMAL(6, 2),
+      platby      DECIMAL(16,2),
+      nakladybanka      DECIMAL(16,2),
+      urok        DECIMAL(16,2),
+      jistina     DECIMAL(16,2),
+      nakladymimobanka  DECIMAL(16,2),
+      vynos       DECIMAL(16,2),
+      zustnespljist     DECIMAL(16,2),
+      zustnesplurnakl   DECIMAL(16,2),
+      usporsp     DECIMAL(16,2),
+      typsazby    char(2)
+    );
+
+CREATE INDEX eu_expesipisk_den_i1 ON eu_expesipisk_den(id_index);
+
+ROLLBACK WORK;
+
+--End of B126709_RN00451080_1

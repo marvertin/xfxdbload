@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135909_UID57405_1
+-- @TC:ONCE: DESCRIPTION = RSTS-14468: Zjednotiť datové typy v tabulkách {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+alter table EU_PrumernaSazba_Cis  modify sazba dec(5, 2) not null;
+
+ROLLBACK WORK;
+
+--End of B135909_UID57405_1

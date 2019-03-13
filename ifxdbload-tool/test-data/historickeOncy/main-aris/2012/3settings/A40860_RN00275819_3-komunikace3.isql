@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, A40860_RN00275819_3-komunikace3
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, platnost)
+  VALUES('AUTORIZACE', 'Typ SMS používaný pro autorizaci', 'Autorizaèní kód pro provedení akce <<TYP_AKCE>>je <<KOD>>. RSTS.', 0, 1);
+  
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, platnost)
+  VALUES('OBNOVA_HESLA', 'Typ SMS používaný pro obnovu hesla', 'Jednorázové heslo pro obnovu pøístupu je <<HESLO>>, po pøihlášení je nutné heslo zmìnit. RSTS.', 0, 1);
+  
+  
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, platnost)
+  VALUES('REGISTRACNI', 'Typ SMS používaný pro registraci nových klientù', 'Vaše registraèní heslo do systému CIBIS-Web je <<HESLO>>, po pøihlášení je nutné heslo zmìnit. RSTS.', 0, 1);
+
+
+  --#Typ SMS pro autorizaci#
+  call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'autorizace', 'AUTORIZACE',0);
+  
+  --#Typ SMS pro obnovu hesla#
+  call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'obnova', 'OBNOVA_HESLA',0);
+  
+  --#Typ SMS pro registraci#
+  call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'obnova', 'REGISTRACNI', 0);
+
+ROLLBACK WORK;
+

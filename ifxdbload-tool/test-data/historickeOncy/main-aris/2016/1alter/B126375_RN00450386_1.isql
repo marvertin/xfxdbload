@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B126375_RN00450386_1
+-- @TC:ONCE: DESCRIPTION = paralelní spuštění akce  BD_PRIntConf {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call tw_execSql('DROP TABLE BD_PRPotUrPrep_Kart;', -206);
+call tw_execSql('DROP TABLE BD_PRPotUr_Kart;'    , -206);
+call tw_execSql('DROP TABLE BD_PRPotUrErr_Kart;' , -206); 
+
+ROLLBACK WORK;
+
+--End of B126375_RN00450386_1

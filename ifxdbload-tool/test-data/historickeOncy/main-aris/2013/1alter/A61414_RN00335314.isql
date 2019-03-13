@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A61414_RN00335314
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_uhr_kart
+    ADD serpravidlo     INTEGER   BEFORE reftime;
+
+CREATE INDEX ep_uhr_kart_i_f1 ON ep_uhr_kart (serpravidlo) ;
+
+ALTER TABLE ep_uhr_kart
+    ADD CONSTRAINT FOREIGN KEY (serpravidlo) REFERENCES ep_uhrpravidlo_cis(pravidlo)  CONSTRAINT ep_uhr_kart_f1;
+
+ROLLBACK WORK;
+
+--End of A61414_RN00335314

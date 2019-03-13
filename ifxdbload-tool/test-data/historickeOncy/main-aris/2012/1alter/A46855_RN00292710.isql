@@ -1,0 +1,51 @@
+-- @TC:ONCE: ID = V2, A46855_RN00292710
+-- @TC:ONCE: DESCRIPTION = Rozšíøit evidenci osob o položku oslovování pøíjmení
+
+BEGIN WORK;
+
+ALTER TABLE eo_fo_arch
+    ADD osloveni        CHAR(35);
+
+ALTER TABLE eo_fo_mat
+    ADD osloveni        CHAR(35);
+
+CREATE TABLE eo_osloveni_acis (
+    idarch          SERIAL   NOT NULL,
+    prijmeni        CHAR(35)   NOT NULL,
+    osloveni        CHAR(35)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    platnost        Integer  ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_osloveni_acis_deu8
+) LOCK MODE ROW;
+
+CREATE unique INDEX eo_osloveni_acis_pk ON eo_osloveni_acis (idarch) ;
+
+ALTER TABLE eo_osloveni_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eo_osloveni_acis_pk;
+
+CREATE TABLE eo_osloveni_cis (
+    prijmeni        CHAR(35)   NOT NULL,
+    osloveni        CHAR(35)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    platnost        Integer  ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_osloveni_cis_deu0
+) LOCK MODE ROW;
+
+
+CREATE unique INDEX eo_osloveni_cis_pk ON eo_osloveni_cis (prijmeni) ;
+
+ALTER TABLE eo_osloveni_cis
+    ADD CONSTRAINT PRIMARY KEY (prijmeni)  CONSTRAINT eo_osloveni_cis_pk;
+
+
+ROLLBACK WORK;
+
+--End of A46855_RN00292710

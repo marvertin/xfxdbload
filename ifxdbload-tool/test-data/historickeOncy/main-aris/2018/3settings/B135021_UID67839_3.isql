@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, B135021_UID67839_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19701: Notifikace o zpracování žádosti v CIBIS-Central {STORY}
+
+BEGIN WORK;
+
+insert into eo_notifikaceudalost_cis (udalost, nazev, platnost)
+  values ('UverZamitRegKlient', 'Zamít. úvěru dle ext. reg. (klient)', 1)
+;
+insert into eo_notifikace_cis (idudalost, idzpusob, platnost)
+ values ((select id from eo_notifikaceudalost_cis where udalost = 'UverZamitRegKlient')
+  , (select id from eo_notifikacezpusob_cis where zpusob = 'EMAIL'), 1)
+;
+insert into eo_notifikace_cis (idudalost, idzpusob, platnost)
+ values ((select id from eo_notifikaceudalost_cis where udalost = 'UverZamitRegKlient')
+  , (select id from eo_notifikacezpusob_cis where zpusob = 'SMS'), 1)
+;
+--------------------------------------
+insert into eo_notifikaceudalost_cis (udalost, nazev, platnost)
+  values ('UverZamitRegOZ', 'Zamít. úvěru dle ext. reg. (OZ)', 1)
+;
+insert into eo_notifikace_cis (idudalost, idzpusob, platnost)
+ values ((select id from eo_notifikaceudalost_cis where udalost = 'UverZamitRegOZ')
+  , (select id from eo_notifikacezpusob_cis where zpusob = 'EMAIL'), 1)
+;
+insert into eo_notifikace_cis (idudalost, idzpusob, platnost)
+ values ((select id from eo_notifikaceudalost_cis where udalost = 'UverZamitRegOZ')
+  , (select id from eo_notifikacezpusob_cis where zpusob = 'SMS'), 1)
+;
+--------------------------------------
+insert into eo_notifikaceudalost_cis (udalost, nazev, platnost)
+  values ('UverRkPrehodnocOZ', 'Přehodnocení rizikové kontroly (OZ)', 1)
+;
+insert into eo_notifikace_cis (idudalost, idzpusob, platnost)
+ values ((select id from eo_notifikaceudalost_cis where udalost = 'UverRkPrehodnocOZ')
+  , (select id from eo_notifikacezpusob_cis where zpusob = 'EMAIL'), 1)
+;
+insert into eo_notifikace_cis (idudalost, idzpusob, platnost)
+ values ((select id from eo_notifikaceudalost_cis where udalost = 'UverRkPrehodnocOZ')
+  , (select id from eo_notifikacezpusob_cis where zpusob = 'SMS'), 1)
+;
+
+ROLLBACK WORK;
+
+--End of B135021_UID67839_3

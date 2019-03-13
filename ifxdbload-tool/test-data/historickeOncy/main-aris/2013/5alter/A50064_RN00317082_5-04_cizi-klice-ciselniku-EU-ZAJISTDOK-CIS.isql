@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_5-04_cizi-klice-ciselniku-EU-ZAJISTDOK-CIS
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CREATE INDEX eu_zajistdok_cis_i_f1 ON eu_zajistdok_cis(dok);
+ALTER TABLE eu_zajistdok_cis ADD CONSTRAINT FOREIGN KEY(dok) REFERENCES do_typdokumentu_cis(doktyp) CONSTRAINT eu_zajistdok_cis_f1;
+
+CREATE INDEX eu_zajistdok_cis_i_f2 ON eu_zajistdok_cis(zajist);
+ALTER TABLE eu_zajistdok_cis ADD CONSTRAINT FOREIGN KEY(zajist) REFERENCES eu_zajist_cis(zajist) CONSTRAINT eu_zajistdok_cis_f2;
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_5-04_cizi-klice-ciselniku-EU-ZAJISTDOK-CIS

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B133086_RSTS-3441_3
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU','dodatky','zruseni','podpisOdm', 2, 1, 'Úvěr', 'Dodatky', 'Zrušení dodatku', 'Dodatky – id důvodu zrušení dodatku při nastavení podpisu - odmítnuto');
+ROLLBACK WORK;
+
+--End of B133086_RSTS-3441_3

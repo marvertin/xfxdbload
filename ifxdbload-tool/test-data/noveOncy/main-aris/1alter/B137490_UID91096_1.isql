@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B137490_UID91096_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31849: Přepočet modelu pro expozici při změně (RBI) {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ru_real_mat 
+  ADD zneplvypocetsplat   Integer  DEFAULT 0,
+  ADD CONSTRAINT CHECK (zneplvypocetsplat IN (0,1)) CONSTRAINT ru_real_mat_dcx0;
+
+
+ALTER TABLE ru_real_arch
+  ADD zneplvypocetsplat   Integer  DEFAULT 0,
+  ADD CONSTRAINT CHECK (zneplvypocetsplat IN (0,1)) CONSTRAINT ru_real_arch_dcx1;
+
+
+ROLLBACK WORK;
+
+--End of B137490_UID91096_1

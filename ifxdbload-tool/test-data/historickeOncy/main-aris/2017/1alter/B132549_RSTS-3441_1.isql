@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, B132549_RSTS-3441_1
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení
+
+
+BEGIN WORK;
+
+ALTER TABLE EU_ExpDodatekZajist_Den
+  ADD smlspor dec(16,0) BEFORE smlouva,
+  ADD tsmlspor char(4) BEFORE smlouva;
+
+ALTER TABLE EU_ExpDodatekUcel_Den
+  ADD smlspor dec(16,0) BEFORE smlouva,
+  ADD tsmlspor char(4) BEFORE smlouva;
+
+ALTER TABLE EU_ExpDodatekSpecPodm_Den
+  ADD smlspor dec(16,0) BEFORE smlouva,
+  ADD tsmlspor char(4) BEFORE smlouva;
+
+drop index eu_expdodatekzajist_den_pk;
+
+alter table eu_expdodatekzajist_den drop constraint eu_expdodatekzajist_den_pk;
+
+CREATE  INDEX eu_expdodatekzajist_den_pk ON eu_expdodatekzajist_den (id_index, id_poradi) ;
+
+drop index eu_expdodatekucel_den_pk;
+
+alter table eu_expdodatekucel_den drop constraint eu_expdodatekucel_den_pk;
+
+CREATE  INDEX eu_expdodatekucel_den_pk ON eu_expdodatekucel_den (id_index, id_poradi) ;
+
+drop index eu_expdodatekspecpodm_den_pk;
+
+alter table eu_expdodatekspecpodm_den drop constraint eu_expdodatekspecpodm_den_pk;
+
+CREATE  INDEX eu_expdodatekspecpodm_den_pk ON eu_expdodatekspecpodm_den (id_index, id_poradi) ;
+
+
+
+
+ROLLBACK WORK;
+
+--End of B132549_RSTS-3441_1
+

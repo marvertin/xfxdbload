@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B126746_RN00451080_5
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+drop procedure if exists EU_VytvorUmorTab;
+drop procedure if exists EU_VytvorUmorTab_T;
+
+ROLLBACK WORK;
+
+--End of B126746_RN00451080_5

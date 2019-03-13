@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B134739_UID62483_3
+-- @TC:ONCE: DESCRIPTION = Rozšířit vlastnosti sazebníku úhrad a slev o LTV a datum souhlasu klienta {STORY}
+
+BEGIN WORK;
+
+INSERT INTo ep_uhrvlastnost_enum (vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) 
+                          VALUES (55, 'Datum souhlasu klienta', 'DATE',0,1,0);
+
+INSERT INTO ep_uhrvlastnost_enum (vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) 
+                          VALUES (56, 'LTV', 'DECIMAL(16,2)',0,1,0);
+ROLLBACK WORK;
+
+--End of B134739_UID62483_3

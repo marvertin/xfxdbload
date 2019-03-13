@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A46856_RN00292710
+-- @TC:ONCE: DESCRIPTION = Rozšíøit evidenci osob o položku oslovování pøíjmení
+
+BEGIN WORK;
+
+ALTER TABLE eo_fozmpl_kart
+    ADD osloveni        CHAR(35);
+
+ROLLBACK WORK;
+
+--End of A46855_RN00292710
+    

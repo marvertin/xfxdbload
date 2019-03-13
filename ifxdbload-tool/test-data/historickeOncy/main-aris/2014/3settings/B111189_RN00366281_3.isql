@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B111189_RN00366281_3
+-- @TC:ONCE: DESCRIPTION = Úmrtí klienta podle nového občanského zákoníku {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKeyD('EP', 'zakon', '89_2012', 'platnostod', mdy(1,1,2014), 1, 'Podpora pro produkt', '', 'Obecné', 'Datum platnosti zákona č. 89/2012 Sb. (NOZ)');
+
+ROLLBACK WORK;
+
+--End of B111189_RN00366281_3

@@ -1,0 +1,75 @@
+-- @TC:ONCE: ID = V2, B131878_36779-registry_3
+-- @TC:ONCE: DESCRIPTION = IMPL: číselníky OP, parametrizace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'D_VUFO', 'JISTINA', '662401', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUFO a D krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'N_VUFO', 'JISTINA', '662401', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUFO a N krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'D_VUFO', 'UROKBE', '662402', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUFO a D krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'N_VUFO', 'UROKBE', '662402', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUFO a N krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'D_VUFO', 'POPLATEK', '662901', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUFO a D krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'N_VUFO', 'POPLATEK', '662901', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUFO a N krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'D_VUFO', 'POJISTENI', '662902', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUFO a D krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'N_VUFO', 'POJISTENI', '662902', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUFO a N krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'D_VUPO', 'JISTINA', '662701', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUPO a D krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'N_VUPO', 'JISTINA', '662701', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUPO a N krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'D_VUPO', 'UROKBE', '662702', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUPO a D krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'N_VUPO', 'UROKBE', '662702', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUPO a N krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'D_VUPO', 'POPLATEK', '662921', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUPO a D krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'N_VUPO', 'POPLATEK', '662921', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUPO a N krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'D_VUPO', 'POJISTENI', '662922', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUPO a D krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'N_VUPO', 'POJISTENI', '662922', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUPO a N krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'O_VUFO', 'JISTINA', '664401', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUFO a O krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'O_VUFO', 'UROKBE', '664402', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUFO a O krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'O_VUFO', 'POPLATEK', '664901', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUFO a O krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'O_VUFO', 'POJISTENI', '664902', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUFO a O krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'O_VUPO', 'JISTINA', '664701', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUPO a O krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'O_VUPO', 'UROKBE', '664702', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUPO a O krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'O_VUPO', 'POPLATEK', '664921', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUPO a O krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'O_VUPO', 'POJISTENI', '664922', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUPO a O krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'P_VUFO', 'JISTINA', '662903', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUFO a P krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'P_VUFO', 'UROKBE', '662904', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUFO a P krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'P_VUFO', 'POPLATEK', '662905', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUFO a P krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'P_VUFO', 'POJISTENI', '662906', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUFO a P krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'P_VUPO', 'JISTINA', '662923', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUPO a P krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'P_VUPO', 'UROKBE', '662924', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUPO a P krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'P_VUPO', 'POPLATEK', '662925', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUPO a P krytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlKrytyOP', 'P_VUPO', 'POJISTENI', '662926', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUPO a P krytý OP');
+
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'D_VUFO', 'JISTINA', '662491', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUFO a D nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'N_VUFO', 'JISTINA', '662491', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUFO a N nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'D_VUFO', 'UROKBE', '662492', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUFO a D nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'N_VUFO', 'UROKBE', '662492', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUFO a N nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'D_VUFO', 'POPLATEK', '662911', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUFO a D nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'N_VUFO', 'POPLATEK', '662911', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUFO a N nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'D_VUFO', 'POJISTENI', '662912', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUFO a D nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'N_VUFO', 'POJISTENI', '662912', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUFO a N nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'D_VUPO', 'JISTINA', '662791', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUPO a D nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'N_VUPO', 'JISTINA', '662791', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUPO a N nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'D_VUPO', 'UROKBE', '662792', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUPO a D nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'N_VUPO', 'UROKBE', '662792', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUPO a N nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'D_VUPO', 'POPLATEK', '662931', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUPO a D nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'N_VUPO', 'POPLATEK', '662931', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUPO a N nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'D_VUPO', 'POJISTENI', '662932', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUPO a D nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'N_VUPO', 'POJISTENI', '662932', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUPO a N nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'O_VUFO', 'JISTINA', '664491', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUFO a O nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'O_VUFO', 'UROKBE', '664492', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUFO a O nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'O_VUFO', 'POPLATEK', '664911', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUFO a O nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'O_VUFO', 'POJISTENI', '664912', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUFO a O nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'O_VUPO', 'JISTINA', '664791', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUPO a O nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'O_VUPO', 'UROKBE', '664792', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUPO a O nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'O_VUPO', 'POPLATEK', '664931', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUPO a O nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'O_VUPO', 'POJISTENI', '664932', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUPO a O nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'P_VUFO', 'JISTINA', '662913', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUFO a P nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'P_VUFO', 'UROKBE', '662914', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUFO a P nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'P_VUFO', 'POPLATEK', '662915', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUFO a P nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'P_VUFO', 'POJISTENI', '662916', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUFO a P nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'P_VUPO', 'JISTINA', '662933', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis JISTINA, VUPO a P nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'P_VUPO', 'UROKBE', '662934', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis UROKBE, VUPO a P nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'P_VUPO', 'POPLATEK', '662935', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POPLATEK, VUPO a P nekrytý OP');
+call TW_RegSetOrAddKey('RU', 'odppohlNekrytyOP', 'P_VUPO', 'POJISTENI', '662936', 1, 'Úvěr', 'Odpis pohledávek', 'Odpis pohledávek', 'Účet pro odpis POJISTENI, VUPO a P nekrytý OP');
+
+ROLLBACK WORK;
+
+--End of B131878_36779-registry_3

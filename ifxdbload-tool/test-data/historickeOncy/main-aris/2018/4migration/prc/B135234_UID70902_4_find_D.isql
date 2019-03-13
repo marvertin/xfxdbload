@@ -1,0 +1,73 @@
+CREATE PROCEDURE B135234_UID70902_4_find_D ()
+
+define _ser          Int;
+
+define _smlouva Dec(16,0);
+define _tsml Char(4);
+define _sazbabepu Dec(5,2);
+define _sazbabe Dec(5,2);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE B135234_UID70902;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE B135234_UID70902(
+  Ser     Serial NOT NULL,  
+  NumErr  Int,              
+  ISAMErr Int,              
+  TextErr VarChar(255),     
+  zprac   SmallInt,
+
+  smlouva Dec(16,0),
+  tsml    Char(4),
+  sazbabepu Dec(5,2),
+  sazbabe Dec(5,2),
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+foreach cc2 with hold for
+  SELECT smlouva, tsml, sazbabepu, sazbabe
+  INTO _smlouva, _tsml, _sazbabepu, _sazbabe
+  FROM EU_Sml_Mat
+  WHERE stav IN ('B', 'C', 'D', 'L')
+  
+  -- naplnění řídící tabulky
+  INSERT INTO B135234_UID70902(smlouva, tsml, sazbabepu, sazbabe, zprac)
+  VALUES(_smlouva, _tsml, _sazbabepu, _sazbabe, -1);
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE B135234_UID70902;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;--end of B135234_UID70902_4_find_D

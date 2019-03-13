@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B121403_RN00415479_1
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE EP_ExpSplSporModH_Den
+    ADD sprokcerpanieir DECIMAL(16,2),
+    ADD spnaslrokcerpanieir DECIMAL(16,2),
+    ADD manvymaztokyeir    Integer,
+    ADD manvymazcashfloweir Integer,
+    ADD sprokcerpanirpsn DECIMAL(16,2),
+    ADD spnaslrokcerpanirpsn DECIMAL(16,2),
+    ADD manvymaztokyrpsn    Integer,
+    ADD manvymazcashflowrpsn Integer;
+
+ROLLBACK WORK;
+
+--End of B121403_RN00415479_1

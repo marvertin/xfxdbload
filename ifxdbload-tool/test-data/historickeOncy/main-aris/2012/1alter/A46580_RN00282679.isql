@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, A46580_RN00282679
+-- @TC:ONCE: DESCRIPTION = Výzva a pøevod do vymáhání bez ukonèení spoøení
+
+BEGIN WORK;
+
+ALTER TABLE ru_vyzvah_kart
+    ADD poplfaze1       Integer DEFAULT 0  NOT NULL,
+    ADD poplfaze2       Integer DEFAULT 0  NOT NULL;
+
+ALTER TABLE ru_vyzvah_kart
+    ADD CONSTRAINT CHECK (poplfaze2 IN (0,1)) CONSTRAINT ru_vyzvah_kart_db47,
+    ADD CONSTRAINT CHECK (poplfaze1 IN (0,1)) CONSTRAINT ru_vyzvah_kart_db46;
+
+ALTER TABLE ru_vyzva_kart
+    ADD poplzapocten    Integer DEFAULT 0  NOT NULL;
+
+ALTER TABLE ru_vyzva_kart
+    ADD CONSTRAINT CHECK (poplzapocten IN (0,1)) CONSTRAINT ru_vyzva_kart_db48;
+
+ROLLBACK WORK;

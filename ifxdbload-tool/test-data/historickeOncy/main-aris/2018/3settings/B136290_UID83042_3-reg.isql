@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B136290_UID83042_3-reg
+-- @TC:ONCE: DESCRIPTION = RSTS-27243: Potřeba zachovat při odpisu sankční úroky {REQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'odppohl', 'D', 'stopurokBE', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'D', 'stopurokSA', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+
+call TW_RegSetOrAddKey('RU', 'odppohl', 'O', 'stopurokBE', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'O', 'stopurokSA', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+
+call TW_RegSetOrAddKey('RU', 'odppohl', 'P', 'stopurokBE', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'P', 'stopurokSA', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+
+call TW_RegSetOrAddKey('RU', 'odppohl', 'N', 'stopurokBE', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'N', 'stopurokSA', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+
+call TW_RegSetOrAddKey('RU', 'odppohl', 'X', 'stopurokBE', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'X', 'stopurokSA', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Ukončit úročení při odpisu pro <typ odpisu> a <charakter úroku>');
+
+call TW_RegSetOrAddKey('RU', 'odppohl', 'D', 'stornourok', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční úroky při odpisu <typ odpisu>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'O', 'stornourok', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční úroky při odpisu <typ odpisu>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'P', 'stornourok', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční úroky při odpisu <typ odpisu>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'N', 'stornourok', '0', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční úroky při odpisu <typ odpisu>');
+call TW_RegSetOrAddKey('RU', 'odppohl', 'X', 'stornourok', '1', 0, 'Úvěr', 'Odpis pohledávek k úvěru', 'Deprecation of Credit Receivables', 'Stornovat sankční úroky při odpisu <typ odpisu>');
+
+ROLLBACK WORK;
+
+--End of B136290_UID83042_3-reg

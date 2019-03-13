@@ -1,0 +1,80 @@
+CREATE PROCEDURE B136300_UID82380_4_find_D ()
+
+define _ser          Int;
+
+define _os           Int;
+define _pobytmf      Char(1);
+define _pobytinterni Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE B136300_UID82380;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE B136300_UID82380(
+  Ser               Serial NOT NULL,  
+  NumErr            Int,              
+  ISAMErr           Int,              
+  TextErr           VarChar(255),     
+  zprac             SmallInt,
+  
+  os                Int,
+  pobytmf           Char(1),
+  pobytinterni      Int,
+  
+
+  PRIMARY    KEY(Ser)
+)LOCK MODE ROW;
+
+foreach cc2 with hold for
+  SELECT os INTO _os
+    FROM eo_osoba_mat
+   WHERE stav = 'A' and typos = 'F'
+  
+  -- zjistím aktuální pobyt dle MF
+  let _pobytmf = (SELECT pobyt FROM sp_ospobyttyp_mat
+                   WHERE os = _os and platnost = 1
+                     and poradi = (SELECT max(poradi) FROM sp_ospobyttyp_mat WHERE os = _os and platnost = 1));
+  
+  let _pobytinterni = DECODE(_pobytmf, 'X', 1, 'Y', 2, '1', 3, '2', 5, '3', 6, '4', 7, null);
+  
+  -- naplnění řídící tabulky
+  if _pobytinterni is not null then
+    INSERT INTO B136300_UID82380 (os, pobytmf, pobytinterni, zprac)
+      VALUES(_os,_pobytmf,_pobytinterni, -1);
+  end if
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE B136300_UID82380;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;--end of B136300_UID82380_4_find_D

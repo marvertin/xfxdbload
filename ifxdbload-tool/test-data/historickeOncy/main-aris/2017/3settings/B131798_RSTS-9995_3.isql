@@ -1,0 +1,58 @@
+-- @TC:ONCE: ID = V2, B131798_RSTS-9995_3
+-- @TC:ONCE: DESCRIPTION = ENN_dvoják neukládá u obou smluv {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into tw_typobjserno_cis(tabulka, nazev, platnost) 
+values ('wsnv_uversmlnavrh_mat ', 'Návrh na vklad/výmaz práva do KN pro ÚS', 1)
+;
+
+INSERT INTO DO_TypDokumentuTypObjektu_Cis (idtyptyp
+, doktyp
+, tabulka, uzivatelskypristup, platnost
+, explicitgener, platnostod
+) VALUES ( (select NVL(MAX(idtyptyp),0)+1 from DO_TypDokumentuTypObjektu_Cis)
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na vklad práva do KN FO')
+, 'wsnv_uversmlnavrh_mat', 'NEPRISTUPNY', 1
+, 0, MDY(1,1,2017)
+)
+;
+
+INSERT INTO DO_TypDokumentuTypObjektu_Cis (idtyptyp
+, doktyp
+, tabulka, uzivatelskypristup, platnost
+, explicitgener, platnostod
+) VALUES ( (select NVL(MAX(idtyptyp),0)+1 from DO_TypDokumentuTypObjektu_Cis)
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na výmaz práva do KN FO')
+, 'wsnv_uversmlnavrh_mat', 'NEPRISTUPNY', 1
+, 0, MDY(1,1,2017)
+)
+;
+
+INSERT INTO DO_TypDokumentuTypObjektu_Cis (idtyptyp
+, doktyp
+, tabulka, uzivatelskypristup, platnost
+, explicitgener, platnostod
+) VALUES ( (select NVL(MAX(idtyptyp),0)+1 from DO_TypDokumentuTypObjektu_Cis)
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na vklad práva do KN PO')
+, 'wsnv_uversmlnavrh_mat', 'NEPRISTUPNY', 1
+, 0, MDY(1,1,2017)
+)
+;
+
+INSERT INTO DO_TypDokumentuTypObjektu_Cis (idtyptyp
+, doktyp
+, tabulka, uzivatelskypristup, platnost
+, explicitgener, platnostod
+) VALUES ( (select NVL(MAX(idtyptyp),0)+1 from DO_TypDokumentuTypObjektu_Cis)
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na výmaz práva do KN PO')
+, 'wsnv_uversmlnavrh_mat', 'NEPRISTUPNY', 1
+, 0, MDY(1,1,2017)
+)
+;
+
+
+ROLLBACK WORK;
+
+--End of B131798_RSTS-9995_3

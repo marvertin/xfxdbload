@@ -1,0 +1,58 @@
+-- @TC:ONCE: ID = V2, A42511_RN00282021
+-- @TC:ONCE: DESCRIPTION = Znovuzavedeni popisu zrusenych registru
+
+BEGIN WORK;
+
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Finanèní úèetnictví'),idfunkcionalita = TW_RegGetIDFunkcionalita('Úèetní jádro'),
+idskupina = TW_RegGetIDSkupina('Archiving'), nazev = 'Hranice archivace otevøených kont' 
+where oblast = 'AC' and        uloha = '*' and funkce = '*' and udaj = 'maxopenarch';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Platební styk'),idfunkcionalita = TW_RegGetIDFunkcionalita('Šek'),
+idSkupina = TW_RegGetIDSkupina('Accounting'), nazev = 'Výnosový úèet poplatku za šek pøi úètování z fin. úètu' 
+where oblast = 'AS' and        uloha = 'ipb' and funkce = '*' and udaj = 'zkrucetpopl';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Podpora pro produkt'),
+idSkupina = TW_RegGetIDSkupina('Parameters of electronical archive'), nazev = 'Adresáø pro archivaci avíza platby na provozním kontì' 
+where oblast = 'EA' and uloha = 'archivace' and funkce = 'provkonto' and udaj = 'avizo';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Podklad pro provizi'),
+idSkupina = TW_RegGetIDSkupina('Sources for commissions'), nazev = 'Vyžaduje provize za navýšení CC pohledávku'
+ where oblast = 'OS' and uloha = '*' and funkce = 'prizprov' and udaj = 'nutnapohl';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Kontrola regionu' 
+where oblast = 'OS' and uloha = 'compprov' and funkce = '*' and udaj = 'kontrreg';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Defaultní text provizní sestavy stav 20' 
+where oblast = 'OS' and uloha = 'sestavy' and funkce = '*' and udaj = 'text20';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Defaultní text provizní sestavy stav 21' 
+where oblast = 'OS' and uloha = 'sestavy' and funkce = '*' and udaj = 'text21';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Defaultní text provizní sestavy stav 22' 
+where oblast = 'OS' and uloha = 'sestavy' and funkce = '*' and udaj = 'text22';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Defaultní text provizní sestavy stav 10' 
+where oblast = 'OS' and uloha = 'sestavy' and funkce = '*' and udaj = 'text10';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Defaultní text provizní sestavy stav 11' 
+where oblast = 'OS' and uloha = 'sestavy' and funkce = '*' and udaj = 'text11';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Defaultní text provizní sestavy stav 12' 
+where oblast = 'OS' and uloha = 'sestavy' and funkce = '*' and udaj = 'text12';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Vyhodnocovat sestavy pro nevyplacené úvìry' 
+where oblast = 'OS' and uloha = 'sestavy' and funkce = '*' and udaj = 'nuver';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Provizní varianta'),
+idSkupina = TW_RegGetIDSkupina('Commission variants'), nazev = 'Obsahuje provizní varianta konstantu' 
+where oblast = 'OS' and uloha = 'compprov' and funkce = '*' and udaj = 'konstanty';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Provizní varianta'),
+idSkupina = TW_RegGetIDSkupina('Commission variants'), nazev = 'Obsahuje provizní varianta katetorii' 
+where oblast = 'OS' and uloha = 'compprov' and funkce = '*' and udaj = 'kategorie';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Správa provizí'),
+idSkupina = TW_RegGetIDSkupina('Commission'), nazev = 'Úvìrová provize - závislost na výši úvìru' 
+where oblast = 'OS' and uloha = 'compprov' and funkce = 'uvery' and udaj = 'vyseuveru';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Výplata provizí'),
+idSkupina = TW_RegGetIDSkupina('Disbursement'), nazev = 'Vytváøet daòové sestavy' 
+where oblast = 'OS' and uloha = 'vypl' and funkce = '*' and udaj = 'taxsest';
+UPDATE TW_Registr_Cis SET idVecnaOblast = TW_RegGetIDVecnaOblast('Provize'),idfunkcionalita = TW_RegGetIDFunkcionalita('Odbytový plán a výkon'),
+idSkupina = TW_RegGetIDSkupina('Performance'), nazev = 'Datum posledního vyhodnocení hist. záznamù' 
+where oblast = 'OS' and uloha = 'vykony' and funkce = '*' and udaj = 'datvyhodhist';
+
+ROLLBACK WORK;

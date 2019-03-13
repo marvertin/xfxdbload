@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B130099_RSTS-2905_3
+-- @TC:ONCE: DESCRIPTION = IFRS - Doplnění polí souvisejících s projektem IFRS9_IRBA
+
+BEGIN WORK;
+
+call tw_regSetOrAddKey('ES', 'vklad', 'rozhden', '25', 1, 1, 'Spoření', 'Vklady na spoření', 'Deposit schedule', 'Rozhodný den vkladu <den_v_měsíci>');
+
+call tw_regSetOrAddKey('EU', 'splatka', 'rozhden', '25', 1, 1, 'Úvěr', 'Splátkový kalendář úvěru', 'Schedule of Credit Repayments', 'Rozhodný den splátky <den_v_měsíci>');
+
+call tw_regSetOrAddKey('EU', 'DPD', 'maxDPD', 'obdobi', 12, 1, 'Úvěr', 'DPD', 'Vyhodnocení', 'Období pro vyhodnocení max. DPD');
+
+call tw_regSetOrAddKey('RU', 'klasif', 'absPrah', 'FO', 0, 1, 'Úvěr', 'Klasifikace úvěru', 'Credit Classification', 'Absolutní práh významnosti FO');
+
+call tw_regSetOrAddKey('RU', 'klasif', 'absPrah', 'PO', 0, 1, 'Úvěr', 'Klasifikace úvěru', 'Credit Classification', 'Absolutní práh významnosti PO');
+
+call tw_regSetOrAddKey('RU', 'klasif', 'relPrah', 'FO', 0, 1, 'Úvěr', 'Klasifikace úvěru', 'Credit Classification', 'Relativní práh významnosti FO');
+
+call tw_regSetOrAddKey('RU', 'klasif', 'relPrah', 'PO', 0, 1, 'Úvěr', 'Klasifikace úvěru', 'Credit Classification', 'Relativní práh významnosti PO');
+
+call tw_regSetOrAddKey('RU', 'klasif', 'relPrahNakaza', '*', 0, 1, 'Úvěr', 'Klasifikace úvěru', 'Credit Classification', 'Relativní práh pro nákazový efekt');
+
+call tw_regSetOrAddKey('RU', 'klasif', 'nonDefault', 'karence', 30, 1, 'Úvěr', 'Klasifikace úvěru', 'Credit Classification', 'Max. výše DPD pro non-default');
+
+call tw_regSetOrAddKey('RU', 'klasif', 'nonDefaultStandard', 'maxDPD', 3, 1, 'Úvěr', 'Klasifikace úvěru', 'Credit Classification', 'Karenční lhůta pro non-default - standard');
+
+call tw_regSetOrAddKey('RU', 'klasif', 'nonDefaultRestr', 'maxDPD', 12, 1, 'Úvěr', 'Klasifikace úvěru', 'Credit Classification', 'Karenční lhůta pro non-default - restrukturalizace');
+
+call tw_regSetOrAddKey('EO', 'vztahRod', 'typ', 'otecMatka', 1, 0, 'Osoba', 'Evidence osoby', 'Persons', 'Typ vztahu dítě – rodič');
+
+ROLLBACK WORK;
+
+--End of B130099_RSTS-2905_3

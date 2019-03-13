@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B122216_RN00443810_1
+-- @TC:ONCE: DESCRIPTION = UkonÄŤenĂ­ exekuce pĹ™i vĂ˝platÄ› exekuce {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table rs_vyplata_kart add cisdzukonceni char(16);
+
+ROLLBACK WORK;
+
+--End of B122216_RN00443810_1

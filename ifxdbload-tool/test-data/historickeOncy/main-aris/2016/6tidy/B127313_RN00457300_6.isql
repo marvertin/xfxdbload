@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B127313_RN00457300_6
+-- @TC:ONCE: DESCRIPTION = rozšířit serial na bigserial {DEFECT}
+
+BEGIN WORK;
+
+drop table ep_splspormodb_ser
+;
+
+ROLLBACK WORK;
+
+--End of B127313_RN00457300_6

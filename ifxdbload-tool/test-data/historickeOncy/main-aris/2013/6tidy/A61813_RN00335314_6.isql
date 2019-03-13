@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, A61813_RN00335314_6
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+drop routine EP_CFModelGetVysePoplVypis
+;
+drop routine MO_GetAditionalInfo
+;
+drop routine EP_CFModelGetVysePoplItf
+;
+drop routine SI_FFunc$_findSettlFeeData
+;
+drop routine SI_FFunc$_gtSettlFeeData
+;
+drop routine SI_FFunc$findEntryFee
+;
+drop routine SI_FFunc$findSettlFee
+;
+drop routine SI_FFunc$findAccMaintFee
+;
+drop routine SI_FFunc$findAccMaintFee1
+;
+drop routine SI_FFunc$findAccMaintFeeByDays
+;
+drop routine SI_SimplFces$enabledFee
+;
+drop routine SI_SimplFces$fumo_puspl
+;
+drop routine SI_EngineImpl$_noBusinessInit
+;
+drop routine SI_FFunc$getFirstWithdrawal
+;
+drop routine SI_ModlerMain$_findWthdrwDate
+;
+ROLLBACK WORK;
+
+--End of A61813_RN00335314_6

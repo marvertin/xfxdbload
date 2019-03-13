@@ -1,0 +1,253 @@
+-- @TC:ONCE: ID = V2, A79955_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+DROP INDEX ruklasifcis_i_p;
+ALTER TABLE ru_klasif_cis MODIFY klasif Integer NOT NULL;
+CREATE UNIQUE INDEX ru_klasif_cis_pk ON ru_klasif_cis(klasif);
+ALTER TABLE ru_klasif_cis ADD CONSTRAINT PRIMARY KEY(klasif) CONSTRAINT ru_klasif_cis_pk;
+
+
+ALTER TABLE ru_klasif_acis MODIFY klasif Integer NOT NULL;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_nepodprihl_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_nepodprihl_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_nepodprihl_cis_pk ON ep_nepodprihl_cis(serno);
+ALTER TABLE ep_nepodprihl_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_nepodprihl_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_nepodprihl_cis_u1 ON ep_nepodprihl_cis(duvod);
+ALTER TABLE ep_nepodprihl_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_nepodprihl_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_nepodprihl_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_nepodprihl_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_nepodprihl_acis_pk ON ep_nepodprihl_acis(idarch);
+ALTER TABLE ep_nepodprihl_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_nepodprihl_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_nepodpokyn_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_nepodpokyn_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_nepodpokyn_cis_pk ON ep_nepodpokyn_cis(serno);
+ALTER TABLE ep_nepodpokyn_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_nepodpokyn_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_nepodpokyn_cis_u1 ON ep_nepodpokyn_cis(duvod);
+ALTER TABLE ep_nepodpokyn_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_nepodpokyn_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_nepodpokyn_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_nepodpokyn_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_nepodpokyn_acis_pk ON ep_nepodpokyn_acis(idarch);
+ALTER TABLE ep_nepodpokyn_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_nepodpokyn_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_poprprihl_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_poprprihl_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_poprprihl_cis_pk ON ep_poprprihl_cis(serno);
+ALTER TABLE ep_poprprihl_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_poprprihl_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_poprprihl_cis_u1 ON ep_poprprihl_cis(duvod);
+ALTER TABLE ep_poprprihl_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_poprprihl_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_poprprihl_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_poprprihl_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_poprprihl_acis_pk ON ep_poprprihl_acis(idarch);
+ALTER TABLE ep_poprprihl_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_poprprihl_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_stornoinsolv_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_stornoinsolv_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_stornoinsolv_cis_pk ON ep_stornoinsolv_cis(serno);
+ALTER TABLE ep_stornoinsolv_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_stornoinsolv_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_stornoinsolv_cis_u1 ON ep_stornoinsolv_cis(duvod);
+ALTER TABLE ep_stornoinsolv_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_stornoinsolv_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_stornoinsolv_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_stornoinsolv_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_stornoinsolv_acis_pk ON ep_stornoinsolv_acis(idarch);
+ALTER TABLE ep_stornoinsolv_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_stornoinsolv_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_paraminsolv_cis (
+  serno   SERIAL NOT NULL,
+  id   Integer NOT NULL,
+  funkce   INTEGER NOT NULL,
+  vytvinfoduv   Integer NOT NULL,
+  urovinfoduv   Integer NOT NULL,
+  nastavvinkul   Integer NOT NULL,
+  zrusvinkul   Integer NOT NULL,
+  klasifminos   INTEGER,
+  vytvsnimek   Integer NOT NULL,
+  aktukol   Integer NOT NULL,
+  zvlrezim   INTEGER,
+  stavvympohl   CHAR(1),
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (vytvinfoduv IN (0,1)) CONSTRAINT ep_paraminsolv_cis_d7e8,
+  CHECK (urovinfoduv IN (0,1)) CONSTRAINT ep_paraminsolv_cis_d7e9,
+  CHECK (nastavvinkul IN (0,1)) CONSTRAINT ep_paraminsolv_cis_d7ea,
+  CHECK (zrusvinkul IN (0,1)) CONSTRAINT ep_paraminsolv_cis_d7eb,
+  CHECK (vytvsnimek IN (0,1)) CONSTRAINT ep_paraminsolv_cis_d7ed,
+  CHECK (aktukol IN (0,1)) CONSTRAINT ep_paraminsolv_cis_d7ee,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_paraminsolv_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_paraminsolv_cis_pk ON ep_paraminsolv_cis(serno);
+ALTER TABLE ep_paraminsolv_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_paraminsolv_cis_pk;
+
+--FK
+CREATE INDEX ep_paraminsolv_cis_i_f1 ON ep_paraminsolv_cis(klasifminos);
+ALTER TABLE ep_paraminsolv_cis ADD CONSTRAINT FOREIGN KEY(klasifminos) REFERENCES ru_klasif_cis(klasif) CONSTRAINT ep_paraminsolv_cis_f1;
+CREATE INDEX ep_paraminsolv_cis_i_f2 ON ep_paraminsolv_cis(zvlrezim);
+ALTER TABLE ep_paraminsolv_cis ADD CONSTRAINT FOREIGN KEY(zvlrezim) REFERENCES ru_zvlrezim_cis(rezim) CONSTRAINT ep_paraminsolv_cis_f2;
+CREATE INDEX ep_paraminsolv_cis_i_f3 ON ep_paraminsolv_cis(funkce);
+ALTER TABLE ep_paraminsolv_cis ADD CONSTRAINT FOREIGN KEY(funkce) REFERENCES ep_ulohafunkce_cis(serno) CONSTRAINT ep_paraminsolv_cis_f3;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_paraminsolv_cis_u1 ON ep_paraminsolv_cis(id);
+ALTER TABLE ep_paraminsolv_cis ADD CONSTRAINT (UNIQUE (id) CONSTRAINT ep_paraminsolv_cis_u1);
+
+--CHECKS
+ALTER TABLE ep_paraminsolv_cis
+ADD CONSTRAINT (CHECK (stavvympohl in ('B', 'I', 'P', 'S', 'U', 'V')) CONSTRAINT ep_paraminsolv_cis_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_paraminsolv_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  id   Integer NOT NULL,
+  funkce   INTEGER NOT NULL,
+  vytvinfoduv   Integer NOT NULL,
+  urovinfoduv   Integer NOT NULL,
+  nastavvinkul   Integer NOT NULL,
+  zrusvinkul   Integer NOT NULL,
+  klasifminos   INTEGER,
+  vytvsnimek   Integer NOT NULL,
+  aktukol   Integer NOT NULL,
+  zvlrezim   INTEGER,
+  stavvympohl   CHAR(1),
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (vytvinfoduv IN (0,1)) CONSTRAINT ep_paraminsolv_acis_d7e8,
+  CHECK (urovinfoduv IN (0,1)) CONSTRAINT ep_paraminsolv_acis_d7e9,
+  CHECK (nastavvinkul IN (0,1)) CONSTRAINT ep_paraminsolv_acis_d7ea,
+  CHECK (zrusvinkul IN (0,1)) CONSTRAINT ep_paraminsolv_acis_d7eb,
+  CHECK (vytvsnimek IN (0,1)) CONSTRAINT ep_paraminsolv_acis_d7ed,
+  CHECK (aktukol IN (0,1)) CONSTRAINT ep_paraminsolv_acis_d7ee,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_paraminsolv_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_paraminsolv_acis_pk ON ep_paraminsolv_acis(idarch);
+ALTER TABLE ep_paraminsolv_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_paraminsolv_acis_pk;
+
+ROLLBACK WORK;
+
+--End of A79955_RN00311507_1

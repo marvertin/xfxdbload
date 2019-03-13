@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A57898_RN00342724_3-01_prejmenovani-opravneni
+-- @TC:ONCE: DESCRIPTION = DOC:zakázaná slova pro rsts v dokumentaci {DEFECT}
+
+
+BEGIN WORK;
+
+update adm_permission set id='client-accounting.bank-accounts-administration.collection-permission-confirmation' where id='elbos.client.accounting.account.confirm-collection.permission'; 
+update adm_permission set id='client-accounting.bank-accounts-administration.collection-permission-confirmation-witout-4-eye-rule' where id='elbos.client.accounting.account.confirm-collection.permission-witout-4-eye-rule';
+update adm_permission set id='payment.standing-order.standing-order-confirmation' where id='elbos.payment.standing.order.confirm-standing-order';
+update adm_permission set id='payment.standing-order.standing-order-confirmation-without-4-eye-rule' where id='elbos.payment.standing.order.confirm-standing-order-without-4-eye-rule';
+update adm_permission set id='payment.standing-order.standing-order-cancellation' where id='elbos.payment.standing.order.cancel-standing-order';
+update adm_permission set id='payment.single-payment.single-payment-confirmation-without-4-eye-rule' where id='elbos.payment.single-payment.confirm-single-payment-without-4-eye-rule';
+
+ROLLBACK WORK;
+
+--End of A57898_RN00342724_3-01_prejmenovani-opravneni

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B114867_RN00407699_1-indexEsZmplanKart
+-- @TC:ONCE: DESCRIPTION = Sale+Web: vysledok zatazoveho testu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--INDEXES
+CREATE INDEX es_zmplan_kart_i1 ON es_zmplan_kart(zmena);
+
+update statistics high for table es_zmplan_kart;
+
+update statistics high for table rp_kontosp_rozp;
+update statistics high for table opr_obchod_mat;
+
+ROLLBACK WORK;
+
+--End of B114867_RN00407699_1-indexEsZmplanKart

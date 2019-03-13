@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B129635_RSTS-4408_1
+-- @TC:ONCE: DESCRIPTION = Pomalá aktualizace číselníku adresních míst z RUIAN
+
+BEGIN WORK;
+
+CREATE INDEX eo_fo_mat_n6 ON eo_fo_mat(kodadm);
+
+CREATE INDEX eo_po_mat_i4 ON eo_po_mat(kodadm);
+
+CREATE INDEX eo_role_mat_n4 ON eo_role_mat(kodadm);
+ROLLBACK WORK;
+
+--End of B128999_RSTS-3411_1

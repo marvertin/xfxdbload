@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A42471_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+   
+ALTER TABLE es_importbuffer_mat
+    ADD indexbazesz     Integer        BEFORE odchylkauru,
+    ADD odchylkaursz    DECIMAL(5,2)   BEFORE odchylkauru,
+    ADD transpredcisli  DECIMAL(6, 0),
+    ADD transkonto      DECIMAL(16, 0), 
+    ADD transbanka      DECIMAL(7, 0);
+    
+ROLLBACK WORK;

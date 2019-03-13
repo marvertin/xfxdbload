@@ -1,0 +1,63 @@
+-- @TC:ONCE: ID = V2, B126431_RN00451080_3
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update ep_typpohybumodel_cis set category = 1 where typpohybumodel = 'V';
+update ep_typpohybumodel_cis set category = 5 where typpohybumodel = 'C';
+update ep_typpohybumodel_cis set category = 2 where typpohybumodel = 'R';
+update ep_typpohybumodel_cis set category = 6 where typpohybumodel = 'S';
+update ep_typpohybumodel_cis set category = 5 where typpohybumodel = 'Z';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = 'A';
+update ep_typpohybumodel_cis set category = 1 where typpohybumodel = 'B';
+update ep_typpohybumodel_cis set category = 2 where typpohybumodel = 'Q';
+update ep_typpohybumodel_cis set category = 4 where typpohybumodel = 'U';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = 'W';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = '#';
+update ep_typpohybumodel_cis set category = 4 where typpohybumodel = 'D';
+update ep_typpohybumodel_cis set category = 6 where typpohybumodel = 'T';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = 'E';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = 'F';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = 'I';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = 'J';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = 'G';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = 'K';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = 'L';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = 'O';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = '$';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = '%';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = '^';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = '&';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = '*';
+update ep_typpohybumodel_cis set category = 7 where typpohybumodel = '@';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = 'N';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = 'X';
+update ep_typpohybumodel_cis set category = 5 where typpohybumodel = 'Y';
+update ep_typpohybumodel_cis set category = 5 where typpohybumodel = '1';
+update ep_typpohybumodel_cis set category = 2 where typpohybumodel = '2';
+update ep_typpohybumodel_cis set category = 5 where typpohybumodel = '3';
+update ep_typpohybumodel_cis set category = 2 where typpohybumodel = '4';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = '5';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = '6';
+update ep_typpohybumodel_cis set category = 8 where typpohybumodel = '7';
+update ep_typpohybumodel_cis set category = 8 where typpohybumodel = '8';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = 'P';
+update ep_typpohybumodel_cis set category = 1 where typpohybumodel = '9';
+update ep_typpohybumodel_cis set category = 1 where typpohybumodel = '!';
+update ep_typpohybumodel_cis set category = 2 where typpohybumodel = '(';
+update ep_typpohybumodel_cis set category = 3 where typpohybumodel = ')';
+update ep_typpohybumodel_cis set category = 2 where typpohybumodel = '[';
+update ep_typpohybumodel_cis set category = 5 where typpohybumodel = ']';
+update ep_typpohybumodel_cis set category = 8 where typpohybumodel = '{';
+update ep_typpohybumodel_cis set category = 8 where typpohybumodel = '}';
+update ep_typpohybumodel_cis set category = 1 where typpohybumodel = 'H';
+update ep_typpohybumodel_cis set category = 8 where typpohybumodel = 'M';
+update ep_typpohybumodel_cis set category = 8 where typpohybumodel = '\';
+update ep_typpohybumodel_cis set category = 8 where typpohybumodel = '?';
+update ep_typpohybumodel_cis set category = 4 where typpohybumodel = 'a';
+
+
+ROLLBACK WORK;
+
+--End of B126431_RN00451080_3

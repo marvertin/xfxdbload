@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B121363_RN00420627_5
+-- @TC:ONCE: DESCRIPTION = Časové rozlišení pobytu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_fo_mat DROP pobyt;
+
+ALTER TABLE eo_fo_mat DROP pobytod;
+
+ALTER TABLE eo_fo_mat DROP datuktrp;
+
+ALTER TABLE eo_fo_mat DROP datumovereni;
+
+ALTER TABLE eo_residence_cis DROP  xssalowed;
+
+ALTER TABLE eo_fo_arch DROP pobyt;
+
+ALTER TABLE eo_fo_arch DROP pobytod;
+
+ALTER TABLE eo_fo_arch DROP datuktrp;
+
+ALTER TABLE eo_fo_arch DROP datumovereni;
+
+ALTER TABLE eo_residence_acis DROP  xssalowed;
+
+ROLLBACK WORK;
+
+--End of B121363_RN00420627_5

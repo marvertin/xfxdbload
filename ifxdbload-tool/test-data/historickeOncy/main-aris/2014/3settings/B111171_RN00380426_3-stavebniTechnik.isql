@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B111171_RN00380426_3-stavebniTechnik
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EP', 'referent', 'skupiny', 'stavebniTechnik', 4, 1, 'Podpora pro produkt', 'Referent', 'Skupiny referentů', 'Skupina referentů – stavební technik');
+
+ROLLBACK WORK;
+
+--End of B111171_RN00380426_3-stavebniTechnik

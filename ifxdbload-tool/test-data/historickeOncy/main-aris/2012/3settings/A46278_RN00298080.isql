@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A46278_RN00298080
+-- @TC:ONCE: DESCRIPTION = Zrušení blokací Vinkulace cizinec
+
+BEGIN WORK;
+
+call TW_RegDelKey('RS','vinkulace','tech','cizinec');
+
+ROLLBACK WORK;
+

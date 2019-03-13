@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B10326_RN00356698
+-- @TC:ONCE: DESCRIPTION = požadavek RN00356698
+
+BEGIN WORK;
+
+--Original analytics: ////0
+CALL TW_RegSetOrAddKey('EP','role','web','DP',1,1,'Podpora pro produkt','Role osob','Roles','Pracovat s rolí <typ role> na webu',1);
+CALL TW_RegSetOrAddKey('ES','SSFO','cibissale','cilstavzmsml_osoba','A', 1,'Spoření', 'Parametry SS', 'Parameters of building saving', 'Cílový stav návrhu na vytvoření disponenta',1);
+
+ROLLBACK WORK;
+
+--End of A57750_RN00342935_3

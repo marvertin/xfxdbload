@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, A53354_RN00312345_3
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+INSERT INTO eo_notifikacezpusob_cis (zpusob, nazev) VALUES ('EMAIL', 'e-mail');
+INSERT INTO eo_notifikacezpusob_cis (zpusob, nazev) VALUES ('SMS', 'SMS');
+
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('ZmenaHesla', 'Zmìna hesla');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('NeprovedeniPlatPrikazu', 'Neprovedeni platebního pøíkazu');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('ZmenaRegistrovanehoMobilu', 'Zmìna registrovaného mobilu');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('ZmenaRegistrovanehoEmailu', 'Zmìna registrovaného e-mailu');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('ZmenaTrnUctu', 'Zmìna transakèního úètu');
+
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob) 
+VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'NeprovedeniPlatPrikazu'), 
+       (SELECT id FROM eo_notifikacezpusob_cis WHERE zpusob = 'EMAIL'));
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob) 
+VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'NeprovedeniPlatPrikazu'), 
+       (SELECT id FROM eo_notifikacezpusob_cis WHERE zpusob = 'SMS'));
+       
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob) 
+VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'ZmenaHesla'), 
+       (SELECT id FROM eo_notifikacezpusob_cis WHERE zpusob = 'EMAIL'));
+       
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob) 
+VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'ZmenaTrnUctu'), 
+       (SELECT id FROM eo_notifikacezpusob_cis WHERE zpusob = 'EMAIL'));    
+       
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob) 
+VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'ZmenaRegistrovanehoMobilu'), 
+       (SELECT id FROM eo_notifikacezpusob_cis WHERE zpusob = 'EMAIL'));
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob) 
+VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'ZmenaRegistrovanehoMobilu'), 
+       (SELECT id FROM eo_notifikacezpusob_cis WHERE zpusob = 'SMS'));       
+       
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob) 
+VALUES ((SELECT id FROM eo_notifikaceudalost_cis WHERE udalost = 'ZmenaRegistrovanehoEmailu'), 
+       (SELECT id FROM eo_notifikacezpusob_cis WHERE zpusob = 'EMAIL'));       
+
+ROLLBACK WORK;
+

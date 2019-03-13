@@ -1,0 +1,79 @@
+create procedure RN00311507_krok_6B()
+-- vytvoření časových snímků insolvence
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+
+define _sernoins like EP_Insolvence_Mat.serno;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_6B');
+
+COMMIT WORK;
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, sernoins
+   INTO _ser, _sernoins
+   FROM RN00311507_krok_6_snim
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_6_snim
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    call EP_SnimekInsolvNovy('M', _sernoins);
+
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00311507_krok_6_snim SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--algoritmus dokonceni migrace
+--...
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_6B');
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

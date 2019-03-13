@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A41953_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - Main / Spoøení
+
+BEGIN WORK;
+  ALTER  TABLE ES_Prilohadokument_perm
+          add importuser char(20) before importtime;
+   
+   ALTER  TABLE ES_Prilohadokument_cis
+          add importuser char(20) before importtime;
+      
+ROLLBACK WORK;

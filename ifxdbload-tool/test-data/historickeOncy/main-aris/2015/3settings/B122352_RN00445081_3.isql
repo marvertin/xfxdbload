@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B122352_RN00445081_3
+-- @TC:ONCE: DESCRIPTION = Nastavení číselníku CashFlow {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+update ep_zahrnutipohybucfmodel_cis
+set include = 0
+where id in (95, 96, 97, 120, 121, 122, 145, 146, 147);
+
+ROLLBACK WORK;
+
+--End of B122352_RN00445081_3

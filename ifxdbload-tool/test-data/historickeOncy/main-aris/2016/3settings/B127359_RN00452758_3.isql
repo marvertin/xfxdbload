@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B127359_RN00452758_3
+-- @TC:ONCE: DESCRIPTION = Registrované kontakty - omezení v Cibis Web
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('RU',3, 'Vytvoření kontroly pro ověření změny reg. mobilu SIS před čerpáním',1);
+
+ROLLBACK WORK;
+
+--End of B127359_RN00452758_3

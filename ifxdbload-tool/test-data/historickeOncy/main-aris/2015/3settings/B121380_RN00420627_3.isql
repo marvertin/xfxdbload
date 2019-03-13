@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B121380_RN00420627_3
+-- @TC:ONCE: DESCRIPTION = Časové rozlišení pobytu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost)
+  VALUES('EO', 30, 'Vytvoření pobytu osoby pro SP', 1);
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost)
+  VALUES('SP', 40, 'Inicializace problematických nároků na SP', 1);
+
+ROLLBACK WORK;
+
+--End of B121380_RN00420627_3

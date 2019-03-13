@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B114427_RN00380426_1
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+create index eu_zajist_mat_u4 on eu_zajist_mat(serno);
+
+create index eu_ucel_mat_u2 on eu_ucel_mat(serno);
+
+ROLLBACK WORK;
+
+--End of B114427_RN00380426_1

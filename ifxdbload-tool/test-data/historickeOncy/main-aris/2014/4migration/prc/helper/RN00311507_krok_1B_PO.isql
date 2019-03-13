@@ -1,0 +1,85 @@
+create procedure RN00311507_krok_1B_PO()
+-- tvorba a naplnění řídící tabulky pro migraci insolvencí
+
+define _po      Int;
+define _ico     Char(10);
+define _refser  Int;
+
+
+on exception
+  ROLLBACK WORK;
+end exception;
+
+
+BEGIN WORK;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_1_PO;
+end;
+
+-- řídící tabulka
+CREATE TABLE RN00311507_krok_1_PO(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt default -1,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+
+                            --vlastni data - např. cislo osoby
+  po      Int,
+  ico     Char(10),
+  refser  Int,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+begin
+  on exception IN(-319)
+  end exception;
+  DROP INDEX RN00311507_krok_1_PO_log_i1;
+end;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_1_PO_log;
+end;
+
+-- logovací tabulka (problémy, informace, ...)
+CREATE TABLE RN00311507_krok_1_PO_log(
+  Ser Int, -- seriál z RN00311507_krok_1_PO
+  text Varchar(255)
+)LOCK MODE ROW;
+
+CREATE INDEX RN00311507_krok_1_PO_log_i1 ON RN00311507_krok_1_PO_log(ser);
+
+-- update statistik je až zde, protože data byla naplněna do řídící tabulky z excelu
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_krok_1_PO_data;
+
+--set debug file to "rc.dbg";
+--trace on;
+     
+-- naplníme řídící tabulku RN00311507_krok_1_PO
+foreach
+  SELECT  ser,    ic
+    INTO _refser,_ico
+    FROM RN00311507_krok_1_PO_data
+   ORDER BY ser
+   
+  let _po = tw_null0((SELECT min(a.po) FROM eo_po_mat a, eo_osoba_mat b WHERE a.ico = _ico and a.po = b.os and b.stav in ('A','U')));
+     
+   
+  INSERT INTO RN00311507_krok_1_PO
+      ( po, ico, refser)
+    VALUES
+      (_po,_ico,_refser);      
+end foreach
+
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_krok_1_PO;
+
+COMMIT WORK;
+
+end procedure;

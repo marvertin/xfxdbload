@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B125654_RN00454562_1
+-- @TC:ONCE: DESCRIPTION = Dvojí RPSN: Nevypočítalo se žádné RPSN pro úvěrový návrh PFSU {DEFECT}
+
+
+BEGIN WORK;
+
+drop table if exists SI_operationType_temp
+;
+
+ROLLBACK WORK;
+
+--End of B125654_RN00454562_1

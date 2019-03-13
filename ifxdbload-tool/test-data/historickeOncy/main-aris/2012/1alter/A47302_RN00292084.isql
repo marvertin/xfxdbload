@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A47302_RN00292084
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda 
+
+BEGIN WORK;
+
+ALTER TABLE EU_CerpKal_Mat ADD (posunzahcerp   Integer);
+
+ALTER TABLE EU_CerpKal_Arch ADD (posunzahcerp   Integer);
+
+ROLLBACK WORK;

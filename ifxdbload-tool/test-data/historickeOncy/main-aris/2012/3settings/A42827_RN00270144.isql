@@ -1,0 +1,51 @@
+-- @TC:ONCE: ID = V2, A42827_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+SET TRIGGERS FOR es_voptarif_acis DISABLED;
+SET TRIGGERS FOR es_paramcastar_acis DISABLED;
+
+update es_voptarif_cis
+set minccfo = mincc
+  , maxccfo = maxcc
+  , minccpo = mincc
+  , maxccpo = maxcc
+  , povolennezlklient = 1
+  , typuctu = 'S'
+  , narokovatsp = 1
+  , transucet = 0
+  , zvyhoduroceni = 0
+  , maxpocettransuctu = 1
+  , uzavprekluver = 1;
+
+update es_voptarif_acis
+set minccfo = mincc
+  , maxccfo = maxcc
+  , minccpo = mincc
+  , maxccpo = maxcc
+  , povolennezlklient = 1
+  , typuctu = 'S'
+  , narokovatsp = 1
+  , transucet = 0
+  , zvyhoduroceni = 0
+  , maxpocettransuctu = 1
+  , uzavprekluver = 1;
+    
+update es_paramcastar_cis
+set periodas = 'R'
+  , periodau = 'R'
+  , periodaz = 'R';
+ 
+update es_paramcastar_acis
+set periodas = 'R'
+  , periodau = 'R'
+  , periodaz = 'R';
+ 
+SET TRIGGERS FOR es_voptarif_acis ENABLED;
+SET TRIGGERS FOR es_paramcastar_acis ENABLED;
+    
+ROLLBACK WORK;
+
+--End of A42718_RN00270144
+ 

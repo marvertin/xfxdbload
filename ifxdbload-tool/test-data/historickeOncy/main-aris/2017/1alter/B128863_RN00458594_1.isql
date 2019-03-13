@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B128863_RN00458594_1
+-- @TC:ONCE: DESCRIPTION = RN00458594 - Rozšíření exportů nad úvěrovou smlouvou
+
+
+BEGIN WORK;
+
+rename column eu_expsml_den.obchzastskup to obchzastzam;   
+rename column eu_expsml_den.agenttipskup to agenttipzam;   
+rename column eu_expsml_den.agentputskup to agentputzam;   
+rename column eu_expsml_den.ozastoverskup to ozastoverzam;   
+   
+ROLLBACK WORK;
+
+--End of B128863_RN00458594_1

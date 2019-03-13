@@ -1,0 +1,651 @@
+-- @TC:ONCE: ID = V2, A41926_RN00269923
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání
+
+BEGIN WORK;
+
+
+alter table ru_zvlrezim_cis modify rezim INTEGER;
+
+alter table ru_zvlrezim_acis modify rezim INTEGER;
+
+CREATE UNIQUE INDEX ru_zvlrezim_cis_pk ON ru_zvlrezim_cis(rezim);
+ALTER TABLE ru_zvlrezim_cis ADD CONSTRAINT PRIMARY KEY(rezim) CONSTRAINT ru_zvlrezim_cis_pk;
+
+CREATE TABLE eo_insolvence_acis (
+    ser             SERIAL  ,
+    id              Integer   NOT NULL,
+    nazev           Char(70)   NOT NULL,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_insolvence_acis_dhpf
+) LOCK MODE ROW
+;
+
+-- ###############################################################
+--       eo_insolvence_cis
+
+-- 36  eo_insolvence_cis-1/3       [CREATE.TABLE]
+CREATE TABLE eo_insolvence_cis (
+    id              Integer   NOT NULL,
+    nazev           Char(70)   NOT NULL,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_insolvence_cis_dhpf
+) LOCK MODE ROW
+;
+
+-- 37  eo_insolvence_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_insolvence_cis_pk ON eo_insolvence_cis (id) ;
+
+-- 38  eo_insolvence_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_insolvence_cis
+    ADD CONSTRAINT PRIMARY KEY (id)  CONSTRAINT eo_insolvence_cis_pk;
+
+-- 93  eo_soud_cis-1/5       [CREATE.TABLE]
+CREATE TABLE eo_soud_cis (
+    id              Integer   NOT NULL,
+    osoba           INTEGER   NOT NULL,
+    typ             CHAR(1)  ,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_soud_cis_dhpt,
+    CHECK (typ in ('K', 'N', 'O', 'V')) CONSTRAINT eo_soud_cis_c1
+) LOCK MODE ROW
+;
+
+-- 94  eo_soud_cis-2/5       [CREATE.INDEX]
+CREATE unique INDEX eo_soud_cis_pk ON eo_soud_cis (id) ;
+
+-- 95  eo_soud_cis-3/5       [CREATE.INDEX]
+CREATE INDEX eo_soud_cis_i_f1 ON eo_soud_cis (osoba) ;
+
+-- 96  eo_soud_cis-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_soud_cis
+    ADD CONSTRAINT PRIMARY KEY (id)  CONSTRAINT eo_soud_cis_pk;
+
+-- 90  eo_soud_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eo_soud_acis (
+    ser             SERIAL   NOT NULL,
+    id              Integer   NOT NULL,
+    osoba           INTEGER   NOT NULL,
+    typ             CHAR(1)  ,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_soud_acis_dhpt
+) LOCK MODE ROW
+;
+
+-- 91  eo_soud_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_soud_acis_pk ON eo_soud_acis (ser) ;
+
+-- 92  eo_soud_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_soud_acis
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT eo_soud_acis_pk;
+
+-- 14  eo_exekutor_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eo_exekutor_acis (
+    ser             SERIAL   NOT NULL,
+    id              Integer   NOT NULL,
+    osoba           INTEGER   NOT NULL,
+    cisexek         CHAR(20)  ,
+    vlastvymah      Integer  ,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_exekutor_acis_dhql,
+    CHECK (vlastvymah IN (0,1)) CONSTRAINT eo_exekutor_acis_dhqj
+) LOCK MODE ROW
+;
+
+-- 15  eo_exekutor_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_exekutor_acis_pk ON eo_exekutor_acis (ser) ;
+
+-- 16  eo_exekutor_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_exekutor_acis
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT eo_exekutor_acis_pk;
+
+-- ###############################################################
+--       eo_exekutor_cis
+
+-- 17  eo_exekutor_cis-1/5       [CREATE.TABLE]
+CREATE TABLE eo_exekutor_cis (
+    id              Integer   NOT NULL,
+    osoba           INTEGER   NOT NULL,
+    cisexek         CHAR(20)  ,
+    vlastvymah      Integer  ,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (vlastvymah IN (0,1)) CONSTRAINT eo_exekutor_cis_dhqj,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_exekutor_cis_dhql
+) LOCK MODE ROW
+;
+
+-- 18  eo_exekutor_cis-2/5       [CREATE.INDEX]
+CREATE unique INDEX eo_exekutor_cis_pk ON eo_exekutor_cis (id) ;
+
+-- 19  eo_exekutor_cis-3/5       [CREATE.INDEX]
+CREATE INDEX eo_exekutor_cis_i_f1 ON eo_exekutor_cis (osoba) ;
+
+-- 20  eo_exekutor_cis-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_exekutor_cis
+    ADD CONSTRAINT PRIMARY KEY (id)  CONSTRAINT eo_exekutor_cis_pk;
+
+-- 10  ru_skupzvlrezim_acis-1/3       [CREATE.TABLE]
+CREATE TABLE ru_skupzvlrezim_acis (
+    ser             SERIAL   NOT NULL,
+    id              Integer   NOT NULL,
+    nazev           Char(70)   NOT NULL,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ru_skupzvlrezim_acis_dhr4
+) LOCK MODE ROW
+;
+
+-- 11  ru_skupzvlrezim_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX ru_skupzvlrezim_acis_pk ON ru_skupzvlrezim_acis (ser) ;
+
+-- 12  ru_skupzvlrezim_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ru_skupzvlrezim_acis
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ru_skupzvlrezim_acis_pk;
+
+-- ###############################################################
+--       ru_skupzvlrezim_cis
+
+-- 13  ru_skupzvlrezim_cis-1/3       [CREATE.TABLE]
+CREATE TABLE ru_skupzvlrezim_cis (
+    id              Integer   NOT NULL,
+    nazev           Char(70)   NOT NULL,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ru_skupzvlrezim_cis_dhr4
+) LOCK MODE ROW
+;
+
+-- 14  ru_skupzvlrezim_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX ru_skupzvlrezim_cis_pk ON ru_skupzvlrezim_cis (id) ;
+
+-- 15  ru_skupzvlrezim_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ru_skupzvlrezim_cis
+    ADD CONSTRAINT PRIMARY KEY (id)  CONSTRAINT ru_skupzvlrezim_cis_pk;
+
+-- ###############################################################
+--       ru_vazbazvlrezim_acis
+
+-- 16  ru_vazbazvlrezim_acis-1/3       [CREATE.TABLE]
+CREATE TABLE ru_vazbazvlrezim_acis (
+    serarch         SERIAL   NOT NULL,
+    ser             INTEGER   NOT NULL,
+    skupina         INTEGER   NOT NULL,
+    rezim           INTEGER   NOT NULL,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ru_vazbazvlrezim_acis_dhrl
+) LOCK MODE ROW
+;
+
+-- 17  ru_vazbazvlrezim_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX ru_vazbazvlrezim_acis_pk ON ru_vazbazvlrezim_acis (serarch) ;
+
+-- 18  ru_vazbazvlrezim_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ru_vazbazvlrezim_acis
+    ADD CONSTRAINT PRIMARY KEY (serarch)  CONSTRAINT ru_vazbazvlrezim_acis_pk;
+
+-- ###############################################################
+--       ru_vazbazvlrezim_cis
+
+-- 19  ru_vazbazvlrezim_cis-1/7       [CREATE.TABLE]
+CREATE TABLE ru_vazbazvlrezim_cis (
+    ser             SERIAL   NOT NULL,
+    skupina         INTEGER   NOT NULL,
+    rezim           INTEGER   NOT NULL,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ru_vazbazvlrezim_cis_dhrl
+) LOCK MODE ROW
+;
+
+-- 20  ru_vazbazvlrezim_cis-2/7       [CREATE.INDEX]
+CREATE unique INDEX ru_vazbazvlrezim_cis_pk ON ru_vazbazvlrezim_cis (ser) ;
+
+-- 21  ru_vazbazvlrezim_cis-3/7       [CREATE.INDEX]
+CREATE INDEX ru_vazbazvlrezim_cis_i_f1 ON ru_vazbazvlrezim_cis (skupina) ;
+
+-- 22  ru_vazbazvlrezim_cis-4/7       [CREATE.INDEX]
+CREATE INDEX ru_vazbazvlrezim_cis_i_f2 ON ru_vazbazvlrezim_cis (rezim) ;
+
+-- 23  ru_vazbazvlrezim_cis-5/7       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ru_vazbazvlrezim_cis
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ru_vazbazvlrezim_cis_pk;
+
+-- ###############################################################
+
+
+-- ###############################################################
+--       ru_vazbazvlrezim_cis
+
+-- 26  ru_vazbazvlrezim_cis-6/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE ru_vazbazvlrezim_cis
+    ADD CONSTRAINT FOREIGN KEY (skupina) REFERENCES ru_skupzvlrezim_cis(id)  CONSTRAINT ru_vazbazvlrezim_cis_f1;
+
+-- 27  ru_vazbazvlrezim_cis-7/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE ru_vazbazvlrezim_cis
+    ADD CONSTRAINT FOREIGN KEY (rezim) REFERENCES ru_zvlrezim_cis(rezim)  CONSTRAINT ru_vazbazvlrezim_cis_f2;
+
+
+-- 1  eu_exekprikaz_arch-1/3       [CREATE.TABLE]
+CREATE TABLE eu_exekprikaz_arch (
+    serarch         SERIAL   NOT NULL,
+    ser             INTEGER   NOT NULL,
+    exekuceser      INTEGER   NOT NULL,
+    poradi          Integer   NOT NULL,
+    stav            CHAR(1)   NOT NULL,
+    cisprikaz       CHAR(20)  ,
+    datnavrh        DATE  ,
+    datnarizeni     DATE  ,
+    poznamka        VARCHAR(255)  ,
+    exekutor        INTEGER  ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 2  eu_exekprikaz_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_exekprikaz_arch_pk ON eu_exekprikaz_arch (serarch) ;
+
+-- 3  eu_exekprikaz_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_exekprikaz_arch
+    ADD CONSTRAINT PRIMARY KEY (serarch)  CONSTRAINT eu_exekprikaz_arch_pk;
+
+-- ###############################################################
+--       eu_exekprikaz_mat
+
+-- 4  eu_exekprikaz_mat-1/9       [CREATE.TABLE]
+CREATE TABLE eu_exekprikaz_mat (
+    ser             SERIAL   NOT NULL,
+    exekuceser      INTEGER   NOT NULL,
+    poradi          Integer   NOT NULL,
+    stav            CHAR(1)   NOT NULL,
+    cisprikaz       CHAR(20)  ,
+    datnavrh        DATE  ,
+    datnarizeni     DATE  ,
+    poznamka        VARCHAR(255)  ,
+    exekutor        INTEGER  ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (stav in ('A', 'Z')) CONSTRAINT eu_exekprikaz_mat_c1
+) LOCK MODE ROW
+;
+
+-- 5  eu_exekprikaz_mat-2/9       [CREATE.INDEX]
+CREATE unique INDEX eu_exekprikaz_mat_pk ON eu_exekprikaz_mat (ser) ;
+
+-- 6  eu_exekprikaz_mat-3/9       [CREATE.INDEX]
+CREATE INDEX eu_exekprikaz_mat_i_f1 ON eu_exekprikaz_mat (exekuceser) ;
+
+-- 7  eu_exekprikaz_mat-4/9       [CREATE.INDEX]
+CREATE INDEX eu_exekprikaz_mat_i_f2 ON eu_exekprikaz_mat (exekutor) ;
+
+-- 8  eu_exekprikaz_mat-5/9       [CREATE.INDEX]
+CREATE unique INDEX eu_exekprikaz_mat_u1 ON eu_exekprikaz_mat (exekuceser,poradi) ;
+
+-- 9  eu_exekprikaz_mat-6/9       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_exekprikaz_mat
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT eu_exekprikaz_mat_pk;
+
+-- 10  eu_exekprikaz_mat-7/9       [CREATE.CONSTRAINT_UNIQUE]
+ALTER TABLE eu_exekprikaz_mat
+    ADD CONSTRAINT UNIQUE (exekuceser,poradi)  CONSTRAINT eu_exekprikaz_mat_u1;
+
+-- ###############################################################
+--       eu_exekuce_arch
+
+-- 11  eu_exekuce_arch-1/1       [CREATE.TABLE]
+CREATE TABLE eu_exekuce_arch (
+    serarch         SERIAL  ,
+    ser             INTEGER   NOT NULL,
+    vympohlser      INTEGER   NOT NULL,
+    cisjednaciexek  CHAR(20)  ,
+    datzapis        DATE  ,
+    uzndluh         DECIMAL(16, 2)  ,
+    datzastav       DATE  ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL
+) LOCK MODE ROW
+;
+
+-- ###############################################################
+--       eu_exekuce_mat
+
+-- 12  eu_exekuce_mat-1/5       [CREATE.TABLE]
+CREATE TABLE eu_exekuce_mat (
+    ser             SERIAL   NOT NULL,
+    vympohlser      INTEGER   NOT NULL,
+    cisjednaciexek  CHAR(20)  ,
+    datzapis        DATE  ,
+    uzndluh         DECIMAL(16, 2)  ,
+    datzastav       DATE  ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 13  eu_exekuce_mat-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_exekuce_mat_pk ON eu_exekuce_mat (ser) ;
+
+-- 14  eu_exekuce_mat-3/5       [CREATE.INDEX]
+CREATE INDEX eu_exekuce_mat_i_f1 ON eu_exekuce_mat (vympohlser) ;
+
+-- 15  eu_exekuce_mat-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_exekuce_mat
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT eu_exekuce_mat_pk;
+
+-- ###############################################################
+--       eu_sledtranvym_den
+
+-- 16  eu_sledtranvym_den-1/7       [CREATE.TABLE]
+CREATE TABLE eu_sledtranvym_den (
+    ser             SERIAL   NOT NULL,
+    vympohlser      INTEGER   NOT NULL,
+    serop           INTEGER   NOT NULL,
+    druh            CHAR(4)   NOT NULL,
+    konto           DECIMAL(16, 0)   NOT NULL,
+    tko             CHAR(2)   NOT NULL,
+    kontoproti      DECIMAL(16, 0)  ,
+    banka           DECIMAL(7, 0)  ,
+    ucet            CHAR(9)  ,
+    typ             CHAR(1)   NOT NULL,
+    castka          DECIMAL(16, 2)   NOT NULL,
+    datuct          DATE   NOT NULL,
+    valuta          DATE   NOT NULL,
+    text            CHAR(20)  ,
+    varsym          DECIMAL(10,0)  ,
+    specsym         DECIMAL(10,0)  ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (typ in ('O', 'P', 'S', 'T')) CONSTRAINT eu_sledtranvym_den_c1
+) LOCK MODE ROW
+;
+
+-- 17  eu_sledtranvym_den-2/7       [CREATE.INDEX]
+CREATE unique INDEX eu_sledtranvym_den_pk ON eu_sledtranvym_den (ser) ;
+
+-- 18  eu_sledtranvym_den-3/7       [CREATE.INDEX]
+CREATE INDEX eu_sledtranvym_den_i_f1 ON eu_sledtranvym_den (vympohlser) ;
+
+-- 19  eu_sledtranvym_den-4/7       [CREATE.INDEX]
+CREATE INDEX eu_sledtranvym_den_i2 ON eu_sledtranvym_den (datuct) ;
+
+-- 20  eu_sledtranvym_den-5/7       [CREATE.INDEX]
+CREATE INDEX eu_sledtranvym_den_i1 ON eu_sledtranvym_den (serop) ;
+
+-- 21  eu_sledtranvym_den-6/7       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_sledtranvym_den
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT eu_sledtranvym_den_pk;
+
+-- ###############################################################
+--       eu_vympohl_arch
+
+-- 22  eu_vympohl_arch-1/3       [CREATE.TABLE]
+CREATE TABLE eu_vympohl_arch (
+  serarch   SERIAL NOT NULL,
+  ser   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  datsledod   DATE,
+  datsleddo   DATE,
+  zarazeni   CHAR(1),
+  vyrazeni   CHAR(1),
+  datprechodovp   DATE,
+  datdopis   DATE,
+  poznpozdni   Char(500),
+  datuzndluh   DATE,
+  cisjednaci   CHAR(20),
+  uzndluhmimosoud   DECIMAL(16, 2),
+  datpromlceni   DATE,
+  datpredsoud   DATE,
+  refprav   Char(2),
+  poznsoud   Char(500),
+  datzaloba   DATE,
+  datpredvolani   DATE,
+  caspredvolani   Datetime Hour to Minute,
+  datrozhodsoud   DATE,
+  cisnabyvtitul   Char(15),
+  datpravmoci   DATE,
+  datvykon   DATE,
+  datsplatpm   DATE,
+  datpocsplacpm   DATE,
+  uzndluhsoud   DECIMAL(16, 2),
+  poplsoud   DECIMAL(16, 2),
+  priznnaklsoud   DECIMAL(16, 2),
+  datzastrizeni   DATE,
+  datpredext   DATE,
+  datukonext   DATE,
+  poznext   Char(500),
+  soud   INTEGER,
+  zaradtime   datetime year to second,
+  zaraduser   CHAR(20),
+  vyradtime   datetime year to second,
+  vyraduser   CHAR(20),
+  pozdvymtime   datetime year to second,
+  pozdvymuser   CHAR(20),
+  soudvymtime   datetime year to second,
+  soudvymuser   CHAR(20),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)EXTENT SIZE 256 NEXT SIZE 256 lock mode row;
+
+-- 23  eu_vympohl_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_vympohl_arch_pk ON eu_vympohl_arch (serarch) ;
+
+-- 24  eu_vympohl_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_vympohl_arch
+    ADD CONSTRAINT PRIMARY KEY (serarch)  CONSTRAINT eu_vympohl_arch_pk;
+
+-- ###############################################################
+--       eu_vympohl_mat
+
+-- 25  eu_vympohl_mat-1/8       [CREATE.TABLE]
+CREATE TABLE eu_vympohl_mat (
+  ser   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  datsledod   DATE,
+  datsleddo   DATE,
+  zarazeni   CHAR(1),
+  vyrazeni   CHAR(1),
+  datprechodovp   DATE,
+  datdopis   DATE,
+  poznpozdni   Char(500),
+  datuzndluh   DATE,
+  cisjednaci   CHAR(20),
+  uzndluhmimosoud   DECIMAL(16, 2),
+  datpromlceni   DATE,
+  datpredsoud   DATE,
+  refprav   Char(2),
+  poznsoud   Char(500),
+  datzaloba   DATE,
+  datpredvolani   DATE,
+  caspredvolani   Datetime Hour to Minute,
+  datrozhodsoud   DATE,
+  cisnabyvtitul   Char(15),
+  datpravmoci   DATE,
+  datvykon   DATE,
+  datsplatpm   DATE,
+  datpocsplacpm   DATE,
+  uzndluhsoud   DECIMAL(16, 2),
+  poplsoud   DECIMAL(16, 2),
+  priznnaklsoud   DECIMAL(16, 2),
+  datzastrizeni   DATE,
+  datpredext   DATE,
+  datukonext   DATE,
+  poznext   Char(500),
+  soud   INTEGER,
+  zaradtime   datetime year to second,
+  zaraduser   CHAR(20),
+  vyradtime   datetime year to second,
+  vyraduser   CHAR(20),
+  pozdvymtime   datetime year to second,
+  pozdvymuser   CHAR(20),
+  soudvymtime   datetime year to second,
+  soudvymuser   CHAR(20),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)EXTENT SIZE 256 NEXT SIZE 256 lock mode row;
+
+-- 26  eu_vympohl_mat-2/8       [CREATE.INDEX]
+CREATE unique INDEX eu_vympohl_mat_pk ON eu_vympohl_mat (ser) ;
+
+-- 27  eu_vympohl_mat-3/8       [CREATE.INDEX]
+CREATE INDEX eu_vympohl_mat_i_f2 ON eu_vympohl_mat (refprav) ;
+
+-- 28  eu_vympohl_mat-4/8       [CREATE.INDEX]
+CREATE unique INDEX eu_vympohl_mat_u1 ON eu_vympohl_mat (smlouva,tsml) ;
+
+-- 29  eu_vympohl_mat-5/8       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_vympohl_mat
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT eu_vympohl_mat_pk;
+
+-- 30  eu_vympohl_mat-6/8       [CREATE.CONSTRAINT_UNIQUE]
+ALTER TABLE eu_vympohl_mat
+    ADD CONSTRAINT UNIQUE (smlouva,tsml)  CONSTRAINT eu_vympohl_mat_u1;
+
+
+
+--XXX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX
+
+
+-- ###############################################################
+--       eu_exekprikaz_mat
+
+-- 31  eu_exekprikaz_mat-8/9       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_exekprikaz_mat
+    ADD CONSTRAINT FOREIGN KEY (exekuceser) REFERENCES eu_exekuce_mat(ser)  CONSTRAINT eu_exekprikaz_mat_f1;
+
+-- 32  eu_exekprikaz_mat-9/9       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_exekprikaz_mat
+    ADD CONSTRAINT FOREIGN KEY (exekutor) REFERENCES eo_exekutor_cis(id)  CONSTRAINT eu_exekprikaz_mat_f2;
+
+-- ###############################################################
+--       eu_exekuce_mat
+
+-- 33  eu_exekuce_mat-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_exekuce_mat
+    ADD CONSTRAINT FOREIGN KEY (vympohlser) REFERENCES eu_vympohl_mat(ser)  CONSTRAINT eu_exekuce_mat_f1;
+
+-- ###############################################################
+--       eu_sledtranvym_den
+
+-- 34  eu_sledtranvym_den-7/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_sledtranvym_den
+    ADD CONSTRAINT FOREIGN KEY (vympohlser) REFERENCES eu_vympohl_mat(ser)  CONSTRAINT eu_sledtranvym_den_f1;
+
+-- ###############################################################
+--       eu_vympohl_mat
+
+-- 35  eu_vympohl_mat-7/8       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_vympohl_mat
+    ADD CONSTRAINT FOREIGN KEY (smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml)  CONSTRAINT eu_vympohl_mat_f1;
+
+-- 36  eu_vympohl_mat-8/8       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_vympohl_mat
+    ADD CONSTRAINT FOREIGN KEY (refprav) REFERENCES ep_referent_cis(zkratka)  CONSTRAINT eu_vympohl_mat_f2;
+
+ALTER TABLE eu_vympohl_mat ADD CONSTRAINT FOREIGN KEY(soud) REFERENCES eo_soud_cis(id) CONSTRAINT eu_vympohl_mat_f3;
+    
+    ----------------------------------------------------------------
+CREATE TABLE eu_insolvence_mat (
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  rezim   INTEGER,
+  datnastaveni   DATE,
+  datzastaveni   DATE,
+  poznamka   Char(500),
+  stav   CHAR(1) NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_insolvence_mat_pk ON eu_insolvence_mat(smlouva,tsml);
+ALTER TABLE eu_insolvence_mat ADD CONSTRAINT PRIMARY KEY(smlouva,tsml) CONSTRAINT eu_insolvence_mat_pk;
+
+--FK
+ALTER TABLE eu_insolvence_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_insolvence_mat_f1;
+CREATE INDEX eu_insolvence_mat_i_f2 ON eu_insolvence_mat(rezim);
+ALTER TABLE eu_insolvence_mat ADD CONSTRAINT FOREIGN KEY(rezim) REFERENCES eo_insolvence_cis(id) CONSTRAINT eu_insolvence_mat_f2;
+
+
+CREATE TABLE eu_insolvence_arch (
+  ser   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  rezim   INTEGER,
+  datnastaveni   DATE,
+  datzastaveni   DATE,
+  poznamka   Char(500),
+  stav   CHAR(1) NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_insolvence_arch_pk ON eu_insolvence_arch(ser);
+ALTER TABLE eu_insolvence_arch ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT eu_insolvence_arch_pk;
+
+
+ROLLBACK;

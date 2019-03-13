@@ -1,0 +1,188 @@
+Create Procedure B107362_RN00311507_cyklus_vym()
+
+-- Migrace cyklů vymáhání
+
+Define _ser like EU_VymPohl_Mat.ser;
+Define _reftime like EU_VymPohl_Mat.reftime;
+Define _smlouva like EU_VymPohl_Mat.smlouva;
+Define _tsml like EU_VymPohl_Mat.tsml;
+Define _cyklus Integer;
+Define _mincyklus Integer;
+Define _maxcyklus Integer;
+Define _cyklusex Integer;
+Define _stav like EU_VymPohl_Mat.stav;
+Define _minstav like EU_VymPohl_Mat.stav;
+Define _serarch like EU_VymPohl_Arch.serarch;
+Define _cyklusvympohl Integer;
+Define _reftimeex like EU_Exekuce_Mat.reftime;
+Define _refuserex like EU_Exekuce_Mat.refuser;
+Define _reftimesn like EU_SnimekVymPohl_Den.reftime;
+Define _serex like EU_Exekuce_Mat.ser;
+Define _serpr like EU_ExekPrikaz_Mat.ser;
+Define _sersn like EU_SnimekVymPohl_Den.ser;
+Define _sersnex like EU_SnimekExekPrikaz_Den.ser;
+Define _portime DateTime Year To Second;
+Define _poruser Char(20);
+Define _minserarch like EU_ExekPrikaz_Arch.serarch;
+Define _maxserarch like EU_ExekPrikaz_Arch.serarch;
+Define _newser Integer;
+Define _poradi Integer;
+Define _reftimeprikaz like EU_SnimekExekPrikaz_Den.reftimeprikaz;
+
+Set Triggers For EU_VymPohl_Mat Disabled;
+Set Triggers For EU_VymPohl_Arch Disabled;
+Set Triggers For EU_Exekuce_Mat Disabled;
+Set Triggers For EU_Exekuce_Arch Disabled;
+Set Triggers For EU_ExekPrikaz_Mat Disabled;
+Set Triggers For EU_ExekPrikaz_Arch Disabled;
+Set Triggers For EU_SnimekVymPohl_Den Disabled;
+Set Triggers For EU_SnimekExekuce_Den Disabled;
+Set Triggers For EU_SnimekExekPrikaz_Den Disabled;
+
+ForEach
+  Select ser, reftime, smlouva, tsml into _ser, _reftime, _smlouva, _tsml From EU_VymPohl_Mat
+
+  Let _cyklus = 1;
+  Let _minstav = null;
+
+  ForEach
+    Select stav, cast(null as int) serarch, 2147483647 into _stav, _serarch, _poradi From EU_VymPohl_Mat Where ser = _ser
+    Union
+    Select stav, serarch, serarch From EU_VymPohl_Arch Where ser = _ser
+    Order by 3 --serarch NULLS LAST
+    -- Má být: "Order by serarch NULLS LAST", ale parser to nebere, tak řadím podle serarch, kde místo null dávám max integer, a aby to nepadalo, tak přiřazuju do (v tomto cyklu nepoužité) proměnné _poradi.
+
+    If _minstav in ('B', 'U', 'V') and _stav in ('I', 'P', 'S') then
+      Let _cyklus = _cyklus + 1;
+    end If;
+    If _serarch is not null then
+      Update EU_VymPohl_Arch Set cyklus = _cyklus Where serarch = _serarch;
+    else
+      Update EU_VymPohl_Mat Set cyklus = _cyklus Where ser = _ser;
+    end If;
+    Let _minstav = _stav;
+  end ForEach;
+
+  Let _cyklusvympohl = _cyklus;
+
+  ForEach
+    Select reftime, cast(null as int) serarch, 2147483647 into _reftimeex, _serarch, _poradi From EU_Exekuce_Mat Where vympohlser = _ser
+    Union
+    Select reftime, serarch, serarch From EU_Exekuce_Arch WHere vympohlser = _ser
+    Order by 3 --serarch NULLS LAST
+
+    If _reftimeex >= _reftime then
+      Let _cyklus = _cyklusvympohl;
+    else
+      Select cyklus into _cyklus From EU_VymPohl_Arch Where serarch = (Select Max(serarch) From EU_VymPohl_Arch Where ser = _ser and reftime <= _reftimeex);
+      Let _cyklus = NVL(_cyklus, _cyklusvympohl); ---
+    end If;
+
+    If _serarch is not null then
+      Update EU_Exekuce_Arch Set cyklus = _cyklus Where serarch = _serarch;
+    else
+      Update EU_Exekuce_Mat Set cyklus = _cyklus Where vympohlser = _ser;
+    end If;
+  end ForEach;
+
+  Select ser into _serex From EU_Exekuce_Mat Where vympohlser = _ser;
+
+  If _serex is not null then
+    ForEach
+      Select ser, poradi into _serpr, _poradi From EU_ExekPrikaz_Mat Where exekuceser = _serex Order by poradi
+
+      Let _mincyklus, _maxcyklus = null, null;
+
+      ForEach
+        Select reftime, cast(null as int) serarch, 2147483647 into _reftimeex, _serarch, _newser From EU_ExekPrikaz_Mat Where ser = _serpr
+        Union
+        Select reftime, serarch, serarch From EU_ExekPrikaz_Arch Where ser = _serpr
+        Order by 3 --serarch NULLS LAST
+
+        If _reftimeex >= _reftime then
+          Let _cyklus = _cyklusvympohl;
+        else
+          Select cyklus into _cyklus From EU_VymPohl_Arch Where serarch = (Select Max(serarch) From EU_VymPohl_Arch Where ser = _ser and reftime <= _reftimeex);
+          Let _cyklus = NVL(_cyklus, _cyklusvympohl); ---
+        end If;
+
+        If _mincyklus is null then
+          Let _mincyklus = _cyklus;
+        end If;
+        If _maxcyklus is null or _maxcyklus < _cyklus then
+          Let _maxcyklus = _cyklus;
+        end If;
+
+        If _serarch is not null then
+          Update EU_ExekPrikaz_Arch Set cyklus = _cyklus Where serarch = _serarch;
+        else
+          Update EU_ExekPrikaz_Mat Set cyklus = _cyklus Where ser = _serpr;
+        end If;
+      end ForEach;
+
+      If _mincyklus <> _maxcyklus then
+        Let _portime, _poruser = null, null;
+        ForEach
+          Select cyklus, Min(serarch), Max(serarch) into _cyklus, _minserarch, _maxserarch From EU_ExekPrikaz_Arch Where ser = _serpr Group by cyklus
+
+          Select reftime, refuser into _reftimeex, _refuserex From EU_ExekPrikaz_Arch Where serarch = _minserarch;
+          If _cyklus <> _maxcyklus then
+            Insert into EU_ExekPrikaz_Mat (exekuceser, poradi, stav, cisprikaz, datnavrh, datnarizeni, poznamka, exekutor, portime, poruser, reftime, refuser, cyklus)
+              Select exekuceser, poradi, stav, cisprikaz, datnavrh, datnarizeni, poznamka, exekutor, _reftimeex, _refuserex, reftime, refuser, cyklus
+                From EU_ExekPrikaz_Arch
+                Where serarch = _maxserarch;
+
+            Let _newser = TW_LastSer();
+            Update EU_ExekPrikaz_Arch Set ser = _newser, portime = _reftimeex, poruser = _refuserex Where ser = _serpr and cyklus = _cyklus;
+          else
+            Update EU_ExekPrikaz_Arch Set portime = _reftimeex, poruser = _refuserex Where ser = _serpr and cyklus = _cyklus;
+            Let _portime, _poruser = _reftimeex, _refuserex; 
+          end If;
+        end ForEach;
+        Update EU_ExekPrikaz_Mat Set (portime, poruser) = (nvl(_portime, reftime), nvl(_poruser, refuser)) Where ser = _serpr;
+      end If; -- _mincyklus <> _maxcyklus
+    end ForEach;
+  end If; -- _serex is not null
+
+  ForEach
+    Select ser, reftime into _sersn, _reftimesn From EU_SnimekVymPohl_Den Where smlouva = _smlouva and tsml = _tsml
+
+    If _reftimesn >= _reftime then
+      Let _cyklus = _cyklusvympohl;
+    else
+      Select cyklus into _cyklus From EU_VymPohl_Arch Where serarch = (Select Max(serarch) From EU_VymPohl_Arch Where ser = _ser and reftime <= _reftimesn);
+      Let _cyklus = NVL(_cyklus, _cyklusvympohl); ---
+    end If;
+    Update EU_SnimekVymPohl_Den Set cyklus = _cyklus Where ser = _sersn;
+    Select ser, reftime into _sersnex, _reftimeex From EU_SnimekExekuce_Den Where snimekvympohlser = _sersn;
+    If _sersnex is not null then
+      If _reftimeex >= _reftime then
+        Let _cyklus = _cyklusvympohl;
+      else
+        Select cyklus into _cyklus From EU_VymPohl_Arch Where serarch = (Select Max(serarch) From EU_VymPohl_Arch Where ser = _ser and reftime <= _reftimesn);
+        Let _cyklus = NVL(_cyklus, _cyklusvympohl); ---
+      end If;
+      Update EU_SnimekExekuce_Den Set cyklus = _cyklus Where ser = _sersnex;
+      Let _cyklusex = _cyklus;
+      ForEach
+        Select ser, poradi, reftimeprikaz into _serpr, _poradi, _reftimeprikaz From EU_SnimekExekPrikaz_Den Where snimekexekuceser = _sersnex
+
+        Select Max(cyklus) into _maxcyklus From EU_ExekPrikaz_Mat Where exekuceser = _serex and poradi = _poradi and reftime >= _reftimeprikaz and cyklus <= _cyklusex;
+        Update EU_SnimekExekPrikaz_Den Set cyklus = _maxcyklus Where ser = _serpr;
+      end ForEach;
+    end If; -- _sersnex is not null
+  end ForEach;
+end ForEach;
+
+Set Triggers For EU_VymPohl_Mat Enabled;
+Set Triggers For EU_VymPohl_Arch Enabled;
+Set Triggers For EU_Exekuce_Mat Enabled;
+Set Triggers For EU_Exekuce_Arch Enabled;
+Set Triggers For EU_ExekPrikaz_Mat Enabled;
+Set Triggers For EU_ExekPrikaz_Arch Enabled;
+Set Triggers For EU_SnimekVymPohl_Den Enabled;
+Set Triggers For EU_SnimekExekuce_Den Enabled;
+Set Triggers For EU_SnimekExekPrikaz_Den Enabled;
+
+end Procedure;
+--End of B107362_RN00311507_4-cyklus_vymahani

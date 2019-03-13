@@ -1,0 +1,51 @@
+-- @TC:ONCE: ID = V2, A42975_RN00269254
+-- @TC:ONCE: DESCRIPTION = Doplnìní funkcionality automatického pøipisování pøíspìvku na základì pøíloh
+
+BEGIN WORK;
+
+ALTER TABLE es_urpremie_acis
+    ADD den             DATE   BEFORE tsml,
+    ADD povolenoposkpu  Integer   BEFORE typprispevku,
+    ADD povolenoposksu  Integer   BEFORE typprispevku,
+    ADD cilovekontoprim CHAR(1)   BEFORE roksp,
+    ADD cilovekontoalt  CHAR(1) DEFAULT '0'  BEFORE roksp,
+    ADD zaoktyp         CHAR(1) DEFAULT 'P'  BEFORE poruser,
+    ADD zaokpresnost    INTEGER  DEFAULT 0 BEFORE poruser;
+
+ALTER TABLE es_urpremie_acis
+    ADD CONSTRAINT CHECK (cilovekontoalt in ('0', 'S', 'U')) CONSTRAINT es_urpremie_acis_c4,
+    ADD CONSTRAINT CHECK (cilovekontoprim in ('S', 'U')) CONSTRAINT es_urpremie_acis_c3,
+    ADD CONSTRAINT CHECK (povolenoposkpu IN (0,1)) CONSTRAINT es_urpremie_acis_dezq,
+    ADD CONSTRAINT CHECK (zaokpresnost <= 2) CONSTRAINT es_urpremie_acis_df2e,
+    ADD CONSTRAINT CHECK (povolenoposksu IN (0,1)) CONSTRAINT es_urpremie_acis_dezr,
+    ADD CONSTRAINT CHECK (zaoktyp IN ('P', 'N', 'D')) CONSTRAINT es_urpremie_acis_df2d;
+
+ALTER TABLE es_urpremie_cis
+    ADD den             DATE   BEFORE tsml,
+    ADD povolenoposkpu  Integer   BEFORE typprispevku,
+    ADD povolenoposksu  Integer   BEFORE typprispevku,
+    ADD cilovekontoprim CHAR(1)   BEFORE roksp,
+    ADD cilovekontoalt  CHAR(1) DEFAULT '0'  BEFORE roksp,
+    ADD zaoktyp         CHAR(1) DEFAULT 'P'  BEFORE poruser,
+    ADD zaokpresnost    INTEGER DEFAULT 0  BEFORE poruser;
+
+ALTER TABLE es_urpremie_cis
+    ADD CONSTRAINT CHECK (cilovekontoalt in ('0', 'S', 'U')) CONSTRAINT es_urpremie_cis_c4,
+    ADD CONSTRAINT CHECK (cilovekontoprim in ('S', 'U')) CONSTRAINT es_urpremie_cis_c3,
+    ADD CONSTRAINT CHECK (povolenoposkpu IN (0,1)) CONSTRAINT es_urpremie_cis_dezq,
+    ADD CONSTRAINT CHECK (zaokpresnost <= 2) CONSTRAINT es_urpremie_cis_df1e,
+    ADD CONSTRAINT CHECK (povolenoposksu IN (0,1)) CONSTRAINT es_urpremie_cis_dezr,
+    ADD CONSTRAINT CHECK (zaoktyp IN ('P', 'N', 'D')) CONSTRAINT es_urpremie_cis_df1d;
+
+ALTER TABLE es_urpremiefix_acis
+    ADD koefzezustatku  DECIMAL(16, 2) DEFAULT 0  BEFORE platnost,
+    ADD limitmin        DECIMAL(16, 2) DEFAULT 0  BEFORE platnost,
+    ADD limtmax         DECIMAL(16, 2)   BEFORE platnost;
+
+ALTER TABLE es_urpremiefix_cis
+    ADD koefzezustatku  DECIMAL(16, 2) DEFAULT 0  BEFORE platnost,
+    ADD limitmin        DECIMAL(16, 2) DEFAULT 0  BEFORE platnost,
+    ADD limitmax        DECIMAL(16, 2)   BEFORE platnost;
+
+
+ROLLBACK WORK;

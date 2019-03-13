@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, B136108_UID81329_1
+-- @TC:ONCE: DESCRIPTION = RSTS-26368: Rozšířit export úvěrové smlouvy o více dokladů {STORY}
+
+BEGIN WORK;
+
+CREATE TABLE eo_exproleprukaz_den (
+  id_index   Integer NOT NULL,
+  por_index   Integer NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  os   Integer,
+  trole   CHAR(2),
+  druhprukaz   Integer,
+  druhprukaztitle   CHAR(35),
+  cisprukaz   CHAR(20),
+  serprukaz   CHAR(10),
+  vydal   CHAR(45),
+  neomezplat   Integer,
+  platnostdo   DATE,
+  kontrznak   CHAR(1),
+  priorita   Integer,
+  platnost   Integer,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_exproleprukaz_den_d8ft
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_exproleprukaz_den_pk ON eo_exproleprukaz_den(id_index,por_index);
+ALTER TABLE eo_exproleprukaz_den ADD CONSTRAINT PRIMARY KEY(id_index,por_index) CONSTRAINT eo_exproleprukaz_den_pk;
+
+--INDEXES
+CREATE INDEX eo_exproleprukaz_den_i1 ON eo_exproleprukaz_den(os);
+
+ROLLBACK WORK;
+
+--End of B136108_UID81329_1

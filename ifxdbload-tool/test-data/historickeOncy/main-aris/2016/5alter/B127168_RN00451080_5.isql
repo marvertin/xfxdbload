@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B127168_RN00451080_5
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+drop procedure if exists EU_EXPUMORTABCR_T;
+drop procedure if exists EU_ExpUmorTabCreate;
+drop procedure if exists EU_EXPUMORTABIN_N;
+drop procedure if exists EU_ExpUmorTabInit;
+drop procedure if exists EU_EXPUMORTABLO_N;
+drop procedure if exists EU_ExpUmorTabLoad;
+drop procedure if exists EU_GETAMORTTBLOPNOTE;
+drop procedure if exists EU_GetAmortTblOpType;
+
+drop procedure if exists EU_REPADD01_N;
+drop procedure if exists EU_REPADD01;
+drop procedure if exists EU_REPPREPAREDATA01_T;
+drop procedure if exists EU_RepPrepareData01;
+drop procedure if exists EU_RepTiskInfo_N;
+
+ROLLBACK WORK;
+
+--End of B127168_RN00451080_5

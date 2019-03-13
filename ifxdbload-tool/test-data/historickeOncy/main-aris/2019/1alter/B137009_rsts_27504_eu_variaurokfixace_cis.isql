@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B137009_rsts_27504_eu_variaurokfixace_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-27504: TF001922 - CIBIS-Main - Číselníky - Varianty úrokových fixací - doplnění externího názvu varianty{REQUEST}
+
+
+BEGIN WORK;
+
+alter table eu_variaurokfixace_acis  
+add extNazev char(35)  before delka;
+   
+alter table eu_variaurokfixace_cis  
+add extNazev char(35)  before delka;
+ 
+ROLLBACK WORK;
+
+--End of B137009_rsts_27504_eu_variaurokfixace_cis

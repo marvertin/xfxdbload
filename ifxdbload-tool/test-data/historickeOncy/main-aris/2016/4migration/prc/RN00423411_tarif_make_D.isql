@@ -1,0 +1,180 @@
+create PROCEDURE RN00423411_tarif_make_D ()
+
+-- RN00423411
+-- nastaveni tarifu k variantam PU
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'ZO') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'ZO',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'ZO',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'ZO',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'ZOR') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'ZOR',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'ZOR',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'ZOR',0, 1);
+END IF;
+     
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPRBU') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPRBU',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPRBU',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPRU') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPRU',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPRU',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPRRBU') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPRRBU',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPRRBU',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPRRU') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPRRU',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPRRU',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPUE') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPUE',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPUE',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPUE90') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPUE90',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPUE90',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPU') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPU',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPU',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FP90') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FP90',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FP90',0, 1);
+END IF;
+     
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPPU') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPPU',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPPU',0, 1);
+END IF;
+
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FPP90') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FPP90',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FPP90',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'FU') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'FU',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'FU',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'F90') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'F90',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (119, 'F90',0, 1);
+END IF;
+                            
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPRB') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'GPRB',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'GPRB',0, 1);
+END IF;
+
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPR') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'GPR',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'GPR',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPBE') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'GPBE',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'GPBE',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPUE') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'GPUE',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'GPUE',0, 1);
+END IF;
+     
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GP') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'GP',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'GP',0, 1);
+END IF;
+      
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPB') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'GPB',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'GPB',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'GPP') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (117, 'GPP',0, 1);
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'GPP',0, 1);
+END IF;
+    
+IF (SELECT COUNT(*) FROM EU_VariaPU_Cis WHERE varid = 'G') > 0 THEN 
+    INSERT INTO eu_variaputarif_cis (tarif,refvariapu,impltarif,platnost)
+     VALUES (118, 'G',0, 1);
+END IF;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

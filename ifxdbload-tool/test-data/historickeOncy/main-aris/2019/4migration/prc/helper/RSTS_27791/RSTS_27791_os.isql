@@ -1,0 +1,135 @@
+create procedure RSTS_27791_os(AOs Int, ALogovat Int default 0)
+
+define _id BigInt;
+define _datvyhodnoceni Date;
+
+define _smlouvaUv Dec(16,0);
+define _smlouvaUvPrev Dec(16,0);
+define _typrole Char(2);
+define _klient Int;
+define _realn Int;
+
+define _dpdeba Int;
+define _nesplaccastka Dec(16,2);
+define _dpdebaMax Int;
+define _nesplaccastkaMax Dec(16,2);
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_start(AOs, 'Osoba');
+  call tw_monitor2_block_start(310, 'Osoba-init');
+end if;
+
+DELETE FROM RSTS_27791_eba_Tmp;
+
+-- vložení záznamů DPD do pomocné evidence
+INSERT INTO RSTS_27791_eba_Tmp(osoba, datvyhodnoceni, typvyhodnoceni, dpdeba, nesplaccastka, datprvvyhodnoceni, vlozit)
+SELECT osoba, datvyhodnoceni, typvyhodnoceni, -1, nesplaccastka, datprvvyhodnoceni, 1
+FROM EP_DPDEvid_Den
+WHERE osoba = AOs
+ORDER BY datvyhodnoceni;
+
+UPDATE STATISTICS HIGH FOR TABLE RSTS_27791_eba_Tmp;
+
+-- příprava rolí a vztahů
+call RSTS_27791_role(AOs, null, null, 'P');
+
+-- přesypání záznamů EBA DPD pro všechny potřebné realizace do temp tabulky
+DELETE FROM RSTS_27791_ebaUv_Tmp;
+
+INSERT INTO RSTS_27791_ebaUv_Tmp(realuv, datvyhodnoceni, typvyhodnoceni, dpdeba, nesplaccastka, datprvvyhodnoceni)
+SELECT realuv, datvyhodnoceni, typvyhodnoceni, dpdeba, nesplaccastka, datprvvyhodnoceni
+FROM EP_DPDEBA_Den
+WHERE realuv IN (SELECT realn FROM RSTS_27791_real_Tmp);
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(310);
+  call tw_monitor2_block_start(320, 'Osoba-max');
+end if;
+
+foreach
+  SELECT id, datvyhodnoceni
+  INTO _id, _datvyhodnoceni
+  FROM RSTS_27791_eba_Tmp
+  ORDER BY id
+  
+  let _dpdebaMax, _nesplaccastkaMax = 0, 0;
+  
+  let _smlouvaUvPrev = null;
+  foreach
+    SELECT smlouvauv, typrole, klient
+    INTO _smlouvaUv, _typrole, _klient
+    FROM RSTS_27791_role_Tmp
+    WHERE datpor <= _datvyhodnoceni AND (datukon IS NULL OR _datvyhodnoceni <= datukon) AND smlouvauv IS NOT NULL
+    ORDER BY smlouvauv
+    
+    if _smlouvaUvPrev is not null and _smlouvaUvPrev = _smlouvaUv then
+      continue foreach;
+    end if;
+    
+    -- pro rolu PR musí mít osoba vztah ke klientovi
+    if _typrole = 'PR' and not exists(SELECT * FROM RSTS_27791_vztah_Tmp WHERE datpor <= _datvyhodnoceni AND (datukon IS NULL OR _datvyhodnoceni <= datukon)) then
+      continue foreach;
+    end if;
+    
+    -- realizace k datu
+    let _realn = null;
+    foreach
+      SELECT realn
+      INTO _realn
+      FROM RSTS_27791_real_Tmp
+      WHERE smlouva = _smlouvaUv AND _datvyhodnoceni BETWEEN datotev AND NVL(datuzav, _datvyhodnoceni)
+      ORDER BY realn DESC
+        
+      exit foreach;
+    end foreach;
+
+    -- zjištění DPD a nesplacené částky ze souhrnného záznamu, případně záznamu úvěru
+    if _realn is not null then 
+      SELECT dpdeba, nesplaccastka
+      INTO _dpdeba, _nesplaccastka
+      FROM RSTS_27791_ebaUv_Tmp
+      WHERE realuv = _realn AND typvyhodnoceni = 'S' AND _datvyhodnoceni BETWEEN datprvvyhodnoceni AND datvyhodnoceni;
+      
+      if _dpdeba is null then
+        SELECT dpdeba, nesplaccastka
+        INTO _dpdeba, _nesplaccastka
+        FROM RSTS_27791_ebaUv_Tmp
+        WHERE realuv = _realn AND typvyhodnoceni = 'L' AND _datvyhodnoceni BETWEEN datprvvyhodnoceni AND datvyhodnoceni;
+      end if;
+
+      let _nesplaccastkaMax = _nesplaccastkaMax + nvl(_nesplaccastka, 0);
+      let _dpdebaMax = TW_MaxInt(nvl(_dpdeba, 0), _dpdebaMax);
+    end if;
+
+    let _smlouvaUvPrev = _smlouvaUv;
+  end foreach;
+
+  UPDATE RSTS_27791_eba_Tmp SET dpdeba = _dpdebaMax, nesplaccastka = _nesplaccastkaMax WHERE id = _id;
+end foreach;
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(320);
+  call tw_monitor2_block_start(330, 'Osoba-slouceni');
+end if;
+
+-- sloučení záznamů s nulovým EBA DPD a nastavení pořadí
+call RSTS_27791_sluc();
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(330);
+  call tw_monitor2_block_start(340, 'Osoba-presyp');
+end if;
+
+-- vložení záznamů do evidence EBA DPD
+INSERT INTO EP_DPDEBA_Den(osoba, poradi, datvyhodnoceni, typvyhodnoceni, dpdeba, nesplaccastka, datprvvyhodnoceni)
+SELECT osoba, poradi, datvyhodnoceni, typvyhodnoceni, dpdeba, nesplaccastka, datprvvyhodnoceni
+FROM RSTS_27791_eba_Tmp
+WHERE vlozit = 1
+ORDER BY id;
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(340);
+  call tw_monitor2_block_finish(AOs);
+end if;
+
+end procedure;

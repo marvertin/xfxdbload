@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B125731_RN00454782_1
+-- @TC:ONCE: DESCRIPTION = Dvojí RPSN: V tabulce cash-flow pro model splácení a spoření v Main zrušit položku fáze {DEFECT}
+
+BEGIN WORK;
+
+alter table ep_expsplspormodcf_den
+  drop phase
+;
+
+alter table ep_splspormodcashflow_den
+  drop phase
+;
+
+ROLLBACK WORK;
+
+--End of B125731_RN00454782_1

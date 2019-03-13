@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B126428_RN00451080_3
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- Typ řádku tabulky umoření
+
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (1, 'Čerpání', 'Čerpání úvěru', 'Čerpání úvěru', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (2, 'Hodnota smlouvy SS', 'Platby na stavební spoření', 'Platby na stavební spoření', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (3, 'Vedlejší náklady', 'Platby mimo banku', 'Platby mimo banku', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (4, 'Vklad', 'Vklad', 'Vklad', 'Tj. vklad na spořicí konto (dospořování)');
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (5, 'Státní podpora', 'Státní podpora - platba', 'Státní podpora - platba', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (6, 'Splátka PÚ', 'Splátka PU', 'Splátka PU', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (7, 'Splátka SÚ', 'Splátka SU', 'Splátka SU', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (8, 'Výnos SP', 'Státní podpora - výnos', 'Státní podpora - výnos', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (9, 'Konečný stav SS', 'Uspořená částka se státní podporou', 'Uspořená částka se státní podporou', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (10, 'Překlopení PÚ-SÚ', 'Převod ke kni přidělení cílové částky', 'Převod ke kni přidělení cílové částky', null);
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (11, 'Doplatek klienta', 'Splacení překlenovacího úvěru', 'Splacení překlenovacího úvěru', 'Pouze pro dílčí TUMO');
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (12, 'Čerpání po překlopení', 'Čerpání úvěru ze stavebního spoření', 'Čerpání úvěru ze stavebního spoření', 'Pouze pro dílčí TUMO');
+insert into eu_typumor_cis ( kod, nazev, nazevmin, nazevbud, poznamka) values (13, 'Vrácení přeplatku ', 'Přeplatek na úvěrovém účtu', 'Přeplatek na úvěrovém účtu', null);
+
+ROLLBACK WORK;
+
+--End of B126428_RN00451080_3

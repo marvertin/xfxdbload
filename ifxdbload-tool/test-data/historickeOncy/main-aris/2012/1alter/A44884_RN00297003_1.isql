@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, A44884_RN00297003_1
+-- @TC:ONCE: DESCRIPTION = Neprovedená inkasa - neplní se dùvod neprovedení {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  CREATE TABLE cz_duvododmitnuti_cis (
+    id        SERIAL NOT NULL,
+    kod       CHAR(4) NOT NULL,
+    guid      VARCHAR(15) NOT NULL,
+    popis     CHAR(35),
+    textfe    VARCHAR(255) NOT NULL,
+    textuziv  VARCHAR(255) NOT NULL,
+    platnost  INTEGER  DEFAULT 1 NOT NULL,
+    portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    poruser   CHAR(20)  DEFAULT USER NOT NULL,
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    refuser   CHAR(20)  DEFAULT USER,
+    CHECK (platnost IN (0,1)) CONSTRAINT cz_duvododmitnuti_cis_d6va
+  ) LOCK MODE ROW;
+  
+  CREATE UNIQUE INDEX cz_duvododmitnuti_cis_pk ON cz_duvododmitnuti_cis(id);
+  ALTER TABLE cz_duvododmitnuti_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT cz_duvododmitnuti_cis_pk;
+  
+  CREATE UNIQUE INDEX cz_duvododmitnuti_cis_u1 ON cz_duvododmitnuti_cis(kod);
+  ALTER TABLE cz_duvododmitnuti_cis ADD CONSTRAINT (UNIQUE (kod) CONSTRAINT cz_duvododmitnuti_cis_u1);
+  
+  CREATE UNIQUE INDEX cz_duvododmitnuti_cis_u2 ON cz_duvododmitnuti_cis(guid);
+  ALTER TABLE cz_duvododmitnuti_cis ADD CONSTRAINT (UNIQUE (guid) CONSTRAINT cz_duvododmitnuti_cis_u2);
+  
+  ALTER TABLE cz_zadost_den ADD duvododm CHAR(4);
+  ALTER TABLE cz_zadost_den ADD CONSTRAINT FOREIGN KEY(duvododm) REFERENCES cz_duvododmitnuti_cis(kod) CONSTRAINT cz_zadost_den_f2;
+
+ROLLBACK WORK;
+
+--End of A44884_RN00297003_1

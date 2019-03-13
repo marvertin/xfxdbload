@@ -1,0 +1,141 @@
+CREATE PROCEDURE RSTS_27791_find_D ()
+
+define _ser          Int;
+
+define _reals Int;
+define _realuv Int;
+define _osoba Int;
+define _urapldef Char(1);
+define _jeretail Int;
+define _klient Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RSTS_27791;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RSTS_27791(
+  Ser     Serial NOT NULL,  
+  sid     Int,
+  NumErr  Int,              
+  ISAMErr Int,              
+  TextErr VarChar(255),     
+  zpracspor SmallInt,
+  zpracuv   SmallInt,
+  zpracos   SmallInt,
+
+  klient   Int,
+  urapldef Char(1),
+  jeretail Int,
+  
+  starttimespor  DATETIME YEAR to FRACTION(5),
+  finishtimespor DATETIME YEAR to FRACTION(5),
+  starttimeuv   DATETIME YEAR to FRACTION(5),
+  finishtimeuv  DATETIME YEAR to FRACTION(5),
+  starttimeos   DATETIME YEAR to FRACTION(5),
+  finishtimeos  DATETIME YEAR to FRACTION(5),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+CREATE INDEX RSTS_27791_i1 ON RSTS_27791(klient);
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RSTS_27791_prod;
+end;
+
+CREATE TABLE RSTS_27791_prod(
+  Ser     Serial NOT NULL,  
+  zprac   SmallInt,
+
+  klient   Int,
+  reals    Int,
+  realuv   Int,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+CREATE INDEX RSTS_27791_prod_i1 ON RSTS_27791_prod(klient);
+
+foreach cc1 with hold for
+  SELECT DISTINCT reals
+  INTO _reals
+  FROM EP_DPDEvid_Den
+  WHERE reals IS NOT NULL
+  
+  let _klient = EP_KlientReal(_reals);
+  
+  -- naplnění řídící tabulky
+  if not exists(SELECT * FROM RSTS_27791 WHERE klient = _klient) then
+    let _urapldef = EO_GetTigerUrAplDef(_klient);
+    let _jeretail = EO_GetJeRetail(_klient);
+
+    INSERT INTO RSTS_27791(klient, urapldef, jeretail, zpracspor, zpracuv, zpracos)
+    VALUES(_klient, _urapldef, _jeretail, -1, -1, -1);
+  end if;
+  
+  INSERT INTO RSTS_27791_prod(klient, reals, realuv, zprac)
+  VALUES(_klient, _reals, null, -1);
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+foreach cc2 with hold for
+  SELECT DISTINCT realuv
+  INTO _realuv
+  FROM EP_DPDEvid_Den
+  WHERE realuv IS NOT NULL
+  
+  let _klient = EP_KlientReal(_realuv);
+  
+  if not exists(SELECT * FROM RSTS_27791 WHERE klient = _klient) then
+    let _urapldef = EO_GetTigerUrAplDef(_klient);
+    let _jeretail = EO_GetJeRetail(_klient);
+
+    INSERT INTO RSTS_27791(klient, urapldef, jeretail, zpracspor, zpracuv, zpracos)
+    VALUES(_klient, _urapldef, _jeretail, -1, -1, -1);
+  end if;
+  
+  INSERT INTO RSTS_27791_prod(klient, reals, realuv, zprac)
+  VALUES(_klient, null, _realuv, -1);
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RSTS_27791;
+UPDATE STATISTICS HIGH FOR TABLE RSTS_27791_prod;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;--end of RSTS_27791_find_D

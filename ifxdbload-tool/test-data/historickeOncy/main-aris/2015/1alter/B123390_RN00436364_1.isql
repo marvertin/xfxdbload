@@ -1,0 +1,76 @@
+-- @TC:ONCE: ID = V2, B123390_RN00436364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+--Extra Expenses
+--Model splácení a spoření – další náklady spojené s úvěrem
+CREATE TABLE ep_splspormodee_den (
+  ser   SERIAL NOT NULL,
+  refheadser   INTEGER NOT NULL,
+  
+  --ID nákladu z číselníku Další náklady spojené s úvěrem (odkaz do číselníku)
+  expenseType   INTEGER,
+  
+  --Výše úhrady
+  expenseAmount   DECIMAL(16, 2),
+  
+  --Perioda: 1=once,M=monthly,Q=quaterly,P=biannually,R=annually
+  expensePeriod   CHAR(1)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splspormodee_den_pk ON ep_splspormodee_den(ser);
+ALTER TABLE ep_splspormodee_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splspormodee_den_pk;
+
+--FK
+CREATE INDEX ep_splspormodee_den_i_f1 ON ep_splspormodee_den(refheadser);
+ALTER TABLE ep_splspormodee_den ADD CONSTRAINT FOREIGN KEY(refheadser) REFERENCES ep_splspormodsh_den(ser) CONSTRAINT ep_splspormodee_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ep_splspormodee_den
+ADD CONSTRAINT (CHECK (expensePeriod in ('1','M','Q','P','R')) CONSTRAINT ep_splspormodee_den_c1)
+;
+
+ALTER TABLE ep_splspormodsh_den
+
+  --Doplňkové (ilustrativní) RPSN vypočtené jako efektivní sazba k datu konce fixace (předčasného splacení)
+  add supplRpsn   Double precision,
+  
+  --Datum, ke kterému bylo simulováno splacení při výpočtu doplňkového RPSN
+  add datSplatSupplRpsn   DATE,
+  
+  --Celková výše dalších nákladů spojených s úvěrem
+  add extraExpenses   DECIMAL(16, 2)
+;
+
+ALTER TABLE ep_splspormodb_den 
+
+  --Určuje, zda příslušný řádek je relevantní pouze pro výpočet doplňkového RPSN nebo obecně
+  add   onlyToSupplRpsn   Integer  DEFAULT 0,
+  add constraint  CHECK (onlyToSupplRpsn IN (0,1)) CONSTRAINT ep_splspormodb_den_dfhn
+;
+
+ALTER TABLE ep_splspormodcashflow_den 
+
+  --Určuje, zda příslušný řádek je relevantní pouze pro výpočet doplňkového RPSN nebo obecně
+  add onlyToSupplRpsn   Integer  DEFAULT 0,
+  add constraint CHECK (onlyToSupplRpsn IN (0,1)) CONSTRAINT ep_splspormodcashflow_den_dfho
+;
+
+--CHECKS
+--Určuje, zda zahrnutá operace pochází z: U = úvěrového konta,S = spořicího konta,E = další náklady spojené s úvěrem
+ALTER TABLE ep_splspormodcashflow_den drop constraint ep_splspormodcashflow_den_c1
+;
+ALTER TABLE ep_splspormodcashflow_den
+  ADD CONSTRAINT CHECK (zdroj in ('S', 'U', 'E')) CONSTRAINT ep_splspormodcashflow_den_c1
+;
+
+ROLLBACK WORK;
+
+--End of B123390_RN00436364_1

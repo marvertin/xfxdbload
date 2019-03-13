@@ -1,0 +1,37 @@
+-- @TC:ONCE: ID = V2, B135826_UID79162_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25256: Doplnit interní druh pobytu do evidencí CIBIS-Main {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_fo_arch
+  ADD refdruhpobytinterni   INTEGER;
+  
+ALTER TABLE eo_fo_mat
+  ADD refdruhpobytinterni   INTEGER;
+
+CREATE INDEX eo_fo_mat_i_f1 ON eo_fo_mat(refdruhpobytinterni);
+
+ALTER TABLE eo_fo_mat ADD CONSTRAINT FOREIGN KEY(refdruhpobytinterni) REFERENCES eo_druhpobytinterni_cis(id) CONSTRAINT eo_fo_mat_f1;
+
+ALTER TABLE eo_fozmpl_kart
+  ADD refdruhpobytinterni   INTEGER;
+
+CREATE INDEX eo_fozmpl_kart_i_f1 ON eo_fozmpl_kart(refdruhpobytinterni);
+ALTER TABLE eo_fozmpl_kart ADD CONSTRAINT FOREIGN KEY(refdruhpobytinterni) REFERENCES eo_druhpobytinterni_cis(id) CONSTRAINT eo_fozmpl_kart_f1;
+
+ALTER TABLE es_expsml_den 
+  ADD orefdruhpobytinterni   INTEGER,
+  ADD rrefdruhpobytinterni   INTEGER;
+
+CREATE INDEX es_expsml_den_i_f5 ON es_expsml_den(orefdruhpobytinterni);
+
+ALTER TABLE es_expsml_den ADD CONSTRAINT FOREIGN KEY(orefdruhpobytinterni) REFERENCES eo_druhpobytinterni_cis(id) CONSTRAINT es_expsml_den_f5;
+
+CREATE INDEX es_expsml_den_i_f6 ON es_expsml_den(rrefdruhpobytinterni);
+
+ALTER TABLE es_expsml_den ADD CONSTRAINT FOREIGN KEY(rrefdruhpobytinterni) REFERENCES eo_druhpobytinterni_cis(id) CONSTRAINT es_expsml_den_f6;
+
+ROLLBACK WORK;
+
+--End of B135826_UID79162_1

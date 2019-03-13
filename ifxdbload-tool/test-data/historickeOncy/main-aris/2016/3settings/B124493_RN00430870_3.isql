@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B124493_RN00430870_3
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+insert into tw_smstyp_cis(zkratka, popis, textsms, plnasms, ignorovatcas, platnost) 
+values                   ('USD_NOTIF1_KL','Notifikace o připravené úvěrové smluvní dokumentaci - pro klienta', 'Pro Vaši úvěrovou smlouvu <<smlouva>> je připravena dokumentace k biometrickému podpisu.',  1, 1, 1);
+
+
+insert into tw_smstyp_cis(zkratka, popis, textsms, plnasms, ignorovatcas, platnost) 
+values                   ('USD_NOTIF1_OZ','Notifikace o připravené úvěrové smluvní dokumentaci - pro OZ', 'Pro úvěrovou smlouvu <<smlouva>> (klient <<klient>>) je připravena dokumentace k biometrickému podpisu.',  1, 1, 1);
+
+
+insert into tw_emailtyp_cis(zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, 
+                            odkaz, maxpocetpriloh, maxpriloh, maxpokusu, maxinterval, casod, casdo, bezdiakritiky, zpusob, priorita, platnost, maxpocetznaku ) 
+values                     ('USD_NOTIF1_OZ', 'Notifikace o připravené úvěrové smluvní dokumentaci - pro OZ', 'sale@rsts.cz','RSTS','Pro úvěrovou smlouvu <<smlouva>> (klient <<klient>>) připravena smluvní dokumentace', 'Pro úvěrovou smlouvu <<smlouva>> (klient <<klient>>) je připravena smluvní dokumentace k biometrickému podpisu v CIBIS-Sale.',
+                            null, 0, 0, 1, 24, null, null, 0, 'A', 1, 1, null );
+    
+ROLLBACK WORK;
+
+--End of B124493_RN00430870_3

@@ -1,0 +1,7 @@
+-- @TC:ONCE: ID = V2, A54891_RN00250958
+-- @TC:ONCE: DESCRIPTION = Obnova úmrtí/zániku osoby
+BEGIN WORK;
+
+UPDATE eo_stavrcmf_cis SET umrti = 1 WHERE stav in (90,95,190,195);
+
+ROLLBACK WORK;

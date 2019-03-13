@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B118765_RN00421645_4
+-- @TC:ONCE: DESCRIPTION = Chyba přenesu výsledku supervize do Revizí ÚN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE EU_ContractChecking_Kart SET takce = 'SUPZ' WHERE propertynote = 'Specifikace podmínky' AND provtime >= mdy(2,23,2015);
+
+ROLLBACK WORK;
+
+--End of B118765_RN00421645_4

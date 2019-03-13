@@ -1,0 +1,285 @@
+create procedure RN00311507_krok_3B()
+-- zaevidování sledovaných transakcí
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+
+define _sernoins like EP_Insolvence_Mat.serno;
+define _datzahajeni like EP_Insolvence_Mat.datzahajeni;
+define _datukonceni like EP_Insolvence_Mat.datukonceni;
+define _insolvspravcekonto like EP_Insolvence_Mat.insolvspravcekonto;
+define _insolvspravcebanka like EP_Insolvence_Mat.insolvspravcebanka;
+define _refosoba like EP_Insolvence_Mat.refosoba;
+define _refinsolvspravce like EP_Insolvence_Mat.refinsolvspravce;
+define _refosobains like EP_Insolvence_Mat.refosoba;
+define _refinsolvspravceins like EP_Insolvence_Mat.refinsolvspravce;
+
+define _refosobaprod like EP_ProduktInsolv_Mat.serno;
+define _smlouva like EP_ProduktInsolv_Mat.smlouva;
+define _tsml like EP_ProduktInsolv_Mat.tsml;
+
+define _datukoncuv like EU_Sml_Mat.datukonc;
+define _productid like EU_Sml_Mat.productid;
+
+define _smer like AC_MemoBank_View.smer;
+define _db_konto like AC_MemoBank_View.db_konto;
+define _db_tko like AC_MemoBank_View.db_tko;
+define _cr_konto like AC_MemoBank_View.cr_konto;
+define _cr_tko like AC_MemoBank_View.cr_tko;
+define _reftime like AC_MemoBank_View.reftime;
+define _refuser like AC_MemoBank_View.refuser;
+
+define _sernotran like EP_SledTran_Den.serno;
+define _typ like EP_SledTran_Den.typ;
+define _sledinsolv like EP_SledTran_Den.sledinsolv;
+define _kontoproti like EP_SledTran_Den.kontoproti;
+define _banka like EP_SledTran_Den.banka;
+define _varsym like EP_SledTran_Den.varsym;
+
+define _konto Dec(16,0);
+define _tko Char(2);
+define _kontoprev Dec(16,0);
+define _tkoprev Char(2);
+define _kontotran Dec(16,0);
+define _tkotran Char(2);
+define _datdo Date;
+define _serop Int;
+define _zdrojser Int;
+define _akcetran Varchar(20);
+define _dbcr Int;
+define _sernoinspom Int;
+define _aktivita Int;
+define _os Int;
+define _vlbanka Dec(7,0);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+SET TRIGGERS FOR EP_SledTran_Den DISABLED;
+SET TRIGGERS FOR EP_ObjSledTran_Mat DISABLED;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_3B');
+
+let _vlbanka = TW_RegGetKey('CC', '*', '*', 'vlbanka');
+
+COMMIT WORK;
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, sernoins
+   INTO _ser, _sernoins
+   FROM RN00311507_krok_3_tran
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_3_tran
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    SELECT datzahajeni, datukonceni, refosoba INTO _datzahajeni, _datukonceni, _refosobaprod FROM EP_Insolvence_Mat WHERE serno = _sernoins;
+    
+    foreach
+      SELECT DISTINCT smlouva, tsml INTO _smlouva, _tsml FROM EP_ProduktInsolv_Mat WHERE refinsolv = _sernoins AND refosoba = _refosobaprod AND platnost = 1 AND tsml NOT IN ('SSFO', 'SSPO')
+      
+      let _datukoncuv, _productid = null, null;
+      foreach
+        SELECT datukonc, productid INTO _datukoncuv, _productid FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _tsml ORDER BY productid DESC
+        exit foreach;
+      end foreach;
+      
+      if _productid is null then
+        continue foreach;
+      end if;
+      
+      if _datukonceni is not null and _datukoncuv is not null then
+        let _datdo = TW_MinDate(_datukonceni, _datukoncuv);
+      else
+        let _datdo = nvl(_datukonceni, _datukoncuv);
+      end if;
+      
+      let _konto, _tko = EP_KontoTkoSml(_smlouva, _tsml);
+      let _kontoprev, _tkoprev = AO_GetAncestor(_konto, _tko, 0, 2);
+      
+      begin
+        on exception IN(-206)
+        end exception;
+        DROP TABLE RN00311507_krok_3_tran_temp;
+      end;
+      
+      SELECT h.ser, 0 zdrojser
+      FROM AC_UcHead_Den h JOIN AC_MemoBody_Den m ON h.ser = m.ser
+      WHERE m.konto IN (_konto, _kontoprev) AND m.tko = 'CA' AND h.datuct >= _datzahajeni AND (_datdo IS NULL OR h.datuct <= _datdo)
+      INTO TEMP RN00311507_krok_3_tran_temp;
+      
+      if exists(SELECT * FROM AC_Konto_Mat WHERE konto IN (_konto, _kontoprev) AND zdrojser = 1) then
+        INSERT INTO RN00311507_krok_3_tran_temp(ser, zdrojser)
+        SELECT h.ser, 1 zdrojser
+        FROM AC_UcHeadPredMigr_Den h JOIN AC_MemoBodyPredMigr_Den m ON h.ser = m.ser
+        WHERE m.konto IN (_konto, _kontoprev) AND m.tko = 'CA' AND h.datuct >= _datzahajeni AND (_datdo IS NULL OR h.datuct <= _datdo);
+      end if;
+
+      foreach
+        SELECT ser, zdrojser INTO _serop, _zdrojser
+        FROM RN00311507_krok_3_tran_temp
+        ORDER BY ser 
+        
+        SELECT smer, db_konto, db_tko, cr_konto, cr_tko, reftime, refuser
+        INTO _smer, _db_konto, _db_tko, _cr_konto, _cr_tko, _reftime, _refuser
+        FROM AC_MemoBankAll_View
+        WHERE ser = _serop AND zdrojser = _zdrojser;
+        
+        let _akcetran = null;
+        if _db_konto in (_konto, _kontoprev) then
+          let _akcetran = DECODE(_smer, 1, 'PLATBA_OUT', 'STORNO_IN');
+          let _kontotran, _tkotran = _db_konto, _db_tko;
+          let _dbcr = -1;
+        elif _cr_konto in (_konto, _kontoprev) then
+          let _akcetran = DECODE(_smer, 1, 'PLATBA_IN', 'STORNO_OUT');
+          let _kontotran, _tkotran = _cr_konto, _cr_tko;
+          let _dbcr = 1;
+        end if;
+        
+        if EP_JeTranSled('SPRINS', _akcetran, _serop, _serop, _zdrojser) <> 0 then
+          let _typ = DECODE(_akcetran, 'PLATBA_IN', 'P', 'PLATBA_OUT', 'O', 'STORNO_IN', 'S', 'STORNO_OUT', 'T');
+
+          SELECT serno, sledinsolv INTO _sernotran, _sledinsolv 
+          FROM EP_SledTran_Den 
+          WHERE serop = _serop AND konto = _kontotran AND tko = _tkotran;
+          
+          -- transakce je již sledována
+          if _sernotran is not null then
+            -- transakce není sledována z pohledu insolvence
+            if _sledinsolv = 0 then
+              UPDATE EP_SledTran_Den SET sledinsolv = 1 WHERE serno = _sernotran;
+            end if;
+        
+          -- transakce ještě není sledována
+          else
+            INSERT INTO EP_SledTran_Den(serop, druh, konto, tko, kontoproti, banka, ucet, typ, castka, datuct, valuta, textkonto, textproti, varsym, specsym, sledvymah, sledinsolv, reftime, refuser)
+            SELECT ser, druh, konto, tko, NVL(pr_konto, pr_ckonto), pr_banka, pr_ucet, _typ, castka, datuct, valuta, text, pr_text, varsym, specsym, 0, 1, _reftime, _refuser
+            FROM AO_ObratAll_View
+            WHERE ser = _serop AND zdrojser = _zdrojser AND konto = _kontotran AND tko = _tkotran AND dbcr = _dbcr AND (konto <> pr_konto OR pr_konto IS NULL);
+            
+            let _sernotran = TW_LastSer();
+          end if;
+
+          let _refosobains, _refinsolvspravceins = null, null;
+
+          SELECT kontoproti, banka, varsym INTO _kontoproti, _banka, _varsym FROM EP_SledTran_Den WHERE serno = _sernotran;
+        
+          -- přímá platba od insolvenčního správce
+          foreach
+            execute function EP_InsolvProd_C(_smlouva, _tsml) into _sernoinspom, _aktivita
+            
+            if _aktivita <> 0 then
+              SELECT insolvspravcekonto, insolvspravcebanka, refosoba, refinsolvspravce
+              INTO _insolvspravcekonto, _insolvspravcebanka, _refosoba, _refinsolvspravce
+              FROM EP_Insolvence_Mat
+              WHERE serno = _sernoinspom;
+              
+              if _kontoproti = _insolvspravcekonto and NVL(_banka, _vlbanka) = _insolvspravcebanka then
+                if _refinsolvspravceins is null then
+                  let _refosobains, _refinsolvspravceins = _refosoba, _refinsolvspravce;
+                else
+                  let _refosobains = null;
+                end if;
+              end If;
+            end if;
+          end foreach;
+          
+          -- nepřímá platba od insolvenčního správce
+          if _refinsolvspravceins is null then
+            if _kontoproti in ('81509', '111309', TW_RegGetKey('EP', 'insolvence', 'prihlaska', 'provoznikonto')) then
+              let _os = EO_GetIDFromRcIco(_varsym, 'FO', 0);
+              if _os is null then
+                let _os = EO_GetIDFromRcIco(_varsym, 'PO', 0);
+              end if;
+              
+              if _os is not null then
+                foreach
+                  SELECT refosoba, refinsolvspravce
+                  INTO _refosoba, _refinsolvspravce
+                  FROM EP_Insolvence_Mat
+                  WHERE refosoba = _os AND EP_AktivitaInsolv(serno) = 'A'
+        
+                  if _refinsolvspravceins is null then
+                    let _refosobains, _refinsolvspravceins = _refosoba, _refinsolvspravce;
+                  else
+                    let _refosobains = null;
+                  end if;
+                end foreach;
+              end if;
+            end if;
+          end if;
+
+          if not exists(SELECT * FROM EP_ObjSledTran_Mat WHERE refobjekt = _productid AND objekttyp = 'SML' AND refsledtran = _sernotran) then
+            INSERT INTO EP_ObjSledTran_Mat(refobjekt, objekttyp, refsledtran, platnost, reftime, refuser) VALUES(_productid, 'SML', _sernotran, 1, _reftime, _refuser);
+          end if;
+
+          if _refinsolvspravceins is not null then
+            INSERT INTO EP_ObjSledTran_Mat(refobjekt, objekttyp, refsledtran, platnost, reftime, refuser) VALUES(_refinsolvspravceins, 'INSSPR', _sernotran, 1, _reftime, _refuser);
+          end if;
+          
+          if _refosobains is not null then
+            INSERT INTO EP_ObjSledTran_Mat(refobjekt, objekttyp, refsledtran, platnost, reftime, refuser) VALUES(_refosobains, 'OSOBA', _sernotran, 1, _reftime, _refuser);
+          end if;
+        end if;
+      end foreach;
+    end foreach;
+
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00311507_krok_3_tran SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--algoritmus dokonceni migrace
+--...
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_3B');
+
+SET TRIGGERS FOR EP_SledTran_Den ENABLED;
+SET TRIGGERS FOR EP_ObjSledTran_Mat ENABLED;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

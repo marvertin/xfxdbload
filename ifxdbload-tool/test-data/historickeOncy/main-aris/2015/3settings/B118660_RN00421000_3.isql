@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B118660_RN00421000_3
+-- @TC:ONCE: DESCRIPTION = Chybné hodnoty v číselníku {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE rr_reptype_cis SET repname = 'Příloha k Felixovu spoření' WHERE repcode = 'SS041';
+
+UPDATE am_kontospmap_cis SET tarif = NULL WHERE popis = 'Map. Felix' AND tarif = -1;
+
+ROLLBACK WORK;
+
+--End of B118660_RN00421000_3

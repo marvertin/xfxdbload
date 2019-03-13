@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A41217_RN00275819_3
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+  --#Typ SMS pro obnovu hesla#
+  call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'obnova', 'OBNOVA_HESLA',0);
+  
+  --#Typ SMS pro registraci#
+  call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'registrace', 'REGISTRACNI', 0);
+
+  UPDATE tw_smstyp_cis 
+  SET textsms = "Autorizaèní kód pro provedení akce <<typ akce>> je <<kod>>. RSTS."
+  WHERE zkratka = 'AUTORIZACE';
+  
+ROLLBACK WORK;
+
+--End of A41217_RN00275819_3

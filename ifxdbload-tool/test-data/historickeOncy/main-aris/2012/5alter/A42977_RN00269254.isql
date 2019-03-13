@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A42977_RN00269254
+-- @TC:ONCE: DESCRIPTION = Doplnìní funkcionality automatického pøipisování pøíspìvku na základì pøíloh
+
+BEGIN WORK;
+
+ALTER TABLE es_urpremie_acis
+    DROP rok;
+
+ALTER TABLE es_urpremie_cis
+    DROP rok;
+    
+ROLLBACK WORK;

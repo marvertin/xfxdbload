@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B125932_RN00454695_3
+-- @TC:ONCE: DESCRIPTION = Řešení bodu 5) z RN00454480 {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#Zkratka provozního konta pro vracení SP z provozního konta RSTS
+CALL tw_regsetoraddkey('SP','VRATKY','PROVKONTO','ZKRATKA', null, 1,
+  'Státní podpora', 'Státní podpora - Vratka', 'Returning SS',
+  'Zkratka provozního konta pro vracení SP z provozního konta RSTS');
+  
+-- #Druh účetní operace pro vracení SP z provozního konta  RSTS#
+CALL tw_regsetoraddkey('SP','VRATKY','DROHOP','NAKLUC', null, 1,
+  'Státní podpora', 'Státní podpora - Vratka', 'Returning SS',
+  'Druh účetní operace pro vracení SP z provozního konta  RSTS');
+  
+ROLLBACK WORK;
+
+--End of B125932_RN00454695_3

@@ -1,0 +1,52 @@
+-- @TC:ONCE: ID = V2, B130512_RSTS-2905_1
+-- @TC:ONCE: DESCRIPTION = IFRS - Doplnění polí souvisejících s projektem IFRS9_IRBA
+
+BEGIN WORK;
+
+call tw_execSql('DROP TABLE rs_stavsplaceni_den;', -206);
+
+CREATE TABLE rs_stavsplaceni_den (
+  serno   BIGSERIAL NOT NULL,
+  realn   Integer NOT NULL,
+  smlouvauv   DECIMAL(16, 0),
+  tsmluv   CHAR(4),
+  poradi   Integer NOT NULL,
+  saldo   DECIMAL(16, 2),
+  ocsaldo   DECIMAL(16, 2),
+  preplatek   DECIMAL(16, 2),
+  pocvklad   Integer,
+  datvklad   DATE,
+  datvyhodnoceni   DATE NOT NULL,
+  realklasif   Integer NOT NULL,
+  indikdefault   Integer NOT NULL,
+  datdefault   DATE,
+  datvyleceni   DATE,
+  pocetvyleceni   Integer,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)
+EXTENT SIZE 20480
+NEXT SIZE 40960
+lock mode row;
+
+--PK
+CREATE UNIQUE INDEX rs_stavsplaceni_den_pk ON rs_stavsplaceni_den(serno);
+ALTER TABLE rs_stavsplaceni_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT rs_stavsplaceni_den_pk;
+
+--FK
+CREATE INDEX rs_stavsplaceni_den_i_f1 ON rs_stavsplaceni_den(realn);
+ALTER TABLE rs_stavsplaceni_den ADD CONSTRAINT FOREIGN KEY(realn) REFERENCES rs_real_mat(realn) CONSTRAINT rs_stavsplaceni_den_f1;
+CREATE INDEX rs_stavsplaceni_den_i_f2 ON rs_stavsplaceni_den(smlouvauv,tsmluv);
+ALTER TABLE rs_stavsplaceni_den ADD CONSTRAINT FOREIGN KEY(smlouvauv,tsmluv) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT rs_stavsplaceni_den_f2;
+
+--INDEXES
+CREATE INDEX rs_stavsplaceni_den_i1 ON rs_stavsplaceni_den(realn,poradi);
+
+--CHECKS
+ALTER TABLE rs_stavsplaceni_den
+ADD CONSTRAINT (CHECK (indikdefault IN (0,1,2,3)) CONSTRAINT rs_stavsplaceni_den_c1),
+ADD CONSTRAINT (CHECK (realklasif IN (0,1,2,3,4)) CONSTRAINT rs_stavsplaceni_den_c2);
+
+ROLLBACK WORK;
+
+--End of B130512_RSTS-2905_1

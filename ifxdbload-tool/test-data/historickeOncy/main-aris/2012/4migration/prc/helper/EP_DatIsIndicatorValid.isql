@@ -1,0 +1,58 @@
+-- { Funkce vraci nula nebo jedna pro situace, kdy je vyplnìna položka, která má vliv na nastavení daného indikátoru. }   
+CREATE FUNCTION EP_DatIsIndicatorValid 
+(
+  ADatAkce date,
+  AOblast char(45), 
+  AUloha char(45), 
+  AFunkce char(45), { Databázový registr pro zjištìní, který indikátor má vliv na právì ovìøovaný indikátor. }
+  AScoringPhase char(3),
+  AIdOs Integer      
+ ) returning Int;
+ 
+ define _kanalType Int;
+ define _dependingCommunicationCanal Integer;
+ define _smazatGet int;
+ define _idGet  int;
+ define _reftimeGet date;
+
+ foreach select kanal into _kanalType from eo_komkanal_cis where pl = 1
+    begin                       
+      let _dependingCommunicationCanal = TW_RegGetKey(AOblast, AUloha, AFunkce, _kanalType, 0);        
+      -- Pøi scoringu jedna SC1, ber data výhradnì z datového prostoru úvìrové žádosti.
+      if (AScoringPhase = 'SC1') then
+          -- Pokud tento kanál má vliv na nastavení indikátoru zadaným na vstupu procedury, ovìø, že je pro danou osobu evidován. 
+          if (_dependingCommunicationCanal = 1) then
+            foreach select id, smazat, date(reftime) into _idGet, _smazatGet, _reftimeGet from creditrqperscommcanalreg where osoba = AIdOs AND kanal = _kanalType
+              if _reftimeGet <= ADatakce then
+                if _smazatGet is null or _smazatGet <> 1 then
+                  return 1;
+                end if;
+              else
+                foreach select smazat into _smazatGet from creditrqperscommcanalarch where date(reftime) <= ADatAkce and id = _idGet order by reftime desc
+                  exit foreach;
+                end foreach;
+                if _smazatGet is null or _smazatGet <> 1 then
+                  return 1;
+                end if;                    
+              end if;
+            end foreach;  
+          end if;        
+      -- Pøi scoringu dvì SC2, ber data výhradnì z centrální evidence.    
+      elif (AScoringPhase = 'SC2') then
+        if (_dependingCommunicationCanal = 1) then
+          if exists (select * from EO_KomKanal_Mat where os = AIdOs AND kanal = _kanalType AND date(portime) <= ADatAkce) then
+            return 1;
+          else
+            if exists (select * from eo_komkanal_arch arch1 where os = AIdOs AND kanal = _kanalType and date(portime) <= ADatAkce
+                          -- @RN00289175: Pøidání té osoby není nutné kvùli funkènosti, ale aby se využil index....jinak se jede pøes eo_komkanal_arch sekvenènì.  
+                          and exists(select * from eo_komkanal_arch where os = AIdOs AND komkanal = arch1.komkanal and date(reftime) >= ADatAkce)) then
+              return 1;
+            end if;   
+          end if;
+        end if;
+      end if;                                                                                 
+    end;                 
+  end foreach;
+return 0;
+ 
+END FUNCTION;

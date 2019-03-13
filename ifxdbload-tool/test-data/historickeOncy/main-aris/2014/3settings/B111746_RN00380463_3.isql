@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B111746_RN00380463_3
+-- @TC:ONCE: DESCRIPTION = Main+Sale: Kontroly při změnách smluvních údajů v Main a Sale (snížení CČ -2x) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('ES','zmena','testMoznostSnizCC','stupenHlasky', 1, 1, 'Change of BS contract', 'Úroveň hlášení při kontrole možnosti snížení CČ', '', 'Úroveň hlášení při kontrole možnosti snížení CČ');
+call TW_RegSetOrAddKey('ES','zmena','testSnizCC','lhutaOdSplacPU', 12, 1, 'Change of BS contract', 'Počet měsíců pro nepovolení snížení CČ po splacení PU', '', 'Počet měsíců pro nepovolení snížení CČ po splacení PU');
+
+ROLLBACK WORK;
+
+--End of B111746_RN00380463_3

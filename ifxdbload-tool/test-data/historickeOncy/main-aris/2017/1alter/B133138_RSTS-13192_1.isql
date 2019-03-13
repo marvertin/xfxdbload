@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B133138_RSTS-13192_1
+-- @TC:ONCE: DESCRIPTION = IFRS - odpis (promlčená pohledávka) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table RU_OdpPohl_Kart
+  add pojisteni Dec(16,2) default 0 before navtime,
+  add castkaOdpDNPojisteni Dec(16,2) default 0 before navtime,
+  add castkaOdpDUPojisteni Dec(16,2) default 0 before navtime;
+      
+ROLLBACK WORK;
+
+--End of B133138_RSTS-13192_1

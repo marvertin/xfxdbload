@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136161_UID82684_3
+-- @TC:ONCE: DESCRIPTION = Dotazník na výběr účelu a zajištění v CIBIS-Sale
+
+BEGIN WORK;
+
+call TW_RegDelKey('EU', 'creditrq', 'rozhodNastroj', 'idPrvniOtazky');
+
+ROLLBACK WORK;
+
+--End of B136161_UID82684_3

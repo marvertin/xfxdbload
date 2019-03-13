@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B131858_36779_5_opuct
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ru_opuct_kart
+    MODIFY serno  BIGINT   NOT NULL; 
+
+CREATE UNIQUE INDEX ru_opuct_kart_pk ON ru_opuct_kart(serno);
+
+alter table ru_opuct_kart ADD CONSTRAINT PRIMARY KEY (serno) CONSTRAINT ru_opuct_kart_pk;
+
+CREATE INDEX ru_opuct_kart_i1 ON ru_opuct_kart(realn, porakt, poradi);
+CREATE INDEX ru_opuct_kart_i2 ON ru_opuct_kart(smlouva, tsml);
+
+ROLLBACK WORK;
+
+--End of B131858_36779_5_opuct

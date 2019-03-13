@@ -1,0 +1,86 @@
+CREATE PROCEDURE RSTS_2905_osobyUverDPD(AOsoba     INT,
+                                        ALogovat   INT DEFAULT 0)
+
+  DEFINE _realuv            int;
+  DEFINE _reals             int;
+  DEFINE _poradi            int;
+  DEFINE _datvyhodnoceni    date;     
+  DEFINE _typvyhodnoceni    char(1);
+  DEFINE _currentdpd        int;
+  DEFINE _maxdpd            int;
+  DEFINE _totaldpd          int;
+  DEFINE _nesplaccastka     dec(16, 2);
+  DEFINE _datprvvyhodnoceni     date;
+  DEFINE _datprvvyhodnoceniOld  date;
+  DEFINE _id                    INT;      
+  DEFINE _realn                 INT;
+  DEFINE _datvyhodnocenipuv     DATE;
+  DEFINE _datprov               DATE;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'OsobyUverDPD'); END IF;
+  
+  FOREACH c1 WITH HOLD FOR
+    SELECT realn INTO _realn FROM rsts_2905_dpd WHERE osoba = AOsoba AND faze IN (1, 2, 3)
+    
+    -- overeni, ze je spravne rozdeleny posledni interval pro vyhodnoceny uver
+    SELECT id, datvyhodnoceni, datprvvyhodnoceni INTO _id, _datvyhodnoceni, _datprvvyhodnoceni FROM ep_dpdevid_den 
+    WHERE 
+      realuv = _realn AND
+      datvyhodnoceni = (SELECT MAX(datvyhodnoceni) FROM ep_dpdevid_den WHERE realuv = _realn AND typvyhodnoceni = 'L') AND
+      typvyhodnoceni = 'L';
+            
+    IF(EXISTS(SELECT 1 FROM rsts_2905_dpdevid WHERE datprvvyhodnoceni + 1 = _datvyhodnoceni) OR
+       EXISTS(SELECT 1 FROM rsts_2905_dpdevid WHERE datvyhodnoceni = _datvyhodnoceni) OR
+       EXISTS(SELECT 1 FROM rsts_2905_dpdevid WHERE datprvvyhodnoceni = _datprvvyhodnoceni AND
+              EXISTS(SELECT 1 FROM rsts_2905_dpdevid WHERE datprvvyhodnoceni = _datvyhodnoceni + 1))) THEN
+      -- interval tam je a nemusim nic resit
+      CONTINUE FOREACH;
+    END IF;       
+    
+    -- uzavreme puvodni interval
+    SELECT datvyhodnoceni INTO _datvyhodnocenipuv FROM rsts_2905_dpdevid 
+    WHERE 
+      osoba = AOsoba AND
+      datprvvyhodnoceni = _datprvvyhodnoceni;
+      
+    UPDATE rsts_2905_dpdevid SET datvyhodnoceni = NULL 
+    WHERE 
+      osoba = AOsoba AND
+      datprvvyhodnoceni = _datprvvyhodnoceni;
+    
+    -- vlozime novy interval - currentdpd musi byt nula, 
+    -- protoze pokud by existoval nejaky uver s nenulovym currentdpd, tak by automaticky vznikl interval s timto zacatkem           
+    INSERT INTO rsts_2905_dpdevid (osoba, datprvvyhodnoceni, datvyhodnoceni, currentdpd, typvyhodnoceni)    
+    VALUES(AOsoba, _datvyhodnoceni + 1, _datvyhodnocenipuv, 0, 'P');
+  
+  END FOREACH;   
+  
+  LET _datprvvyhodnoceniOld = NULL;
+  FOREACH c1 WITH HOLD FOR
+    SELECT id, datprvvyhodnoceni, datvyhodnoceni INTO _id, _datprvvyhodnoceni, _datvyhodnoceni 
+    FROM rsts_2905_dpdevid 
+    WHERE
+      osoba = AOsoba AND
+      typvyhodnoceni = 'P'
+    ORDER BY 
+      datprvvyhodnoceni DESC   
+    
+    IF(_datprvvyhodnoceniOld IS NOT NULL) THEN
+      UPDATE rsts_2905_dpdevid SET datvyhodnoceni = _datprvvyhodnoceniOld - 1 
+      WHERE id = _id;
+    ELIF(_datprvvyhodnoceniOld IS NULL AND _datvyhodnoceni IS NULL) THEN
+      -- jde o prvni kontrolovany zaznam, ktery ale nema vyplneno datum vyhodnoceni (obcas tato situace nastane)
+      LET _datprov = AP_DatProv();
+      SELECT MAX(NVL(datuzav, _datprov)) INTO _datvyhodnoceni FROM rsts_2905_dpd 
+      WHERE osoba = AOsoba AND faze IN (1, 2, 3);
+      
+      UPDATE rsts_2905_dpdevid SET datvyhodnoceni = _datvyhodnoceni 
+      WHERE id = _id;
+    END IF;
+        
+    
+    LET _datprvvyhodnoceniOld = _datprvvyhodnoceni;
+  END FOREACH 
+    
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;  
+END PROCEDURE;

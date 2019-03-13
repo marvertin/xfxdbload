@@ -1,0 +1,40 @@
+-- @TC:ONCE: ID = V2, A42060_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+BEGIN WORK;
+
+ALTER TABLE es_paramcastar_acis
+    ADD periodas        CHAR(1)   BEFORE odchylkauru,
+    ADD periodau        CHAR(1)   BEFORE koefuhr,
+    ADD indexbazez      Integer   BEFORE koefuhr,
+    ADD odchylkaurz     DECIMAL(5,2)   BEFORE koefuhr,
+    ADD periodaz        CHAR(1)   BEFORE koefuhr,
+    MODIFY indexbazes      Integer   NOT NULL,
+    MODIFY indexbazeu      Integer   NOT NULL,
+    MODIFY vstuhrvek       Integer   NOT NULL,
+    MODIFY uhrzvysccvek    Integer   NOT NULL,
+    MODIFY status          Integer DEFAULT 1  NOT NULL;
+
+ALTER TABLE es_paramcastar_acis
+    ADD CONSTRAINT CHECK (periodaz IN ('D','T','M','R','Q','P','X')) CONSTRAINT es_paramcastar_acis_dlyu,
+    ADD CONSTRAINT CHECK (periodas IN ('D','T','M','R','Q','P','X')) CONSTRAINT es_paramcastar_acis_dlyr,
+    ADD CONSTRAINT CHECK (periodau IN ('D','T','M','R','Q','P','X')) CONSTRAINT es_paramcastar_acis_dlyv;
+
+ALTER TABLE es_paramcastar_cis
+    ADD periodas        CHAR(1)   BEFORE odchylkauru,
+    ADD periodau        CHAR(1)   BEFORE koefuhr,
+    ADD indexbazez      Integer   BEFORE koefuhr,
+    ADD odchylkaurz     DECIMAL(5,2)   BEFORE koefuhr,
+    ADD periodaz        CHAR(1)   BEFORE koefuhr,
+    MODIFY indexbazes      Integer   NOT NULL,
+    MODIFY indexbazeu      Integer   NOT NULL,
+    MODIFY vstuhrvek       Integer   NOT NULL,
+    MODIFY uhrzvysccvek    Integer   NOT NULL,
+    MODIFY status          Integer DEFAULT 1  NOT NULL;
+
+ALTER TABLE es_paramcastar_cis
+    ADD CONSTRAINT CHECK (periodaz IN ('D','T','M','R','Q','P','X')) CONSTRAINT es_paramcastar_cis_dly7,
+    ADD CONSTRAINT CHECK (periodas IN ('D','T','M','R','Q','P','X')) CONSTRAINT es_paramcastar_cis_dlra,
+    ADD CONSTRAINT CHECK (periodau IN ('D','T','M','R','Q','P','X')) CONSTRAINT es_paramcastar_cis_dly8;
+
+
+ROLLBACK WORK;

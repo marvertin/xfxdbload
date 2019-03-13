@@ -19,7 +19,7 @@ public class Test {
     try {
 
       Class.forName("com.informix.jdbc.IfxDriver");
-      final Connection c= DriverManager.getConnection("jdbc:informix-sqli://kosatka:1529/zav1_on:;INFORMIXSERVER=kosatkarn;CLIENT_LOCALE=cs_CZ.1250;DB_LOCALE=cs_CZ.1250", "aris", "aris741");
+      final Connection c= DriverManager.getConnection("jdbc:informix-sqli://kosatka:1529/r8shkx:;INFORMIXSERVER=kosatkarn;CLIENT_LOCALE=cs_CZ.1250;DB_LOCALE=cs_CZ.1250", "aris", "aris741");
       Statement stm = null;
       try {
 

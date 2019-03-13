@@ -1,0 +1,51 @@
+create PROCEDURE B134808_UID65862_4_find_D ()
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE UID65862_ltvkoefzajist;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE UID65862_ltvkoefzajist (
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  smlouva Dec(16,0),        --udaje role
+  tsml    Char(4),    
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--plnime ridici tabulku posledni roli
+        
+INSERT INTO UID65862_ltvkoefzajist(smlouva, tsml, zprac)
+SELECT smlouva, tsml, -1
+FROM eu_sml_mat
+WHERE stav NOT IN ('Z', 'S', 'V');
+
+UPDATE STATISTICS HIGH FOR TABLE UID65862_ltvkoefzajist;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

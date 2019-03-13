@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B115660_RN00392680_3
+-- @TC:ONCE: DESCRIPTION = Nemovitosti 2. fáze: WS KN: Aktualizace údajů nemovitostí na vyžádání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost) VALUES('EN',(select max(typ) + 10 from tw_prov_typ_cis WHERE okruh = 'EN'),'Aktualizace vlastníků nemovitostí k LV z KN',1);
+
+call TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'OBREJSTRIK', '*', 0, 1, 'Osoba', 'Evidence osoby', 'Evidence of person', 'Zápis v obchodním rejstříku – defaultní nastavení');
+call TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'EKONSEKTOR', '*', 0, 1, 'Osoba', 'Evidence osoby', 'Evidence of person', 'Ekonomický sektor –  defaultní nastavení');
+call TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'SOUHLASVYUZITI', '*', -1, 1, 'Osoba', 'Evidence osoby', 'Evidence of person', 'Defaultní souhlas k využití údajů');
+call TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'NEJVVZEDALNI', '*', 0, 1, 'Osoba', 'Evidence osoby', 'Evidence of person', 'Nejvyšší dosažené vzdělání - defaultní nastavení');
+call TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'POLITEXPOSOBA', '*', -1, 1, 'Osoba', 'Evidence osoby', 'Evidence of person', 'Politicky exponovaná osoba - defaultní nastavení ');
+
+
+ROLLBACK WORK;
+
+--End of B115660_RN00392680_3

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B105832_RN00311507_5
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE UNIQUE INDEX eu_exekprikaz_mat_u1 ON eu_exekprikaz_mat(exekuceser,cyklus,poradi);
+ALTER TABLE eu_exekprikaz_mat ADD CONSTRAINT (UNIQUE (exekuceser,cyklus,poradi) CONSTRAINT eu_exekprikaz_mat_u1);
+
+CREATE UNIQUE INDEX eu_snimekexekprikaz_den_u1 ON eu_snimekexekprikaz_den(snimekexekuceser,cyklus,poradi);
+ALTER TABLE eu_snimekexekprikaz_den ADD CONSTRAINT (UNIQUE (snimekexekuceser,cyklus,poradi) CONSTRAINT eu_snimekexekprikaz_den_u1);
+
+ROLLBACK WORK;
+
+--End of B105832_RN00311507_5

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B133070_RSTS-12704_1
+-- @TC:ONCE: DESCRIPTION = Zpomalení reakcí Cibis-Sale na provozu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table EU_DuvStoZam_Cis 
+  modify kodur char(2);
+  
+alter table EU_DuvStoZam_aCis 
+  modify kodur char(2);
+
+ROLLBACK WORK;
+
+--End of B133070_RSTS-12704_1

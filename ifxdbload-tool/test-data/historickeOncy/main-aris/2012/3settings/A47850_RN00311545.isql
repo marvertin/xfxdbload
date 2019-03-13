@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A47850_RN00311545
+-- @TC:ONCE: DESCRIPTION = Špatnì rozvržené a pojmenované sloupeèky exportu Pøespoøení 100%
+
+BEGIN WORK;
+
+update ex_export_cis
+set nazev = 'Pøespoøení (100%)'
+where typexp = 'CX';
+
+ROLLBACK WORK;
+
+--End of A47850_RN00311545

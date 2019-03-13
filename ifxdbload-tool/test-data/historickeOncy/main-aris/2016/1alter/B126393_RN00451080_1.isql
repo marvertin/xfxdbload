@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, B126393_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_typumor_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  kod   Integer,
+  nazev   CHAR(35),
+  nazevmin   CHAR(70),
+  nazevbud   CHAR(70),
+  poznamka   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_typumor_acis_pk ON eu_typumor_acis(idarch);
+ALTER TABLE eu_typumor_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_typumor_acis_pk;
+
+
+CREATE TABLE eu_typumor_cis (
+  serno   SERIAL NOT NULL,
+  kod   Integer,
+  nazev   CHAR(35),
+  nazevmin   CHAR(70),
+  nazevbud   CHAR(70),
+  poznamka   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_typumor_cis_pk ON eu_typumor_cis(serno);
+ALTER TABLE eu_typumor_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_typumor_cis_pk;
+
+
+ROLLBACK WORK;
+
+--End of B126393_RN00451080_1

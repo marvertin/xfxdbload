@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A61023_RN00334619_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní úlohy Správa vymáhané pohledávky {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- eu_vympohl_mat(arch) 
+ALTER TABLE eu_vympohl_mat ADD datkontroly   DATE;
+ALTER TABLE eu_vympohl_arch ADD datkontroly   DATE;
+
+-- eu_snimekvympohl_den  
+ALTER TABLE eu_snimekvympohl_den ADD datkontroly   DATE;
+ALTER TABLE eu_snimekvympohl_den ADD datprovvyzvyfaze1   DATE;
+ALTER TABLE eu_snimekvympohl_den ADD datprovvyzvyfaze2   DATE;
+
+ROLLBACK WORK;
+
+--End of A61023_RN00334619_1

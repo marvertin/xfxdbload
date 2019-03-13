@@ -1,0 +1,175 @@
+-- @TC:ONCE: ID = V2, B124215_RN00447046_1-NewsLetterTab
+-- @TC:ONCE: DESCRIPTION = Export dat pro NewsLetter {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+
+-- ###############################################################
+-- eo_newsletterbed_den
+
+CREATE TABLE eo_newsletterbed_den (
+    serno             SERIAL NOT NULL
+    , datprov         DATE
+    , starttime       DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+    , loadendtime     DATETIME YEAR TO SECOND
+    , endtime         DATETIME YEAR TO SECOND
+    , stav            CHAR(1) NOT NULL
+    , faze            INTEGER DEFAULT 0 NOT NULL
+    , path            VARCHAR(255)
+    , runerr          INTEGER DEFAULT 0 NOT NULL
+    , excid           VARCHAR(255)
+    , numErr          INTEGER
+    , textErr         VARCHAR(255)
+    , akttime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+    , poruser         CHAR(20) DEFAULT USER  NOT NULL
+    , portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+    , refuser         CHAR(20) DEFAULT USER  NOT NULL
+    , reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+    , CHECK (runerr IN (0,1)) CONSTRAINT eo_newsletteros_work_rnrr
+) LOCK MODE ROW;
+
+-- [CREATE.INDEX]
+CREATE unique INDEX eo_newsletterbed_den_pk ON eo_newsletterbed_den (serno);
+
+-- [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_newsletterbed_den
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_newsletterbed_den_pk;
+
+
+-- ###############################################################
+-- eo_newsletterbed_den
+
+CREATE TABLE eo_newsletteros_work (
+    serno             SERIAL NOT NULL
+    , os              INTEGER NOT NULL
+    , rc              CHAR(13) NOT NULL
+    , jmeno           CHAR(24)
+    , prijmeni        CHAR(35)
+    , vek             INTEGER
+    , email           CHAR(45) NOT NULL
+    , vymahani        INTEGER
+    , blokace         INTEGER
+    , exekuce         INTEGER
+    , insolvence      INTEGER
+    , zemrela         INTEGER
+    , vyporadani      INTEGER
+    , rolepu          INTEGER
+    , rolesu          INTEGER
+    , emailblokacekl  INTEGER
+    , emailblokace    INTEGER
+    , poruser         CHAR(20) DEFAULT USER  NOT NULL
+    , portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+    , CHECK (vymahani IN (0,1)) CONSTRAINT eo_newsletteros_work_vmhn
+    , CHECK (blokace IN (0,1)) CONSTRAINT eo_newsletteros_work_blkc
+    , CHECK (exekuce IN (0,1)) CONSTRAINT eo_newsletteros_work_exek
+    , CHECK (insolvence IN (0,1)) CONSTRAINT eo_newsletteros_work_insl
+    , CHECK (zemrela IN (0,1)) CONSTRAINT eo_newsletteros_work_zmrl
+    , CHECK (vyporadani IN (0,1)) CONSTRAINT eo_newsletteros_work_vprd
+    , CHECK (rolepu IN (0,1)) CONSTRAINT eo_newsletteros_work_rlpu
+    , CHECK (rolesu IN (0,1)) CONSTRAINT eo_newsletteros_work_rlsu
+    , CHECK (emailblokacekl IN (0,1)) CONSTRAINT eo_newsletteros_work_ebkl
+    , CHECK (emailblokace IN (0,1)) CONSTRAINT eo_newsletteros_work_eblc
+) LOCK MODE ROW;
+
+-- [CREATE.INDEX]
+CREATE unique INDEX eo_newsletteros_work_pk ON eo_newsletteros_work (serno);
+
+-- [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_newsletteros_work
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_newsletteros_work_pk;
+
+
+-- ###############################################################
+-- eo_newsletterosblokreason_work
+
+CREATE TABLE eo_newsletterosblokreason_work (
+    serno             SERIAL  NOT NULL
+    , os              INTEGER NOT NULL
+    , reason          INTEGER NOT NULL
+) LOCK MODE ROW;
+
+-- [CREATE.INDEX]
+CREATE unique INDEX eo_newsletterosblokreason_work_pk ON eo_newsletterosblokreason_work (serno);
+
+-- [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_newsletterosblokreason_work
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_newsletterosblokreason_work_pk;
+
+
+-- ###############################################################
+-- eo_newsletteremailblokkl_work
+
+CREATE TABLE eo_newsletteremailblokkl_work (
+    serno             SERIAL  NOT NULL
+    , email           CHAR(45) NOT NULL
+    , os              INTEGER
+    , duplcount       INTEGER DEFAULT 0 NOT NULL
+) LOCK MODE ROW;
+
+-- [CREATE.INDEX]
+CREATE unique INDEX eo_newsletteremailblokkl_work_pk ON eo_newsletteremailblokkl_work (serno);
+
+-- [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_newsletteremailblokkl_work
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_newsletteremailblokkl_work_pk;
+
+
+-- ###############################################################
+-- eo_newsletteremailblok_work
+
+CREATE TABLE eo_newsletteremailblok_work (
+    serno             SERIAL  NOT NULL
+    , email           CHAR(45) NOT NULL
+    , os              INTEGER
+    , duplcount       INTEGER DEFAULT 0 NOT NULL
+) LOCK MODE ROW;
+
+-- [CREATE.INDEX]
+CREATE unique INDEX eo_newsletteremailblok_work_pk ON eo_newsletteremailblok_work (serno);
+
+-- [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_newsletteremailblok_work
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_newsletteremailblok_work_pk;
+
+
+-- ###############################################################
+-- eo_newsletteremailsend_work
+
+CREATE TABLE eo_newsletteremailsend_work (
+    serno             SERIAL  NOT NULL
+    , email           CHAR(45) NOT NULL
+) LOCK MODE ROW;
+
+-- [CREATE.INDEX]
+CREATE unique INDEX eo_newsletteremailsend_work_pk ON eo_newsletteremailsend_work (serno);
+
+-- [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_newsletteremailsend_work
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_newsletteremailsend_work_pk;
+
+
+
+-- ###############################################################
+-- eo_newsletterosarch_work
+
+CREATE TABLE eo_newsletterosarch_work (
+    serno           SERIAL  NOT NULL
+    , os              INTEGER NOT NULL
+    , rc              CHAR(13) NOT NULL
+    , jmeno           CHAR(24)
+    , prijmeni        CHAR(35)
+    , email           CHAR(45) NOT NULL
+) LOCK MODE ROW;
+
+-- [CREATE.INDEX]
+CREATE unique INDEX eo_newsletterosarch_work_pk ON eo_newsletterosarch_work (serno);
+
+-- [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_newsletterosarch_work
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_newsletterosarch_work_pk;
+
+
+ROLLBACK WORK;
+
+--End of B124215_RN00447046_1-NewsLetterTab

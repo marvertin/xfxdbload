@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A41925_RN00275819_report
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO rr_reptype_cis(repcode, area, repkind, reptype, repvar, repname, exportdir, formatdir, formatfile, keepinterval) 
+    VALUES('UP000', 'UP', '00', '0', 0, 'Potvrzení o úrocích', '', '', 'UP000.jrxml', 1);
+
+ROLLBACK WORK;
+
+--End of A41925_RN00275819_3

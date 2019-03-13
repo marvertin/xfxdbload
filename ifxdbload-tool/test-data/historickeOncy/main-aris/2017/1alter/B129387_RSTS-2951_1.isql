@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, B129387_RSTS-2951_1
+-- @TC:ONCE: DESCRIPTION = RN00457749-Centrální evidence exekucí
+
+
+BEGIN WORK;
+
+CREATE TABLE eu_kontrceeosoby_wrk (
+  smlouva       DECIMAL(16, 0),
+  tsml          CHAR(4),
+  os            int,
+  rc            CHAR(13),
+  celejmeno     CHAR(100),
+  typrole       CHAR(2),
+  requestnumber DECIMAL(16, 0),
+  druhprukaz    int,
+  cisprukaz     CHAR(20),
+  owner2 char(255) -- úmyslně dáván owner2, abych jednoznačně stanovil, že je jinak konstruovaný => stanice + uživatel + owner
+);
+create index eu_kontrceeosoby_wrk_i1 on eu_kontrceeosoby_wrk(owner2, os);
+
+CREATE TABLE eu_kontrceeerr_wrk (
+  MsgImplText VarChar(255),
+  Par1 VarChar(255),
+  Par2 VarChar(255),
+  Par3 VarChar(255),
+  Priorita integer,
+  owner2 char(255)
+);
+ 
+
+CREATE TABLE eu_kontrceenavr_wrk (
+  vyslsmlouva   CHAR(1),
+  vyslosoba     CHAR(1),
+  os            int,  
+  rc            CHAR(13),
+  celejmeno     CHAR(100),
+  ex_number     CHAR(255),
+  druhprukaz    int,
+  cisprukaz     CHAR(20),
+  owner2        char(255) -- úmyslně dáván owner2, abych jednoznačně stanovil, že je jinak konstruovaný => stanice + uživatel + owner
+);
+create index eu_kontrceenavr_wrk_wrk_i1 on eu_kontrceeosoby_wrk(owner2);
+
+ROLLBACK WORK;
+
+--End of B129387_RSTS-2951_1

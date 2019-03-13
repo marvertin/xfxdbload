@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B133478_UID52127_1
+-- @TC:ONCE: DESCRIPTION = Úprava funkce rizikových subjektů + nová RK Rizikový subjekt
+
+BEGIN WORK;
+
+ALTER TABLE EP_RizSubjektKontr_Den 
+  ADD cislorevize int BEFORE reftime;
+
+ROLLBACK WORK;
+
+--End of B133477_UID56312_1

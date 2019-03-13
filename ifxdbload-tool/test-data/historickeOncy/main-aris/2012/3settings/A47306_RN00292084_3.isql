@@ -1,0 +1,72 @@
+-- @TC:ONCE: ID = V2, A47306_RN00292084_3
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#poznámka pøi potvrzení úvìrové smlouvy# 
+--Parametr je nahrazen novými parametry (Viz: dále parametry #poznámka do kalendáøù pøi potvrzení úvìrové smlouvy# a #poznámka do kalendáøù pøi prvním èerpání úvìru#)
+--Vìcná oblast  Spoøení
+--Funkcionalita Parametry stavebního spoøení
+--Skupina parametrù Parameters of building saving
+--Význam parametru  Text automaticky vkládaný do poznámky vkladového kalendáøe pøi potvrzení úvìrové smlouvy.
+--Analytický typ  Business
+--Adresa parametru  ES/sml/infpotvruvsml/poznamka
+call TW_RegDelKey('ES','sml','infpotvruvsml','poznamka')
+;
+
+--#automatický pøepoèet mìsíèního vkladu pøi uzavøení smlouvy o PU nad <tsml>#
+--(!!!Jen pokud bylo implementováno RN00281496!!!)
+--Poznámka: Parametr je nahrazen údajem „Pøíznak, dorovnat vklad na minimální podle tarifu VOP“ nastaveným individuálnì na smlouvì (resp. v èíselníku parametrù zahájení splácení a dospoøování). 
+--Vìcná oblast  Spoøení
+--Funkcionalita Zmìny smluv SS
+--Skupina parametrù Change of BS contract
+--Význam parametru  Definuje, zda se má pøi uzavøení smlouvy o PU pro daný typ spoøicí smlouvy provádìt navýšení pravidelného vkladu na minimální výši mìsíèního vkladu podle CÈ a tarifu VOP. 
+--Analytický typ  Business
+--Adresa parametru  ES/SSFO/PU/aktualizujvklad
+--ES/SSPO/PU/aktualizujvklad
+call TW_RegDelKey('ES','SSFO','PU','aktualizujvklad')
+;
+call TW_RegDelKey('ES','SSPO','PU','aktualizujvklad')
+;
+
+--#Rozhodný den splátky#
+--Všechny volání tohoto parametru v systému jsou plošnì nahrazena.
+--Vìcná oblast  Úvìr
+--Funkcionalita Úvìrová smlouva
+--Skupina parametrù Management of credit contract
+--Význam parametru  Rozhodný den pro splátku úvìru pro nový interval ve splátkovém kalendáøi.
+--Analytický typ  Business
+--Adresa parametru  EU/<typ smlouvy>/splat/rozhden  --pro nastavené typy smluv
+--(SUFO, PUSU, PFSU)
+call TW_RegDelKey('EU','SUFO','splat','rozhden')
+;
+call TW_RegDelKey('EU','PUSU','splat','rozhden')
+;
+call TW_RegDelKey('EU','PFSU','splat','rozhden')
+;
+
+--#Editovat pøíznak odložené platnosti#
+--Vìcná oblast  Úvìr
+--Funkcionalita Splátkový kalendáø
+--Skupina parametrù Schedule of Credit Repayments
+--Význam parametru  Povoluje/zakazuje editaci pøíznaku „Odložené zahájení“ ve splátkovém kalendáøi.
+--Analytický typ  Business
+--Adresa parametru  EU/splatint/odklad/*
+call TW_RegDelKey('EU','splatint','odklad','*')
+;
+
+--#Provést aktualizaci odloženého splácení pøi èerpání#
+--(funkcionalita je nahrazena novými parametry dle nového èíselníku)
+--Vìcná oblast  Úvìr
+--Funkcionalita Splátkový kalendáø
+--Skupina parametrù Schedule of Credit Repayments
+--Význam parametru  Provést aktualizaci intervalu pro odklad splácení pøi prvním èerpání
+--Analytický typ  Business
+--Adresa parametru  EU/splatint/zplatneni/*
+call TW_RegDelKey('EU','splatint','zplatneni','*')
+;
+
+ROLLBACK WORK;
+
+--End of A47306_RN00292084_3

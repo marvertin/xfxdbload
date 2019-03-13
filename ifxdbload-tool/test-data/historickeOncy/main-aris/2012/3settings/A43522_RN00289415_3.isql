@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, A43522_RN00289415_3
+-- @TC:ONCE: DESCRIPTION = Pølilš dlouhý název registru pro operace vymáhání {DEFECT}
+
+BEGIN WORK;
+
+call TW_RegDelKey('RU', 'sprVym', 'sledovani-druhOperOdchozi', 'OU01')
+;
+call TW_RegDelKey('RU', 'sprVym', 'sledovani-druhOperOdchozi', 'VP09')
+;
+call TW_RegDelKey('RU', 'sprVym', 'sledovani-druhOperOdchozi', 'VPX7')
+;
+call TW_RegDelKey('RU', 'sprVym', 'sledovani-druhOperOdchozi', 'VPX9')
+;
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'sledovani-druhOperOd', 'OU01', 1, 1, 
+                       'Úvìr', 
+                       'Vymáhání úvìru', 
+                       'Správa vymáhané pohledávky', 
+                       'Sledování odchozí platby ve vymáhání pro UO01')
+;
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'sledovani-druhOperOd', 'VP09', 1, 1, 
+                       'Úvìr', 
+                       'Vymáhání úvìru', 
+                       'Správa vymáhané pohledávky', 
+                       'Sledování odchozí platby ve vymáhání pro VP09')
+;
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'sledovani-druhOperOd', 'VPX7', 1, 1, 
+                       'Úvìr', 
+                       'Vymáhání úvìru', 
+                       'Správa vymáhané pohledávky', 
+                       'Sledování odchozí platby ve vymáhání pro VPX7')
+;
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'sledovani-druhOperOd', 'VPX9', 1, 1, 
+                       'Úvìr', 
+                       'Vymáhání úvìru', 
+                       'Správa vymáhané pohledávky', 
+                       'Sledování odchozí platby ve vymáhání pro VPX9')
+;
+
+ROLLBACK WORK;
+--End of A43522_RN00289415_3

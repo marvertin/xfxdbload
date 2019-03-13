@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135857_UID79962_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25669: Zajištění unikátnosti v interních druzích pobytu {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CREATE UNIQUE INDEX eo_druhpobytinterni_cis_u1 ON eo_druhpobytinterni_cis(nazev);
+ALTER TABLE eo_druhpobytinterni_cis ADD CONSTRAINT (UNIQUE (nazev) CONSTRAINT eo_druhpobytinterni_cis_u1);
+
+ROLLBACK WORK;
+
+--End of B135857_UID79962_1

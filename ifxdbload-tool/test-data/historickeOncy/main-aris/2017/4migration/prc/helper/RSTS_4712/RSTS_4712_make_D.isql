@@ -1,0 +1,134 @@
+create PROCEDURE RSTS_4712_make_D(ADebugFile     Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                  ALogovat       INT DEFAULT 0
+)
+
+  define _ser         Int;
+  define _serDM       Int;
+  
+  define _konto       dec(16, 0);
+  define _tko         char(2);
+  define _zdrojser    int;  
+  define _prvni       integer;
+  define _posledni    integer;
+  define _curr        integer; 
+  define _AID         varchar(20);  
+  define _SID         integer;
+   
+  define _zprac       int;
+  
+  --povinne globalni promenne
+  define global TW_ErrSql   Int          default null;
+  define global TW_ErrIsam  Int          default null;
+  define global TW_ErrText  VarChar(255) default null;
+  
+  --osetreni chyby pri konstrukci kursoru
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  SET ISOLATION TO COMMITTED READ;
+  set lock mode to wait 600;
+  
+  if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+    trace on;
+  end if;
+  
+  let _zprac = 2;
+
+  
+  --ZACATEK vlastni migrace
+  BEGIN WORK;
+  
+  --záznam o spuštení migrace
+  let _serDM = TW_DM_Start('RSTS_4712', 'RSTS_4712', 'Optimalizace načítání dat z archivní databáze');
+  COMMIT WORK;
+  
+  let _zprac = 2;
+  if not exists(select 1 from rsts_4712 where zprac = 2)
+    and exists(select 1 from rsts_4712 where zprac = 20)  then
+    
+    -- provést pokud proběhl čístící běh
+    CALL tw_para_clean('rsts_4712_make_D');
+  end if
+  
+  let _AID = 'rsts_4712_make_D';
+  let _SID = DBINFO('sessionid');
+  
+  -- nejvetsi a nejmensi serial
+  let _prvni, _posledni = (select min(ser), max(ser) from rsts_4712 where zprac IN (-1, -2));
+  
+    -- vnejsi cyklus pres ridici tabulku
+    while tw_para_find(_AID,_SID,_prvni,_posledni) = 1
+      -- vnitrni cyklus pres ridici tabulku
+      while tw_para_hasnext(_AID,_SID) = 1
+        -- zahajim transakci
+        BEGIN WORK;
+        -- vezmu záznam
+        let _curr = tw_para_next(_AID,_SID);
+        -- dohledam zpracovavany zaznam
+        let _ser, _konto, _tko, _zdrojser = (SELECT ser, konto, tko, zdrojser FROM rsts_4712 WHERE ser = _curr and zprac IN (-1, -2));
+        if _ser is null then
+          COMMIT WORK;
+          continue while; --pokud byl zaznam jiz zpracovan jdu dal
+        end if;
+  
+        begin
+          on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+            begin
+              on exception in (-255)
+              end exception;
+              rollback;
+            end;         
+            if (TW_ErrSql in (-213,-457, -721)) then
+              call TW_RaiseTechError ('132G112TCUI', 'rsts_4712_make_D: Action has been cancelled by operator');
+            end if;            
+            
+            BEGIN WORK;
+            
+            UPDATE rsts_4712 SET (NumErr, ISAMErr, TextErr, zprac, sid) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2, _SID) WHERE ser = _curr;
+    
+            COMMIT;
+  
+            BEGIN WORK;          
+            --znovu vezmu záznam - reknu, ze je chyba (1)
+            let _curr = tw_para_next(_AID,_SID,1);
+            call TW_ClearMessage();
+            COMMIT WORK;
+            continue while;
+          end exception with resume;
+          
+          
+          --vlastni algoritmus migrace
+          UPDATE rsts_4712 SET starttime = get_timestamp() WHERE ser = _curr;
+          
+          CALL RSTS_4712_zprac(_konto, _tko, _zdrojser, _serDM);                 
+          
+          -- aktualizuju zaznam v ridici tabulce
+          UPDATE rsts_4712 SET zprac = _zprac, sid = _SID, numerr = NULL, isamerr = NULL, texterr = NULL, finishtime = get_timestamp() 
+          WHERE ser = _curr;
+          
+          COMMIT WORK;
+          BEGIN WORK;
+        end;
+  
+        -- potvrdim transakci
+        COMMIT WORK;
+      end while;
+    end while;
+  
+  --KONEC vlastni migrace
+  
+  --ZACATEK dokonceni migrace (pokud dokonceni existuje)
+  BEGIN WORK;
+  
+  --zápis o ukončení migrace do provozního deníku a protokolu migraci
+  call TW_DM_End(_serDM);
+  
+  if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+     trace off;
+  end if;
+  
+  COMMIT WORK;
+  --KONEC dokonceni migrace
+
+end procedure;

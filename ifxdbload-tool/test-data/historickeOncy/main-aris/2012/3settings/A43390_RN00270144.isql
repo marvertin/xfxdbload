@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A43390_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('AT', 'web', 'zpusobposunu', 'povolit', 0, 1, 
+  'Platební styk', 'Trvalý pøíkaz', 'Standing Order', 'Urèuje, zda je možné ve webových aplikacích nastavovat posun zpracování');  
+
+call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'chyba_zpracovani', 4, 0, 
+  'Správa systému', 'SMS komunikace', 'Typ SMS', 'Definuje typ SMS, který bude odeslán v pøípadì chyby pøi zpracování platebních pøíkazù');
+
+call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'chyba_zpracovani', 'CHYBA_ZP_PL', 0, 
+  'Správa systému', 'E-mailová komunikace', 'Vazby na typy e-mailù', 'Definuje typ e-mailu, který bude odeslán v pøípadì chyby pøi zpracování platebních pøíkazù');
+
+ROLLBACK WORK;
+
+

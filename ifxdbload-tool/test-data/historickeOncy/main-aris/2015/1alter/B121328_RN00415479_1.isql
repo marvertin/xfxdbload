@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B121328_RN00415479_1
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table PRO_SimulatedTurnover
+drop specification,
+drop impactOnRpsnEir
+;
+
+alter table PRO_ContractStatus
+--Základ pro výpočet SP k datu 1. čerpání úvěru v minulosti
+add ssBaseWthdrDate   DECIMAL(16, 2)  DEFAULT 0
+;
+
+ROLLBACK WORK;
+
+--End of B121328_RN00415479_1

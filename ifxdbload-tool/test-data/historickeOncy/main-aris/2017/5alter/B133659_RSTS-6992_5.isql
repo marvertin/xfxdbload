@@ -1,0 +1,59 @@
+-- @TC:ONCE: ID = V2, B133659_RSTS-6992_5
+-- @TC:ONCE: DESCRIPTION = Úpravy stávajících číselníků Main
+
+
+BEGIN WORK;
+
+call tw_execSql('RENAME TABLE checkreasonresult TO old_checkreasonresult;               ', -206);  
+call tw_execSql('RENAME TABLE checkreasonresult_acis TO old_checkreasonresult_acis;               ', -206);              
+
+call tw_execSql('RENAME TABLE eu_kontrolatyp_cis TO old_eu_kontrolatyp_cis;               ', -206);  
+call tw_execSql('RENAME TABLE eu_kontrolatyp_acis TO old_eu_kontrolatyp_acis;               ', -206);                   
+
+call tw_execSql('RENAME TABLE NoCheckRule TO old_NoCheckRule;               ', -206);  
+call tw_execSql('RENAME TABLE NoCheckRule_acis TO old_NoCheckRule_acis;               ', -206);         
+
+call tw_execSql('RENAME TABLE eu_kontrolavsth_cis TO old_eu_kontrolavsth_cis;               ', -206);  
+call tw_execSql('RENAME TABLE eu_kontrolavsth_acis TO old_eu_kontrolavsth_acis;               ', -206);  
+                 
+call tw_execSql('RENAME TABLE eu_kontrolavsthv_cis TO old_eu_kontrolavsthv_cis;               ', -206);  
+call tw_execSql('RENAME TABLE eu_kontrolavsthv_acis TO old_eu_kontrolavsthv_acis;               ', -206);    
+                     
+call tw_execSql('RENAME TABLE eu_kontrolavstb_cis TO old_eu_kontrolavstb_cis;               ', -206);  
+call tw_execSql('RENAME TABLE eu_kontrolavstb_acis TO old_eu_kontrolavstb_acis;               ', -206);    
+               
+call tw_execSql('RENAME TABLE eu_prijemhranice_cis TO old_eu_prijemhranice_cis;               ', -206);  
+call tw_execSql('RENAME TABLE eu_prijemhranice_acis TO old_eu_prijemhranice_acis;               ', -206);                                                                                                                                                    
+
+call tw_execSql('RENAME TABLE EO_DruhDavkyOS_Cis TO old_EO_DruhDavkyOS_Cis;               ', -206);  
+call tw_execSql('RENAME TABLE EO_DruhDavkyOS_aCis TO old_EO_DruhDavkyOS_aCis;               ', -206);   
+
+call tw_execSql('RENAME TABLE workposition TO old_workposition;               ', -206); 
+
+call tw_execSql('RENAME TABLE eo_zamestnani_mat TO old_eo_zamestnani_mat;               ', -206);  
+call tw_execSql('RENAME TABLE eo_zamestnani_arch TO old_eo_zamestnani_arch;               ', -206); 
+
+call tw_execSql('RENAME TABLE EO_RoleDruhDavkyOS_mat TO old_EO_RoleDruhDavkyOS_mat;               ', -206);  
+call tw_execSql('RENAME TABLE EO_RoleDruhDavkyOS_arch TO old_EO_RoleDruhDavkyOS_arch;               ', -206); 
+
+call tw_execSql('RENAME TABLE eo_ziskprijm_cis TO old_eo_ziskprijm_cis;               ', -206); 
+call tw_execSql('RENAME TABLE eo_ziskprijm_acis TO old_eo_ziskprijm_acis;               ', -206); 
+
+call tw_execSql('RENAME TABLE eo_zivminkoef_cis TO old_eo_zivminkoef_cis;               ', -206); 
+call tw_execSql('RENAME TABLE eo_zivminkoef_acis TO old_eo_zivminkoef_acis;               ', -206); 
+
+call tw_execSql('RENAME TABLE eo_typzavazku_cis TO old_eo_typzavazku_cis;               ', -206); 
+call tw_execSql('RENAME TABLE eo_typzavazku_acis TO old_eo_typzavazku_acis;               ', -206); 
+
+call tw_execSql('RENAME TABLE eo_ucelzavazku_cis TO old_eo_ucelzavazku_cis;               ', -206); 
+call tw_execSql('RENAME TABLE eo_ucelzavazku_acis TO old_eo_ucelzavazku_acis;               ', -206); 
+
+call tw_execSql('RENAME TABLE eo_platnostzavazku_cis TO old_eo_platnostzavazku_cis;               ', -206); 
+call tw_execSql('RENAME TABLE eo_platnostzavazku_acis TO old_eo_platnostzavazku_acis;               ', -206); 
+
+call tw_execSql('RENAME TABLE seo_davka_mat TO old_seo_davka_mat;               ', -206);  
+call tw_execSql('RENAME TABLE seo_davka_arch TO old_seo_davka_arch;               ', -206);  
+
+ROLLBACK WORK;
+
+--End of B133659_RSTS-6992_5

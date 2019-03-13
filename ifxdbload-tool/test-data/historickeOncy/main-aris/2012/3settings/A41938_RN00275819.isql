@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A41938_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+  -- #Defaultní lokalita pro výbìr souboru s pøílohou#
+  call tw_regsetoraddkey('es', '*', 'priloha', 'default_cesta', null,1);
+ 
+ROLLBACK WORK;
+
+ 

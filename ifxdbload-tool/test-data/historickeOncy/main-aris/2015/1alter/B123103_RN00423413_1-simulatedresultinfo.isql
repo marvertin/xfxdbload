@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B123103_RN00423413_1-simulatedresultinfo
+-- @TC:ONCE: DESCRIPTION = Úpravy v modelování {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table pro_simulatedresultinfo add nobusiness Integer  DEFAULT 0 NOT NULL before refuser;
+
+ROLLBACK WORK;
+
+--End of B123103_RN00423413_1-simulatedresultinfo

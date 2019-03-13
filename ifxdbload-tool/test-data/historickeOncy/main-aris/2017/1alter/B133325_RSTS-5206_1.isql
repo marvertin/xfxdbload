@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B133325_RSTS-5206_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ru_real_mat
+  ADD promlcpohl   Integer  DEFAULT 0,
+  ADD CONSTRAINT CHECK (promlcpohl IN (0,1)) CONSTRAINT ru_real_mat_d2v7;
+
+ALTER TABLE ru_real_arch
+  ADD promlcpohl   Integer;
+
+ROLLBACK WORK;
+
+--End of B133325_RSTS-5206_1

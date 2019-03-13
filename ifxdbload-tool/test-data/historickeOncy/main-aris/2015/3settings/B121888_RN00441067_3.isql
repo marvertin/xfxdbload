@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B121888_RN00441067_3
+-- @TC:ONCE: DESCRIPTION = nenauctuje se uhrada za zmenu tarifu a uroceni {DEFECT}
+
+
+BEGIN WORK;
+
+CALL TW_RegDelKey('ES', 'zmena', 'import', 'zakazzvys');
+
+ROLLBACK WORK;
+
+--End of B121888_RN00441067_3

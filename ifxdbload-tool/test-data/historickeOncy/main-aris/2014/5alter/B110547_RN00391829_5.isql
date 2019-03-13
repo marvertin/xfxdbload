@@ -1,0 +1,59 @@
+-- @TC:ONCE: ID = V2, B110547_RN00391829_5
+-- @TC:ONCE: DESCRIPTION = Insolvence - sečtené položky pohledávky {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_pohlinsolv_mat DROP (
+  jistdospl,
+  jistpospl,
+  beurokdospl,
+  beurokpospl,
+  saurokdospl,
+  saurokpospl,
+  pohluhrdospl,
+  pohluhrpospl,
+  pokutadospl,
+  pokutapospl,
+  poplpojdospl,
+  poplpojpospl,
+  poplsouddospl,
+  poplsoudpospl
+);
+
+ALTER TABLE ep_pohlinsolv_arch DROP (
+  jistdospl,
+  jistpospl,
+  beurokdospl,
+  beurokpospl,
+  saurokdospl,
+  saurokpospl,
+  pohluhrdospl,
+  pohluhrpospl,
+  pokutadospl,
+  pokutapospl,
+  poplpojdospl,
+  poplpojpospl,
+  poplsouddospl,
+  poplsoudpospl
+);
+
+ALTER TABLE ep_snimpohlinsolv_den DROP (
+  jistdospl,
+  jistpospl,
+  beurokdospl,
+  beurokpospl,
+  saurokdospl,
+  saurokpospl,
+  pohluhrdospl,
+  pohluhrpospl,
+  pokutadospl,
+  pokutapospl,
+  poplpojdospl,
+  poplpojpospl,
+  poplsouddospl,
+  poplsoudpospl
+);
+
+ROLLBACK WORK;
+
+--End of B110547_RN00391829_5

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A44856_RN00298027_1
+-- @TC:ONCE: DESCRIPTION = Web - jednorázový pøíkaz
+
+BEGIN WORK;
+
+ALTER TABLE an_prikazh_kart
+    ADD offlinemod INT DEFAULT 0 BEFORE poruser;
+
+ALTER TABLE an_prikazh_arch
+    ADD offlinemod INT DEFAULT 0 BEFORE poruser;
+
+ROLLBACK WORK;
+
+--End of A44856_RN00298027_1

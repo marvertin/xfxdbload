@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A42925_RN00270144
+-- @TC:ONCE: LOAD_UNLESS_LOADED = A42799_RN00270144
+-- @TC:ONCE: DESCRIPTION = script je opravou A42799_RN00270144.isql.error
+BEGIN WORK;
+
+CREATE TABLE rs_kontrurokzv_den (
+    id              SERIAL   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    typ             CHAR(4)   NOT NULL,
+    datumkontroly   DATE   NOT NULL,
+    vop             Integer  ,
+    tarif           Integer  ,
+    datumod         DATE  ,
+    indexbazesz     Integer  ,
+    odchylkaursz    DECIMAL(5,2)  ,
+    periodaursz     CHAR(1)  ,
+    duvod           Integer  ,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) EXTENT SIZE 62856 NEXT SIZE 62856 LOCK MODE ROW;
+
+ROLLBACK WORK;
+

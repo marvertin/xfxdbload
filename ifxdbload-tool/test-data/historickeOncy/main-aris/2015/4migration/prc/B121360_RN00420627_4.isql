@@ -1,0 +1,16 @@
+Create Procedure B121360_RN00420627_4()
+
+  define _pobyt char(1);
+  define _pobytdo date;
+  define _datumovereni date;
+  define _os int;
+  
+  let _datumovereni = (SELECT datprov FROM ap_status);
+  
+  foreach SELECT fo,pobyt,datuktrp  INTO _os,_pobyt, _pobytdo  FROM eo_fo_mat  
+    INSERT INTO sp_ospobyttyp_mat (os, poradi, pobytdo, pobyt, datumovereni)
+       VALUES (_os, 1, _pobytdo, _pobyt, _datumovereni);
+  end foreach;
+ 
+  
+end Procedure;

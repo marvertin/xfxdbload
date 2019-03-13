@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A98593_RN00350293_6
+-- @TC:ONCE: DESCRIPTION = CIBIS-OS: Nové provizní konto {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  CALL tw_execSql('drop view ah_pohlosrid_view', -206);
+  
+ROLLBACK WORK;
+
+--End of A98593_RN00350293_6

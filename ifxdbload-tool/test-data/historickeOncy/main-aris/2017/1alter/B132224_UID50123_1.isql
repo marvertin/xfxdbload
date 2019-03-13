@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B132224_UID50123_1
+-- @TC:ONCE: DESCRIPTION = TF001621 - Velice pomalá reakce systému v modelování při změně Varianty
+
+
+BEGIN WORK;
+
+CREATE INDEX ru_splat_kart_i2 ON ru_splat_kart(incommingser);
+
+ROLLBACK WORK;
+
+--End of B132224_UID50123_1

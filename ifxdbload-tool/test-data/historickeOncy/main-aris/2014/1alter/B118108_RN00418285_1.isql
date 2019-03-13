@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B118108_RN00418285_1
+-- @TC:ONCE: DESCRIPTION = Chyba v anonymizaci {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+create index bsavingrqpersonarch_i1 on bsavingrqpersonarch(bsavingreg, personidentnum);
+create index bsavingrqpersonreg_i2 on bsavingrqpersonreg(bsavingreg, personidentnum, anonymization);
+
+alter table eo_bsavingselection add bsavingreg int before contractnumber;
+
+create index eo_bsavingselection_i2 on eo_bsavingselection(bsavingreg, personidentnum);
+
+ROLLBACK WORK;
+
+--End of B118108_RN00418285_1

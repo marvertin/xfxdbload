@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A43496_RN00288403
+-- @TC:ONCE: DESCRIPTION = Nový typ zprávy
+
+BEGIN WORK;
+
+INSERT INTO EP_ZpravaTyp_Cis (nazev, popis, platnost)
+VALUES ('import','Zprávy generované importem', 1);
+
+    
+ROLLBACK WORK;
+
+ 

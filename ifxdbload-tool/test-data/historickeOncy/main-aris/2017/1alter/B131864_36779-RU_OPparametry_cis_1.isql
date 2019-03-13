@@ -1,0 +1,74 @@
+-- @TC:ONCE: ID = V2, B131864_36779-RU_OPparametry_cis_1
+-- @TC:ONCE: DESCRIPTION = IMPL: číselníky OP, parametrizace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE ru_opparametry_cis (
+  serno   SERIAL NOT NULL,
+  treal   CHAR(4) NOT NULL,
+  stadiumifrs   Integer NOT NULL,
+  indikzajistnemo   Integer NOT NULL,
+  urg   Integer NOT NULL,
+  stariuver   Integer NOT NULL,
+  dobadefaultu   Integer NOT NULL,
+  zbytksplat   Integer NOT NULL,
+  pd12mes   decimal(7,4) NOT NULL,
+  pdcelozivotni   decimal(7,4) NOT NULL,
+  lgd   decimal(7,4) NOT NULL,
+  beel   decimal(7,4) NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_opparametry_cis_pk ON ru_opparametry_cis(serno);
+ALTER TABLE ru_opparametry_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_opparametry_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ru_opparametry_cis
+ADD CONSTRAINT (CHECK (stadiumifrs IN(1, 2, 3)) CONSTRAINT ru_opparametry_cis_c1),
+ADD CONSTRAINT (CHECK (urg IN(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5)) CONSTRAINT ru_opparametry_cis_c2);
+
+
+----------------------------------------------------------------
+CREATE TABLE ru_opparametry_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  treal   CHAR(4) NOT NULL,
+  stadiumifrs   Integer NOT NULL,
+  indikzajistnemo   Integer NOT NULL,
+  urg   Integer NOT NULL,
+  stariuver   Integer NOT NULL,
+  dobadefaultu   Integer NOT NULL,
+  zbytksplat   Integer NOT NULL,
+  pd12mes   decimal(7,4) NOT NULL,
+  pdcelozivotni   decimal(7,4) NOT NULL,
+  lgd   decimal(7,4) NOT NULL,
+  beel   decimal(7,4) NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_opparametry_acis_pk ON ru_opparametry_acis(idarch);
+ALTER TABLE ru_opparametry_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ru_opparametry_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+ROLLBACK WORK;
+
+--End of B131864_36779-RU_OPparametry_cis_1

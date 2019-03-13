@@ -1,0 +1,93 @@
+-- @TC:ONCE: ID = V2, A46867_RN00282474v2_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù
+-- @TC:ONCE: LOAD_UNLESS_LOADED = A46867_RN00282474_1
+
+BEGIN WORK;
+
+  ALTER TABLE ev_sazpojist_cis DROP CONSTRAINT evsazpojistcis_c_f1;
+  ALTER TABLE ev_zajpojist_cis DROP CONSTRAINT evzajpojistcis_c_f1;
+  
+  DROP TABLE ev_varpojist_cis;
+  DROP TABLE ev_varpojist_acis;
+  
+  CREATE TABLE ev_varpojist_cis (
+    id   SERIAL NOT NULL,
+    nazev   CHAR(70) NOT NULL,
+    tvec   CHAR(1) NOT NULL,
+    druh   CHAR(1) NOT NULL,
+    extident   CHAR(10) NOT NULL,
+    poznamka   CHAR(160),
+    datumod   DATE NOT NULL,
+    datumdo   DATE,
+    platnost   Integer  DEFAULT 1 NOT NULL,
+    poruser   CHAR(20)  DEFAULT USER NOT NULL,
+    portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,    
+    refuser   CHAR(20)  DEFAULT USER NOT NULL,
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ev_varpojist_cis_dgkb
+  )lock mode row;
+  
+  --PK
+  CREATE UNIQUE INDEX ev_varpojist_cis_pk ON ev_varpojist_cis(id);
+  ALTER TABLE ev_varpojist_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ev_varpojist_cis_pk;
+  
+  --FK
+  CREATE INDEX ev_varpojist_cis_i_f1 ON ev_varpojist_cis(tvec,druh);
+  ALTER TABLE ev_varpojist_cis ADD CONSTRAINT FOREIGN KEY(tvec,druh) REFERENCES ev_druhvec_cis(tvec,druh) CONSTRAINT ev_varpojist_cis_f1;
+  
+  --INDEXES
+  
+  --UNIQUE INDEXES
+  CREATE UNIQUE INDEX ev_varpojist_cis_u2 ON ev_varpojist_cis(tvec,druh,nazev);
+  ALTER TABLE ev_varpojist_cis ADD CONSTRAINT (UNIQUE (tvec,druh,nazev) CONSTRAINT ev_varpojist_cis_u2);
+  CREATE UNIQUE INDEX ev_varpojist_cis_u1 ON ev_varpojist_cis(tvec,druh,extident);
+  ALTER TABLE ev_varpojist_cis ADD CONSTRAINT (UNIQUE (tvec,druh,extident) CONSTRAINT ev_varpojist_cis_u1);
+  
+  CREATE TABLE ev_varpojist_acis (
+    idarch   SERIAL NOT NULL,
+    id   INTEGER NOT NULL,
+    nazev   CHAR(70) NOT NULL,
+    tvec   CHAR(1),
+    druh   CHAR(1) NOT NULL,
+    extident   CHAR(10) NOT NULL,
+    poznamka   CHAR(160),
+    datumod   DATE NOT NULL,
+    datumdo   DATE,
+    platnost   Integer  DEFAULT 1 NOT NULL,
+    poruser   CHAR(20)  DEFAULT USER NOT NULL,
+    portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,    
+    refuser   CHAR(20)  DEFAULT USER NOT NULL,
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ev_varpojist_acis_dgkb
+  )lock mode row;
+  
+  --PK
+  CREATE UNIQUE INDEX ev_varpojist_acis_pk ON ev_varpojist_acis(idarch);
+  ALTER TABLE ev_varpojist_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ev_varpojist_acis_pk;
+  
+  -- cfastecne zmeny tabulek
+  
+  ALTER TABLE ev_pojist_mat MODIFY varianta INT;
+  CREATE INDEX ev_pojist_mat_i_f2 ON ev_pojist_mat(varianta);
+  
+  ALTER TABLE ev_pojist_arch ADD varianta INT BEFORE pojistovna;
+  
+  ALTER TABLE ev_pojistcrp_mat ADD smlouva   DECIMAL(16, 0) BEFORE datnav;
+  ALTER TABLE ev_pojistcrp_mat ADD tsml   CHAR(4) BEFORE datnav;
+  ALTER TABLE ev_pojistcrp_mat ADD datzrusnavrh   DATE BEFORE pojpristup;
+  ALTER TABLE ev_pojistcrp_mat ADD rozhdatumpoj   DATE BEFORE pojpristup;
+  ALTER TABLE ev_pojistcrp_mat ADD zpusobzadani   CHAR(1) BEFORE pojpristup;
+  ALTER TABLE ev_pojistcrp_mat ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND BEFORE reftime;
+  ALTER TABLE ev_pojistcrp_mat ADD poruser   CHAR(20)  DEFAULT USER BEFORE reftime; 
+  
+  ALTER TABLE ev_pojistcrp_arch ADD smlouva   DECIMAL(16, 0) BEFORE datnav;
+  ALTER TABLE ev_pojistcrp_arch ADD tsml   CHAR(4) BEFORE datnav;
+  ALTER TABLE ev_pojistcrp_arch ADD datzrusnavrh   DATE BEFORE pojpristup;
+  ALTER TABLE ev_pojistcrp_arch ADD rozhdatumpoj   DATE BEFORE pojpristup;
+  ALTER TABLE ev_pojistcrp_arch ADD zpusobzadani   CHAR(1) BEFORE pojpristup; 
+  ALTER TABLE ev_pojistcrp_arch ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND BEFORE reftime;
+  ALTER TABLE ev_pojistcrp_arch ADD poruser   CHAR(20)  DEFAULT USER BEFORE reftime;    
+
+ROLLBACK WORK;
+
+--End of A46867_RN00282474v2_1

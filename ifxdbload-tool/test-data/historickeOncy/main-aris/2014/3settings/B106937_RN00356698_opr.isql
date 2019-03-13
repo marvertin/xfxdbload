@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B106937_RN00356698_opr
+-- @TC:ONCE: DESCRIPTION = požadavek RN00356698
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('ES','SSFO','cibissale','cilstavzmsml_osoba','A', 1,'Spoření', 'Žádost o vypořádání smlouvy', 'Ukončení smlouvy SS na webu', 'Cílový stav návrhu na vytvoření disponenta',1);
+
+ROLLBACK WORK;
+
+--End of A57750_RN00342935_3

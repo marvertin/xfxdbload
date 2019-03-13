@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B10500_RN00311507_1-ukolovnik_ultimo_mesice
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE ep_ukoltyp_cis  DROP CONSTRAINT ep_ukoltyp_cis_dcsi;
+ALTER TABLE ep_ukoltyp_acis DROP CONSTRAINT ep_ukoltyp_acis_dcss;
+
+ALTER TABLE ep_ukoltyp_cis  ADD CONSTRAINT (CHECK (casjednotka IN ('D', 'T', 'M', 'U', 'R', 'Q', 'P', 'X')) CONSTRAINT ep_ukoltyp_cis_c1);
+ALTER TABLE ep_ukoltyp_acis ADD CONSTRAINT (CHECK (casjednotka IN ('D', 'T', 'M', 'U', 'R', 'Q', 'P', 'X')) CONSTRAINT ep_ukoltyp_acis_c1);
+
+ROLLBACK WORK;
+--End of B10500_RN00311507_1-ukolovnik_ultimo_mesice

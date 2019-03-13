@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A41805_RN00275819_KomKanal
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - db registry pro komunikaèní kanály
+
+BEGIN WORK;
+  call tw_regsetoraddkey('EO', 'osoba', 'komkanal','mobil-SIS', null, 1);
+  call tw_regsetoraddkey('EO', 'osoba', 'komkanal','email-SIS', null, 1);
+  call tw_regsetoraddkey('EO', 'osoba', 'komkanal','mobil-SIS_chyba', null, 1);
+  call tw_regsetoraddkey('EO', 'osoba', 'komkanal','email-SIS_chyba', null, 1);
+  
+  INSERT INTO eo_typkom_cis(typkom, popis, pl) VALUES(2, 'E-mail', 1);
+  
+  UPDATE eo_typkom_cis SET popis = 'Papírovì' WHERE typkom = 1 and pl = 1;
+  
+ROLLBACK WORK;

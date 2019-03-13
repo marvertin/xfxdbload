@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B127340_RN00451081_3
+-- @TC:ONCE: DESCRIPTION = HS - nepřipsané úroky RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- #Omezená výše úroku na spoření zahrnovaná do výpočtu RPSN#
+Call TW_RegSetOrAddKey('MO','modelCore','RPSNcalculation','limitedSavInterest', 1);
+
+ROLLBACK WORK;
+
+--End of B127340_RN00451081_3

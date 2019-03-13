@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B116384_RN00375554_1
+-- @TC:ONCE: DESCRIPTION = Doplnit do modelování posuzování bonity {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_bonita
+
+ ADD refuser   CHAR(20)  DEFAULT USER,
+ ADD reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+;
+
+ROLLBACK WORK;
+
+--End of B116384_RN00375554_1

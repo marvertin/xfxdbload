@@ -1,0 +1,76 @@
+-- @TC:ONCE: ID = V2, B130873_RSTS-3518_1
+-- @TC:ONCE: DESCRIPTION = RSTS-3518 Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_contractchecking_kart 
+    ADD dstistatus char(1) default 'S',
+    ADD dstiresult char(1) default '0',
+    ADD dstiannul integer default 0 not null ,
+    ADD dstinote VARCHAR(255),
+    
+    ADD dtistatus char(1) default 'S',
+    ADD dtiresult char(1) default '0',
+    ADD dtiannul integer default 0 not null ,
+    ADD dtinote VARCHAR(255),
+    
+    ADD minincomeejstatus char(1) default 'S',
+    ADD minincomeejresult char(1) default '0',
+    ADD minincomeejannul integer default 0 not null,
+    ADD minincomeejnote VARCHAR(255),
+    
+    ADD agematuritystatus char(1) default 'S',
+    ADD agematurityresult char(1) default '0',
+    ADD agematurityannul integer default 0 not null,
+    ADD agematuritynote VARCHAR(255),
+    
+    ADD crdurationstatus char(1) default 'S',
+    ADD crdurationresult char(1) default '0',
+    ADD crdurationannul integer default 0 not null,
+    ADD crdurationnote VARCHAR(255)
+;
+
+ALTER TABLE eu_contractchecking_den 
+    ADD dstistatus char(1),
+    ADD dstiresult char(1),
+    ADD dstiannul integer default 0 not null ,
+    ADD dstinote VARCHAR(255),
+    
+    ADD dtistatus char(1),
+    ADD dtiresult char(1),
+    ADD dtiannul integer default 0 not null ,
+    ADD dtinote VARCHAR(255),
+    
+    ADD minincomeejstatus char(1),
+    ADD minincomeejresult char(1),
+    ADD minincomeejannul integer default 0 not null,
+    ADD minincomeejnote VARCHAR(255),
+    
+    ADD agematuritystatus char(1),
+    ADD agematurityresult char(1),
+    ADD agematurityannul integer default 0 not null,
+    ADD agematuritynote VARCHAR(255),
+    
+    ADD crdurationstatus char(1),
+    ADD crdurationresult char(1),
+    ADD crdurationannul integer default 0 not null,
+    ADD crdurationnote VARCHAR(255)
+;
+
+alter table eo_finsit_mat add uvangazovanost dec(16,2);
+
+alter table eo_finsit_arch add uvangazovanost dec(16,2);
+
+alter table eu_kontrolatyp_acis add kind char(1) before portime;
+
+alter table eu_kontrolatyp_cis add kind char(1) before portime;
+
+alter table eo_finsit_mat modify pomersplatekprijmu dec(8,4);
+
+alter table eo_finsit_mat modify pomerdluhuprijmu dec(8,4);
+
+
+ROLLBACK WORK;
+
+--End of B130873_RSTS-3518_1

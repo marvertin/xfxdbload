@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, A41731_RN00269080_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní finanèních tokù o položku klientská prémie {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_globalbaseparameters
+
+  --Prémie – typ srážkové danì
+  --Význam: Typ srážkové danì pro daò z pøíjmu dle èíselníku daòových sazeb
+  add  bonusTaxType   CHAR(20)  DEFAULT 'N/A' NOT NULL
+;
+
+alter table pro_plannedfinancialflow
+
+  --Zdanìní prémie
+  --Význam: Urèuje, zda pøi modelování Prémie má být modelováno i její zdanìní
+  add   bonusTaxationFlag   Integer  DEFAULT 0 NOT NULL,
+  
+  --Sazba danì z prémií
+  --Význam: Urèuje daòovou (procentní) sazbu pro zdanìní modelovaných prémií
+  add bonusTaxRate   DECIMAL(5,2)
+;
+
+alter table pro_plannedfinancialflow
+  add constraint CHECK (bonustaxationflag IN (0,1)) CONSTRAINT pro_plannedfinancialflow_detv
+;
+
+ROLLBACK WORK;
+
+--End of A41731_RN00269080_1

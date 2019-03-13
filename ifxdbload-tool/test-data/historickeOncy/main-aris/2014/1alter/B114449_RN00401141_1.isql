@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B114449_RN00401141_1
+-- @TC:ONCE: DESCRIPTION = TC004 Osoby - uložené změny v záložce komunikační kanál se nezobrazují v historii kom. kanálů {DEFECT}
+
+
+BEGIN WORK;
+
+CREATE INDEX aris.eo_komkanal_arch_i2
+  ON aris.eo_komkanal_arch(vztahpo);
+
+CREATE INDEX aris.eo_komkanal_arch_i3
+  ON aris.eo_komkanal_arch(komkanal);
+
+ROLLBACK WORK;
+
+--End of B114449_RN00401141_1

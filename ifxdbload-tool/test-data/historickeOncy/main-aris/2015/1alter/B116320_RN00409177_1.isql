@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B116320_RN00409177_1
+-- @TC:ONCE: DESCRIPTION = rozlišení zálohového čerpání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ru_cerp_kart
+  ADD zalohovecerp INTEGER;
+
+ALTER TABLE RU_ExpCerp_Den
+  ADD zalohovecerp INTEGER;
+
+ROLLBACK WORK;
+
+--End of B116320_RN00409177_1

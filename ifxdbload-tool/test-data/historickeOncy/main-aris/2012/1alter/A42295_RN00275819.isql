@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A42295_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál - zprávy
+
+BEGIN WORK;
+
+ALTER TABLE es_zmplan_kart DROP CONSTRAINT eszmplankart_c_czpusob;
+
+ALTER TABLE es_zmplan_kart
+    ADD CONSTRAINT CHECK (zpusob in ('M', 'D', 'A')) CONSTRAINT es_zmplan_kart_c5;
+    
+ROLLBACK WORK;

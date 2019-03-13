@@ -1,0 +1,214 @@
+-- @TC:ONCE: ID = V2, B10022_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP TABLE EP_NepodPokyn_ACis', -206);
+call TW_ExecSql('DROP TABLE EP_NepodPokyn_Cis', -206);
+call TW_ExecSql('DROP TABLE EP_NepodPrihl_ACis', -206);
+call TW_ExecSql('DROP TABLE EP_NepodPrihl_Cis', -206);
+call TW_ExecSql('DROP TABLE EP_PoprPrihl_ACis', -206);
+call TW_ExecSql('DROP TABLE EP_PoprPrihl_Cis', -206);
+call TW_ExecSql('DROP TABLE EP_StornoInsolv_ACis', -206);
+call TW_ExecSql('DROP TABLE EP_StornoInsolv_Cis', -206);
+call TW_ExecSql('DROP TABLE EP_UkoncInsolv_ACis', -206);
+call TW_ExecSql('DROP TABLE EP_UkoncInsolv_Cis', -206);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvnepodpokyn_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvnepodpokyn_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvnepodpokyn_acis_pk ON ep_duvnepodpokyn_acis(idarch);
+ALTER TABLE ep_duvnepodpokyn_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_duvnepodpokyn_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvnepodpokyn_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvnepodpokyn_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvnepodpokyn_cis_pk ON ep_duvnepodpokyn_cis(serno);
+ALTER TABLE ep_duvnepodpokyn_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_duvnepodpokyn_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_duvnepodpokyn_cis_u1 ON ep_duvnepodpokyn_cis(duvod);
+ALTER TABLE ep_duvnepodpokyn_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_duvnepodpokyn_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvnepodprihl_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvnepodprihl_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvnepodprihl_acis_pk ON ep_duvnepodprihl_acis(idarch);
+ALTER TABLE ep_duvnepodprihl_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_duvnepodprihl_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvnepodprihl_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvnepodprihl_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvnepodprihl_cis_pk ON ep_duvnepodprihl_cis(serno);
+ALTER TABLE ep_duvnepodprihl_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_duvnepodprihl_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_duvnepodprihl_cis_u1 ON ep_duvnepodprihl_cis(duvod);
+ALTER TABLE ep_duvnepodprihl_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_duvnepodprihl_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvpoprprihl_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvpoprprihl_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvpoprprihl_acis_pk ON ep_duvpoprprihl_acis(idarch);
+ALTER TABLE ep_duvpoprprihl_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_duvpoprprihl_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvpoprprihl_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvpoprprihl_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvpoprprihl_cis_pk ON ep_duvpoprprihl_cis(serno);
+ALTER TABLE ep_duvpoprprihl_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_duvpoprprihl_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_duvpoprprihl_cis_u1 ON ep_duvpoprprihl_cis(duvod);
+ALTER TABLE ep_duvpoprprihl_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_duvpoprprihl_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvstornoinsolv_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvstornoinsolv_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvstornoinsolv_acis_pk ON ep_duvstornoinsolv_acis(idarch);
+ALTER TABLE ep_duvstornoinsolv_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_duvstornoinsolv_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvstornoinsolv_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvstornoinsolv_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvstornoinsolv_cis_pk ON ep_duvstornoinsolv_cis(serno);
+ALTER TABLE ep_duvstornoinsolv_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_duvstornoinsolv_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_duvstornoinsolv_cis_u1 ON ep_duvstornoinsolv_cis(duvod);
+ALTER TABLE ep_duvstornoinsolv_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_duvstornoinsolv_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvukoncinsolv_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvukoncinsolv_acis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvukoncinsolv_acis_pk ON ep_duvukoncinsolv_acis(idarch);
+ALTER TABLE ep_duvukoncinsolv_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_duvukoncinsolv_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_duvukoncinsolv_cis (
+  serno   SERIAL NOT NULL,
+  duvod   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_duvukoncinsolv_cis_d7ce
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_duvukoncinsolv_cis_pk ON ep_duvukoncinsolv_cis(serno);
+ALTER TABLE ep_duvukoncinsolv_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_duvukoncinsolv_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_duvukoncinsolv_cis_u1 ON ep_duvukoncinsolv_cis(duvod);
+ALTER TABLE ep_duvukoncinsolv_cis ADD CONSTRAINT (UNIQUE (duvod) CONSTRAINT ep_duvukoncinsolv_cis_u1);
+
+ROLLBACK WORK;
+
+--End of B10022_RN00311507_1

@@ -1,0 +1,55 @@
+-- @TC:ONCE: ID = V2, A47307_RN00292084
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda
+
+BEGIN WORK;
+
+CREATE TABLE eu_odkladduvod_cis (
+  id   SERIAL NOT NULL,
+  nazev   VARCHAR(255) NOT NULL,
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_odkladduvod_cis_dpk7
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_odkladduvod_cis_pk ON eu_odkladduvod_cis(id);
+ALTER TABLE eu_odkladduvod_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eu_odkladduvod_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE eu_odkladduvod_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  nazev   VARCHAR(255) NOT NULL,
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_odkladduvod_cis_dpk8
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_odkladduvod_acis_pk ON eu_odkladduvod_acis(idarch);
+ALTER TABLE eu_odkladduvod_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_odkladduvod_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+ROLLBACK WORK; 

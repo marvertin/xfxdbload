@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135187_UID70101_1-pef_firmaodpovedo_den
+-- @TC:ONCE: DESCRIPTION = RSTS-20891: Subdodávka IMPLEMENTACE: RSTS-19301_Rozšířit vyhodnocování dat z CRIBIS o atribut "Share" (hodnota vlastnického podílu) (HD) {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE pef_firmaodpovedo_den ADD podilos DECIMAL(5,2) BEFORE fulladdress; 
+
+ROLLBACK WORK;
+
+--End of B135187_UID70101_1-pef_firmaodpovedo_den

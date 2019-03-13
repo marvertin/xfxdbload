@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, B135825_UID78754_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24995: Zavést číselník "Interní druh pobytu"
+
+BEGIN WORK;
+
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan ČR s trv. pobytem', 'X', 'CR', 'RC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan ČR bez trv. pobytu', 'Y', 'MIMO_CR', 'RC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan EU s povolením pobytu s trv. pobytem', '1', 'CR', 'RC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan EU s povolením pobytu s přech. pobytem', '1', 'MIMO_CR', 'RC_ICC', 1);
+
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan EU bez povolení pobytu', '2', 'MIMO_CR', 'RC_ICC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan 3.státu s trv. pobytem', '3', 'CR', 'RC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan 3.státu bez trv. pobytu - dlouhodobý pobyt', '4', 'MIMO_CR', 'RC_ICC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan 3.státu bez trv. pobytu - modrá karta', '4', 'MIMO_CR', 'RC_ICC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan 3.státu bez trv. pobytu - zam. karta', '4', 'MIMO_CR', 'RC_ICC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan 3.státu bez trv. pobytu - přech. pobyt', '4', 'MIMO_CR', 'RC_ICC', 1);
+  
+INSERT INTO eo_druhpobytinterni_cis (nazev, refdruhpobytumf, stattrvaleadresy, omezenitypid, platnost)
+  VALUES ('Občan 3.státu bez pobytu', '4', 'MIMO_CR', 'RC_ICC', 1);
+
+ROLLBACK WORK;
+
+--End of B135825_UID78754_3

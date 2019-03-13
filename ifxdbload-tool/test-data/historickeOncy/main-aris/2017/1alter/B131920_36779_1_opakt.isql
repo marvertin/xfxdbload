@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B131920_36779_1_opakt
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE INDEX ru_opparametry_cis_i1 ON ru_opparametry_cis(treal,stadiumifrs,indikzajistnemo,urg,stariuver,dobadefaultu,zbytksplat);
+
+ROLLBACK WORK;
+
+--End of B131920_36779_1

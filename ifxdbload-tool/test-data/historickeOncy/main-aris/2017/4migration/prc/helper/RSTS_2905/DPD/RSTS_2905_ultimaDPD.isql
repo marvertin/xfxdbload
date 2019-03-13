@@ -1,0 +1,53 @@
+CREATE PROCEDURE RSTS_2905_ultimaDPD(AKonto    DEC(16, 0),
+                                     ATko      CHAR(2),
+                                     ARealn    INT,
+                                     ADatOtev  DATE,
+                                     ADatUzav  DATE,
+                                     ALogovat  INT DEFAULT 0)                                                                    
+
+  DEFINE _datvyhodnoceni         DATE;
+  DEFINE _datprvvyhodnoceni      DATE;
+  DEFINE _vlozeno                INT;
+
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'UltimaDPD'); END IF;
+
+  IF(ADatUzav IS NULL) THEN
+    LET ADatUzav = AP_DatProv();
+  END IF;
+  
+  LET _datvyhodnoceni = TW_LastDayOf(ADatOtev, 'M');
+  LET _datprvvyhodnoceni = ADatOtev; 
+  LET _vlozeno = 0;  
+  
+  WHILE(_datvyhodnoceni <= ADatUzav) 
+    IF(ATko = 'CA') THEN
+      INSERT INTO rsts_2905_dpdevid (realuv, poradi, datvyhodnoceni, datprvvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka)
+      VALUES (ARealn, NULL, _datvyhodnoceni, _datprvvyhodnoceni, 'L', 0, 0, 0, 0);
+    ELSE
+      INSERT INTO rsts_2905_dpdevid (reals, poradi, datvyhodnoceni, datprvvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka)
+      VALUES (ARealn, NULL, _datvyhodnoceni, _datprvvyhodnoceni, 'D', 0, 0, 0, 0);    
+    END IF;
+    
+    LET _vlozeno = _vlozeno + 1;
+    
+    IF(_datvyhodnoceni = ADatUzav) THEN
+      EXIT WHILE;  -- vlozil jsem posledni zaznam 
+    END IF;
+        
+    LET _datprvvyhodnoceni = _datvyhodnoceni + 1;
+    LET _datvyhodnoceni = TW_MinDate(TW_LastDayOf(_datvyhodnoceni + 1, 'M'), ADatUzav);      
+  END WHILE;
+  
+  IF(_vlozeno = 0) THEN
+    -- nedoslo k vlozeni zadneho radku, protoze doba trvani produktu nepresla pres ultimo mesice
+    IF(ATko = 'CA') THEN
+      INSERT INTO rsts_2905_dpdevid (realuv, poradi, datvyhodnoceni, datprvvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka)
+      VALUES (ARealn, NULL, ADatUzav, ADatOtev, 'L', 0, 0, 0, 0);
+    ELSE
+      INSERT INTO rsts_2905_dpdevid (reals, poradi, datvyhodnoceni, datprvvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka)
+      VALUES (ARealn, NULL, ADatUzav, ADatOtev, 'D', 0, 0, 0, 0);    
+    END IF;    
+  END IF;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;
+END PROCEDURE;

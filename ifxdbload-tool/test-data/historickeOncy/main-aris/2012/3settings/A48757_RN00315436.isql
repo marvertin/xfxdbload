@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A48757_RN00315436
+-- @TC:ONCE: DESCRIPTION = Náhled na klienta jako Call Centrum {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_defcond(appname, culohy, nazev, fromstr, wherestr)
+  VALUES('CbRsts-AMain-MCibisMainGui', 1902, 'Osoby s negativní platební morálkou', 'eo_negatplatmoral', 'eo_fo_mat.fo = eo_negatplatmoral.os and eo_negatplatmoral.ico is null');
+
+INSERT INTO tw_defcond(appname, culohy, nazev, fromstr, wherestr)
+  VALUES('CbRsts-AMain-MCibisMainGui', 1903, 'Osoby s negativní platební morálkou', 'eo_negatplatmoral', 'eo_po_mat.po = eo_negatplatmoral.os');
+
+ROLLBACK WORK;
+

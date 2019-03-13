@@ -1,0 +1,41 @@
+CREATE FUNCTION RSTS_2905_datumNesplVkladuDPD(ARealn          INT,
+                                              ADatum          DATE,       -- datum kontroly
+                                              ANesplacCastka  DEC(16, 2), -- dluzna castka
+                                              ADatOtev        DATE)
+  RETURNING INT;  -- vraci pocet dnu od nesplaceneheo vkladu     
+  
+  DEFINE _datprov     DATE;
+  DEFINE _vklad       DEC(16, 2);
+  DEFINE _zbytek      DEC(16, 2);
+  DEFINE _realpu      INT;
+  DEFINE _datvklad    DATE;
+  DEFINE _rozpusteno  DATE;
+  
+  LET _zbytek = ABS(ANesplacCastka);
+  FOREACH c1 WITH HOLD FOR
+    SELECT datprov, vklad INTO _datprov, _vklad
+    FROM rsts_2905_vklad
+    WHERE
+      datprov <= ADatum
+    ORDER BY
+      datprov DESC, poradi DESC
+    
+    LET _zbytek = _zbytek - _vklad;
+    IF(_zbytek <= 0) THEN  
+      EXIT FOREACH;
+    END IF;  
+  END FOREACH;
+  
+  IF(_zbytek <= 0) THEN
+    LET _rozpusteno = _datprov;
+  ELSE
+    -- nedoslo k uplnemu rozpusteni - nestandardni situace 
+    LET _realpu = (SELECT realpu FROM rz_real_mat WHERE reals = ARealn);
+    LET _datvklad = RU_DatPrvCerp(_realpu); 
+    
+    LET _rozpusteno = NVL(_datvklad, ADatOtev);    
+  END IF;        
+  
+  RETURN NVL(ADatum - _rozpusteno + 1, 0);                            
+  
+END FUNCTION;

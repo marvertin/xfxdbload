@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135742_UID76986_1-ep_splspormoderr_den
+-- @TC:ONCE: DESCRIPTION = RSTS-23957: IMPLEMENTACE (BE): RSTS-14722_Údržba chybové evidence modelu splácení a spoření {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormoderr_den ADD (
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4)
+)
+;
+
+ROLLBACK WORK;
+
+--End of B135742_UID76986_1-ep_splspormoderr_den

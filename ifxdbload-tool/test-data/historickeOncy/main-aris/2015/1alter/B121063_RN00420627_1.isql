@@ -1,0 +1,126 @@
+-- @TC:ONCE: ID = V2, B121063_RN00420627_1
+-- @TC:ONCE: DESCRIPTION = Časové rozlišení pobytu {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       sp_narokzakonpobyt_acis
+
+-- 1  sp_narokzakonpobyt_acis-1/3       [CREATE.TABLE]
+CREATE TABLE sp_narokzakonpobyt_acis (
+    idarch          SERIAL   NOT NULL,
+    zakon           Integer   NOT NULL,
+    pobyt           Char(1)   NOT NULL,
+    naroksp         Integer DEFAULT 1  NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    poznamka        CHAR(70)  ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 2  sp_narokzakonpobyt_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_narokzakonpobyt_acis_pk ON sp_narokzakonpobyt_acis (idarch) ;
+
+-- 3  sp_narokzakonpobyt_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_narokzakonpobyt_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT sp_narokzakonpobyt_acis_pk;
+
+-- ###############################################################
+--       sp_narokzakonpobyt_cis
+
+-- 4  sp_narokzakonpobyt_cis-1/3       [CREATE.TABLE]
+CREATE TABLE sp_narokzakonpobyt_cis (
+    zakon           Integer   NOT NULL,
+    pobyt           Char(1)   NOT NULL,
+    naroksp         Integer DEFAULT 1  NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    poznamka        CHAR(70)  ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (naroksp IN (0,1)) CONSTRAINT sp_narokzakonpobyt_cis_naroksp,
+    CHECK (platnost IN (0,1)) CONSTRAINT sp_narokzakonpobyt_cis_platnost
+) LOCK MODE ROW
+;
+
+-- 5  sp_narokzakonpobyt_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_narokzakonpobyt_cis_pk ON sp_narokzakonpobyt_cis (zakon,pobyt) ;
+
+-- 6  sp_narokzakonpobyt_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_narokzakonpobyt_cis
+    ADD CONSTRAINT PRIMARY KEY (zakon,pobyt)  CONSTRAINT sp_narokzakonpobyt_cis_pk;
+
+-- ###############################################################
+--       sp_ospobyttyp_arch
+
+-- 7  sp_ospobyttyp_arch-1/3       [CREATE.TABLE]
+CREATE TABLE sp_ospobyttyp_arch (
+    idarch          SERIAL   NOT NULL,
+    os              Integer   NOT NULL,
+    poradi          Integer   NOT NULL,
+    pobyt           Char(1),
+    datumovereni    DATE   NOT NULL,
+    pobytod         DATE  ,
+    pobytdo         DATE  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    poznamka        CHAR(70)  ,
+    salerefuser     CHAR(20) DEFAULT USER ,
+    salereftime     DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL    
+) LOCK MODE ROW
+;
+
+-- 8  sp_ospobyttyp_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_ospobyttyp_arch_pk ON sp_ospobyttyp_arch (idarch) ;
+
+-- 9  sp_ospobyttyp_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_ospobyttyp_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT sp_ospobyttyp_arch_pk;
+
+-- ###############################################################
+--       sp_ospobyttyp_mat
+
+-- 10  sp_ospobyttyp_mat-1/3       [CREATE.TABLE]
+CREATE TABLE sp_ospobyttyp_mat (
+    os              Integer   NOT NULL,
+    poradi          Integer   NOT NULL,
+    pobyt           Char(1),
+    datumovereni    DATE   NOT NULL,
+    pobytod         DATE  ,
+    pobytdo         DATE  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    poznamka        CHAR(70)  ,
+    salerefuser     CHAR(20) DEFAULT USER ,
+    salereftime     DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT sp_ospobyttyp_mat_platnost
+) LOCK MODE ROW
+;
+
+-- 11  sp_ospobyttyp_mat-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_ospobyttyp_mat_pk ON sp_ospobyttyp_mat (os,poradi) ;
+
+-- 12  sp_ospobyttyp_mat-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_ospobyttyp_mat
+    ADD CONSTRAINT PRIMARY KEY (os,poradi)  CONSTRAINT sp_ospobyttyp_mat_pk;
+
+
+ALTER TABLE eo_fo_mat add pobytod date before pobyt;
+ALTER TABLE eo_fo_mat ADD datumovereni date before pobyt;
+ALTER TABLE eo_fo_arch add pobytod date before pobyt;
+ALTER TABLE eo_fo_arch ADD datumovereni date before pobyt;
+
+ROLLBACK WORK;
+
+--End of B121063_RN00420627_1

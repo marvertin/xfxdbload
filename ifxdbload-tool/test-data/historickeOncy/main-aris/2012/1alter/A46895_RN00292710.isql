@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, A46895_RN00292710
+-- @TC:ONCE: DESCRIPTION = Rozšíøit evidenci osob o položku oslovování pøíjmení
+
+BEGIN WORK;
+
+ALTER TABLE bsavingrqpersonreg
+    ADD osloveni        CHAR(35);
+
+ALTER TABLE bsavingrqpersonarch
+    ADD osloveni        CHAR(35);
+
+ALTER TABLE bs_zmosoba_mat
+    ADD osloveni        CHAR(35)   BEFORE poruser;
+
+ALTER TABLE bs_zmosoba_arch
+    ADD osloveni        CHAR(35)   BEFORE poruser;
+
+ALTER TABLE bs_stosoba_arch
+    ADD osloveni        CHAR(35)   BEFORE poruser;
+
+ALTER TABLE bs_stosoba_mat
+    ADD osloveni        CHAR(35)   BEFORE portime;
+
+ALTER TABLE creditrqpersonreg
+    ADD xvocative       CHAR(35);
+
+ALTER TABLE creditrqpersonarch
+    ADD xvocative       CHAR(35);
+
+ROLLBACK WORK;
+
+--End of A46855_RN00292710
+    

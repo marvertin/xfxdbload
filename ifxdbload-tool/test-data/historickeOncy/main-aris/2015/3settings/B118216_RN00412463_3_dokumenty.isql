@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B118216_RN00412463_3_dokumenty
+-- @TC:ONCE: DESCRIPTION = Main: Úprava parametrů platebního stavebního spoření {CUSTOMERREQUEST} 
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B118216_RN00412463_3
+
+BEGIN WORK;
+  
+-- Typ dokumentu
+INSERT INTO do_typdokumentu_cis(text) VALUES('Ujednání k Felixovu spoření');
+
+-- Typ objektu typ dokumentu
+INSERT INTO do_typdokumentutypobjektu_cis(doktyp, objtyp,uzivatelskypristup, platnost, kvalitadok, poradi, platnostod)
+  VALUES((SELECT max(doktyp) FROM do_typdokumentu_cis), 'S_sporeni_nova', 'NEPRISTUPNY', 1, 'ORIGINAL', 0, mdy(4,1,2015));
+
+-- Podpisová pole 
+INSERT INTO do_podpisovepole_cis(doktyp, poradi, xpos, ypos, sirka, vyska, poznamka, platnost)
+  VALUES((SELECT max(doktyp) FROM do_typdokumentu_cis), 1, 0, 0, 129, 50, 'Podpis klienta (resp. zákonného zástupce)', 1);
+INSERT INTO do_podpisovepole_cis(doktyp, poradi, xpos, ypos, sirka, vyska, poznamka, platnost)
+  VALUES((SELECT max(doktyp) FROM do_typdokumentu_cis), 2, 0, 0, 129, 50, 'Podpis OZ', 1);
+
+
+ROLLBACK WORK;
+
+--End of B118216_RN00412463_3

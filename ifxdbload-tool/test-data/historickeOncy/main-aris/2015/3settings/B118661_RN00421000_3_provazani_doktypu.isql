@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B118661_RN00421000_3_provazani_doktypu
+-- @TC:ONCE: DESCRIPTION = Nové tiskové výstupy v CIBIS-Sale {CUSTOMERREQUEST}
+
+-- RN00412463 - Annex do verze 2015-F
+
+BEGIN WORK;
+
+UPDATE do_typdokumentu_cis set (repcode, archivovat,generovany) = ('SS041',1,1) WHERE doktyp = (SELECT doktyp FROM do_typdokumentu_cis WHERE text = 'Ujednání k Felixovu spoření');
+
+ROLLBACK WORK;
+
+-- end of B118661_RN00421000_3_provazani_doktypu

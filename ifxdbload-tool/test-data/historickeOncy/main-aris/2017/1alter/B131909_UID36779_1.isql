@@ -1,0 +1,68 @@
+-- @TC:ONCE: ID = V2, B131909_UID36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B131907_UID36779_1
+
+BEGIN WORK;
+
+--Model splácení a spoření – cash-flow z pohledu banky
+CREATE TABLE ep_splspormodbankcf_den (
+  ser   BIGSERIAL NOT NULL,
+  headser   INTEGER,
+  refsplspormodb   BIGINT,
+  poradi   Integer,
+  datum   DATE,
+  castka   DECIMAL(16, 2),
+  saldo   DECIMAL(16, 2),
+  typfiktivniho   CHAR(1),
+  sazbabe dec(5,2)
+) extent size 16 next size 1024 lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splspormodbankcf_den_pk ON ep_splspormodbankcf_den(ser);
+ALTER TABLE ep_splspormodbankcf_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splspormodbankcf_den_pk;
+
+--FK
+CREATE INDEX ep_splspormodbankcf_den_i_f1 ON ep_splspormodbankcf_den(headser);
+ALTER TABLE ep_splspormodbankcf_den ADD CONSTRAINT FOREIGN KEY(headser) REFERENCES ep_splspormodh_den(ser) CONSTRAINT ep_splspormodbankcf_den_f1;
+CREATE INDEX ep_splspormodbankcf_den_i_f2 ON ep_splspormodbankcf_den(refsplspormodb);
+ALTER TABLE ep_splspormodbankcf_den ADD CONSTRAINT FOREIGN KEY(refsplspormodb) REFERENCES ep_splspormodb_den(ser) CONSTRAINT ep_splspormodbankcf_den_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ep_splspormodbankcf_den
+ADD CONSTRAINT (CHECK (typFiktivniho in ('U', 'P', 'C', 'T', 'S')) CONSTRAINT ep_splspormodbankcf_den_c1);
+
+------------------------------------------------
+CREATE TABLE ep_expsplspormodbnkcf_den (
+  ser   BIGSERIAL NOT NULL,
+  id_index   Integer,
+  refheadser   INTEGER,
+  refsplspormodb   BIGINT,
+  poradi   Integer,
+  datum   DATE,
+  castka   DECIMAL(16, 2),
+  saldo   DECIMAL(16, 2),
+  typpoh   CHAR(1),
+  typfiktivniho   CHAR(1),
+  sazbabe dec(5,2),
+  poradipoh   Integer
+) extent size 16 next size 256 lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_expsplspormodbnkcf_den_pk ON ep_expsplspormodbnkcf_den(ser);
+ALTER TABLE ep_expsplspormodbnkcf_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_expsplspormodbnkcf_den_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+ROLLBACK WORK;
+
+--End of B131909_UID36779_1

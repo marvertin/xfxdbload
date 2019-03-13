@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, B122643_RN00420633_1
+-- @TC:ONCE: DESCRIPTION = Úpravy ve vracení SP na MF {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter TABLE sp_vratky_kart 
+    add zdrojvratka     Integer  before rok,
+    add kk_konto        DECIMAL(16, 0)  before rok,
+    add kk_tko          CHAR(2)  before rok,
+    add ico             CHAR(10)  before rok,
+    add datzal          DATE  before rok,
+    add spzarok         datetime year to year  before rok,
+    add jm              char(24)  before navuser,
+    add prijm           char(35)  before navuser,
+    add rc              CHAR(10)  before navuser,
+    add psc             char(5)  before navuser,
+    add kodzprac        CHAR(1)  before navuser,
+    add ca_usporcastka  DECIMAL(16, 2)  before navuser,
+    add ca_spmfpredzv   DECIMAL(16, 2)  before navuser,
+    add ca_sparpredzv   DECIMAL(16, 2)  before navuser,
+    add ca_spmfpozv     DECIMAL(16, 2)  before navuser,
+    add ca_sparpozv     DECIMAL(16, 2)  before navuser,
+    add ca_inkovrp      Integer  before navuser,
+    add ca_inkfees      Integer  before navuser,
+    add refzadmf        Integer  before navuser,
+    add porprevoduzadsp Integer before navuser;
+
+ROLLBACK WORK;
+
+--End of B122643_RN00420633_1

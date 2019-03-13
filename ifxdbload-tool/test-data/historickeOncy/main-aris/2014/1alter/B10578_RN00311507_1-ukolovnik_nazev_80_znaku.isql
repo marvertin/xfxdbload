@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B10578_RN00311507_1-ukolovnik_nazev_80_znaku
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+Alter Table ep_ulohafunkce_cis  Modify nazev Char(80) Not Null;
+Alter Table ep_ulohafunkce_acis Modify nazev Char(80) Not Null;
+
+Alter Table ep_ukoltyp_cis  Modify nazev Char(80) Not Null;
+Alter Table ep_ukoltyp_acis Modify nazev Char(80) Not Null;
+
+Alter Table ep_ukol_mat  Modify nazev Char(80) Not Null;
+Alter Table ep_ukol_arch Modify nazev Char(80) Not Null;
+
+ROLLBACK WORK;
+--End of B10578_RN00311507_1-ukolovnik_nazev_80_znaku

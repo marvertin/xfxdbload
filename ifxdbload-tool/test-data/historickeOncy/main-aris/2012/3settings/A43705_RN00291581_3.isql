@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43705_RN00291581_3
+-- @TC:ONCE: DESCRIPTION = Zamezit vytváøení prioritních pøíkazù v jednoráových pøíkazech
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('AN', '*', 'povolit', 'prioritniPlatby', 0, 1);
+
+ROLLBACK WORK;
+
+--End of A43687_RN00291602_3

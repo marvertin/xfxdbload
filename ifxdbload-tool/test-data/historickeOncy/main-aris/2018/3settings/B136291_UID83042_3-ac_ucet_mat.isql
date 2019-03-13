@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, B136291_UID83042_3-ac_ucet_mat
+-- @TC:ONCE: DESCRIPTION = RSTS-27243: Potřeba zachovat při odpisu sankční úroky {REQUEST}
+
+BEGIN WORK;
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('999040', 'A', 1, null, null, 1, 1, 1, 0, null, null, 'CZK', 'Sankce - odepsané pohledávky_X_X_Fn', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('999050', 'A', 1, null, null, 1, 1, 1, 0, null, null, 'CZK', 'Sankce - odepsané pohledávky_X_X_Fr', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('999080', 'A', 1, null, null, 1, 1, 1, 0, null, null, 'CZK', 'Sankce - odepsané pohledávky_X_X_Pr', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('999060', 'A', 1, null, null, 1, 1, 1, 0, null, null, 'CZK', 'Sankce - odepsané pohledávky_X_X_Pn', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('999070', 'A', 1, null, null, 1, 1, 1, 0, null, null, 'CZK', 'Sankce - odepsané pohledávky_X_X_Po', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('999901', 'P', 1, null, null, 1, 1, 1, 0, null, null, 'CZK', 'Souvztažný účet k sankcím k odeps.pohled.', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('762040', 'V', 0, null, null, 1, 1, 1, 2, null, null, 'CZK', 'Výnosy z odepsaných pohl. - sankce_X_X_Fn', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('762050', 'V', 0, null, null, 1, 1, 1, 2, null, null, 'CZK', 'Výnosy z odepsaných pohl. - sankce_X_X_Fr', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('762080', 'V', 0, null, null, 1, 1, 1, 2, null, null, 'CZK', 'Výnosy z odepsaných pohl. - sankce_X_X_Pr', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('762060', 'V', 0, null, null, 1, 1, 1, 2, null, null, 'CZK', 'Výnosy z odepsaných pohl. - sankce_X_X_Pn', null, null, 0, 1);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel)
+VALUES ('762070', 'V', 0, null, null, 1, 1, 1, 2, null, null, 'CZK', 'Výnosy z odepsaných pohl. - sankce_X_X_Po', null, null, 0, 1);
+
+ROLLBACK WORK;
+
+--End of B136291_UID83042_3-ac_ucet_mat

@@ -1,0 +1,37 @@
+-- @TC:ONCE: ID = V2, A47167_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù, chyby v davce
+
+BEGIN WORK;
+
+DROP TABLE ev_eod_err;
+
+CREATE TABLE ev_eod_err (
+  id   SERIAL NOT NULL,
+  davka   Integer NOT NULL,
+  vec   Integer NOT NULL,
+  cislopojist   CHAR(16),
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  daterr   DATE,
+  akce   Integer,
+  poradiuhr   Integer,
+  sqlcodenum   INTEGER,
+  isamcode   INTEGER,
+  errtext   VARCHAR(255),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ev_eod_err_pk ON ev_eod_err(id);
+ALTER TABLE ev_eod_err ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ev_eod_err_pk;
+
+
+--CHECKS
+ALTER TABLE ev_eod_err
+ADD CONSTRAINT (CHECK (akce IN (1, 2, 3, 4, 5)) CONSTRAINT ev_eod_err_c1);
+
+
+ROLLBACK WORK;
+
+--End of A47167_RN00282474_1

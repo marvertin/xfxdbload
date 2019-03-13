@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B130889_RSTS-3447_1
+-- @TC:ONCE: DESCRIPTION = Zavazky - Refactoring pole veritel
+
+
+BEGIN WORK;
+
+RENAME COLUMN seo_zavazky_mat.veritel  TO veritelrsts;
+RENAME COLUMN seo_zavazky_arch.veritel TO veritelrsts;
+
+ALTER TABLE seo_zavazky_mat ADD CONSTRAINT (CHECK (veritelrsts IN (0, 1)) CONSTRAINT seo_zavazky_mat_c1);
+
+ROLLBACK WORK;
+
+--End of B130889_RSTS-3447_1

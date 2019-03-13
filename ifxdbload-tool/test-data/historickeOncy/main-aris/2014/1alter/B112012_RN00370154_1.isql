@@ -1,0 +1,52 @@
+-- @TC:ONCE: ID = V2, B112012_RN00370154_1
+-- @TC:ONCE: DESCRIPTION = Úpravy modelování - CIBIS-Sale a CIBIS-Web {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+/* Pro zálohované sady globálních parametrů modelování chceme určitě nastavení ponechat!
+
+    alter table PRO_GlobalBaseParameters
+    
+     DROP xusesavingaccentryfee,
+     DROP xusesavingaccmaintenancefee,
+     DROP xusesavingaccstatementfee,
+     DROP xusesavingaccchangetarifffee,
+     DROP xusesavingaccincreasetafee,
+     DROP xusebridgeloanacccontractionfee,
+     DROP xusebridgeloanaccmaintenancefee,
+     DROP xusebridgeloanaccstatementfee,
+     DROP xusebridgeloanaccinsurancefee,
+     DROP xusecreditaccwithbridgemaintenancefee,
+     DROP xusecreditaccwithbridgestatementfee,
+     DROP xusecreditaccwithbridgeinsurancefee,
+     DROP xusecreditaccnobridgecontractionfee,
+     DROP xusecreditaccnobridgemaintenancefee,
+     DROP xusecreditaccnobridgestatementfee,
+     DROP xusecreditaccnobridgeinsurancefee
+    ;
+    
+    alter table PRO_BridgeLoanVariant
+     DROP xusebridgeloancontractionfee,                     
+     DROP xusebridgeloanaccmaintenancefee,                     
+     DROP xusecreditaccmaintenancefee,                
+     DROP xusebridgeloanaccstatementfee,                     
+     DROP xusecreditaccstatementfee,                     
+     DROP xusecreditaccinsurancefee,                    
+     DROP xusebridgeloanaccinsurancefee
+    ;
+*/
+
+alter table PRO_GlobalBaseParameters
+
+ --Položka určuje, jaký je maximální povolený věk klienta k datu splatnosti úvěru (pro muže)
+ ADD limitveksplatuvermuz   Integer,
+   
+ --Položka určuje, jaký je maximální povolený věk klienta k datu splatnosti úvěru (pro ženy)  
+ ADD limitveksplatuverzena   Integer
+
+;
+
+ROLLBACK WORK;
+
+--End of B112012_RN00370154_1

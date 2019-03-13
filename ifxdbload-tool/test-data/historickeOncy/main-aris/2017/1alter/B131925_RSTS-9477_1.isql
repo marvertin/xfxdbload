@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B131925_RSTS-9477_1
+-- @TC:ONCE: DESCRIPTION = ClearQuest jiĹľ nenĂ­ podporovĂˇn, brzo bude napojenĂ­ na JIRA! {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_ucel_mat MODIFY definiceucelu LVARCHAR(4000);
+
+ALTER TABLE eu_ucel_arch MODIFY definiceucelu LVARCHAR(4000);
+
+ROLLBACK WORK;
+
+--End of B131925_RSTS-9477_1

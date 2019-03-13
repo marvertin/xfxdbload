@@ -1,0 +1,646 @@
+-- vrací historické údaje úvìru
+create function EP_DatGetScoringParHistUv(ADatAkce Date,
+                                          ATypSC Char(3), 
+                                          AIdOS Int, 
+                                          ASmlouva Dec(16,0), 
+                                          ATsml Char(4))
+returning
+  Dec(16,2),   --totalDebt
+  Int,         --numbCredits
+  Int,         --creditsFinishedOK
+  Int,         --countFinishedCredits
+  Int,         --maxReminderLevel
+  Int,         --countReminderRequests
+  Dec(16,2),   --maxReminderAmount
+  Dec(16,2),   --sumReminderAmount
+  Int,         --ageOldestAllCredit
+  Int,         --durationOldestCredit
+  Int,         --sumAgeAllCredits
+  Int,         --sumDurationAllCredits
+  Dec(16,2),   --sumBridgeLoanAmount
+  Dec(16,2),   --sumCreditAmount
+  Dec(16,2),   --sumTransferredBridgeLoanAmount
+  Dec(16,2),   --sumAllEnforcedCredits
+  Int,         --countBridgeLoans
+  Int,         --countCredits
+  Int,         --countTransferredCredits
+  Int;         --countEnforcedCredits
+
+define _totalDebt                            Dec(16,2);
+define _numbCredits                          Int;
+define _creditsFinishedOK                    Int;
+define _countFinishedCredits                 Int;
+define _maxReminderLevel                     Int;
+define _countReminderRequests                Int;
+define _maxReminderAmount                    Dec(16,2);
+define _sumReminderAmount                    Dec(16,2);
+define _ageOldestAllCredit                   Int;
+define _durationOldestCredit                 Int;
+define _sumAgeAllCredits                     Int;
+define _sumDurationAllCredits                Int;
+define _sumBridgeLoanAmount                  Dec(16,2);
+define _sumCreditAmount                      Dec(16,2);
+define _sumTransferredBridgeLoanAmount       Dec(16,2);
+define _sumAllEnforcedCredits                Dec(16,2);
+define _countBridgeLoans                     Int;
+define _countCredits                         Int;
+define _countTransferredCredits              Int;
+define _countEnforcedCredits                 Int;
+
+define _datprov                              Date;
+define _xpersonidentnum                      Char(13);
+define _xpersonidenttype                     Char(1);
+define _personID                             Int;
+define _numKL                                Int;
+define _debtKL                               Dec(16,2);
+define _smlouva                              Dec(16,0);
+define _tsml                                 Char(4);
+define _uvsml                                Dec(16,0);
+define _uvtsml                               Char(4);
+define _stav                                 Char(1);
+define _datzad                               Date;
+define _datsml                               Date;
+define _datukonc                             Date;
+define _vysepu                               Dec(16,2);
+define _vyse                                 Dec(16,2);
+define _maxupom                              Int;
+define _pocetupom                            Int;
+define _maxupomcastka                        Dec(16,2);
+define _sumupomcastka                        Dec(16,2);
+define _stari                                Int;
+define _trvani                               Int;
+define _treal                                Char(4);
+define _idGet                                Int;
+define _smlGet                               dec(16, 0);
+define _tsmlGet                              Char(4);
+define _stavGet                              Char(1);
+define _stavGet2                             Char(1);
+define _stavGet3                             Char(1);
+define _reftimeGet                           date;
+define _reftimeGet2                          date;
+define _typroleGet                           char(2);
+define _priznakSpor                          Int;
+
+let _totalDebt = 0;
+let _numbCredits = 0;
+let _creditsFinishedOK = 0;
+let _countFinishedCredits = 0;
+let _maxReminderLevel = 0;
+let _countReminderRequests = 0;
+let _maxReminderAmount = 0;
+let _sumReminderAmount = 0;
+let _ageOldestAllCredit = 0;
+let _durationOldestCredit = 0;
+let _sumAgeAllCredits = 0;
+let _sumDurationAllCredits = 0;
+let _sumBridgeLoanAmount = 0;
+let _sumCreditAmount = 0;
+let _sumTransferredBridgeLoanAmount = 0;
+let _sumAllEnforcedCredits = 0;
+let _countBridgeLoans = 0;
+let _countCredits = 0;
+let _countTransferredCredits = 0;
+let _countEnforcedCredits = 0;
+
+let _datprov = ADatAkce;
+
+if ATypSC in ('SC1', 'SCA') THEN
+  SELECT     id, xpersonidentnum, xpersonidenttype 
+    INTO _idGet,_xpersonidentnum,_xpersonidenttype 
+    FROM creditrqpersonreg WHERE id = AIdOS and date(reftime) <= ADatAkce;
+
+  if _idGet is null then
+    foreach SELECT  xpersonidentnum, xpersonidenttype 
+              INTO _xpersonidentnum,_xpersonidenttype 
+              FROM creditrqpersonarch WHERE creditrqpersonreg_id = AIdOS and date(xrefmodifytime) <= ADatAkce
+              ORDER BY xrefmodifytime DESC
+      exit foreach;
+    end foreach;
+  end if;
+  
+  --v soucasne dobe neni funkcni trigger pro vkladani do xpersonidenttype archivu
+  if _xpersonidentnum is not null and _xpersonidenttype is null then
+    SELECT xpersonidenttype INTO _xpersonidenttype FROM creditrqpersonreg WHERE id = AIdOS;
+  end if;
+  
+  SELECT id, personid INTO _idGet,_personID FROM creditrqpersonreg WHERE id = AIdOs AND xvalidity = 1 AND date(reftime) <= ADatAkce;
+  if _idGet is null then
+    let _personID = null;
+    foreach SELECT personid, xvalidity INTO _personID, _idGet FROM creditrqpersonarch 
+              WHERE creditrqpersonreg_id = AIdOS and date(xrefmodifytime) <= ADatAkce 
+              ORDER BY xrefmodifytime DESC 
+      exit foreach;
+    end foreach;
+    if _personID is not null and _idGet = 0 then
+      let _personID = null;
+    end if; 
+  end if;
+  
+  --aby nepadala nasledujiti podminka resp. znamena to ze osoba neni v cibisu
+  if _personID is null then
+    --jeste skusit hledat podle _xpersonidentnum, _xpersonidenttype pac je v systemu chyba
+    --a klic do centralni evidence se premaze pokud je na osobe evidovana zmena
+    if (SELECT COUNT(*) FROM EO_FO_Mat aa, EO_Osoba_Mat bb WHERE aa.rc = _xpersonidentnum AND typid = _xpersonidenttype AND bb.stav <> 'Z' AND bb.os = aa.fo) > 1 then
+      call TW_RaiseError('421D23TCUI','EP_DatGetScoringParHistUv', 'Duplicitní rodné èíslo');
+    else
+      select ff.fo, date(ff.reftime) into _personID, _reftimeGet from eo_fo_mat ff join eo_osoba_mat oo on ff.fo = oo.os where ff.rc = _xpersonidentnum AND ff.typid = _xpersonidenttype AND oo.stav <> 'Z';
+      if _reftimeGet <= ADatAkce then
+        select stav, date(reftime) into _stavGet, _reftimeGet2 from eo_osoba_mat where os = _personID;
+        if _reftimeGet2 <= ADatAkce and _stavGet = 'Z' then
+          let _personID = null;
+        elif _reftimeGet2 > ADatAkce then
+          let _stavGet = null;
+          foreach select stav into _stavGet from eo_osoba_arch where os = _personID and date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavGet is not null and _stavGet = 'Z' then
+            let _personID = null;
+          end if;
+        end if;
+      else
+        foreach
+          select fo into _personID from eo_fo_arch where rc = _xpersonidentnum AND typid = _xpersonidenttype and date(reftime) <= ADatAkce order by reftime desc
+          exit foreach;
+        end foreach;
+        if _personID is not null then
+          select stav, date(reftime) into _stavGet, _reftimeGet2 from eo_osoba_mat where os = _personID;
+          if _reftimeGet2 <= ADatAkce and _stavGet = 'Z' then
+            let _personID = null;
+          elif _reftimeGet2 > ADatAkce then
+            let _stavGet = null;
+            foreach select stav into _stavGet from eo_osoba_arch where os = _personID and date(reftime) <= ADatAkce order by reftime desc
+              exit foreach;
+            end foreach;
+            if _stavGet is not null and _stavGet = 'Z' then
+              let _personID = null;
+            end if;
+          end if;
+        end if;
+      end if;
+    end if;
+    if _personID is null then
+      let _personID = -1;
+    end if;
+  end if;
+else
+  let _personID = AIdOs;
+end if;
+
+--TODO
+--let _numbCredits, _totalDebt, _numKL, _debtKL = EU_GetDebts(_personId, ASmlouva, ATsml);
+
+let _numbCredits, _totalDebt = 0, 0;
+
+-- vyhodnocení pouze pokud je osoba v evidenci main
+if exists(SELECT * FROM EO_FO_Mat WHERE fo = _personID) then
+  -- vypoøádané úvìrové smlouvy, u nichž je osoba pøistupitelem
+  --matrika roli
+  foreach SELECT smlouva, typ, date(reftime), stav INTO _smlouva, _tsml, _reftimeGet, _stavGet
+            FROM EO_Role_Mat WHERE os = _personID AND typrole = 'PR' 
+    --zaznam v matrice je k datu aktualni a je ve stavu A nebo U
+    if _reftimeGet <= ADatAkce  and _stavGet IN ('A', 'U') then
+      --matrika smluv
+      if exists (select * from EU_Sml_Mat where smlouva = _smlouva and tsml = _tsml and stav = 'V' and date(reftime) <= ADatAkce) then
+        if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+          if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+            let _creditsFinishedOK = _creditsFinishedOK + 1;
+          end if;
+        end if;
+      else
+        --archiv smluv
+        let _stavGet2 = null;
+        foreach select stav into _stavGet2 from EU_Sml_Arch where smlouva = _smlouva and tsml = _tsml and date(reftime) <= ADatAkce order by reftime desc
+          exit foreach;
+        end foreach;
+        if _stavGet2 is not null and _stavGet2 = 'V' then
+          if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+            if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+              let _creditsFinishedOK = _creditsFinishedOK + 1;
+            end if;
+          end if;
+        end if;
+      end if;
+    --zaznam v matrice k datu aktualni neni nebo neni ve stav A nebo U ... musim projit archiv roli
+    elif _reftimeGet > ADatAkce then
+      let _stavGet2 = null;
+      foreach SELECT stav INTO _stavGet2
+                FROM EO_Role_Arch WHERE os = _personID AND typrole = 'PR' AND smlouva = _smlouva AND typ = _tsml AND date(reftime) <= ADatAkce ORDER BY reftime DESC
+        exit foreach; 
+      end foreach;
+      if _stavGet2 is not null and _stavGet2 in ('A', 'U') then
+        --matrika smluv
+        if exists (select * from EU_Sml_Mat where smlouva = _smlouva and tsml = _tsml and stav = 'V' and date(reftime) <= ADatAkce) then
+          if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+            if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+              let _creditsFinishedOK = _creditsFinishedOK + 1;
+            end if;
+          end if;
+        else
+          --archiv smluv
+          let _stavGet3 = null;
+          foreach select stav into _stavGet3 from EU_Sml_Arch where smlouva = _smlouva and tsml = _tsml and date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavGet3 is not null and _stavGet3 = 'V' then
+            if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+              if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                let _creditsFinishedOK = _creditsFinishedOK + 1;
+              end if;
+            end if;
+          end if;
+        end if;  
+      end if;
+    end if;
+  end foreach;
+
+  -- vypoøádané úvìrové smlouvy, u nichž je osoba klientem
+  foreach
+    --matrika roli
+    SELECT smlouva, typ, stav, date(reftime) INTO _smlouva, _tsml, _stavGet, _reftimeGet FROM EO_Role_Mat WHERE os = _personID AND typrole = 'KL'
+    --zaznam v matrice roli je k datu aktualni a je ve stavu A nebo U
+    if _reftimeGet <= ADatAkce and _stavGet IN ('A', 'U') then
+      if _tsml in ('SSFO', 'SSPO') then
+        foreach
+          SELECT smlouva, tsml, stav, date(reftime) INTO _uvsml,_uvtsml,_stavGet2,_reftimeGet2 FROM EU_Sml_Mat WHERE smlspor = _smlouva AND tsmlspor = _tsml
+          --stav smlouvy v matrice je V a odpovida datu akce
+          if _reftimeGet2 <= ADatAkce and _stavGet2 = 'V' then
+            if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _uvsml AND tsml = _uvtsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _uvsml AND tsml = _uvtsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                  let _creditsFinishedOK = _creditsFinishedOK + 1;
+                end if;
+              end if;
+          --stav smlouvy v matrice neni V nebo neodpovida datum akce ... projdu archiv smluv
+          elif _reftimeGet2 > ADatAkce then
+            let _stavGet3 = null;
+            foreach select stav into _stavGet3 from EU_Sml_Arch where smlouva = _uvsml and tsml = _uvtsml and date(reftime) <= ADatAkce order by reftime desc
+              exit foreach;
+            end foreach;
+            --prvni zaznam v archivu k datu akce je ve stavu V 
+            if _stavGet3 is not null and _stavGet3 = 'V' then
+              if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _uvsml AND tsml = _uvtsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _uvsml AND tsml = _uvtsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                  let _creditsFinishedOK = _creditsFinishedOK + 1;
+                end if;
+              end if;
+            end if;
+          end if;
+        end foreach;
+      elif _tsml <> 'BZFO' then
+        if exists (SELECT * FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _tsml and stav = 'V' and date(reftime) <= ADatAkce) then
+          if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+            if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+              let _creditsFinishedOK = _creditsFinishedOK + 1;
+            end if;
+          end if;
+        else
+          --musim projit archiv smluv
+          let _stavGet2 = null;
+          foreach select stav into _stavGet2 from EU_Sml_Arch where smlouva = _smlouva and tsml = _tsml and date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavGet2 is not null and _stavGet2 = 'V' then
+            if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+              if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                let _creditsFinishedOK = _creditsFinishedOK + 1;
+              end if;
+            end if;
+          end if;
+        end if
+      end if;
+    --zaznam v matrice roli neni k datu aktualni nebo neni ve stavu A nebo U.. musim projit archiv roli
+    elif _reftimeGet > ADatAkce then
+      let _stavGet2 = null;
+      foreach SELECT stav INTO _stavGet2
+                FROM EO_Role_Arch WHERE os = _personID AND typrole = 'KL' AND smlouva = _smlouva AND typ = _tsml AND date(reftime) <= ADatAkce ORDER BY reftime DESC
+        exit foreach; 
+      end foreach;
+      if _stavGet2 is not null and _stavGet2 in ('A', 'U') then
+        if _tsml in ('SSFO', 'SSPO') then
+          foreach 
+            SELECT smlouva, tsml, stav, date(reftime) INTO _uvsml,_uvtsml,_stavGet2,_reftimeGet2 FROM EU_Sml_Mat WHERE smlspor = _smlouva AND tsmlspor = _tsml
+            --stav smlouvy v matrice je V a odpovida datu akce
+            if _reftimeGet2 <= ADatAkce and _stavGet2 = 'V' then
+              if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _uvsml AND tsml = _uvtsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                  if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _uvsml AND tsml = _uvtsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                    let _creditsFinishedOK = _creditsFinishedOK + 1;
+                  end if;
+                end if;
+            --stav smlouvy v matrice neni V nebo neodpovida datum akce ... projdu archiv smluv
+            elif _reftimeGet2 > ADatAkce then
+              let _stavGet3 = null;
+              foreach select stav into _stavGet3 from EU_Sml_Arch where smlouva = _uvsml and tsml = _uvtsml and date(reftime) <= ADatAkce order by reftime desc
+                exit foreach;
+              end foreach;
+              --prvni zaznam v archivu k datu akce je ve stavu V 
+              if _stavGet3 is not null and _stavGet3 = 'V' then
+                if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _uvsml AND tsml = _uvtsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                  if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _uvsml AND tsml = _uvtsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                    let _creditsFinishedOK = _creditsFinishedOK + 1;
+                  end if;
+                end if;
+              end if;
+            end if;
+          end foreach;
+        elif _tsml <> 'BZFO' then
+          if exists (SELECT * FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _tsml and stav = 'V' and date(reftime) <= ADatAkce) then
+            if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+              if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                let _creditsFinishedOK = _creditsFinishedOK + 1;
+              end if;
+            end if;
+          else
+            --musim projit archiv smluv
+            let _stavGet2 = null;
+            foreach select stav into _stavGet2 from EU_Sml_Arch where smlouva = _smlouva and tsml = _tsml and date(reftime) <= ADatAkce order by reftime desc
+              exit foreach;
+            end foreach;
+            if _stavGet2 is not null and _stavGet2 = 'V' then
+              if not exists(SELECT * FROM RU_Real_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                if not exists(SELECT * FROM RU_Real_Arch WHERE smlouva = _smlouva AND tsml = _tsml AND klasifreal > 1 and date(reftime) <= ADatAkce) then
+                  let _creditsFinishedOK = _creditsFinishedOK + 1;
+                end if;
+              end if;
+            end if;
+          end if
+        end if;  
+      end if;  
+    end if;
+  end foreach;
+
+  -- cyklus úvìrù
+  foreach
+    SELECT  smlouva, typ, stav, typrole, date(reftime)
+      INTO _smlGet,_tsmlGet,_stavGet,_typroleGet,_reftimeGet
+      FROM EO_Role_Mat 
+      WHERE os = _personID AND typrole IN ('RU', 'PR', 'KL')
+    --zaznam z matriky roli je k platny k datu a je ve stavu A nebo U  
+    if _reftimeGet <= ADatAkce and _stavGet in ('A', 'U') then
+      foreach
+        --vyberu vsechny smlouvy z matriky smluv pro roli
+        SELECT  smlouva, tsml, stav, datzad, datsml, datukonc, vysepu, vyse, date(reftime), 0
+          INTO _smlouva,_tsml,_stav,_datzad,_datsml,_datukonc,_vysepu,_vyse,_reftimeGet2, _priznakSpor
+          FROM EU_Sml_Mat
+          WHERE smlouva = _smlGet and tsml = _tsmlGet
+        UNION
+        SELECT  smlouva, tsml, stav, datzad, datsml, datukonc, vysepu, vyse, date(reftime), 1
+          FROM EU_Sml_Mat
+          WHERE smlspor = _smlGet and tsmlspor = _tsmlGet
+        --zaznam v matrice smluv odpovida datu akce
+        if _reftimeGet2 <= ADatAkce then
+          if ((_stavGet = 'A' and _stav = 'L') or (_stavGet = 'U' and _stav = 'V')) and 
+             ((_typroleGet in ('RU', 'PR') and _priznakSpor = 0) or (_typroleGet = 'KL')) then
+            
+            if _stav = 'V' then
+              let _countFinishedCredits = _countFinishedCredits + 1;
+            end if;
+            
+            SELECT MAX(u.upom), COUNT(*), -1 * MIN(TW_Null0Money(u.pohl) + TW_Null0Money(u.jnvl) + TW_Null0Money(u.unvl) + TW_Null0Money(u.pnvl)), 
+                   -1 * SUM(TW_Null0Money(u.pohl) + TW_Null0Money(u.jnvl) + TW_Null0Money(u.unvl) + TW_Null0Money(u.pnvl))  
+              INTO _maxupom, _pocetupom, _maxupomcastka, _sumupomcastka
+              FROM RU_Upom_Kart u JOIN RU_Real_Mat r ON u.realn = r.realn 
+              WHERE r.smlouva = _smlouva AND r.tsml = _tsml AND 
+                    (r.datotev >= _datzad OR r.datotev IS NULL) AND 
+                    u.datprov <= ADatAkce
+              GROUP BY r.smlouva, r.tsml;
+            
+            let _maxReminderLevel = TW_MaxInt(_maxReminderLevel, nvl(_maxupom, 0));
+            let _countReminderRequests = _countReminderRequests + nvl(_pocetupom, 0);
+            let _maxReminderAmount = TW_MaxMoney(_maxReminderAmount, nvl(_maxupomcastka, 0));
+            let _sumReminderAmount = _sumReminderAmount + nvl(_sumupomcastka, 0);
+            
+            let _stari = TW_MonthBetw(_datsml, _datprov);
+            let _trvani = TW_MonthBetw(_datsml, nvl(_datukonc, _datprov));
+            
+            if _ageOldestAllCredit < _stari then
+              let _ageOldestAllCredit = _stari;
+              let _durationOldestCredit = _trvani;
+            end if;
+            let _sumAgeAllCredits = _sumAgeAllCredits + _stari;
+            let _sumDurationAllCredits = _sumDurationAllCredits + _trvani;
+            
+            SELECT treal INTO _treal FROM RU_Real_Mat WHERE realn = EP_DatRealSml(ADAtAkce, _smlouva, _tsml);
+            if _tsml in ('PFSU', 'PUSU') and _treal = 'PUFO' then
+              let _sumBridgeLoanAmount = _sumBridgeLoanAmount + _vysepu;
+              let _countBridgeLoans = _countBridgeLoans + 1;
+            elif _tsml = 'SUFO' and _treal = 'SUFO' then
+              let _sumCreditAmount = _sumCreditAmount + _vyse;
+              let _countCredits = _countCredits + 1;
+            elif _tsml in ('PFSU', 'PUSU') and _treal = 'SUFO' then
+              let _sumTransferredBridgeLoanAmount = _sumTransferredBridgeLoanAmount + _vysepu + _vyse;
+              let _countTransferredCredits = _countTransferredCredits + 1;
+            elif _tsml in ('PFSU', 'PUSU', 'SUFO') and _treal = 'VUFO' then
+              let _sumAllEnforcedCredits = _sumAllEnforcedCredits + nvl(_vysepu, 0) + nvl(_vyse, 0);
+              let _countEnforcedCredits = _countEnforcedCredits + 1;
+            end if;
+          end if;
+        else
+          --záznam v matrice smluv neodpovídá datu akce ... musim projit archiv smluv
+          foreach
+            SELECT  stav, datzad, datsml, datukonc, vysepu, vyse, date(reftime)
+              INTO _stav,_datzad,_datsml,_datukonc,_vysepu,_vyse,_reftimeGet2
+              FROM EU_Sml_Arch
+              WHERE smlouva = _smlouva and tsml = _tsml and date(reftime) <= ADatAkce
+              ORDER BY reftime DESC
+            exit foreach;
+          end foreach;
+          if ((_stavGet = 'A' and _stav = 'L') or (_stavGet = 'U' and _stav = 'V')) and 
+             ((_typroleGet in ('RU', 'PR') and _priznakSpor = 0) or (_typroleGet = 'KL')) then
+            
+            if _stav = 'V' then
+              let _countFinishedCredits = _countFinishedCredits + 1;
+            end if;
+            
+            SELECT MAX(u.upom), COUNT(*), -1 * MIN(TW_Null0Money(u.pohl) + TW_Null0Money(u.jnvl) + TW_Null0Money(u.unvl) + TW_Null0Money(u.pnvl)), 
+                   -1 * SUM(TW_Null0Money(u.pohl) + TW_Null0Money(u.jnvl) + TW_Null0Money(u.unvl) + TW_Null0Money(u.pnvl))  
+              INTO _maxupom, _pocetupom, _maxupomcastka, _sumupomcastka
+              FROM RU_Upom_Kart u JOIN RU_Real_Mat r ON u.realn = r.realn 
+              WHERE r.smlouva = _smlouva AND r.tsml = _tsml AND 
+                    (r.datotev >= _datzad OR r.datotev IS NULL) AND 
+                    u.datprov <= ADatAkce
+              GROUP BY r.smlouva, r.tsml;
+            
+            let _maxReminderLevel = TW_MaxInt(_maxReminderLevel, nvl(_maxupom, 0));
+            let _countReminderRequests = _countReminderRequests + nvl(_pocetupom, 0);
+            let _maxReminderAmount = TW_MaxMoney(_maxReminderAmount, nvl(_maxupomcastka, 0));
+            let _sumReminderAmount = _sumReminderAmount + nvl(_sumupomcastka, 0);
+            
+            let _stari = TW_MonthBetw(_datsml, _datprov);
+            let _trvani = TW_MonthBetw(_datsml, nvl(_datukonc, _datprov));
+            
+            if _ageOldestAllCredit < _stari then
+              let _ageOldestAllCredit = _stari;
+              let _durationOldestCredit = _trvani;
+            end if;
+            let _sumAgeAllCredits = _sumAgeAllCredits + _stari;
+            let _sumDurationAllCredits = _sumDurationAllCredits + _trvani;
+            
+            SELECT treal INTO _treal FROM RU_Real_Mat WHERE realn = EP_DatRealSml(ADAtAkce, _smlouva, _tsml);
+            if _tsml in ('PFSU', 'PUSU') and _treal = 'PUFO' then
+              let _sumBridgeLoanAmount = _sumBridgeLoanAmount + _vysepu;
+              let _countBridgeLoans = _countBridgeLoans + 1;
+            elif _tsml = 'SUFO' and _treal = 'SUFO' then
+              let _sumCreditAmount = _sumCreditAmount + _vyse;
+              let _countCredits = _countCredits + 1;
+            elif _tsml in ('PFSU', 'PUSU') and _treal = 'SUFO' then
+              let _sumTransferredBridgeLoanAmount = _sumTransferredBridgeLoanAmount + _vysepu + _vyse;
+              let _countTransferredCredits = _countTransferredCredits + 1;
+            elif _tsml in ('PFSU', 'PUSU', 'SUFO') and _treal = 'VUFO' then
+              let _sumAllEnforcedCredits = _sumAllEnforcedCredits + nvl(_vysepu, 0) + nvl(_vyse, 0);
+              let _countEnforcedCredits = _countEnforcedCredits + 1;
+            end if;
+          end if;
+        end if;
+      end foreach;
+    --zaznam z matriky roli neni k datu platny ... projdu archiv  
+    elif _reftimeGet > ADatAkce then
+      foreach
+        SELECT stav INTO _stavGet FROM EO_Role_Arch
+        WHERE os = _personID AND typrole = _typroleGet AND smlouva = _smlGet AND typ = _tsmlGet AND reftime <= ADatAkce 
+        ORDER BY reftime DESC
+        exit foreach;
+      end foreach;
+      if _stavGet in ('A', 'U') then
+        foreach
+          --vyberu vsechny smlouvy z matriky smluv pro roli
+          SELECT  smlouva, tsml, stav, datzad, datsml, datukonc, vysepu, vyse, date(reftime), 0
+            INTO _smlouva,_tsml,_stav,_datzad,_datsml,_datukonc,_vysepu,_vyse,_reftimeGet2, _priznakSpor
+            FROM EU_Sml_Mat
+            WHERE smlouva = _smlGet and tsml = _tsmlGet
+          UNION
+          SELECT  smlouva, tsml, stav, datzad, datsml, datukonc, vysepu, vyse, date(reftime), 1
+            FROM EU_Sml_Mat
+            WHERE smlspor = _smlGet and tsmlspor = _tsmlGet
+          --zaznam v matrice smluv odpovida datu akce
+          if _reftimeGet2 <= ADatAkce then
+            if ((_stavGet = 'A' and _stav = 'L') or (_stavGet = 'U' and _stav = 'V')) and 
+               ((_typroleGet in ('RU', 'PR') and _priznakSpor = 0) or (_typroleGet = 'KL')) then
+              
+              if _stav = 'V' then
+                let _countFinishedCredits = _countFinishedCredits + 1;
+              end if;
+              
+              SELECT MAX(u.upom), COUNT(*), -1 * MIN(TW_Null0Money(u.pohl) + TW_Null0Money(u.jnvl) + TW_Null0Money(u.unvl) + TW_Null0Money(u.pnvl)), 
+                     -1 * SUM(TW_Null0Money(u.pohl) + TW_Null0Money(u.jnvl) + TW_Null0Money(u.unvl) + TW_Null0Money(u.pnvl))  
+                INTO _maxupom, _pocetupom, _maxupomcastka, _sumupomcastka
+                FROM RU_Upom_Kart u JOIN RU_Real_Mat r ON u.realn = r.realn 
+                WHERE r.smlouva = _smlouva AND r.tsml = _tsml AND 
+                      (r.datotev >= _datzad OR r.datotev IS NULL) AND 
+                      u.datprov <= ADatAkce
+                GROUP BY r.smlouva, r.tsml;
+              
+              let _maxReminderLevel = TW_MaxInt(_maxReminderLevel, nvl(_maxupom, 0));
+              let _countReminderRequests = _countReminderRequests + nvl(_pocetupom, 0);
+              let _maxReminderAmount = TW_MaxMoney(_maxReminderAmount, nvl(_maxupomcastka, 0));
+              let _sumReminderAmount = _sumReminderAmount + nvl(_sumupomcastka, 0);
+              
+              let _stari = TW_MonthBetw(_datsml, _datprov);
+              let _trvani = TW_MonthBetw(_datsml, nvl(_datukonc, _datprov));
+              
+              if _ageOldestAllCredit < _stari then
+                let _ageOldestAllCredit = _stari;
+                let _durationOldestCredit = _trvani;
+              end if;
+              let _sumAgeAllCredits = _sumAgeAllCredits + _stari;
+              let _sumDurationAllCredits = _sumDurationAllCredits + _trvani;
+              
+              SELECT treal INTO _treal FROM RU_Real_Mat WHERE realn = EP_DatRealSml(ADAtAkce, _smlouva, _tsml);
+              if _tsml in ('PFSU', 'PUSU') and _treal = 'PUFO' then
+                let _sumBridgeLoanAmount = _sumBridgeLoanAmount + _vysepu;
+                let _countBridgeLoans = _countBridgeLoans + 1;
+              elif _tsml = 'SUFO' and _treal = 'SUFO' then
+                let _sumCreditAmount = _sumCreditAmount + _vyse;
+                let _countCredits = _countCredits + 1;
+              elif _tsml in ('PFSU', 'PUSU') and _treal = 'SUFO' then
+                let _sumTransferredBridgeLoanAmount = _sumTransferredBridgeLoanAmount + _vysepu + _vyse;
+                let _countTransferredCredits = _countTransferredCredits + 1;
+              elif _tsml in ('PFSU', 'PUSU', 'SUFO') and _treal = 'VUFO' then
+                let _sumAllEnforcedCredits = _sumAllEnforcedCredits + nvl(_vysepu, 0) + nvl(_vyse, 0);
+                let _countEnforcedCredits = _countEnforcedCredits + 1;
+              end if;
+            end if;
+          else
+            --záznam v matrice smluv neodpovídá datu akce ... musim projit archiv smluv
+            foreach
+              SELECT  stav, datzad, datsml, datukonc, vysepu, vyse, date(reftime)
+                INTO _stav,_datzad,_datsml,_datukonc,_vysepu,_vyse,_reftimeGet2
+                FROM EU_Sml_Arch
+                WHERE smlouva = _smlouva and tsml = _tsml and date(reftime) <= ADatAkce
+                ORDER BY reftime DESC
+              exit foreach;
+            end foreach;
+            if ((_stavGet = 'A' and _stav = 'L') or (_stavGet = 'U' and _stav = 'V')) and 
+               ((_typroleGet in ('RU', 'PR') and _priznakSpor = 0) or (_typroleGet = 'KL')) then
+              
+              if _stav = 'V' then
+                let _countFinishedCredits = _countFinishedCredits + 1;
+              end if;
+              
+              SELECT MAX(u.upom), COUNT(*), -1 * MIN(TW_Null0Money(u.pohl) + TW_Null0Money(u.jnvl) + TW_Null0Money(u.unvl) + TW_Null0Money(u.pnvl)), 
+                     -1 * SUM(TW_Null0Money(u.pohl) + TW_Null0Money(u.jnvl) + TW_Null0Money(u.unvl) + TW_Null0Money(u.pnvl))  
+                INTO _maxupom, _pocetupom, _maxupomcastka, _sumupomcastka
+                FROM RU_Upom_Kart u JOIN RU_Real_Mat r ON u.realn = r.realn 
+                WHERE r.smlouva = _smlouva AND r.tsml = _tsml AND 
+                      (r.datotev >= _datzad OR r.datotev IS NULL) AND 
+                      u.datprov <= ADatAkce
+                GROUP BY r.smlouva, r.tsml;
+              
+              let _maxReminderLevel = TW_MaxInt(_maxReminderLevel, nvl(_maxupom, 0));
+              let _countReminderRequests = _countReminderRequests + nvl(_pocetupom, 0);
+              let _maxReminderAmount = TW_MaxMoney(_maxReminderAmount, nvl(_maxupomcastka, 0));
+              let _sumReminderAmount = _sumReminderAmount + nvl(_sumupomcastka, 0);
+              
+              let _stari = TW_MonthBetw(_datsml, _datprov);
+              let _trvani = TW_MonthBetw(_datsml, nvl(_datukonc, _datprov));
+              
+              if _ageOldestAllCredit < _stari then
+                let _ageOldestAllCredit = _stari;
+                let _durationOldestCredit = _trvani;
+              end if;
+              let _sumAgeAllCredits = _sumAgeAllCredits + _stari;
+              let _sumDurationAllCredits = _sumDurationAllCredits + _trvani;
+              
+              SELECT treal INTO _treal FROM RU_Real_Mat WHERE realn = EP_DatRealSml(ADAtAkce, _smlouva, _tsml);
+              if _tsml in ('PFSU', 'PUSU') and _treal = 'PUFO' then
+                let _sumBridgeLoanAmount = _sumBridgeLoanAmount + _vysepu;
+                let _countBridgeLoans = _countBridgeLoans + 1;
+              elif _tsml = 'SUFO' and _treal = 'SUFO' then
+                let _sumCreditAmount = _sumCreditAmount + _vyse;
+                let _countCredits = _countCredits + 1;
+              elif _tsml in ('PFSU', 'PUSU') and _treal = 'SUFO' then
+                let _sumTransferredBridgeLoanAmount = _sumTransferredBridgeLoanAmount + _vysepu + _vyse;
+                let _countTransferredCredits = _countTransferredCredits + 1;
+              elif _tsml in ('PFSU', 'PUSU', 'SUFO') and _treal = 'VUFO' then
+                let _sumAllEnforcedCredits = _sumAllEnforcedCredits + nvl(_vysepu, 0) + nvl(_vyse, 0);
+                let _countEnforcedCredits = _countEnforcedCredits + 1;
+              end if;
+            end if;
+          end if;
+        end foreach;
+      end if;
+    end if;
+  end foreach;
+end if;
+
+return
+_totalDebt, --Dec(16,2)
+_numbCredits, --Int
+_creditsFinishedOK, --Int
+_countFinishedCredits, --Int
+_maxReminderLevel, --Int
+_countReminderRequests, --Int
+_maxReminderAmount, --Dec(16,2)
+_sumReminderAmount, --Dec(16,2)
+_ageOldestAllCredit, --Int
+_durationOldestCredit, --Int
+_sumAgeAllCredits, --Int
+_sumDurationAllCredits, --Int
+_sumBridgeLoanAmount, --Dec(16,2)
+_sumCreditAmount, --Dec(16,2)
+_sumTransferredBridgeLoanAmount, --Dec(16,2)
+_sumAllEnforcedCredits, --Dec(16,2)
+_countBridgeLoans, --Int
+_countCredits, --Int
+_countTransferredCredits, --Int
+_countEnforcedCredits; --Int
+
+end function;

@@ -1,0 +1,391 @@
+-- @TC:ONCE: ID = V2, B132492_36886_3-acr_ucet_cis
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+set triggers for acr_ucet_cis disabled;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_PU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_SU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_VU' AND typobj = 'U' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_PU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_SU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_VU' AND typobj = 'P' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PZ_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_K_PN_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PZ_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_S_PN_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PZ_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '0_D_PN_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PZ_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '1_X_PN_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PZ_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '2_X_PN_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PZ_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '3_X_PN_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PZ_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_PU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_SU' AND typobj = 'A' AND typmaj IS NULL;
+
+DELETE FROM ACR_Ucet_Cis WHERE  tsml = 'PFSU' AND mapkod = '4_X_PN_VU' AND typobj = 'A' AND typmaj IS NULL;
+
+set triggers for acr_ucet_cis enabled;
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_PU', 'U', null, 215513);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_SU', 'U', null, 215523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_VU', 'U', null, 215543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_PU', 'U', null, 216513);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_SU', 'U', null, 216523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_VU', 'U', null, 216543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_PU', 'U', null, 218513);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_SU', 'U', null, 218523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_VU', 'U', null, 218543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_PU', 'U', null, 241513);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_SU', 'U', null, 241523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_VU', 'U', null, 241543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_PU', 'U', null, 242513);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_SU', 'U', null, 242523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_VU', 'U', null, 242543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_PU', 'U', null, 243513);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_SU', 'U', null, 243523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_VU', 'U', null, 243543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_PU', 'U', null, 244513);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_SU', 'U', null, 244523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_VU', 'U', null, 244543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_PU', 'P', null, 215514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_SU', 'P', null, 215524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_VU', 'P', null, 215544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_PU', 'P', null, 216514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_SU', 'P', null, 216524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_VU', 'P', null, 216544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_PU', 'P', null, 218514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_SU', 'P', null, 218524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_VU', 'P', null, 218544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_PU', 'P', null, 241514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_SU', 'P', null, 241524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_VU', 'P', null, 241544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_PU', 'P', null, 242514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_SU', 'P', null, 242524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_VU', 'P', null, 242544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_PU', 'P', null, 243514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_SU', 'P', null, 243524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_VU', 'P', null, 243544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_PU', 'P', null, 244514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_SU', 'P', null, 244524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_VU', 'P', null, 244544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_PU', 'A', null, 215515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_SU', 'A', null, 215525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_FO_VU', 'A', null, 215545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_PU', 'A', null, 216515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_SU', 'A', null, 216525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_FO_VU', 'A', null, 216545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_PU', 'A', null, 218515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_SU', 'A', null, 218525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_FO_VU', 'A', null, 218545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_PU', 'A', null, 241515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_SU', 'A', null, 241525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_FO_VU', 'A', null, 241545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_PU', 'A', null, 242515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_SU', 'A', null, 242525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_FO_VU', 'A', null, 242545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_PU', 'A', null, 243515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_SU', 'A', null, 243525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_FO_VU', 'A', null, 243545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_PU', 'A', null, 244515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_SU', 'A', null, 244525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_FO_VU', 'A', null, 244545);
+
+ROLLBACK WORK;
+
+--End of B132492_36886_3-acr_ucet_cis

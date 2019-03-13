@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B133234_UID55856_1
+-- @TC:ONCE: DESCRIPTION = Oprava indexu na unique {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+DROP INDEX eu_zajist_mat_u4;
+
+CREATE UNIQUE INDEX eu_zajist_mat_u4 ON eu_zajist_mat(serno);
+
+ALTER TABLE eu_zajist_mat ADD CONSTRAINT UNIQUE (serno) CONSTRAINT u1;
+
+ROLLBACK WORK;
+
+--End of B133234_UID55856_1

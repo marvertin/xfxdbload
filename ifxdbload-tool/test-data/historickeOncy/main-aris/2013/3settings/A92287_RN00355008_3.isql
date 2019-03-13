@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A92287_RN00355008_3
+-- @TC:ONCE: DESCRIPTION = Úprava klasifikace {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetKey('RU', '*', 'vyzva', 'minklasif', 2);
+call TW_RegSetKey('RU', '*', 'prvym', 'minklasif', 2);
+
+ROLLBACK WORK;
+
+--End of A92287_RN00355008_3

@@ -1,0 +1,111 @@
+create PROCEDURE B131361_RSTS_2620_make_inic_D (-- vstupni paramtery
+                              ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _smlspor      Dec(16,0);
+define _tsmlspor     Char(4);
+define _tsml         Char(4);
+define _konto        Dec(16,0);
+define _tko          Char(2);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_2620', 'RSTS_2620_iniciator', 'Migrace iniciátora dospořování');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  smlSpor,  tsmlSpor,  tsml
+   INTO  _ser, _smlspor, _tsmlspor, _tsml
+   FROM RSTS_2620_iniciator
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulky
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS_2620_iniciator
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)  
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    update es_vkladkin_mat
+    set iniciatordosp = MOU_GetSmlNova(_smlSpor, nvl((select min(reftime) from es_vkladkin_arch aa where aa.smlouva = es_vkladkin_mat.smlouva and aa.poradi = es_vkladkin_mat.poradi and aa.uroven = es_vkladkin_mat.uroven), datod), _tsml)  
+    where  smlouva = _smlSpor;
+    
+    update es_vkladkin_arch
+    set iniciatordosp = MOU_GetSmlNova(_smlSpor, nvl((select min(reftime) from es_vkladkin_arch aa where aa.smlouva = es_vkladkin_mat.smlouva and aa.poradi = es_vkladkin_mat.poradi and aa.uroven = es_vkladkin_mat.uroven), datod), _tsml)  
+    where  smlouva = _smlSpor;
+    
+    update rs_upom_kart 
+    set iniciatordosp = MOU_GetSmlNova(_smlSpor, navtime, _tsml)
+    where realn = (select reals from rz_real_mat where smlouva = _smlSpor and tsml = _tsmlSpor);
+    
+    let _konto, _tko = EP_KontoTkoSml(_smlSpor, _tsmlSpor);
+    
+    update ac_ocsaldo_den
+    set iniciatordosp = MOU_GetSmlNova(_smlSpor, reftime, _tsml)
+    where konto = _konto
+      and tko = _tko;
+        
+    --nastaví příznak zpracováno na 1
+    UPDATE RSTS_2620_iniciator SET zprac = 1,  NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

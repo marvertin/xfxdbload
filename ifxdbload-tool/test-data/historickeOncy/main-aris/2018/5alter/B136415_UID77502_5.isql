@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136415_UID77502_5
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+DROP TABLE am_kontouvmap_acis;
+DROP TABLE am_kontouvmap_cis;
+
+ROLLBACK WORK;
+
+--End of B136415_UID77502_5

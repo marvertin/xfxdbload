@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, B125192_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--Určuje, zda se mají uživateli (nebo aplikační logice) prezentovat výsledky z modelování
+--obratů v režimu EIR (bez poplatků…) nebo RPSN.
+--Pozn.: Potřebujeme-li tedy modelování zavolat tak, aby vnitřně modelovalo 2x (ale 
+--zobrazilo pouze jedny výsledky), tak nám tento parametr spoluurčuje pořadí modelování
+--obratů (zda nejdřív v režimu EIR a pak RPSN nebo naopak).
+rename column pro_bssimulationcase.simulateEffectiveRateType TO resultTosMode
+;
+
+ALTER TABLE pro_bssimulationcase ADD (
+  
+  --Určuje, zda se má počítat sazba EIR pro spoření 
+  calcsavingseir   Integer  DEFAULT 0 NOT NULL,
+  
+  --Určuje, zda se má počítat sazba RPSN (vlastně RPSV - V jako výnosy, ne N jako náklady) pro spoření
+  calcsavingsrpsn   Integer  DEFAULT 0 NOT NULL,
+  
+  --Určuje, zda se má počítat sazba EIR pro úvěr
+  calccrediteir   Integer  DEFAULT 0 NOT NULL,
+  
+  --Určuje, zda se má počítat sazba souhrnného RPSN úvěru (za celou smlouvu)
+  calccreditrpsn   Integer  DEFAULT 0 NOT NULL,
+  
+  --Určuje, zda se má počítat sazba dílčího RPSN za fázi překlenovacího úvěru
+  calccreditrpsnbrphase   Integer  DEFAULT 0 NOT NULL,
+  
+  --Určuje, zda se má počítat sazba dílčího RPSN za fázi stavebního úvěru (případně KOME)
+  calccreditrpsncrphase   Integer  DEFAULT 0 NOT NULL
+  ),
+  ADD CONSTRAINT (
+  CHECK (calcsavingseir IN (0,1)) CONSTRAINT pro_bssimulationcase_dw4z,
+  CHECK (calcsavingsrpsn IN (0,1)) CONSTRAINT pro_bssimulationcase_dw50,
+  CHECK (calccrediteir IN (0,1)) CONSTRAINT pro_bssimulationcase_dw51,
+  CHECK (calccreditrpsn IN (0,1)) CONSTRAINT pro_bssimulationcase_dw52,
+  CHECK (calccreditrpsnbrphase IN (0,1)) CONSTRAINT pro_bssimulationcase_dw53,
+  CHECK (calccreditrpsncrphase IN (0,1)) CONSTRAINT pro_bssimulationcase_dw54
+  )
+;
+
+
+ROLLBACK WORK;
+
+--End of B125192_RN00443393_1

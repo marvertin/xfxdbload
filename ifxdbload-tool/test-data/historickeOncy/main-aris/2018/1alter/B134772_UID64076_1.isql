@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B134772_UID64076_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17799: Aktualizace NHZ při schválení {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eu_zajist_mat ADD(
+    refoptimsmlouva   DECIMAL(16, 0) BEFORE poznamka
+  , refoptimtsml   CHAR(4) BEFORE poznamka
+  , optimuser   CHAR(20) BEFORE poznamka
+  , optimtime   datetime year to second BEFORE poznamka
+  , optimdatprov DATE BEFORE poznamka
+);
+
+ALTER TABLE eu_zajist_arch ADD(
+    refoptimsmlouva   DECIMAL(16, 0) BEFORE poznamka
+  , refoptimtsml   CHAR(4) BEFORE poznamka
+  , optimuser   CHAR(20) BEFORE poznamka
+  , optimtime   datetime year to second BEFORE poznamka
+  , optimdatprov DATE BEFORE poznamka
+);
+
+ROLLBACK WORK;
+
+--End of B134772_UID64076_1

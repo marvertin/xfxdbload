@@ -1,0 +1,62 @@
+-- @TC:ONCE: ID = V2, B134817_UID62462_1-dotaznik
+-- @TC:ONCE: DESCRIPTION = RSTS-17004: Rozšířit modelovací případ o datové struktury pro dotazník a pro návodné otázky {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE pro_navot (
+  id   SERIAL NOT NULL,
+  bsimulationcase_id   Integer NOT NULL,
+  otazkaid   Integer,
+  odpoved   CHAR(1),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_navot_pk ON pro_navot(id);
+ALTER TABLE pro_navot ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_navot_pk;
+
+--FK
+CREATE INDEX pro_navot_i_f1 ON pro_navot(bsimulationcase_id);
+ALTER TABLE pro_navot ADD CONSTRAINT FOREIGN KEY(bsimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_navot_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+
+
+CREATE TABLE pro_dotaznikvarpu (
+  id   SERIAL NOT NULL,
+  bsimulationcase_id   Integer NOT NULL,
+  refotazka   INTEGER NOT NULL,
+  refodpoved   INTEGER,
+  odpoved   VARCHAR(255),
+  poradi   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT pro_dotaznikvarpu_d591
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_dotaznikvarpu_pk ON pro_dotaznikvarpu(id);
+ALTER TABLE pro_dotaznikvarpu ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_dotaznikvarpu_pk;
+
+--FK
+CREATE INDEX pro_dotaznikvarpu_i_f1 ON pro_dotaznikvarpu(bsimulationcase_id);
+ALTER TABLE pro_dotaznikvarpu ADD CONSTRAINT FOREIGN KEY(bsimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_dotaznikvarpu_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+
+ROLLBACK WORK;
+
+--End of B134817_UID62462_1-dotaznik

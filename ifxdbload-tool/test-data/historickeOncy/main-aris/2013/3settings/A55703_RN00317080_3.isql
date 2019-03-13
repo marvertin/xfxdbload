@@ -1,0 +1,64 @@
+-- @TC:ONCE: ID = V2, A55703_RN00317080_3
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 121, 'Bonita žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 122, 'Bonita osoby: <èíslo_žádosti>; osoba: <ID_osoby>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 123, 'Scoring žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 124, 'Scoring osoby: <èíslo_žádosti>; osoba: <ID_osoby>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 125, 'SOLUS žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 126, 'SOLUS osoby: <èíslo_žádosti>; osoba: <ID_osoby>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 127, 'ÚR žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 128, 'ÚR osoby: <èíslo_žádosti>; osoba: <ID_osoby>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 129, 'Kontrola telefonù žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 131, 'Kontrola pøíjmù žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 133, 'Kontrola firem žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 135, 'Kontrola dokladù žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 137, 'Splnìná návratnost žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 138, 'Nesplnìná návratnost žádosti: <èíslo_žádosti>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 139, 'Splnìná návratnost osoby: <èíslo_žádosti>; osoba: <ID_osoby>', 1);
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost) VALUES('EU', 140, 'Nesplnìná návratnost osoby: <èíslo_žádosti>; osoba: <ID_osoby>', 1);
+
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('KO', 'KO kriteria', 1, 1, 1, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('REPE', 'Bonita', 1, 1, 2, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('SCO', 'Scoring', 1, 1, 3, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('SOL', 'SOLUS', 1, 1, 5, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('CBSC', 'CB score', 1, 1, 4, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('DOCU', 'Osobní doklady', 1, 0, 4, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('FIRM', 'Firmy', 1, 0, 4, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('INCO', 'Potvrzení o pøíjmu', 1, 0, 4, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('TELE', 'Telefony', 1, 0, 4, 1);
+INSERT INTO EU_KontrolaTyp_Cis(typ, nazev, faze1, faze2, poradi, platnost) VALUES('URE', 'Úvìrový registr', 1, 1, 5, 1);
+
+INSERT INTO TW_SMSTyp_Cis(zkratka, popis, textsms) VALUES('NEGATIVNI_SOLUS_OZ', 'Informace o negativním výsledku SOLUS pro OZ', 'Výsledek dotazu do Solusu u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> neskonèil úspìšnì, pro pokraèování mùžete e-mailem kontaktovat OØR, popø. zpracování ukonèit v Sale.');
+INSERT INTO TW_SMSTyp_Cis(zkratka, popis, textsms) VALUES('NEGATIVNI_CBCB_OZ', 'Informace o negativním výsledku CBCB pro OZ', 'Výsledek dotazu do úvìrového registru u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> neskonèil úspìšnì, pro pokraèování mùžete pøedat do standardní varianty, popø. zpracování ukonèit v Sale.');
+INSERT INTO TW_SMSTyp_Cis(zkratka, popis, textsms) VALUES('NEGATIVNI_VSE_Z_OZ', 'Informace o  negativním výsledku všech kontrol pro OZ', 'Protože výsledky všech pøedepsaných kontrol nebyly jednoznaènì kladné u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>, pro pokraèování mùžete pøedat do standardní varianty, popø. zpracování ukonèit v Sale.');
+INSERT INTO TW_SMSTyp_Cis(zkratka, popis, textsms) VALUES('OK_Z_VARIANTA_OZ', 'Informace o kladném výsledku všech kontrol pro OZ - varianta Z', 'Výsledky všech pøedepsaných kontrol byly úspìšné, žádost o úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byla schválena. Pro vyhotovení smluvní dokumentace pøedejte úvìr ze Sale na centrálu.');
+INSERT INTO TW_SMSTyp_Cis(zkratka, popis, textsms) VALUES('OK_Z_VARIANTA_KLIENT', 'Informace o kladném výsledku všech kontrol pro klienta - varianta Z', 'Výsledky všech pøedepsaných kontrol byly úspìšné u Vaší žádosti o úvìr ve výši <<VYSE_UVERU>>, žádost o úvìr byla pøedbìžnì schválena.');
+INSERT INTO TW_SMSTyp_Cis(zkratka, popis, textsms) VALUES('OK_P_VARIANTA_OZ', 'Informace o kladném výsledku všech kontrol pro OZ - varianta P', 'Výsledky dotazù do registrù byly úspìšné pro žádost o úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>. Další pøedepsané kontroly pokraèují.');
+INSERT INTO TW_SMSTyp_Cis(zkratka, popis, textsms) VALUES('OK_P_VARIANTA_KLIENT', 'Informace o kladném výsledku všech kontrol pro klienta - varianta P', 'Vaše žádost o úvìr ve výši <<VYSE_UVERU>> byla kladnì vyhodnocena z hlediska Vaší platební morálky.');
+
+INSERT INTO TW_EmailTyp_Cis(zkratka, popis, predmet, obsah, maxpocetpriloh, bezdiakritiky, priorita, zpusob) VALUES('NEGATIVNI_SOLUS_OZ', 'Informace o zamítnutí pro OZ (SOLUS)', 'Negativní výsledek dotazu do Solusu u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>', 'Výsledek dotazu do Solusu u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> neskonèil úspìšnì, pro pokraèování mùžete e-mailem kontaktovat OØR, popø. zpracování ukonèit v Sale.', 0, 0, 1, 'A');
+INSERT INTO TW_EmailTyp_Cis(zkratka, popis, predmet, obsah, maxpocetpriloh, bezdiakritiky, priorita, zpusob) VALUES('NEGATIVNI_CBCB_OZ', 'Informace o zamítnutí pro OZ (CBCB)', 'Negativní výsledek dotazu do úvìrového registru u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>', 'Výsledek dotazu do úvìrového registru u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> neskonèil úspìšnì, pro pokraèování mùžete pøedat do standardní varianty, popø. zpracování ukonèit v Sale.', 0, 0, 1, 'A');
+INSERT INTO TW_EmailTyp_Cis(zkratka, popis, predmet, obsah, maxpocetpriloh, bezdiakritiky, priorita, zpusob) VALUES('NEGATIVNI_VSE_Z_OZ', 'Informace o zamítnutí pro OZ (vše)', 'Negativní  všechny kontroly u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>', 'Protože výsledky všech pøedepsaných kontrol nebyly jednoznaènì kladné u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>, pro pokraèování mùžete pøedat do standardní varianty, popø. zpracování ukonèit v Sale.', 0, 0, 1, 'A');
+INSERT INTO TW_EmailTyp_Cis(zkratka, popis, predmet, obsah, maxpocetpriloh, bezdiakritiky, priorita, zpusob) VALUES('OK_Z_VARIANTA_OZ', 'Informace o schválení pro OZ', 'Výsledky všech kontrol pro žádost o úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> jsou OK', 'Výsledky všech pøedepsaných kontrol byly úspìšné, žádost o úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byla schválena. Pro vyhotovení smluvní dokumentace pøedejte úvìr ze Sale na centrálu.', 0, 0, 1, 'A');
+INSERT INTO TW_EmailTyp_Cis(zkratka, popis, predmet, obsah, maxpocetpriloh, bezdiakritiky, priorita, zpusob) VALUES('OK_P_VARIANTA_OZ', 'Informace o schválení pro OZ', 'Výsledky všech kontrol pro žádost o úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> jsou OK', 'Výsledky dotazù do registrù byly úspìšné pro žádost o úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>. Další pøedepsané kontroly pokraèují.', 0, 0, 1, 'A');
+
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'SMS-negSolusOZ', (SELECT id FROM TW_SMSTyp_Cis WHERE zkratka = 'NEGATIVNI_SOLUS_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o negativním výsledku SOLUS pro OZ');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'SMS-negCBCBOZ', (SELECT id FROM TW_SMSTyp_Cis WHERE zkratka = 'NEGATIVNI_CBCB_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o negativním výsledku CBCB pro OZ');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'SMS-vseNegOZ', (SELECT id FROM TW_SMSTyp_Cis WHERE zkratka = 'NEGATIVNI_VSE_Z_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o negativním výsledku všech kontrol pro OZ');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'SMS-OK-Z-OZ', (SELECT id FROM TW_SMSTyp_Cis WHERE zkratka = 'OK_Z_VARIANTA_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o kladném výsledku všech kontrol pro OZ - varianta Z');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'SMS-OK-Z-client', (SELECT id FROM TW_SMSTyp_Cis WHERE zkratka = 'OK_Z_VARIANTA_KLIENT'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o kladném výsledku všech kontrol pro klienta - varianta Z');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'SMS-OK-P-OZ', (SELECT id FROM TW_SMSTyp_Cis WHERE zkratka = 'OK_P_VARIANTA_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o kladném výsledku všech kontrol pro OZ - varianta P');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'SMS-OK-P-client', (SELECT id FROM TW_SMSTyp_Cis WHERE zkratka = 'OK_P_VARIANTA_KLIENT'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o kladném výsledku všech kontrol pro klienta - varianta P');
+
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'e-mail-negSolusOZ', (SELECT id FROM TW_EmailTyp_Cis WHERE zkratka = 'NEGATIVNI_SOLUS_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ e-mail pro informování o negativním výsledku SOLUS pro OZ');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'e-mail-negCBCBOZ', (SELECT id FROM TW_EmailTyp_Cis WHERE zkratka = 'NEGATIVNI_CBCB_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ e-mail pro informování o negativním výsledku CBCB pro OZ');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'e-mail-vseNegOZ', (SELECT id FROM TW_EmailTyp_Cis WHERE zkratka = 'NEGATIVNI_VSE_Z_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ e-mail pro informování o negativním výsledku všech kontrol pro OZ');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'e-mail-OK-Z-OZ', (SELECT id FROM TW_EmailTyp_Cis WHERE zkratka = 'OK_Z_VARIANTA_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ e-mail pro informování o kladném výsledku všech kontrol pro OZ - varianta Z');
+call TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'nofitikace', 'e-mail-OK-P-OZ', (SELECT id FROM TW_EmailTyp_Cis WHERE zkratka = 'OK_P_VARIANTA_OZ'), 1, 'Úvìr', 'Úvìrová žádost - kontroly', 'Notifikace', 'Typ e-mail pro informování o kladném výsledku všech kontrol pro OZ - varianta P');
+
+ROLLBACK WORK;
+
+--End of A55703_RN00317080_3

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B131834_RSTS-3441_3
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení
+
+
+BEGIN WORK;
+
+UPDATE ep_takce_cis SET text = 'Vytvoření návrhu pro úvěrovou komisi' WHERE takce = 'VYNS';
+UPDATE ep_takce_cis SET text = 'Schválení návrhu úvěrovou komisí' WHERE takce = 'SCHB';
+UPDATE ep_takce_cis SET text = 'Schválení návrhu klientem' WHERE takce = 'SCHK';
+
+INSERT INTO ep_takce_cis (takce, text) VALUES ('DNAV','Návrh dodatku');
+INSERT INTO ep_takce_cis (takce, text) VALUES ('DZRUS','Zrušení dodatku');
+INSERT INTO ep_takce_cis (takce, text) VALUES ('DUZAV','Uzavření dodatku v systému');
+
+ROLLBACK WORK;
+
+--End of 131834_RSTS-3441_3

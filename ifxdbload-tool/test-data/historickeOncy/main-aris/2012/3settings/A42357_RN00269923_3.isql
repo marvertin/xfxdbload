@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A42357_RN00269923_3
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'udaje', 'promlceniDohody', 45, 1, 'Úvìr', 'Vymáhání úvìru', 'Správa vymáhané pohledávky', 'Doba (poèet mìsícù) na promlèení mimosoudní dohody ve vymáhání');
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'export', 'KL', 1, 1, 'Úvìr', 'Vymáhání úvìru', 'Správa vymáhané pohledávky', 'Parametr urèuje, zda jsou pøi exportu správy vymáhané pohledávky pro více rolí exportovány i záznamy pro role daného typu (<typ_role>)');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'export', 'PR', 1, 1, 'Úvìr', 'Vymáhání úvìru', 'Správa vymáhané pohledávky', 'Parametr urèuje, zda jsou pøi exportu správy vymáhané pohledávky pro více rolí exportovány i záznamy pro role daného typu (<typ_role>)');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'export', 'RU', 1, 1, 'Úvìr', 'Vymáhání úvìru', 'Správa vymáhané pohledávky', 'Parametr urèuje, zda jsou pøi exportu správy vymáhané pohledávky pro více rolí exportovány i záznamy pro role daného typu (<typ_role>)');
+
+ROLLBACK WORK;
+
+--End of A42357_RN00269923_3

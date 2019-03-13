@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B114548_RN00384928_1
+-- @TC:ONCE: DESCRIPTION = Main/Sale: Souhlas s údaji pro partnery (Doplnění a rozšíření) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_blockingjournal ADD platnost Integer before poruser;
+
+ROLLBACK WORK;
+
+--End of B114548_RN00384928_1

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B135076_UID62915_6
+-- @TC:ONCE: DESCRIPTION = RSTS-17283: Zrušit starou kontrolu Osobní doklady (odstranit tabulky, UC, oprávnění atp.) {STORY}
+
+
+BEGIN WORK;
+
+drop procedure EU_ProvedCCheckingDocAK;
+drop procedure SEP_DokladDokonci;
+drop procedure SEP_DokladKontrVytv;
+drop procedure SEP_DokladOsSeznamVytv;
+drop procedure SEP_DokladSlucPozadVytv;
+drop procedure SEP_DokladStorno;
+drop procedure SEP_DokladStornoOsoba;
+drop procedure EU_StornoCCheckingDocAK;
+
+ROLLBACK WORK;
+
+--End of B135076_UID62915_6

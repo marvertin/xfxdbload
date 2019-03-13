@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B123924_RN00436364_3
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into eu_varurokfixprirad_cis(refvariaurokfixace, platnostod,    platnost, nabizetsale, fazeuveru, tsml) 
+values                             (8,                  mdy(1,1,2015), 1,        1,           'KOME',    'KOME');
+
+insert into eu_typdalsinakl_cis (algoritmus, typ, popis, periodicita, uhrada, editacesale, nabizetmodsale,  platnost) values (null, 'Odhad', 'Úhrada za vyhotovení odhadu', 0, null, 1, 1, 1);
+insert into eu_typdalsinakl_cis (algoritmus, typ, popis, periodicita, uhrada, editacesale, nabizetmodsale,  platnost) values ('A1', 'LV', 'Úhrada za výpis z katastru nemovitostí', 0, 100, 0, 1, 1);
+insert into eu_typdalsinakl_cis (algoritmus, typ, popis, periodicita, uhrada, editacesale, nabizetmodsale,  platnost) values (null, 'Vklad do KN', 'Úhrada za vklad do kat. nemovitostí', 0, 1000, 0, 1, 1);
+insert into eu_typdalsinakl_cis (algoritmus, typ, popis, periodicita, uhrada, editacesale, nabizetmodsale,  platnost) values ('A2', 'Podpis', 'Úhrada za ověření podpisu na zástavní smlouvě', 0, 30, 0, 1, 1);
+insert into eu_typdalsinakl_cis (algoritmus, typ, popis, periodicita, uhrada, editacesale, nabizetmodsale,  platnost) values (null, 'Poj.nem.', 'Pojistné za pojištění nemovitosti', 1, null, 1, 1, 1);
+insert into eu_typdalsinakl_cis (algoritmus, typ, popis, periodicita, uhrada, editacesale, nabizetmodsale,  platnost) values (null, 'Živ.poj.', 'Pojistné za životní, resp. úrazové pojištění', 1, null, 1, 1, 1);
+
+
+ROLLBACK WORK;
+
+--End of B123924_RN00436364_3

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B125719_RN00454796_3
+-- @TC:ONCE: DESCRIPTION = Registr #typ dokumentu pro další ujednání k Felixovu spoření# nelze vyhledat v CIBIS-Main. {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE tw_registr_cis set  nazev = 'typ dokumentu pro další ujednání k Felixovu spoření' where oblast = 'ES' AND udaj = 'felixspor' AND funkce = 'generDok';
+
+ROLLBACK WORK;
+
+--End of B125719_RN00454796_3

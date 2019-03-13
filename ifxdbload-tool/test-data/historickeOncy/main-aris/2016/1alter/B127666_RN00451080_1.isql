@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B127666_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+alter table eu_expumorb_den drop constraint eu_expumorb_den_pk;
+drop index eu_expumorb_den_pk;
+CREATE UNIQUE INDEX eu_expumorb_den_pk ON eu_expumorb_den(id_index, smlouva, tsml, poradih, poradi, datumpohybu, faze);
+ALTER TABLE eu_expumorb_den ADD CONSTRAINT PRIMARY KEY(id_index, smlouva, tsml, poradih, poradi, datumpohybu, faze) CONSTRAINT eu_expumorb_den_pk;
+
+ROLLBACK WORK;
+
+--End of B127666_RN00451080_1

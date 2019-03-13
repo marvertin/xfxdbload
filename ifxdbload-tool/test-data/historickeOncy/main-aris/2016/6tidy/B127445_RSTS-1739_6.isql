@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B127445_RSTS-1739_6
+-- @TC:ONCE: DESCRIPTION = existuje stará implementace tabulky umoření {DEFECT}
+
+BEGIN WORK;
+
+drop function EU_getCRAmortTabOpText;
+drop function EU_GetCRAmortizationTableB_c;
+drop function EU_GetAmortizationSummaryInfo;
+
+ROLLBACK WORK;
+
+--End of B127445_RSTS-1739_6

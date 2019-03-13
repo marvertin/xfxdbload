@@ -1,0 +1,73 @@
+-- @TC:ONCE: ID = V2, B118216_RN00412463_3_ucetnictvi
+-- @TC:ONCE: DESCRIPTION = Main: Úprava parametrů platebního stavebního spoření {CUSTOMERREQUEST}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B118216_RN00412463_3 
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('ES','bsavingreq','generDok','felixspor', null, 1, 'Spoření', 'Požadavek - Nová smlouva SSFO', 'Uzavřené smlouvy', 'typ dokumentu pro další ujednání k Felixovu spořen');
+
+-- finanční účet
+
+INSERT INTO ac_ucet_mat
+  (ucet, typ, jepodrozvaha, stav, jedb, jecr, typco, mena, popis, separexport, basel)
+  VALUES
+   (226112, 'P', 0, 1, 1, 1, 0, 'CZK', 'Vklady Felix FO', 0, 1);
+
+INSERT INTO ac_ucet_mat
+  (ucet, typ, jepodrozvaha, stav, jedb, jecr, typco, mena, popis, separexport, basel)
+  VALUES
+   (226212, 'P', 0, 1, 1, 1, 0, 'CZK', 'Vklady Felix PZ', 0, 1);
+
+INSERT INTO ac_ucet_mat
+  (ucet, typ, jepodrozvaha, stav, jedb, jecr, typco, mena, popis, separexport, basel)
+  VALUES
+   (226312, 'P', 0, 1, 1, 1, 0, 'CZK', 'Vklady Felix PN', 0, 1);
+
+-- ac_mapkod_cis
+INSERT INTO ac_mapkod_cis(kod, popis, platnost) VALUES(5, 'Vklad splatný na požádání - Felix', 1);
+
+-- Přiřazení mapovacího kódu
+INSERT INTO ep_fincodemap_cis(tarif, druhvklad, fincode, platnost) VALUES(0, 5, '5', 1);
+
+-- Účetní mapování spořícího subkonta
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('PS', 'BU', 'PN', 226312, 0, 'M', 0, '5', 'Map. Felix', 1);
+  
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('PS', 'BU', 'PZ', 226212, 0, 'M', 0, '5', 'Map. Felix', 1);
+  
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('PS', 'POHL', 'PN', null, 0, 'M', 0, '5', 'Map. Felix', 1);
+  
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('PS', 'POHL', 'PZ', null, 0, 'M', 0, '5', 'Map. Felix', 1);
+  
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('SS', 'BU', 'FO', 226112, 0, 'M', 0, '5', 'Map. Felix', 1);
+  
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('SS', 'BUZA', 'FO', 226112, 0, 'M', 0, '5', 'Map. Felix', 1);
+  
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('SS', 'POHL', 'FO', null, 0, 'M', 0, '5', 'Map. Felix', 1);
+  
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('SS', 'PRAR', 'FO', 226112, 0, 'M', 0, '5', 'Map. Felix', 1);
+  
+INSERT INTO am_kontospmap_cis(tko, sko, typmajitele, ucet, obdobi, obdobijednotka, splvstuhr, mapkod, popis, platnost)
+  VALUES('SS', 'PRMF', 'FO', 226112, 0, 'M', 0, '5', 'Map. Felix', 1); 
+  
+
+-- Typ reportu  
+--INSERT INTO rr_reptype_cis
+--  (repcode, area, repkind, reptype, repvar, repname, formatfile, keepinterval, bulkprint, bulkprintsave, savewithoutpreview, formatchange)
+--VALUES
+--  ('SS041', 'SS', '04', '1', 0, 'Příloha k Felixovu spoření', 'SS041.jrxml', 1, 0, 0, 1, 0);
+  
+UPDATE es_voptarif_cis SET aktivplattrans = 1 WHERE typuctu = 'P';
+
+
+ROLLBACK WORK;
+
+--End of B118216_RN00412463_3

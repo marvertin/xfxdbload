@@ -1,0 +1,212 @@
+create PROCEDURE RSTS_5206_prechodIFRS_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser       Int;
+define _serDM     Int;
+define _serobjekt Int;
+define _realn     Int;
+define _smlouva   Dec(16,0);
+define _tsml      Char(4);
+define _poradi    Int;
+define _datprov   Date;
+define _Status     integer;
+define _OldBatch   Int;
+define _NewBatch   Int;
+define _davkaexp   Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+execute procedure AP_HtInit ();
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_5206_prechodIFRS', 'RSTS_5206_prechodIFRS', 'Přechod na IFRS 9');
+
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+-- Pro všechny realizace úvěru, u kterých je zaúčtována opravná položka provedeno její rozpuštění vůči účtu 572002. 
+-- Akci zaznamená v kartotéce aktualizací a účtování OP.
+-- Reseno aktualizaci OP pri docasne zmene uctu v ciselnicich
+
+if (SELECT COUNT(*) FROM RSTS_5206_prechodIFRS WHERE akce = 1 AND zprac < 0) > 0 then
+
+  CALL TW_RegSetKey('RU', 'op', 'metoda', '*', 'CNB');
+ 
+  UPDATE RU_OPUcetNV_Cis SET ucetn = 572002, ucetv = 572002 WHERE platnost = 1;
+  
+  COMMIT WORK;
+
+  BEGIN WORK;
+  
+  --pokud nebylo ještě nic zpracovano
+  if (SELECT COUNT(*) FROM RSTS_5206_prechodIFRS WHERE zprac > 0) = 0 then
+    if (SELECT Count(*) FROM ae_uctoprenos_den WHERE Davka = TW_RegGetKey('AE','*','*','davkainto') ) > 0 then
+      --uzavreni davky do SAP, pokud je neprazdna
+      let _Status, _OldBatch, _NewBatch = AE_CloseBatch();
+      --prenos davky do SAP
+      call AE_Export_SAP_N (_OldBatch, 0);
+    end if;  
+  end if;  
+  
+  foreach cc2 with hold for
+     SELECT ser, smlouva, tsml, realn
+     INTO  _ser,_smlouva,_tsml,_realn
+     FROM RSTS_5206_prechodIFRS
+     WHERE akce = 1 AND zprac < 0
+     ORDER BY ser
+  
+    begin
+      --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+      on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+        --rollback transakce
+        ROLLBACK WORK;
+        --ulozime chybu do ridici tabulky
+        UPDATE RSTS_5206_prechodIFRS
+          SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+          WHERE ser=_ser;
+        --zahajeni transakce migrace
+        BEGIN WORK;
+      end exception;
+      
+     let _poradi = RU_OPAktualizace (_realn, 0 {AOPCelkem}, NULL, NULL {AObdobi},
+          1 {AStavReal}, NULL {AKoefDUJist}, NULL {AKoefDUPopl}, NULL {AKoefDUUrokBE},
+          NULL {AKoefDUUrokSA}, NULL {AKoefDUPokuta}, NULL {AKoefDNJist}, NULL {AKoefDNPopl}, NULL {AKoefDNUrokBE},
+          NULL {AKoefDNUrokSA}, NULL {AKoefDNPokuta}, NULL {AOPDUMesPod}, NULL {ADatUct}, NULL {AKlasif});    
+  
+      --nastaví příznak zpracováno na 1
+      UPDATE RSTS_5206_prechodIFRS SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+      
+    end;
+  
+    --musime doplnit smlouvu a typ smlouvy, protoze stara procedura to nedela a migrace jiz probehla
+    UPDATE RU_OP_Kart SET smlouva = _smlouva, tsml = _tsml WHERE realn = _realn and poradi = _poradi;
+    UPDATE RU_OPUct_Kart SET smlouva = _smlouva, tsml = _tsml WHERE realn = _realn and porakt = _poradi;
+    
+    --nova transakce
+    COMMIT WORK;
+    BEGIN WORK;
+  end foreach;
+
+  -- vraceni uctu
+  UPDATE RU_OPUcetNV_Cis SET (ucetn, ucetv) =  
+    ( (SELECT ucetn,ucetv FROM RU_OPUcetNV_aCis WHERE idarch = (SELECT MAX(idarch) FROM RU_OPUcetNV_aCis
+       WHERE TW_nullempty(tos) = TW_nullempty(RU_OPUcetNV_Cis.tos) AND TW_null0(klasif) = TW_null0(RU_OPUcetNV_Cis.klasif) AND 
+             TW_null0(typdluhu) = TW_null0(RU_OPUcetNV_Cis.typdluhu) AND TW_null0(typpohl) = TW_null0(RU_OPUcetNV_Cis.typpohl) AND
+             TW_null0(danove) = TW_null0(RU_OPUcetNV_Cis.danove) AND TW_null0(predchozi) = TW_null0(RU_OPUcetNV_Cis.predchozi) ) ) )
+    WHERE platnost = 1;
+  
+end if;
+   
+-- Provede nastavení parametru #Metoda výpočtu OP# na „IFRS9“.
+CALL TW_RegSetKey('RU', 'op', 'metoda', '*', 'IFRS 9');
+COMMIT WORK;
+
+BEGIN WORK;
+
+LET _datprov = AP_datprov();
+
+-- Pro všechny úvěrové smlouvy ve stavech „D“ a „L“ provede aktualizaci OP a jejich zaúčtování dle struktury dluhu. Jako účet pro tvorbu OP bude použit účet 572002. Akci zaznamená v kartotéce aktualizací a účtování OP.
+if (SELECT COUNT(*) FROM RSTS_5206_prechodIFRS WHERE akce = 2 AND zprac < 0) > 0 then
+  
+  
+  UPDATE ru_opifrs9uct_cis SET naklucetop = 572002;
+  
+  COMMIT WORK;
+
+  BEGIN WORK;
+  
+  foreach cc2 with hold for
+     SELECT ser, smlouva, tsml, realn
+     INTO  _ser,_smlouva,_tsml,_realn
+     FROM RSTS_5206_prechodIFRS
+     WHERE akce = 2 AND zprac < 0
+     ORDER BY ser
+  
+    begin
+      --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+      on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+        --rollback transakce
+        ROLLBACK WORK;
+        --ulozime chybu do ridici tabulky
+        UPDATE RSTS_5206_prechodIFRS
+          SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+          WHERE ser=_ser;
+        --zahajeni transakce migrace
+        BEGIN WORK;
+      end exception;
+      
+     let _poradi = RU_OPAktualizace (AReal = _realn,  ASmlouva = _smlouva, ATsml = _tsml);
+     --převod vytvořených OP do minulého období  
+     let _poradi = RU_OPPrevodIfrs9(AReal = _realn,  ASmlouva = _smlouva, ATsml = _tsml);
+  
+      --nastaví příznak zpracováno na 1
+      UPDATE RSTS_5206_prechodIFRS SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+      
+    end;
+  
+    --nova transakce
+    COMMIT WORK;
+    BEGIN WORK;
+  end foreach;
+
+  -- vraceni uctu
+  UPDATE ru_opifrs9uct_cis SET (naklucetop) =  
+    ( (SELECT naklucetop FROM ru_opifrs9uct_acis WHERE idarch = (SELECT MAX(idarch) FROM ru_opifrs9uct_acis
+       WHERE tw_null0(serno) =  tw_null0(ru_opifrs9uct_cis.serno)) ) );
+  
+end if;
+
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+BEGIN WORK;
+
+if not exists (select 1 from RSTS_5206_prechodIFRS where zprac <> 1) then
+  --uzavreni davky do SAP
+  let _Status, _OldBatch, _NewBatch = AE_CloseBatch();
+  --prenos davky do SAP
+  call AE_Export_SAP_N (_OldBatch, 0);
+  --export zaúčtovaných OP 
+  let _davkaexp = RU_OPExportUC ();
+  
+end if;
+
+COMMIT WORK;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B121316_RN00423315_3-xferattr
+-- @TC:ONCE: DESCRIPTION = Integrace CIBISu a ECM {CUSTOMERREQUEST}
+BEGIN WORK;
+
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('EA_VOZ_AR', 0, 'HP-NT', 'verifikace_oz.unl', 'NONE', 1, 'Verifikace cisel OZ', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('EA_VOZ_AR', 1, 'HP-NT', 'verifikace_oz.unl', 'NONE', 1, 'Verifikace cisel OZ', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('EA_VOZ_OU', 0, 'HP-NT', 'verifikace_oz.unl', 'NONE', 1, 'Verifikace cisel OZ', '', '');
+INSERT INTO nt_xferattr_cis(id, is_test_mode, xfer, src_mask, xlation, is_move, title, src_dir, dst_dir)
+  VALUES('EA_VOZ_OU', 1, 'HP-NT', 'verifikace_oz.unl', 'NONE', 1, 'Verifikace cisel OZ', '', '');
+
+ROLLBACK WORK;
+--End of B121316_RN00423315_3-xferattr

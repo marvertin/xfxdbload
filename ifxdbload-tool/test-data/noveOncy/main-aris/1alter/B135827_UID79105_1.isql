@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B135827_UID79105_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25227: V denících přepočtů hodnot zajištění evidovat nové údaje {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eu_zajistvypb_den ADD (
+  vyseakt   DECIMAL(16, 2),
+  vysebud   DECIMAL(16, 2)
+);
+
+ALTER TABLE eu_zajistvyph_den ADD (
+  vyseakt   DECIMAL(16, 2),
+  vysebud   DECIMAL(16, 2),
+  nezajuverakt   DECIMAL(16, 2),
+  nezajuverbud   DECIMAL(16, 2),
+  nezajsaldo   DECIMAL(16, 2)
+);
+
+ROLLBACK WORK;
+
+--End of B135827_UID79105_1

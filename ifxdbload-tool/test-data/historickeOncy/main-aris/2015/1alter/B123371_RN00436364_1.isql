@@ -1,0 +1,72 @@
+-- @TC:ONCE: ID = V2, B123371_RN00436364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+ALTER TABLE pro_contractstatus
+
+  --Určuje, zda parametry fixace byly načteny z úvěrové smlouvy (případně žádosti) anebo je musí modelování explicitně určit samo
+  ADD fixLoaded   Integer  DEFAULT 0,
+  
+  --Varianta fixace úrokové sazby (odkaz do číselníku)
+  ADD fixVariant   INTEGER,
+  
+  --Datum počátku fixace úrokové sazby úvěru
+  ADD fixStart   DATE,
+  
+  --Datum konce fixace úrokové sazby úvěru
+  ADD fixEnd   DATE,
+  
+  --Celková výše dalších nákladů spojených s úvěrem
+  ADD extraExpenses   DECIMAL(16, 2),
+  
+  ADD CONSTRAINT CHECK (fixloaded IN (0,1)) CONSTRAINT pro_contractstatus_df4p
+;
+
+ALTER TABLE pro_simulatedturnover
+
+  --Určuje, zda příslušný řádek je relevantní pouze pro výpočet doplňkového RPSN nebo obecně
+  ADD  onlyToSupplRpsn   Integer  DEFAULT 0,
+  
+  ADD CONSTRAINT CHECK (onlytosupplrpsn IN (0,1)) CONSTRAINT pro_simulatedturnover_df4u
+;
+
+CREATE TABLE pro_extraExpense (
+  id   SERIAL NOT NULL,
+  bssimulationcase_id   Integer NOT NULL,
+  
+  --ID nákladu z číselníku. Další náklady spojené s úvěrem (odkaz do číselníku)
+  expenseType   INTEGER,
+  
+  --Výše úhrady
+  expenseAmount   DECIMAL(16, 2),
+  
+  --Perioda: jednorázová (1), měsíční (M), čtvrtletní (Q), pololetní (P), roční (R)
+  expensePeriod   CHAR(1),
+  
+  --Úroveň: systémová (S), uživatelská (U)
+  expenseLevel   CHAR(1)
+  
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_extraexpense_pk ON pro_extraExpense(id);
+ALTER TABLE pro_extraExpense ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_extraexpense_pk;
+
+--FK
+CREATE INDEX pro_extraexpense_i_f1 ON pro_extraExpense(bssimulationcase_id);
+ALTER TABLE pro_extraExpense ADD CONSTRAINT FOREIGN KEY(bssimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_extraexpense_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE pro_extraExpense
+ADD CONSTRAINT (CHECK (expensePeriod in ('1','M','Q','P','R')) CONSTRAINT pro_extraexpense_c1),
+ADD CONSTRAINT (CHECK (expenseLevel in ('S','U')) CONSTRAINT pro_extraexpense_c2);
+
+ROLLBACK WORK;
+
+--End of B123371_RN00436364_1

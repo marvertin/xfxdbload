@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B121500_RN00420627_3
+-- @TC:ONCE: DESCRIPTION = Časové rozlišení pobytu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE tw_prov_typ_cis SET (popis)  = (TRIM(popis) || ' - start')  WHERE okruh = 'SP' and typ = 40;
+
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost)
+  VALUES('SP', 41, 'Inicializace problematických nároků na SP - konec', 1);
+
+ROLLBACK WORK;
+
+--End of B121500_RN00420627_3

@@ -1,0 +1,84 @@
+create procedure RSTS_27791_memo(AKonto Dec(16,0), ATko Char(2))
+-- přesype obraty pro dané konto do pomocné evidence
+
+define _jeArchivovano Int;
+
+if exists(SELECT * FROM RSTS_27791_memoGrp_Tmp WHERE konto = AKonto AND tko = ATko) then
+  return;
+end if;
+
+begin
+  on exception in (-206)
+  end exception;
+
+  DROP TABLE RSTS_27791_memo_Tmp;
+end;
+
+CREATE TEMP TABLE RSTS_27791_memo_Tmp(
+  ser Int,
+  zdrojser Int, 
+  konto Dec(16,0),
+  tko Char(2),
+  sko Char(4), 
+  dbcr Int, 
+  castka Dec(16,2),
+  datuct Date
+) WITH NO LOG;
+  
+SELECT jearchivovano INTO _jeArchivovano FROM AC_Konto_Mat WHERE konto = AKonto AND tko = ATko;
+
+INSERT INTO RSTS_27791_memo_Tmp(ser, zdrojser, konto, tko, sko, dbcr, castka, datuct)
+SELECT m.ser, 0, m.konto, m.tko, m.sko, m.dbcr, m.castka, (SELECT h.datuct FROM AC_UcHead_Den h WHERE h.ser = m.ser)
+FROM AC_MemoBody_Den m
+WHERE m.konto = AKonto AND m.tko = ATko AND m.sko IN ('PRIN', 'MPRI', 'INTS', 'MINT', 'FEES', 'MFES', 'MPIN', 'MPFS');
+
+INSERT INTO RSTS_27791_memo_Tmp(ser, zdrojser, konto, tko, sko, dbcr, castka, datuct)
+SELECT m.ser, 1, m.konto, m.tko, m.sko, m.dbcr, m.castka, (SELECT h.datuct FROM AC_UcHeadPredMigr_Den h WHERE h.ser = m.ser)
+FROM AC_MemoBodyPredMigr_Den m 
+WHERE m.konto = AKonto AND m.tko = ATko AND m.sko IN ('PRIN', 'MPRI', 'INTS', 'MINT', 'FEES', 'MFES', 'MPIN', 'MPFS');
+
+if _jeArchivovano = 1 then
+  INSERT INTO RSTS_27791_memo_Tmp(ser, zdrojser, konto, tko, sko, dbcr, castka, datuct)
+  SELECT m.ser, 0, m.konto, m.tko, m.sko, m.dbcr, m.castka, (SELECT h.datuct FROM AC_UcHead_Den_A h WHERE h.ser = m.ser)
+  FROM AC_MemoBody_Den_A m 
+  WHERE m.konto = AKonto AND m.tko = ATko AND m.sko IN ('PRIN', 'MPRI', 'INTS', 'MINT', 'FEES', 'MFES', 'MPIN', 'MPFS');
+
+  INSERT INTO RSTS_27791_memo_Tmp(ser, zdrojser, konto, tko, sko, dbcr, castka, datuct)
+  SELECT m.ser, 1, m.konto, m.tko, m.sko, m.dbcr, m.castka, (SELECT h.datuct FROM AC_UcHeadPredMigr_Den_A h WHERE h.ser = m.ser)
+  FROM AC_MemoBodyPredMigr_View_A m
+  WHERE m.konto = AKonto AND m.tko = ATko AND m.sko IN ('PRIN', 'MPRI', 'INTS', 'MINT', 'FEES', 'MFES', 'MPIN', 'MPFS');
+  
+  CREATE INDEX RSTS_27791_memo_i2 ON RSTS_27791_memo_Tmp(ser, zdrojser);
+  
+  UPDATE STATISTICS HIGH FOR TABLE RSTS_27791_memo_Tmp;
+
+  begin
+    on exception in (-206)
+    end exception;
+  
+    DROP TABLE RSTS_27791_memoDel_Tmp;
+  end;
+  
+  -- odstranění případných duplicitních záznamů
+  SELECT ser, zdrojser, MIN(rowid) minrowid
+  FROM RSTS_27791_memo_Tmp
+  GROUP BY ser, zdrojser HAVING COUNT(*) > 1
+  INTO TEMP RSTS_27791_memoDel_Tmp;
+  
+  DELETE FROM RSTS_27791_memo_Tmp
+  WHERE EXISTS(SELECT * FROM RSTS_27791_memoDel_Tmp WHERE ser = RSTS_27791_memo_Tmp.ser AND zdrojser = RSTS_27791_memo_Tmp.zdrojser AND minrowid <> RSTS_27791_memo_Tmp.rowid);
+end if;
+
+CREATE INDEX RSTS_27791_memo_i1 ON RSTS_27791_memo_Tmp(konto, tko, datuct);
+
+UPDATE STATISTICS HIGH FOR TABLE RSTS_27791_memo_Tmp;
+
+INSERT INTO RSTS_27791_memoGrp_Tmp(konto, tko, datuct, dluhdospl, dluhpospl)
+SELECT konto, tko, datuct, SUM(CASE WHEN sko IN ('PRIN', 'INTS', 'FEES') THEN dbcr * castka ELSE 0 END), SUM(CASE WHEN sko IN ('MPRI', 'MINT', 'MFES', 'MPIN', 'MPFS') THEN dbcr * castka ELSE 0 END) 
+FROM RSTS_27791_memo_Tmp
+WHERE konto = AKonto AND tko = ATko
+GROUP BY konto, tko, datuct;
+
+UPDATE STATISTICS HIGH FOR TABLE RSTS_27791_memoGrp_Tmp;
+
+end procedure;

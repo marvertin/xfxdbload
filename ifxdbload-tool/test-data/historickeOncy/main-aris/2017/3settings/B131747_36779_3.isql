@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B131747_36779_3
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+update eo_tigertyp_cis set retail = 1
+  where nazev in ('Private Individual (Retail)','Micro SME (Retail)'
+    ,'Group Micro SME (Retail)','Sub-group Micro-SME (Retail)')
+;
+
+update ep_typpohybumodel_cis set platnost = 0
+  where typpohybumodel = '8';
+ 
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, category, platnost )
+  values ('c', 'Prémie na kompenzaci základních úhrad', 1, NULL, NULL, 8, 1)
+;
+
+insert into ep_splspormodakce_cis(akce, text, platnost, manzrus, tokzrus, autozrus, uzivint, ulozmodel, vyprpsn
+  , vypdilcirpsn, zpusobautozrus, potlactokrpsn, ulozcashflow, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit)
+  values('SSEIRS', 'Výpočet bankovního EIR spoření', 1, 1, 1, 1, 1, 1, 0
+  , 0, 'I', 1, 0, 1, 1, 1, 1)
+;
+
+insert into ep_splspormodakce_cis(akce, text, platnost, manzrus, tokzrus, autozrus, uzivint, ulozmodel, vyprpsn
+  , vypdilcirpsn, zpusobautozrus, potlactokrpsn, ulozcashflow, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit)
+  values('USEIRU', 'Výpočet bankovního EIR úvěru', 1, 1, 1, 1, 1, 1, 0
+  , 0, 'I', 1, 0, 1, 1, 1, 1)
+;
+
+ROLLBACK WORK;
+
+--End of B131747_36779_3

@@ -1,0 +1,246 @@
+-- @TC:ONCE: ID = V2, A56258_RN00323238_3-01_doplneni-tabulky-ep_referent_cis
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Rozšíøení èíselníkù ve vazbì na ARCIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='Ba';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='El';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='H';                          
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='N';                          
+UPDATE ep_referent_cis SET jmenoproarcis='okrupickova' WHERE zkratka='PA';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='PB';                         
+UPDATE ep_referent_cis SET jmenoproarcis='bcervova' WHERE zkratka='PC';                         
+UPDATE ep_referent_cis SET jmenoproarcis='dhorakova' WHERE zkratka='PD';                         
+UPDATE ep_referent_cis SET jmenoproarcis='hreinerova' WHERE zkratka='PE';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='PF';                         
+UPDATE ep_referent_cis SET jmenoproarcis='jgrunerova' WHERE zkratka='PG';                         
+UPDATE ep_referent_cis SET jmenoproarcis='hhanlova' WHERE zkratka='PH';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='PI';                         
+UPDATE ep_referent_cis SET jmenoproarcis='djonasova' WHERE zkratka='PJ';                         
+UPDATE ep_referent_cis SET jmenoproarcis='psvorcova' WHERE zkratka='PK';                         
+UPDATE ep_referent_cis SET jmenoproarcis='lmlynar' WHERE zkratka='PL';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mvondrasek' WHERE zkratka='PM';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='PO';                         
+UPDATE ep_referent_cis SET jmenoproarcis='kkostal' WHERE zkratka='PP';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='PR';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='PS';                         
+UPDATE ep_referent_cis SET jmenoproarcis='vtopinkova' WHERE zkratka='PT';                         
+UPDATE ep_referent_cis SET jmenoproarcis='kkubatova' WHERE zkratka='PU';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='PV';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mhavlenova' WHERE zkratka='PY';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='PZ';                         
+UPDATE ep_referent_cis SET jmenoproarcis='akocianova' WHERE zkratka='XA';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mnovakova-dolezalova' WHERE zkratka='XB';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mnovakova-dolezalova' WHERE zkratka='XC';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mnovakova-dolezalova' WHERE zkratka='XD';                         
+UPDATE ep_referent_cis SET jmenoproarcis='abarochovska' WHERE zkratka='XF';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mnovakova-dolezalova' WHERE zkratka='XH';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='XJ';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mnovakova-dolezalova' WHERE zkratka='XK';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mvlkova' WHERE zkratka='XM';                         
+UPDATE ep_referent_cis SET jmenoproarcis='pmala' WHERE zkratka='XP';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mtoncarova' WHERE zkratka='XR';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='XS';                         
+UPDATE ep_referent_cis SET jmenoproarcis='ksvobodova' WHERE zkratka='XT';                         
+UPDATE ep_referent_cis SET jmenoproarcis='kjungmannova' WHERE zkratka='XU';                         
+UPDATE ep_referent_cis SET jmenoproarcis='vkubacova' WHERE zkratka='XV';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='XX';                         
+UPDATE ep_referent_cis SET jmenoproarcis='sbrectanova' WHERE zkratka='YB';                         
+UPDATE ep_referent_cis SET jmenoproarcis='ocicvarek' WHERE zkratka='YC';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mfingerova' WHERE zkratka='YF';                         
+UPDATE ep_referent_cis SET jmenoproarcis='psplichal' WHERE zkratka='YH';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='YK';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mzajicova' WHERE zkratka='YM';                         
+UPDATE ep_referent_cis SET jmenoproarcis='bpavlik' WHERE zkratka='YP';                         
+UPDATE ep_referent_cis SET jmenoproarcis='psoukup' WHERE zkratka='YS';                         
+UPDATE ep_referent_cis SET jmenoproarcis='psoukup' WHERE zkratka='YV';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mzacek' WHERE zkratka='YZ';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ad';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='af';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='aj';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='am';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ar';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='at';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='au';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='av';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ba';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='bb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='bc';                         
+UPDATE ep_referent_cis SET jmenoproarcis='dbenesova' WHERE zkratka='bd';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='be';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='bi';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='bm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='bo';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='br';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='bu';                         
+UPDATE ep_referent_cis SET jmenoproarcis='vhrdlickova' WHERE zkratka='bv';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='bš';                         
+UPDATE ep_referent_cis SET jmenoproarcis='dcaldrova' WHERE zkratka='ca';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ch';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='da';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='di';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='dl';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='dm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='do';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='du';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='dz';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='eb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ef';                         
+UPDATE ep_referent_cis SET jmenoproarcis='elupiskova' WHERE zkratka='el';                         
+UPDATE ep_referent_cis SET jmenoproarcis='ffreudl' WHERE zkratka='fr';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='gh';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ha';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hc';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hd';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hh';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hj';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mhladik' WHERE zkratka='hm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hn';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ho';                         
+UPDATE ep_referent_cis SET jmenoproarcis='phavelka' WHERE zkratka='hp';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hr';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hu';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hv';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='hy';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='in';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='is';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ja';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='jb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='jd';                         
+UPDATE ep_referent_cis SET jmenoproarcis='jjelinkova' WHERE zkratka='je';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='jh';                         
+UPDATE ep_referent_cis SET jmenoproarcis='zdudkova' WHERE zkratka='ji';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='jk';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='jl';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='jm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='jn';                         
+UPDATE ep_referent_cis SET jmenoproarcis='pjindrova' WHERE zkratka='jp';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='js';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mvykysalova' WHERE zkratka='ju';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='jv';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ka';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kd';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ke';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kf';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kg';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kh';                         
+UPDATE ep_referent_cis SET jmenoproarcis='jkilianova' WHERE zkratka='ki';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kj';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kk';                         
+UPDATE ep_referent_cis SET jmenoproarcis='lkozakova' WHERE zkratka='kl';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='km';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kn';                         
+UPDATE ep_referent_cis SET jmenoproarcis='pmrazkova' WHERE zkratka='ko';                         
+UPDATE ep_referent_cis SET jmenoproarcis='dkravarikova' WHERE zkratka='kr';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ks';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kt';                         
+UPDATE ep_referent_cis SET jmenoproarcis='rrihova' WHERE zkratka='ku';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kv';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='kš';                         
+UPDATE ep_referent_cis SET jmenoproarcis='vkourilova' WHERE zkratka='kø';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='la';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='le';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='lf';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='lh';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='li';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='lj';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='lk';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='lm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='lo';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='lr';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='lu';                         
+UPDATE ep_referent_cis SET jmenoproarcis='ztomsova-liskova' WHERE zkratka='lz';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='m';                          
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ma';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='mb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='mc';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='mh';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='mi';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='mk';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ml';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mmostecka' WHERE zkratka='mm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='mo';                         
+UPDATE ep_referent_cis SET jmenoproarcis='pmaovec' WHERE zkratka='mp';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ms';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='mt';                         
+UPDATE ep_referent_cis SET jmenoproarcis='jarmusilova' WHERE zkratka='mu';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='mv';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='na';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ne';                         
+UPDATE ep_referent_cis SET jmenoproarcis='mnetopilova' WHERE zkratka='nm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='nz';                         
+UPDATE ep_referent_cis SET jmenoproarcis='opokorna' WHERE zkratka='op';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='p';                          
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pa';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pd';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pe';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ph';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pj';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pk';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pl';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='po';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pp';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pr';                         
+UPDATE ep_referent_cis SET jmenoproarcis='jprochazkova' WHERE zkratka='pz';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='pš';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ra';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='re';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='rk';                         
+UPDATE ep_referent_cis SET jmenoproarcis='rlusticky' WHERE zkratka='rl';                         
+UPDATE ep_referent_cis SET jmenoproarcis='jrychtarikova' WHERE zkratka='ry';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='rz';                         
+UPDATE ep_referent_cis SET jmenoproarcis='hraskova' WHERE zkratka='rš';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='sa';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='sb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='sc';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='sd';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='se';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='si';                         
+UPDATE ep_referent_cis SET jmenoproarcis='kstankova' WHERE zkratka='sk';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='sl';                         
+UPDATE ep_referent_cis SET jmenoproarcis='masyrova' WHERE zkratka='sm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='so';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='sr';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='st';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='su';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='sz';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='sè';                         
+UPDATE ep_referent_cis SET jmenoproarcis='thorejsi' WHERE zkratka='th';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ti';                         
+UPDATE ep_referent_cis SET jmenoproarcis='tnovakova' WHERE zkratka='tn';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='to';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='tp';                         
+UPDATE ep_referent_cis SET jmenoproarcis='ktreml' WHERE zkratka='tr';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='tv';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='ul';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='va';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='vb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='vj';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='vk';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='vm';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='vo';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='vp';                         
+UPDATE ep_referent_cis SET jmenoproarcis='rtumova' WHERE zkratka='vr';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='vs';                         
+UPDATE ep_referent_cis SET jmenoproarcis='euhlirova' WHERE zkratka='vu';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='vy';                         
+UPDATE ep_referent_cis SET jmenoproarcis='zvyroubalova' WHERE zkratka='vz';                         
+UPDATE ep_referent_cis SET jmenoproarcis='rvanova' WHERE zkratka='vá';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='w';                          
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='wi';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='wo';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='zb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='kzelinkova' WHERE zkratka='ze';                         
+UPDATE ep_referent_cis SET jmenoproarcis='zberanova-hajna' WHERE zkratka='zh';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='zl';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='zv';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='šb';                         
+UPDATE ep_referent_cis SET jmenoproarcis='OZU sekretariat' WHERE zkratka='še';                         
+
+ROLLBACK WORK;
+
+--End of A56258_RN00323238_1-_1_modifikace-tabulky-ep_referent_cis
+
+

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B126438_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodh_den
+
+  -- Časová hranice nákladů souvisejících s úvěrem
+  ADD cashranicenakl   DATE;
+
+ALTER  TABLE ep_expsplspormodcf_den 
+  ADD poradipoh   Integer,
+  ADD refsplspormodb   Integer;
+  
+ROLLBACK WORK;
+
+--End of B126438_RN00451080_1

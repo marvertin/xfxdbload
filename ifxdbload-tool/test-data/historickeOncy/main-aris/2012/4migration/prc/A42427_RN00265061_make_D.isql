@@ -1,0 +1,177 @@
+create procedure A42427_RN00265061_make_D(-- vstupni paramtery
+                                    ADebugFile    Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                    ABezTransakci int default 0
+)
+
+define _davka        Int;
+define _akce         Int;
+
+define _ser              int;
+define _datvypoc    date; 
+define  _fo               int;
+define  _smlouva     dec(16,0);
+define  _typ             char(4);
+define  _typrole       char(2);
+
+define  _datpzu       date; 
+define  _maxDatOd       date;
+
+define _pocvos1 dec(16,2); 
+define _pocvos2 dec(16,2);
+define _pocvos3 dec(16,2); 
+define _pocvos4 dec(16,2); 
+define _pocvos5 dec(16,2); 
+define _pocosd1 dec(16,2); 
+define _pocosd2 dec(16,2); 
+define _pocosd3a4 dec(16,2); 
+define _pocosd5 dec(16,2); 
+define _datod DATE;
+define _dispprostr dec(16,2);
+define _dispprostrVyp dec(16,2);
+
+define _nezajcastuver    dec(16,2);
+define _datzadosti       date;
+define _castkaspor       dec(16,2);
+define _castkauver       dec(16,2);
+define _nezajcastka      dec(16,2);
+define _datsplat         Date;
+define _datsplatvyp      Date;
+define _vek              integer;
+define _smlUv            Dec(16,0);
+define _tsmlUv           Char(4);
+define _variantapu       char(10);
+
+
+
+define _zprac int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+  BEGIN WORK;
+end if;
+
+--set triggers eu_contractchecking_kart_u disabled;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka ('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00265061');
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, datvypoc, fo, smlouva, typ, typrole 
+     INTO _ser, _datvypoc, _fo, _smlouva, _typ, _typrole
+     FROM RN00265061_2
+    WHERE zprac < 0
+ ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00265061_2
+        SET(NumErr,ISAMErr,TextErr, zprac)= (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+
+    --vlastni algoritmus migrace
+    SELECT  datpzu, dispprostr, datsplat, vek 
+      INTO _datpzu,_dispprostr,_datsplat,_vek 
+      FROM eo_finsit_mat 
+     WHERE datvypoc = _datvypoc AND  fo = _fo AND smlouva = _smlouva AND typ = _typ AND  typrole = _typrole;
+      
+    SELECT max(datod) INTO _maxDatOd FROM  eo_zivminkoef_cis WHERE datod <= _datpzu AND platnost = 1;
+    
+    SELECT pocvos1, pocvos2, pocvos3, pocvos4, pocvos5, pocosd1, pocosd2, pocosd3a4, pocosd5, datod
+      INTO  _pocvos1, _pocvos2, _pocvos3, _pocvos4, _pocvos5, _pocosd1, _pocosd2, _pocosd3a4, _pocosd5, _datod
+      FROM eo_zivminkoef_cis 
+      WHERE datod = _maxDatOd; 
+     
+   
+    --na rozdil o navrhu reseni jeste po domluve se Zuzkou pridano nastaveni data splatnosti a veku dle data splatnosti
+    --pro FS, k nimz existuje smlouva ve stavu uverovy navrh
+    let _nezajcastuver,_datzadosti,_castkaspor,_castkauver,_datsplatvyp,_smlUv,_tsmlUv,_variantapu =
+    EP_PodklFinSitSml(_smlouva, _typ);
+    IF _smlUv IS NOT NULL THEN
+      IF (SELECT stav FROM EU_Sml_Mat WHERE smlouva = _smlUv AND tsml = _tsmlUv) = 'B' THEN
+        if _datsplatvyp is not null then
+              let _vek = EO_VekOS(_fo,_datsplatvyp);
+              LET _datsplat = _datsplatvyp;
+        end if;      
+      END IF;
+    END IF;
+
+    UPDATE eo_finsit_mat SET (cpocvos1, cpocvos2, cpocvos3, cpocvos4, cpocvos5, 
+                              cpocosd1, cpocosd2, cpocosd3a4, cpocosd5, cdatzivminkoef,
+                              datsplat, vek ) =
+                            (_pocvos1, _pocvos2, _pocvos3, _pocvos4, _pocvos5, 
+                             _pocosd1, _pocosd2, _pocosd3a4, _pocosd5, _datod,
+                             _datsplat,_vek)       
+      WHERE datvypoc = _datvypoc AND  fo = _fo AND smlouva = _smlouva AND typ = _typ AND  typrole = _typrole;
+      
+    let _dispprostrVyp = EO_GetDispProstr(_fo, _smlouva, _typ, _typrole, _datvypoc);
+    let _zprac = 1;
+    if _dispprostr <> _dispprostrVyp then
+       let _zprac = 2;
+    end if;
+   --konec algoritmu migrace
+   
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00265061_2 SET zprac = _zprac, NumErr = null, ISAMErr = null, TextErr = null WHERE ser = _ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--algoritmus dokonceni migrace
+--set triggers eu_contractchecking_kart_u enabled;
+
+--zápis o ukonèení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukonèení migrace/datové manipulace RN00265061');
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+end procedure;

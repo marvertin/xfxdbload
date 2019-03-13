@@ -1,0 +1,24 @@
+create procedure B131560_UID41968_3()
+
+define _serRiskAnalytik int;
+define _serRiskFraud int;
+
+insert into ep_pouziti_cis(nazev, platnost) VALUES ('RISK - analytik', 1);
+let _serRiskAnalytik = TW_LastSer();
+
+insert into ep_pouziti_cis(nazev, platnost) VALUES ('RISK- fraud', 1);
+let _serRiskFraud = TW_LastSer();
+
+insert into ep_refpouziti_cis (pouziti, zkratka, platnost) values(_serRiskAnalytik, 'ps', 1);
+insert into ep_refpouziti_cis (pouziti, zkratka, platnost) values(_serRiskAnalytik, 'jj', 1);
+insert into ep_refpouziti_cis (pouziti, zkratka, platnost) values(_serRiskAnalytik, 'mr', 1);
+insert into ep_refpouziti_cis (pouziti, zkratka, platnost) values(_serRiskAnalytik, 'he', 1);
+
+insert into ep_refpouziti_cis (pouziti, zkratka, platnost) values(_serRiskFraud, 'PP', 1);
+insert into ep_refpouziti_cis (pouziti, zkratka, platnost) values(_serRiskFraud, 'mp', 1);
+
+call TW_RegSetOrAddKey('EP','referent','skupiny','uverar-BO', 2);
+call TW_RegSetOrAddKey('EP','referent','skupiny','RISK-analytik', _serRiskAnalytik);
+call TW_RegSetOrAddKey('EP','referent','skupiny','RISK-fraud', _serRiskFraud);
+
+end procedure; --B131560_UID41968_3

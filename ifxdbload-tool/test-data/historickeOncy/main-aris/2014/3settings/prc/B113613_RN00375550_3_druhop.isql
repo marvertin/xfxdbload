@@ -1,0 +1,17 @@
+Create Procedure B113613_RN00375550_3_druhop()
+
+  define _udaj   CHAR(20);
+  define _staryudaj CHAR(20);
+
+-- Migrace změny názvu AX/prevod_PK/*/druhop
+  let _staryudaj = TW_RegGetKey('AX','prevod_PK','*','druhop');
+
+  foreach SELECT udaj INTO _udaj FROM tw_registr_cis WHERE oblast = 'AX' and uloha = 'prevod_PK' and funkce = 'provkonto'
+  
+    CALL TW_RegSetOrAddKey('AX','prevod_PK','druhop',_udaj, _staryudaj, 1, 'Klientské účetnictví','Zdanění','Accounting','Druh operace přeúčtování daně na provozní konto');
+  
+  end foreach; 
+ 
+  call TW_RegDelKey('AX','prevod_PK','*','druhop');
+ 
+end Procedure;

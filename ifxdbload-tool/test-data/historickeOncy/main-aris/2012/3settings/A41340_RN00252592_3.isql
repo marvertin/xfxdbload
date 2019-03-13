@@ -1,0 +1,58 @@
+-- @TC:ONCE: ID = V2, A41340_RN00252592_3
+-- @TC:ONCE: DESCRIPTION = Výzva pro ruèitele
+
+BEGIN WORK;
+  --#Generovat výzvu ke splacení pro roli <typ_role> fáze 1#
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze1', 'KL', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, které typy rolí mají být nabízeny pro generování výzvy ke splacení ve fázi 1');
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze1', 'MK', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, které typy rolí mají být nabízeny pro generování výzvy ke splacení ve fázi 1');
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze1', 'PR', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, které typy rolí mají být nabízeny pro generování výzvy ke splacení ve fázi 1');
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze1', 'MP', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, které typy rolí mají být nabízeny pro generování výzvy ke splacení ve fázi 1');
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze1', 'SD', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, které typy rolí mají být nabízeny pro generování výzvy ke splacení ve fázi 1');
+
+  --#Generovat výzvu ke splacení pro roli <typ_role> fáze 2#
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze2', 'RU', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, které typy rolí mají být nabízeny pro generování výzvy ke splacení ve fázi 2');
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze2', 'MR', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, které typy rolí mají být nabízeny pro generování výzvy ke splacení ve fázi 2');
+  
+  --#Generovat výzvu ke splacení pro manžela(-ku) osoby v roli <typ_role> fáze 1#
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze1-manz', 'KL', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda pro osoby na daném úvìru v roli daného typu (<typ_role>) povolit vytvoøení výzvy i pro jejich manžele/manželky (evidováno jako rodinné vztahy mezi osobami). Platí pro 1. fázi výzvy.');
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze1-manz', 'PR', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda pro osoby na daném úvìru v roli daného typu (<typ_role>) povolit vytvoøení výzvy i pro jejich manžele/manželky (evidováno jako rodinné vztahy mezi osobami). Platí pro 1. fázi výzvy.');
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze1-manz', 'SD', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda pro osoby na daném úvìru v roli daného typu (<typ_role>) povolit vytvoøení výzvy i pro jejich manžele/manželky (evidováno jako rodinné vztahy mezi osobami). Platí pro 1. fázi výzvy.');
+  
+  --#Generovat výzvu ke splacení pro manžela(-ku) osoby v roli <typ_role> fáze 2#
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba-faze2-manz', 'RU', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda pro osoby na daném úvìru v roli daného typu (<typ_role>) povolit vytvoøení výzvy i pro jejich manžele/manželky (evidováno jako rodinné vztahy mezi osobami). Platí pro 2. fázi výzvy.');    
+
+  --#Úhrada za výzvu – 2.fáze#
+  call tw_regsetoraddkey('RU', 'PUFO', 'vyzva-faze2', 'provuhr', 0, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda má být úètována úhrada za výzvu v 1.fázi');
+  call tw_regsetoraddkey('RU', 'SUFO', 'vyzva-faze2', 'provuhr', 0, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda má být úètována úhrada za výzvu v 1.fázi');
+  call tw_regsetoraddkey('RU', 'PUPO', 'vyzva-faze2', 'provuhr', 0, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda má být úètována úhrada za výzvu v 1.fázi');
+  call tw_regsetoraddkey('RU', 'SUPO', 'vyzva-faze2', 'provuhr', 0, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda má být úètována úhrada za výzvu v 1.fázi');
+  call tw_regsetoraddkey('RU', 'KOME', 'vyzva-faze2', 'provuhr', 0, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda má být úètována úhrada za výzvu v 1.fázi');
+  call tw_regsetoraddkey('RU', 'VUFO', 'vyzva-faze2', 'provuhr', 0, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda má být úètována úhrada za výzvu v 1.fázi');
+  call tw_regsetoraddkey('RU', 'VUPO', 'vyzva-faze2', 'provuhr', 0, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda má být úètována úhrada za výzvu v 1.fázi');
+  call tw_regsetoraddkey('RU', 'VUKO', 'vyzva-faze2', 'provuhr', 0, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje, zda má být úètována úhrada za výzvu v 1.fázi');
+  
+  --#Typ úhrady za výzvu – 2.fáze#
+  call tw_regsetoraddkey('RU', 'vyzva-faze2', '*', 'tuhr', '', 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje typ úhrady za výzvy v 2.fázi');
+  
+  --#Lhùta splatnosti výzvy – 2.fáze#
+  call tw_regsetoraddkey('RU', 'PUFO', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');
+  call tw_regsetoraddkey('RU', 'SUFO', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');
+  call tw_regsetoraddkey('RU', 'PUPO', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');      
+  call tw_regsetoraddkey('RU', 'SUPO', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');
+  call tw_regsetoraddkey('RU', 'KOME', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');
+  call tw_regsetoraddkey('RU', 'VUFO', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');
+  call tw_regsetoraddkey('RU', 'VUPO', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');
+  call tw_regsetoraddkey('RU', 'VUKO', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');
+  call tw_regsetoraddkey('RU', '*', 'vyzva-faze2', 'lhutasplat', 3, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Parametr urèuje dobu mezi zpracováním výzvy 1.fáze a oèekávaným pøevodem do vymáhání. Nastavuje se poèet mìsícù.');
+  
+  --#Povolit vytvoøení opakované výzvy ke splacení pro osobu#
+  call tw_regsetoraddkey('RU', 'vyzva', 'tvorba', 'povolOpakovatVyzvu', 1, 1, 'Úvìr', 'Výzva ke splacení', 'Generovat výzvu pro roli ve fázi', 'Pokud je parametr nastaven na Ano, pak je možné tutéž osobu oslovit výzvou ke splacení v 1. i 2. fázi výzvy. Jinak to možné není.');
+  
+  -- prejmenovani
+  update tw_registr_cis set funkce='vyzva-faze1' where oblast='RU' and funkce='vyzva' and udaj='provuhr';
+  update tw_registr_cis set uloha='vyzva-faze1' where oblast='RU' and uloha='vyzva' and funkce='*' and udaj='tuhr';
+  update tw_registr_cis set funkce='vyzva-faze1' where oblast='RU' and funkce='vyzva' and udaj='lhutasplat';
+  
+ROLLBACK WORK;
+
+--End of A41340_RN00252592_3

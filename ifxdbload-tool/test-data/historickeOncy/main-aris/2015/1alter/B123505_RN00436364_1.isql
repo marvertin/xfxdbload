@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, B123505_RN00436364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+ALTER TABLE EU_ExpSml_Den DROP fixsazba,
+                          ADD hyposmernice   Integer,
+                          ADD supplrpsn   Double precision,
+                          ADD supplrpsnschv   Double precision,
+                          ADD extraexpenses   DECIMAL(16, 2),
+                          ADD extraexpensesschv   DECIMAL(16, 2),
+                          ADD CONSTRAINT CHECK (hyposmernice IN (0,1)) CONSTRAINT eu_expsml_den_djcx;
+
+CREATE TABLE ep_expsplspormodee_den (
+  serno   SERIAL NOT NULL,
+  id_index   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  refser   INTEGER,
+  refheadser   INTEGER,
+  expensetype   INTEGER,
+  expensetypetext   VARCHAR(255),
+  expenseamount   DECIMAL(16, 2),
+  expenseperiod   CHAR(1),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_expsplspormodee_den_pk ON ep_expsplspormodee_den(serno);
+ALTER TABLE ep_expsplspormodee_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_expsplspormodee_den_pk;
+
+ALTER TABLE eu_dodatek_den ADD   hyposmernice   Integer,
+                           ADD   CONSTRAINT CHECK (hyposmernice IN (0,1)) CONSTRAINT eu_dodatek_den_dndg;
+
+ROLLBACK WORK;
+
+--End of B123505_RN00436364_1

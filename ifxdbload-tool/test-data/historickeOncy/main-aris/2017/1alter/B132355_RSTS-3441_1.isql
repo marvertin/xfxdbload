@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B132355_RSTS-3441_1
+-- @TC:ONCE: DESCRIPTION = RN00458178-Dodatky - zrobustnění řešení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_dodatekhead_arch 
+  ADD jepohlposplat   Int before poruser,
+  ADD pohlposplat     Dec(16,2) before poruser;
+
+ALTER TABLE eu_dodatekhead_mat 
+  ADD jepohlposplat   Int before poruser,
+  ADD pohlposplat     Dec(16,2) before poruser;
+  
+ROLLBACK WORK;
+
+--End of B132355_RSTS-3441_1

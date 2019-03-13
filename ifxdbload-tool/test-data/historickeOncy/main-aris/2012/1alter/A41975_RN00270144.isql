@@ -1,0 +1,76 @@
+-- @TC:ONCE: ID = V2, A41975_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+BEGIN WORK;
+
+ALTER TABLE es_voptarif_cis
+    ADD textindikator   char(30)   BEFORE datod,
+    ADD minccfo         DECIMAL(16, 2)   BEFORE minvklad,
+    ADD maxccfo         DECIMAL(16, 2)   BEFORE minvklad,
+    ADD minccpo         DECIMAL(16, 2)   BEFORE minvklad,
+    ADD maxccpo         DECIMAL(16, 2)   BEFORE minvklad,
+    ADD povolennezlklient Integer   BEFORE mincczvyh,
+    ADD typuctu         CHAR(1)   BEFORE mincczvyh,
+    ADD narokovatsp     Integer   BEFORE mincczvyh,
+    ADD transucet       Integer   BEFORE mincczvyh,
+    ADD zvyhoduroceni   Integer   BEFORE mincczvyh,
+    ADD minzustatekucet DECIMAL(16, 2)   BEFORE mincczvyh,
+    ADD platbyzdarmacelk Integer   BEFORE mincczvyh,
+    ADD maxpocettransuctu Integer   DEFAULT 1 BEFORE mincczvyh,
+    ADD uzavprekluver   Integer   BEFORE mincczvyh,
+    MODIFY maxvek          Integer,
+    MODIFY odkldobazvyscc  Integer,
+    MODIFY odkldobasnizcc  Integer,
+    MODIFY odkldobazmtarif Integer,
+    MODIFY mindobapridel   Integer   NOT NULL,
+    MODIFY lhutaprideluver Integer   NOT NULL,
+    MODIFY lhutaprideluverlong Integer,
+    MODIFY zvyscc          Integer   NOT NULL,
+    MODIFY uctuhrprespor   Integer   NOT NULL,
+    MODIFY status          Integer DEFAULT 1  NOT NULL,
+    MODIFY pocprespvklad   Integer;
+
+ALTER TABLE es_voptarif_cis
+    ADD CONSTRAINT CHECK (typuctu in ('S','P')) CONSTRAINT es_voptarif_cis_c3,
+    ADD CONSTRAINT CHECK (transucet IN (0,1)) CONSTRAINT es_voptarif_cis_djav,
+    ADD CONSTRAINT CHECK (uzavprekluver IN (0,1)) CONSTRAINT es_voptarif_cis_djb0,
+    ADD CONSTRAINT CHECK (zvyhoduroceni IN (0,1)) CONSTRAINT es_voptarif_cis_djaw,
+    ADD CONSTRAINT CHECK (povolennezlklient IN (0,1)) CONSTRAINT es_voptarif_cis_djas,
+    ADD CONSTRAINT CHECK (narokovatsp IN (0,1)) CONSTRAINT es_voptarif_cis_djau;
+
+ALTER TABLE es_voptarif_acis
+    ADD textindikator   char(30)   BEFORE datod,
+    ADD minccfo         DECIMAL(16, 2)   BEFORE minvklad,
+    ADD maxccfo         DECIMAL(16, 2)   BEFORE minvklad,
+    ADD minccpo         DECIMAL(16, 2)   BEFORE minvklad,
+    ADD maxccpo         DECIMAL(16, 2)   BEFORE minvklad,
+    ADD povolennezlklient Integer   BEFORE mincczvyh,
+    ADD typuctu         CHAR(1)   BEFORE mincczvyh,
+    ADD narokovatsp     Integer   BEFORE mincczvyh,
+    ADD transucet       Integer   BEFORE mincczvyh,
+    ADD zvyhoduroceni   Integer   BEFORE mincczvyh,
+    ADD minzustatekucet DECIMAL(16, 2)   BEFORE mincczvyh,
+    ADD platbyzdarmacelk Integer   BEFORE mincczvyh,
+    ADD maxpocettransuctu Integer   DEFAULT 1 BEFORE mincczvyh,
+    ADD uzavprekluver   Integer   BEFORE mincczvyh,
+    MODIFY maxvek          Integer,
+    MODIFY odkldobazvyscc  Integer,
+    MODIFY odkldobasnizcc  Integer,
+    MODIFY odkldobazmtarif Integer,
+    MODIFY mindobapridel   Integer   NOT NULL,
+    MODIFY lhutaprideluver Integer   NOT NULL,
+    MODIFY lhutaprideluverlong Integer,
+    MODIFY zvyscc          Integer   NOT NULL,
+    MODIFY uctuhrprespor   Integer   NOT NULL,
+    MODIFY status          Integer DEFAULT 1  NOT NULL,
+    MODIFY pocprespvklad   Integer;
+
+ALTER TABLE es_voptarif_acis
+    ADD CONSTRAINT CHECK (transucet IN (0,1)) CONSTRAINT es_voptarif_acis_djc4,
+    ADD CONSTRAINT CHECK (uzavprekluver IN (0,1)) CONSTRAINT es_voptarif_acis_djc9,
+    ADD CONSTRAINT CHECK (zvyhoduroceni IN (0,1)) CONSTRAINT es_voptarif_acis_djc5,
+    ADD CONSTRAINT CHECK (povolennezlklient IN (0,1)) CONSTRAINT es_voptarif_acis_djc1,
+    ADD CONSTRAINT CHECK (splatkauzaklad in ('C','U')) CONSTRAINT es_voptarif_acis_c2,
+    ADD CONSTRAINT CHECK (narokovatsp IN (0,1)) CONSTRAINT es_voptarif_acis_djc3,
+    ADD CONSTRAINT CHECK (hodnoceni in ('U','H')) CONSTRAINT es_voptarif_acis_c1;
+
+ROLLBACK WORK;

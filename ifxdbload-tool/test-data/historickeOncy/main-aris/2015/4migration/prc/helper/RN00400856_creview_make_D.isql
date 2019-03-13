@@ -1,0 +1,126 @@
+create PROCEDURE RN00400856_creview_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _smlouva      dec(16,0);
+define _tsml         char(4);
+define _poradi       Int;
+define _id           Int; 
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00400856', 'RN00400856_creview', 'Migrace: pořadí creditreview');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+
+begin
+  on exception in (-206)
+  end exception;
+  DROP TABLE RN00400856_creview_temp;
+end;
+
+select smlouva, tsml, id, navuser
+from eu_creditreview
+into temp RN00400856_creview_temp;
+
+create index RN00400856_creview_temp_i1 on RN00400856_creview_temp(smlouva, tsml, navuser);
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  smlouva,  tsml
+   INTO  _ser, _smlouva, _tsml
+   FROM RN00400856_creview
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00400856_creview
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    let _poradi = 1;
+    
+    foreach 
+      select id
+      into  _id
+      from RN00400856_creview_temp
+      where smlouva = _smlouva
+        and tsml =_tsml
+      order by navuser
+      
+      update eu_creditreview
+      set poradi = _poradi
+      where id = _id;
+      
+      let _poradi = _poradi + 1;
+    end foreach;
+
+    --nastaví příznak zpracováno na 1
+    UPDATE RN00400856_creview SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+begin
+  on exception in (-206)
+  end exception;
+  DROP TABLE RN00400856_creview_temp;
+end;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

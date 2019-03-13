@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A40458_RN00241425_1
+-- @TC:ONCE: DESCRIPTION = Odpis a postoupení nevymáhaných a neklasifikovaných úvìrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE RU_Real_Mat ADD primyodpis Integer;
+ALTER TABLE RU_Real_Mat ADD CONSTRAINT (CHECK (primyodpis IN (0,1)) CONSTRAINT ru_real_mat_dv4a);
+
+ALTER TABLE RU_Real_Arch ADD primyodpis Integer;
+
+ROLLBACK WORK;
+
+--End of A40458_RN00241425_1

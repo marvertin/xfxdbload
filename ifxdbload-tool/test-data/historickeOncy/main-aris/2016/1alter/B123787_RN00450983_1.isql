@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B123787_RN00450983_1
+-- @TC:ONCE: DESCRIPTION = Úvěry PO: načítání dat trvá dlouho {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+
+-- ###############################################################
+--       eu_zajistvypb_den
+
+-- 4  eu_zajistvypb_den-2/2       [CREATE.INDEX]
+CREATE INDEX eu_zajistvypb_den_i1 ON eu_zajistvypb_den (idzajistvyph,poradizajist) ;
+
+-- ###############################################################
+--       eu_zajistvyph_den
+
+-- 5  eu_zajistvyph_den-1/3       [DROP.INDEX]
+/* Rusen index: CREATE INDEX "aris".euzajistvyphden_i_i1 ON eu_zajistvyph_den (smlouva,tsml)  */
+DROP INDEX euzajistvyphden_i_i1;
+
+
+-- 7  eu_zajistvyph_den-3/3       [CREATE.INDEX]
+CREATE INDEX eu_zajistvyph_den_i1 ON eu_zajistvyph_den (smlouva,tsml,poradiakt) ;
+
+
+ROLLBACK WORK;
+
+--End of B123787_RN00450983_1

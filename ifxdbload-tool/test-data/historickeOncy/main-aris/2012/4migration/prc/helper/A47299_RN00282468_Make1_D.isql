@@ -1,0 +1,143 @@
+create PROCEDURE A47299_RN00282468_Make1_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _smlouva         dec(16,0);
+define _tsml            char(4);
+define _datschval       date;
+define _datsml          date;
+define _skupina         int;
+define _variafixace     int;
+define _pocet           int;
+define _delka           int;
+define _delkafix        int;
+define _zacatekfix      date;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka ('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00282468');
+
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, smlouva, tsml, datschval, datsml, skupina
+    INTO _ser,_smlouva,_tsml,_datschval,_datsml,_skupina
+    FROM RN00282468
+    WHERE zprac < 0
+      ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00282468
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+
+    let _variafixace = null;
+
+    if _skupina in (1, 3) then
+      if _datschval between mdy(2, 4, 2004) and mdy(11, 28, 2010) then
+        let _variafixace = 2;
+      elif _datschval between mdy(11, 29, 2010) and mdy(6, 24, 2012) then
+        let _variafixace = 3;
+      elif _datschval >= mdy(6, 25, 2012) then
+        let _variafixace = 4;
+      end if;
+    
+      update RN00282468 set fixaceod = _datsml, 
+                            fixacedo = TW_AddDays(TW_AddYears(_datsml, 5), -1), 
+                            variafixace = _variafixace 
+       where ser = _ser;
+    elif _skupina = 2 then
+      select delkafix, zacatekfix into _delkafix, _zacatekfix from eu_urokfixace_kart 
+                                    where smlouva = _smlouva and tsml = _tsml 
+                                      and poradi = (select max(poradi) from eu_urokfixace_kart 
+                                                      where smlouva = _smlouva and tsml = _tsml);
+      if _delkafix = 3604 then
+        let _delkafix = 36;
+      elif _delkafix = 7204 then
+        let _delkafix = 72;
+      end if;
+      
+      let _delka = null;                                                      
+      select count(*) into _pocet from eu_variaurokfixace_cis where delka = _delkafix;
+      if _pocet <> 1 then
+        let _variafixace = 1;
+      else
+        select fixaceid, delka into _variafixace, _delka from eu_variaurokfixace_cis where delka = _delkafix;
+      end if;
+      
+      if _delka is null then
+        select delka into _delka from eu_variaurokfixace_cis where fixaceid = _variafixace;
+      end if
+      
+      update RN00282468 set fixaceod = _zacatekfix, 
+                            fixacedo = TW_AddMonths(_zacatekfix, _delka), 
+                            variafixace = _variafixace 
+       where ser = _ser;
+    end if;
+
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00282468 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--algoritmus dokonceni migrace
+--...
+
+
+--zápis o ukonèení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukonèení migrace/datové manipulace RN00282468');
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

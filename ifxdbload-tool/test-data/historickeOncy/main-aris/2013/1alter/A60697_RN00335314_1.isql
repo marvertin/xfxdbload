@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, A60697_RN00335314_1
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- ep_uhrzaklad_enum
+CREATE TABLE ep_uhrzaklad_enum (
+  zaklad   Integer NOT NULL,
+  popis   CHAR(160) NOT NULL,
+  poznamka   CHAR(160),
+  dostupmodel   Integer NOT NULL,
+  promenvcase   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (dostupmodel IN (0,1)) CONSTRAINT ep_uhrzaklad_enum_dbxg,
+  CHECK (promenvcase IN (0,1)) CONSTRAINT ep_uhrzaklad_enum_dbxh
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrzaklad_enum_pk ON ep_uhrzaklad_enum(zaklad);
+ALTER TABLE ep_uhrzaklad_enum ADD CONSTRAINT PRIMARY KEY(zaklad) CONSTRAINT ep_uhrzaklad_enum_pk;
+
+-- ep_uhrvlastnost_enum
+CREATE TABLE ep_uhrvlastnost_enum (
+  vlastnost   Integer NOT NULL,
+  popis   CHAR(160) NOT NULL,
+  dattyp   VARCHAR(255) NOT NULL,
+  poznamka   CHAR(160),
+  dostupmodel   Integer NOT NULL,
+  promenvcase   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (dostupmodel IN (0,1)) CONSTRAINT ep_uhrvlastnost_enum_dbxi,
+  CHECK (promenvcase IN (0,1)) CONSTRAINT ep_uhrvlastnost_enum_dbxj
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrvlastnost_enum_pk ON ep_uhrvlastnost_enum(vlastnost);
+ALTER TABLE ep_uhrvlastnost_enum ADD CONSTRAINT PRIMARY KEY(vlastnost) CONSTRAINT ep_uhrvlastnost_enum_pk;
+
+ROLLBACK WORK;
+
+--End of A60697_RN00335314_1

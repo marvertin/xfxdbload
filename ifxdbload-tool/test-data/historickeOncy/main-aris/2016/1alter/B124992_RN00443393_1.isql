@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B124992_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_zahrnutipohybucfmodel_cis 
+  ADD rpsntype   Char(2) BEFORE period,
+  ADD inversesign   Integer BEFORE note,
+  ADD CONSTRAINT CHECK (inversesign IN (0,1)) CONSTRAINT ep_zahrnutipohybucfmodel_cis_dw2v,
+  ADD CONSTRAINT (CHECK (rpsntype in ('SO', 'PU', 'SU')) CONSTRAINT ep_zahrnutipohybucfmodel_cis_c5);
+
+ALTER TABLE ep_zahrnutipohybucfmodel_acis 
+  ADD rpsntype   Char(2) BEFORE period,
+  ADD inversesign   Integer BEFORE note,
+  ADD CONSTRAINT CHECK (inversesign IN (0,1)) CONSTRAINT ep_zahrnutipohybucfmodel_acis_dw2x;
+
+ROLLBACK WORK;
+
+--End of B124992_RN00443393_1

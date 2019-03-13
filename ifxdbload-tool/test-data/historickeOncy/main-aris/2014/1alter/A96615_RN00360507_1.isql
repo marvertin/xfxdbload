@@ -1,0 +1,214 @@
+-- @TC:ONCE: ID = V2, A96615_RN00360507_1
+-- @TC:ONCE: DESCRIPTION = Zavedení blacklistů pro podporu řízení rizik {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE ep_rizsubjekttyp_cis (
+  serno   SERIAL NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  poznamka   CHAR(70),
+  udajpocet   Integer NOT NULL,
+  nazev1   CHAR(35),
+  nazev2   CHAR(35),
+  nazev3   CHAR(35),
+  nazev4   CHAR(35),
+  nazev5   CHAR(35),
+  nazev6   CHAR(35),
+  nazev7   CHAR(35),
+  nazev8   CHAR(35),
+  nazev9   CHAR(35),
+  nazev10   CHAR(35),
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_rizsubjekttyp_cis_dpzn
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_rizsubjekttyp_cis_pk ON ep_rizsubjekttyp_cis(serno);
+ALTER TABLE ep_rizsubjekttyp_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_rizsubjekttyp_cis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_rizsubjekttyp_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  poznamka   CHAR(70),
+  udajpocet   Integer NOT NULL,
+  nazev1   CHAR(35),
+  nazev2   CHAR(35),
+  nazev3   CHAR(35),
+  nazev4   CHAR(35),
+  nazev5   CHAR(35),
+  nazev6   CHAR(35),
+  nazev7   CHAR(35),
+  nazev8   CHAR(35),
+  nazev9   CHAR(35),
+  nazev10   CHAR(35),
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_rizsubjekttyp_acis_dpzn
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_rizsubjekttyp_acis_pk ON ep_rizsubjekttyp_acis(idarch);
+ALTER TABLE ep_rizsubjekttyp_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_rizsubjekttyp_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_rizsubjekt_mat (
+  serno   SERIAL NOT NULL,
+  reftyp   INTEGER NOT NULL,
+  poznamka   CHAR(70),
+  hodnota1   CHAR(35),
+  hodnota2   CHAR(35),
+  hodnota3   CHAR(35),
+  hodnota4   CHAR(35),
+  hodnota5   CHAR(35),
+  hodnota6   CHAR(35),
+  hodnota7   CHAR(35),
+  hodnota8   CHAR(35),
+  hodnota9   CHAR(35),
+  hodnota10   CHAR(35),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_rizsubjekt_mat_dq0p
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_rizsubjekt_mat_pk ON ep_rizsubjekt_mat(serno);
+ALTER TABLE ep_rizsubjekt_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_rizsubjekt_mat_pk;
+
+--FK
+CREATE INDEX ep_rizsubjekt_mat_i_f1 ON ep_rizsubjekt_mat(reftyp);
+ALTER TABLE ep_rizsubjekt_mat ADD CONSTRAINT FOREIGN KEY(reftyp) REFERENCES ep_rizsubjekttyp_cis(serno) CONSTRAINT ep_rizsubjekt_mat_f1;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_rizsubjekt_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  reftyp   INTEGER NOT NULL,
+  poznamka   CHAR(70),
+  hodnota1   CHAR(35),
+  hodnota2   CHAR(35),
+  hodnota3   CHAR(35),
+  hodnota4   CHAR(35),
+  hodnota5   CHAR(35),
+  hodnota6   CHAR(35),
+  hodnota7   CHAR(35),
+  hodnota8   CHAR(35),
+  hodnota9   CHAR(35),
+  hodnota10   CHAR(35),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_rizsubjekt_arch_dq0p
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_rizsubjekt_arch_pk ON ep_rizsubjekt_arch(idarch);
+ALTER TABLE ep_rizsubjekt_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_rizsubjekt_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_rizsubjekt_arch_i1 ON ep_rizsubjekt_arch(serno);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_rizsubjektkontr_den (
+  serno   SERIAL NOT NULL,
+  vysledek   Integer NOT NULL,
+  refrizsubjekt   INTEGER,
+  refzadost   INTEGER,
+  refosoba   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poznamka   VARCHAR(255),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_rizsubjektkontr_den_pk ON ep_rizsubjektkontr_den(serno);
+ALTER TABLE ep_rizsubjektkontr_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_rizsubjektkontr_den_pk;
+
+--FK
+CREATE INDEX ep_rizsubjektkontr_den_i_f1 ON ep_rizsubjektkontr_den(refrizsubjekt);
+ALTER TABLE ep_rizsubjektkontr_den ADD CONSTRAINT FOREIGN KEY(refrizsubjekt) REFERENCES ep_rizsubjekt_mat(serno) CONSTRAINT ep_rizsubjektkontr_den_f1;
+CREATE INDEX ep_rizsubjektkontr_den_i_f2 ON ep_rizsubjektkontr_den(refosoba);
+ALTER TABLE ep_rizsubjektkontr_den ADD CONSTRAINT FOREIGN KEY(refosoba) REFERENCES eo_osoba_mat(os) CONSTRAINT ep_rizsubjektkontr_den_f2;
+CREATE INDEX ep_rizsubjektkontr_den_i_f3 ON ep_rizsubjektkontr_den(smlouva,tsml);
+ALTER TABLE ep_rizsubjektkontr_den ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES ep_sml_mat(smlouva,tsml) CONSTRAINT ep_rizsubjektkontr_den_f3;
+
+--INDEXES
+CREATE INDEX ep_rizsubjektkontr_den_i1 ON ep_rizsubjektkontr_den(refzadost);
+
+--CHECKS
+ALTER TABLE ep_rizsubjektkontr_den
+ADD CONSTRAINT (CHECK (vysledek in (-1,0,1)) CONSTRAINT ep_rizsubjektkontr_den_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_prukaz_cis (
+  serno   SERIAL NOT NULL,
+  cislo   CHAR(20) NOT NULL,
+  refdruh   INTEGER NOT NULL,
+  datplatod   DATE NOT NULL,
+  datplatdo   DATE,
+  datnardrzitel   DATE,
+  poznamka   CHAR(70),
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_prukaz_cis_dpyr
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_prukaz_cis_pk ON ep_prukaz_cis(serno);
+ALTER TABLE ep_prukaz_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_prukaz_cis_pk;
+
+--FK
+CREATE INDEX ep_prukaz_cis_i_f1 ON ep_prukaz_cis(refdruh);
+ALTER TABLE ep_prukaz_cis ADD CONSTRAINT FOREIGN KEY(refdruh) REFERENCES eo_druhprukaz_cis(druhprukaz) CONSTRAINT ep_prukaz_cis_f1;
+
+--INDEXES
+CREATE INDEX ep_prukaz_cis_i1 ON ep_prukaz_cis(cislo);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_prukaz_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  cislo   CHAR(20) NOT NULL,
+  refdruh   INTEGER NOT NULL,
+  datplatod   DATE NOT NULL,
+  datplatdo   DATE,
+  datnardrzitel   DATE,
+  poznamka   CHAR(70),
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_prukaz_acis_dpyr
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_prukaz_acis_pk ON ep_prukaz_acis(idarch);
+ALTER TABLE ep_prukaz_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_prukaz_acis_pk;
+
+--INDEXES
+CREATE INDEX ep_prukaz_acis_i1 ON ep_prukaz_acis(serno);
+
+ROLLBACK WORK;
+
+--End of A96615_RN00360507_1

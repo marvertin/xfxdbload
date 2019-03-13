@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A47619_RN00305361_6
+-- @TC:ONCE: DESCRIPTION = Lokaliace problému RN00305285 {DEFECT}
+
+
+BEGIN WORK;
+
+create procedure A47619_RN00305361_6_dropprc()
+begin
+  on exception in (-674)
+  end exception with resume
+    DROP PROCEDURE EP_PotvInkasoSys;
+    DROP PROCEDURE EP_ProvInkasoSys;
+  end; 
+end procedure;
+
+call A47619_RN00305361_6_dropprc();
+
+drop procedure A47619_RN00305361_6_dropprc;
+
+
+ROLLBACK WORK;
+
+--End of A47619_RN00305361_6

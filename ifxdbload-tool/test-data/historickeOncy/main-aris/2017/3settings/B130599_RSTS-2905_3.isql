@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B130599_RSTS-2905_3
+-- @TC:ONCE: DESCRIPTION = IFRS - Doplnění polí souvisejících s projektem IFRS9_IRBA
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, poznamka, platnost) VALUES('EP', 140, 'Zpracování DPD', null, 1);
+
+ROLLBACK WORK;
+
+--End of B130599_RSTS-2905_3

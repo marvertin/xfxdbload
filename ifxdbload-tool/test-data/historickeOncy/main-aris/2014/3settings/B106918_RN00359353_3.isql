@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B106918_RN00359353_3
+-- @TC:ONCE: DESCRIPTION = Změna vyhodnocování závazků osob pro ÚŽ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update EO_VztahOs_Cis set symetricky = 1 where typvztah in ('ES', 'PP');
+
+ROLLBACK WORK;
+
+--End of B106918_RN00359353_3

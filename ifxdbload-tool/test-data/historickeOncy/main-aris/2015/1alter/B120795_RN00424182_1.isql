@@ -1,0 +1,105 @@
+-- @TC:ONCE: ID = V2, B120795_RN00424182_1
+-- @TC:ONCE: DESCRIPTION = Změna struktury souboru CC {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       ao_blokace_kart
+
+-- 40  ao_blokace_kart-1/10       [DROP.CONSTRAINT_PRIMARY_KEY]
+/* Rusen constraint: PRIMARY KEY (konto,tko,porcis)  CONSTRAINT "aris".ao_blokace_kart_p */
+ALTER TABLE ao_blokace_kart DROP CONSTRAINT ao_blokace_kart_p;
+
+-- 41  ao_blokace_kart-2/10       [CREATE.COLUMN]
+/* Sloupec nema default a ma byt NOT NULL, bude pozdeji zmenen */
+/* Sloupec nema default a ma byt NOT NULL, bude pozdeji zmenen */
+ALTER TABLE ao_blokace_kart
+    ADD serno           INTEGER   BEFORE konto,
+    ADD refduvod        INTEGER   BEFORE portime;
+                     
+-- 45  ao_blokace_kart-6/10       [CREATE.INDEX]
+CREATE INDEX ao_blokace_kart_i_f1 ON ao_blokace_kart (refduvod) ;
+
+
+-- 48  ao_blokace_kart-9/10       [CREATE.CONSTRAINT_UNIQUE]
+ALTER TABLE ao_blokace_kart
+    ADD CONSTRAINT UNIQUE (konto,tko,porcis)  CONSTRAINT ao_blokace_kart_u1;
+
+-- ###############################################################
+--       ao_duvodblokace_acis
+
+-- 44  ao_duvodblokace_acis-1/3       [CREATE.TABLE]
+CREATE TABLE ao_duvodblokace_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    kod             CHAR(20)  ,
+    nazev           CHAR(40)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    systemovy       Integer DEFAULT 0 NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    CHECK (platnost IN (0,1)) CONSTRAINT ao_duvodblokace_acis_diqt,
+    CHECK (systemovy IN (0,1)) CONSTRAINT ao_duvodblokace_acis_dir0
+) LOCK MODE ROW
+;
+
+-- 45  ao_duvodblokace_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX ao_duvodblokace_acis_pk ON ao_duvodblokace_acis (idarch) ;
+
+-- 46  ao_duvodblokace_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ao_duvodblokace_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT ao_duvodblokace_acis_pk;
+
+-- ###############################################################
+--       ao_duvodblokace_cis
+
+-- 47  ao_duvodblokace_cis-1/5       [CREATE.TABLE]
+CREATE TABLE ao_duvodblokace_cis (
+    serno           SERIAL   NOT NULL,
+    kod             CHAR(20)  ,
+    nazev           CHAR(40)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    systemovy       Integer DEFAULT 0 NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    CHECK (platnost IN (0,1)) CONSTRAINT ao_duvodblokace_cis_diqn,
+    CHECK (systemovy IN (0,1)) CONSTRAINT ao_duvodblokace_cis_dir1
+) LOCK MODE ROW
+;
+
+-- 48  ao_duvodblokace_cis-2/5       [CREATE.INDEX]
+CREATE unique INDEX ao_duvodblokace_cis_pk ON ao_duvodblokace_cis (serno) ;
+
+-- 49  ao_duvodblokace_cis-3/5       [CREATE.INDEX]
+CREATE unique INDEX ao_duvodblokace_cis_u1 ON ao_duvodblokace_cis (nazev) ;
+
+-- 50  ao_duvodblokace_cis-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ao_duvodblokace_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT ao_duvodblokace_cis_pk;
+
+-- 51  ao_duvodblokace_cis-5/5       [CREATE.CONSTRAINT_UNIQUE]
+ALTER TABLE ao_duvodblokace_cis
+    ADD CONSTRAINT UNIQUE (nazev)  CONSTRAINT ao_duvodblokace_cis_u1;
+
+-- ###############################################################
+--       cz_zadost_den
+
+-- 2  cz_zadost_den-1/6       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (typ IN ('S' ,'I' ,'O' )) CONSTRAINT "aris".cz_zadost_den_c2 */
+ALTER TABLE cz_zadost_den DROP CONSTRAINT cz_zadost_den_c2;
+
+
+-- 6  cz_zadost_den-5/6       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE cz_zadost_den
+    ADD refblokace      Integer;
+
+-- 7  cz_zadost_den-6/6       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE cz_zadost_den
+    ADD CONSTRAINT CHECK (typ  IN ('S','I','O','B')) CONSTRAINT cz_zadost_den_c1;
+
+ROLLBACK WORK;
+
+--End of B120795_RN00424182_1

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A42098_RN00275819_3
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'vstupParam', 'tahloCCmin', 50000, 1, 
+'Podpora pro produkt', 'Modelování', 'Modelování', 'Dolní hranice táhla pro nastavení CÈ v modelování CIBIS-Web');
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'vstupParam', 'tahloCCmax', 2000000, 1, 
+'Podpora pro produkt', 'Modelování', 'Modelování', 'Horní hranice táhla pro nastavení CÈ v modelování CIBIS-Web');
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'vstupParam', 'tahloCCminKrok', 5000, 1, 
+'Podpora pro produkt', 'Modelování', 'Modelování', 'Minimální krok pøi pohybu táhlem pro nastavení CÈ v modelování CIBIS-Web');
+
+ROLLBACK WORK;
+
+--End of A42098_RN00275819_3

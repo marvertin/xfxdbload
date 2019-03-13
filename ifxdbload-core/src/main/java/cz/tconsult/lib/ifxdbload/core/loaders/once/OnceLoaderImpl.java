@@ -1,5 +1,6 @@
 package cz.tconsult.lib.ifxdbload.core.loaders.once;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,14 +54,39 @@ public class OnceLoaderImpl implements OnceLoader {
 
   @Override
   public void load(final List<ParseredSource> pss) {
+    _load(pss.stream().map(OnceScript::new).collect(Collectors.toList()));
+  }
+
+  private void _load(final List<OnceScript> pss) {
     final String sss = checksums.entrySet().stream().map(Object::toString).collect(Collectors.joining("\n"));
-    System.out.println(sss);
+    //System.out.println(sss);
 
     System.out.println("---------------------------------------------------");
-    pss.sort((x,y) -> x.getFileNameOnly().compareTo(y.getFileNameOnly()));
+    Collections.sort(pss);
 
-    for (final ParseredSource ps : pss) {
-      System.out.println(ps.getFileNameOnly());
+    for (final OnceScript once : pss) {
+      final String scriptid = once.getScriptId();
+
+      //      final boolean ignorovatChecksum =  once.getStatements().stream().flatMap(stm -> stm.getDirectives().stream()).filter(dir -> dir.getKey().equals("IGNORE_CHECKSUM")).findFirst().isPresent();
+      //      ps.getStatements().stream().forEach(stm -> {
+      //      });
+      //      ps.getStatements().stream().flatMap(stm -> stm.getDirectives().stream()).forEach(dir -> {
+      //        // System.out.println("DIRENKA: " + dir.getKey());
+      //
+      //      });
+
+      final Long checksum = checksums.get(scriptid);
+      if (checksum == null) {
+        System.out.println("NEZAVEDEN:        " + scriptid);
+      } else {
+        if (once.getGlobalDirectives().isIgnoreChecksum()) {
+          System.out.println("IGNOROVAT:       " + scriptid);
+        } else if (once.verify(checksum) ) {
+          System.out.println("OK:              " + scriptid);
+        } else {
+          System.out.println("!!!!BAD!!!       " + scriptid);
+        }
+      }
     }
     //TODO [veverka] implementuj - vygenerovana metoda [veverka 8:33:37]
 

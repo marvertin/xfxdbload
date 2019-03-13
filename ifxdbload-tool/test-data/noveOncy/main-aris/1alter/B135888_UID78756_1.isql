@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135888_UID78756_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24997: Zavést číselník "Druh dokladu pro ÚŽ" {STORY}
+
+
+BEGIN WORK;
+
+CREATE UNIQUE INDEX eo_druhprukazuz_cis_u1 ON eo_druhprukazuz_cis(nazev);
+ALTER TABLE eo_druhprukazuz_cis ADD CONSTRAINT (UNIQUE (nazev) CONSTRAINT eo_druhprukazuz_cis_u1);
+
+ROLLBACK WORK;
+
+--End of B135888_UID78756_1

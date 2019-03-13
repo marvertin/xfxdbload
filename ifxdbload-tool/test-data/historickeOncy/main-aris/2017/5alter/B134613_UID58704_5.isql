@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B134613_UID58704_5
+-- @TC:ONCE: DESCRIPTION = RSTS-15028: IFRS - bEIR {DEFECT}
+
+
+BEGIN WORK;
+
+alter table ep_splspormoderrbody_den drop constraint ep_splspormoderrbody_den_f1;
+alter table ep_splspormoderrbody_den drop constraint ep_splspormoderrbody_den_pk;
+drop index ep_splspormoderrbody_den_i_f1;
+drop index ep_splspormoderrbody_den_pk;
+
+alter table ep_splspormoderrmsg_den drop constraint ep_splspormoderrmsg_den_f1;
+alter table ep_splspormoderrmsg_den drop constraint ep_splspormoderrmsg_den_pk;
+drop index ep_splspormoderrmsg_den_i_f1;
+drop index ep_splspormoderrmsg_den_pk;
+
+alter table ep_splspormoderr_den drop constraint ep_splspormoderr_den_f1;
+alter table ep_splspormoderr_den drop constraint ep_splspormoderr_den_pk;
+drop index ep_splspormoderr_den_i_f1;
+drop index ep_splspormoderr_den_pk;
+
+
+alter table ep_splspormoderr_den type (RAW);
+alter table ep_splspormoderrmsg_den type (RAW);
+alter table ep_splspormoderrbody_den type (RAW);
+
+ROLLBACK WORK;
+
+--End of B134613_UID58704_5

@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, B106607_RN00311507_1-ukolovnik_nepovinna_uloha
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+Alter Table EP_UlohaUkol_Mat  Modify refuloha Integer;
+Alter Table EP_UlohaUkol_Arch Modify refuloha Integer;
+
+ROLLBACK WORK;
+--End of B106607_RN00311507_1-ukolovnik_nepovinna_uloha

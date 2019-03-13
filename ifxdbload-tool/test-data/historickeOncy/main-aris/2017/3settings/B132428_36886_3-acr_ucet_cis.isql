@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B132428_36886_3-acr_ucet_cis
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE ACR_Ucet_Cis SET ucet = 226131 WHERE  tsml = 'SSFO' AND mapkod = 5 AND typobj = 'U';
+
+UPDATE ACR_Ucet_Cis SET ucet = 226136 WHERE  tsml = 'SSFO' AND mapkod = 4 AND typobj = 'P';
+
+UPDATE ACR_Ucet_Cis SET ucet = 226136 WHERE  tsml = 'SSFO' AND mapkod = 5 AND typobj = 'P';
+
+UPDATE ACR_Ucet_Cis SET ucet = 226138 WHERE  tsml = 'SSFO' AND mapkod = 4 AND typobj = 'A';
+
+UPDATE ACR_Ucet_Cis SET ucet = 226138 WHERE  tsml = 'SSFO' AND mapkod = 5 AND typobj = 'A';
+
+UPDATE ACR_Ucet_Cis SET ucet = 218744 WHERE  tsml = 'PUPO' AND mapkod = '0_D_PN_VU' AND typobj = 'P';
+
+UPDATE ACR_Ucet_Cis SET ucet = 242614 WHERE  tsml = 'PUPO' AND mapkod = '2_X_PZ_PU' AND typobj = 'P';
+
+UPDATE ACR_Ucet_Cis SET ucet = 242615 WHERE  tsml = 'PUPO' AND mapkod = '2_X_PZ_PU' AND typobj = 'A';
+
+UPDATE ACR_Ucet_Cis SET ucet = 244743 WHERE  tsml = 'PUPO' AND mapkod = '4_X_PN_VU' AND typobj = 'U';
+
+
+
+ROLLBACK WORK;
+
+--End of B132428_36886_3-acr_ucet_cis

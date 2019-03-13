@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A42728_RN00238704
+-- @TC:ONCE: DESCRIPTION = Zmìny v CBS a skóringu. (Optimalizace migrace, fáze dvì)
+
+BEGIN WORK;
+
+CREATE INDEX eo_fo_arch_i1 ON eo_fo_arch(rc);
+CREATE INDEX rz_real_arch_i1 ON rz_real_arch(smlouva, tsml);
+
+ROLLBACK WORK;

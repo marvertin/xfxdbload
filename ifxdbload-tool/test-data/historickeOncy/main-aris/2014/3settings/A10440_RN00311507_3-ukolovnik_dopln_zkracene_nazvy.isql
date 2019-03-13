@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A10440_RN00311507_3-ukolovnik_dopln_zkracene_nazvy
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+Update EP_UlohaFunkce_Cis Set nazev = 'Zadat splátkový kalendář / zpeněžení majetkové podstaty' Where id = 'ZADKALZPEN';
+
+Update EP_UkolTyp_Cis Set nazev = 'Kontrola stavu insolvenčního řízení bez úpadku, odmítnutí nebo ukončení' Where nazev = 'Kontrola stavu insolvenčního řízení';
+Update EP_UkolTyp_Cis Set nazev = 'Termín pro podání přihlášky do insolvenčního řízení'                     Where nazev = 'Termín pro podání přihlášky do inso';
+Update EP_UkolTyp_Cis Set nazev = 'Kontrola první splátky dle splátkového kalendáře'                        Where nazev = 'Kontrola první splátky dle splátkov';
+Update EP_UkolTyp_Cis Set nazev = 'Kontrola plnění splátkového kalendáře'                                   Where nazev = 'Kontrola plnění splátkového kalendá';
+Update EP_UkolTyp_Cis Set nazev = 'Kontrolní termín pro pokyn zajištěného věřitele'                         Where nazev = 'Kontrolní termín pro pokyn zajištěn';
+Update EP_UkolTyp_Cis Set nazev = 'Konečný termín pro pokyn zajištěného věřitele'                           Where nazev = 'Konečný termín pro pokyn zajištěnéh';
+Update EP_UkolTyp_Cis Set nazev = 'Termín pro skončení insolvenčního řízení'                                Where nazev = 'Termín pro skončení insolvenčního ř';
+Update EP_UkolTyp_Cis Set nazev = 'Termín pro podání návrhu na nařízení exekuce'                            Where nazev = 'Termín pro podání návrhu na nařízen';
+
+ROLLBACK WORK;
+--End of A10440_RN00311507_3-ukolovnik_dopln_zkracene_nazvy

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A47166_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù, exporty
+
+BEGIN WORK;
+
+  ALTER TABLE EU_ExpZaj_Den MODIFY pvarianta INT;
+  ALTER TABLE EU_ExpZaj_Den ADD prozhdatumpoj DATE BEFORE pmena;
+
+ROLLBACK WORK;
+
+--End of A47166_RN00282474_1

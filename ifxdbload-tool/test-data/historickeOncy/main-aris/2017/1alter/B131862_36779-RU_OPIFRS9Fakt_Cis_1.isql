@@ -1,0 +1,60 @@
+-- @TC:ONCE: ID = V2, B131862_36779-RU_OPIFRS9Fakt_Cis_1
+-- @TC:ONCE: DESCRIPTION = IMPL: číselníky OP, parametrizace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE ru_opifrs9fakt_cis (
+  serno   SERIAL NOT NULL,
+  stadiumifrs   Integer NOT NULL,
+  typdluhu  Integer NOT NULL,
+  pouzitbeel   Integer NOT NULL,
+  faktorop   decimal(7,4),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_opifrs9fakt_cis_pk ON ru_opifrs9fakt_cis(serno);
+ALTER TABLE ru_opifrs9fakt_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_opifrs9fakt_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ru_opifrs9fakt_cis
+ADD CONSTRAINT (CHECK (stadiumifrs IN(1, 2, 3)) CONSTRAINT ru_opifrs9fakt_cis_c1),
+ADD CONSTRAINT (CHECK (pouzitbeel IN(0, 1)) CONSTRAINT ru_opifrs9fakt_cis_c3);
+
+
+----------------------------------------------------------------
+CREATE TABLE ru_opifrs9fakt_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  stadiumifrs   Integer NOT NULL,
+  typdluhu   Integer NOT NULL,
+  pouzitbeel   Integer NOT NULL,
+  faktorop   decimal(7,4),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_opifrs9fakt_acis_pk ON ru_opifrs9fakt_acis(idarch);
+ALTER TABLE ru_opifrs9fakt_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ru_opifrs9fakt_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+ROLLBACK WORK;
+
+--End of B131862_36779-RU_OPIFRS9Fakt_Cis_1

@@ -1,0 +1,74 @@
+-- @TC:ONCE: ID = V2, A46975_RN00292084_1
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+DROP TRIGGER ep_paramsplac_acis_d;
+DROP TRIGGER ep_paramsplac_acis_u;
+
+DROP INDEX ep_paramsplac_acis_pk;
+ALTER TABLE ep_paramsplac_acis DROP CONSTRAINT ep_paramsplac_acis_pk;
+
+RENAME TABLE ep_paramsplac_acis TO ep_parammoduhr_acis;
+
+CREATE UNIQUE INDEX ep_parammoduhr_acis_pk ON ep_parammoduhr_acis(idarch);
+ALTER TABLE ep_parammoduhr_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_parammoduhr_acis_pk;
+
+DROP TRIGGER ep_paramsplac_cis_i;
+DROP TRIGGER ep_paramsplac_cis_u;
+
+DROP INDEX ep_paramsplac_cis_pk;
+ALTER TABLE ep_paramsplac_cis DROP CONSTRAINT ep_paramsplac_cis_pk;
+
+ALTER TABLE ep_paramsplac_cis 
+  DROP CONSTRAINT ep_paramsplac_cis_de7n,
+  DROP CONSTRAINT ep_paramsplac_cis_de7o,
+  DROP CONSTRAINT ep_paramsplac_cis_de7p,
+  DROP CONSTRAINT ep_paramsplac_cis_deco,
+  DROP CONSTRAINT ep_paramsplac_cis_decp,
+  DROP CONSTRAINT ep_paramsplac_cis_de7q,
+  DROP CONSTRAINT ep_paramsplac_cis_de7r,
+  DROP CONSTRAINT ep_paramsplac_cis_de7s,
+  DROP CONSTRAINT ep_paramsplac_cis_de7t,
+  DROP CONSTRAINT ep_paramsplac_cis_de7v,
+  DROP CONSTRAINT ep_paramsplac_acis_decp,
+  DROP CONSTRAINT ep_paramsplac_acis_de7v,
+  DROP CONSTRAINT ep_paramsplac_acis_deco,
+  DROP CONSTRAINT ep_paramsplac_acis_de7t,
+  DROP CONSTRAINT ep_paramsplac_acis_de7r,
+  DROP CONSTRAINT ep_paramsplac_acis_de7s,
+  DROP CONSTRAINT ep_paramsplac_acis_de7p,
+  DROP CONSTRAINT ep_paramsplac_acis_de7q,
+  DROP CONSTRAINT ep_paramsplac_acis_de7n,
+  DROP CONSTRAINT ep_paramsplac_acis_de7o;
+
+ALTER TABLE ep_paramsplac_cis 
+  DROP posunzahcerp,
+  DROP variantasplpoprvcerp,
+  DROP posunzahsplpoprvcerp,
+  DROP posunzahdospor,
+  DROP periodaspl,
+  DROP povoleniodklsplpocerp,
+  DROP delkaodklsplpoprvcerp;
+
+RENAME TABLE ep_paramsplac_cis TO ep_parammoduhr_cis;
+
+CREATE UNIQUE INDEX ep_parammoduhr_cis_pk ON ep_parammoduhr_cis(id);
+ALTER TABLE ep_parammoduhr_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ep_parammoduhr_cis_pk;
+
+ALTER TABLE ep_parammoduhr_cis 
+  ADD CONSTRAINT CHECK (zappoplzauzavsporsml IN (0,1)) CONSTRAINT ep_parammoduhr_cis_de7n,
+  ADD CONSTRAINT CHECK (zappoplzavedspor IN (0,1)) CONSTRAINT ep_parammoduhr_cis_de7o,
+  ADD CONSTRAINT CHECK (zappoplzavypisspor IN (0,1)) CONSTRAINT ep_parammoduhr_cis_de7p,
+  ADD CONSTRAINT CHECK (zappoplzazmenucc IN (0,1)) CONSTRAINT ep_parammoduhr_cis_deco,
+  ADD CONSTRAINT CHECK (zappoplzazmenutarifu IN (0,1)) CONSTRAINT ep_parammoduhr_cis_decp,
+  ADD CONSTRAINT CHECK (zappoplzauzavuvsml IN (0,1)) CONSTRAINT ep_parammoduhr_cis_de7q,
+  ADD CONSTRAINT CHECK (zappoplzaveduv IN (0,1)) CONSTRAINT ep_parammoduhr_cis_de7r,
+  ADD CONSTRAINT CHECK (zappoplzavypisuv IN (0,1)) CONSTRAINT ep_parammoduhr_cis_de7s,
+  ADD CONSTRAINT CHECK (zappojuniqa IN (0,1)) CONSTRAINT ep_parammoduhr_cis_de7t,
+  ADD CONSTRAINT CHECK (platnost IN (0,1)) CONSTRAINT ep_parammoduhr_cis_de7v;
+
+ROLLBACK WORK;
+
+--End of A46975_RN00292084_1

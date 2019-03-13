@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A49733_RN00323807_3
+-- @TC:ONCE: DESCRIPTION = Nastavení èísla souboru dávky CC {DEFECT}
+
+
+BEGIN WORK;
+
+
+--#rozúètovat dávku CC automaticky#
+call TW_RegSetOrAddKey('CC','CCProcess','*','poslCisOdeslPrior',(SELECT fname FROM cc_davka_prot WHERE davka = (SELECT MAX(davka) FROM cc_davka_prot where smer = 'I' and stav = 2  and isprior = 1)),
+     0,'Platební styk','Mezibankovní platba','CC Process','Èíslo poslední odeslané prioritní dávky',1);
+
+--#maximální poèet položek v prioritní dávce#
+call TW_RegSetOrAddKey('CC','CCProcess','*','poslCisOdeslNeprior',(SELECT fname FROM cc_davka_prot WHERE davka = (SELECT MAX(davka) FROM cc_davka_prot where smer = 'I' and stav = 2  and isprior = 0)),0,
+                       'Platební styk','Mezibankovní platba','CC Process','Èíslo poslední odeslané neprioritní dávky',1);
+
+
+ROLLBACK WORK;
+
+--End of A49733_RN00323807_3

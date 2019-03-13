@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, A41730_RN00275819_Sporeni2
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - Main / Spoøení
+
+BEGIN WORK;
+
+-- 1  bsavingrqreg-1/1       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE bsavingrqreg
+    ADD zadost          INTEGER ;
+    
+ALTER TABLE ep_typzadost_cis
+    MODIFY zpusob          CHAR(1) DEFAULT 'A'  NOT NULL,
+    MODIFY zpusobevid      CHAR(1) DEFAULT 'A';
+         
+-- 2  ep_zadkomkanal-1/1       [ALTER.COLUMN]ALTER TABLE ep_zadkomkanal     MODIFY kanal           Integer,     MODIFY os              Integer,     MODIFY typkom          Integer,     MODIFY adresa          CHAR(45);  -- 3  ep_zadosoba-1/1       [ALTER.COLUMN]ALTER TABLE ep_zadosoba     MODIFY stat            CHAR(2) DEFAULT 'CZ';  -- 4  ep_zadrole-1/1       [ALTER.COLUMN]ALTER TABLE ep_zadrole    MODIFY stat            CHAR(2) DEFAULT 'CZ'; -- 1  ep_typzadost_acis-1/3       [CREATE.TABLE]
+CREATE TABLE ep_typzadost_acis (
+    idarch          SERIAL  NOT NULL,
+    typzadost       CHAR(1)  ,
+    text            CHAR(35)  ,
+    zpracdavka      Integer DEFAULT 1 ,
+    zpusob          CHAR(1) DEFAULT 'A' ,
+    zpusobevid      CHAR(1) DEFAULT 'A' ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1 ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    refuser         CHAR(20) DEFAULT USER ,
+    CHECK (platnost IN (0,1)) CONSTRAINT ep_typzadost_acis_dk1t
+) LOCK MODE ROW
+;
+
+-- 2  ep_typzadost_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX ep_typzadost_acis_pk ON ep_typzadost_acis (idarch) ;
+
+-- 3  ep_typzadost_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_typzadost_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT ep_typzadost_acis_pk;
+ 
+ROLLBACK WORK; 

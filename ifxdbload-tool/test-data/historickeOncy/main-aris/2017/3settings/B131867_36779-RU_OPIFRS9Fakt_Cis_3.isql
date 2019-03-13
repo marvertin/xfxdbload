@@ -1,0 +1,58 @@
+-- @TC:ONCE: ID = V2, B131867_36779-RU_OPIFRS9Fakt_Cis_3
+-- @TC:ONCE: DESCRIPTION = IMPL: číselníky OP, parametrizace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (1, 7, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (1, 8, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (1, 0, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (1, 1, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (1, 2, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (1, 3, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (1, 6, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (1, 5, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (2, 7, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (2, 8, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (2, 0, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (2, 1, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (2, 2, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (2, 3, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (2, 6, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (2, 5, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (3, 7, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (3, 8, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (3, 0, 1, null);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (3, 1, 1, null);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (3, 2, 0, 0);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (3, 3, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (3, 6, 0, 1);
+INSERT INTO RU_OPIFRS9Fakt_Cis(stadiumifrs, typdluhu, pouzitbeel, faktorop)
+VALUES (3, 5, 0, 0);
+
+ROLLBACK WORK;
+
+--End of B131867_36779-RU_OPIFRS9Fakt_Cis_3

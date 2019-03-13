@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B131855_UID30974_1-extraexpense
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_extraExpense 
+  ADD expenseValidFrom DATE,
+  ADD expenseValidTo DATE;
+
+ROLLBACK WORK;
+
+--End of B131855_UID30974_1-extraexpense

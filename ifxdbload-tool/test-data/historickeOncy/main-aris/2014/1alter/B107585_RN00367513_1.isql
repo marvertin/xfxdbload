@@ -1,0 +1,49 @@
+-- @TC:ONCE: ID = V2, B107585_RN00367513_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření evidence specifických podmínek {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_specpodm_cis
+    ADD nedzaloha       Integer   BEFORE navuser;
+
+ALTER TABLE eu_specpodm_cis
+    ADD CONSTRAINT CHECK (nedzaloha IN (0,1)) CONSTRAINT eu_specpodm_cis_dl0q;
+
+ALTER TABLE eu_specpodm_acis
+    ADD nedzaloha       Integer   BEFORE navuser;
+
+ALTER TABLE eu_specpodm_acis
+    ADD CONSTRAINT CHECK (nedzaloha IN (0,1)) CONSTRAINT eu_specpodm_acis_dl0r;
+
+ALTER TABLE eu_specpodm_mat
+    ADD nedzaloha       DECIMAL(16,2)   BEFORE navuser;
+
+ALTER TABLE eu_specpodm_arch
+    ADD nedzaloha       DECIMAL(16,2)   BEFORE navuser;
+
+ALTER TABLE eu_expspecpodm_den
+    ADD nedzaloha       DECIMAL(16,2);   
+
+ALTER TABLE eu_expupspecpodm_den
+    ADD nedzaloha_1       DECIMAL(16,2) BEFORE id_2;
+
+ALTER TABLE eu_expupspecpodm_den
+    ADD nedzaloha_2       DECIMAL(16,2) BEFORE id_3;
+
+ALTER TABLE eu_expupspecpodm_den
+    ADD nedzaloha_3       DECIMAL(16,2) BEFORE id_4;
+
+ALTER TABLE eu_expupspecpodm_den
+    ADD nedzaloha_4       DECIMAL(16,2)  BEFORE id_5;
+    
+ALTER TABLE eu_expupspecpodm_den
+    ADD nedzaloha_5       DECIMAL(16,2) BEFORE nazevmajitel;
+                
+ALTER TABLE eu_upspecpodmb_kart
+    ADD nedzaloha       DECIMAL(16,2)   BEFORE reftime;
+
+
+ROLLBACK WORK;
+
+--End of B107585_RN00367513_1

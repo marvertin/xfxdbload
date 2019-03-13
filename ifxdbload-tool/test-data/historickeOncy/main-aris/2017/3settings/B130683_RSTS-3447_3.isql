@@ -1,0 +1,50 @@
+-- @TC:ONCE: ID = V2, B130683_RSTS-3447_3
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+BEGIN WORK;
+
+--Číselník typů v Provozní deník
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 248, 'DSTI žádosti: <číslo_žádosti>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 249, 'DTI žádosti: <číslo_žádosti>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 250, 'DSTI osoby: <číslo_žádosti>; osoba <ID osoby>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 251, 'DTI osoby: <číslo_žádosti>; osoba <ID osoby>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 252, 'Min. výše příjmu EJ žádosti: <číslo_žádosti>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 253, 'Min. výše příjmu EJ osoby: <číslo_žádosti>; osoba <ID osoby>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 254, 'Věk k datu splatnosti žádosti: <číslo_žádosti>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 255, 'Věk k datu splatnosi osoby: <číslo_žádosti>; osoba <ID osoby>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 256, 'Délka trvání úvěru žádosti: <číslo_žádosti>', 1)
+;
+insert into tw_prov_typ_cis(okruh, typ, popis, platnost)
+VALUES ('EU', 257, 'Délka trvání úvěru osoby: <číslo_žádosti>; osoba <ID osoby>', 1)
+;
+
+ROLLBACK WORK;
+
+--End of B130683_RSTS-3447_3
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B134866_UID64228_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17898: Úvěrové přílohy - parametrizace {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE es_priloha_acis DROP CONSTRAINT es_priloha_acis_c1;
+
+ALTER TABLE es_priloha_cis DROP CONSTRAINT es_priloha_cis_c1;
+
+ALTER TABLE es_priloha_cis MODIFY (
+    ukon   CHAR(1) NOT NULL
+);
+
+ALTER TABLE es_priloha_cis ADD CONSTRAINT (CHECK (ukon in ('O','N','Z','D','V','U')) CONSTRAINT es_priloha_cis_c1);
+
+ROLLBACK WORK;
+
+--End of B134866_UID64228_1

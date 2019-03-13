@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, A84274_RN00311507_5
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_vympohl_mat MODIFY cyklus   Integer NOT NULL;
+
+ALTER TABLE eu_exekuce_mat MODIFY cyklus   Integer NOT NULL;
+
+ALTER TABLE eu_exekprikaz_mat MODIFY cyklus   Integer NOT NULL;
+
+ALTER TABLE eu_snimekvympohl_den MODIFY cyklus   Integer NOT NULL;
+
+ALTER TABLE eu_snimekexekuce_den MODIFY cyklus   Integer NOT NULL;
+
+ALTER TABLE eu_snimekexekprikaz_den MODIFY cyklus   Integer NOT NULL;
+
+ROLLBACK WORK;
+
+--End of A84274_RN00311507_5

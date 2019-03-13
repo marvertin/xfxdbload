@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B108400_RN00384511_1
+-- @TC:ONCE: DESCRIPTION = Main: vymena-zrusenie pri N disponentoch (vymena osob) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE es_smlzmos_kart
+    ADD ospuvodni       Integer   BEFORE datplatvztahod,
+    MODIFY poradi          Integer   NOT NULL                        ,/* previouse: smallint : ... : ... */
+    MODIFY uplprav         Integer DEFAULT 1  NOT NULL               ,/* previouse: smallint : ... : ... */
+    MODIFY duvod           Integer                                   ,/* previouse: smallint : ... : ... */
+    MODIFY disponent       Integer;                                   /* previouse: smallint : ... : ... */
+
+ROLLBACK WORK;
+
+--End of B108400_RN00384511_1

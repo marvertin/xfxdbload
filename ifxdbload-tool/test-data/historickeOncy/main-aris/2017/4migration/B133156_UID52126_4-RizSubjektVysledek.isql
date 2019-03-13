@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B133156_UID52126_4-RizSubjektVysledek
+-- @TC:ONCE: DESCRIPTION = V evidenci výsledků kontrol rizikového subjektu evidovat číslo revize a OK/KO - jen BE {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+SET TRIGGERS FOR ep_rizsubjektkontr_den DISABLED;
+/*
+  Ano=1 -> OK=OKI
+  Ne=0 -> KO tvrdé=KOT
+  Neprovedeno=-1 -> Neověřeno=ERR
+*/
+UPDATE ep_rizsubjektkontr_den SET vysledek='OKI' WHERE xold_vysledek=1;
+UPDATE ep_rizsubjektkontr_den SET vysledek='KOT' WHERE xold_vysledek=0;
+UPDATE ep_rizsubjektkontr_den SET vysledek='ERR' WHERE xold_vysledek=-1;
+SET TRIGGERS FOR ep_rizsubjektkontr_den ENABLED;
+
+ROLLBACK WORK;
+
+--End of B133156_UID52126_4-RizSubjektVysledek

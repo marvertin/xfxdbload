@@ -1,0 +1,58 @@
+-- @TC:ONCE: ID = V2, B133236_UID50036_1
+-- @TC:ONCE: DESCRIPTION = Rozšířit číselníky dat z CRIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE pef_firmaosoba_cis (
+  serno   SERIAL NOT NULL,
+  reffirma   INTEGER,
+  jmeno   VARCHAR(70) NOT NULL,
+  prijmeni   VARCHAR(70),
+  datumnarozeni   DATE,
+  vztahod   DATE,
+  vztahdo   DATE,
+  pozice   VARCHAR(100),
+  adresa   VARCHAR(255),
+  ulice   VARCHAR(48),
+  cpopis   CHAR(8),
+  corient   CHAR(8),
+  obec   VARCHAR(100),
+  psc   CHAR(5),
+  stat   VARCHAR(60),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmaosoba_cis_pk ON pef_firmaosoba_cis(serno);
+ALTER TABLE pef_firmaosoba_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmaosoba_cis_pk;
+
+--FK
+CREATE INDEX pef_firmaosoba_cis_i_f1 ON pef_firmaosoba_cis(reffirma);
+ALTER TABLE pef_firmaosoba_cis ADD CONSTRAINT FOREIGN KEY(reffirma) REFERENCES pef_firma_cis(serno) CONSTRAINT pef_firmaosoba_cis_f1;
+
+----------------------------------------------------------------
+CREATE TABLE pef_firmavarovani_cis (
+  serno   SERIAL NOT NULL,
+  reffirma   INTEGER NOT NULL,
+  kod   VARCHAR(10) NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmavarovani_cis_pk ON pef_firmavarovani_cis(serno);
+ALTER TABLE pef_firmavarovani_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmavarovani_cis_pk;
+
+--FK
+CREATE INDEX pef_firmavarovani_cis_i_f1 ON pef_firmavarovani_cis(reffirma);
+ALTER TABLE pef_firmavarovani_cis ADD CONSTRAINT FOREIGN KEY(reffirma) REFERENCES pef_firma_cis(serno) CONSTRAINT pef_firmavarovani_cis_f1;
+
+
+
+
+ROLLBACK WORK;
+
+--End of B133236_UID50036_1

@@ -1,0 +1,127 @@
+
+CREATE PROCEDURE A42849_RN00269923_make_D(ADebugFile    Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                          ABezTransakci int default 0)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _realn        Int;
+define _poradi       Smallint;
+define _exekutor     Int;
+define _id           Int;
+define _reftime      DateTime Year to Second;
+define _refuser      Char(20);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if (ABezTransakci = 0) then
+  BEGIN WORK;
+end if;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+--let _Davka = AP_NovaDavka ('EO');
+--let _Akce = TW_Provden('EO', 1, _Davka, 'Zahájení migrace exekutorù RN00269923');
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, realn, poradi, exekutor   
+     INTO  _ser, _realn, _poradi, _exekutor
+     FROM RN00269923_exekSpor
+    WHERE zprac <= 0
+ ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00269923_exekSpor
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser = _ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+
+    --vlastni algoritmus migrace   
+    
+    let _id = (SELECT id FROM EO_Exekutor_Cis WHERE osoba = _exekutor);   
+    
+    if _id is null then
+        
+      let _id = (SELECT max(id)+1 FROM EO_Exekutor_Cis);
+      if _id is null then
+        let _id = 1;
+      end if;          
+    
+      INSERT INTO EO_Exekutor_Cis (
+        id, osoba, vlastvymah, platnost             
+      ) VALUES (
+        _id, _exekutor, 0, 1      
+      );
+    
+    end if;
+    
+    let _reftime, _refuser = 
+      (SELECT reftime, refuser FROM rs_exekprikaz_mat WHERE realn = _realn and poradi = _poradi);
+    
+    -- pøepojení, vytvoøí se mi záznam do archívu matriky a updatuje reftime a refuser, což nechceme..
+    UPDATE rs_exekprikaz_mat SET exekutor = _id WHERE realn = _realn and poradi = _poradi;
+    
+    -- takže ho zas nastavíme zpátky. Na update reftimu nebo refusera se trigger nespustí, takže jsme v klidu
+    UPDATE rs_exekprikaz_mat SET reftime = _reftime, refuser = _refuser WHERE realn = _realn and poradi = _poradi;
+             
+    --konec algoritmu migrace
+
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00269923_exekSpor SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null WHERE ser = _ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--zápis o ukonèení migrace do provozního deníku
+--let _Akce = TW_Provden('EU',2,_Davka,'Ukonèení migrace vymáhaných pohledávek RN00269923');
+
+if (PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+if (ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+END PROCEDURE;

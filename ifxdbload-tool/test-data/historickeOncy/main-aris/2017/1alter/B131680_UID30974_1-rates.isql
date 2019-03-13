@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, B131680_UID30974_1-rates
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení
+
+
+BEGIN WORK;
+
+CREATE TABLE pro_rates (
+  id   SERIAL NOT NULL,
+  bsSimulationcase_id   Integer,
+  changedintrsratebridgeloan   DECIMAL(5,2),
+  dateofchangeintrsratebridgeloan   DATE,
+  changedintrsrateregularcredit   DECIMAL(5,2),
+  dateofchangeintrsrateregularcredit   DATE,
+  changedsanctintrsratebridgeloan   DECIMAL(5,2),
+  dateofchangesanctintrsratebridgeloan   DATE,
+  changedsanctintrsrateregularcredit   DECIMAL(5,2),
+  dateofchangesanctintrsrateregularcredit   DATE,
+  refuser   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_rates_pk ON pro_rates(id);
+ALTER TABLE pro_rates ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_rates_pk;
+
+--FK
+CREATE INDEX pro_rates_i_f1 ON pro_rates(bsSimulationcase_id);
+ALTER TABLE pro_rates ADD CONSTRAINT FOREIGN KEY(bsSimulationcase_id) REFERENCES pro_bssimulationcase(id) CONSTRAINT pro_rates_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+ALTER TABLE PRO_ContractStatus 
+  DROP changedintrsratebridgeloan, DROP dateofchangeintrsratebridgeloan, 
+  DROP changedintrsrateregularcredit, DROP dateofchangeintrsrateregularcredit;
+
+ROLLBACK WORK;
+
+--End of B131680_UID30974_1-rates

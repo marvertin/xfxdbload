@@ -1,0 +1,55 @@
+-- @TC:ONCE: ID = V2, A44868_RN00297669_3
+-- @TC:ONCE: DESCRIPTION = nastavenie textu pre vypis pre novozadane druhy operacii {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  UPDATE ac_druhtko_cis
+     SET vypdbtext = LOWER(vypdbtext),
+         vypcrtext = LOWER(vypcrtext)
+   WHERE (druh ='OJ01' AND tko ='PK')
+      OR (druh ='OJ01' AND tko ='SS')
+      OR (druh ='0J02' AND tko ='PK')
+      OR (druh ='0J02' AND tko ='SS')
+      OR (druh ='0J02' AND tko ='SU')
+      OR (druh ='0J02' AND tko ='DP')
+      OR (druh ='0J02' AND tko ='VK')
+      OR (druh ='0J02' AND tko ='PS')
+      OR (druh ='0J02' AND tko ='UK')
+      OR (druh ='0J02' AND tko ='UP')
+      OR (druh ='0J02' AND tko ='BF')
+      OR (druh ='0J02' AND tko ='PU')
+      OR (druh ='0J02' AND tko ='US')
+      OR (druh ='0J02' AND tko ='UV')
+      OR (druh ='0J02' AND tko ='CA')
+      OR (druh ='OT01' AND tko ='PK')
+      OR (druh ='OT01' AND tko ='SS')
+      OR (druh ='OT02' AND tko ='PK')
+      OR (druh ='OT02' AND tko ='SS')
+      OR (druh ='OT02' AND tko ='SU')
+      OR (druh ='OT02' AND tko ='DP')
+      OR (druh ='OT02' AND tko ='VK')
+      OR (druh ='OT02' AND tko ='PS')
+      OR (druh ='OT02' AND tko ='UK')
+      OR (druh ='OT02' AND tko ='UP')
+      OR (druh ='OT02' AND tko ='BF')
+      OR (druh ='OT02' AND tko ='PU')
+      OR (druh ='OT02' AND tko ='US')
+      OR (druh ='OT02' AND tko ='UV')
+      OR (druh ='OT02' AND tko ='CA')
+      OR (druh ='ZI03' AND tko ='PK')
+      OR (druh ='ZI03' AND tko ='SS')
+      OR (druh ='ZI03' AND tko ='SU')
+      OR (druh ='ZI03' AND tko ='DP')
+      OR (druh ='ZI03' AND tko ='VK')
+      OR (druh ='ZI03' AND tko ='PS')
+      OR (druh ='ZI03' AND tko ='UK')
+      OR (druh ='ZI03' AND tko ='UP')
+      OR (druh ='ZI03' AND tko ='BF')
+      OR (druh ='ZI03' AND tko ='PU')
+      OR (druh ='ZI03' AND tko ='US')
+      OR (druh ='ZI03' AND tko ='UV')
+      OR (druh ='ZI03' AND tko ='CA');  
+
+ROLLBACK WORK;
+
+--End of A44868_RN00297669_3

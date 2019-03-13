@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B131766_RSTS-9265_1
+-- @TC:ONCE: DESCRIPTION = ClearQuest jiĹľ nenĂ­ podporovĂˇn, brzo bude napojenĂ­ na JIRA! {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_fo_mat MODIFY prijmeni NCHAR(35) NOT NULL, MODIFY jmeno NCHAR(24) NOT NULL;
+
+ROLLBACK WORK;
+
+--End of B131766_RSTS-9265_1

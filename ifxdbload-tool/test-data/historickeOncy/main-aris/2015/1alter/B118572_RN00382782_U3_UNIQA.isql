@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B118572_RN00382782_U3_UNIQA
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       ev_pojistcrp_arch
+
+-- 3  ev_pojistcrp_arch-1/2       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ev_pojistcrp_arch
+    ADD skupinapojist   CHAR(1)   BEFORE portime;
+
+
+-- ###############################################################
+--       ev_pojistcrp_mat
+
+-- 5  ev_pojistcrp_mat-1/3       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ev_pojistcrp_mat
+    ADD skupinapojist   CHAR(1)   BEFORE portime;
+
+-- 7  ev_pojistcrp_mat-3/3       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE ev_pojistcrp_mat
+    ADD CONSTRAINT CHECK (skupinapojist  IN('A','X')) CONSTRAINT ev_pojistcrp_mat_c6;
+
+
+ROLLBACK WORK;
+
+--End of B118572_RN00382782_U3_UNIQA

@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B126578_RN00451402_3
+-- @TC:ONCE: DESCRIPTION = Web/SIS: Povolit uživateli změnit přihlašovací jméno {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO  eo_notifikaceudalost_cis (udalost, nazev) VALUES ('ZmenaLoginu', 'Změna uživatelského jména');
+
+INSERT INTO  eo_notifikace_cis (idudalost, idzpusob, platnost) VALUES ((SELECT max(id) FROM eo_notifikaceudalost_cis) ,1,1);
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('AU',110, 'Změna aliasu loginu <login>(<nový_alias>)',1);
+
+
+
+call TW_RegSetOrAddKey('EO','notifikace','zmena_loginu','povoleno', 1, 1, 'Osoba', 'Notifikace', 'Obecné parametry', 'Notifikovat uživatele při změně uživatelského jména');
+
+ROLLBACK WORK;
+
+--End of B126578_RN00451402_3

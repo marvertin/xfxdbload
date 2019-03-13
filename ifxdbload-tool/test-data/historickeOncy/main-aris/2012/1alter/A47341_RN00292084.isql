@@ -1,0 +1,12 @@
+ -- @TC:ONCE: ID = V2, A47341_RN00292084
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda
+
+BEGIN WORK;
+
+ALTER TABLE eu_splatkal_mat ADD (rozhdenzahdospor   CHAR(1),
+                                                           posunzahdospor   Integer);
+                                                           
+ALTER TABLE eu_splatkal_arch ADD (rozhdenzahdospor   CHAR(1),
+                                                           posunzahdospor   Integer);                                                           
+ROLLBACK WORK;
+

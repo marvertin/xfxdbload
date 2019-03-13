@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B133889_UID59826_3
+-- @TC:ONCE: DESCRIPTION = Timeout DokladyMV je nastaven v sekundách ale berou se milisekundy {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call Tw_RegSetOrAddKey('WS','napojeniNaMV','komunikace','timeout', 60000);
+
+ROLLBACK WORK;
+
+--End of B133889_UID59826_3

@@ -1,0 +1,108 @@
+-- @TC:ONCE: ID = V2, B135233_UID70902_1
+-- @TC:ONCE: DESCRIPTION = RSTS-21309: Při předání žádosti je nutné dávat do rozpadu sazeb i sazbu SÚ {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+call tw_execSql('DROP TABLE eu_sazbauprav_mat;', -206);
+call tw_execSql('DROP TABLE eu_sazbauprav_arch;', -206);
+call tw_execSql('DROP TABLE cus_upravaursazby_mat;', -206);
+call tw_execSql('DROP TABLE cus_upravaursazby_arch;', -206);
+
+-- ###############################################################
+-- ###############################################################
+-- EU_SazbaUprav_Mat
+
+CREATE TABLE eu_sazbauprav_mat (
+  serno   BIGINT NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  faze   CHAR(2) NOT NULL,
+  refpravidlo   INTEGER,
+  typ   CHAR(1) NOT NULL,
+  uzivatelska   Integer  DEFAULT 0 NOT NULL,
+  zmena   Integer,
+  poradi   Integer,
+  hodnota   DECIMAL(6, 3),
+  pravidlo   VARCHAR(255),
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (uzivatelska IN (0,1)) CONSTRAINT eu_sazbauprav_mat_d5eb,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_sazbauprav_mat_d4ed
+)
+extent size 4000
+next size 60000
+lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_sazbauprav_mat_pk ON eu_sazbauprav_mat(serno);
+ALTER TABLE eu_sazbauprav_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_sazbauprav_mat_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE eu_sazbauprav_mat
+ADD CONSTRAINT (CHECK (typ IN ('Z', 'R', 'P', 'S')) CONSTRAINT eu_sazbauprav_mat_c1),
+ADD CONSTRAINT (CHECK (faze IN ('PU', 'SU')) CONSTRAINT eu_sazbauprav_mat_c2);
+
+
+
+-- ###############################################################
+-- EU_SazbaUprav_Arch
+
+CREATE TABLE eu_sazbauprav_arch (
+  idarch   BIGSERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  faze   CHAR(2) NOT NULL,
+  refpravidlo   INTEGER,
+  typ   CHAR(1) NOT NULL,
+  uzivatelska   Integer NOT NULL,
+  zmena   Integer,
+  poradi   Integer,
+  hodnota   DECIMAL(6, 3),
+  pravidlo   VARCHAR(255),
+  poznamka   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (uzivatelska IN (0,1)) CONSTRAINT eu_sazbauprav_arch_d5eb,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_sazbauprav_arch_d4ed
+)
+extent size 4000
+next size 60000
+lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_sazbauprav_arch_pk ON eu_sazbauprav_arch(idarch);
+ALTER TABLE eu_sazbauprav_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_sazbauprav_arch_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+
+-- ###############################################################
+-- ###############################################################
+
+ROLLBACK WORK;
+
+--End of B135233_UID70902_1

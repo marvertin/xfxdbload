@@ -1,0 +1,63 @@
+-- @TC:ONCE: ID = V2, B126553_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_expumorh_den (
+  id_index   int NOT NULL,
+  serno int,
+  refsplspormodsh   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  datvytvor   DATE,
+  typtabulky   CHAR(1),
+  rezimtabulky   CHAR(1),
+  stav   CHAR(1),
+  predanarchiv   Integer,
+  poruser   CHAR(20),
+  portime   DATETIME YEAR TO SECOND,
+  refuser   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_expumorh_den_pk ON eu_expumorh_den(id_index, smlouva, tsml, poradi);
+ALTER TABLE eu_expumorh_den ADD CONSTRAINT PRIMARY KEY(id_index, smlouva, tsml, poradi) CONSTRAINT eu_expumorh_den_pk;
+
+
+CREATE TABLE eu_expumorb_den (
+  id_index   int NOT NULL,
+  serno int,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradih   Integer,
+  refumorh   INTEGER NOT NULL,
+  poradi   Integer,
+  typumor   INTEGER,
+  cisloobd   Integer,
+  datumpohybu   DATE,
+  faze   CHAR(1),
+  vysecerp   DECIMAL(16,2),
+  ursazba   DECIMAL(6, 2),
+  platby   DECIMAL(16,2),
+  nakladybanka   DECIMAL(16,2),
+  urok   DECIMAL(16,2),
+  jistina   DECIMAL(16,2),
+  nakladymimobanka   DECIMAL(16,2),
+  vynos   DECIMAL(16,2),
+  zustnespljist   DECIMAL(16,2),
+  zustnesplurnakl   DECIMAL(16,2),
+  usporsp   DECIMAL(16,2)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_expumorb_den_pk ON eu_expumorb_den(id_index, smlouva, tsml, poradih, poradi);
+ALTER TABLE eu_expumorb_den ADD CONSTRAINT PRIMARY KEY(id_index, smlouva, tsml, poradih, poradi) CONSTRAINT eu_expumorb_den_pk;
+
+ROLLBACK WORK;
+
+--End of B126553_RN00451080_1

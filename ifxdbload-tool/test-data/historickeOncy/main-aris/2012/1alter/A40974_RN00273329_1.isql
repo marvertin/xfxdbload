@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, A40974_RN00273329_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní pole Daòová úspora do výsledkù pøi modelování úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE pro_taxrate
+
+  --Druh danì 
+  --Význam: Druh danì – základní èlenìní.
+  --Doména hodnot: Pevný výèet: Srážková daò (S) / Daò z pøíjmu (D).
+  ADD taxKind   CHAR(1) DEFAULT 'S' NOT NULL,
+  
+  --Maximální roèní základ danì
+  --Význam: Maximální roèní základ pro výpoèet danì s roèní periodou zúètování.
+  --Doména hodnot: Èástka (Kè).
+  ADD taxMaximumAnnualBase   DECIMAL(16, 2)
+;
+--CHECKS
+ALTER TABLE pro_taxrate
+  ADD CONSTRAINT (CHECK (taxKind in ('S', 'D')) CONSTRAINT pro_taxrate_c3)
+;
+
+ALTER TABLE pro_globalbaseparameters
+
+  --Druh danì pro daò z pøíjmu
+  --Význam: Druh danì (základní èlenìní) pro daò z pøíjmu dle èíselníku daòových sazeb.
+  --Doména hodnot: Pevný výèet: Srážková daò (S) / Daò z pøíjmu (D).
+  ADD incomeTaxKind   CHAR(1)  DEFAULT 'D' NOT NULL
+;
+
+--CHECKS
+ALTER TABLE pro_globalbaseparameters
+  ADD CONSTRAINT (CHECK (incomeTaxKind in ('S', 'D')) CONSTRAINT pro_globalbaseparameters_c1)
+;
+
+ROLLBACK WORK;
+
+--End of A40974_RN00273329_1

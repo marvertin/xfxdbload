@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B133603_RSTS-6993_1
+-- @TC:ONCE: DESCRIPTION = Změny v evidencích Main a provizích {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eo_fo_mat    ADD zpusobb   Integer;
+
+ALTER TABLE eo_fo_arch    ADD zpusobb   Integer;
+
+ALTER TABLE eo_fozmpl_kart    ADD zpusobb   Integer;
+
+ROLLBACK WORK;
+
+--End of B133603_RSTS-6993_1

@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, A54820_RN00250958
+-- @TC:ONCE: DESCRIPTION = Obnova úmrtí/zániku osoby
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eo_stavrcmf_acis
+
+-- 5  eo_stavrcmf_acis-1/2       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eo_stavrcmf_acis
+    ADD umrti           Integer DEFAULT 0  NOT NULL BEFORE reftime;
+
+-- 6  eo_stavrcmf_acis-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eo_stavrcmf_acis
+    ADD CONSTRAINT CHECK (umrti IN (0,1)) CONSTRAINT eo_stavrcmf_acis_d50s;
+
+-- ###############################################################
+--       eo_stavrcmf_cis
+
+-- 7  eo_stavrcmf_cis-1/2       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eo_stavrcmf_cis
+    ADD umrti           Integer DEFAULT 0  NOT NULL BEFORE reftime;
+
+-- 8  eo_stavrcmf_cis-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eo_stavrcmf_cis
+    ADD CONSTRAINT CHECK (umrti IN (0,1)) CONSTRAINT eo_stavrcmf_cis_d50r;
+
+
+ROLLBACK WORK;

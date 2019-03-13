@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B127120_RN00457300_1
+-- @TC:ONCE: DESCRIPTION = rozšířit serial na bigserial {DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodcashflow_den MODIFY (
+    ser BIGSERIAL
+    , refsplspormodb BIGINT
+  )
+;
+ALTER TABLE ep_expsplspormodcf_den MODIFY (
+    ser BIGSERIAL
+    , refsplspormodb BIGINT
+  )
+;
+
+ROLLBACK WORK;
+
+--End of B127120_RN00457300_1

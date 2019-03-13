@@ -1,0 +1,193 @@
+create PROCEDURE A47299_RN00282468_Find_D()
+
+define _ser             Int;
+define _datprov         date;
+define _smlouva         dec(16,0);
+define _tsml            char(4);
+define _datschval       date;
+define _datschvalPodm   date;
+define _sazbaBEPU       Dec(5,2);
+define _puvsazbaBEPU    Dec(5,2);
+define _aktsazbaBEPU    Dec(5,2);
+define _nezaradit       int;
+define _skupina         int;
+define _datsml          date;
+define _sazbaBEPUArch   Dec(5,2);
+define _stav            char(1);
+define _minser          int;
+define _aktser          int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00282468;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00282468(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+                            --vlastni data - napø. cislo osoby
+  smlouva     dec(16,0),
+  tsml        char(4),
+  skupina     int,
+  fixaceod    date,
+  fixacedo    date,
+  variafixace int,
+  datschval   date,
+  datsml      date,
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+let _datprov = AP_DatProv();
+
+--plnime ridici tabulku - napr. z osob
+--dulezite je poradi vybiranych radku - v tomto poradi se budou
+--ukladat do ridici tabulky a v tomto poradi se bude i migrovat
+foreach cc1 with hold for
+   -- select pro vyber dat
+  select smlouva, tsml, sazbaBEPU, datschval, datschvalPodm, datsml, stav
+   into _smlouva,_tsml,_sazbaBEPU,_datschval,_datschvalPodm,_datsml,_stav
+   from eu_sml_mat 
+   where tsml not in ('SUFO', 'SUPO') and 
+         (tsml in ('PUPO', 'KOME') or 
+          (tsml in ('PUSU', 'PFSU', 'PPSU') and datklop is null)
+         ) and 
+         stav in ('C', 'D', 'L')
+  
+  if _stav = 'C' then
+    let _datschval = _datschvalPodm;
+  end if;
+  let _skupina = null; 
+
+  let _nezaradit = 0;
+  
+  --existují smlouva uz jednou existovala
+  if exists (select 1 from eu_sml_arch where smlouva = _smlouva and tsml = _tsml and stav > 'L') then
+    --prvni zaznam z archivu ve stavu L, ktery je po otevreni nove smlouvy nad stejnou sporici smlouvou
+    select min(ser) into _minser from eu_sml_arch arch1 
+    where arch1.stav = 'L' and arch1.smlouva = _smlouva and arch1.tsml = _tsml and 
+          arch1.ser > (select max(arch2.ser) from eu_sml_arch arch2 
+                        where arch2.smlouva = arch1.smlouva and arch2.tsml = arch1.tsml and arch2.stav > 'L');
+  else
+    --prvni zaznam z archivu ve stavu L
+    select min(ser) into _minser from eu_sml_arch arch1 
+    where arch1.stav = 'L' and arch1.smlouva = _smlouva and arch1.tsml = _tsml;
+  end if;
+
+  let _puvsazbaBEPU = null;
+  
+  --puvodni sazba PU po uzavreni
+  if _minser is not null then
+    select sazbaBEPU into _puvsazbaBEPU from eu_sml_arch where smlouva = _smlouva and tsml = _tsml and ser = _minser;
+  end if;
+  
+  if _puvsazbaBEPU is null then
+    let _puvsazbaBEPU = _sazbaBEPU;
+  end if; 
+     
+  --má vùbec smysl prohledavat archiv?                 
+  if _minser is not null then
+  
+    --nezaradime smlouvy schválené v IS CIBIS (tedy s datem schválení >= 1. 9. 2009), 
+    --u kterých došlo po uzavøení úvìrové smlouvy ke zmìnì výše sazby PÚ (v úvìrové smlouvì).
+    if _datschval >= mdy(9,1,2009) then
+      if _puvsazbaBEPU <> _sazbaBEPU or 
+         exists (select 1 from eu_sml_arch where sazbaBEPU <> _puvsazbaBEPU and smlouva = _smlouva and 
+                                                 tsml = _tsml and ser > _minser) then 
+        let _nezaradit = 1;
+      end if;
+    end if;
+
+    if _nezaradit = 1 then
+      continue foreach;
+    end if;
+    
+    --nezaradime smlouvy kde kdykoliv po potvrzení byla zmìnìna sazba pro PÚ na 0 (v úvìrové smlouvì), 
+    --ale aktuálnì nastavená sazba nulová není.
+    if _sazbaBEPU <> 0 then
+      --pùvodni sazba pu nebyla nastavena na 0 a v prubehu byla nastavena na 0 
+      if _puvsazbaBEPU <> 0 and exists (select 1 from eu_sml_arch where sazbaBEPU = 0 and smlouva = _smlouva and tsml = _tsml and 
+                                                                         ser > _minser) then
+        let _nezaradit = 1;
+      --puvodni sazba byla 0, v prubehu byla nastavena na nejakou jinou hodnotu a potom na 0
+      elif _puvsazbaBEPU = 0 then
+        foreach select sazbaBEPU, ser into _aktsazbaBEPU, _aktser from eu_sml_arch 
+                  where sazbaBEPU <> 0 and smlouva = _smlouva and tsml = _tsml and ser > _minser
+                  order by ser
+          if _aktsazbaBEPU <> 0 then
+            if exists (select 1 from eu_sml_arch where sazbaBEPU = 0 and smlouva = _smlouva and tsml = _tsml and 
+                                                                         ser > _aktser) then
+              let _nezaradit = 1;
+            end if;
+          end if;
+        end foreach;
+      end if;
+    end if;
+    
+  end if;
+  
+  if _nezaradit = 1 then
+    continue foreach;
+  end if;
+  
+  if _tsml in ('PUSU', 'PFSU') and exists (select 1 from eu_sml_mat 
+              where ((EP_IsMigrObjHyst(smlouva, tsml) = 0 and datschval >= mdy(2,4,2004)) or 
+                     (EP_IsMigrObjHyst(smlouva, tsml) = 1 and datschval >= mdy(9,1,2009))) 
+                    and smlouva = _smlouva and tsml = _tsml) then
+    let _skupina = 1;
+  elif _tsml in ('PUSU', 'PFSU') and exists (select 1 from eu_sml_mat mat 
+                where EP_IsMigrObjHyst(smlouva, tsml) = 1 and datschval < mdy(9,1,2009) and smlouva = _smlouva and tsml = _tsml 
+                      and exists (select 1 from eu_urokfixace_kart 
+                                    where smlouva = mat.smlouva and tsml = mat.tsml 
+                                      and delkafix in (36, 3604, 72, 7204) 
+                                      and poradi = (select max(poradi) from eu_urokfixace_kart 
+                                                      where smlouva = mat.smlouva and tsml = mat.tsml))) then
+    let _skupina = 2;
+  elif _tsml in ('PUPO', 'PPSU', 'KOME') then
+    let _skupina = 3;
+  end if;
+  
+  if _skupina is not null then
+    --vlozeni dat do ridici tabulky
+    INSERT INTO RN00282468(smlouva, tsml, skupina, datschval, datsml, zprac)
+        VALUES(_smlouva, _tsml, _skupina, _datschval, _datsml, -1);
+
+   --nova transakce
+   COMMIT WORK;
+   BEGIN WORK;
+   
+  end if;
+
+end foreach;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00282468;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

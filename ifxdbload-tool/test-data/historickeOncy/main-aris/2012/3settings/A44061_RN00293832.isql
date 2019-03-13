@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A44061_RN00293832
+-- @TC:ONCE: DESCRIPTION = Nový typ zprávy
+
+BEGIN WORK;
+
+INSERT INTO EP_ZpravaTyp_Cis (nazev, popis, platnost)
+VALUES ('manualní','Zprávy vytváøené manuálnì pøes aplikaci', 1);
+
+    
+ROLLBACK WORK;
+
+ 

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B124127_RN00451445_4
+-- @TC:ONCE: DESCRIPTION = HS: Chyba při zkontrolovat vše, když jsou vyplněny zajištění s "Dalšími náklady" v CIBIS-Sale. {DEFECT}
+
+
+BEGIN WORK;
+
+update pro_extraExpense set expensePeriod = 'J'
+ where expensePeriod = '1'
+;
+
+update ep_splspormodee_den set expensePeriod = 'J'
+ where expensePeriod = '1'
+;
+
+ROLLBACK WORK;
+
+--End of B124127_RN00451445_4

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B121099_RN00424647_3-duvododmitnuti
+-- @TC:ONCE: DESCRIPTION = Odchody finančních prostředků (blokace, insolvence, exekuce) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) 
+    VALUES ('EXEK', '121S100TCUI', 'Konto je spojeno s exekucí', 'Konto je spojeno s exekucí', 'Nepovolené inkaso');
+
+ROLLBACK WORK;
+
+--End of B121099_RN00424647_3-duvododmitnuti

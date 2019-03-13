@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136222_UID83274_5
+-- @TC:ONCE: DESCRIPTION = RSTS-27375: Přejmenovat nepoužívaný sloupec eu_odpovedrozhod_cis.typodpoved {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+RENAME COLUMN eu_odpovedrozhod_cis.typodpoved TO xold_typodpoved;
+
+RENAME COLUMN eu_odpovedrozhod_acis.typodpoved TO xold_typodpoved;
+
+ROLLBACK WORK;
+
+--End of B136222_UID83274_5

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A61360_RN00352309
+-- @TC:ONCE: DESCRIPTION = Nové atributy dávky do BRKI/NRKI (2)
+
+BEGIN WORK;
+
+  call TW_RegSetOrAddKey('EP','BRKI','batch','principal_duedays', 0, 1,
+      'Podpora pro produkt','Úvìrový registr','Batch','Úvìrový registr - hlásit zùstatek jistiny a dobu po splatnosti');
+
+ROLLBACK WORK;
+
+--End of A61360_RN00352309

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B133486_UID57230_1
+-- @TC:ONCE: DESCRIPTION = IFRS - ČR detail + rozpis operace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE acr_casoverozliseni_kart ADD castkarozpousteni DECIMAL(16, 2) BEFORE typ;
+ALTER TABLE acr_casoverozliseni_kart ADD rozpoustenicelkem Integer BEFORE coobjekt;
+ALTER TABLE acr_casoverozliseni_kart ADD rozpousteniprovedeno Integer BEFORE coobjekt;
+
+ROLLBACK WORK;
+
+--End of B133486_UID57230_1

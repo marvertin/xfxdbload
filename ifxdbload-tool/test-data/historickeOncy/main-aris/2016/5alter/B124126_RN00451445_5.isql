@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B124126_RN00451445_5
+-- @TC:ONCE: DESCRIPTION = HS: Chyba při zkontrolovat vše, když jsou vyplněny zajištění s "Dalšími náklady" v CIBIS-Sale. {DEFECT}
+
+
+BEGIN WORK;
+
+--CHECKS
+ALTER TABLE pro_extraexpense
+  ADD CONSTRAINT (CHECK (expensePeriod in ('J','M','Q','P','R')) CONSTRAINT pro_extraexpense_c1)
+;
+
+--CHECKS
+ALTER TABLE ep_splspormodee_den
+  ADD CONSTRAINT (CHECK (expensePeriod in ('J','M','Q','P','R')) CONSTRAINT ep_splspormodee_den_c1)
+;
+
+
+ROLLBACK WORK;
+
+--End of B124125_RN00451445_1

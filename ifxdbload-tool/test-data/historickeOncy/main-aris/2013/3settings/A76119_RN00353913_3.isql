@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A76119_RN00353913_3
+-- @TC:ONCE: DESCRIPTION = proè v parameters nejsou nìkteré hodnoty
+
+
+BEGIN WORK;
+
+CALL TW_RegAktAnalytickyPopis('EU','*','ORR','objem2','Úvìr','Úvìrová žádost - kontroly','Pøedání ÚŽ na OØR','Výše úvìru pro doporuèení kontroly OØR',1);
+
+CALL TW_RegAktAnalytickyPopis('EU','*','ORR','objem1','Úvìr','Úvìrová žádost - kontroly','Pøedání ÚŽ na OØR','Objem závazkù pro doporuèení kontroly OØR',1);
+
+CALL TW_RegAktAnalytickyPopis('EU','*','ORR','pocet1','Úvìr','Úvìrová žádost - kontroly','Pøedání ÚŽ na OØR','Poèet závazkù pro doporuèení kontroly OØR',1);
+
+
+ROLLBACK WORK;
+
+--End of A76119_RN00353913_3
+

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B130666_RN00451095_1-fixcal_check
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_fixcal
+  DROP CONSTRAINT pro_fixcal_c1;
+  
+update pro_fixcal set status = 'A' where status = 'P';
+
+ALTER TABLE pro_fixcal
+  ADD CONSTRAINT (CHECK (status IN ('A' ,'Z' )) CONSTRAINT pro_fixcal_c1);
+
+ROLLBACK WORK;
+
+--End of B130666_RN00451095_1-fixcal_check

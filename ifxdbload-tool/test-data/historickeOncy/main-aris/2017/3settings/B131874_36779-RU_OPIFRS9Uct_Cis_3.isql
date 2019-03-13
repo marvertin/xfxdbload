@@ -1,0 +1,82 @@
+-- @TC:ONCE: ID = V2, B131874_36779-RU_OPIFRS9Uct_Cis_3
+-- @TC:ONCE: DESCRIPTION = IMPL: číselníky OP, parametrizace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 7, 1, 0, '543400', '653400', '753400', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 8, 1, 0, '543410', '653410', '753410', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 0, 1, 0, '249100', '654100', '754100', '754101');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 1, 1, 0, '249110', '654110', '754110', '754111');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 3, 1, 0, '249120', '651120', '751120', '751121');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 6, 1, 0, '249130', '651130', '751130', '751131');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 7, 1, 0, '543420', '653420', '753420', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 8, 1, 0, '543430', '653430', '753430', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 0, 1, 0, '249200', '654200', '754200', '754201');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 1, 1, 0, '249210', '654210', '754210', '754211');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 3, 1, 0, '249220', '651220', '751220', '751221');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 6, 1, 0, '249230', '651230', '751230', '751231');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 7, 1, 0, '543440', '653440', '753440', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 8, 1, 0, '543450', '653450', '753450', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 0, 1, 0, '249400', '654400', '754400', '754401');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 1, 1, 0, '249410', '654410', '754410', '754411');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 3, 1, 0, '249420', '651420', '751420', '751421');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 6, 1, 0, '249430', '651430', '751430', '751431');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 7, 1, 1, '543490', '653490', '753490', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 8, 1, 1, '543491', '653491', '753491', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 0, 1, 1, '249942', '651942', '751942', '751960');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 1, 1, 1, '249943', '651943', '751943', '751961');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 3, 1, 1, '249944', '651944', '751944', '751962');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 6, 1, 1, '249945', '651945', '751945', '751963');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 7, 1, 1, '543492', '653492', '753492', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 8, 1, 1, '543493', '653493', '753493', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 0, 1, 1, '249946', '651946', '751946', '751964');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 1, 1, 1, '249947', '651947', '751947', '751965');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 3, 1, 1, '249948', '651948', '751948', '751966');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 6, 1, 1, '249949', '651949', '751949', '751967');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 7, 1, 1, '543494', '653494', '753494', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 8, 1, 1, '543495', '653495', '753495', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 0, 1, 1, '249956', '651956', '751956', '751968');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 1, 1, 1, '249957', '651957', '751957', '751969');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 3, 1, 1, '249958', '651958', '751958', '751970');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 6, 1, 1, '249959', '651959', '751959', '751971');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 7, 0, 0, '543500', '653500', '753500', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 8, 0, 0, '543510', '653510', '753510', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 0, 0, 0, '249500', '654500', '754500', '754501');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 1, 0, 0, '249510', '654510', '754510', '754511');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 3, 0, 0, '249520', '651520', '751520', '751521');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 6, 0, 0, '249530', '651530', '751530', '751531');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 7, 0, 0, '543520', '653520', '753520', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 8, 0, 0, '543530', '653530', '753530', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 0, 0, 0, '249600', '654600', '754600', '754602');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 1, 0, 0, '249610', '654610', '754610', '754611');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 3, 0, 0, '249620', '651620', '751620', '751621');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 6, 0, 0, '249630', '651630', '751630', '751631');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 7, 0, 0, '543540', '653540', '753540', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 8, 0, 0, '543550', '653550', '753550', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 0, 0, 0, '249700', '654700', '754700', '754701');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 1, 0, 0, '249710', '654710', '754710', '754711');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 3, 0, 0, '249720', '651720', '751720', '751721');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 6, 0, 0, '249730', '651730', '751730', '751731');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 7, 0, 1, '543590', '653590', '753590', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 8, 0, 1, '543591', '653591', '753591', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 0, 0, 1, '249972', '651972', '751972', '751984');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 1, 0, 1, '249973', '651973', '751973', '751985');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 3, 0, 1, '249974', '651974', '751974', '751986');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (1, 6, 0, 1, '249975', '651975', '751975', '751987');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 7, 0, 1, '543592', '653592', '753592', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 8, 0, 1, '543593', '653593', '753593', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 0, 0, 1, '249976', '651976', '751976', '751988');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 1, 0, 1, '249977', '651977', '751977', '751989');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 3, 0, 1, '249978', '651978', '751978', '751990');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (2, 6, 0, 1, '249979', '651979', '751979', '751991');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 7, 0, 1, '543594', '653594', '753594', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 8, 0, 1, '543595', '653595', '753595', null);
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 0, 0, 1, '249980', '651980', '751980', '751992');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 1, 0, 1, '249981', '651981', '751981', '751993');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 3, 0, 1, '249982', '651982', '751982', '751994');
+insert into RU_OPIFRS9Uct_Cis (stadiumifrs, typdluhu, retail, promlcpohl, ucetop, naklucetop, vynucetrozpop, vynucetpouzop) values (3, 6, 0, 1, '249983', '651983', '751983', '751995');
+
+ROLLBACK WORK;
+
+--End of B131874_36779-RU_OPIFRS9Uct_Cis_3

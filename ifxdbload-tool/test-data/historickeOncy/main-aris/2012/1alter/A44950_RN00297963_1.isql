@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, A44950_RN00297963_1
+-- @TC:ONCE: DESCRIPTION = Inkaso - zùstává "Potvrzený návrh" {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  ALTER TABLE ep_inkaso_kart
+      ADD chyba           VARCHAR(255)   BEFORE navtime,
+      ADD msgnum          CHAR(15)       BEFORE navtime,
+      ADD msgdetail       VARCHAR(255)   BEFORE navtime,
+      ADD msgimpltext     VARCHAR(255)   BEFORE navtime,
+      ADD msgpar1         VARCHAR(255)   BEFORE navtime,
+      ADD msgpar2         VARCHAR(255)   BEFORE navtime,
+      ADD msgpar3         VARCHAR(255)   BEFORE navtime;
+  
+  CREATE TABLE cz_duvododmitnuti_acis (
+    idarch    SERIAL NOT NULL,
+    id        INT NOT NULL,
+    kod       CHAR(4) NOT NULL,
+    guid      VARCHAR(15) NOT NULL,
+    popis     CHAR(35),
+    textfe    VARCHAR(255) NOT NULL,
+    textuziv  VARCHAR(255) NOT NULL,
+    platnost  INT DEFAULT 1 NOT NULL,
+    portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    poruser   CHAR(20)  DEFAULT USER NOT NULL,
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    refuser   CHAR(20)  DEFAULT USER,
+    CHECK (platnost IN (0,1)) CONSTRAINT cz_duvododmitnuti_acis_d6va
+  ) LOCK MODE ROW;
+  
+  CREATE UNIQUE INDEX cz_duvododmitnuti_acis_pk ON cz_duvododmitnuti_acis(idarch);
+  ALTER TABLE cz_duvododmitnuti_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cz_duvododmitnuti_acis_pk;
+    
+ROLLBACK WORK;

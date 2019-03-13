@@ -1,0 +1,52 @@
+-- @TC:ONCE: ID = V2, A54978_RN00312345_3
+-- @TC:ONCE: DESCRIPTION = Nìkolik úprav aplikace CIBIS-web {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('ZMEN_HESLO', 'Zmìna hesla', 'rsts@rsts.cz', 'RSTS', 'Zmìna hesla', 
+  'Provedli jsme požadovanou zmìnu hesla. RSTS.',
+   null, 0, 5, 24, 0, 'S', 0, 1, 1);
+  
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('ZMEN_TRNU', 'Zmìna transakèního úètu', 'rsts@rsts.cz', 'RSTS', 'Zmìna transakèního úètu', 
+  'Provedli jsme požadovanou zmìnu transakèního úètu. RSTS.',
+   null, 0, 5, 24, 0, 'S', 0, 1, 1);  
+   
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('ZMEN_REGMOB', 'Zmìna registrovaného mobilu', 'rsts@rsts.cz', 'RSTS', 'Zmìna registrovaného mobilu', 
+  'Provedli jsme požadovanou zmìnu registrovaného mobilu. RSTS.',
+   null, 0, 5, 24, 0, 'S', 0, 1, 1);  
+   
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('ZMEN_REGEML', 'Zmìna registrovaného e-mailu', 'rsts@rsts.cz', 'RSTS', 'Zmìna registrovaného e-mailu', 
+  'Provedli jsme požadovanou zmìnu registrovaného e-mailu. RSTS.',
+   null, 0, 5, 24, 0, 'S', 0, 1, 1);        
+   
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, platnost)
+  VALUES('ZMEN_HESLO', 'Zmìna hesla', 'Provedli jsme požadovanou zmìnu hesla. RSTS.', 0, 1);
+  
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, platnost)
+  VALUES('ZMEN_TRNU', 'Zmìna transakèního úètu', 'Provedli jsme požadovanou zmìnu transakèního úètu. RSTS.', 0, 1);   
+  
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, platnost)
+  VALUES('ZMEN_REGMOB', 'Zmìna registrovaného mobilu', 'Provedli jsme požadovanou zmìnu registrovaného mobilu. RSTS.', 0, 1);   
+  
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, plnasms, platnost)
+  VALUES('ZMEN_REGEML', 'Zmìna registrovaného e-mailu', 'Provedli jsme požadovanou zmìnu registrovaného e-mailu. RSTS.', 0, 1);            
+
+
+ROLLBACK WORK;
+

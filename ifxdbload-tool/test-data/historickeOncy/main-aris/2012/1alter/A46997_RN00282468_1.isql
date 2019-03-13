@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A46997_RN00282468_1
+-- @TC:ONCE: DESCRIPTION = Úroková fixace {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_expsml_den ADD (
+  variafixace           Integer,
+  fixsazba              Integer,
+  fixaceod              DATE,
+  fixacedo              DATE
+);
+
+ROLLBACK WORK;
+
+--End of A46997_RN00282468_1

@@ -1,0 +1,6 @@
+-- @TC:ONCE: ID = V2, A46237_RN00293012
+-- @TC:ONCE: DESCRIPTION = Parametr definuje (poèet mìsícù) dobu od ukonèení posledního platného produktu (resp. role), po které budou automaticky vytváøeny požadavky na deaktivaci služeb SMS a SIS.
+
+BEGIN WORK;
+  call TW_RegSetOrAddKey('EO', 'osoba', 'spravasluzeb ', 'pocmesdeaktivace', '12', 1, 'Osoba', 'Kartotéka správy služeb', 'Deaktivace služeb', 'Poèet mìsícù pro hromadnou deaktivaci služeb');
+ROLLBACK WORK;

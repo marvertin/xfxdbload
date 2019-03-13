@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B137119_UID90950_5
+-- @TC:ONCE: DESCRIPTION = RSTS-31782: Doplnit změny v odpisech - IFRS {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CALL TW_RegDelKey('RU', 'odppohl', 'VUFO', 'ucetodpdn');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUFO', 'ucetodpdu');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUFO', 'ucetpostdn');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUFO', 'ucetpostdu');
+
+CALL TW_RegDelKey('RU', 'odppohl', 'VUPO', 'ucetodpdn');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUPO', 'ucetodpdu');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUPO', 'ucetpostdn');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUPO', 'ucetpostdu');
+
+CALL TW_RegDelKey('RU', 'odppohl', 'VUKO', 'ucetodpdn');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUKO', 'ucetodpdu');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUKO', 'ucetpostdn');
+CALL TW_RegDelKey('RU', 'odppohl', 'VUKO', 'ucetpostdu');
+
+CALL TW_RegDelKey('RU', 'odppohlKrytyOP', NULL, NULL);
+CALL TW_RegDelKey('RU', 'odppohlNekrytyOP', NULL, NULL);
+
+call tw_execSql('DROP PROCEDURE RU_ProvOdpPohlTyp;', -674);
+call tw_execSql('DROP PROCEDURE RU_OdpPohlUcet;', -674);
+
+ROLLBACK WORK;
+
+--End of B137119_UID90950_5

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A76005_RN00360117_3
+-- @TC:ONCE: DESCRIPTION = TC081: Pøi zaškrtnutí položky "Nabízeno pro modelování klientùm" se zobrazí databázová chyba. {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE eu_variapu_cis SET klientnabizet = 0 WHERE klientnabizet is null;
+
+ROLLBACK WORK;
+
+--End of A76005_RN00360117_3

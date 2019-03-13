@@ -1,0 +1,56 @@
+
+
+CREATE PROCEDURE EU_RN00269923_ExekPrikazy(
+    aExekuceSer    Integer,
+    aSmlouva       Dec(16,0)
+)
+
+define _poradi            Int;
+define _cisloPrikazu      CHAR(20);
+define _exekutor          CHAR(20);
+define _datNavrhNaVykon   DATE;
+define _datNarizeniVykonu DATE;
+define _poznamka          VARCHAR(255);
+
+define _exekutorId        Integer;
+define _portime           DateTime Year to Second;
+define _poruser           Char(20);
+
+foreach cc2 for
+   SELECT  poradi, cisloPrikazu, exekutor, datNavrhNaVykon, datNarizeniVykonu, poznamka   
+     INTO  _poradi, _cisloPrikazu, _exekutor, _datNavrhNaVykon, _datNarizeniVykonu, _poznamka
+     FROM RN00269923_exek_prik
+    WHERE smlouva = aSmlouva
+ ORDER BY poradi
+ 
+      if trim(_cisloPrikazu) = '' then
+        let _cisloPrikazu = null;
+      end if;
+      if trim(_exekutor) = '' then
+        let _exekutor = null;
+      end if;
+      if trim(_poznamka) = '' then
+        let _poznamka = null;
+      end if;
+      
+      if _poradi is null then
+        let _poradi = (SELECT max(poradi)+1 FROM EU_ExekPrikaz_Mat WHERE exekuceser = aExekuceSer);
+        if _poradi is null then
+          let _poradi = 1;
+        end if;
+      end if;
+ 
+      let _exekutorId = (SELECT id FROM EO_Exekutor_Cis WHERE cisexek = _exekutor AND platnost = 1);
+      
+      let _portime, _poruser = TW_CurrentRef();
+  
+      INSERT INTO EU_ExekPrikaz_Mat (
+       exekuceser, poradi, stav, cisprikaz, datnavrh, datnarizeni, poznamka, exekutor, portime, poruser              
+      ) VALUES (
+       aExekuceSer, _poradi, 'A', _cisloPrikazu, _datNavrhNaVykon, _datNarizeniVykonu, _poznamka, _exekutorId, _portime, _poruser
+      );
+    
+end foreach;  
+
+
+END PROCEDURE;

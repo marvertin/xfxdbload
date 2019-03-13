@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A44512_RN00294355_3
+-- @TC:ONCE: DESCRIPTION = Inkasa - neprovedení {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE ac_druhtko_cis SET dbsko='PYMT' WHERE tko='CA' AND druh IN ('OJ02', 'ZI03', 'OT02');
+
+ROLLBACK WORK;
+
+--End of A44512_RN00294355_3

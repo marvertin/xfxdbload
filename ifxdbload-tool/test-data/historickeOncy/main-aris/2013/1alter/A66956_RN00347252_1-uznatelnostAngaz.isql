@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A66956_RN00347252_1-uznatelnostAngaz
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale 2013F - Funkce variant procesu, položka angažovanost {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE eu_zajist_cis
+  ADD uznatelnostAngaz Integer DEFAULT 0;
+
+ALTER TABLE eu_zajist_cis
+  ADD CONSTRAINT (CHECK (uznatelnostAngaz IN (0,1)) CONSTRAINT eu_zajist_cis_dw8a);
+
+ALTER TABLE eu_zajist_acis 
+  ADD uznatelnostAngaz Integer DEFAULT 0;
+
+ALTER TABLE eu_zajist_acis
+  ADD CONSTRAINT (CHECK (uznatelnostAngaz IN (0,1)) CONSTRAINT eu_zajist_acis_dw8a);
+
+ROLLBACK WORK;
+--End of A66956_RN00347252_1-uznatelnostAngaz

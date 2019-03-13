@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, A42792_RN00270144_1
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- ###############################################################
+--       cz_zadost_den
+
+
+-- 7  cz_zadost_den-6/10       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE cz_zadost_den
+    ADD vztah           CHAR(1) DEFAULT 'M'  NOT NULL BEFORE priorita;
+
+-- 9  cz_zadost_den-8/10       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE cz_zadost_den
+    ADD CONSTRAINT CHECK (vztah IN ('M', 'V')) CONSTRAINT cz_zadost_den_c7;
+
+ROLLBACK WORK;
+
+--End of A42792_RN00270144_1

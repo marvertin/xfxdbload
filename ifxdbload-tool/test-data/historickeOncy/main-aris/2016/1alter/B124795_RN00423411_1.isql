@@ -1,0 +1,503 @@
+-- @TC:ONCE: ID = V2, B124795_RN00423411_1
+-- @TC:ONCE: DESCRIPTION = Rozhodovací nástroj pro variantu PÚ {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eu_variapu_acis
+
+-- 50  eu_variapu_acis-1/3       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_variapu_acis
+    ADD vsechnytarify   Integer BEFORE text;
+
+-- 51  eu_variapu_acis-2/3       [DROP.COLUMN]
+ALTER TABLE eu_variapu_acis
+    DROP tarif;
+
+-- ###############################################################
+--       eu_variapu_cis
+
+
+-- 53  eu_variapu_cis-1/10       [DROP.CONSTRAINT_UNIQUE]
+/* Rusen constraint: UNIQUE (tarif,varid)  CONSTRAINT "aris".ep_variapu_c_u1 */
+ALTER TABLE eu_variapu_cis DROP CONSTRAINT ep_variapu_c_u1;
+
+-- 54  eu_variapu_cis-2/10       [CREATE.COLUMN]
+ALTER TABLE eu_variapu_cis
+    ADD vsechnytarify   Integer DEFAULT 0 NOT NULL BEFORE text;
+
+-- 57  eu_variapu_cis-5/10       [DROP.COLUMN]
+ALTER TABLE eu_variapu_cis
+    DROP tarif;
+
+-- 60  eu_variapu_cis-8/10       [CREATE.INDEX]
+CREATE unique INDEX eu_variapu_cis_pk ON eu_variapu_cis (varid) ;
+
+-- 61  eu_variapu_cis-9/10       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_variapu_cis
+    ADD CONSTRAINT PRIMARY KEY (varid)  CONSTRAINT eu_variapu_cis_pk;
+
+
+-- ###############################################################
+--       eu_kritvariapurozhod_acis
+
+-- 1  eu_kritvariapurozhod_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_kritvariapurozhod_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    refvazbarozhod  INTEGER   NOT NULL,
+    refvariapu      CHAR(10)   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_kritvariapurozhod_acis_dp69
+) LOCK MODE ROW
+;
+
+-- 2  eu_kritvariapurozhod_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_kritvariapurozhod_acis_pk ON eu_kritvariapurozhod_acis (idarch) ;
+
+-- 3  eu_kritvariapurozhod_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_kritvariapurozhod_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_kritvariapurozhod_acis_pk;
+
+-- ###############################################################
+--       eu_kritvariapurozhod_cis
+
+-- 4  eu_kritvariapurozhod_cis-1/7       [CREATE.TABLE]
+CREATE TABLE eu_kritvariapurozhod_cis (
+    serno           SERIAL   NOT NULL,
+    refvazbarozhod  INTEGER   NOT NULL,
+    refvariapu      CHAR(10)   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_kritvariapurozhod_cis_dp69
+) LOCK MODE ROW
+;
+
+-- 5  eu_kritvariapurozhod_cis-2/7       [CREATE.INDEX]
+CREATE unique INDEX eu_kritvariapurozhod_cis_pk ON eu_kritvariapurozhod_cis (serno) ;
+
+-- 6  eu_kritvariapurozhod_cis-3/7       [CREATE.INDEX]
+CREATE INDEX eu_kritvariapurozhod_cis_i_f1 ON eu_kritvariapurozhod_cis (refvazbarozhod) ;
+
+-- 7  eu_kritvariapurozhod_cis-4/7       [CREATE.INDEX]
+CREATE INDEX eu_kritvariapurozhod_cis_i_f2 ON eu_kritvariapurozhod_cis (refvariapu) ;
+
+-- 8  eu_kritvariapurozhod_cis-5/7       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_kritvariapurozhod_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_kritvariapurozhod_cis_pk;
+
+-- ###############################################################
+--       eu_odpovedrozhod_acis
+
+-- 9  eu_odpovedrozhod_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_odpovedrozhod_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER  ,
+    id              Integer   NOT NULL,
+    typodpoved      CHAR(10)   NOT NULL,
+    platnostod      DATE   NOT NULL,
+    platnostdo      DATE  ,
+    textodpoved     VARCHAR(255)  ,
+    refprocedurarozhod INTEGER  ,
+    povolhodnoty    CHAR(10)  ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_odpovedrozhod_acis_dp69
+) LOCK MODE ROW
+;
+
+-- 10  eu_odpovedrozhod_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_odpovedrozhod_acis_pk ON eu_odpovedrozhod_acis (idarch) ;
+
+-- 11  eu_odpovedrozhod_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_odpovedrozhod_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_odpovedrozhod_acis_pk;
+
+-- ###############################################################
+--       eu_odpovedrozhod_cis
+
+-- 12  eu_odpovedrozhod_cis-1/7       [CREATE.TABLE]
+CREATE TABLE eu_odpovedrozhod_cis (
+    serno           SERIAL   NOT NULL,
+    id              Integer   NOT NULL,
+    typodpoved      CHAR(10)   NOT NULL,
+    platnostod      DATE   NOT NULL,
+    platnostdo      DATE  ,
+    textodpoved     VARCHAR(255)  ,
+    refprocedurarozhod INTEGER  ,
+    povolhodnoty    CHAR(10)  ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_odpovedrozhod_cis_dp5y
+) LOCK MODE ROW
+;
+
+--CHECKS
+ALTER TABLE eu_odpovedrozhod_cis
+ADD CONSTRAINT (CHECK (typodpoved IN ('DEFTEXT','POLEVYPLN','VYSLPROC')) CONSTRAINT eu_odpovedrozhod_cis_c1),
+ADD CONSTRAINT (CHECK (povolhodnoty in ('NUMBER','TEXT')) CONSTRAINT eu_odpovedrozhod_cis_c2);
+
+-- 13  eu_odpovedrozhod_cis-2/7       [CREATE.INDEX]
+CREATE unique INDEX eu_odpovedrozhod_cis_pk ON eu_odpovedrozhod_cis (serno) ;
+
+-- 14  eu_odpovedrozhod_cis-3/7       [CREATE.INDEX]
+CREATE INDEX eu_odpovedrozhod_cis_i_f1 ON eu_odpovedrozhod_cis (refprocedurarozhod) ;
+
+-- 15  eu_odpovedrozhod_cis-4/7       [CREATE.INDEX]
+CREATE unique INDEX eu_odpovedrozhod_cis_uq_eu_odpovedrozhod_cis_id ON eu_odpovedrozhod_cis (id) ;
+
+-- 16  eu_odpovedrozhod_cis-5/7       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_odpovedrozhod_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_odpovedrozhod_cis_pk;
+
+-- 17  eu_odpovedrozhod_cis-6/7       [CREATE.CONSTRAINT_UNIQUE]
+ALTER TABLE eu_odpovedrozhod_cis
+    ADD CONSTRAINT UNIQUE (id)  CONSTRAINT eu_odpovedrozhod_cis_uq_eu_odpovedrozhod_cis_id;
+
+-- ###############################################################
+--       eu_procedurarozhod_acis
+
+-- 26  eu_procedurarozhod_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_procedurarozhod_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    nazev           VARCHAR(255)   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_procedurarozhod_acis_dp69
+) LOCK MODE ROW
+;
+
+-- 27  eu_procedurarozhod_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_procedurarozhod_acis_pk ON eu_procedurarozhod_acis (idarch) ;
+
+-- 28  eu_procedurarozhod_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_procedurarozhod_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_procedurarozhod_acis_pk;
+
+-- ###############################################################
+--       eu_procedurarozhod_cis
+
+-- 29  eu_procedurarozhod_cis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_procedurarozhod_cis (
+    serno           SERIAL   NOT NULL,
+    nazev           VARCHAR(255)   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_procedurarozhod_cis_dp5y
+) LOCK MODE ROW
+;
+
+-- 30  eu_procedurarozhod_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_procedurarozhod_cis_pk ON eu_procedurarozhod_cis (serno) ;
+
+-- 31  eu_procedurarozhod_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_procedurarozhod_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_procedurarozhod_cis_pk;
+
+-- ###############################################################
+--       eu_sadavazebrozhod_acis
+
+-- 32  eu_sadavazebrozhod_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_sadavazebrozhod_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    nazev           VARCHAR(255)   NOT NULL,
+    platnostod      DATE   NOT NULL,
+    platnostdo      DATE  ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_sadavazebrozhod_acis_dp69
+) LOCK MODE ROW
+;
+
+-- 33  eu_sadavazebrozhod_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_sadavazebrozhod_acis_pk ON eu_sadavazebrozhod_acis (idarch) ;
+
+-- 34  eu_sadavazebrozhod_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_sadavazebrozhod_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_sadavazebrozhod_acis_pk;
+
+-- ###############################################################
+--       eu_sadavazebrozhod_cis
+
+-- 35  eu_sadavazebrozhod_cis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_sadavazebrozhod_cis (
+    serno           SERIAL   NOT NULL,
+    nazev           VARCHAR(255)   NOT NULL,
+    platnostod      DATE   NOT NULL,
+    platnostdo      DATE  ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_sadavazebrozhod_cis_dp5y
+) LOCK MODE ROW
+;
+
+-- 36  eu_sadavazebrozhod_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_sadavazebrozhod_cis_pk ON eu_sadavazebrozhod_cis (serno) ;
+
+-- 37  eu_sadavazebrozhod_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_sadavazebrozhod_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_sadavazebrozhod_cis_pk;
+
+-- ###############################################################
+--       eu_vartarifrozhod_acis
+
+-- 38  eu_vartarifrozhod_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_vartarifrozhod_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    refkritvariapurozhod INTEGER   NOT NULL,
+    tarif           Integer   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_vartarifrozhod_acis_dp69
+) LOCK MODE ROW
+;
+
+-- 39  eu_vartarifrozhod_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_vartarifrozhod_acis_pk ON eu_vartarifrozhod_acis (idarch) ;
+
+-- 40  eu_vartarifrozhod_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_vartarifrozhod_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_vartarifrozhod_acis_pk;
+
+-- ###############################################################
+--       eu_vartarifrozhod_cis
+
+-- 41  eu_vartarifrozhod_cis-1/5       [CREATE.TABLE]
+CREATE TABLE eu_vartarifrozhod_cis (
+    serno           SERIAL   NOT NULL,
+    refkritvariapurozhod INTEGER   NOT NULL,
+    tarif           Integer   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_vartarifrozhod_cis_dp69
+) LOCK MODE ROW
+;
+
+-- 42  eu_vartarifrozhod_cis-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_vartarifrozhod_cis_pk ON eu_vartarifrozhod_cis (serno) ;
+
+-- 43  eu_vartarifrozhod_cis-3/5       [CREATE.INDEX]
+CREATE INDEX eu_vartarifrozhod_cis_i_f1 ON eu_vartarifrozhod_cis (refkritvariapurozhod) ;
+
+-- 44  eu_vartarifrozhod_cis-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_vartarifrozhod_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_vartarifrozhod_cis_pk;
+
+-- ###############################################################
+--       eu_vazbarozhod_acis
+
+-- 45  eu_vazbarozhod_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_vazbarozhod_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    refsadavazebrozhod INTEGER   NOT NULL,
+    refotazkarozhod INTEGER   NOT NULL,
+    refodpovedrozhod INTEGER   NOT NULL,
+    refotazkarozhodnasl INTEGER  ,
+    odpovedod       VARCHAR(255)  ,
+    odpoveddo       VARCHAR(255)  ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_vazbarozhod_acis_dp5y
+) LOCK MODE ROW
+;
+
+-- 46  eu_vazbarozhod_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_vazbarozhod_acis_pk ON eu_vazbarozhod_acis (idarch) ;
+
+-- 47  eu_vazbarozhod_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_vazbarozhod_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_vazbarozhod_acis_pk;
+
+-- ###############################################################
+--       eu_vazbarozhod_cis
+
+-- 48  eu_vazbarozhod_cis-1/9       [CREATE.TABLE]
+CREATE TABLE eu_vazbarozhod_cis (
+    serno           SERIAL   NOT NULL,
+    refsadavazebrozhod INTEGER   NOT NULL,
+    refotazkarozhod INTEGER   NOT NULL,
+    refodpovedrozhod INTEGER   NOT NULL,
+    refotazkarozhodnasl INTEGER  ,
+    odpovedod       VARCHAR(255)  ,
+    odpoveddo       VARCHAR(255)  ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_vazbarozhod_cis_dp5y
+) LOCK MODE ROW
+;
+
+-- 49  eu_vazbarozhod_cis-2/9       [CREATE.INDEX]
+CREATE unique INDEX eu_vazbarozhod_cis_pk ON eu_vazbarozhod_cis (serno) ;
+
+-- 50  eu_vazbarozhod_cis-3/9       [CREATE.INDEX]
+CREATE INDEX eu_vazbarozhod_cis_i_f1 ON eu_vazbarozhod_cis (refotazkarozhod) ;
+
+-- 51  eu_vazbarozhod_cis-4/9       [CREATE.INDEX]
+CREATE INDEX eu_vazbarozhod_cis_i_f2 ON eu_vazbarozhod_cis (refodpovedrozhod) ;
+
+-- 52  eu_vazbarozhod_cis-5/9       [CREATE.INDEX]
+CREATE INDEX eu_vazbarozhod_cis_i_f3 ON eu_vazbarozhod_cis (refsadavazebrozhod) ;
+
+-- 53  eu_vazbarozhod_cis-6/9       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_vazbarozhod_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_vazbarozhod_cis_pk;
+
+
+-- ###############################################################
+--       eu_variaputarif_acis
+
+-- 65  eu_variaputarif_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_variaputarif_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    tarif           Integer   NOT NULL,
+    refvariapu      CHAR(10)  NOT NULL,
+    impltarif       Integer   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_variaputarif_acis_dp69
+) LOCK MODE ROW
+;
+
+-- 66  eu_variaputarif_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_variaputarif_acis_pk ON eu_variaputarif_acis (idarch) ;
+
+-- 67  eu_variaputarif_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_variaputarif_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_variaputarif_acis_pk;
+
+-- ###############################################################
+--       eu_variaputarif_cis
+
+-- 68  eu_variaputarif_cis-1/5       [CREATE.TABLE]
+CREATE TABLE eu_variaputarif_cis (
+    serno           SERIAL   NOT NULL,
+    tarif           Integer   NOT NULL,
+    refvariapu      CHAR(10)  NOT NULL,
+    impltarif       Integer   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_variaputarif_cis_dp69
+) LOCK MODE ROW
+;
+
+-- 69  eu_variaputarif_cis-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_variaputarif_cis_pk ON eu_variaputarif_cis (serno) ;
+
+-- 70  eu_variaputarif_cis-3/5       [CREATE.INDEX]
+CREATE INDEX eu_variaputarif_cis_i_f1 ON eu_variaputarif_cis (refvariapu) ;
+
+-- 71  eu_variaputarif_cis-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_variaputarif_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_variaputarif_cis_pk;
+
+
+
+--XXX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX
+
+
+-- ###############################################################
+--       eu_kritvariapurozhod_cis
+
+-- 54  eu_kritvariapurozhod_cis-6/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_kritvariapurozhod_cis
+    ADD CONSTRAINT FOREIGN KEY (refvazbarozhod) REFERENCES eu_vazbarozhod_cis(serno)  CONSTRAINT eu_kritvariapurozhod_cis_f1;
+
+-- 55  eu_kritvariapurozhod_cis-7/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_kritvariapurozhod_cis
+    ADD CONSTRAINT FOREIGN KEY (refvariapu) REFERENCES eu_variapu_cis(varid)  CONSTRAINT eu_kritvariapurozhod_cis_f2;
+
+-- ###############################################################
+--       eu_odpovedrozhod_cis
+
+-- 56  eu_odpovedrozhod_cis-7/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_odpovedrozhod_cis
+    ADD CONSTRAINT FOREIGN KEY (refprocedurarozhod) REFERENCES eu_procedurarozhod_cis(serno)  CONSTRAINT eu_odpovedrozhod_cis_f1;
+
+-- ###############################################################
+--       eu_vartarifrozhod_cis
+
+-- 57  eu_vartarifrozhod_cis-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_vartarifrozhod_cis
+    ADD CONSTRAINT FOREIGN KEY (refkritvariapurozhod) REFERENCES eu_kritvariapurozhod_cis(serno)  CONSTRAINT eu_vartarifrozhod_cis_f1;
+
+-- ###############################################################
+--       eu_vazbarozhod_cis
+
+-- 58  eu_vazbarozhod_cis-7/9       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_vazbarozhod_cis
+    ADD CONSTRAINT FOREIGN KEY (refotazkarozhod) REFERENCES eu_otazkarozhod_cis(serno)  CONSTRAINT eu_vazbarozhod_cis_f1;
+
+-- 59  eu_vazbarozhod_cis-8/9       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_vazbarozhod_cis
+    ADD CONSTRAINT FOREIGN KEY (refodpovedrozhod) REFERENCES eu_odpovedrozhod_cis(serno)  CONSTRAINT eu_vazbarozhod_cis_f2;
+
+-- 60  eu_vazbarozhod_cis-9/9       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_vazbarozhod_cis
+    ADD CONSTRAINT FOREIGN KEY (refsadavazebrozhod) REFERENCES eu_sadavazebrozhod_cis(serno)  CONSTRAINT eu_vazbarozhod_cis_f3;
+
+-- ###############################################################
+--       eu_variaputarif_cis
+
+-- 80  eu_variaputarif_cis-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_variaputarif_cis
+    ADD CONSTRAINT FOREIGN KEY (refvariapu) REFERENCES eu_variapu_cis(varid)  CONSTRAINT eu_variaputarif_cis_f1;
+
+
+ROLLBACK WORK;
+
+--End of B124795_RN00423411_1

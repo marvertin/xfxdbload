@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B129694_RSTS-2951_1
+-- @TC:ONCE: DESCRIPTION = Centrální evidence exekucí {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--CHECKS
+ALTER TABLE ws_metoda_cis
+  DROP CONSTRAINT ws_metoda_cis_c1
+;
+
+ALTER TABLE ws_metoda_cis
+  ADD CONSTRAINT (CHECK (skupinasluzeb IN (1,2,3,4,5,6,7,8,9)) CONSTRAINT ws_metoda_cis_c1)
+;
+
+ROLLBACK WORK;
+
+--End of B129694_RSTS-2951_1

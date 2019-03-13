@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A47035_RN00282474_4-part5
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--6.  Inicializace  kartotéky úhrad pojistného pojištìní UNIQA
+--Nové údaje jsou nastaveny do všech záznamù následovnì:
+--Èíslo pojištìné úvìrové smlouvy Èíslo úvìrové smlouvy
+--Typ pojištìné úvìrové smlouvy Typ úvìrové smlouvy
+--Varianta pojištìní      #Defaultní varianta pojištìní UNIQA#
+--Rozhodné datum pro pojistné Datum návrhu (v matrice pojištìní UNIQA)
+--    Reference uživatele a èasu zrušen <Prázdné>   -- nebude se migrovat
+update ec_uhrpojist_kart set
+  (smlouva,tsml,variantaid,rozhdatumpoj) = ((
+    select p.smlouva,p.tsml,tw_reggetKey('EV','*','pojistUNIQA','DefVar'),rozhdatumpoj
+     from ev_pojistcrp_mat p where p.vec = ec_uhrpojist_kart.vec
+  ))
+  where vec in (select vec from ev_pojistcrp_mat)
+;
+
+
+ROLLBACK WORK;
+
+--End of A47035_RN00282474_4-part5

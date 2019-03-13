@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B114214_RN00402078_3
+-- @TC:ONCE: DESCRIPTION = Nejsou odstraněna oprávnění pro cibis-ex a cibis-basel2 {DEFECT}
+
+
+BEGIN WORK;
+
+delete from tw0042_atoca_def where refact in (select serno from adm_permission where scope in ('CIBIS-Extract','CIBIS-Basel2'));
+delete from tw0042_atoea_def where refact in (select serno from adm_permission where scope in ('CIBIS-Extract','CIBIS-Basel2'));
+delete from  adm_gtoact_def where refact in (select serno from adm_permission where scope in ('CIBIS-Extract','CIBIS-Basel2'));
+delete from  tw0042_gstoact_def where refact in (select serno from adm_permission where scope in ('CIBIS-Extract','CIBIS-Basel2'));
+delete from  adm_secobjectpermission where refperm in (select serno from adm_permission where scope in ('CIBIS-Extract','CIBIS-Basel2'));
+delete from adm_permission where scope in ('CIBIS-Extract','CIBIS-Basel2');
+delete from adm_rank where scope in ('CIBIS-Extract','CIBIS-Basel2');
+
+
+ROLLBACK WORK;
+
+--End of B114214_RN00402078_3

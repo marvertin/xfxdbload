@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A48961_RN00319665_1-idx
+-- @TC:ONCE: DESCRIPTION = PO osoby v akci EO_DeactServices taky mùžou být duplicitní {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE INDEX eo_po_mat_i2 ON eo_po_mat (ico);
+
+ROLLBACK WORK;
+
+--End of A48961_RN00319665_1-idx

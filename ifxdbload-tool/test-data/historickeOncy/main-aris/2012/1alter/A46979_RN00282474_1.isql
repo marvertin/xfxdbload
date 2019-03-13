@@ -1,0 +1,79 @@
+-- @TC:ONCE: ID = V2, A46979_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+---------------------------------------------------
+CREATE TABLE pro_insurancevariant (
+  id SERIAL NOT NULL,
+  variantname   CHAR(70),
+  globalbaseparameters_id   Integer NOT NULL,
+  datesince   DATE NOT NULL,
+  dateto   DATE,
+  mirroredid   INTEGER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_insurancevariant_pk ON pro_insurancevariant(id);
+ALTER TABLE pro_insurancevariant ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_insurancevariant_pk;
+
+--FK
+CREATE INDEX pro_insurancevariant_i_f1 ON pro_insurancevariant(globalbaseparameters_id);
+ALTER TABLE pro_insurancevariant ADD CONSTRAINT FOREIGN KEY(globalbaseparameters_id) REFERENCES pro_globalbaseparameters(id) CONSTRAINT pro_insurancevariant_f1;
+
+--INDEXES
+CREATE INDEX pro_insurancevariant_i1 ON pro_insurancevariant(globalbaseparameters_id,datesince,dateto);
+CREATE INDEX pro_insurancevariant_i2 ON pro_insurancevariant(globalbaseparameters_id,dateto);
+
+---------------------------------------------------
+CREATE TABLE pro_insuranceset (
+  id SERIAL NOT NULL,
+  setname   CHAR(70),
+  variantid   INTEGER NOT NULL,
+  datesince   DATE NOT NULL,
+  dateto   DATE,
+  mirroredid   INTEGER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_insuranceset_pk ON pro_insuranceset(id);
+ALTER TABLE pro_insuranceset ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT pro_insuranceset_pk;
+
+--FK
+CREATE INDEX pro_insuranceset_i_f1 ON pro_insuranceset(variantid);
+ALTER TABLE pro_insuranceset ADD CONSTRAINT FOREIGN KEY(variantid) REFERENCES pro_insurancevariant(id) CONSTRAINT pro_insuranceset_f1;
+
+--INDEXES
+CREATE INDEX pro_insuranceset_i1 ON pro_insuranceset(variantid,datesince,dateto);
+CREATE INDEX pro_insuranceset_i2 ON pro_insuranceset(variantid,dateto);
+
+---------------------------------------------------
+DROP TRIGGER pro_insurancerate_i;
+
+ALTER TABLE pro_insuranceRate
+    DROP refuser
+  , DROP reftime
+;
+
+DROP INDEX pro_insurancerate_i1;
+DROP INDEX pro_insurancerate_i2;
+
+ALTER TABLE pro_insuranceRate
+ ADD setid INTEGER BEFORE gender
+;
+
+ALTER TABLE pro_insuranceRate
+  MODIFY globalbaseparameters_id INTEGER
+;
+
+--FK
+CREATE INDEX pro_insurancerate_i_f1 ON pro_insurancerate(setid);
+ALTER TABLE pro_insurancerate ADD CONSTRAINT FOREIGN KEY(setid) REFERENCES pro_insuranceset(id) CONSTRAINT pro_insurancerate_f1;
+
+--INDEXES
+CREATE INDEX pro_insurancerate_i1 ON pro_insurancerate(setid,agesince,ageto);
+CREATE INDEX pro_insurancerate_i2 ON pro_insurancerate(setid,ageto);
+
+ROLLBACK WORK;
+
+--End of A46979_RN00282474_1

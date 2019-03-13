@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B133479_UID52127_4
+-- @TC:ONCE: DESCRIPTION = Úprava funkce rizikových subjektů + nová RK Rizikový subjekt
+
+BEGIN WORK;
+
+call tw_regsetoraddKey('EU', 'contract', 'revizeUN', 'rozhFceRizSub-vych', 'crk_spustitKontrRizSubjektVych');
+
+ROLLBACK WORK;
+
+--End of B133479_UID52127_4

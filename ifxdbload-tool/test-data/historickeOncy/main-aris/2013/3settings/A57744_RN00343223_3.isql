@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A57744_RN00343223_3
+-- @TC:ONCE: DESCRIPTION = Zaøazení DB registrù {DEFECT}
+
+BEGIN WORK;
+
+call TW_RegDelKey('ES', 'bsavingrq' , '*', 'limitRecords');  -- používal se ve staré aplikaci Sale
+call TW_RegDelKey('ES', 'bsavingrq' , 'tisk', 'formbarcode'); -- používal se ve staré aplikaci Sale
+
+-- Pøesun z úlohy 'bsavingrq' do 'bsavingreq' se týká 5 registrù (první tøi se používají v CIBIS-Web, poslední dva v nové aplikaci CIBIS-Sale2):
+-- 'ES','bsavingreq','*','dopl_text'
+-- 'ES','bsavingreq','S','koefuhr'
+-- 'ES','bsavingreq','P','koefuhr'
+-- 'ES','bsavingreq', 'navrh', 'defpolitexponos' 
+-- 'ES','bsavingreq', 'navrh', 'defpoplatnikdan'
+UPDATE TW_Registr_Cis SET uloha = 'bsavingreq' WHERE oblast = 'ES' AND uloha = 'bsavingrq';
+
+ROLLBACK WORK;
+
+--End of A57744_RN00343223_3

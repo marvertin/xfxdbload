@@ -1,0 +1,71 @@
+create PROCEDURE RSTS_2905_findStavDospor_D()
+  
+  --povinne globalni promenne
+  define global TW_ErrSql   Int          default null;
+  define global TW_ErrIsam  Int          default null;
+  define global TW_ErrText  VarChar(255) default null;
+    
+  define _realn         int;  
+  define _tsml          char(4); 
+  define _treal         char(4);
+  
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  
+  --izolacni uroven bude dirty read
+  SET ISOLATION TO DIRTY READ;
+  
+  BEGIN WORK;
+  
+  --zruseni tabulky pokud jiz existuje
+  begin
+     on exception IN(-206)
+     end exception;
+    DROP TABLE rsts_2905_stavDospor;
+  end;
+  
+  --zalozime ridici tabulku
+  CREATE TABLE rsts_2905_stavDospor(
+    Ser     Serial NOT NULL,  --číslo řádku
+    sid     int,              -- SID paralelního běhu
+    zprac   int,              -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                              -- -1- prošlo fázi find - výběr kont
+                              -- -2- chyba ve fázi make
+                              --  2- prošlo fází make
+   
+    realn     int,  
+    treal     char(4),
+    
+    NumErr  Int,              --číslo chyby, jež na řádku nastala
+    ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+    TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  
+    PRIMARY KEY(Ser)
+  )LOCK MODE ROW;
+  
+  -- plnime ridici tabulku - sporeni
+        
+  INSERT INTO rsts_2905_stavDospor (realn, treal, zprac)
+    SELECT rs.realn, rs.treal, -1
+    FROM rs_real_mat rs
+    JOIN es_vkladkin_mat vkl ON vkl.smlouva = rs.smlouva AND vkl.tsml = rs.tsml  
+    WHERE
+      (datdo > MDY(1,1,2008) OR
+      datdo IS NULL) AND
+      vkl.stav = 'A'
+    GROUP BY
+      rs.realn, rs.treal;    
+       
+  
+  COMMIT WORK;
+  
+
+  
+  BEGIN WORK;
+  UPDATE STATISTICS HIGH FOR TABLE rsts_2905_stavDospor;
+  CALL tw_para_clean('RSTS_2905_makeStavDospor_D');
+  COMMIT WORK;
+
+end procedure;

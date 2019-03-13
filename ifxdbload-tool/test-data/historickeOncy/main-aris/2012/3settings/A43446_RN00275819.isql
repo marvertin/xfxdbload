@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A43446_RN00275819
+-- @TC:ONCE: DESCRIPTION = chyba v parametrizaci vztahu SZ
+BEGIN WORK;
+
+update eo_vztahos_cis 
+set typos2 = 'P'
+where typvztah = 'SZ';
+   
+ROLLBACK WORK;
+
+ 

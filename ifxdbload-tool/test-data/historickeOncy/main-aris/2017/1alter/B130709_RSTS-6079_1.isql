@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B130709_RSTS-6079_1
+-- @TC:ONCE: DESCRIPTION = uložení model. případu pro existujícího klienta {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_bonita 
+  add   partneros   INTEGER,
+  add partneruid   BIGINT
+;
+
+ROLLBACK WORK;
+
+--End of B130709_RSTS-6079_1

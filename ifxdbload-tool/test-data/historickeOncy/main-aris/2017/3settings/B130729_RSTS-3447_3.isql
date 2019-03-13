@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, B130729_RSTS-3447_3
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Koupě na splátky', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Operativní leasing', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Exportní / importní / eskontní úvěr', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Hypoteční úvěr', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Investiční úvěr', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Provozní úvěr', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Osobní úvěr', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Spotřební úvěr', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Finanční leasing', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Revolvingový úvěr', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Kreditní karty splátkové', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Kreditní karty', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Úvěr ze stavebního spoření', NULL, 1);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Úvěr, splátkový produkt', 'migrovaný záznam', 0);
+insert into eo_typzavazku_cis (poradi, typzavazku, poznamka, platnost) VALUES (NULL, 'Ostatní', 'migrovaný záznam', 0);
+
+insert into eo_ucelzavazku_cis (ucel, poznamka, platnost) VALUES ('Bydlení', NULL, 1);
+insert into eo_ucelzavazku_cis (ucel, poznamka, platnost) VALUES ('Auto', NULL, 1);
+insert into eo_ucelzavazku_cis (ucel, poznamka, platnost) VALUES ('Podnikání', NULL, 1);
+insert into eo_ucelzavazku_cis (ucel, poznamka, platnost) VALUES ('Ostatní', NULL, 1);
+
+insert into eo_platnostzavazku_cis (stavplatnosti, poznamka, platnost) VALUES ('Bude trvat dále', NULL, 1);
+insert into eo_platnostzavazku_cis (stavplatnosti, poznamka, platnost) VALUES ('Ref tímto úvěrem', NULL, 1);
+insert into eo_platnostzavazku_cis (stavplatnosti, poznamka, platnost) VALUES ('Splaceno před čerpáním', NULL, 1);
+insert into eo_platnostzavazku_cis (stavplatnosti, poznamka, platnost) VALUES ('Již splaceno', NULL, 1);
+insert into eo_platnostzavazku_cis (stavplatnosti, poznamka, platnost) VALUES ('Budoucí závazek', NULL, 1);
+
+ROLLBACK WORK;
+
+--End of B130729_RSTS-3447_3

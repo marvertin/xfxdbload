@@ -1,0 +1,99 @@
+-- @TC:ONCE: ID = V2, A60241_RN00326567
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Rozšíøení checklistu k ÚŽ
+
+BEGIN WORK;
+
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 1 and zdrojprijmu = 'O';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 2 and zdrojprijmu = 'O';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 3 and zdrojprijmu = 'O';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 4 and zdrojprijmu = 'O';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 5 and zdrojprijmu = 'O';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 6 and zdrojprijmu = 'O';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 7 and zdrojprijmu = 'D';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 8 and zdrojprijmu = 'D';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 9 and zdrojprijmu = 'D';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 10 and zdrojprijmu = 'D';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 11 and zdrojprijmu = 'D';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 12 and zdrojprijmu = 'D';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 13 and zdrojprijmu = 'P';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 14 and zdrojprijmu = 'P';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 15 and zdrojprijmu = 'P';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 16 and zdrojprijmu = 'P';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 17 and zdrojprijmu = 'P';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 18 and zdrojprijmu = 'P';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 19 and zdrojprijmu = 'Z';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 20 and zdrojprijmu = 'Z';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 21 and zdrojprijmu = 'Z';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 22 and zdrojprijmu = 'Z';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 23 and zdrojprijmu = 'Z';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 24 and zdrojprijmu = 'Z';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 7 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 13 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 2 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 14 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 3 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 15 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 4 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 16 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 5 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 17 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 6 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 18 and zdrojprijmu = 'U';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 25 and zdrojprijmu = 'E';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 25 and zdrojprijmu = 'E';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 26 and zdrojprijmu = 'S';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 27 and zdrojprijmu = 'S';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 28 and zdrojprijmu = 'S';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 29 and zdrojprijmu = 'S';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 30 and zdrojprijmu = 'S';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 31 and zdrojprijmu = 'S';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 32 and zdrojprijmu = 'R';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 33 and zdrojprijmu = 'R';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 34 and zdrojprijmu = 'R';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 35 and zdrojprijmu = 'R';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 36 and zdrojprijmu = 'R';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 37 and zdrojprijmu = 'R';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 38 and zdrojprijmu = 'X';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 39 and zdrojprijmu = 'X';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 40 and zdrojprijmu = 'X';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 41 and zdrojprijmu = 'X';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 42 and zdrojprijmu = 'X';
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 43 and zdrojprijmu = 'X';
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 110 and zdrojprijmu is null;
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 111 and zdrojprijmu is null;
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 112 and zdrojprijmu is null;
+update eu_navrdok_cis set umisteni = 'NAVRAT' where dok = 113 and zdrojprijmu is null;
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 114 and zdrojprijmu is null;
+update eu_navrdok_cis set umisteni = 'ZAJIST' where dok = 115 and zdrojprijmu is null;
+
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 49, 'Jiné dokumenty k žádosti o úvìr', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 51, 'Kopie prùkazu totožnosti', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 85, 'DAP zamìstnavatele (ovìøeno FÚ)', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 86, 'Dohoda o pracovní èinnosti', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 87, 'Doklad prokazující osobu blízkou', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 88, 'Doklad prokazující výši danì', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 89, 'Nájemní smlouva (klient není vlastníkem nemovitosti)', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 90, 'Odhad nákladù stavebních úprav', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 91, 'Sdìlení OZ k žádosti o úvìr', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 92, 'Podnájemní smlouva (klient není vlastníkem ani nájemcem nemovitosti)', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 93, 'Položkový rozpoèet stavebních nákladù', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 94, 'Potvrzení o nástupu do zamìstnání ze správy soc. zabezpeèení', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 95, 'Potvrzení o podmínkách výmazu zástavního práva', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 96, 'Potvrzení o zùstatku a trvání závazku vèetnì souhlasu s pøedèasným splacením a urèením lhùty a podmínek plnìní', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 97, 'Pravomocného rozhodnutí soudu se stanovením výše výživného', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 98, 'Rozhodnutí o pøiznání a výši dávky pìstounské péèe', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 99, 'Smlouva o postoupení restituèní pohledávky', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 100, 'Smlouva o pøevodu majetku vèetnì termínu splatnosti-restituce', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 101, 'Smlouva o pøevodu nemovitostí (plátce danì je dlužník)-úèel je úhrada danì', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 102, 'Smlouva o spolufinancování druh/družka', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 103, 'Smlouva o vìcném bøemeni', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 104, 'Smlouvy o nájmu, pronájmu zastavované nemovitosti', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 105, 'Souhlas majitele nemovitosti s podnájmem nemovitosti (klient není vlastníkem ani nájemcem nemovitosti)', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 106, 'Stavební doklad', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 107, 'Výpisy z úètu s došlou mzdou', mdy(1,1,2013));
+insert into eu_navrdok_cis (ostatniprijmy, umisteni, dok, poznamka, platnostod) values ('NEROZLISENO', 'OSTATN', 108, 'Výplatní pásky', mdy(1,1,2013));
+
+
+ROLLBACK WORK;
+
+--End of A56606_RN00338870_3

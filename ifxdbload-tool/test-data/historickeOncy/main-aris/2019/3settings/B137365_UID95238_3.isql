@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137365_UID95238_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33933: Zjemnění parametrů pro kontrolu stádií při čerpání
+
+BEGIN WORK;
+
+call TW_RegDelKey('RU', '*', 'cerp', 'maxstadiumklient');
+call TW_RegDelKey('RU', '*', 'cerp', 'maxstadiumreal');
+
+ROLLBACK WORK;
+
+--End of B137365_UID95238_3

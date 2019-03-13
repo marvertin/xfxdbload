@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A60607_RN00339378
+-- @TC:ONCE: DESCRIPTION = Obmedzenie zvysenia CC
+
+BEGIN WORK;
+
+  call TW_RegSetOrAddKey('ES', 'zmena', 'testMoznostNavysCC', 'stupenHlasky', 1, 1,
+      'Spoøení', 'Zmìna smlouvy SS','Change of BS contract', '#Úroveò hlášení pøi kontrole možnosti navýšení CÈ#');
+
+ROLLBACK WORK;
+
+--End of A60607_RN00339378

@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, B120535_RN00413743_3
+-- @TC:ONCE: DESCRIPTION = Rozšíření kontroly rizikových subjektů {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  ('PUPO',       null,  'D',   2,      null,            mdy(1,1,2015),   1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  ('SUPO',       null,  'D',   2,      null,             mdy(1,1,2015),  1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  ('KOME',       null,  'D',   2,      null,             mdy(1,1,2015),  1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  ('PUPO',       null,  'I',   2,      null,             mdy(1,1,2015),  1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  ('SUPO',       null,  'I',   2,      null,             mdy(1,1,2015),  1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  ('KOME',       null,  'I',   2,      null,             mdy(1,1,2015),  1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  (null,         'ZL',  'D',   2,      null,             mdy(1,1,2015),  1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  (null,         'ZL',  'I',   2,      null,             mdy(1,1,2015),  1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  (null,         null,  'D',   2,      'Z',             mdy(1,1,2015),   1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+insert into nocheckrule (xproductkind, xrole, xkind, xphase, xprocessvariant, xdatevalidfrom,  xvalidity, xcurrency, id) 
+values                  (null,         null,  'I',   2,      'Z',             mdy(1,1,2015),   1,         'CZK',     (SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule));
+
+ROLLBACK WORK;
+
+--End of B120535_RN00413743_3

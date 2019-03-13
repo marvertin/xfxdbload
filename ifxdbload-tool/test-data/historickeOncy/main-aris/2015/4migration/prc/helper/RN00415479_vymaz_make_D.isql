@@ -1,0 +1,187 @@
+create PROCEDURE RN00415479_vymaz_make_D (-- vstupni paramtery
+                                    AZpracovatParalelne Int Default  0
+                                    , ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+                                    
+) 
+
+define _ser          Int;
+define _davka        Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _headser       int;
+define _vymazmodel    int;
+define _vymazeir      int;
+define _vymazrpsn     int;
+
+define _prvni       integer;
+define _posledni    integer; 
+define _curr        integer;
+define _AID         varchar(20);  
+define _SID         integer;
+ 
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+define global Exclusive_G integer default 1;
+
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+let Exclusive_G = 1; 
+
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00415479', 'RN00415479_vymaz', 'Migrace: výmaz modelování, krok provedení výmazu');
+
+COMMIT WORK;
+
+
+--pres ridici tabulku
+if AZpracovatParalelne = 0 then
+  BEGIN WORK;
+  foreach cc2 with hold for
+     SELECT ser,  headser,  vymazmodel,  vymazeir,  vymazrpsn
+     INTO  _ser, _headser, _vymazmodel, _vymazeir, _vymazrpsn
+     FROM RN00415479_vymaz
+     WHERE zprac in (-3) -- -3 má význam, že bylo provedeno vyhledání kandidátů 
+     ORDER BY ser
+  
+    begin
+      --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+      on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+        --rollback transakce
+        ROLLBACK WORK;
+        --ulozime chybu do ridici tabulky
+        UPDATE RN00415479_vymaz
+          SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+          WHERE ser=_ser;
+        --zahajeni transakce migrace
+        BEGIN WORK;
+      end exception;
+  
+      --------------------------------------------------------------------
+      --vlastni algoritmus migrace
+      if _vymazmodel > 0 then
+         call RN00415479_vymaz_make_smaz(_headser, 1);
+      else
+        if _vymazeir > 0 then
+          call RN00415479_vymaz_make_smaz(_headser, 2);
+        end if;
+
+        if _vymazrpsn > 0 then
+          call RN00415479_vymaz_make_smaz(_headser, 3);
+        end if;
+      end if;
+
+      UPDATE RN00415479_vymaz 
+      SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null WHERE ser=_ser;
+    end;
+  
+    --nova transakce
+    COMMIT WORK;
+    BEGIN WORK;
+  end foreach;
+  COMMIT WORK;
+else
+  set lock mode to wait 30;  
+  
+  let _AID = 'RN00415479_vymaz';
+  let _SID = DBINFO('sessionid');
+  
+  -- nejvetsi a nejmensi serial
+  let _prvni,_posledni = (select min(ser),max(ser) from RN00415479_vymaz where zprac = -3);
+
+  -- vnejsi cyklus pres ridici tabulku
+  while tw_para_find(_AID,_SID,_prvni,_posledni) = 1 
+    -- vnitrni cyklus pres ridici tabulku
+    while tw_para_hasnext(_AID,_SID) = 1
+      -- zahajim transakci
+      BEGIN WORK;      
+      -- vezmu záznam
+      let _curr = tw_para_next(_AID,_SID); 
+      -- dohledam zpracovavany zaznam
+      let _headser, _vymazmodel, _vymazeir, _vymazrpsn = (SELECT headser,  vymazmodel,  vymazeir,  vymazrpsn FROM RN00415479_vymaz WHERE ser = _curr and zprac = -3);
+      if _headser is null then
+        COMMIT WORK;
+        CONTINUE WHILE; --pokud byl zaznam jiz zpracovan jdu dal
+      end if;      
+
+      begin
+        on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+          if (TW_ErrSql in (-213,-457, -721)) then
+            call TW_RaiseTechError ('373A36TCUI', 'RN00415479_vymaz_make_D: Action has been cancelled by operator');
+          end if;
+          
+          begin
+            on exception in (-255)
+            end exception;
+            ROLLBACK WORK;
+          end;
+          
+          BEGIN WORK;
+          
+          UPDATE RN00415479_vymaz SET (numerr, isamerr, texterr) = (TW_ErrSql, TW_ErrIsam, TW_ErrText) WHERE ser = _curr;
+          COMMIT;
+
+          BEGIN WORK;       
+          --znovu vezmu záznam - reknu, ze je chyba (1)
+          let _curr = tw_para_next(_AID,_SID,1);                                                        
+          call TW_ClearMessage();
+          COMMIT WORK;
+          CONTINUE WHILE; 
+        end exception with resume;
+
+        --vlastni algoritmus migrace
+        if _vymazmodel > 0 then
+         call RN00415479_vymaz_make_smaz(_headser, 1);
+        else
+          if _vymazeir > 0 then
+            call RN00415479_vymaz_make_smaz(_headser, 2);
+          end if;
+        
+          if _vymazrpsn > 0 then
+            call RN00415479_vymaz_make_smaz(_headser, 3);
+          end if;
+        end if;
+
+        -- aktualizuju zaznam v ridici tabulce
+        UPDATE RN00415479_vymaz SET zprac = _SID WHERE ser=_curr;        
+      end;     
+                                              
+      -- potvrdim transakci
+      COMMIT WORK;      
+    end while;
+  end while;
+end if;
+
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

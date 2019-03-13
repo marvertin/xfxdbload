@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B123064_RN00440357_3
+-- @TC:ONCE: DESCRIPTION = Zavedení nového typu vlastnosti produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO  EP_UhrVlastnost_Enum (vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(47, 'Úvěr pod účinností HS', 'BOOLEAN', 0, 0, 0);
+
+ROLLBACK WORK;
+
+--End of B123064_RN00440357_3

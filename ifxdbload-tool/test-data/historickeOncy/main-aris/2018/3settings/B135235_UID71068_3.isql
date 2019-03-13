@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135235_UID71068_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21419: !U!132F111TCUI(aaSUFO||01.08.2016):crk_getHraniciUveru:Nelze jednoznačn {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+UPDATE crk_kontrolasada_cis
+SET platnostdo = (SELECT platnostod-1 FROM crk_kontrolasada_cis WHERE reftsml = 'SUFO' AND sadanazev = 'SUFO 2017')
+WHERE serno = (SELECT serno FROM crk_kontrolasada_cis WHERE reftsml = 'SUFO' AND sadanazev = 'Smlouvy SUFO' AND platnostod = MDY(1,1,1994));
+
+ROLLBACK WORK;
+
+--End of B135235_UID71068_3

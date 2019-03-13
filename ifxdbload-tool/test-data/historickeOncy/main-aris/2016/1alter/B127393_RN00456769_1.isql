@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B127393_RN00456769_1
+-- @TC:ONCE: DESCRIPTION = Main: export dat na US - rozšíření o doklady totožnosti
+
+BEGIN WORK;
+
+ALTER TABLE eo_exprole_den 
+  ADD druhprukaz   Integer,
+  ADD druhprukaztitle   CHAR(35),
+  ADD cisprukaz   CHAR(20),
+  ADD vydal   CHAR(45),
+  ADD neomezplat   Integer,
+  ADD platnostdo   DATE,
+  ADD kontrznak   CHAR(1);
+  
+ALTER TABLE eu_expsml_den 
+  ADD splspormoddatsplatpu   DATE,
+  ADD splspormoddatsplat   DATE;
+  
+ROLLBACK WORK;
+
+--End of B127393_RN00456769_1

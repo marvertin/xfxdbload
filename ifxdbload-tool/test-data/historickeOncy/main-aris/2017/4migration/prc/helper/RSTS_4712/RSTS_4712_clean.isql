@@ -1,0 +1,20 @@
+create PROCEDURE RSTS_4712_clean()
+  
+  --povinne globalni promenne
+  define global TW_ErrSql   Int          default null;
+  define global TW_ErrIsam  Int          default null;
+  define global TW_ErrText  VarChar(255) default null;    
+  
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  
+  --izolacni uroven bude dirty read
+  SET ISOLATION TO DIRTY READ;
+  
+  BEGIN WORK;
+  CALL tw_para_clean('rsts_4712_make_D');
+  COMMIT WORK;
+
+end procedure;

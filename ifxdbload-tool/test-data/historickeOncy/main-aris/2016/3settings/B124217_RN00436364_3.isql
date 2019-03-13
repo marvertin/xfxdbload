@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B124217_RN00436364_3
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 201, (select serno from eu_typdalsinakl_cis where typ = 'Odhad'));
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 212, (select serno from eu_typdalsinakl_cis where typ = 'Odhad'));
+
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 201, (select serno from eu_typdalsinakl_cis where typ = 'LV'));
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 212, (select serno from eu_typdalsinakl_cis where typ = 'LV'));
+
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 201, (select serno from eu_typdalsinakl_cis where typ = 'Vklad do KN'));
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 212, (select serno from eu_typdalsinakl_cis where typ = 'Vklad do KN'));
+
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 201, (select serno from eu_typdalsinakl_cis where typ = 'Podpis'));
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 212, (select serno from eu_typdalsinakl_cis where typ = 'Podpis'));
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 103, (select serno from eu_typdalsinakl_cis where typ = 'Podpis'));
+
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 31, (select serno from eu_typdalsinakl_cis where typ = 'Poj.nem.'));
+
+insert into eu_vazbazajistnakl_cis(platnost, refzajist, reftypdalsinakl) values (1, 9, (select serno from eu_typdalsinakl_cis where typ = 'Živ.poj.'));
+
+ROLLBACK WORK;
+
+--End of B124217_RN00436364_3

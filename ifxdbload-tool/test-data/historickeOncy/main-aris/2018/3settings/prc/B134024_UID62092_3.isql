@@ -1,0 +1,171 @@
+-- @TC:ONCE: ID = V2, B134024_UID62092_3
+-- @TC:ONCE: DESCRIPTION = RSTS-16746 - Nová parametrizace číselníků {CUSTOMERREQUEST}
+
+CREATE PROCEDURE B134024_UID62092_3()
+
+define _odpovedAno,_odpovedNe int;
+define _sada1, _sada2 int;
+define _otazkaZajNemov,_otazkaRefinHypo,_otazkapRefinReko,_otazkaPojisteniUniqa, _otazkaPotrebOsobyBlizke int;
+define _vazba1RefHypoAno,_vazba1RefHypoNe,_vazba1RefRekoAno,_vazba1RefRekoNe,_vazba2RefHypoAno,_vazba2RefHypoNe int;
+define _idPrvniOtazky int;
+define _kritvariapuHyAno, _kritvariapuHyNe, _kritvariapuReAno, _kritvariapuReNe int;
+define _hypoVop, _rekoVop int;
+
+
+--Všechno staré zneplatníme
+--==================================
+UPDATE eu_vazbarozhod_cis SET platnost = 0 where platnost <> 0;
+UPDATE eu_kritvariapurozhod_cis SET platnost = 0 where platnost <> 0;
+UPDATE eu_otazkarozhod_cis SET text = '(nepl) ' || text, platnost = 0 where platnost <> 0;
+UPDATE eu_sadavazebrozhod_cis SET nazev = '(nepl) ' || nazev, platnost = 0 where platnost <> 0;
+UPDATE eu_vartarifrozhod_cis SET platnost = 0 where platnost <> 0;
+
+
+--Zjistíme existující odpovědi
+--==================================
+select serno into _odpovedAno from eu_odpovedrozhod_cis where textodpoved = 'Ano';
+select serno into _odpovedNe from eu_odpovedrozhod_cis where textodpoved = 'Ne';
+
+
+--Stvoříme otázky:
+--==================================
+let _idPrvniOtazky = (select NVL(max(id),0) + 10 from eu_otazkarozhod_cis);
+if _idPrvniOtazky < 101 then
+  let _idPrvniOtazky = 101;
+end if;
+
+INSERT INTO eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) 
+  VALUES (_idPrvniOtazky + 00,'Řeší úvěr potřeby osoby blízké?',null,mdy(1,1,2018),null,1);
+let _otazkaPotrebOsobyBlizke = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) 
+  VALUES (_idPrvniOtazky + 10,'Sjednat pojištění UNIQA?',null,mdy(1,1,2018),null,1);
+let _otazkaPojisteniUniqa = TW_LastSer();
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) 
+  VALUES (_idPrvniOtazky + 20,'Zajištění nemovitostí?',NULL,mdy(1,1,2016),null,1);
+let _otazkaZajNemov = TW_LastSer();
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) 
+  VALUES (_idPrvniOtazky + 30,'Refinancování?','HYPO větev',mdy(1,1,2016),null,1);
+let _otazkaRefinHypo = TW_LastSer();
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) 
+  VALUES (_idPrvniOtazky + 40,'Refinancování?','REKO větev',mdy(1,1,2016),null,1);
+let _otazkapRefinReko = TW_LastSer();
+
+
+
+--Stvoříme sady:
+--==================================
+INSERT INTO eu_sadavazebrozhod_cis(nazev, platnostod,  tsml, prvniotazka, platnost)
+VALUES ('Sada PFSU', mdy(8,1,2016), 'PFSU', _otazkaPotrebOsobyBlizke, 1);
+let _sada1 = TW_lastser();
+
+INSERT INTO eu_sadavazebrozhod_cis(nazev, platnostod, tsml, prvniotazka, platnost)
+VALUES ('Sada SUFO', mdy(8,1,2016), 'SUFO', _otazkaPotrebOsobyBlizke, 1);
+let _sada2 = TW_lastser();
+
+
+
+--Stvoříme vazby:
+--==================================
+
+------PFSU Otázka Potreb osoby blizke
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada1, _otazkaPotrebOsobyBlizke, _odpovedAno, _otazkaPojisteniUniqa, NULL, 1);
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada1, _otazkaPotrebOsobyBlizke, _odpovedNe, _otazkaPojisteniUniqa, NULL, 1);
+  
+------PFSU Otázka Pojištění UNIQA
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada1, _otazkaPojisteniUniqa, _odpovedAno, _otazkaZajNemov, 'POJISTENI', 1);
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada1, _otazkaPojisteniUniqa, _odpovedNe, _otazkaZajNemov, NULL, 1);
+
+-------PFSU Otázka Zajištění
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada1, _otazkaZajNemov, _odpovedAno, _otazkaRefinHypo, 'NEMOVITOST', 1);
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada1, _otazkaZajNemov, _odpovedNe, _otazkapRefinReko, NULL, 1);
+
+-------PFSU Otázka Refinancování, větev HYPO
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, terminalnivazba, platnost)
+  VALUES (_sada1, _otazkaRefinHypo, _odpovedAno, NULL, 'REFINANCOVAT', 1, 1);
+let _vazba1RefHypoAno = TW_LastSer();
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, terminalnivazba, platnost)
+  VALUES (_sada1, _otazkaRefinHypo, _odpovedNe, NULL, NULL, 1, 1);
+let _vazba1RefHypoNe = TW_LastSer();
+
+-------PFSU Otázka Refinancování, větev REKO
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, terminalnivazba, platnost)
+  VALUES (_sada1, _otazkapRefinReko, _odpovedAno, NULL, 'REFINANCOVAT', 1, 1);
+let _vazba1RefRekoAno = TW_LastSer();
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, terminalnivazba, platnost)
+  VALUES (_sada1, _otazkapRefinReko, _odpovedNe, NULL, NULL, 1, 1);
+let _vazba1RefRekoNe = TW_LastSer();
+
+
+------SUFO Otázka Potreb osoby blizke
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada2, _otazkaPotrebOsobyBlizke, _odpovedAno, _otazkaPojisteniUniqa, NULL, 1);
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada2, _otazkaPotrebOsobyBlizke, _odpovedNe, _otazkaPojisteniUniqa, NULL, 1);
+
+------SUFO Otázka Pojištění UNIQA
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada2, _otazkaPojisteniUniqa, _odpovedAno, _otazkaZajNemov, 'POJISTENI', 1);
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada2, _otazkaPojisteniUniqa, _odpovedNe, _otazkaZajNemov, NULL, 1);
+
+-------SUFO Otázka Zajištění
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada2, _otazkaZajNemov, _odpovedAno, _otazkaRefinHypo, 'NEMOVITOST', 1);
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, platnost)
+  VALUES (_sada2, _otazkaZajNemov, _odpovedNe, _otazkaRefinHypo, NULL, 1);
+
+------SUFO Otázka Refinancování, větev HYPO
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, terminalnivazba, platnost)
+  VALUES (_sada2, _otazkaRefinHypo, _odpovedAno, NULL, 'REFINANCOVAT', 1, 1);
+let _vazba2RefHypoAno = TW_LastSer();
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, akce, terminalnivazba, platnost)
+  VALUES (_sada2, _otazkaRefinHypo, _odpovedNe, NULL, NULL, 1, 1);
+let _vazba2RefHypoNe = TW_LastSer();
+
+
+
+--Stvoříme přiřazení k variantám PU
+--==================================
+INSERT INTO eu_kritvariapurozhod_cis(refvazbarozhod, refvariapu, platnost)
+  VALUES (_vazba1RefHypoAno, 'HY', 1);
+let _kritvariapuHyAno = TW_LastSer();
+INSERT INTO eu_kritvariapurozhod_cis(refvazbarozhod, refvariapu, platnost)
+  VALUES (_vazba1RefHypoNe, 'HY', 1);
+let _kritvariapuHyNe = TW_LastSer();
+
+INSERT INTO eu_kritvariapurozhod_cis(refvazbarozhod, refvariapu, platnost)
+  VALUES (_vazba1RefRekoAno, 'RE', 1);
+let _kritvariapuReAno = TW_LastSer();
+INSERT INTO eu_kritvariapurozhod_cis(refvazbarozhod, refvariapu, platnost)
+  VALUES (_vazba1RefRekoNe, 'RE', 1);
+let _kritvariapuReNe = TW_LastSer();
+
+
+--Priradenie kriterii k tarifom
+--==================================
+SELECT tarif INTO _hypoVop FROM es_voptarif_cis WHERE text='HYPO U 173'; 
+SELECT tarif INTO _rekoVop FROM es_voptarif_cis WHERE text='REKO U 172';
+
+
+INSERT INTO eu_vartarifrozhod_cis(refkritvariapurozhod, tarif, platnost)
+  VALUES(_kritvariapuHyAno, _hypoVop, 1);
+INSERT INTO eu_vartarifrozhod_cis(refkritvariapurozhod, tarif, platnost)
+  VALUES(_kritvariapuHyNe, _hypoVop, 1);
+INSERT INTO eu_vartarifrozhod_cis(refkritvariapurozhod, tarif, platnost)
+  VALUES(_kritvariapuReAno, _rekoVop, 1);    
+INSERT INTO eu_vartarifrozhod_cis(refkritvariapurozhod, tarif, platnost)
+  VALUES(_kritvariapuReNe, _rekoVop, 1);
+
+
+END PROCEDURE
+--End of B134024_UID62092_3

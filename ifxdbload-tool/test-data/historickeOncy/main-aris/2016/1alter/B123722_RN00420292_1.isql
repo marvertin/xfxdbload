@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B123722_RN00420292_1
+-- @TC:ONCE: DESCRIPTION = Vytvoření návrhu vypořádání úvěru po jeho splacení. {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ru_vypor_kart ADD autovypor   Integer  DEFAULT 0,
+                          ADD CONSTRAINT CHECK (autovypor IN (0,1)) CONSTRAINT ru_vypor_kart_dnoe;
+
+ROLLBACK WORK;
+
+--End of B123722_RN00420292_1

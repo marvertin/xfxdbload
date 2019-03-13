@@ -1,0 +1,54 @@
+-- @TC:ONCE: ID = V2, B130376_RSTS-5084_1
+-- @TC:ONCE: DESCRIPTION = Zavedení evidence technických chyb do modelu splácení a spoření {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE ep_splspormoderr_den (
+  ser   SERIAL NOT NULL,
+  headser   INTEGER,
+  errsql   Integer,
+  errisam   Integer,
+  errtext   VARCHAR(255)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splspormoderr_den_pk ON ep_splspormoderr_den(ser);
+ALTER TABLE ep_splspormoderr_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splspormoderr_den_pk;
+
+--FK
+CREATE INDEX ep_splspormoderr_den_i_f1 ON ep_splspormoderr_den(headser);
+ALTER TABLE ep_splspormoderr_den ADD CONSTRAINT FOREIGN KEY(headser) REFERENCES ep_splspormodsh_den(ser) CONSTRAINT ep_splspormoderr_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE ep_splspormoderrmsg_den (
+  ser   SERIAL NOT NULL,
+  headser   INTEGER,
+  severity   CHAR(1),
+  text   VARCHAR(255),
+  value   VARCHAR(255)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splspormoderrmsg_den_pk ON ep_splspormoderrmsg_den(ser);
+ALTER TABLE ep_splspormoderrmsg_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splspormoderrmsg_den_pk;
+
+--FK
+CREATE INDEX ep_splspormoderrmsg_den_i_f1 ON ep_splspormoderrmsg_den(headser);
+ALTER TABLE ep_splspormoderrmsg_den ADD CONSTRAINT FOREIGN KEY(headser) REFERENCES ep_splspormoderr_den(ser) CONSTRAINT ep_splspormoderrmsg_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+ROLLBACK WORK;
+
+--End of B130376_RSTS-5084_1

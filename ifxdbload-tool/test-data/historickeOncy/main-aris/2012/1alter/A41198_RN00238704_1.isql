@@ -1,0 +1,50 @@
+-- @TC:ONCE: ID = V2, A41198_RN00238704_1
+-- @TC:ONCE: DESCRIPTION = Zmìny v CBS a skóringu {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE EU_Ucel_Cis 
+  ADD typzadost CHAR(1),
+  ADD CONSTRAINT (CHECK (typzadost in ('K', 'B', 'D', 'V', 'O')) CONSTRAINT eu_ucel_cis_c3);
+
+ALTER TABLE EU_Ucel_ACis ADD typzadost CHAR(1);
+
+CREATE TABLE eo_typadr_cis (
+  typ   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_typadr_cis_dxsb
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_typadr_cis_pk ON eo_typadr_cis(typ);
+ALTER TABLE eo_typadr_cis ADD CONSTRAINT PRIMARY KEY(typ) CONSTRAINT eo_typadr_cis_pk;
+
+CREATE TABLE eo_typadr_acis (
+  ser   SERIAL NOT NULL,
+  typ   Integer NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_typadr_acis_dxsb
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_typadr_acis_pk ON eo_typadr_acis(ser);
+ALTER TABLE eo_typadr_acis ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT eo_typadr_acis_pk;
+
+ALTER TABLE EO_Bydleni_Mat ADD typadr Integer;
+
+CREATE INDEX eo_bydleni_mat_i_f7 ON eo_bydleni_mat(typadr);
+ALTER TABLE eo_bydleni_mat ADD CONSTRAINT FOREIGN KEY(typadr) REFERENCES eo_typadr_cis(typ) CONSTRAINT eo_bydleni_mat_f7;
+
+ALTER TABLE EO_Bydleni_Arch ADD typadr Integer;
+
+ROLLBACK WORK;
+
+--End of A41198_RN00238704_1

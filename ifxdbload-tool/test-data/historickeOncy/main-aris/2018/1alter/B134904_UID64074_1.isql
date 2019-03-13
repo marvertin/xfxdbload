@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B134904_UID64074_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17797: Přepočet NHZ v Central {STORY}
+
+BEGIN WORK;
+
+alter table eu_sml_arch
+  add refgrafzajist BIGINT
+;
+
+alter table eu_sml_mat
+  add refgrafzajist BIGINT
+;
+
+--FK
+CREATE INDEX eu_sml_mat_i_f17 ON eu_sml_mat(refgrafzajist);
+ALTER TABLE eu_sml_mat ADD CONSTRAINT FOREIGN KEY(refgrafzajist) REFERENCES ceu_grafzajist_mat(serno) CONSTRAINT eu_sml_mat_f17;
+
+ROLLBACK WORK;
+
+--End of B134904_UID64074_1

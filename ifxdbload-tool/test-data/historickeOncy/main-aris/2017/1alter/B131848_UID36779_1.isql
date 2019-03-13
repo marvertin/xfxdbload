@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B131848_UID36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ac_marketakce_acis
+  add kompenzaceuhr   Integer/*boolean*/  DEFAULT 0
+;
+
+alter table ac_marketakce_cis
+  --Položka určuje, zda se pod daným typem akce (příspěvku) kompenzují základní úhrady
+  add kompenzaceuhr   Integer/*boolean*/  DEFAULT 0
+, add constraint CHECK (kompenzaceuhr IN (0,1)) CONSTRAINT ac_marketakce_cis_dxml
+;
+
+--INDEXES
+CREATE INDEX pp_makce_kart_i4 ON pp_makce_kart(sermem);
+
+ROLLBACK WORK;
+
+--End of B131848_UID36779_1

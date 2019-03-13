@@ -1,0 +1,89 @@
+-- @TC:ONCE: ID = V2, B136140_UID82684_1
+-- @TC:ONCE: DESCRIPTION = Vyplněný dotazník
+
+
+BEGIN WORK;
+
+CREATE TABLE eu_dotaznikhead_mat (
+  serno   BIGSERIAL NOT NULL,
+  urceni   CHAR(10) NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_dotaznikhead_mat_pk ON eu_dotaznikhead_mat(serno);
+ALTER TABLE eu_dotaznikhead_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_dotaznikhead_mat_pk;
+
+--CHECKS
+ALTER TABLE eu_dotaznikhead_mat
+ADD CONSTRAINT (CHECK ( urceni IN ('VARIANTAPU','UCEL','ZAJISTENI')) CONSTRAINT eu_dotaznikhead_mat_c1);
+
+CREATE TABLE eu_dotaznikhead_arch (
+  idarch   BIGSERIAL NOT NULL,
+  serno   BIGINT,
+  urceni   CHAR(10),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_dotaznikhead_arch_pk ON eu_dotaznikhead_arch(idarch);
+ALTER TABLE eu_dotaznikhead_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_dotaznikhead_arch_pk;
+
+--CHECKS
+ALTER TABLE eu_dotaznikhead_arch
+ADD CONSTRAINT (CHECK ( urceni IN ('VARIANTAPU','UCEL','ZAJISTENI')) CONSTRAINT eu_dotaznikhead_arch_c1);
+
+CREATE TABLE eu_dotaznikbody_mat (
+  serno   BIGSERIAL NOT NULL,
+  refhead   BIGINT NOT NULL,
+  refotazka   INTEGER NOT NULL,
+  refodpoved   INTEGER NOT NULL,
+  poradi   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_dotaznikbody_mat_d8hs
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_dotaznikbody_mat_pk ON eu_dotaznikbody_mat(serno);
+ALTER TABLE eu_dotaznikbody_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_dotaznikbody_mat_pk;
+
+--FK
+CREATE INDEX eu_dotaznikbody_mat_i_f3 ON eu_dotaznikbody_mat(refotazka);
+ALTER TABLE eu_dotaznikbody_mat ADD CONSTRAINT FOREIGN KEY(refotazka) REFERENCES eu_otazkarozhod_cis(serno) CONSTRAINT eu_dotaznikbody_mat_f3;
+CREATE INDEX eu_dotaznikbody_mat_i_f1 ON eu_dotaznikbody_mat(refhead);
+ALTER TABLE eu_dotaznikbody_mat ADD CONSTRAINT FOREIGN KEY(refhead) REFERENCES eu_dotaznikhead_mat(serno) CONSTRAINT eu_dotaznikbody_mat_f1;
+CREATE INDEX eu_dotaznikbody_mat_i_f2 ON eu_dotaznikbody_mat(refodpoved);
+ALTER TABLE eu_dotaznikbody_mat ADD CONSTRAINT FOREIGN KEY(refodpoved) REFERENCES eu_odpovedrozhod_cis(serno) CONSTRAINT eu_dotaznikbody_mat_f2;
+
+CREATE TABLE eu_dotaznikbody_arch (
+  idarch   BIGSERIAL NOT NULL,
+  serno   BIGINT,
+  refhead   BIGINT,
+  refotazka   INTEGER,
+  refodpoved   INTEGER,
+  poradi   Integer,
+  platnost   Integer  DEFAULT 1,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_dotaznikbody_arch_d8hs
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_dotaznikbody_arch_pk ON eu_dotaznikbody_arch(idarch);
+ALTER TABLE eu_dotaznikbody_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_dotaznikbody_arch_pk;
+
+ROLLBACK WORK;
+
+--End of B136140_UID82684_1

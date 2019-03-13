@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B132354_36883-RSTS-5249_1
+-- @TC:ONCE: DESCRIPTION = IMPL: BE Spoření {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table rz_real_mat 
+  add bankeir   Double precision,
+  add bankeirposlprepoc   DATE
+;
+
+alter table rz_real_arch
+  add bankeir   Double precision,
+  add bankeirposlprepoc   DATE
+;
+
+ROLLBACK WORK;
+
+--End of B132354_36883-RSTS-5249_1

@@ -1,0 +1,27 @@
+CREATE PROCEDURE RSTS_24221_zneplatneni(ATest INT DEFAULT 0)   
+
+  DEFINE _mapkod      CHAR(20);
+  DEFINE _sko         CHAR(4); 
+  DEFINE _typdluhu    INT;
+  DEFINE _tsml        CHAR(4);
+
+  IF(ATest = 0) THEN
+    BEGIN WORK;
+  END IF;  
+  
+  IF(EXISTS(SELECT 1 FROM rsts_24221 WHERE zprac <> 1)) THEN
+    CALL TW_RaiseError ('136W808TCUI', 'RSTS_24221_zneplatneni:', 'Existuje nezpracovaný záznam manipulace.');
+  END IF;
+
+  UPDATE ac_mapkod_cis SET platnost = 0 WHERE kod IN ('PREUC', 'PREUC_ODEPS');
+  UPDATE ac_skomap_cis SET platnost = 0 WHERE mapkod IN ('PREUC', 'PREUC_ODEPS');
+  UPDATE ac_mapdluhu_cis SET platnost = 0 WHERE mapkod IN ('PREUC', 'PREUC_ODEPS');
+  UPDATE acr_ucet_cis SET platnost = 0 WHERE mapkod IN ('PREUC', 'PREUC_ODEPS');      
+  UPDATE am_uvprislib_cis SET platnost = 0 WHERE mapkod IN ('PREUC', 'PREUC_ODEPS');
+  
+  IF(ATest = 0) THEN
+    COMMIT WORK;
+  END IF;   
+    
+END PROCEDURE;
+

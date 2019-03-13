@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B114265_RN00380463_1
+-- @TC:ONCE: DESCRIPTION = Main+Sale: Kontroly při změnách smluvních údajů v Main a Sale (snížení CČ -2x) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table pro_globalbaseparameters
+
+ --$#Počet měsíců pro nepovolení snížení CČ po splacení PU#$
+ --Počet měsíců od posledního splacení PU.
+ add pocMesZakazSnizCcPoPU int
+;
+
+alter table pro_tariff
+ 
+ --$#Povoleno snížení CČ#$
+ --Položka určuje, zda je pro daný tarif VOP povoleno snížení CČ nebo ne
+ add xPovolSnizCc Integer  DEFAULT 1 NOT NULL,
+ add constraint CHECK (xpovolsnizcc IN (0,1)) CONSTRAINT pro_tariff_d3tj
+;
+
+alter table pro_contractdata
+
+ --Datum posledního splacení PU
+ --Datum kdy byl naposledy splacen PU nad smlouvou SS.
+ add datPoslSplacPu DATE
+;
+ROLLBACK WORK;
+
+--End of B114265_RN00380463_1

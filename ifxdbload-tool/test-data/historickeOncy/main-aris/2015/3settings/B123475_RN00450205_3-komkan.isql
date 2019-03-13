@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B123475_RN00450205_3-komkan
+-- @TC:ONCE: DESCRIPTION = ÚpravyModel: Chybně analytický i implementační název DB registrů {DEFECT}
+
+
+BEGIN WORK;
+
+-- @since RN00423413
+-- Přesunuto z B122751_RN00423413_3-KanalPrior
+-- #Priorita telefonního komunikačního kanálu <typ_kanálu> pro ukládání modelovacího případu#
+-- Určuje, s jakou prioritou jsou vyhledávány typy komunikačních kanálů pro ukládání modelovacího případu (nižší číslo=vyšší priorita). <typ_kanálu> je ID druhu kanále dle číselníku.
+Call TW_RegSetKey('MO', 'modelMain', 'komKanaly', 'telKanalPrior10', 1);
+Call TW_RegSetKey('MO', 'modelMain', 'komKanaly', 'telKanalPrior4', 2);
+
+-- @since RN00423413, RN00450205
+-- #Priorita e-mailového komunikačního kanálu <typ_kanálu> pro ukládání modelovacího případu#
+-- Určuje, s jakou prioritou jsou vyhledávány typy komunikačních kanálů pro ukládání modelovacího případu (nižší číslo=vyšší priorita). <typ_kanálu> je ID druhu kanále dle číselníku.
+Call TW_RegSetKey('MO', 'modelMain', 'komKanaly', 'mailKanalPrior9', 1);
+Call TW_RegSetKey('MO', 'modelMain', 'komKanaly', 'mailKanalPrior5', 2);
+
+ROLLBACK WORK;
+
+--End of B123475_RN00450205_3-komkan

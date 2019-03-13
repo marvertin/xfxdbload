@@ -1,0 +1,49 @@
+-- @TC:ONCE: ID = V2, A55569_RN00317080_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE eu_kontrolatyp_cis (
+  typ   Char(6) NOT NULL,
+  nazev   CHAR(40) NOT NULL,
+  faze1   Integer NOT NULL,
+  faze2   Integer NOT NULL,
+  poradi   Integer NOT NULL,
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (faze1 IN (0,1)) CONSTRAINT eu_kontrolatyp_cis_dn61,
+  CHECK (faze2 IN (0,1)) CONSTRAINT eu_kontrolatyp_cis_dn62,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_kontrolatyp_cis_dn64
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolatyp_cis_pk ON eu_kontrolatyp_cis(typ);
+ALTER TABLE eu_kontrolatyp_cis ADD CONSTRAINT PRIMARY KEY(typ) CONSTRAINT eu_kontrolatyp_cis_pk;
+
+CREATE TABLE eu_kontrolatyp_acis (
+  typ   Char(6) NOT NULL,
+  nazev   CHAR(40) NOT NULL,
+  faze1   Integer NOT NULL,
+  faze2   Integer NOT NULL,
+  poradi   Integer NOT NULL,
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (faze1 IN (0,1)) CONSTRAINT eu_kontrolatyp_acis_dn61,
+  CHECK (faze2 IN (0,1)) CONSTRAINT eu_kontrolatyp_acis_dn62,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_kontrolatyp_acis_dn64
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolatyp_acis_pk ON eu_kontrolatyp_acis(typ);
+ALTER TABLE eu_kontrolatyp_acis ADD CONSTRAINT PRIMARY KEY(typ) CONSTRAINT eu_kontrolatyp_acis_pk;
+
+ROLLBACK WORK;
+
+--End of A55569_RN00317080_1

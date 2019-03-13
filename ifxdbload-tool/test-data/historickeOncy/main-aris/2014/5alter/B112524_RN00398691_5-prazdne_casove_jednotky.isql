@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, B112524_RN00398691_5-prazdne_casove_jednotky
+-- @TC:ONCE: DESCRIPTION = Main: pri vyzve rucitele sa nevytvorili ukoly {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE ep_ukoltyp_cis  ADD CONSTRAINT (CHECK (casjednotka IN ('D', 'T', 'M', 'U', 'R', 'Q', 'P', 'N')) CONSTRAINT ep_ukoltyp_cis_c1);
+ALTER TABLE ep_ukoltyp_acis ADD CONSTRAINT (CHECK (casjednotka IN ('D', 'T', 'M', 'U', 'R', 'Q', 'P', 'N')) CONSTRAINT ep_ukoltyp_acis_c1);
+
+ROLLBACK WORK;
+--End of B112524_RN00398691_5-prazdne_casove_jednotky

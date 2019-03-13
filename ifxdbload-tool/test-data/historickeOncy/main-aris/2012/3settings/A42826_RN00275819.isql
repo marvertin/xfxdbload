@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A42826_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový produkt - oprava customizace
+
+BEGIN WORK;
+
+UPDATE ep_typzadost_cis SET text = 'Zmìna mobil SIS' WHERE typzadost = 'B' and platnost = 1;
+     
+ROLLBACK WORK;
+

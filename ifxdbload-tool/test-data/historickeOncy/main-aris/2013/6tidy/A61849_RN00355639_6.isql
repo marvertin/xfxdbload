@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A61849_RN00355639_6
+-- @TC:ONCE: DESCRIPTION = V modelování se zøejmì chybnì pracuje s daty starých evidencí ÚŽ {DEFECT}
+
+
+BEGIN WORK;
+
+drop routine EP_KlientZadost
+;
+drop routine EP_IdentKlZadost
+;
+drop routine EP_NazevKlZadost
+;
+drop routine EP_TypIdKlZadost
+;
+
+ROLLBACK WORK;
+
+--End of A61849_RN00355639_6

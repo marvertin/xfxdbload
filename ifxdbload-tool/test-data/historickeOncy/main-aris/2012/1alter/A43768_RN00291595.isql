@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A43768_RN00291595
+-- @TC:ONCE: DESCRIPTION = Vytvoøení zprávy bez uvedení pøíjemce jen na smlouvu 
+
+BEGIN WORK;
+
+ALTER TABLE ep_zpravareakce_den
+    ADD prijemceos      INTEGER   BEFORE datumreakce,
+    ADD reagujicios     INTEGER   BEFORE datumreakce
+   ;
+
+
+ALTER TABLE ep_zpravareakce_den
+    DROP reagujiciid;
+    
+ROLLBACK WORK;    

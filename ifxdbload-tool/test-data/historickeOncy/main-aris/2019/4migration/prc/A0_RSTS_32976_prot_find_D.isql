@@ -1,0 +1,172 @@
+-- název procedury začíná A0 schválně, aby běžela jako první v části migrací
+CREATE PROCEDURE A0_RSTS_32976_prot_find_D()
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulek pokud jiz existuji
+BEGIN
+  ON EXCEPTION IN(-206)
+  END EXCEPTION;
+  DROP TABLE RSTS_32976_Protokol_Sml;
+END;
+
+BEGIN
+  ON EXCEPTION IN(-206)
+  END EXCEPTION;
+  DROP TABLE RSTS_32976_Protokol_Os;
+END;
+
+--zalozime ridici tabulku pro smlouvy
+CREATE TABLE RSTS_32976_Protokol_Sml(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  INT,              --číslo chyby, jež na řádku nastala
+  ISAMErr INT,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VARCHAR(255),     --textový popis chyby, jež na řádku nastala
+  zpracPred   INT DEFAULT -1,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  zpracPo   INT DEFAULT -1,
+
+  -- atributy pro stav před migrací
+  smlouva           DEC(16,0),
+  tsml              CHAR(4),
+  stavSml           CHAR(1),
+  realn             INTEGER,
+  treal             CHAR(4),
+  stavreal          CHAR(1),
+  stadiumifrsPred   INTEGER,
+  klasifReal        INT,
+  klasifUver        INT,
+  klasifSdruz       INT,
+  klasifMinReal     INT,
+  klasifMinKlient   INT,
+  klasifSmlouva     INT,
+  klasifStop        INT,
+  klasifVysledna    INT,
+  klasifNejhorsi5   INT,
+  datVymZajist      DATE,
+  zvlrezimText      CHAR(40),
+  vyzvaDatProv      DATE,
+  odpPohlDatProv    DATE,
+  odpPohlEkZtrata   DEC(16,2),
+  dodRestrStav      CHAR(10),
+  dodRestrDatPodpis DATE,
+  dodRestrDatMigr   DATE,
+  dodRestrDatOd     DATE,
+  dodRestrDatDo     DATE,
+  konto             DEC(16,0),
+  tko               CHAR(4),
+  mapKodPred        CHAR(20),
+  saldoCelkem       DEC(16,2),
+  saldoRozvaha      DEC(16,2),
+  saldoPodrozvaha   DEC(16,2),
+  indikDefaultPred  INTEGER,
+  datDefaultPred    DATE,
+  rstsDPDUver       INTEGER,
+  rstsDPDSouhrn     INTEGER,
+  rstsDPDSporeni    INTEGER,
+  smlSpor           DEC(16,0),
+  tsmlSpor          CHAR(4),
+  klasifSpor        INT,
+  indikDefaultSpor  INTEGER,
+  individualparam   INT,
+
+  -- atributy pro stav po migrací
+  mapKodPo          CHAR(20),
+  stadiumifrsPo     INTEGER,
+  indikDefaultPo    INTEGER,
+  datDefaultPo      DATE,
+  ebaDPDUver        INTEGER,
+  ebaDPDSouhrn      INTEGER,
+  ebaDPDSporeni     INTEGER,
+  RDT00u    INTEGER,
+  RD010     INTEGER,
+  RD020     INTEGER,
+  RD030u    INTEGER,
+  RD040     INTEGER,
+  RD050     INTEGER,
+  RD130     INTEGER,
+  RD140     INTEGER,
+  RD150     INTEGER,
+  RD160     INTEGER,
+  RD210     INTEGER,
+  RD220     INTEGER,
+  RD230     INTEGER,
+  S01       INTEGER,
+  S02       INTEGER,
+  S03       INTEGER,
+  S06u      INTEGER,
+  SQ        INTEGER,
+  SX        INTEGER,
+  SDu       INTEGER,
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+-- pomocná tabulka pro osoby
+CREATE TABLE RSTS_32976_Protokol_Os(
+  Ser                 Serial NOT NULL,  --číslo řádku
+
+  -- atributy pro stav před migrací
+  os                  INTEGER,
+  typrole             CHAR(2),
+  smlouva             DEC(16,0),
+  tsml                CHAR(4),
+  idos                CHAR(13),
+  typid               CHAR(1),
+  formapravText       CHAR(40),
+  tigertypText        CHAR(40),
+  rstsDPDOsoba        INTEGER,
+  klasifMin           INTEGER,
+  klasifVysledna      INTEGER,
+  klasifNejhorsiMin5  INTEGER,
+  klasifNejhorsi5     INTEGER,
+  insolvenceStav      CHAR(1),
+  pocetExekPoNabPM    INTEGER,
+  datumUmrti          DATE,
+  seznamOstUveru      LVARCHAR(4000),
+
+  -- atributy pro stav po migrací
+  ebaDPDOsoba        INTEGER,
+  RDT00d    INTEGER,
+  RD030d    INTEGER,
+  RD060     INTEGER,
+  RD070     INTEGER,
+  RD080d    INTEGER,
+  RD110     INTEGER,
+  RD120     INTEGER,
+  RD240     INTEGER,
+  S04       INTEGER,
+  S05       INTEGER,
+  S06d      INTEGER,
+  SDd       INTEGER,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--plnime ridici tabulku
+INSERT INTO RSTS_32976_Protokol_Sml(smlouva, tsml, stavsml, smlspor, tsmlspor)
+SELECT smlouva, tsml, stav, smlspor, tsmlspor
+FROM EU_Sml_mat
+WHERE stav IN ('D', 'L');
+ 
+--UPDATE STATISTICS
+UPDATE STATISTICS HIGH FOR TABLE RSTS_32976_Protokol_Sml;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+END PROCEDURE;

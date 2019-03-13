@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135824_UID78811_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25030: Úprava číselníku států {STORY}
+
+
+BEGIN WORK;
+
+update eo_stat_cis set zadatnarodniid = 1 where statprisl = 'SK';
+
+ROLLBACK WORK;
+
+--End of B135824_UID78811_3

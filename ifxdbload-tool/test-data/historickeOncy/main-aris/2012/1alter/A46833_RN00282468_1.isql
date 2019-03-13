@@ -1,0 +1,68 @@
+-- @TC:ONCE: ID = V2, A46833_RN00282468_1
+-- @TC:ONCE: DESCRIPTION = Úroková fixace {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE eu_variaurokfixace_cis (
+  ser   SERIAL NOT NULL,
+  fixaceid   Integer NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  delka   Integer,
+  poznamka   CHAR(70),
+  nabidkaod   DATE,
+  nabidkado   DATE,
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_variaurokfixace_cis_deti
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_variaurokfixace_cis_pk ON eu_variaurokfixace_cis(ser);
+ALTER TABLE eu_variaurokfixace_cis ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT eu_variaurokfixace_cis_pk;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX eu_variaurokfixace_cis_uq_eu_variaurokfixace_cis_fixaceid ON eu_variaurokfixace_cis(fixaceid);
+ALTER TABLE eu_variaurokfixace_cis ADD CONSTRAINT (UNIQUE (fixaceid) CONSTRAINT eu_variaurokfixace_cis_uq_eu_variaurokfixace_cis_fixaceid);
+
+
+CREATE TABLE eu_variaurokfixace_acis (
+  idarch   SERIAL NOT NULL,
+  ser   INTEGER,
+  fixaceid   Integer,
+  nazev   CHAR(35),
+  delka   Integer,
+  poznamka   CHAR(70),
+  nabidkaod   DATE,
+  nabidkado   DATE,
+  platnost   Integer,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_variaurokfixace_acis_deti
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_variaurokfixace_acis_pk ON eu_variaurokfixace_acis(idarch);
+ALTER TABLE eu_variaurokfixace_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_variaurokfixace_acis_pk;
+
+
+ALTER TABLE eu_sml_mat ADD (
+  variafixace   Integer,
+  fixaceod   DATE,
+  fixacedo   DATE
+);
+
+ALTER TABLE eu_sml_arch ADD (
+  variafixace   Integer,
+  fixaceod   DATE,
+  fixacedo   DATE
+);
+
+
+ROLLBACK WORK;
+
+--End of A46833_RN00282468_1

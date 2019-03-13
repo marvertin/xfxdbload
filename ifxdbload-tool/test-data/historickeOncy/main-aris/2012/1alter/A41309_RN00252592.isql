@@ -1,0 +1,59 @@
+-- @TC:ONCE: ID = V2, A41309_RN00252592
+-- @TC:ONCE: DESCRIPTION = Výzva pro ruèitele
+
+BEGIN WORK;
+
+CREATE TABLE ru_vyzvah_kart (
+    ser             SERIAL   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    cyklus          Integer DEFAULT 1  NOT NULL,
+    aktfaze         Integer DEFAULT 0  NOT NULL,
+    maxdatsplatfaze1 DATE  ,
+    maxdatsplatfaze2 DATE  ,
+    pocetobeslfaze1 Integer  ,
+    pocetobeslfaze2 Integer  ,
+    datpor          DATE,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL
+) LOCK MODE ROW
+;
+
+--  ru_vyzvah_kart-2/7       [CREATE.INDEX]
+CREATE unique INDEX ru_vyzvah_kart_pk ON ru_vyzvah_kart (ser) ;
+
+--0  ru_vyzvah_kart-3/7       [CREATE.INDEX]
+CREATE INDEX ru_vyzvah_kart_i_f1 ON ru_vyzvah_kart (smlouva,tsml) ;
+
+--1  ru_vyzvah_kart-4/7       [CREATE.INDEX]
+CREATE unique INDEX ru_vyzvah_kart_u1 ON ru_vyzvah_kart (smlouva,tsml,cyklus) ;
+
+--2  ru_vyzvah_kart-5/7       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ru_vyzvah_kart
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ru_vyzvah_kart_pk;
+
+--3  ru_vyzvah_kart-6/7       [CREATE.CONSTRAINT_UNIQUE]
+ALTER TABLE ru_vyzvah_kart
+    ADD CONSTRAINT UNIQUE (smlouva,tsml,cyklus)  CONSTRAINT ru_vyzvah_kart_u1;
+    
+ALTER TABLE ru_vyzvah_kart    
+    ADD CONSTRAINT FOREIGN KEY (smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml)  CONSTRAINT ru_vyzvah_kart_f1;
+        
+ALTER TABLE ru_vyzva_kart    
+    ADD faze            Integer default 1  BEFORE stav,
+    ADD vyzva           INTEGER   BEFORE stav,    ADD os              INTEGER   BEFORE navtime,    ADD typrole         CHAR(2)   BEFORE navtime;
+    
+CREATE INDEX ru_vyzva_kart_i_f5 ON ru_vyzva_kart (vyzva);     
+
+-- 14  ru_vyzva_kart-8/8       [CREATE.CONSTRAINT_FOREIGN_KEY]                                     ALTER TABLE ru_vyzva_kart                                                                              ADD CONSTRAINT FOREIGN KEY (vyzva) REFERENCES ru_vyzvah_kart(ser)  CONSTRAINT ru_vyzva_kart_f5;
+    
+ALTER TABLE ru_vyzva_kart DROP CONSTRAINT ru_vyzva_kart_p;
+
+CREATE unique INDEX ru_vyzva_kart_pk ON ru_vyzva_kart (realn,poradi,faze);
+
+ALTER TABLE ru_vyzva_kart
+    ADD CONSTRAINT PRIMARY KEY (realn,poradi,faze)  CONSTRAINT ru_vyzva_kart_pk;    
+    
+ROLLBACK WORK;    

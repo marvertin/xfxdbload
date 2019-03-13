@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A61795_RN00335314
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ses_pozadavekh_mat   
+    ADD jeZadostWeb Int default 0 not null before poruser;   
+
+ALTER TABLE ses_pozadavekh_arch 
+    ADD jeZadostWeb Int default 0 not null before poruser;   
+
+    
+ROLLBACK;
+
+--End of A61795_RN00335314

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B137328_UID91935_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32259: Registry pro komunikaci OZ {REQUEST}
+
+
+BEGIN WORK;
+
+
+call TW_RegDelKey('EU','posouzeniUveru','e-maily-preruseni','mb-OZ-ANA-FRA');
+
+--#Mailbox pro komunikaci OZ s analytiky OŘR ve schvalovacím procesu#
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-preruseni', 'mb-OZ-ANA', 'analyticiORR@rsts.cz', 1);
+
+--#Mailbox pro komunikaci OZ s fraud OŘR ve schvalovacím procesu#
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-preruseni', 'mb-OZ-FRA', 'analyticiORR2@rsts.cz', 1);
+
+ROLLBACK WORK;
+
+--End of B137328_UID91935_3

@@ -1,0 +1,119 @@
+CREATE PROCEDURE RSTS_32976_prot_makePo_D (-- vstupni paramtery
+                      ABezTransakci INTEGER DEFAULT 0,    -- slouzi k testovacim ucelum,
+                                                          -- kdy si uzivatel sam ridi transakce
+                                                          -- muze pouzivat i zakaznik
+                      ADebugFile    CHAR(30) DEFAULT NULL -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+DEFINE _ser           INT;
+
+DEFINE _smlouva       DEC(16,0);
+DEFINE _tsml          CHAR(4);
+DEFINE _osKL          INTEGER;
+DEFINE _os            INTEGER;
+DEFINE _typrole       CHAR(2);
+DEFINE _druzkaReg     INTEGER;
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+--osetreni chyby pri konstrukci kursoru
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+IF(PD_TraceRequestedBegin(ADebugFile) = 1) THEN
+  trace ON;
+END IF;
+
+
+--ZACATEK vlastni migrace
+IF(ABezTransakci = 0) THEN
+   BEGIN WORK;
+END IF;
+
+-- družka
+let _druzkaReg = TW_RegGetKey('EO', 'vztahyOs', 'typyRodVztahu', 'druzka');
+
+-- ridici tabulka
+FOREACH cc1 WITH hold FOR
+  SELECT ser,  smlouva,  tsml
+  INTO  _ser, _smlouva, _tsml
+  FROM RSTS_32976_Protokol_Sml  
+  WHERE zpracpo < 0
+  ORDER BY ser
+
+  BEGIN
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      IF(ABezTransakci = 0) THEN
+         ROLLBACK WORK;
+      END IF;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS_32976_Protokol_Sml
+        SET(NumErr,ISAMErr,TextErr, zpracpo)= (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      IF(ABezTransakci = 0) THEN
+         BEGIN WORK;
+      END IF;
+    END EXCEPTION;      
+    
+    -- vlastní proces smlouva
+    CALL RSTS_32976_prot_zpracSmlPo(_ser, _smlouva, _tsml);
+
+    -- vlastní proces osoby
+
+    -- klient
+    LET _osKL = EP_KlientSml(_smlouva, _tsml);
+
+    CALL RSTS_32976_prot_zpracOsPo(_osKL, 'KL', _smlouva, _tsml);
+
+    -- ostatní osoby
+    FOREACH
+      SELECT os,  typrole
+      INTO  _os, _typrole
+      FROM EO_Role_mat
+      WHERE smlouva = _smlouva
+      AND typ = _tsml
+      AND typrole IN ('MK', 'PR')
+      AND stav = 'A'
+
+      -- přistupitel se bude uvažovat pouze coby druh/družka
+      IF _typrole = 'PR'
+         AND NOT EXISTS(SELECT * FROM EO_VztahOs_Mat WHERE os1 = _os AND os2 = _osKL AND vztahrod = _druzkaReg AND stav = 'A')
+         AND NOT EXISTS(SELECT * FROM EO_VztahOs_Mat WHERE os1 = _osKL AND os2 = _os AND vztahrod = _druzkaReg AND stav = 'A')
+      THEN
+        CONTINUE FOREACH;
+      END IF;
+      
+      CALL RSTS_32976_prot_zpracOsPo(_os, _typrole, _smlouva, _tsml);
+      
+    END FOREACH;
+    
+    -- nastavení technických informací
+    UPDATE RSTS_32976_Protokol_SML SET zpracpo = 1, NumErr = NULL, ISAMErr = NULL, TextErr = NULL WHERE ser = _ser;
+    
+  END;
+
+  IF (ABezTransakci = 0) THEN
+    COMMIT WORK;
+    BEGIN WORK;
+  END IF;
+END FOREACH;  -- ridici tabulka
+
+IF(ABezTransakci = 0) THEN
+   COMMIT WORK;
+END IF;
+
+IF(PD_TraceRequestedEnd(ADebugFile) = 1) THEN
+  trace OFF;
+END IF;
+
+END PROCEDURE;

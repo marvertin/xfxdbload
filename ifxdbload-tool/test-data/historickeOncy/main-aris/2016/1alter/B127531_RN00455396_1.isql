@@ -1,0 +1,40 @@
+-- @TC:ONCE: ID = V2, B127531_RN00455396_1
+-- @TC:ONCE: DESCRIPTION = Integrace registru RÚIAN do CIBISu {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE ep_adrmistaaplikovat_den (
+  serno   SERIAL NOT NULL,
+  kodadm   Integer,
+  os   Integer,
+  typrole   CHAR(2),
+  smlouva   DECIMAL(16, 0),
+  typ   CHAR(4),
+  vysledek   CHAR(255),
+  poruser  CHAR(20) DEFAULT USER  NOT NULL,
+  portime  DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+  
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_adrmistaaplikovat_den_pk ON ep_adrmistaaplikovat_den(serno);
+ALTER TABLE ep_adrmistaaplikovat_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_adrmistaaplikovat_den_pk;
+
+
+CREATE TABLE ep_adrmistaaplikovat_wrk (
+  radek       Integer,
+  objektzmeny CHAR(10),
+  kodadm      char(255),
+  os          char(255),
+  typrole     CHAR(255),
+  smlouva     char(255),
+  typ         CHAR(255),
+  vysledek    char(255),
+  zalozeno    DATE DEFAULT TODAY,
+  owner       char(255)
+);
+    
+ROLLBACK WORK;
+
+--End of B127531_RN00455396_1

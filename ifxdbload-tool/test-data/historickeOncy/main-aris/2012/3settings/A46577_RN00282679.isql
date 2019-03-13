@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A46577_RN00282679
+-- @TC:ONCE: DESCRIPTION = Výzva a pøevod do vymáhání bez ukonèení spoøení
+
+BEGIN WORK;
+
+-- #Typ dluhu pro automatické zapoètení spoøení ve vymáhání#
+call TW_RegSetOrAddKey('RU', 'vym', 'zapocetSporeni', 'typDluhu', 360, 1, 'Úvìr', 'Vymáhání úvìru', 'Automatické zapoètení spoøení', 'Typ dluhu, který vzniká na kontì PÚ pokud je pøi automatickém zapoètení spoøení kompenzováno záporné saldo inkasem z PÚ.');
+
+ROLLBACK WORK;
+

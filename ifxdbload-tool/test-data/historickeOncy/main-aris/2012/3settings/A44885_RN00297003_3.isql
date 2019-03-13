@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A44885_RN00297003_3
+-- @TC:ONCE: DESCRIPTION = Neprovedená inkasa - neplní se dùvod neprovedení {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('SPLT', '448R15TCUI', 'Datum splatnosti žádosti je v minulosti', 'Datum splatnosti žádosti je v minulosti', 'Splatnost žádosti vypršela');
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('PONX', '448S16TCUI', 'Povolení k inkasu neexistuje', 'Povolení k inkasu neexistuje', 'Žádné povolení k inkasu');
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('PONZ', '448T17TCUI', 'Povolení k inkasu nesplòuje podmínky žádosti', 'Povolení k inkasu nesplòuje podmínky žádosti', 'Nepovolené inkaso');
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('PONP', '448V19TCUI', 'Povolení k inkasu již není platné', 'Povolení k inkasu již není platné', 'Nepovolené inkaso');
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('LIMT', '448W20TCUI', 'Èástka pøekraèuje limit povolení k inkasu ', 'Èástka pøekraèuje limit povolení k inkasu ', 'Nepovolené inkaso');
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('PROS', '448X21TCUI', 'Nedostatek prostøedkù na kontì', 'Nedostatek prostøedkù na kontì', 'Nedostatek prostøedkù');
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('NEEX', '448Y22TCUI', 'Konto neexistuje', 'Konto neexistuje', 'Neexistující úèet');
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('BLOK', '448A24TCUI', 'Konto je blokováno', 'Konto je blokováno', 'Nedostatek prostøedkù');
+  INSERT INTO cz_duvododmitnuti_cis (kod, guid, popis, textfe, textuziv) VALUES ('ZRUS', '448C26TCUI', 'Konto je zrušeno', 'Konto je zrušeno', 'Úèet je uzavøen');
+
+ROLLBACK WORK;
+
+--End of A44885_RN00297003_3

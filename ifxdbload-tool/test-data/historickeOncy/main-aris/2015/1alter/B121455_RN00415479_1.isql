@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B121455_RN00415479_1
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  ALTER TABLE ep_splspormodcashflow_den
+    ADD phase CHAR(1) DEFAULT 'S' before typpoh
+;
+
+--CHECKS
+  ALTER TABLE ep_splspormodcashflow_den
+    ADD CONSTRAINT (CHECK (phase in ('S', 'U')) CONSTRAINT ep_splspormodcashflow_den_c2)
+;
+
+ROLLBACK WORK;
+
+--End of B121455_RN00415479_1

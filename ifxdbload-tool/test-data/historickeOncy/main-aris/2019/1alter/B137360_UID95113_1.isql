@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137360_UID95113_1
+-- @TC:ONCE: DESCRIPTION = RSTS-33874: IMPLEMENTACE (BE+java+integrace - fialová): RSTS-31911_REAL: Floor EIR; číselník MOF; rozmodelování expozice OP stage 2 (RBI) {INTERNAL_WORK}
+
+BEGIN WORK;
+
+alter table pro_bssimulationcase
+  add akce   CHAR(6)  DEFAULT 'MOOBEC'
+;
+
+ROLLBACK WORK;
+
+--End of B137360_UID95113_1

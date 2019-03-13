@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, A43525_RN00288620_3
+-- @TC:ONCE: DESCRIPTION = Nelze vytvoøit PSS pro SSPO {DEFECT}
+
+BEGIN WORK;
+
+
+INSERT INTO ac_cozakpfx_cis(czprefix, tko, tprod, faze, popis, poznamka, fazekonta, platnost) 
+VALUES(111, 'SS', 'STSPFO', 11, 'Stavební spoøení fyzických osob 1', null, 'PLFO', 1);
+
+INSERT INTO ac_cozakpfx_cis(czprefix, tko, tprod, faze, popis, poznamka, fazekonta, platnost) 
+VALUES(121, 'PS', 'STSPPO', 11, 'Stavební spoøení právnických osob 1', null, 'PLPO', 1);
+
+INSERT INTO ac_cozakpfx_cis(czprefix, tko, tprod, faze, popis, poznamka, fazekonta, platnost) 
+VALUES(111, 'SS', 'STSPFO', 12, 'Stavební spoøení fyzických osob 1', null, 'PLFO', 1);
+
+INSERT INTO ac_cozakpfx_cis(czprefix, tko, tprod, faze, popis, poznamka, fazekonta, platnost) 
+VALUES(121, 'PS', 'STSPPO', 12, 'Stavební spoøení právnických osob 1', null, 'PLPO', 1);
+
+INSERT INTO ac_cozakpfx_cis(czprefix, tko, tprod, faze, popis, poznamka, fazekonta, platnost) 
+VALUES(112, 'SS', 'STSPFO', 2, 'Stavební spoøení fyzických osob 2', null, 'PLFO', 1);
+
+INSERT INTO ac_cozakpfx_cis(czprefix, tko, tprod, faze, popis, poznamka, fazekonta, platnost) 
+VALUES(122, 'PS', 'STSPPO', 2, 'Stavební spoøení právnických osob 2', null, 'PLPO', 1);
+
+ROLLBACK WORK;
+
+--End of A43525_RN00288620_3

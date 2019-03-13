@@ -1,0 +1,116 @@
+create procedure RN00311507_krok_2A()
+-- vytvoření tabulky pro data insolvencí
+
+BEGIN WORK;
+
+begin
+  on exception IN(-319)
+  end exception with resume;
+  DROP INDEX RN00311507_krok_2_data_i1;
+  DROP INDEX RN00311507_krok_2_data_i2;
+  DROP INDEX RN00311507_krok_2_data_i3;
+end;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_2_data;
+end;
+
+CREATE TABLE RN00311507_krok_2_data(
+  Ser     Serial NOT NULL,  --číslo řádku
+                            --vlastni data - např. cislo osoby
+  ID Int,
+  pc Dec(16,0), --pč
+  cjednaci Char(10), --čjednací
+  insolvent Char(200),
+  rc Char(13), --rč
+  DatumUmrti Date,
+  sml_SS Dec(16,0),
+  role Char(50),
+  zahajeni_IR Date, --zahájení IŘ
+  cj_IR Char(45), --čj IŘ
+  spojenoS Char(10), 
+  puvIR Char(45), --puvIŘ
+  upadek Date, --úpadek
+  oddluzeni Date, --oddlužení
+  konkurz Date,
+  prezkum Date,
+  prihlaska Date, --přihláška
+  PrihlAnoNe Char(3),
+  predanoOZU Date,
+  pdnu Char(50), --pdnů
+  pdnu_upadekOZU Char(50),
+  vyse_pohl Dec(16,2), --výše pohl
+  zastavurok Char(3), --zastavúrok
+  aktualvyse_pohl Dec(16,2), --aktuálvýše_pohl
+  splatky Dec(16,2), --splátky
+  datum Date,
+  platce Char(200), --plátce
+  insspravce Char(200), --inssprávce
+  ID_IS Int, 
+  poznamky LVarchar(2000), --poznámky  
+  splkalend Date,
+  PrvniSplatka Date,
+  splKalZV Date,
+  pokynZV Date,
+  MajPodstata Date,
+  vervybor Char(3),
+  zamitIN Date, --zamítIN 
+  zamitINPM Date,
+  odvolZamitIN Date, 
+  SkonceniIRkonkurz Date,
+  ukonceni Date, --ukončení
+  ZalobaPohl Date,
+  ZalobaNem Date,
+  zapocetSSKc Dec(16,2),
+  zapocetSS Date,
+  Termin Date,
+  referent Char(2), --ref
+  zvlrez Char(50), --zvlrež
+  banka_IS Dec(7,0),
+  predcisli_IS Dec(6,0),
+  cislo_IS Dec(10,0),
+  splatky_Akt_Mesic Dec(16,2), --splátky_Akt_Mesic
+  MesicMinus1 Dec(16,2),
+  MesicMinus2 Dec(16,2),
+  MesicMinus3 Dec(16,2),
+  MesicMinus4 Dec(16,2),
+  MesicMinus5 Dec(16,2),
+  MesicMinus6 Dec(16,2),
+  MesicMinus7 Dec(16,2),
+  MesicMinus8 Dec(16,2),
+  MesicMinus9 Dec(16,2),
+  MesicMinus10 Dec(16,2),
+  MesicMinus11 Dec(16,2),
+  MesicMinus12 Dec(16,2),
+  klasrealna Int, --klasreálná
+  Zastava Char(10),
+  ZastDatum Date,
+  Zastava3osoby Char(10),
+  Zast3osDatum Date,
+  ZajisteniSS Char(10),
+  ZajistSSDatum Date,
+  Nesledovat Char(10),
+  stop_popl Char(3),
+  ExistujeVyber Char(50),
+  VlozeniZaznamu Datetime Year to Second,
+  PosledniUprava Datetime Year to Second,
+  konto Dec(16,0),
+  typ_konta Char(2),
+  typ_realizace Char(4),
+  max_serial Int,
+  os Int,
+  Vlozil Char(20),
+  Upravil Char(20),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+CREATE INDEX RN00311507_krok_2_data_i1 ON RN00311507_krok_2_data(cjednaci);
+CREATE INDEX RN00311507_krok_2_data_i2 ON RN00311507_krok_2_data(cj_IR);
+CREATE INDEX RN00311507_krok_2_data_i3 ON RN00311507_krok_2_data(os);
+
+COMMIT WORK;
+
+end procedure;

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B121310_RN00420627_1
+-- @TC:ONCE: DESCRIPTION = Časové rozlišení pobytu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table sp_prbnarokroksp_arch modify ( naroksp Integer);
+alter table sp_prbnarokroksp_mat modify ( naroksp Integer);
+
+ROLLBACK WORK;
+
+--End of B121310_RN00420627_1

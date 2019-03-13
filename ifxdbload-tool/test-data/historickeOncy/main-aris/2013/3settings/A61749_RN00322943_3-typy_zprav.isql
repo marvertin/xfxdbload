@@ -1,0 +1,117 @@
+-- @TC:ONCE: ID = V2, A61749_RN00322943_3-typy_zprav
+-- @TC:ONCE: DESCRIPTION = Dodateèné požadavky v rámci redesign CIBIS-sale {CUSTOMERREQUEST}
+BEGIN WORK;
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_SCHVAL_KLIENT', 'Informace o schválení úvìrového návrhu - klient', 'Váš úvìr è. smlouvy <<CISLO_SS>> byl schválen.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_SCHVAL_OZ', 'Informace o schválení úvìrového návrhu - OZ', 'Úvìr è. smlouvy <<CISLO_SS>> byl schválen.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_PSCHVAL_KLIENT', 'Informace o schválení úvìrového návrhu s podmínkou - klient', 'Váš úvìr è. smlouvy <<CISLO_SS>> byl schválen s podmínkou.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_PSCHVAL_OZ', 'Informace o schválení úvìrového návrhu s podmínkou - OZ', 'Úvìr è. smlouvy <<CISLO_SS>> byl schválen s podmínkou.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_ZAMIT_KLIENT', 'Informace o zamítnutí úvìrového návrhu - klient', 'Váš úvìr è. smlouvy <<CISLO_SS>> byl zamítnut.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_ZAMIT_OZ', 'Informace o zamítnutí úvìrového návrhu - OZ', 'Úvìr è. smlouvy <<CISLO_SS>> byl zamítnut.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_STORNO_KLIENT', 'Informace o storno úvìru - klient', 'Váš úvìr è. smlouvy <<CISLO_SS>> byl stornován.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_STORNO_OZ', 'Informace o storno úvìru - OZ', 'Úvìr è. smlouvy <<CISLO_SS>> byl stornován.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_CERP_KLIENT', 'Informace o èerpání úvìru - klient', 'Váš úvìr è. smlouvy <<CISLO_SS>> byl èerpán.');
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms)
+  VALUES('UVER_CERP_OZ', 'Informace o èerpání úvìru - OZ', 'Úvìr è. smlouvy <<CISLO_SS>> byl èerpán.');
+
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_SCHVAL_KLIENT', 'Informace o schválení úvìrového návrhu - klient', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>> byl schválen.', 
+  'Vaše žádost o úvìr <<CISLO_SS>> byla schválena. RSTS.',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+   
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_SCHVAL_OZ', 'Informace o schválení úvìrového návrhu - OZ', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl schválen.', 
+  'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl schválen. RSTS',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_PSCHVAL_KLIENT', 'Informace o schválení úvìrového návrhu s podmínkou - klient', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>> byl schválen s podmínkou.', 
+  'Vaše žádost o úvìr <<CISLO_SS>> byla schválena s podmínkou. RSTS.',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_PSCHVAL_OZ', 'Informace o schválení úvìrového návrhu s podmínkou - OZ', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl schválen s podmínkou.', 
+  'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl schválen s podmínkou. RSTS',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_ZAMIT_KLIENT', 'Informace o zamítnutí úvìrového návrhu - klient', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>> byl zamítnut.', 
+  'Vaše žádost o úvìr <<CISLO_SS>> byla zamítnuta. RSTS.',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_ZAMIT_OZ', 'Informace o zamítnutí úvìrového návrhu - OZ', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl zamítnut.', 
+  'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl zamítnut. RSTS',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_STORNO_KLIENT', 'Informace o storno úvìru - klient', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>> byl stornován.', 
+  'Váš úvìr <<CISLO_SS>> byl stornován. RSTS.',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_STORNO_OZ', 'Informace o storno úvìru - OZ', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl stornován.', 
+  'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl stornován. RSTS',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_CERP_KLIENT', 'Informace o èerpání úvìru - klient', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>> byl èerpán.', 
+  'Váš úvìr <<CISLO_SS>> byl èerpán. RSTS.',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+  INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, 
+    obsah, 
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+  VALUES('UVER_CERP_OZ', 'Informace o èerpání úvìru - OZ', 'rsts@rsts.cz', 'RSTS', 'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl èerpán.', 
+  'Úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byl èerpán. RSTS',
+   null, 0, 1, 24, 0, 'A', 0, 1, 1);
+
+ROLLBACK WORK;
+--End of A61749_RN00322943_3-typy_zprav

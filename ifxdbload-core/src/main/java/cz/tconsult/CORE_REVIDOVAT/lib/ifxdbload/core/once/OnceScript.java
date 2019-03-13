@@ -214,16 +214,16 @@ public class OnceScript  {
   private static final Pattern noTransPatternV1 = Pattern.compile("(?i)^[\\s]*--[\\s]*notran[s]{0,1}[\\s]*$",Pattern.CASE_INSENSITIVE);
   private static final Pattern noTransPatternV2 = Pattern.compile("--\\s*@TC:ONCE:\\s*NO_TRANSACTION_CONTROL\\s*",Pattern.CASE_INSENSITIVE);
   private static final Pattern idPattern2 = Pattern.compile("--\\s*@TC:ONCE:\\s*ID\\s*=\\s*V2\\s*,\\s*(.*)",Pattern.CASE_INSENSITIVE);
-  private static final Pattern dbKindPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*DBKIND\\s*=\\s*([\\w,\\s]*)",Pattern.CASE_INSENSITIVE);
+  private static final Pattern dbKindPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*DBKIND\\s*=\\s*([\\w,\\s]*)",Pattern.CASE_INSENSITIVE);  //pole
   private static final Pattern loadUnlessLoadedPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*LOAD_UNLESS_LOADED\\s*=\\s*(.*)",Pattern.CASE_INSENSITIVE);
   private static final Pattern loadIfLoadedPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*LOAD_IF_LOADED\\s*=\\s*(.*)",Pattern.CASE_INSENSITIVE);
   private static final Pattern ignoreChecksumPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*IGNORE_CHECKSUM\\s*",Pattern.CASE_INSENSITIVE);
   private static final Pattern loadOncePattern = Pattern.compile("--\\s*@TC:ONCE:\\s*LOAD_ONCE\\s*",Pattern.CASE_INSENSITIVE);
   private static final Pattern reloadAlwaysPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*RELOAD_ALWAYS\\s*",Pattern.CASE_INSENSITIVE);
   private static final Pattern descriptionPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*DESCRIPTION\\s*=\\s*(.*)",Pattern.CASE_INSENSITIVE);
-  private static final Pattern dbmsPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*DBMS\\s*=\\s*([\\w,\\s]*)",Pattern.CASE_INSENSITIVE);
-  private static final Pattern variantPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*VARIANT\\s*=\\s*([\\w,\\s]*)",Pattern.CASE_INSENSITIVE);
-  private static final Pattern otherDirectivePattern = Pattern.compile("--\\s*@TC:ONCE:\\s*(\\w+\\s*=\\s*[\\w,\\s]*)",Pattern.CASE_INSENSITIVE);
+  private static final Pattern dbmsPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*DBMS\\s*=\\s*([\\w,\\s]*)",Pattern.CASE_INSENSITIVE); //pole
+  private static final Pattern variantPattern = Pattern.compile("--\\s*@TC:ONCE:\\s*VARIANT\\s*=\\s*([\\w,\\s]*)",Pattern.CASE_INSENSITIVE); //pole
+  private static final Pattern otherDirectivePattern = Pattern.compile("--\\s*@TC:ONCE:\\s*(\\w+\\s*=\\s*[\\w,\\s]*)",Pattern.CASE_INSENSITIVE); //pole
   private static final Pattern invalidDirective = Pattern.compile("--\\s*@TC:(?!ONCE:)\\s*", Pattern.CASE_INSENSITIVE);
 
   /**

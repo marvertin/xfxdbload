@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B133025_UID47034_3
+-- @TC:ONCE: DESCRIPTION = Specifikce podminky - provozni denik {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 1401, 'Vytvořit specifickou podmínku', null, 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 1402, 'Změnit specifickou podmínku', null, 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 1403, 'Zneplatnit specifickou podmínku', null, 1);
+
+ROLLBACK WORK;
+
+--End of B133025_UID47034_3

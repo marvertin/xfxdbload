@@ -1,0 +1,54 @@
+-- @TC:ONCE: ID = V2, B135712_UID65089_6
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+drop procedure RU_OPUctovaniUcet;
+drop procedure RU_OPUctovani;
+drop procedure RU_NovaOdPohlAk;
+drop procedure RU_AktualOdpisy;
+
+drop procedure RU_OPGetUcetNV;
+drop procedure RU_OPGetUcetPouz;
+
+drop procedure RU_OPStornoAkt;
+drop procedure RU_OPStornoUct;
+
+drop procedure RU_OPGetUcetAkt;
+
+drop procedure RU_OPGetUcet;
+
+drop procedure RU_OPGetTypZaj;
+drop procedure RU_OPDluhBezZaj;
+drop procedure RU_OPAktNova;
+drop procedure RU_OPDanove;
+
+drop procedure RU_OPZajisteni;
+drop procedure RU_OPCastDluh;
+drop procedure RU_OPTypZaj_C_Te;
+
+
+drop table ru_opucetnv_cis;
+drop table ru_opucet_cis;
+drop table ru_opzajpriordluhu_cis;
+drop table ru_optypzaj_cis;
+drop table ru_opkoef_cis;
+
+drop table ru_opucetnv_acis;
+drop table ru_opucet_acis;
+drop table ru_opzajpriordluhu_acis;
+drop table ru_optypzaj_acis;
+drop table ru_opkoef_acis;
+
+drop procedure RU_OPGetKoef;
+drop procedure RU_OPInfo_N;
+drop procedure RU_OPSaldo; 
+drop procedure RU_OPDanoveTyp;
+drop procedure RU_OPGetMaxOdpZaj;
+drop procedure RU_OPKoef_C_Te;
+
+
+ROLLBACK WORK;
+
+--End of B135712_UID65089_6

@@ -1,0 +1,49 @@
+-- @TC:ONCE: ID = V2, B121222_RN00415479_1
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE ep_typpohybumodel_cis (
+  typpohybumodel   CHAR(1) NOT NULL,
+  text   CHAR(70) NOT NULL,
+  amorttabletopast   CHAR(40),
+  amorttabletoplan   CHAR(40),
+  priorityalg   Integer,
+  priority   Integer,
+  note   CHAR(160),
+  platnost   Integer  DEFAULT 1,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (priorityalg IN (0,1)) CONSTRAINT ep_typpohybumodel_cis_drdw,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_typpohybumodel_cis_dre1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_typpohybumodel_cis_pk ON ep_typpohybumodel_cis(typpohybumodel);
+ALTER TABLE ep_typpohybumodel_cis ADD CONSTRAINT PRIMARY KEY(typpohybumodel) CONSTRAINT ep_typpohybumodel_cis_pk;
+
+
+CREATE TABLE ep_typpohybumodel_acis (
+  idarch   SERIAL NOT NULL,
+  typpohybumodel   CHAR(1) NOT NULL,
+  text   CHAR(70) NOT NULL,
+  amorttabletopast   CHAR(40),
+  amorttabletoplan   CHAR(40),
+  priorityalg   Integer,
+  priority   Integer,
+  note   CHAR(160),
+  platnost   Integer  DEFAULT 1,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (priorityalg IN (0,1)) CONSTRAINT ep_typpohybumodel_acis_drdw,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_typpohybumodel_acis_dre1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_typpohybumodel_acis_pk ON ep_typpohybumodel_acis(idarch);
+ALTER TABLE ep_typpohybumodel_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_typpohybumodel_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B121222_RN00415479_1

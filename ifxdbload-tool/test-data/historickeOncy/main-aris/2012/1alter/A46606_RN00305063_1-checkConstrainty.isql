@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A46606_RN00305063_1-checkConstrainty
+-- @TC:ONCE: DESCRIPTION = DM: Nedostateènì popsané a nedostateènì chránìné tabulky smluv {DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE es_sml_mat
+    ADD CONSTRAINT CHECK (typ in ('SSFO','SSPO')) CONSTRAINT es_sml_mat_c5,
+    ADD CONSTRAINT CHECK (stav in ('A','B','D','L','S','V','X','Z')) CONSTRAINT es_sml_mat_c6;
+
+ROLLBACK WORK;
+
+--End of A46606_RN00305063_1-checkConstrainty

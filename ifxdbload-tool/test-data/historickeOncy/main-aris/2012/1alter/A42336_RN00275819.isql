@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A42336_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table eo_komkanal_mat
+  drop constraint  eo_komkanal_mat_f3;
+
+alter table eo_komkanal_arch
+  add vztahos   CHAR(2) before refuser;
+
+ROLLBACK WORK;
+
+--End of A42336_RN00275819
+ 

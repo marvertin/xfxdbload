@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B121544_RN00415479_1
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE ep_expsplspormodcf_den (
+  ser   SERIAL NOT NULL,
+  id_index   Integer NOT NULL,
+  refheadser   INTEGER NOT NULL,
+  refeirrpsnser   INTEGER NOT NULL,
+  phase   CHAR(1),
+  typpoh   CHAR(1),
+  datumpohybu   DATE,
+  castka   DECIMAL(16, 2),
+  zdroj   CHAR(1)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_expsplspormodcf_den_pk ON ep_expsplspormodcf_den(ser);
+ALTER TABLE ep_expsplspormodcf_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_expsplspormodcf_den_pk;
+
+ROLLBACK WORK;
+
+--End of B121544_RN00415479_1

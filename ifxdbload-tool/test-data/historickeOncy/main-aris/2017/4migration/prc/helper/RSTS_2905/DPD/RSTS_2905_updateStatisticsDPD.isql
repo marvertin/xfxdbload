@@ -1,0 +1,6 @@
+CREATE PROCEDURE RSTS_2905_updateStatisticsDPD()                        
+      
+  UPDATE STATISTICS HIGH FOR TABLE ep_dpdevid_den;   
+    
+END PROCEDURE;
+

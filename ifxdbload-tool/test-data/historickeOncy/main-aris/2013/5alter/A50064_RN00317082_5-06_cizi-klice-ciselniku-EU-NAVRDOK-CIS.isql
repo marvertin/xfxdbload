@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_5-06_cizi-klice-ciselniku-EU-NAVRDOK-CIS
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CREATE INDEX eu_navrdok_cis_i_f1 ON eu_navrdok_cis(dok);
+ALTER TABLE eu_navrdok_cis ADD CONSTRAINT FOREIGN KEY(dok) REFERENCES do_typdokumentu_cis(doktyp) CONSTRAINT eu_navrdok_cis_f1;
+
+CREATE INDEX eu_navrdok_cis_i_f2 ON eu_navrdok_cis(typrole);
+ALTER TABLE eu_navrdok_cis ADD CONSTRAINT FOREIGN KEY(typrole) REFERENCES eo_roleos_cis(typrole) CONSTRAINT eu_navrdok_cis_f2;
+
+CREATE INDEX eu_navrdok_cis_i_f3 ON eu_navrdok_cis(zdrojprijmu);
+ALTER TABLE eu_navrdok_cis ADD CONSTRAINT FOREIGN KEY(zdrojprijmu) REFERENCES eo_ziskprijm_cis(zpusob) CONSTRAINT eu_navrdok_cis_f3;
+
+--CREATE INDEX eu_navrdok_cis_i_f4 ON eu_navrdok_cis(variantauveru);
+--ALTER TABLE eu_navrdok_cis ADD CONSTRAINT FOREIGN KEY(variantauveru) REFERENCES eu_variapu_cis(varid) CONSTRAINT eu_navrdok_cis_f4;
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_5-06_cizi-klice-ciselniku-EU-NAVRDOK-CIS

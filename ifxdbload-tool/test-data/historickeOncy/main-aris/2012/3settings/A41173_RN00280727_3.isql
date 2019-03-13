@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A41173_RN00280727_3
+-- @TC:ONCE: DESCRIPTION = Pøímý odpis - hodnì záznamù se stejným reftime v historii realizace SS {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO RZ_Akce_Cis (akce, popis) VALUES ('QS', 'Pøímý odpis');
+INSERT INTO RZ_Akce_Cis (akce, popis) VALUES ('KS', 'Pøímý odpis');
+INSERT INTO RZ_Akce_Cis (akce, popis) VALUES ('SS', 'Pøímý odpis');
+
+ROLLBACK WORK;
+
+--End of A41173_RN00280727_3

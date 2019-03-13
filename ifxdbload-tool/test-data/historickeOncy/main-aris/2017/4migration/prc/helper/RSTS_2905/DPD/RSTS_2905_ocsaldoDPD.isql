@@ -1,0 +1,79 @@
+CREATE PROCEDURE RSTS_2905_ocsaldoDPD(AKonto    DEC(16, 0),
+                                      ATko      CHAR(2),
+                                      ARealn    INT,
+                                      ADatOtev  DATE,
+                                      ADatUzav  DATE,
+                                      ALogovat  INT DEFAULT 0) 
+  
+  DEFINE _zpracovavaneDatum     DATE;
+  DEFINE _datprov               DATE;
+  DEFINE _preplatek             DEC(16, 2);
+  DEFINE _datVyhodnoceni        DATE;
+  DEFINE _idNovyZaznam          INT;
+  DEFINE _currentDPDNovyZaznam  INT;
+  DEFINE _id                    INT;   
+  DEFINE _currentDPD            INT;
+  DEFINE _datPrvVyhodnoceni     DATE; 
+  DEFINE _nesplaccastka         DEC(16, 2); 
+  DEFINE _curr                  INT;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'OcSaldoDPD'); END IF;   
+  
+  LET _datprov = AP_DatProv();
+
+  FOREACH c1 WITH HOLD FOR
+    SELECT datum, TW_MinMoney(preplatek, 0)
+    INTO _zpracovavaneDatum, _preplatek  
+    FROM rsts_2905_saldo
+    WHERE
+      konto = AKonto AND
+      tko   = ATko AND
+      datum BETWEEN ADatOtev AND ADatUzav
+    ORDER BY
+      datum
+      
+    IF(EXISTS(SELECT 1 FROM rsts_2905_dpdevid WHERE reals = ARealn AND datvyhodnoceni = _zpracovavaneDatum AND datprvvyhodnoceni = _zpracovavaneDatum)) 
+    THEN
+      UPDATE rsts_2905_dpdevid 
+      SET
+        currentDPD = RSTS_2905_datumNesplVkladuDPD(ARealn, _zpracovavaneDatum, _preplatek, ADatOtev),
+        nesplaccastka = -1* _preplatek ,
+        ocsaldoevid = 1
+      WHERE reals = ARealn AND datvyhodnoceni = _zpracovavaneDatum AND datprvvyhodnoceni = _zpracovavaneDatum;
+    ELSE
+      SELECT id, datvyhodnoceni, currentDPD, datprvvyhodnoceni, nesplaccastka 
+      INTO _id, _datVyhodnoceni, _currentDPD, _datPrvVyhodnoceni, _nesplaccastka 
+      FROM rsts_2905_dpdevid
+      WHERE
+        reals           = ARealn AND
+        datvyhodnoceni  = (SELECT MIN(datvyhodnoceni) FROM rsts_2905_dpdevid 
+                           WHERE reals = ARealn AND datvyhodnoceni >= _zpracovavaneDatum);
+      
+      LET _curr = RSTS_2905_datumNesplVkladuDPD(ARealn, _zpracovavaneDatum, _preplatek, ADatOtev);     
+      INSERT INTO rsts_2905_dpdevid (reals, datvyhodnoceni, datprvvyhodnoceni, typvyhodnoceni, currentDPD, nesplaccastka, ocsaldoevid)
+      VALUES (ARealn, _zpracovavaneDatum, _zpracovavaneDatum, 'D', _curr, -1* _preplatek, 1);      
+      
+      LET _idNovyZaznam = TW_LastSer();             
+        
+      IF(_datVyhodnoceni IS NOT NULL) THEN
+        IF(_datVyhodnoceni <= _datprov AND _zpracovavaneDatum + 1 <= _datVyhodnoceni) THEN
+          UPDATE rsts_2905_dpdevid SET datprvvyhodnoceni = _zpracovavaneDatum + 1--, nesplaccastka = -1* _preplatek
+          WHERE id = _id;
+        END IF;  
+        IF(_datVyhodnoceni > _datprov OR _zpracovavaneDatum + 1 > _datVyhodnoceni) THEN
+          DELETE FROM rsts_2905_dpdevid WHERE id = _id; 
+        END IF;
+      END IF;     
+      
+      IF(_datPrvVyhodnoceni < _zpracovavaneDatum) THEN
+        INSERT INTO rsts_2905_dpdevid (reals, datvyhodnoceni, datprvvyhodnoceni, typvyhodnoceni, currentDPD, nesplaccastka)
+        --VALUES (ARealn, _zpracovavaneDatum - 1, _datPrvVyhodnoceni, 'D', _currentDPD, _nesplaccastka);          
+        VALUES (ARealn, _zpracovavaneDatum - 1, _datPrvVyhodnoceni, 'D', _currentDPD, 0);
+      END IF;            
+           
+    END IF;        
+  END FOREACH;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;  
+     
+END PROCEDURE;

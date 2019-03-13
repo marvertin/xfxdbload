@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, B118230_RN00418285_1
+-- @TC:ONCE: DESCRIPTION = Chyba v anonymizaci {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+create index bs_stkoradr_arch_i1 on bs_stkoradr_arch(stosoba);
+create index bs_stkomkanal_arch_i1 on bs_stkomkanal_arch(stosoba);
+create index bs_stosoba_arch_i1 on bs_stosoba_arch(stsml);
+create index bs_stoz_arch_i1 on bs_stoz_arch(stsml);
+create index bs_sttotoznost_arch_i1 on bs_sttotoznost_arch(stsml);
+create index bs_stvyplkonto_arch_i1 on bs_stvyplkonto_arch(stsml);
+create index bs_stvyplbanka_arch_i1 on bs_stvyplbanka_arch(stsml);
+create index bs_stvyplsek_arch_i1 on bs_stvyplsek_arch(stsml);
+create index bs_ststorno_arch_i1 on bs_ststorno_arch(stsml);
+create index bs_stsml_arch_i1 on bs_stsml_arch(id);
+create index bs_strozdil_arch_i1 on bs_strozdil_arch(stsml);
+
+create index bs_zmkoradr_arch_i1 on bs_zmkoradr_arch(zmosoba);
+create index bs_zmkomkanal_arch_i1 on bs_zmkomkanal_arch(zmosoba);
+create index bs_zmosoba_arch_i1 on bs_zmosoba_arch(zmsml);
+create index bs_zmstat_arch_i1 on bs_zmstat_arch(zmsml);
+create index bs_zmoz_arch_i1 on bs_zmoz_arch(zmsml);
+create index bs_zmtotoznost_arch_i1 on bs_zmtotoznost_arch(zmsml);
+create index bs_zmbydleni_arch_i1 on bs_zmbydleni_arch(zmsml);
+create index bs_zmplatba_arch_i1 on bs_zmplatba_arch(zmsml);
+create index bs_zmsml_arch_i1 on bs_zmsml_arch(id);
+create index bs_zmrozdil_arch_i1 on bs_zmrozdil_arch(zmsml);
+
+alter table EO_ChangeBSavingSelection add zmsml int before smlouva;
+create index EO_ChangeBSavingSelection_i2 on EO_ChangeBSavingSelection(zmsml, os);
+
+ROLLBACK WORK;
+
+--End of B118230_RN00418285_1

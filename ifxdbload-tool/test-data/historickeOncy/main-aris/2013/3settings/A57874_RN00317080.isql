@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A57874_RN00317080
+-- @TC:ONCE: DESCRIPTION = ÚŽ: Model splácení a spoø. - musíme pro UZFINA poèítat EIR
+
+
+BEGIN WORK;
+
+UPDATE EP_SplSporModAkce_Cis SET (vypeir) = (1) WHERE akce = 'UZFINA';
+
+ROLLBACK WORK;
+
+--End of A57874_RN00317080

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B126250_RN00451094_1
+-- @TC:ONCE: DESCRIPTION = Změna v nastavení konce fixace a automatický posun data fixace {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_variaurokfixace_cis 
+  ADD obnovafixaceaut   Integer  DEFAULT 0 BEFORE platnost,
+  ADD CONSTRAINT CHECK (obnovafixaceaut IN (0,1)) CONSTRAINT eu_variaurokfixace_cis_d24f;
+
+ALTER TABLE eu_variaurokfixace_acis 
+  ADD obnovafixaceaut   Integer  DEFAULT 0 BEFORE platnost,
+  ADD CONSTRAINT CHECK  (obnovafixaceaut IN (0,1)) CONSTRAINT eu_variaurokfixace_acis_d24g;  
+
+ROLLBACK WORK;
+
+--End of B126250_RN00451094_1

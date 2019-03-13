@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A50843_RN00281137_5-narozeninovyIndexNaOsobe
+-- @TC:ONCE: DESCRIPTION = Úpravy aplikace CIBIS-Sale {CUSTOMERREQUEST}
+
+-- index využívá proceduru, která vytáhne jen den a mìsíc narození, proto musí být once až v tomto skriptu, aby už procedura existovala
+-- v migracích index potøeba není, vlastnì je potøeba jen v kmeni klientù
+
+BEGIN WORK;
+
+create index eo_fo_mat_n3 on eo_fo_mat (tw_narozeniny(datnaroz));
+
+ROLLBACK WORK;
+
+--End of A50843_RN00281137_5-narozeninovyIndexNaOsobe

@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B108500_RN00386696_3
+-- @TC:ONCE: DESCRIPTION = Insolvence: nejsou naplněny číselníky insolvence {DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO ep_duvukoncinsolv_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvukoncinsolv_cis)
+  ,'Splátkový kalendář','tzn. úpadek řešen oddlužením formou splátkového kalendáře',1);
+INSERT INTO ep_duvukoncinsolv_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvukoncinsolv_cis)
+  ,'Zpeněžení majetkové podstaty','tzn. úpadek řešen oddlužením formou zpeněžení majetkové podstaty',1);
+INSERT INTO ep_duvukoncinsolv_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvukoncinsolv_cis)
+  ,'Spl.kal./zpeněžení maj.podst.','tzn. úpadek řešen oddlužením kombinací splátkového kalendáře a zpeněžení majetkové podstaty',1);
+INSERT INTO ep_duvukoncinsolv_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvukoncinsolv_cis)
+  ,'Konkurz','tzn. úpadek řešen konkurzem',1);
+INSERT INTO ep_duvukoncinsolv_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvukoncinsolv_cis)
+  ,'Úmrtí','tzn. dlužník zemřel v době aktivního ins.řízení',1);
+INSERT INTO ep_duvukoncinsolv_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvukoncinsolv_cis)
+  ,'Jiné','důvod uveden v poznámce',1);
+
+ROLLBACK WORK;
+
+--End of B108500_RN00386696_3

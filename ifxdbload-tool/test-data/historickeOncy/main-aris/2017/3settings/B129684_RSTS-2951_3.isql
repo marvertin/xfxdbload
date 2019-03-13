@@ -1,0 +1,125 @@
+-- @TC:ONCE: ID = V2, B129684_RSTS-2951_3
+-- @TC:ONCE: DESCRIPTION = Centrální evidence exekucí {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#Časový limit pro obdržení odpovědi CEE#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Časový limit pro obdržení odpovědi CEE
+call tw_regSetOrAddKey('EP', 'CEE', 'WS', 'CasovyLimit', '30000'
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Nastavení WS', 'Časový limit pro obdržení odpovědi CEE')
+;
+
+--#Koncový bod pro připojení služby CEE#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Koncový bod pro připojení služby CEE
+call tw_regSetOrAddKey('EP', 'CEE', 'WS', 'KoncovyBod', 'https://ws.multicribis.net/CribisCZWS.asmx'
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Nastavení WS', 'Koncový bod pro připojení služby CEE')
+;
+--#Jméno pro CEE#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Jméno pro přihlášení k CEE
+call tw_regSetOrAddKey('EP', 'CEE', 'WS', 'Jmeno', ''
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Nastavení WS', 'Jméno pro CEE')
+;
+--#Heslo pro CEE#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Heslo pro přihlášení k CEE
+call tw_regSetOrAddKey('EP', 'CEE', 'WS', 'Heslo', ''
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Nastavení WS', 'Heslo pro CEE')
+;
+update TW_Registr_Cis set sifrovano = 1
+where oblast = 'EP' AND uloha = 'CEE' AND funkce = 'WS' AND udaj = 'Heslo'
+;
+
+--#Počet zbývajících žádostí na CEE k notifikaci#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Počet zbývajících žádostí, při jehož dosažení je odeslána notifikace
+call tw_regSetOrAddKey('EP', 'CEE', 'notifikace', 'LimitDotazuNotif', ''
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Notifikace', 'Počet zbývajících žádostí na CEE k notifikaci');
+
+--#Příjemci notifikace zbývajících žádostí na CEE#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--E-mailové adresy příjemců notifikací počtu zbývajících žádostí
+call tw_regSetOrAddKey('EP', 'CEE', 'notifikace', 'LimitDotazuPrijemce', ''
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Notifikace', 'Příjemci notifikace zbývajících žádostí na CEE');
+
+--#Typ notifikačního e-mailu zbývajících žádostí na CEE#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Typ e-mailu, který bude odeslán při notifikaci zbývajících žádostí na CEE
+call tw_regSetOrAddKey('EP', 'CEE', 'notifikace', 'LimitDotazuTypEmail', 'CEE_RRQ_NOTIF'
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Notifikace', 'Typ notifikačního e-mailu zbývajících žádostí na CEE');
+
+--#Využít výsledků starších dotazů do CEE pro <akci>#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Určuje, zda při požadavku se při požadavku na dotaz do CEE podívat nebo nepodívat na výsledky dotazů (provedených v posledních dnech) již evidované v CIBIS 
+call tw_regSetOrAddKey('EP', 'CEE', 'cache', 'vyuzitPro-1', 0
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Cache', 'Využít výsledků starších dotazů do CEE pro akci 1');
+call tw_regSetOrAddKey('EP', 'CEE', 'cache', 'vyuzitPro-2', 1
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Cache', 'Využít výsledků starších dotazů do CEE pro akci 2');
+call tw_regSetOrAddKey('EP', 'CEE', 'cache', 'vyuzitPro-3', 1
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Cache', 'Využít výsledků starších dotazů do CEE pro akci 3');
+call tw_regSetOrAddKey('EP', 'CEE', 'cache', 'vyuzitPro-4', 1
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Cache', 'Využít výsledků starších dotazů do CEE pro akci 4');
+call tw_regSetOrAddKey('EP', 'CEE', 'cache', 'vyuzitPro-5', 1
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Cache', 'Využít výsledků starších dotazů do CEE pro akci 5');
+
+--#Počet dní pro využití výsledků starších dotazů do CEE#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Určuje limitní počet dní (ohledně stáří evidovaného výsledku dotazu CEE), který když je překročen, tak se vždy dotazujeme znovu
+call tw_regSetOrAddKey('EP', 'CEE', 'cache', 'pocetDni', ''
+, 1, 'Podpora pro produkt', 'Komunikace s CEE', 'Cache', 'Počet dní pro využití výsledků starších dotazů do CEE');
+
+--#Typ SMS pro informování o negativním výsledku CEE pro OZ#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Typ SMS pro informování o negativním výsledku CEE pro OZ  
+call tw_regSetOrAddKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-negCEEOZ', 'NEGATIVNI_CEE_OZ'
+, 1, 'Úvěr', 'Úvěrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o negativním výsledku CEE pro OZ');
+
+--#Typ e-mail pro informování o negativním výsledku CEE pro OZ#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Typ e-mailu pro informování o negativním výsledku CEE pro OZ
+call tw_regSetOrAddKey('EU', 'creditrq-zaklad', 'notifikace', 'e-mail-negCEEOZ', 'NEGATIVNI_CEE_OZ'
+, 1, 'Úvěr', 'Úvěrová žádost - kontroly', 'Notifikace', 'Typ e-mail pro informování o negativním výsledku CEE pro OZ');
+
+--#Typ SMS pro informování o nemožnosti ověřit výsledek CEE pro OZ#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Typ SMS pro informování OZ o tom, že se nepodařilo prověřit kontrolu CEE
+call tw_regSetOrAddKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-neoverCEEOZ', 'NEOVER_CEE_OZ'
+, 1, 'Úvěr', 'Úvěrová žádost - kontroly', 'Notifikace', 'Typ SMS pro informování o nemožnosti ověřit výsledek CEE pro OZ');
+
+--#Typ e-mail pro informování o nemožnosti ověřit výsledek CEE pro OZ#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Typ e-mailu pro informování OZ o tom, že se nepodařilo prověřit kontrolu CEE
+call tw_regSetOrAddKey('EU', 'creditrq-zaklad', 'notifikace', 'e-mail-neoverCEEOZ', 'NEOVER_CEE_OZ'
+, 1, 'Úvěr', 'Úvěrová žádost - kontroly', 'Notifikace', 'Typ e-mail pro informování o nemožnosti ověřit výsledek CEE pro OZ');
+
+--#Při čerpání provádět kontrolu CEE pro <typ role>#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Parametru určuje, zda osobu v dané roli zahrnout při čerpání pro kontrolu vůči centrální evidenci exekucí
+call tw_regSetOrAddKey('RU', 'cerp', 'kontrolaCEE', 'provadetPro-KL', 1
+, 1, 'Úvěr', 'Čerpání úvěru', 'Kontrola CEE', 'Při čerpání provádět kontrolu CEE pro typ role KL');
+call tw_regSetOrAddKey('RU', 'cerp', 'kontrolaCEE', 'provadetPro-MK', 1
+, 1, 'Úvěr', 'Čerpání úvěru', 'Kontrola CEE', 'Při čerpání provádět kontrolu CEE pro typ role MK');
+call tw_regSetOrAddKey('RU', 'cerp', 'kontrolaCEE', 'provadetPro-PR', 1
+, 1, 'Úvěr', 'Čerpání úvěru', 'Kontrola CEE', 'Při čerpání provádět kontrolu CEE pro typ role PR');
+call tw_regSetOrAddKey('RU', 'cerp', 'kontrolaCEE', 'provadetPro-MP', 1
+, 1, 'Úvěr', 'Čerpání úvěru', 'Kontrola CEE', 'Při čerpání provádět kontrolu CEE pro typ role MP');
+
+--#Při čerpání provádět kontrolu dokladů na MV pro <typ role>#
+--@since RSTS-2951 Centrální evidence exekucí (RN00457749)
+--Parametru určuje, zda osobu v dané roli zahrnout při čerpání pro kontrolu vůči neplatným a odcizeným dokladům na MV
+call tw_regSetOrAddKey('RU', 'cerp', 'kontrolaDokladu', 'provadetPro-KL', 1
+, 1, 'Úvěr', 'Čerpání úvěru', 'Kontrola dokladů na MV', 'Při čerpání provádět kontrolu dokladů na MV pro typ role KL');
+call tw_regSetOrAddKey('RU', 'cerp', 'kontrolaDokladu', 'provadetPro-MK', 1
+, 1, 'Úvěr', 'Čerpání úvěru', 'Kontrola dokladů na MV', 'Při čerpání provádět kontrolu dokladů na MV pro typ role MK');
+call tw_regSetOrAddKey('RU', 'cerp', 'kontrolaDokladu', 'provadetPro-PR', 1
+, 1, 'Úvěr', 'Čerpání úvěru', 'Kontrola dokladů na MV', 'Při čerpání provádět kontrolu dokladů na MV pro typ role PR');
+call tw_regSetOrAddKey('RU', 'cerp', 'kontrolaDokladu', 'provadetPro-MP', 1
+, 1, 'Úvěr', 'Čerpání úvěru', 'Kontrola dokladů na MV', 'Při čerpání provádět kontrolu dokladů na MV pro typ role MP');
+
+
+ROLLBACK WORK;
+
+--End of B129684_RSTS-2951_3

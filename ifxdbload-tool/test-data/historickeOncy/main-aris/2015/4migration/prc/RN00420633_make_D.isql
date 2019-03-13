@@ -1,0 +1,122 @@
+create PROCEDURE RN00420633_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _realss    int; 
+define _poradi    int;
+define _inkaso    int;
+define _konto     decimal(16,0);
+define _tko       char(2);
+define _smlouva   decimal(16,0);
+define _tsml      char(4);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00420633', 'RN00420633', 'Migrace nových údajů evidence Kartotéka akce vratka SP');
+
+COMMIT WORK;
+
+set triggers for sp_vratky_kart disabled;
+
+BEGIN WORK;
+
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  realss,  poradi,  inkaso
+   INTO  _ser, _realss, _poradi, _inkaso
+   FROM RN00420633
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00420633
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    let _konto = null;
+    
+    select konto,  tko
+    into  _konto, _tko
+    from IN_InkKon_Kart
+    where ink = _inkaso;
+
+    if _konto is null then
+      select smlouva,  tsml
+      into  _smlouva, _tsml
+      from rz_real_mat
+      where realn = _realss;
+      
+      let _konto, _tko = EP_KontoTkoSml(_smlouva, _tsml);
+    end if;
+    
+    update sp_vratky_kart
+    set zdrojvratka = 0
+      , kk_konto = _konto
+      , kk_tko = _tko
+    where realss =_realss
+      and poradi = _poradi;
+    
+    --nastaví příznak zpracováno na 1
+    UPDATE RN00420633 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+set triggers for sp_vratky_kart enabled;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+SET TRIGGERS ao_blokace_kart_U ENABLED; 
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

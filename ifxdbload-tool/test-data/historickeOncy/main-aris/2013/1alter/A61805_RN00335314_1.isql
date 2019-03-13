@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, A61805_RN00335314_1
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       pro_contractstatus
+
+-- 5  pro_contractstatus-1/1       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE pro_contractstatus
+    ADD priloha1        Integer  ,
+    ADD priloha2        Integer  ,
+    ADD priloha3        Integer  ,
+    ADD priloha4        Integer ;
+
+
+ROLLBACK WORK;
+
+--End of A61805_RN00335314_1

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A42841_RN00269923_5
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE INDEX rs_exekprikaz_mat_i_f1 ON rs_exekprikaz_mat(exekutor);
+ALTER TABLE rs_exekprikaz_mat ADD CONSTRAINT FOREIGN KEY(exekutor) REFERENCES eo_exekutor_cis(id) CONSTRAINT rs_exekprikaz_mat_f1;
+
+ROLLBACK WORK;
+
+--End of A42841_RN00269923_5

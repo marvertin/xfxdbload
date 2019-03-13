@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B136033_UID80749_1
+-- @TC:ONCE: DESCRIPTION = RSTS-26064: Rozlišovat bezpečné druhy pobytu pro RK Cizinec {STORY}
+
+
+BEGIN WORK;
+
+-- eo_druhpobytinterni_acis
+ALTER TABLE eo_druhpobytinterni_acis
+  ADD  bezpecnyprork   Integer before poznamka;
+    
+ALTER TABLE eo_druhpobytinterni_acis
+  ADD CONSTRAINT (  CHECK (bezpecnyprork IN (0,1)) CONSTRAINT eo_druhpobytinterni_acis_d8ad);
+
+-- eo_druhpobytinterni_cis
+ALTER TABLE eo_druhpobytinterni_cis ADD 
+  bezpecnyprork Integer DEFAULT 0 NOT NULL before poznamka;
+  
+ALTER TABLE eo_druhpobytinterni_cis
+  ADD CONSTRAINT ( CHECK (bezpecnyprork IN (0,1)) CONSTRAINT eo_druhpobytinterni_cis_d8ac); 
+
+ROLLBACK WORK;
+
+--End of B136033_UID80749_1

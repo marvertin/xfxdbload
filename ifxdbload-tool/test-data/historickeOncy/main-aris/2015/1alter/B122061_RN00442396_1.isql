@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B122061_RN00442396_1
+-- @TC:ONCE: DESCRIPTION = Modelování úhrady za změnu tarifu {DEFECT}
+
+
+BEGIN WORK;
+
+alter table pro_contractstatus
+
+ --RN00400175 (RN00442396)
+ --Suma předchozích úhrad za změnu tarifu a za změnu úrokových sazeb
+ add sumOfChgTarifFeesAndInterests   DECIMAL(16, 2) 
+;
+
+ROLLBACK WORK;
+
+--End of B122061_RN00442396_1

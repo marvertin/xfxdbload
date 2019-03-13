@@ -1,0 +1,56 @@
+-- @TC:ONCE: ID = V2, B132878_UID51552_5-UidCeeDotaz
+-- @TC:ONCE: DESCRIPTION = Provést RK typu CEE pro osobu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+---------------------------------------------------
+-- Odstraneni starych constraintu a indexu pro PK a FK
+
+-- odstreneni stareho FK constraintu
+ALTER TABLE ep_ceeodpovedh_den DROP CONSTRAINT ep_ceeodpovedh_den_f1;
+
+-- odstraneni stareho klice pro FK
+DROP INDEX ep_ceeodpovedh_den_i_f1;
+
+-- odstranit PK constrainti ze stareho sloupce PK
+ALTER TABLE ep_ceedotaz_den DROP CONSTRAINT ep_ceedotaz_den_pk;
+
+-- odstraneni indexu ze sloupce stareho PK
+DROP INDEX ep_ceedotaz_den_pk;
+
+
+---------------------------------------------------
+-- Modifikace NOT NULL constraintu pro stare a nove sloupce PK a FK
+
+-- nastaveni PK jako NOT NULL
+ALTER TABLE ep_ceedotaz_den MODIFY serno BIGINT NOT NULL;
+
+-- nastaveni FK jako NOT NULL
+ALTER TABLE ep_ceeodpovedh_den MODIFY refceedotaz BIGINT NOT NULL;
+
+-- povoleni NULL hodnoty pro stary FK
+ALTER TABLE ep_ceeodpovedh_den MODIFY xold_refceedotaz INT;
+
+
+---------------------------------------------------
+-- Zavedeni novych constraintu a indexu pro PK a FK
+
+--PK
+CREATE UNIQUE INDEX ep_ceedotaz_den_pk ON ep_ceedotaz_den(serno);
+ALTER TABLE ep_ceedotaz_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ceedotaz_den_pk;
+
+CREATE UNIQUE INDEX ep_ceedotaz_den_i_pk_xold ON ep_ceedotaz_den(xold_serno);
+
+
+--FK
+CREATE INDEX ep_ceeodpovedh_den_i_f1 ON ep_ceeodpovedh_den(refceedotaz);
+ALTER TABLE ep_ceeodpovedh_den ADD CONSTRAINT FOREIGN KEY(refceedotaz) REFERENCES ep_ceedotaz_den(serno) CONSTRAINT ep_ceeodpovedh_den_f1;
+
+CREATE INDEX ep_ceeodpovedh_den_i_f1_xold ON ep_ceeodpovedh_den(xold_refceedotaz);
+
+
+
+ROLLBACK WORK;
+
+--End of B132878_UID51552_5-UidCeeDotaz

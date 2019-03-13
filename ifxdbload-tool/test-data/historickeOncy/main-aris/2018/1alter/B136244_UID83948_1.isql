@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136244_UID83948_1
+-- @TC:ONCE: DESCRIPTION = RSTS-27864: CHCKBLC a INVENT {DEFECT}
+
+
+BEGIN WORK;
+
+create index ru_opuct_kart_i3 on ru_opuct_kart(smlouva, dbucet);
+create index ru_opuct_kart_i4 on ru_opuct_kart(smlouva, crucet);
+create index ru_op_kart_i3 on ru_op_kart(smlouva, stadiumifrs);
+
+ROLLBACK WORK;
+
+--End of B136244_UID83948_1

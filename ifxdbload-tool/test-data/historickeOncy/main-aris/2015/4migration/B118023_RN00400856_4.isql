@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, B118023_RN00400856_4
+-- @TC:ONCE: DESCRIPTION = Změna evidence dat v úloze Smlouvy - Creditreview {CUSTOMERREQUEST}
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+call RN00400856_creview_find_D();
+call RN00400856_creview_make_D();
+
+--End of B118023_RN00400856_4

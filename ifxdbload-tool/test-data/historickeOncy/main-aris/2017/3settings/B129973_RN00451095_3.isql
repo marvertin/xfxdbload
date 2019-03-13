@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B129973_RN00451095_3
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE eu_variaurokfixace_cis SET  ucelnakladypu = 1,  ucelnakladysu = 1, mimoradnaspl = 1 WHERE fixaceid IN (19,20,21);
+
+ROLLBACK WORK;
+
+--End of B129973_RN00451095_3

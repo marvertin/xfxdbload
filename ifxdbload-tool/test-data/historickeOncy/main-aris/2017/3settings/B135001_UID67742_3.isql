@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135001_UID67742_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19650: Aktualizace IS CIBIS na novou verzi WSNV 2.10 {REQUEST}
+
+
+BEGIN WORK;
+
+UPDATE ws_metoda_cis SET specifikace = 'https://nv.cuzk.cz/ws_2.10/NavrhyNaVklad.svc?wsdl' WHERE id IN (39, 40, 41, 42, 43);
+
+CALL TW_RegSetKey('EN', 'WS', 'WSNV', 'KoncovyBod', 'https://nv.cuzk.cz/ws_2.10/NavrhyNaVklad.svc');
+
+ROLLBACK WORK;
+
+--End of B135001_UID67742_3

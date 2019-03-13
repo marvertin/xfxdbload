@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A46698_RN00249565_3
+-- @TC:ONCE: DESCRIPTION = Zmìna kontroly telefonních a mobilních èísel v komunikaèních kanálech. {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE tw_registr_cis SET idvecnaoblast = null, idfunkcionalita = null, idskupina = null, nazev = null WHERE oblast = 'EO' and uloha =  'osoba' and funkce = 'komkanal' and udaj = 'fax';
+
+call TW_RegSetAnalytickyPopis ('EO', 'osoba', 'komkanal', 'fax', 'Osoba', 'Evidence osoby', 'Persons', 'Komunikaèní kanál pro Fax', 1);
+
+
+ROLLBACK WORK;
+
+--End of A46698_RN00249565_3

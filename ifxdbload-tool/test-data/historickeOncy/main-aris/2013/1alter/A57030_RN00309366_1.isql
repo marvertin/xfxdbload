@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A57030_RN00309366_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Modelování {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_simulatedresultinfo 
+  ADD internal   Integer  DEFAULT 0 NOT NULL before refuser
+  , ADD CONSTRAINT CHECK (internal IN (0,1)) CONSTRAINT pro_simulatedresultinfo_dizh
+;
+
+ROLLBACK WORK;
+
+--End of A57030_RN00309366_1

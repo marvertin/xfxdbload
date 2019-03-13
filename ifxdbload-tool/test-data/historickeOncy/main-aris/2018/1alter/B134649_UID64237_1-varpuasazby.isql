@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B134649_UID64237_1-varpuasazby
+-- @TC:ONCE: DESCRIPTION = RSTS-17905: Varianty PÚ a sazby - dokončení {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_contractdata
+  DROP requestedBridgeLoanDate,
+  DROP xbridgeLoanBlockedAmount, 
+  DROP xbridgeLoanTargetAmountKoef, 
+  DROP xbridgeLoanAllotmentNumber;
+
+ROLLBACK WORK;
+
+--End of B134649_UID64237_1-varpuasazby

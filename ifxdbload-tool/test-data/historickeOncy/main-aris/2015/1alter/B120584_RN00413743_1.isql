@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B120584_RN00413743_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření kontroly rizikových subjektů {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eo_checkingosoby_den (
+  typrole CHAR(2),
+  fo      Integer,
+  typid   CHAR(1),
+  rc      CHAR(13),
+  cisprukaz   CHAR(20),
+  druhprukaz  Integer,
+  vysledekmv  Integer,
+  owner   VARCHAR(255)
+)lock mode row;
+
+CREATE INDEX eo_checkingosoby_den_i1 ON eo_checkingosoby_den(owner);
+
+ROLLBACK WORK;
+
+--End of B120584_RN00413743_1

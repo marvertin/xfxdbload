@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B121935_RN00441609_3
+-- @TC:ONCE: DESCRIPTION = RPSN-migr.: Chybí RPSN/EIR spoření ve statistikách {DEFECT}
+
+BEGIN WORK;
+
+update ep_splspormodakce_cis set (ulozmodel) = (1) where akce = 'SSPOTV';
+
+ROLLBACK WORK;
+
+--End of B121935_RN00441609_3

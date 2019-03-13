@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B126228_RN00453258_1
+-- @TC:ONCE: DESCRIPTION = Úvěry: Rozšíření exportů nad úvěrovou smlouvou {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_expsml_den ADD   obchzastico   CHAR(13),
+                          ADD   obchzasttyp   CHAR(10);
+
+ROLLBACK WORK;
+
+--End of B126228_RN00453258_1

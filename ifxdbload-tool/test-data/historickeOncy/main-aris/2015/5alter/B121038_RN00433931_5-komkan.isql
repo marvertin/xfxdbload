@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B121038_RN00433931_5-komkan
+-- @TC:ONCE: DESCRIPTION = [sv] Impl.BE: RN00421310 Rozšíření úvěrových rolí pro verifikaci příjmů a zaměstnavatele/firmy + změna v kontrole telefonů {ACTIVITY}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_komkanal_cis
+    MODIFY kontruz         Integer   NOT NULL                        ,
+    MODIFY akceptuz        Integer   NOT NULL                        ;
+
+ALTER TABLE eo_komkanal_cis
+    ADD CONSTRAINT CHECK (akceptuz IN (0,1)) CONSTRAINT eo_komkanal_cis_c1g,
+    ADD CONSTRAINT CHECK (kontruz IN (0,1)) CONSTRAINT eo_komkanal_cis_c2g;
+
+ROLLBACK WORK;
+
+
+--End of B121038_RN00433931_5-komkan

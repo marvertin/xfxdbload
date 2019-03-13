@@ -1,0 +1,40 @@
+create procedure RN00311507_krok_1A_PO()
+-- vytvoření tabulky pro data insolvenčních správců PO
+
+BEGIN WORK;
+
+begin
+  on exception IN(-319)
+  end exception with resume;
+  DROP INDEX RN00311507_krok_1_PO_data_i1;
+end;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_1_PO_data;
+end;
+
+CREATE TABLE RN00311507_krok_1_PO_data(
+  Ser               Serial NOT NULL,  --číslo řádku
+  
+  ID_CIBIS          Int,
+  ID                Int,
+  Nazev             Char(100),
+  IC                Int,
+  PredesleNazvy     Char(100),
+  Ulice             Char(45),
+  Psc               Char(6),
+  CP                Char(12),
+  Mesto             Char(60),
+  Okres             Char(45),
+  DenVznikuPravaNaCinnost  Date,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+CREATE INDEX RN00311507_krok_1_PO_data_i1 ON RN00311507_krok_1_PO_data(ID_CIBIS);
+
+COMMIT WORK;
+
+end procedure;

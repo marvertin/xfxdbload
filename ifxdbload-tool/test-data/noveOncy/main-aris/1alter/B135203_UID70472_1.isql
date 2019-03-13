@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B135203_UID70472_1
+-- @TC:ONCE: DESCRIPTION = RSTS-21066: Column (vsechnytarify) not found in any table in the query {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+RENAME TABLE eu_sazbavariantapu_acis TO old_eu_sazbavariantapu_acis;
+
+RENAME TABLE eu_sazbavariantapu_cis TO old_eu_sazbavariantapu_cis;
+
+RENAME TABLE eu_sazba_acis TO old_eu_sazba_acis;
+
+RENAME TABLE eu_sazba_cis TO old_eu_sazba_cis;
+
+ROLLBACK WORK;
+
+--End of B135203_UID70472_1

@@ -1,0 +1,40 @@
+-- @TC:ONCE: ID = V2, B110932_RN00380426_1_zajisteni_ucel
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table eu_zajist_mat
+  add zjedspecif   Integer  DEFAULT 0,
+  add kontrcentral Integer  DEFAULT 0,
+  add serno   BIGINT before smlouva,
+  add reffunkcnicelek       BIGINT before os,
+  add refzastavnisml        BIGINT before os;
+
+alter table eu_zajist_arch
+  add zjedspecif   Integer  DEFAULT 0,
+  add kontrcentral Integer  DEFAULT 0,
+  add serno   BIGINT before smlouva,
+  add reffunkcnicelek    BIGINT before os,
+  add refzastavnisml        BIGINT before os;
+  
+alter table eu_ucel_mat
+  add zjedspecif   Integer  DEFAULT 0,
+  add kontrcentral Integer  DEFAULT 0,
+  add serno   BIGINT before smlouva,
+  add refskupina    BIGINT before stav;
+
+alter table eu_ucel_arch
+  add zjedspecif   Integer  DEFAULT 0,
+  add kontrcentral Integer  DEFAULT 0,
+  add serno   BIGINT before smlouva,
+  add refskupina    BIGINT before stav;
+
+CREATE INDEX eu_zajist_mat_i_f2 ON eu_zajist_mat(reffunkcnicelek);
+ALTER TABLE eu_zajist_mat ADD CONSTRAINT FOREIGN KEY(reffunkcnicelek) REFERENCES cev_funkcnicelek_mat(serno) CONSTRAINT eu_zajist_mat_f2;
+
+CREATE INDEX eu_ucel_mat_i_f2 ON eu_ucel_mat(refskupina);
+ALTER TABLE eu_ucel_mat ADD CONSTRAINT FOREIGN KEY(refskupina) REFERENCES cev_skupina_mat(serno) CONSTRAINT eu_ucel_mat_f2;
+    
+ROLLBACK WORK;
+
+--End of B110932_RN00380426_1

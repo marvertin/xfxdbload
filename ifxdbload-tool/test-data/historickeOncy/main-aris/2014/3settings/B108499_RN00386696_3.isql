@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B108499_RN00386696_3
+-- @TC:ONCE: DESCRIPTION = Insolvence: nejsou naplněny číselníky insolvence {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO ep_duvstornoinsolv_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvstornoinsolv_cis)
+  ,'Uživatelská chyba','tzn. chybné natypování údajů uživatelem',1);
+INSERT INTO ep_duvstornoinsolv_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvstornoinsolv_cis)
+  ,'Jiné','důvod uveden v poznámce',1);
+
+ROLLBACK WORK;
+
+--End of B108499_RN00386696_3

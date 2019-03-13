@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B126645_RN00442031_4
+-- @TC:ONCE: DESCRIPTION = Úvěry: Evidence a provázanost příloh (marketingových akcí) k úvěrům {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (65,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (91,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (95,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (95,'SSPO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (111,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (111,'SSPO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (122,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (123,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (151,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (154,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (155,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (158,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (160,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (164,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (164,'SSPO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (165,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (166,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (169,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (172,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (173,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (174,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (175,'SSFO', 1);
+INSERT INTO es_prilohatsml_cis (priloha, tsml, platnost) VALUES (176,'SSFO', 1);
+
+ROLLBACK WORK;
+
+--End of B126645_RN00442031_4

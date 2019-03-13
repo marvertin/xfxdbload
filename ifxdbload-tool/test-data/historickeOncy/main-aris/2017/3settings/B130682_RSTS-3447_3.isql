@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, B130682_RSTS-3447_3
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+BEGIN WORK;
+
+--Číselník získání příjmů
+
+--Toto by bylo elegantní, ale nemůžu použít, protože to přečíslovali tak různě.... :-(
+--update eo_ziskprijm_cis set poradi = poradi + 3 where zpusob <> 'P'
+
+update eo_ziskprijm_cis set poradi = 2, platnost = 0 where zpusob == 'D';
+update eo_ziskprijm_cis set poradi = 3, platnost = 0 where zpusob == 'O';
+update eo_ziskprijm_cis set poradi = 4 where zpusob == 'U';
+update eo_ziskprijm_cis set poradi = 5 where zpusob == 'E';
+update eo_ziskprijm_cis set poradi = 6 where zpusob == 'Z';
+update eo_ziskprijm_cis set poradi = 8 where zpusob == 'R';
+update eo_ziskprijm_cis set poradi = 9 where zpusob == 'S';
+update eo_ziskprijm_cis set poradi = 10 where zpusob == 'L';
+update eo_ziskprijm_cis set poradi = 11 where zpusob == 'X';
+
+insert into eo_ziskprijm_cis(zpusob, popis, poradi, platnost) VALUES('A', 'Z podnikání – DAP FO s výdajovým paušálem', 2, 1);
+insert into eo_ziskprijm_cis(zpusob, popis, poradi, platnost) VALUES('B', 'Z podnikání – DAP FO s daňovou evidencí/podv.úč.', 3, 1);
+insert into eo_ziskprijm_cis(zpusob, popis, poradi, platnost) VALUES('C', 'Ze (spolu)vlastnictví PO (závislá činnost, odměny, rozdělení zisku)', 7, 1);
+
+
+ROLLBACK WORK;
+
+--End of B130682_RSTS-3447_3
+
+
+
+
+
+
+
+
+
+

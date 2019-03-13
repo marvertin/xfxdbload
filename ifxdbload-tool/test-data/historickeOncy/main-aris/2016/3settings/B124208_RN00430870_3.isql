@@ -1,0 +1,127 @@
+-- @TC:ONCE: ID = V2, B124208_RN00430870_3
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 200, 'Zadání nového pokynu k čerpání', 1
+  , 'smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 201, 'Změna údajů pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 202, 'Kontrola údajů pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 203, 'Zobrazení detailu pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 204, 'Podpis pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 205, 'Předání pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 206, 'Servisní předání pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 207, 'Generování dokumentů k pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 208, 'Dokončení předání pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 209, 'Storno pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 210, 'Doplnění pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 211, 'Změna zadavatele na pokynu k čerpání', 1
+  , 'Pokyn k čerpání: <UID>; smlouva: <smlouva>;původní OZ: <OZ>;nový OZ: <OZ>')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 212, 'Čištění neperspektivních pokynů k čerpání', 1
+  , 'EOD: <datprov>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 230, 'Zadání nového balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 231, 'Změna balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 232, 'Kontrola balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 233, 'Zobrazení detailu balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 234, 'Předání balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 235, 'Servisní předání balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 236, 'Generování dokumentů k balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 237, 'Dokončení předání balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 238, 'Storno balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 239, 'Změna zadavatele balíčku dokladů', 1
+  , 'Balíček dokladů: <UID>; smlouva: <smlouva>;původní OZ: <OZ>;nový OZ: <OZ>')
+;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 240, 'Čištění neperspektivních balíčků dokladů', 1
+  , 'EOD: <datprov>;')
+;  
+ROLLBACK WORK;
+
+--End of B124208_RN00430870_3

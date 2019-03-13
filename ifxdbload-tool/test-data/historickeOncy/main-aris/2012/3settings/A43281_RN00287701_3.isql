@@ -1,0 +1,85 @@
+-- @TC:ONCE: ID = V2, A43281_RN00287701_3
+-- @TC:ONCE: DESCRIPTION = Nefunguje vyhledávání v editoru DB registrù nebo nenastaven název nového parametru {DEFECT}
+
+BEGIN WORK;
+
+--oprava spatnych nazvu registru
+--A42983_RN00287043_3
+update tw_registr_cis set nazev = 'Vyhodnocovat Scoring1 pro nepovinné osoby' where oblast = 'EU' and uloha = 'scoring' and funkce = 'sc1' and udaj = 'nepovinOsoby';
+
+update tw_registr_cis set nazev = 'Scorovat žádost pøi pøedání' where oblast = 'EU' and uloha = 'scoring' and funkce = 'sc1' and udaj = 'autoScPredani';
+
+update tw_registr_cis set nazev = 'Scorovat žádost pøi stornu' where oblast = 'EU' and uloha = 'scoring' and funkce = 'sc1' and udaj = 'autoScStorno';
+
+update tw_registr_cis set nazev = 'Scorovat žádost pøi odmítnutí' where oblast = 'EU' and uloha = 'scoring' and funkce = 'sc1' and udaj = 'autoScOdmit';
+
+update tw_registr_cis set nazev = 'Vyhodnocovat Scoring2 pro nepovinné osoby' where oblast = 'EU' and uloha = 'scoring' and funkce = 'sc2' and udaj = 'nepovinOsoby';
+
+update tw_registr_cis set nazev = 'Scorovat smlouvu pøi stornu' where oblast = 'EU' and uloha = 'scoring' and funkce = 'sc2' and udaj = 'autoScStorno';
+
+update tw_registr_cis set nazev = 'Scorovat smlouvu pøi zamítnutí' where oblast = 'EU' and uloha = 'scoring' and funkce = 'sc2' and udaj = 'autoScZamit';
+
+update tw_registr_cis set nazev = 'Provádìt kontroly návratnosti pøi zmìnì smluvních údajù' where oblast = 'EU' and uloha = 'revizeUN' and funkce = 'kontrolyZmenaSm' and udaj = '*';
+
+--A42748_RN00285558
+update tw_registr_cis set nazev = 'Defaultní lokalita pro výbìr souborù zpráv' where oblast = 'EP' and uloha = 'zprava' and funkce = 'import' and udaj = 'lokalita';
+
+--A42678_RN00269923_3
+update tw_registr_cis set nazev = 'Indikátor pro Vymáhání - insolvence' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'insolvence-text';
+
+update tw_registr_cis set nazev = 'Vymáhání - insolvence - skupina zvl. rež.' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'rezimy' and udaj = 'skupinaInsolv';
+
+update tw_registr_cis set nazev = 'Indikátor pro Soudní vymáhání' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'soudni-text';
+
+update tw_registr_cis set nazev = 'Soudní vymáhání - skupina zvl. rež.' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'rezimy' and udaj = 'skupinaSoudni';
+
+update tw_registr_cis set nazev = 'Indikátor pro Pozdní vymáhání' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'pozdni-text';
+
+update tw_registr_cis set nazev = 'Skupina zvláštních režimù pro pozdní vymáhání.' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'rezimy' and udaj = 'skupinaPozdni';
+
+update tw_registr_cis set nazev = 'Indikátor pro Rané vymáhání - úvìr' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneUver-text';
+
+update tw_registr_cis set nazev = 'Indikátor Rané vym. úvìr - stupeò upomínky' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneUver-stupUpom';
+
+update tw_registr_cis set nazev = 'Indikátor Rané vym. úvìr - typ upomínky' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneUver-typUpom';
+
+update tw_registr_cis set nazev = 'Indikátor Rané vym. úvìr - dní po spl.' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneUver-prodleni';
+
+update tw_registr_cis set nazev = 'Indikátor Rané vym. úvìr - dlužné splátky' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneUver-dluzSpl';
+
+update tw_registr_cis set nazev = 'Indikátor pro Rané vymáhání - spoøení' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneSpor-text';
+
+update tw_registr_cis set nazev = 'Indikátor Rané vym. spoø. - stupeò upomínky' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneSpor-stupUpom';
+
+update tw_registr_cis set nazev = 'Indikátor Rané vym. spoø. - doba upomínky' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneSpor-dobaUpom';
+
+update tw_registr_cis set nazev = 'Indikátor Rané vym. spoø. - nesplacená pohl.' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneSpor-nesplPohl';
+
+update tw_registr_cis set nazev = 'Indikátor Rané vym. spoø. - dlužné vklady' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'indikator' and udaj = 'raneSpor-dluhVkl';
+
+--A42677_RN00269923_U07
+update tw_registr_cis set nazev = 'Pozdní vymáhání - distribuèní zvl. rež.' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'rezimy' and udaj = 'distribucniRezim';
+
+update tw_registr_cis set nazev = 'Pozdní vymáhání - podmínka stupeò upomínky' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'zarazeni' and udaj = 'stupUpom';
+
+update tw_registr_cis set nazev = 'Pozdní vymáhání - podmínka dlužné splátky' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'zarazeni' and udaj = 'dluhSpl';
+
+update tw_registr_cis set nazev = 'Pozdní vymáhání - podmínka poèet dní po spl.' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'zarazeni' and udaj = 'prodleni';
+
+update tw_registr_cis set nazev = 'Pozdní vymáhání - dlužné vklady' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'zarazeni' and udaj = 'dluzVkl';
+                        
+--A42357_RN00269923_3                        
+update tw_registr_cis set nazev = 'Poèet mìsícù promlèení mimosoudní dohody' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'udaje' and udaj = 'promlceniDohody';
+
+update tw_registr_cis set nazev = 'Exportovat správu vymáhané pohledávky pro KL' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'export' and udaj = 'KL';
+
+update tw_registr_cis set nazev = 'Exportovat správu vymáhané pohledávky pro PR' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'export' and udaj = 'PR';
+
+update tw_registr_cis set nazev = 'Exportovat správu vymáhané pohledávky pro RU' where oblast = 'RU' and uloha = 'sprVym' and funkce = 'export' and udaj = 'RU';
+
+--A41199_RN00238704_3                        
+update tw_registr_cis set nazev = 'Èíslo zajištìní typu Bez zajištìní' where oblast = 'EU' and uloha = '*' and funkce = 'zajist' and udaj = 'bezZajisteni';
+
+ROLLBACK WORK;
+
+--End of A43281_RN00287701_3

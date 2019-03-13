@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B121819_RN00440706_1
+-- @TC:ONCE: DESCRIPTION = Doplněná žádost o SP - nelze zobrazit historii {DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE sp_zadmfdopln_arch MODIFY datum CHAR(45);
+
+ROLLBACK WORK;
+
+--End of B121818_RN00440706_1

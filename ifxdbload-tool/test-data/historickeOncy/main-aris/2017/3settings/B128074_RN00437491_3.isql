@@ -1,0 +1,98 @@
+-- @TC:ONCE: ID = V2, B128074_RN00437491_3
+-- @TC:ONCE: DESCRIPTION = Elektronický návrh na vklad {CUSTOMERREQUEST}
+
+--@since RSTS-2935 (RN00437491)
+
+BEGIN WORK;
+
+insert into tw_typobjserno_cis(tabulka, nazev, platnost) 
+values ('wsnv_navrh_mat', 'Návrh na vklad/výmaz práva do KN', 1)
+;
+
+INSERT INTO Do_TypDokumentu_Cis (doktyp
+, text, platnost
+, biztyp, obsah, podobsah, garant
+, generovany, archivovat, podepisovany
+) VALUES ( (select NVL(MAX(doktyp),0)+1 from Do_TypDokumentu_Cis)
+, 'Dokument návrhu na vklad práva do KN FO', 1
+, '38'/*biztyp*/, '04'/*obsah*/, '00'/*podobsah*/, 'OZU'/*garant*/
+, 0, 1, 0
+)
+;
+INSERT INTO DO_TypDokumentuTypObjektu_Cis (idtyptyp
+, doktyp
+, tabulka, uzivatelskypristup, platnost
+, explicitgener, platnostod
+) VALUES ( (select NVL(MAX(idtyptyp),0)+1 from DO_TypDokumentuTypObjektu_Cis)
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na vklad práva do KN FO')
+, 'wsnv_navrh_mat', 'NEPRISTUPNY', 1
+, 0, MDY(1,1,2016)
+)
+;
+
+INSERT INTO Do_TypDokumentu_Cis (doktyp
+, text, platnost
+, biztyp, obsah, podobsah, garant
+, generovany, archivovat, podepisovany
+) VALUES ( (select NVL(MAX(doktyp),0)+1 from Do_TypDokumentu_Cis)
+, 'Dokument návrhu na výmaz práva do KN FO', 1
+, '38'/*biztyp*/, '08'/*obsah*/, '02'/*podobsah*/, 'OZU'/*garant*/
+, 0, 1, 0
+)
+;
+INSERT INTO DO_TypDokumentuTypObjektu_Cis (idtyptyp
+, doktyp
+, tabulka, uzivatelskypristup, platnost
+, explicitgener, platnostod
+) VALUES ( (select NVL(MAX(idtyptyp),0)+1 from DO_TypDokumentuTypObjektu_Cis)
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na výmaz práva do KN FO')
+, 'wsnv_navrh_mat', 'NEPRISTUPNY', 1
+, 0, MDY(1,1,2016)
+)
+;
+
+INSERT INTO Do_TypDokumentu_Cis (doktyp
+, text, platnost
+, biztyp, obsah, podobsah, garant
+, generovany, archivovat, podepisovany
+) VALUES ( (select NVL(MAX(doktyp),0)+1 from Do_TypDokumentu_Cis)
+, 'Dokument návrhu na vklad práva do KN PO', 1
+, '54', '03', '0', 'OZUSPPO'
+, 0, 1, 0
+)
+;
+INSERT INTO DO_TypDokumentuTypObjektu_Cis (idtyptyp
+, doktyp
+, tabulka, uzivatelskypristup, platnost
+, explicitgener, platnostod
+) VALUES ( (select NVL(MAX(idtyptyp),0)+1 from DO_TypDokumentuTypObjektu_Cis)
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na vklad práva do KN PO')
+, 'wsnv_navrh_mat', 'NEPRISTUPNY', 1
+, 0, MDY(1,1,2016)
+)
+;
+
+INSERT INTO Do_TypDokumentu_Cis (doktyp
+, text, platnost
+, biztyp, obsah, podobsah, garant
+, generovany, archivovat, podepisovany
+) VALUES ( (select NVL(MAX(doktyp),0)+1 from Do_TypDokumentu_Cis)
+, 'Dokument návrhu na výmaz práva do KN PO', 1
+, '56', '09', '00'/*podobsah*/,'OZUSPPO'
+, 0, 1, 0
+)
+;
+INSERT INTO DO_TypDokumentuTypObjektu_Cis (idtyptyp
+, doktyp
+, tabulka, uzivatelskypristup, platnost
+, explicitgener, platnostod
+) VALUES ( (select NVL(MAX(idtyptyp),0)+1 from DO_TypDokumentuTypObjektu_Cis)
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na výmaz práva do KN PO')
+, 'wsnv_navrh_mat', 'NEPRISTUPNY', 1
+, 0, MDY(1,1,2016)
+)
+;
+
+ROLLBACK WORK;
+
+--End of B128074_RN00437491_3

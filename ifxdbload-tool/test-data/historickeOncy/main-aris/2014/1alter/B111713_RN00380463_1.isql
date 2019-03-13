@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B111713_RN00380463_1
+-- @TC:ONCE: DESCRIPTION = Main+Sale: Kontroly při změnách smluvních údajů v Main a Sale (snížení CČ -2x) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE es_voptarif_cis
+ADD povolsnizcc  int default 1 not null before refuser ;
+
+ALTER TABLE es_voptarif_cis
+ADD CONSTRAINT CHECK ( povolsnizcc IN (0,1)) CONSTRAINT es_voptarif_cis_c6;
+
+ALTER TABLE es_voptarif_acis
+ADD  povolsnizcc  int default 1 before refuser;
+
+ROLLBACK WORK;
+
+--End of B111713_RN00380463_1

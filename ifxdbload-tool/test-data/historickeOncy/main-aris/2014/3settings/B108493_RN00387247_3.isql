@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B108493_RN00387247_3
+-- @TC:ONCE: DESCRIPTION = Aktualizace parametrizace číselníku parametrů aktualizace okolí inoslvence {DEFECT}
+
+BEGIN WORK;
+
+UPDATE EP_ParamInsolv_Cis SET klasifminos = NULL WHERE funkce IN (SELECT serno FROM EP_UlohaFunkce_Cis WHERE id IN ('ZAHAJIT', 'ZADOBZIV') AND refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV'));
+
+UPDATE EP_ParamInsolv_Cis SET klasifminos = 4 WHERE funkce = (SELECT serno FROM EP_UlohaFunkce_Cis WHERE id = 'ZADUPADEK' AND refuloha = (SELECT serno FROM EP_Uloha_Cis WHERE id = 'SPRINSOLV'));
+
+ROLLBACK WORK;
+
+--End of B108493_RN00387247_3

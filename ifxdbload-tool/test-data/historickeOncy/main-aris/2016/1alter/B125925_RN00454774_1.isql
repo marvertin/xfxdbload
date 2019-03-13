@@ -1,0 +1,71 @@
+-- @TC:ONCE: ID = V2, B125925_RN00454774_1
+-- @TC:ONCE: DESCRIPTION = Garantovaná výplata bonusů exHYST {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       es_bonusextresult_arch
+
+-- 4  es_bonusextresult_arch-1/3       [CREATE.TABLE]
+CREATE TABLE es_bonusextresult_arch (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER  ,
+    smlouva         DECIMAL(16, 0)  ,
+    tsml            CHAR(4)  ,
+    test            Integer  ,
+    vysledek        CHAR(1)  ,
+    platnost        Integer DEFAULT 1 ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    refuser         CHAR(20) DEFAULT USER ,
+    CHECK (platnost IN (0,1)) CONSTRAINT es_bonusextresult_arch_deva
+) LOCK MODE ROW
+;
+
+-- 5  es_bonusextresult_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX es_bonusextresult_arch_pk ON es_bonusextresult_arch (idarch) ;
+
+-- 6  es_bonusextresult_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE es_bonusextresult_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT es_bonusextresult_arch_pk;
+
+-- ###############################################################
+--       es_bonusextresult_mat
+
+-- 7  es_bonusextresult_mat-1/5       [CREATE.TABLE]
+CREATE TABLE es_bonusextresult_mat (
+    serno           SERIAL   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    test            Integer   NOT NULL,
+    vysledek        CHAR(1)   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT es_bonusextresult_mat_deva,
+    CHECK (vysledek IN ('S','N')) CONSTRAINT es_bonusextresult_mat_c1
+) LOCK MODE ROW
+;
+
+-- 8  es_bonusextresult_mat-2/5       [CREATE.INDEX]
+CREATE unique INDEX es_bonusextresult_mat_pk ON es_bonusextresult_mat (serno) ;
+
+-- 9  es_bonusextresult_mat-3/5       [CREATE.INDEX]
+CREATE INDEX es_bonusextresult_mat_i_i1 ON es_bonusextresult_mat (smlouva,tsml) ;
+
+-- 10  es_bonusextresult_mat-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE es_bonusextresult_mat
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT es_bonusextresult_mat_pk;
+    
+-- 19  es_bonusextresult_mat-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE es_bonusextresult_mat
+    ADD CONSTRAINT FOREIGN KEY (smlouva,tsml) REFERENCES es_sml_mat(smlouva,typ)  CONSTRAINT es_bonusextresult_mat_f1;
+
+
+ROLLBACK WORK;
+
+--End of B125925_RN00454774_1

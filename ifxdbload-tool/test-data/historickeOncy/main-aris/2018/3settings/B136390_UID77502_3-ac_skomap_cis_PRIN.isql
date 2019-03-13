@@ -1,0 +1,108 @@
+-- @TC:ONCE: ID = V2, B136390_UID77502_3-ac_skomap_cis_PRIN
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+UPDATE ac_skomap_cis SET platnost = 0 WHERE sko = 'PRIN';
+
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Fr_PU', 'CA', 'PRIN', '215151', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Fr_SU', 'CA', 'PRIN', '215161', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Fr_VU', 'CA', 'PRIN', '215181', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Fn_PU', 'CA', 'PRIN', '215451', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Fn_SU', 'CA', 'PRIN', '215461', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Fn_VU', 'CA', 'PRIN', '215481', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Pr_PU', 'CA', 'PRIN', '215851', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Pr_SU', 'CA', 'PRIN', '215861', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Pr_KO', 'CA', 'PRIN', '215871', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Pr_VU', 'CA', 'PRIN', '215881', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Pn_PU', 'CA', 'PRIN', '215651', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Pn_SU', 'CA', 'PRIN', '215661', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Pn_KO', 'CA', 'PRIN', '215671', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Pn_VU', 'CA', 'PRIN', '215681', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Po_PU', 'CA', 'PRIN', '215751', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Po_SU', 'CA', 'PRIN', '215761', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Po_KO', 'CA', 'PRIN', '215771', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_K_Po_VU', 'CA', 'PRIN', '215781', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Fn_PU', 'CA', 'PRIN', '216451', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Fn_SU', 'CA', 'PRIN', '216461', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Fn_VU', 'CA', 'PRIN', '216481', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Fr_PU', 'CA', 'PRIN', '216151', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Fr_SU', 'CA', 'PRIN', '216161', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Fr_VU', 'CA', 'PRIN', '216181', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Pr_PU', 'CA', 'PRIN', '216851', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Pr_SU', 'CA', 'PRIN', '216861', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Pr_KO', 'CA', 'PRIN', '216871', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Pr_VU', 'CA', 'PRIN', '216881', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Pn_PU', 'CA', 'PRIN', '216651', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Pn_SU', 'CA', 'PRIN', '216661', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Pn_KO', 'CA', 'PRIN', '216671', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Pn_VU', 'CA', 'PRIN', '216681', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Po_PU', 'CA', 'PRIN', '216751', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Po_SU', 'CA', 'PRIN', '216761', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Po_KO', 'CA', 'PRIN', '216771', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_S_Po_VU', 'CA', 'PRIN', '216781', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Fn_PU', 'CA', 'PRIN', '218451', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Fn_SU', 'CA', 'PRIN', '218461', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Fn_VU', 'CA', 'PRIN', '218481', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Fr_PU', 'CA', 'PRIN', '218151', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Fr_SU', 'CA', 'PRIN', '218161', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Fr_VU', 'CA', 'PRIN', '218181', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Pr_PU', 'CA', 'PRIN', '218851', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Pr_SU', 'CA', 'PRIN', '218861', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Pr_KO', 'CA', 'PRIN', '218871', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Pr_VU', 'CA', 'PRIN', '218881', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Pn_PU', 'CA', 'PRIN', '218651', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Pn_SU', 'CA', 'PRIN', '218661', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Pn_KO', 'CA', 'PRIN', '218671', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Pn_VU', 'CA', 'PRIN', '218681', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Po_PU', 'CA', 'PRIN', '218751', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Po_SU', 'CA', 'PRIN', '218761', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Po_KO', 'CA', 'PRIN', '218771', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '1_D_Po_VU', 'CA', 'PRIN', '218781', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Fn_PU', 'CA', 'PRIN', '242451', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Fn_SU', 'CA', 'PRIN', '242461', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Fn_VU', 'CA', 'PRIN', '242481', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Fr_PU', 'CA', 'PRIN', '242151', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Fr_SU', 'CA', 'PRIN', '242161', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Fr_VU', 'CA', 'PRIN', '242181', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Pr_PU', 'CA', 'PRIN', '242851', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Pr_SU', 'CA', 'PRIN', '242861', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Pr_KO', 'CA', 'PRIN', '242871', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Pr_VU', 'CA', 'PRIN', '242881', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Pn_PU', 'CA', 'PRIN', '242651', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Pn_SU', 'CA', 'PRIN', '242661', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Pn_KO', 'CA', 'PRIN', '242671', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Pn_VU', 'CA', 'PRIN', '242681', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Po_PU', 'CA', 'PRIN', '242751', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Po_SU', 'CA', 'PRIN', '242761', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Po_KO', 'CA', 'PRIN', '242771', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '2_X_Po_VU', 'CA', 'PRIN', '242781', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Fn_PU', 'CA', 'PRIN', '243451', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Fn_SU', 'CA', 'PRIN', '243461', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Fn_VU', 'CA', 'PRIN', '243481', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Fr_PU', 'CA', 'PRIN', '243151', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Fr_SU', 'CA', 'PRIN', '243161', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Fr_VU', 'CA', 'PRIN', '243181', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Pr_PU', 'CA', 'PRIN', '243851', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Pr_SU', 'CA', 'PRIN', '243861', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Pr_KO', 'CA', 'PRIN', '243871', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Pr_VU', 'CA', 'PRIN', '243881', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Pn_PU', 'CA', 'PRIN', '243651', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Pn_SU', 'CA', 'PRIN', '243661', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Pn_KO', 'CA', 'PRIN', '243671', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Pn_VU', 'CA', 'PRIN', '243681', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Po_PU', 'CA', 'PRIN', '243751', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Po_SU', 'CA', 'PRIN', '243761', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Po_KO', 'CA', 'PRIN', '243771', 0);
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha) VALUES (1, '3_X_Po_VU', 'CA', 'PRIN', '243781', 0);
+
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha, protiucet, vynosucet) VALUES (1, 'X_X_Fr_VO', 'CA', 'PRIN', '996101', 1, '999341', '762111');
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha, protiucet, vynosucet) VALUES (1, 'X_X_Fn_VO', 'CA', 'PRIN', '996401', 1, '999341', '762141');
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha, protiucet, vynosucet) VALUES (1, 'X_X_Pr_VO', 'CA', 'PRIN', '996801', 1, '999341', '762181');
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha, protiucet, vynosucet) VALUES (1, 'X_X_Pn_VO', 'CA', 'PRIN', '996601', 1, '999341', '762161');
+INSERT INTO ac_skomap_cis (platnost, mapkod, tko, sko, ucet, jepodrozvaha, protiucet, vynosucet) VALUES (1, 'X_X_Po_VO', 'CA', 'PRIN', '996701', 1, '999341', '762171');
+
+ROLLBACK WORK;
+
+--End of B136390_UID77502_3-ac_skomap_cis_PRIN

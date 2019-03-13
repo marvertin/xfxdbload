@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, A96616_RN00360507_1
+-- @TC:ONCE: DESCRIPTION = Zavedení blacklistů pro podporu řízení rizik {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_contractchecking_kart ADD (
+  dokladmvstatus   Char(1),
+  dokladmvresult   CHAR(1),
+  dokladmvannul   Integer  DEFAULT 0,
+  dokladmvnote   VARCHAR(255),
+  rizsubjektstatus   Char(1),
+  rizsubjektresult   CHAR(1),
+  rizsubjektannul   Integer  DEFAULT 0,
+  rizsubjektnote   VARCHAR(255)
+);
+
+ALTER TABLE eu_contractchecking_kart ADD CONSTRAINT(
+  CHECK (dokladmvstatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dq1i,
+  CHECK (dokladmvannul IN (0,1)) CONSTRAINT eu_contractchecking_kart_dq1k,
+  CHECK (rizsubjektstatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dq1m,
+  CHECK (rizsubjektannul IN (0,1)) CONSTRAINT eu_contractchecking_kart_dq1o
+);
+
+ALTER TABLE eu_contractchecking_den ADD (
+  dokladmvstatus   Char(1),
+  dokladmvresult   CHAR(1),
+  dokladmvannul   Integer  DEFAULT 0,
+  dokladmvnote   VARCHAR(255),
+  rizsubjektstatus   Char(1),
+  rizsubjektresult   CHAR(1),
+  rizsubjektannul   Integer  DEFAULT 0,
+  rizsubjektnote   VARCHAR(255)
+);
+
+ALTER TABLE eu_contractchecking_den ADD CONSTRAINT (
+  CHECK (dokladmvstatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_den_dq1q,
+  CHECK (dokladmvannul IN (0,1)) CONSTRAINT eu_contractchecking_den_dq1s,
+  CHECK (rizsubjektstatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_den_dq1u,
+  CHECK (rizsubjektannul IN (0,1)) CONSTRAINT eu_contractchecking_den_dq1w
+);
+
+ROLLBACK WORK;
+
+--End of A96616_RN00360507_1

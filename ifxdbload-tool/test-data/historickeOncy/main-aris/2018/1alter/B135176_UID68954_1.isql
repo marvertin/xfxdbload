@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135176_UID68954_1
+-- @TC:ONCE: DESCRIPTION = RSTS-20162: Omezení výběru interních závazků k refinancování {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_stavrod_cis ADD nepovoleneprechody CHAR(128) BEFORE refuser;
+ALTER TABLE eo_stavrod_acis ADD nepovoleneprechody CHAR(128) BEFORE refuser;
+
+ROLLBACK WORK;
+
+--End of B135176_UID68954_1

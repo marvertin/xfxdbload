@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B134727_UID61855_1-kontrvekuatrvuv
+-- @TC:ONCE: DESCRIPTION = RSTS-16589: Kontroly věku a trvání úvěru {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE PRO_GlobalBaseParameters
+  DROP limitVekSplatuverMuz, 
+  DROP limitVekSplatuverZena;
+
+
+ROLLBACK WORK;
+
+--End of B134727_UID61855_1-kontrvekuatrvuv

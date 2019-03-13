@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A41405_RN00275819
+-- @TC:ONCE: DESCRIPTION = Parametrizace - zprávy RN00275819
+
+BEGIN WORK;
+
+INSERT INTO EP_ZpravaTyp_Cis (nazev, popis, platnost)
+VALUES ('akvizice', 'Zprávy generované z akvizièních pøíležitostí.',1);
+
+INSERT INTO EP_ZpravaTyp_Cis (nazev, popis, platnost)
+VALUES ('potvrzení', 'Zprávy typu potvrzení uživatelem provedené akce.',1);
+
+INSERT INTO EP_DotazOblast_Cis (typoblasti, popis, zkratka, email, platnost)
+VALUES ('Stavební spoøení', 'Dotaz ke stavebnímu spoøení', 'STSP', 'rsts@rsts.cz', 1);
+
+INSERT INTO EP_DotazOblast_Cis (typoblasti, popis, zkratka, email, platnost)
+VALUES ('Úvìr', 'Dotaz k úvìru', 'UVER', 'rsts@rsts.cz', 1);
+
+INSERT INTO EP_DotazOblast_Cis (typoblasti, popis, zkratka, email, platnost)
+VALUES ('Jiná', 'Obecný dotaz', 'OST', 'rsts@rsts.cz', 1);
+
+
+ROLLBACK;

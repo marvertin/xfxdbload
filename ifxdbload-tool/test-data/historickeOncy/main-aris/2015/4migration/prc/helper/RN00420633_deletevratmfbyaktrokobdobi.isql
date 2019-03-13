@@ -1,0 +1,12 @@
+
+CREATE     PROCEDURE RN00420633_deletevratmfbyaktrokobdobi();
+
+define _rok    datetime year to year;
+define _obdobi integer;
+define _zavora integer;
+
+let _rok, _obdobi, _zavora = SP_GetObdobi();
+
+DELETE FROM sp_vratmf_kart WHERE rok = _rok AND obdobi = _obdobi; 
+
+end procedure;

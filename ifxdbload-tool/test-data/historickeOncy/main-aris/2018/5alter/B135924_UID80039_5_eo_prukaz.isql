@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, B135924_UID80039_5_eo_prukaz
+-- @TC:ONCE: DESCRIPTION = RSTS-25716: Umožnit zadat více dokladů totožnosti v CIBIS-Main {STORY}
+
+
+BEGIN WORK;
+
+-- 203  eo_prukaz_arch-3/4       [ALTER.COLUMN]
+/* Byl pridan NOT NULL sloupec bez defaultu */
+ALTER TABLE eo_prukaz_arch
+    MODIFY priorita        Integer   NOT NULL                        ;
+
+-- 204  eo_prukaz_arch-4/4       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eo_prukaz_arch
+    ADD CONSTRAINT CHECK (platnost IN (0,1)) CONSTRAINT eo_prukaz_arch_d750;
+
+-- 207  eo_prukaz_mat-3/4       [ALTER.COLUMN]
+/* Byl pridan NOT NULL sloupec bez defaultu */
+ALTER TABLE eo_prukaz_mat
+    MODIFY priorita        Integer   NOT NULL                        ;
+
+-- 208  eo_prukaz_mat-4/4       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eo_prukaz_mat
+    ADD CONSTRAINT CHECK (platnost IN (0,1)) CONSTRAINT eo_prukaz_mat_d74s;
+
+-- 211  eo_prukaz_mat-7/7       [CREATE.INDEX]
+CREATE INDEX eo_prukaz_mat_i3 ON eo_prukaz_mat (fo) ;
+
+/* doplneno znovuvytvoreni ciziho klice na osobu */
+ALTER TABLE eo_prukaz_mat ADD CONSTRAINT FOREIGN KEY(fo) REFERENCES eo_osoba_mat(os) CONSTRAINT eo_prukaz_mat_f1 ;
+
+ROLLBACK WORK;
+
+--End of B135924_UID80039_5

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B131258_RSTS-8371_1
+-- @TC:ONCE: DESCRIPTION = Pomalý běh noční dávky (bd_dpdprep)
+
+BEGIN WORK;
+
+CREATE INDEX ep_dpdzprac_work_i1 ON ep_dpdzprac_work(idobjektu);
+
+ROLLBACK WORK;
+
+--End of B131258_RSTS-8371_1

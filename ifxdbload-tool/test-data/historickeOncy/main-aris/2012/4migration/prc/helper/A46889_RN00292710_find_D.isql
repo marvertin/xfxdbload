@@ -1,0 +1,59 @@
+create procedure A46889_RN00292710_find_D()
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00292710;   -- hlavni ridici tabulka
+end;  
+
+--zalozime ridici tabulku
+CREATE TABLE RN00292710(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  -1 nezpracováno
+                            --                -2 chyba pøi zpracování
+                            --                -3 nenalezen vokativ pøíjmení 
+  --vlastní data
+  fo        int,
+  sex       int,
+  prijmeni  char(35),
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+insert into RN00292710 (  fo,   sex,   prijmeni, zprac)
+  select                f.fo, f.sex, f.prijmeni, -1
+  from eo_fo_mat f
+  join eo_osoba_mat o on o.os = f.fo
+  where o.stav = 'A';     
+
+   
+COMMIT WORK;
+BEGIN WORK;
+      
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00292710;
+
+--konec transakce pripravy
+COMMIT WORK;
+end procedure;

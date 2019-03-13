@@ -1,0 +1,108 @@
+CREATE PROCEDURE B136310_UID62592_4_find_D ()
+
+define _ser          Int;
+
+define _os1               Int;
+define _os2               Int;
+define _typvztah      Char(2);
+define _stav              Char(1);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE B136310_UID62592;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE B136310_UID62592(
+  Ser         Serial NOT NULL,  
+  NumErr      Int,              
+  ISAMErr     Int,              
+  TextErr     VarChar(255),     
+  zprac       SmallInt,
+  smlouva     dec(16, 0),
+  productid   Int,
+  tabulka     char(50),
+  PRIMARY     KEY(Ser)
+)LOCK MODE ROW;
+
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'eo_role_arch', -1
+from eu_sml_mat u
+where exists (select 1 from eo_role_arch t where t.smlouva = u.smlouva);
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'eo_role_mat', -1
+from eu_sml_mat u
+where exists (select 1 from eo_role_mat t where t.smlouva = u.smlouva);
+
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'ep_snimobjsledtran_den', -1
+from eu_sml_mat u
+where exists (select 1 from ep_snimobjsledtran_den t where t.smlouva = u.smlouva);
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'eu_akc_kart', -1
+from eu_sml_mat u
+where exists (select 1 from eu_akc_kart t where t.smlouva = u.smlouva);
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'eu_contractchecking_den', -1
+from eu_sml_mat u
+where exists (select 1 from eu_contractchecking_den t where t.smlouva = u.smlouva);
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'eu_contractchecking_kart', -1
+from eu_sml_mat u
+where exists (select 1 from eu_contractchecking_kart t where t.smlouva = u.smlouva);
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'ru_real_mat', -1
+from eu_sml_mat u
+where exists (select 1 from ru_real_mat t where t.smlouva = u.smlouva);
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'wa_prep_kart', -1
+from eu_sml_mat u
+where exists (select 1 from wa_prep_kart t where t.smlouva = u.smlouva);
+
+insert into B136310_UID62592
+(smlouva, productid, tabulka, zprac)
+select smlouva, productid, 'wa_removed_kart', -1
+from eu_sml_mat u
+where exists (select 1 from wa_removed_kart t where t.smlouva = u.smlouva);
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE B136236_UID82746;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;--end of B136310_UID62592_4_find_D

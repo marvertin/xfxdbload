@@ -1,0 +1,7 @@
+-- @TC:ONCE: ID = V2, A67568_RN00338666_3
+-- @TC:ONCE: DESCRIPTION = Zmìna dávky UNIQA - nové vlastnosti pro urèení provizí
+BEGIN WORK;
+
+UPDATE ec_ramsmlpoj_cis SET  platnostod = MDY(1, 1, 1993) WHERE ramsmlpoj = '1080500001';
+
+ROLLBACK WORK;

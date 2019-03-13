@@ -1,0 +1,102 @@
+create PROCEDURE RSTS3411_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _indexbaze              SmallInt;
+define _datplatnostod        Date;
+define _serDM                    Int;
+define _refuser                  CHAR(20) ;
+define _reftime                  DATETIME YEAR TO SECOND;
+define _ser                         Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS3411', 'RSTS3411', 'Zmena bazovej urokovej sadzby do buducna');
+
+COMMIT WORK;
+
+Set Triggers For ur_global_acis Disabled;
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, indexbaze, datplatnostod
+   INTO  _ser, _indexbaze, _datplatnostod
+   FROM RSTS3411
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS3411
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    SELECT refuser, reftime
+    INTO _refuser, _reftime
+    FROM ur_global_acis
+    WHERE idarch = (SELECT min(idarch) FROM ur_global_acis WHERE indexbaze = _indexbaze AND datplatnostod = _datplatnostod);
+    
+    if _reftime is not null then
+        UPDATE ur_global_cis SET portime = _reftime, poruser = _refuser WHERE indexbaze = _indexbaze AND datplatnostod = _datplatnostod;
+        UPDATE ur_global_acis SET portime = _reftime, poruser = _refuser WHERE indexbaze = _indexbaze AND datplatnostod = _datplatnostod;
+    else
+        UPDATE ur_global_cis  SET portime = reftime, poruser = refuser WHERE indexbaze = _indexbaze AND datplatnostod = _datplatnostod;
+    end if;
+    
+    --nastaví příznak zpracováno na 1
+    UPDATE RSTS3411 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+Set Triggers For ur_global_acis Enabled;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

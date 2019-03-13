@@ -1,0 +1,76 @@
+-- @TC:ONCE: ID = V2, B129688_RSTS-2951_3
+-- @TC:ONCE: DESCRIPTION = Centrální evidence exekucí {CUSTOMERREQUEST}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B129687_RSTS-2951_3
+
+BEGIN WORK;
+
+INSERT INTO ws_metoda_cis (id, nazev, specifikace
+    , metoda, poznamka, platnost, smersluzby, skupinasluzeb) VALUES (
+  50, 'Základní informace o exekuci osoby', 'https://ws.multicribis.net/CribisCZWS.asmx?wsdl'
+    , 'ExekuceGet', NULL, 1, 1, 9)
+;
+
+INSERT INTO eu_kontrolatyp_cis (typ, nazev, platnost) VALUES (
+  'CEE', 'Centrální evidence exekucí', 1)
+;
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet
+, obsah
+, odkaz, maxpriloh, maxpokusu, maxinterval
+, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob
+, blokovano, priorita,  platnost, maxpocetpriloh) VALUES (
+
+'CEE_RRQ_NOTIF', 'Vyčerpání limitu počtu žádostí na CEE', 'admin@rsts.cz', 'Administrátor RSTS', 'Vyčerpání limitu počtu žádostí na CEE'
+, 'Limit počtu žádostí na CEE bude brzy vyčerpán. Aktuální počet volných žádostí je <<počet volných žádostí>>.'
+, NULL, 0, 1, 24
+, NULL, NULL, NULL, 0, 'A'
+, 0, 2, 1, 0
+)
+;
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet
+, obsah
+, odkaz, maxpriloh, maxpokusu, maxinterval
+, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob
+, blokovano, priorita,  platnost, maxpocetpriloh) VALUES (
+
+'NEGATIVNI_CEE_OZ', 'Informace o zamítnutí pro OZ (CEE)', 'sale@rsts.cz', 'RSTS', 'Negativní výsledek dotazu do CEE (nebo se nepodařilo ověřit) u úvěru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> (<<OSOBY_S_EXEKUCI>>)'
+, 'Výsledek dotazu do Centrální evidence exekucí u úvěru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> neskončil úspěšně pro osobu/osoby <<OSOBY_S_EXEKUCI>>, pro pokračování můžete předat do standardní varianty, popř. zpracování ukončit v Sale.'
+, NULL, 0, 5, 24
+, NULL, NULL, NULL, 0, 'A'
+, 0, 1, 1, 0
+)
+;
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet
+, obsah
+, odkaz, maxpriloh, maxpokusu, maxinterval
+, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob
+, blokovano, priorita,  platnost, maxpocetpriloh) VALUES (
+
+'NEOVER_CEE_OZ', 'Informace o nemožnosti ověřit výsledek CEE pro OZ', 'sale@rsts.cz', 'RSTS', 'Nelze ověřit výsledek dotazu do CEE (nebo se nepodařilo ověřit) u úvěru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>'
+, 'Výsledek dotazu do Centrální evidence exekucí u úvěru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> momentálně nelze ověřit, pro pokračování můžete předat do standardní varianty v Sale.'
+, NULL, 0, 5, 24
+, NULL, NULL, NULL, 0, 'A'
+, 0, 1, 1, 0
+)
+;
+
+INSERT INTO tw_smstyp_cis (msgtype, zkratka, popis, textsms, plnasms, ignorovatcas, platnost) VALUES (
+
+'OBECNA', 'NEGATIVNI_CEE_OZ', 'Informace o negativním výsledku CEE pro OZ'
+, 'CEE u úvěru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> neúspěšný, předejte do stand. varianty nebo zpracování ukončete v Sale. RSTS'
+, 0, 0, 1
+)
+;
+INSERT INTO tw_smstyp_cis (msgtype, zkratka, popis, textsms, plnasms, ignorovatcas, platnost) VALUES (
+
+'OBECNA', 'NEOVER_CEE_OZ', 'Informace o nemožnosti ověřit výsledek CEE pro OZ'
+, 'CEE u úvěru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> momentálně nelze ověřit, předejte do stand. varianty v Sale. RSTS'
+, 0, 0, 1
+)
+;
+
+ROLLBACK WORK;
+
+--End of B129688_rsts-2951_3

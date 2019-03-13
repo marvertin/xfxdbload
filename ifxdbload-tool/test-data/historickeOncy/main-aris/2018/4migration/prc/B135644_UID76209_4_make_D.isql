@@ -1,0 +1,341 @@
+CREATE PROCEDURE B135644_UID76209_4_make_D (-- vstupni parametry
+  ADatum      DATE DEFAULT NULL,
+  ADebugFile  CHAR(30) DEFAULT NULL -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+DEFINE _ser             INT;
+DEFINE _serDM           INT;
+DEFINE _serobjekt       INT;
+
+DEFINE _smlouva         DEC(16,0);
+DEFINE _tsml            CHAR(4);
+DEFINE _castka          DEC(16,2);
+DEFINE _poradi          SMALLINT;
+DEFINE _datum           DATE;
+DEFINE _datprov         DATE;
+DEFINE _realn           INTEGER;
+DEFINE _stadiumifrs     INTEGER;
+DEFINE _klasif          INTEGER;
+DEFINE _fazekonta       CHAR(4);
+DEFINE _NaklStr         CHAR(10);
+DEFINE _ucetOld         CHAR(9);
+DEFINE _ucetNew         CHAR(9);
+DEFINE _nahrUcet        CHAR(9);  -- jen pro návratovou hodnotu funkce
+DEFINE _operUct         INTEGER;
+DEFINE _poruct          INTEGER;
+DEFINE _druh            CHAR(4);
+DEFINE _konto           DEC(16,0);
+DEFINE _tko             CHAR(2);
+DEFINE _predchozi       SMALLINT;
+DEFINE _pocet           INTEGER;
+DEFINE _mena            CHAR(3);
+DEFINE _provtime        DateTime YEAR TO SECOND;
+DEFINE _provuser        CHAR(20);
+DEFINE _prislibnecerpuver DEC(16,2);
+DEFINE _prislibcerpuver  DEC(16,2);
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+
+--osetreni chyby pri konstrukci kursoru
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+LET _datprov = AP_DatProv();
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+IF(PD_TraceRequestedBegin(ADebugFile) = 1) THEN
+  trace ON;
+END IF;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_23584', 'UID76209_4', 'Implementace: RSTS-18291_REAL: IFRS - OP - migrace');
+
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+LET _mena = 'CZK';
+LET _provtime, _provuser = TW_CurrentRef();
+IF ADatum IS NULL THEN
+  LET _datum = MDY(1,2,2018);
+ELSE
+  LET _datum = ADatum;
+END IF;
+
+FOREACH c1 WITH hold FOR
+  SELECT ser, smlouva, tsml, realn, stadiumifrs, castka
+  INTO  _ser,_smlouva,_tsml, _realn, _stadiumifrs, _castka
+  FROM B135644_UID76209_4
+  WHERE zprac < 0
+  ORDER BY ser
+  
+  BEGIN
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulky
+    ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE B135644_UID76209_4
+      SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+      WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    END EXCEPTION;
+    
+    -- Opravná záležitost
+    INSERT INTO B135644_UID76209_work(realn) VALUES(_realn);
+
+
+    --  1)  Zaevidování nové aktualizace OP typu A s uvedením výše příslibu a výše OP z poslední aktualizace v nově zavedených polích pro celkový
+    --       příslib a celkovou OP k příslibu.
+    ---------------------------
+    ------------ 1 ------------
+    ---------------------------
+    SELECT prislibnecerpuver, prislibcerpuver
+    INTO _prislibnecerpuver, _prislibcerpuver
+    FROM RU_OP_Kart 
+    WHERE smlouva = _smlouva 
+    AND tsml = _tsml
+    AND poradi IN (SELECT max(poradi) FROM RU_OP_Kart WHERE smlouva = _smlouva AND tsml = _tsml AND typ = 'A');
+
+    SELECT max(poradi) INTO _poradi FROM RU_OP_Kart WHERE smlouva = _smlouva AND tsml = _tsml;
+    LET _poradi = TW_Null0(_poradi) + 1;
+    INSERT INTO RU_OP_Kart (serno, realn, smlouva,  tsml,  poradi, stav, typ, datprov, opprislib, mena, prislib, provtime, provuser)
+    VALUES (tw_nextserno(), _realn, _smlouva, _tsml, _poradi, 'C', 'A', _datprov, _castka, _mena, nvl(_prislibnecerpuver,0) + nvl(_prislibcerpuver,0), _provtime, _provuser);
+    ---------------------------
+    ------------ 1 ------------
+    ---------------------------
+
+
+    --  2)  Přeúčtování OP mezi aktuálním účtem, na kterém je vedena OP čerpaného úvěru na účet OP nečerpaného úvěru dle aktuálních parametrů úvěru. 
+    ---------------------------
+    ------------ 2 ------------
+    ---------------------------
+    LET _predchozi = 0;
+    LET _stadiumifrs = RU_OpGetStadiumIfrsStad(_realn);
+    
+    LET _ucetNew, _nahrUcet = RU_OPGetUcetIfrs9(_smlouva, _tsml, 7, _predchozi, -1, _stadiumifrs, 0);
+    LET _ucetOld = RU_OPGetUcetAktIfrs9(_smlouva, _tsml, 8, _predchozi, _stadiumifrs);
+    
+    LET _klasif = NULL;
+    SELECT klasif
+    INTO _klasif
+    FROM RU_Real_Mat
+    WHERE realn = _realn;
+    LET _druh = TW_RegGetKey('RU', 'op', _klasif, 'druhpreuctovanidn', NULL);
+    IF (_druh IS NULL) THEN
+      LET _druh = TW_RegGetKey('RU', 'op', '*', 'druhpreuctovanidn');
+    END IF;
+    
+    LET _konto, _tko = EP_KontoTkoSml(_smlouva, _tsml);
+    LET _fazeKonta = NULL;
+    IF NOT EXISTS (SELECT 1 FROM ac_konto_mat WHERE konto = _konto AND tko = _tko) THEN
+      IF _tsml IN ('PUSU', 'PFSU', 'PPSU') THEN
+        let _fazeKonta = TW_RegGetKey('EU', _tsml, '*', 'trealPU');
+      ELSE
+        let _fazeKonta = TW_RegGetKey('EU', _tsml, '*', 'treal');
+      END IF;
+    END IF;
+    LET _naklStr = AO_COObjKon(_konto, _tko, 2 {fáze}, NULL, 0 {náklady}, NULL, _fazeKonta);
+      
+    LET _operUct = AC_Zauctuj(0 {AZpusobUct}, NULL {ADavkaVznik}, _druh {Adruh},
+      _castka {Acastka}, 1 {ASmerUct}, NULL {AValuta}, NULL {ADatUct},
+      NULL {ARokSP}, NULL {ADbKonto}, 'VU' {ADbTko}, NULL {ADbSko},
+      NULL {ADbBanka}, NULL {ADbZkratka}, _ucetOld {ADbUcet},
+      _naklStr {ADbNaklStr}, NULL {ACrKonto}, 'VU' {ACrTko}, NULL {ACrSko},
+      NULL {ACrBanka}, NULL {ACrZkratka}, _ucetNew {ACrUcet}, NULL {ACrNaklStr},
+      NULL {ADbText}, NULL {ADbSpecSym}, _smlouva {ADbVarSym}, NULL {ACrText},
+      NULL {ACrSpecSym}, _smlouva {ACrVarSym}, NULL {ADatVypl}, NULL {AIdTran},
+      NULL {AUhrInk}, NULL {AZdroj}, NULL {APriorita}, NULL {AKonstSym},
+      NULL {ACiziDatUct}, NULL {ACiziValuta}, NULL {ADatPor}, NULL {AZprKli},
+      NULL {AZprBank}, NULL {ADbIdent}, NULL {ACrIdent}, '____' {AMarketAkce},
+      0 {AUziv1}, 0 {AUziv2}, 0 {AUziv3}, NULL {AExclusive}, NULL {AKodVyplAkce},
+      _mena {AMena});
+  
+    LET _poruct = (SELECT Max(poradi) FROM RU_OPUct_Kart WHERE smlouva = _smlouva AND tsml = _tsml);
+    LET _poruct = TW_Null0(_poruct) + 1;
+  
+    INSERT INTO RU_OPUct_Kart(serno, realn, smlouva, tsml, poradi, porAkt, stav, typDluhu, typPohl,
+        danove, predchozi, smer, castka, dbUcet, crUcet, datProv,
+        operUct, oper, provtime, provuser, mena)
+    VALUES (tw_nextserno(), _realn, _smlouva, _tsml, _poruct, _poradi, 'C', 7, NULL,
+        NULL , _predchozi, 1, _castka, _ucetOld, _ucetNew, _datprov,
+        _operUct, NULL , _provtime, _provuser, _mena);
+    ---------------------------
+    ------------ 2 ------------
+    ---------------------------
+
+      
+    --  3)  Pokud pro danou úvěrovou smlouvu existuje zaúčtování OP k příslibu nečerpaného úvěru (typ dluhu 7) s datem účtování 2. 1. 2018, pak
+    --       bude dále provedeno:
+    ---------------------------
+    ------------ 3 ------------
+    ---------------------------
+    SELECT count(*)
+    INTO _pocet 
+    FROM RU_OPUct_Kart 
+    WHERE smlouva = _smlouva 
+    AND tsml = _tsml 
+    AND datprov = _datum 
+    AND typdluhu  = 7;
+    
+    -- Z bodu 2 jsou:  _druh, _naklStr
+    
+    IF _pocet > 0 THEN
+      ----  a) Storno operace ve výši aktuální výše OP k příslibu čerpaného úvěru z účtu OP příslibu čerpaného úvěru ve prospěch nákladového
+      ----       účtu OP příslibu čerpaného úvěru.
+      LET _predchozi = 0;
+      LET _nahrUcet, _ucetNew = RU_OPGetUcetIfrs9(_smlouva, _tsml, 8, _predchozi, -1, _stadiumifrs, 0);
+      LET _ucetOld = RU_OPGetUcetAktIfrs9(_smlouva, _tsml, 8, _predchozi, _stadiumifrs);
+      
+      LET _operUct = AC_Zauctuj(0 {AZpusobUct}, NULL {ADavkaVznik}, _druh {Adruh},
+        _castka {Acastka}, -1 {ASmerUct}, NULL {AValuta}, NULL {ADatUct},
+        NULL {ARokSP}, NULL {ADbKonto}, 'VU' {ADbTko}, NULL {ADbSko},
+        NULL {ADbBanka}, NULL {ADbZkratka}, _ucetOld {ADbUcet},
+        NULL {ADbNaklStr}, NULL {ACrKonto}, 'VU' {ACrTko}, NULL {ACrSko},
+        NULL {ACrBanka}, NULL {ACrZkratka}, _ucetNew {ACrUcet}, _naklStr {ACrNaklStr},
+        NULL {ADbText}, NULL {ADbSpecSym}, _smlouva {ADbVarSym}, NULL {ACrText},
+        NULL {ACrSpecSym}, _smlouva {ACrVarSym}, NULL {ADatVypl}, NULL {AIdTran},
+        NULL {AUhrInk}, NULL {AZdroj}, NULL {APriorita}, NULL {AKonstSym},
+        NULL {ACiziDatUct}, NULL {ACiziValuta}, NULL {ADatPor}, NULL {AZprKli},
+        NULL {AZprBank}, NULL {ADbIdent}, NULL {ACrIdent}, '____' {AMarketAkce},
+        0 {AUziv1}, 0 {AUziv2}, 0 {AUziv3}, NULL {AExclusive}, NULL {AKodVyplAkce},
+        _mena {AMena});
+        
+        LET _poruct = (SELECT Max(poradi) FROM RU_OPUct_Kart WHERE smlouva = _smlouva AND tsml = _tsml);
+        LET _poruct = TW_Null0(_poruct) + 1;
+  
+        INSERT INTO RU_OPUct_Kart(serno, realn, smlouva, tsml, poradi, porAkt, stav, typDluhu, typPohl,
+          danove, predchozi, smer, castka, dbUcet, crUcet, datProv,
+          operUct, oper, provtime, provuser, mena)
+        VALUES (tw_nextserno(), _realn, _smlouva, _tsml, _poruct, _poradi, 'C', 7, NULL,
+          NULL , _predchozi, 0, _castka, _ucetOld, _ucetNew, _datprov,
+          _operUct, 1 , _provtime, _provuser, _mena);
+      ---- a) ----
+      
+      ----  b)  Storno operace ve stejné výši z výnosového účtu OP nečerpaného úvěru ve prospěch účtu OP příslibu nečerpaného úvěru.
+      LET _predchozi = 1;
+      LET _ucetNew, _ucetOld = RU_OPGetUcetIfrs9(_smlouva, _tsml, 7, _predchozi, -1, _stadiumifrs, 0);
+      
+      LET _operUct = AC_Zauctuj(0 {AZpusobUct}, NULL {ADavkaVznik}, _druh {Adruh},
+        _castka {Acastka}, -1 {ASmerUct}, NULL {AValuta}, NULL {ADatUct},
+        NULL {ARokSP}, NULL {ADbKonto}, 'VU' {ADbTko}, NULL {ADbSko},
+        NULL {ADbBanka}, NULL {ADbZkratka}, _ucetOld {ADbUcet},
+        _naklStr {ADbNaklStr}, NULL {ACrKonto}, 'VU' {ACrTko}, NULL {ACrSko},
+        NULL {ACrBanka}, NULL {ACrZkratka}, _ucetNew {ACrUcet}, NULL {ACrNaklStr},
+        NULL {ADbText}, NULL {ADbSpecSym}, _smlouva {ADbVarSym}, NULL {ACrText},
+        NULL {ACrSpecSym}, _smlouva {ACrVarSym}, NULL {ADatVypl}, NULL {AIdTran},
+        NULL {AUhrInk}, NULL {AZdroj}, NULL {APriorita}, NULL {AKonstSym},
+        NULL {ACiziDatUct}, NULL {ACiziValuta}, NULL {ADatPor}, NULL {AZprKli},
+        NULL {AZprBank}, NULL {ADbIdent}, NULL {ACrIdent}, '____' {AMarketAkce},
+        0 {AUziv1}, 0 {AUziv2}, 0 {AUziv3}, NULL {AExclusive}, NULL {AKodVyplAkce},
+        _mena {AMena});
+        
+        LET _poruct = (SELECT Max(poradi) FROM RU_OPUct_Kart WHERE smlouva = _smlouva AND tsml = _tsml);
+        LET _poruct = TW_Null0(_poruct) + 1;
+  
+        INSERT INTO RU_OPUct_Kart(serno, realn, smlouva, tsml, poradi, porAkt, stav, typDluhu, typPohl,
+          danove, predchozi, smer, castka, dbUcet, crUcet, datProv,
+          operUct, oper, provtime, provuser, mena)
+        VALUES (tw_nextserno(), _realn, _smlouva, _tsml, _poruct, _poradi, 'C', 7, NULL,
+          NULL , _predchozi, 0, _castka, _ucetOld, _ucetNew, _datprov,
+          _operUct, 1 , _provtime, _provuser, _mena);
+      ---- b) ----
+      
+      ----  c)  Přeúčtování OP ve stejné výši z účtu OP příslibu nečerpaného úvěru na účet OP příslibu čerpaného úvěru.
+      LET _predchozi = 1;
+      LET _ucetOld, _nahrUcet = RU_OPGetUcetIfrs9(_smlouva, _tsml, 7, _predchozi, -1, _stadiumifrs, 0);
+      LET _ucetNew, _nahrUcet = RU_OPGetUcetIfrs9(_smlouva, _tsml, 8, _predchozi, -1, _stadiumifrs, 0);
+      
+      LET _operUct = AC_Zauctuj(0 {AZpusobUct}, NULL {ADavkaVznik}, _druh {Adruh},
+        _castka {Acastka}, 1 {ASmerUct}, NULL {AValuta}, NULL {ADatUct},
+        NULL {ARokSP}, NULL {ADbKonto}, 'VU' {ADbTko}, NULL {ADbSko},
+        NULL {ADbBanka}, NULL {ADbZkratka}, _ucetOld {ADbUcet},
+        _naklStr {ADbNaklStr}, NULL {ACrKonto}, 'VU' {ACrTko}, NULL {ACrSko},
+        NULL {ACrBanka}, NULL {ACrZkratka}, _ucetNew {ACrUcet}, NULL {ACrNaklStr},
+        NULL {ADbText}, NULL {ADbSpecSym}, _smlouva {ADbVarSym}, NULL {ACrText},
+        NULL {ACrSpecSym}, _smlouva {ACrVarSym}, NULL {ADatVypl}, NULL {AIdTran},
+        NULL {AUhrInk}, NULL {AZdroj}, NULL {APriorita}, NULL {AKonstSym},
+        NULL {ACiziDatUct}, NULL {ACiziValuta}, NULL {ADatPor}, NULL {AZprKli},
+        NULL {AZprBank}, NULL {ADbIdent}, NULL {ACrIdent}, '____' {AMarketAkce},
+        0 {AUziv1}, 0 {AUziv2}, 0 {AUziv3}, NULL {AExclusive}, NULL {AKodVyplAkce},
+        _mena {AMena});
+        
+        LET _poruct = (SELECT Max(poradi) FROM RU_OPUct_Kart WHERE smlouva = _smlouva AND tsml = _tsml);
+        LET _poruct = TW_Null0(_poruct) + 1;
+  
+        INSERT INTO RU_OPUct_Kart(serno, realn, smlouva, tsml, poradi, porAkt, stav, typDluhu, typPohl,
+          danove, predchozi, smer, castka, dbUcet, crUcet, datProv,
+          operUct, oper, provtime, provuser, mena)
+        VALUES (tw_nextserno(), _realn, _smlouva, _tsml, _poruct, _poradi, 'C', 8, NULL,
+          NULL , _predchozi, -1, _castka, _ucetOld, _ucetNew, _datprov,
+          _operUct, NULL , _provtime, _provuser, _mena);
+      ---- c) ----
+    ELSE
+      -- V případě přeúčtování dle kroku 2 kdy již nenásledují kroky 3a-3c bude do kartotéky účtování OP vložen pro operaci dle kroku 2 
+      -- kromě stávajícího záznamu pro dluh 7 i záznam pro dluh 8 se směrem -1 a ostatními se shodnými parametry (kromě pořadí).
+      -- Vlivem další komunikací se zákazníkem a Jarkem S. bude nastaveno:
+      --  crucet na null
+      --  dbucet na null
+      --  operuct na null
+      --  oper na null
+      
+      LET _poruct = (SELECT Max(poradi) FROM RU_OPUct_Kart WHERE smlouva = _smlouva AND tsml = _tsml);
+      LET _poruct = TW_Null0(_poruct) + 1;
+        
+      INSERT INTO RU_OPUct_Kart(serno, realn, smlouva, tsml, poradi, porAkt, stav, typDluhu, typPohl,
+        danove, predchozi, smer, castka, dbUcet, crUcet, datProv,
+        operUct, oper, provtime, provuser, mena)
+      VALUES (tw_nextserno(), _realn, _smlouva, _tsml, _poruct, _poradi, 'C', 8, NULL,
+        NULL , _predchozi, -1, _castka, NULL, NULL, _datprov,
+        NULL, NULL , _provtime, _provuser, _mena);
+    END IF;
+    ---------------------------
+    ------------ 3 ------------
+    ---------------------------
+
+
+    --  4)  Zaevidování provedených přeúčtování v kartotéce účtování OP s vazbou na vytvořenou aktualizaci OP.
+    --  celé není třeba, postupně řešeno v bodě 1 - 3
+    ---------------------------
+    ------------ 4 ------------
+    ---------------------------
+
+
+    --nastaví příznak zpracováno na 1
+    UPDATE B135644_UID76209_4 SET zprac = 1, NumErr = NULL, ISAMErr = NULL, TextErr = NULL WHERE ser = _ser;
+  END;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+END FOREACH;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+CALL TW_DM_End(_serDM);
+
+IF(PD_TraceRequestedEnd(ADebugFile) = 1) THEN
+   trace OFF;
+END IF;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+END PROCEDURE;

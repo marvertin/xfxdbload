@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A41843_RN00282452
+-- @TC:ONCE: DESCRIPTION = Èíselník Typy e-mailù obsahuje navíc záznam EVYPIS_VYTVVYP.
+
+BEGIN WORK;
+
+SET TRIGGERS FOR tw_emailtyp_cis DISABLED;
+delete from tw_emailtyp_cis where zkratka = 'EVYPIS_VYTVVYP';
+SET TRIGGERS FOR tw_emailtyp_cis ENABLED;
+
+ROLLBACK;

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A56258_RN00323238_1-01_modifikace-tabulky-ep_referent_cis
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Rozšíøení èíselníkù ve vazbì na ARCIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_referent_acis
+    ADD jmenoproarcis   CHAR(35)   BEFORE poznamka;
+
+ALTER TABLE ep_referent_cis
+    ADD jmenoproarcis   CHAR(35)   BEFORE poznamka;
+
+
+ROLLBACK WORK;
+
+--End of A56258_RN00323238_1-_1_modifikace-tabulky-ep_referent_cis

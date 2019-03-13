@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A99829_RN00360778_1
+-- @TC:ONCE: DESCRIPTION = Metodické požadavky BRKI/NRKI {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodakce_cis ADD uloztok Integer;
+
+ALTER TABLE ep_splspormodakce_cis ADD CONSTRAINT CHECK (uloztok IN (0,1)) CONSTRAINT ep_splspormodakce_cis_dqjq;
+
+ALTER TABLE ep_splspormodakce_acis ADD uloztok Integer;
+
+ALTER TABLE ep_splspormodakce_acis ADD CONSTRAINT CHECK (uloztok IN (0,1)) CONSTRAINT ep_splspormodakce_acis_dqjr;
+
+ROLLBACK WORK;
+
+--End of A99829_RN00360778_1

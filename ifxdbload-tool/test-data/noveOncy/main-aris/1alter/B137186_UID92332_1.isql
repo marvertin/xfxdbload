@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B137186_UID92332_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+ 
+ --eu_ucel_cis
+ ALTER TABLE eu_ucel_cis ADD extrefinzapoct Integer DEFAULT 0;
+    
+ ALTER TABLE eu_ucel_cis ADD CONSTRAINT CHECK (extrefinzapoct IN (0,1)) CONSTRAINT eu_ucel_cis_dc6x;
+ 
+ ALTER TABLE eu_ucel_cis ADD refinbeznavys Integer DEFAULT 0;
+    
+ ALTER TABLE eu_ucel_cis ADD CONSTRAINT CHECK (refinbeznavys IN (0,1)) CONSTRAINT eu_ucel_cis_dce3;
+ 
+ 
+ --eu_ucel_acis
+ ALTER TABLE eu_ucel_acis ADD extrefinzapoct Integer DEFAULT 0;
+    
+ ALTER TABLE eu_ucel_acis ADD CONSTRAINT CHECK (extrefinzapoct IN (0,1)) CONSTRAINT eu_ucel_acis_dc6y;
+ 
+ ALTER TABLE eu_ucel_acis ADD refinbeznavys Integer DEFAULT 0;
+    
+ ALTER TABLE eu_ucel_acis ADD CONSTRAINT CHECK (refinbeznavys IN (0,1)) CONSTRAINT eu_ucel_acis_dce4;
+ 
+ROLLBACK WORK;
+
+--End of B137186_UID92332_1

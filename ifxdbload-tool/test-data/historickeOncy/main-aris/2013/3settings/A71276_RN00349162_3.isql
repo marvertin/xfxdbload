@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A71276_RN00349162_3
+-- @TC:ONCE: DESCRIPTION = Pásmové úroèení ZÚ - nastaveni ciselniku
+
+
+BEGIN WORK;
+
+INSERT INTO ur_pasmo_cis (indexbaze, datplatnostod, poradi, hraniceod, sazba)
+SELECT indexbaze, datplatnostod, 1, 0, sazba FROM ur_global_cis;
+
+ROLLBACK WORK;
+
+--End of A71276_RN00349162_3

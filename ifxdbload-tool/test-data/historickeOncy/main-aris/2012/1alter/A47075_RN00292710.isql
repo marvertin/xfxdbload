@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A47075_RN00292710
+-- @TC:ONCE: DESCRIPTION = Rozšíøit evidenci osob o položku oslovování pøíjmení
+
+BEGIN WORK;
+
+alter table eo_osloveni_cis
+  modify platnost int default 1;
+        
+ROLLBACK WORK;
+
+--End of A47075_RN00292710
+    

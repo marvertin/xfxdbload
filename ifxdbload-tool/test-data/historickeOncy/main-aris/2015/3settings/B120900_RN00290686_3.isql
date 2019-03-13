@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B120900_RN00290686_3
+-- @TC:ONCE: DESCRIPTION = Zrevidovat db registry - pokračování RN00267320 {DEFECT}
+
+BEGIN WORK;
+
+call TW_RegDelKey('EP','EIR','*','*');
+call TW_RegDelKey('EP','EIR','*','TypEIR');
+call TW_RegDelKey('EU','*','*','EIR');
+call TW_RegDelKey('EU','EIR','*','uloha');
+call TW_RegDelKey('EP','EIR','*','Sportarif');
+
+ROLLBACK WORK;
+
+--End of B120900_RN00290686_3

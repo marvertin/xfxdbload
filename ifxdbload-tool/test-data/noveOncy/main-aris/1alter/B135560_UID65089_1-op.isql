@@ -1,0 +1,91 @@
+-- @TC:ONCE: ID = V2, B135560_UID65089_1-op
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE ru_opmof_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  mesic   Integer,
+  puvodnitreal   CHAR(4),
+  zajistnemov   Integer  DEFAULT 0,
+  scenar   Integer,
+  mofpd   decimal(10,6),
+  moflgd  decimal(10,6),
+  platnost Integer default 1,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (zajistnemov IN (0,1)) CONSTRAINT ru_opmof_acis_d5ya
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_opmof_acis_pk ON ru_opmof_acis(idarch);
+ALTER TABLE ru_opmof_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ru_opmof_acis_pk;
+
+
+CREATE TABLE ru_opmof_cis (
+  serno   SERIAL NOT NULL,
+  mesic   Integer,
+  puvodnitreal   CHAR(4),
+  zajistnemov   Integer  DEFAULT 0,
+  scenar   Integer,
+  mofpd   decimal(10,6),
+  moflgd  decimal(10,6),
+  platnost Integer default 1,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (zajistnemov IN (0,1)) CONSTRAINT ru_opmof_cis_d5xz
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_opmof_cis_pk ON ru_opmof_cis(serno);
+ALTER TABLE ru_opmof_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_opmof_cis_pk;
+
+
+ALTER TABLE ru_opparametry_cis 
+  ADD mesic   Integer BEFORE  LGD,
+  ADD pddiff   DECIMAL(10,6) BEFORE beel,
+  ADD pfp   DECIMAL(10,6) BEFORE beel,
+  ADD lgdpool   DECIMAL(10,6) BEFORE beel;
+
+ALTER TABLE ru_opparametry_acis 
+  ADD mesic   Integer BEFORE  LGD,
+  ADD pddiff   DECIMAL(10,6) BEFORE beel,
+  ADD pfp   DECIMAL(10,6) BEFORE beel,
+  ADD lgdpool   DECIMAL(10,6) BEFORE beel;
+
+
+ALTER TABLE ru_op_kart
+  ADD aktualnistav   Integer  DEFAULT 0,
+  ADD prislib   DECIMAL(16,2),
+  ADD opprislib   DECIMAL(16,2),
+  ADD CONSTRAINT CHECK (aktualnistav IN (0,1)) CONSTRAINT ru_op_kart_d5zf;
+
+CREATE TABLE ru_oppodklady_kart (
+  serno   BIGINT NOT NULL,
+  refop   BIGINT,
+  mesic   Integer,
+  scenar   Integer,
+  scenarvaha   decimal(5,2),
+  pddiff   decimal(7,4),
+  mofpd   decimal(10,6),
+  lgd   decimal(7,4),
+  moflgd   decimal(10,6),
+  expozice   DECIMAL(16,2),
+  diskfaktor   decimal(5,2),
+  op   decimal(20,6),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_oppodklady_kart_pk ON ru_oppodklady_kart(serno);
+ALTER TABLE ru_oppodklady_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_oppodklady_kart_pk;
+
+--FK
+CREATE INDEX ru_oppodklady_kart_i_f1 ON ru_oppodklady_kart(refop);
+ALTER TABLE ru_oppodklady_kart ADD CONSTRAINT FOREIGN KEY(refop) REFERENCES ru_op_kart(serno) CONSTRAINT ru_oppodklady_kart_f1;
+ROLLBACK WORK;
+
+--End of B135560_UID65089_1

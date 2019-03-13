@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A43072_RN00270144
+-- @TC:ONCE: DESCRIPTION = Odsranìní constrainti 
+BEGIN WORK;
+
+ALTER TABLE rs_real_mat
+  DROP CONSTRAINT ( rsrealmat_c_u1 ) ;
+
+DROP INDEX rs_real_mat_i1;
+
+CREATE INDEX rs_real_mat_i1
+  ON rs_real_mat(realss);
+
+
+ALTER TABLE rs_real_mat
+  DROP CONSTRAINT ( rsrealmat_u_u2 ) ;
+  
+DROP INDEX aris.rsrealmat_i_u2;
+
+CREATE INDEX rsrealmat_i_u2
+  ON rs_real_mat(productid);
+    
+ROLLBACK WORK;

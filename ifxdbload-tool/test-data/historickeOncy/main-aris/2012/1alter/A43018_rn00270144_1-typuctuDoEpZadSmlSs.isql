@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A43018_rn00270144_1-typuctuDoEpZadSmlSs
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ep_zadsmlss
+   add typUctu char(1) default  'S'  not null before smlouva;
+   
+alter table    ep_zadsmlss
+  add constraint  check   ((typuctu IN ('S' ,'P' )))  constraint ep_zadsmlss_ctypUctu;
+  
+ROLLBACK WORK;
+
+--End of A43018_rn00270144_1-typuctuDoEpZadSmlSs

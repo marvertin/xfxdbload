@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B125661_RN00445343_1
+-- @TC:ONCE: DESCRIPTION = Celkem zaplacená částka - náklady spojené s RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_expsml_den
+
+  -- Celková zaplacená částka souhrnná (dle CF)
+  add celkZaplDleCf   DECIMAL(16, 2)
+  , add celkZaplDleCfSchv   DECIMAL(16, 2);
+
+ROLLBACK WORK;
+
+--End of B125661_RN00445343_1

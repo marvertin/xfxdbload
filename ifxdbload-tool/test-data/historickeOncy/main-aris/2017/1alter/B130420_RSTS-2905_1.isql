@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B130420_RSTS-2905_1
+-- @TC:ONCE: DESCRIPTION = IFRS - Doplnění polí souvisejících s projektem IFRS9_IRBA
+
+BEGIN WORK;
+
+alter table rs_real_mat
+  add realklasif Integer before refuser;
+
+--CHECKS
+ALTER TABLE rs_real_mat
+ADD CONSTRAINT (CHECK (realklasif IN (0,1,2,3,4)) CONSTRAINT rs_real_mat_c1);
+
+alter table rs_real_arch
+  add realklasif Integer before refuser;
+
+--CHECKS
+ALTER TABLE rs_real_arch
+ADD CONSTRAINT (CHECK (realklasif IN (0,1,2,3,4)) CONSTRAINT rs_real_arch_c1);
+
+ROLLBACK WORK;
+
+--End of B130420_RSTS-2905_1

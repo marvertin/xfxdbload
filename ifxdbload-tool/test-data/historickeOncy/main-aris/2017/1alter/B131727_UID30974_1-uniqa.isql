@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B131727_UID30974_1-uniqa
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení
+
+
+BEGIN WORK;
+
+ALTER TABLE PRO_ContractData
+  ADD newinsurvariantid   INTEGER BEFORE crucialRepaymentDay,
+  ADD newinsurcrucialdate   DATE BEFORE crucialRepaymentDay,
+  ADD zajistchangedbyinsur   Integer  DEFAULT 0 NOT NULL BEFORE crucialRepaymentDay;
+
+ALTER TABLE PRO_ContractData ADD CONSTRAINT (CHECK (zajistchangedbyinsur IN (0, 1)) CONSTRAINT pro_contractdata_dwei);
+
+ROLLBACK WORK;
+
+--End of B131727_UID30974_1-uniqa

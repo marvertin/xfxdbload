@@ -115,7 +115,7 @@ public class SplParser {
     } else {
       final Tuple2<Optional<SplStatement>, TokenIterator<LexerToken>> result = parseOneStatement(tokenIterator);
       final List<SplStatement> list = parseAll(result.get2());
-      return ListUtils.union(list, result.get1().map(Collections::singletonList).orElse(Collections.emptyList()));
+      return ListUtils.union(result.get1().map(Collections::singletonList).orElse(Collections.emptyList()), list);
     }
   }
 

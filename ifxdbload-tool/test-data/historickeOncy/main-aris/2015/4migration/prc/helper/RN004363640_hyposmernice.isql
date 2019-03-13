@@ -1,0 +1,23 @@
+CREATE PROCEDURE RN004363640_hyposmernice()
+
+define _hyposmernice    like eu_sml_mat.hyposmernice;
+define _ucinSpotrZakona date;
+define _datprov         date;
+
+let _datprov = ap_datprov();
+let _hyposmernice = 0;
+
+let _ucinSpotrZakona = TW_RegGetKeyDateDf('EU', 'contract', 'legislativa', 'ucinSpotrZakona', NULL);
+if _ucinSpotrZakona <= _datprov then
+  let _hyposmernice = 1;
+end if;
+
+update eu_sml_mat 
+set hyposmernice = _hyposmernice 
+where stav in ('A', 'B', 'C');
+
+update eu_sml_mat 
+set hyposmernice = 0 
+where stav in ('D', 'L'); 
+
+end procedure

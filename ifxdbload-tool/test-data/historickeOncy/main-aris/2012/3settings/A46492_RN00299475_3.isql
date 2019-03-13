@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A46492_RN00299475_3
+-- @TC:ONCE: DESCRIPTION = Jiná výše úhrady za elektronický výpis {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call tw_regsetoraddkey(
+        'ES', 'korespondence', '*', 'korespElektr',
+        NULL,
+        1,
+        'Spoøení',
+        'Parametry SS',
+        'Korespondence',
+        'Urèuje elektronický zpùsob korespondence, pøi jeho nastavení není úètována úhrada za výpis');
+        
+call tw_regsetoraddkey(
+        'EO', 'komkanal', '*', 'komunElektr',
+        NULL,
+        1,
+        'Osoba',
+        'Komunikaèní kanály',
+        'Komunikaèní kanály',
+        'Urèuje elektronický typ komunikace, pøi jeho nastavení není úètována úhrada za výpis u komerèních úvìrù');        
+
+
+ROLLBACK WORK;
+
+--End of A46492_RN00299475_3
+

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import cz.tconsult.lib.lexer.LexerToken;
 import cz.tconsult.lib.spllexer.ESeplTokenForIgnoring;
+import cz.tconsult.lib.spllexer.ESplTokenKeyword;
 import cz.tconsult.lib.spllexer.ESplTokenNoKeyword;
 import cz.tconsult.lib.spllexer.SplDirective;
 
@@ -14,6 +15,10 @@ class TokenChecker2 extends TokenChecker {
 
   /** Posbíraný aktuálně parsrovaný příkaz */
   private StringBuilder sb;
+
+  /** Posbíraný aktuálně parsrovaný příkaz pro účely výpoču heše, tedy bez bílých znaků, jen tokeny. */
+  private StringBuilder sbHash;
+
   /** první token příkazu, jenž se začínal sbírat do sb */
   private LexerToken firstToken;
 
@@ -34,6 +39,31 @@ class TokenChecker2 extends TokenChecker {
 
       }
     }
+    if (sbHash != null) {
+      final Object tokenType = token.getType();
+      if (tokenType instanceof ESplTokenKeyword) {
+        sbHash.append(token.getText().toUpperCase());
+        sbHash.append('|');
+      } else if (tokenType instanceof ESplTokenNoKeyword) {
+        final ESplTokenNoKeyword tt = (ESplTokenNoKeyword) tokenType;
+        switch (tt) {
+        case IDENT:
+          sbHash.append(token.getText().toLowerCase());
+          sbHash.append('|');
+          break;
+        case STRING:
+          sbHash.append('"');
+          sbHash.append(token.getValue().toString());
+          sbHash.append('"');
+          sbHash.append('|');
+          break;
+        case TCDIRECTIVE:
+          break;
+        default:
+          sbHash.append(token.getText());
+        }
+      }
+    }
   }
 
   /**
@@ -46,6 +76,7 @@ class TokenChecker2 extends TokenChecker {
 
   public void startCollecting() {
     sb = new StringBuilder();
+    sbHash = new StringBuilder();
     firstToken = rawGet();
   }
 
@@ -55,7 +86,7 @@ class TokenChecker2 extends TokenChecker {
       .map(LexerToken::getValue)
       .map( x -> (SplDirective) x)
       .collect(Collectors.toSet());
-    return new SplStatement(directs, type, nazev == null ? null : (String) nazev.getValue(), sb.toString(), firstToken.getLocator());
+    return new SplStatement(directs, type, nazev == null ? null : (String) nazev.getValue(), sb.toString().trim(), sbHash.toString().trim(), firstToken.getLocator());
   }
 
   /**

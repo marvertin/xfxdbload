@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, B120796_RN00424182_3
+-- @TC:ONCE: DESCRIPTION = Změna struktury souboru CC {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ao_duvodblokace_cis(kod, nazev, poznamka, systemovy, platnost) VALUES ('VINKULACE', 'vinkulace', NULL, 1, 1);
+INSERT INTO ao_duvodblokace_cis(kod, nazev, poznamka, systemovy, platnost) VALUES ('HD44', 'HD:44', NULL, 1, 1);
+INSERT INTO ao_duvodblokace_cis(kod, nazev, poznamka, systemovy, platnost) VALUES ('JINY', 'jiný', NULL, 0, 1);
+
+INSERT INTO cc_typ_cis (typ, zpusobzprac, uhrink, smer, priorita, dbcrfrom, dbcrinto, jeuhrada3, jevalutanwd, zadostuhr, popis, poznamka, platnost, nahrada) VALUES (44, 'Z', 'U', null, 1, -1, 1, 0, 0, 0, 'Blokace', 'Žádost o blokaci prostředků', 1, null);
+INSERT INTO cc_typ_cis (typ, zpusobzprac, uhrink, smer, priorita, dbcrfrom, dbcrinto, jeuhrada3, jevalutanwd, zadostuhr, popis, poznamka, platnost, nahrada) VALUES (84, 'P', null, null, 0, null, null, 0, 1, 0, 'Chyba blokace', 'Chyba v žádosti o blokaci prostředků', 1, null);
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, platnost, maxpocetpriloh) VALUES ('CC_CHYBNE_KONTO_BLOKACE', 'Chyba konta při blokaci z importu CC', 'admin@rsts.cz', 'Administrátor RSTS                      ', 'Chyba konta pro blokaci při importu CC', 'Byla přijata blokace z CC na neexistující platné konto <<konto>> v dávce <<id_davky>>.', null, 0, 1, 24, null, 0, 'A', 0, 2, 1, 0);
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, platnost, maxpocetpriloh) VALUES ('CC_BLOKACE_KONTA', 'Blokace konta při importu CC', 'admin@rsts.cz', 'Administrátor RSTS                      ', 'Blokace konta při importu CC', 'Byla přijata blokace konta <<konto>> při importu dávky <<id_davky>> z CC.', null, 0, 1, 24, null, 0, 'A', 0, 2, 1, 0);
+
+call TW_RegSetOrAddKey('TW', 'e-mail', 'typ', 'chybne_konto_blokace','CC_CHYBNE_KONTO_BLOKACE',0,
+'Správa systému','E-mailová komunikace','Adresy příjemců','Typ e-mailu pro chybné konto blokace při importu CC');
+
+call TW_RegSetOrAddKey('TW', 'e-mail', 'typ', 'konto_blokace','CC_BLOKACE_KONTA',0,
+'Správa systému','E-mailová komunikace','Adresy příjemců','Typ e-mailu pro konto blokace při importu CC');
+
+call TW_RegSetOrAddKey('CC', 'CCProcess', '*', 'e-mail_chybne_konto', null,1,
+'Platební styk','Mezibankovní platba','CC Process','E-mailová adresa pro notifikaci o chybném kontě blokace z CC');
+
+call TW_RegSetOrAddKey('CC', 'CCProcess', '*', 'e-mail_konto_blokace', null,1,
+'Platební styk','Mezibankovní platba','CC Process','E-mailová adresa pro notifikaci o blokaci konta z CC');
+
+INSERT INTO tw_defcond(appname, culohy, nazev, poznamka, fromstr, wherestr, rolechange, roleread)
+VALUES( 'CbRsts-AMain-MCibisMainGui', 1800, 'Interní žádosti o blokace', null, null, 'zdroj = ''I'' AND typ = ''B''', '$twvyber', null);
+
+INSERT INTO tw_defcond(appname, culohy, nazev, poznamka, fromstr, wherestr, rolechange, roleread)
+VALUES( 'CbRsts-AMain-MCibisMainGui', 1800, 'Externí žádosti o blokace s platnou blokací', null, null, 'zdroj = ''E'' AND typ = ''B'' AND stavblokace = 1', '$twvyber', null);
+
+INSERT INTO tw_defcond(appname, culohy, nazev, poznamka, fromstr, wherestr, rolechange, roleread)
+VALUES( 'CbRsts-AMain-MCibisMainGui', 1800, 'Externí žádosti o blokace s neplatnou blokací', null, null, 'zdroj = ''E'' AND typ = ''B'' AND stavblokace = 0', '$twvyber', null);
+
+INSERT INTO tw_defcond(appname, culohy, nazev, poznamka, fromstr, wherestr, rolechange, roleread)
+VALUES( 'CbRsts-AMain-MCibisMainGui', 1800, 'Externí odmítnuté žádosti o blokace', null, null, 'zdroj = ''E'' AND typ = ''B'' AND stav = -2', '$twvyber', null);
+
+
+ROLLBACK WORK;
+
+--End of B120796_RN00424182_3

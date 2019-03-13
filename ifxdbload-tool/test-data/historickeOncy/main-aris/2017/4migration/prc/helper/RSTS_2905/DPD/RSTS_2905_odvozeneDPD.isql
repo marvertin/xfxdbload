@@ -1,0 +1,129 @@
+CREATE PROCEDURE RSTS_2905_odvozeneDPD(AKonto    DEC(16, 0),
+                                       ATko      CHAR(2),
+                                       ARealn    INT,
+                                       ATReal    CHAR(4),
+                                       AOsoba    INT, 
+                                       ALogovat  INT) 
+
+  DEFINE _obdobiNum                 INT;
+  DEFINE _currentDPD                INT; 
+  DEFINE _id                        INT; 
+  DEFINE _totalDPD                  INT;
+  DEFINE _totalDPDPred              INT;
+  DEFINE _datvyhodnoceni            DATE;
+  DEFINE _datprvvyhodnoceni         DATE;
+  DEFINE _realuv                    INT;
+  DEFINE _reals                     INT;
+  DEFINE _osoba                     INT;
+  DEFINE _typvyhodnoceni            CHAR(1);
+  DEFINE _nesplaccastka             DEC(16, 2);
+  DEFINE _maxDPD                    INT;
+  DEFINE _maxDPDPred                INT;
+  DEFINE _idLoop                    INT; 
+  DEFINE _datOd                     INT;
+  DEFINE _logovat                   INT;
+  DEFINE _minDatVyhodnoceni         DATE;
+  DEFINE _treal                     CHAR(4);
+  DEFINE _realpu                    INT;
+  DEFINE _realsu                    INT;
+  DEFINE _pocet                     INT;
+  
+  LET _logovat = ALogovat;  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'OdvozeneDPD'); END IF;  
+  
+  LET _obdobiNum    = TW_RegGetKey('EU', 'DPD', 'maxDPD', 'obdobi');     
+  LET _totalDPDPred = 0;
+  
+  LET _logovat = _logovat + 10; 
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(_logovat, 'OdvozeneDPD_1'); END IF; 
+   
+  IF(ATReal LIKE 'SU%' OR ATReal LIKE 'VU%') THEN
+    -- doplnim preklenovak
+    SELECT realpu INTO _realpu FROM rz_real_mat WHERE realsu = ARealn OR realvu = ARealn;
+    IF(_realpu IS NOT NULL) THEN
+      INSERT INTO rsts_2905_dpdevid (realuv, datprvvyhodnoceni, datvyhodnoceni, currentdpd, totaldpd)
+        SELECT realuv, datprvvyhodnoceni, datvyhodnoceni, currentdpd, totaldpd FROM ep_dpdevid_den WHERE realuv = _realpu; 
+    END IF;
+  END IF;
+  
+  IF(ATReal LIKE 'VU%') THEN
+    SELECT realsu INTO _realsu FROM rz_real_mat WHERE realvu = ARealn;
+    IF(_realsu IS NULL) THEN
+      SELECT realn INTO _realsu FROM ru_real_mat 
+      WHERE 
+        smlouva = (SELECT smlouva FROM ru_real_mat WHERE realn = ARealn AND treal = 'KOME') AND 
+        treal = 'VUKO';    
+    END IF;
+    IF(_realsu IS NOT NULL) THEN
+      INSERT INTO rsts_2905_dpdevid (realuv, datprvvyhodnoceni, datvyhodnoceni, currentdpd, totaldpd)
+        SELECT realuv, datprvvyhodnoceni, datvyhodnoceni, currentdpd, totaldpd FROM ep_dpdevid_den WHERE realuv = _realsu; 
+    END IF;
+  END IF;    
+  
+  SELECT COUNT(*) INTO _pocet FROM rsts_2905_dpdevid WHERE currentDPD <> 0;
+  IF(_pocet = 0) THEN
+    UPDATE rsts_2905_dpdevid SET maxDPD = 0, totalDPD = 0;
+    RETURN;
+  END IF;   
+  
+  FOREACH c1 WITH HOLD FOR
+    SELECT currentDPD, totalDPD, id
+    INTO _currentDPD, _totalDPD, _id 
+    FROM rsts_2905_dpdevid
+    ORDER BY
+      datvyhodnoceni       
+    
+    IF(_currentDPD > 0) THEN
+      LET _totalDPD = _totalDPDPred + 1;
+    ELSE
+      LET _totalDPD = _totalDPDPred;
+    END IF;
+    
+    LET _totalDPDPred = _totalDPD;
+    UPDATE rsts_2905_dpdevid SET totalDPD = _totalDPD WHERE id = _id;   
+  END FOREACH;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(_logovat); END IF;
+  
+  LET _logovat = _logovat + 10;  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(_logovat, 'OdvozeneDPD_2'); END IF;
+  
+  UPDATE rsts_2905_dpdevid SET maxDPD = RSTS_2905_maxDPD(datprvvyhodnoceni, _obdobiNum)
+  WHERE realuv = ARealn OR reals = ARealn OR osoba = AOsoba;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(_logovat); END IF;
+  
+  LET _logovat = _logovat + 10;  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(_logovat, 'OdvozeneDPD_3'); END IF;
+  
+  FOREACH c2 WITH HOLD FOR
+    SELECT currentDPD, datvyhodnoceni, datprvvyhodnoceni, realuv, reals, id, typvyhodnoceni, nesplaccastka, totalDPD, maxDPD
+    INTO _currentDPD, _datvyhodnoceni, _datprvvyhodnoceni, _realuv, _reals, _id, _typvyhodnoceni, _nesplaccastka, _totalDPD, _maxDPDPred 
+    FROM rsts_2905_dpdevid b
+    WHERE
+      (realuv = ARealn OR osoba = AOsoba OR reals = ARealn) AND
+      datvyhodnoceni <> datprvvyhodnoceni AND
+      EXISTS(SELECT id FROM rsts_2905_dpdevid ab WHERE ab.datvyhodnoceni BETWEEN TW_AddMonths(b.datprvvyhodnoceni, -_obdobiNum) AND b.datprvvyhodnoceni AND ab.currentDPD > 0)
+    ORDER BY
+      datvyhodnoceni      
+        
+    LET _datOd = _datprvvyhodnoceni + 1;      
+    WHILE(_datOd <= _datvyhodnoceni)
+      LET _maxDPD = RSTS_2905_maxDPD(_datOd, _obdobiNum);
+      IF(_maxDPD <> _maxDPDPred) THEN
+                
+        UPDATE rsts_2905_dpdevid SET datvyhodnoceni = _datOd - 1 WHERE datvyhodnoceni = _datvyhodnoceni;
+        
+        INSERT INTO rsts_2905_dpdevid (realuv, reals, osoba, datvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka, datprvvyhodnoceni)
+        VALUES (_realuv, _reals, AOsoba, _datvyhodnoceni, _typvyhodnoceni, _currentdpd, _maxDPD, _totaldpd, _nesplaccastka, _datOd);
+        LET _maxDPDPred = _maxDPD;
+      END IF; 
+      LET _datOd = _datOd + 1;          
+    END WHILE;   
+    
+  END FOREACH;  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(_logovat); END IF;
+
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;  
+     
+END PROCEDURE;

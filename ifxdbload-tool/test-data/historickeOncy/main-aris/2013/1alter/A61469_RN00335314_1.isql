@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A61469_RN00335314_1
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_contractstatus
+ DROP creditProposalApprovalDate
+;
+
+ALTER TABLE pro_contractstatus
+ ADD creditContractStatus   CHAR(1)
+;
+
+ALTER TABLE pro_contractstatus
+ADD CONSTRAINT (CHECK (creditContractStatus   in ('A','B','C','D','L','S','V','Z')) CONSTRAINT pro_contractstatus_c3)
+;
+
+ROLLBACK WORK;
+
+--End of A61469_RN00335314_1

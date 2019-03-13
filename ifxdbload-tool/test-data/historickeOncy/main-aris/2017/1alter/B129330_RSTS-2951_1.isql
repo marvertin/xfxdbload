@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B129330_RSTS-2951_1
+-- @TC:ONCE: DESCRIPTION = RN00457749-Centrální evidence exekucí
+
+
+BEGIN WORK;
+
+ALTER TABLE nocheckrule DROP CONSTRAINT nocheckrule_c5;
+
+ALTER TABLE nocheckrule
+    ADD CONSTRAINT ( CHECK (xkind IN ('S' ,'K' ,'R' ,'A' ,'E' ,'M' ,'P' ,'H' ,'C' ,'F' ,'D' ,'I', 'U' )) CONSTRAINT nocheckrule_c5 );
+
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eu_contractchecking_kart_c1;
+
+ALTER TABLE eu_contractchecking_kart
+    ADD CONSTRAINT ( CHECK (takce IN ('MANU' ,'DOCU' ,'FIRM' ,'INCO' ,'TELE' ,'URE2' ,'SCO2' ,'SETT' ,'CRTE' ,'INPR' ,'INDI' ,'WIRE' ,'REPL' ,'CANC' ,'CANP' ,'SOL2' ,'REPE' ,'KONS' ,'POZM' ,'SUPZ' ,'OSDO' ,'RISU' ,'SC2S', 'CEE' )) CONSTRAINT eu_contractchecking_kart_c1 );
+
+ALTER TABLE eu_contractchecking_kart 
+  ADD ceestatus   Char(1),
+  ADD ceeresult   CHAR(1),
+  ADD ceeannul   Integer  DEFAULT 0,
+  ADD ceenote   VARCHAR(255),
+  ADD CONSTRAINT CHECK  (ceestatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dz2f,
+  ADD CONSTRAINT CHECK (ceeannul IN (0,1)) CONSTRAINT eu_contractchecking_kart_dz2h;
+  
+
+ROLLBACK WORK;
+
+--End of B129330_RSTS-2951_1

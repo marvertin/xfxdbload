@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B125441_RN00437502_1-InfoDuvOsPorRef
+-- @TC:ONCE: DESCRIPTION = Rozšíření zpráv SSZ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- eo_infoduvos_mat
+
+ALTER TABLE eo_infoduvos_mat
+      ADD poruser         CHAR(20)  BEFORE refuser
+    , ADD portime         DATETIME YEAR TO SECOND  BEFORE refuser
+    , ADD pordatprov      DATE   BEFORE refuser
+    , ADD refdatprov      DATE   BEFORE platnost
+;
+
+
+-- ###############################################################
+-- eo_infoduvos_arch
+
+ALTER TABLE eo_infoduvos_arch
+      ADD poruser         CHAR(20)  BEFORE refuser
+    , ADD portime         DATETIME YEAR TO SECOND  BEFORE refuser
+    , ADD pordatprov      DATE   BEFORE refuser
+    , ADD refdatprov      DATE   BEFORE platnost
+;
+
+ROLLBACK WORK;
+
+--End of B125441_RN00437502_1-InfoDuvOsPorRef

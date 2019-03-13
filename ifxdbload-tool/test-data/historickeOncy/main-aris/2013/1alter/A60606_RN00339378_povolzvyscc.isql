@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A60606_RN00339378_povolzvyscc
+-- @TC:ONCE: DESCRIPTION = Obmedzenie zvysenia CC
+
+
+BEGIN WORK;
+
+ALTER TABLE es_voptarif_cis
+  ADD povolzvyscc int default 1 not null before uctuhrprespor  
+;
+
+ALTER TABLE es_voptarif_cis
+    ADD CONSTRAINT CHECK (povolzvyscc IN (0,1)) CONSTRAINT es_voptarif_cis_c4;
+
+ALTER TABLE es_voptarif_acis
+  ADD povolzvyscc int default 1 not null before uctuhrprespor
+;
+
+ALTER TABLE es_voptarif_acis
+    ADD CONSTRAINT CHECK (povolzvyscc IN (0,1)) CONSTRAINT es_voptarif_cis_c5;
+
+
+ROLLBACK WORK;
+
+--End of A60606_RN00339378_povolzvyscc

@@ -1,0 +1,48 @@
+CREATE PROCEDURE RSTS_24221_KontoUvSet(AKonto         Dec(16,0),
+                                       ATko           Char(2),
+                                       AMapKod        Char(20) default null
+                                       )
+
+  define _SerZmena     Int;
+  define _Sko          Char(4);
+  define _mapkod       Char(20);
+  define _datum        Date;
+  define _realn        int; 
+
+
+  -- pokud je AMapKod = null, zjistíme jej pomocí konta a tko
+  if AMapkod is null then
+    let _mapkod = EP_GetFinCodeMap(AKonto, ATko);
+  else
+    let _mapkod = AMapKod;
+  end if
+  let _datum = (SELECT datprov FROM ap_status);
+
+  -- zjisteni realizace ke kontu
+  LET _realn = EP_RealKon(AKonto, ATko);
+
+  --projdu vsechny subkonta
+  FOREACH
+    SELECT  sko
+      INTO _sko
+      FROM ac_sko_mat
+      WHERE konto = AKonto AND tko = ATko
+
+
+    if (EXISTS (SELECT * FROM ac_skomap_cis WHERE sko = _sko AND platnost = 1)) then
+      --jde o prime mapovani subkont
+      let _SerZmena = AH_RemapDluhSko(AKonto, ATko, _sko, _mapkod, _datum);
+    else
+      --jde o mapovani podle typu dluhu
+      call AH_remapdluhtyp(AKonto, ATko, _sko, _mapkod, _datum);
+    end if;
+
+  END FOREACH
+
+  CALL ACR_PremapovatCasoveRozliseni(AKonto, ATko, _mapkod);
+  
+  CALL RSTS_24221_OPPreuctovani(_realn, NULL, 1, NULL, NULL, _mapkod);
+
+  UPDATE ac_konto_mat SET mapkod = _mapkod WHERE konto = AKonto and tko = ATko;
+
+end procedure;

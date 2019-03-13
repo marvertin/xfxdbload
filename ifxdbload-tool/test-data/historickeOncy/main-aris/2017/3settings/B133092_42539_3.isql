@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B133092_42539_3
+-- @TC:ONCE: DESCRIPTION = ClearQuest jiĹľ nenĂ­ podporovĂˇn, brzo bude napojenĂ­ na JIRA! {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 1301, 'Změnit referenta úvěrové smlouvy', 1);
+
+ROLLBACK WORK;
+
+--End of B133092_42539_3

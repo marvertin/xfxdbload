@@ -1,0 +1,111 @@
+-- @TC:ONCE: ID = V2, A46304_RN00301461_3
+-- @TC:ONCE: DESCRIPTION = Výpisy z CA kont pøes SIS {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--
+-- Zpoplatnìné výpisy
+--
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_PUFO', 'mimor_vypis_zpopl',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis_zpopl'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný zpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_SUFO', 'mimor_vypis_zpopl',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis_zpopl'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný zpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_PUPO', 'mimor_vypis_zpopl',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis_zpopl'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný zpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_SUPO', 'mimor_vypis_zpopl',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis_zpopl'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný zpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_KOME', 'mimor_vypis_zpopl',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis_zpopl'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný zpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call TW_RegDelKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis_zpopl');
+
+--
+-- Nezpoplatnìné výpisy
+--
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_PUFO', 'mimor_vypis',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný nezpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_SUFO', 'mimor_vypis',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný nezpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_PUPO', 'mimor_vypis',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný nezpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_SUPO', 'mimor_vypis',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný nezpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call tw_regsetoraddkey(
+        'TV', 'vypis', 'druhvyp_ca_KOME', 'mimor_vypis',
+        TW_RegGetKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis'),
+        1,
+        'Klientské úèetnictví',
+        'Správa bankovních kont',
+        'Vazby na druhy výpisù',
+        'Druh výpisu pro mimoøádný nezpoplatnìný výpis z konta typu <typ konta> realizace <treal>');
+
+call TW_RegDelKey('TV', 'vypis', 'druhvyp_ca', 'mimor_vypis');
+
+ROLLBACK WORK;
+
+--End of A46304_RN00301461_3
+

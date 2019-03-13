@@ -1,0 +1,62 @@
+-- @TC:ONCE: ID = V2, B115268_RN00388977_3
+-- @TC:ONCE: DESCRIPTION = Evidence SME v CIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_tigertyp_cis MODIFY serno INTEGER NOT NULL;
+
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(1,'Private Individual (Retail)','Retail',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(3,'Corporates','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(4,'Public Sector (Commercial Undertaking)','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(5,'Prospective corporates','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(6,'Small medium Business (SMB)','SMB',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(11,'Banks','FI / Banks',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(12,'Central Government','Sovereigns incl. Public Sector Entities',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(13,'SUBGROUP Corporate','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(14,'SUBGROUP FI','FI / Banks',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(16,'GROUP Corporate','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(17,'GROUP FI','FI / Banks',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(18,'Specialised Lending Project (excluding Commodity)','Specialised Lending',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(20,'Micro SME (Retail)','Retail',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(21,'Asset Backed Securities','Securitiesation / ABS',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(23,'Insurance Life','Insurance',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(24,'Insurance Non-Life','Insurance',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(26,'Finance Companies - supervised','Finance companies',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(27,'Leasing Financial Institutions','Leasing companies',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(28,'GTS internal / inhouse customers','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(30,'Central Bank','Sovereigns incl. Public Sector Entities',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(31,'Multilateral Development Banks - List','FI / Banks',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(32,'Regional Government or local Authority','Sovereigns incl. Public Sector Entities',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(33,'Church or Religious Community','FI / Banks',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(34,'Other Administrative Body or Non-Commercial Undertaking','Sovereigns incl. Public Sector Entities',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(35,'International Organisations','International Organisations',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(36,'Private Individual (Non-Retail)','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(37,'Securities Firms','FI / Banks',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(38,'Leasing (Corporate / Standalone)','Leasing companies',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(39,'Associations','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(40,'Political Party','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(41,'Group SMB','SMB',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(42,'Public Sector (Non-Commercial Undertaking - Sub-Sovereigns)','Sovereigns incl. Public Sector Entities',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(43,'GROUP Sovereigns','Sovereigns incl. Public Sector Entities',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(51,'Fiduciary Business','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(52,'ERP customers','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(53,'Public Sector (Non-Commercial Undertaking - Sovereigns)','Sovereigns incl. Public Sector Entities',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(54,'Purchased Receivables - Pool Corporate','Purchased Receivables',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(55,'Purchased Receivables - Pool LRG','Purchased Receivables',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(56,'Purchased Receivables - Pool Retail','Purchased Receivables',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(57,'Collective Investment Undertaking (CIU)','Funds',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(58,'Suspense accounts','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(59,'Multilateral Development Banks - Other','FI / Banks',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(60,'Pension funds / Retirement funds','Insurance',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(61,'Finance Companies - not supervised','Finance companies',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(62,'Retail customers with Non-Retail treatment','Corporates',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(63,'Sub-group SMB','SMB',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(64,'Group Micro SME (Retail)','Retail',1);
+INSERT INTO eo_tigertyp_cis(serno, nazev, poznamka, platnost) VALUES(65,'Sub-group Micro-SME (Retail)','Retail',1);
+
+ALTER TABLE eo_tigertyp_cis MODIFY serno SERIAL NOT NULL;
+
+ROLLBACK WORK;
+
+--End of B115268_RN00388977_3

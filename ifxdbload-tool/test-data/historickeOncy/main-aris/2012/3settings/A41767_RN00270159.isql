@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A41767_RN00270159
+-- @TC:ONCE: DESCRIPTION = CMZRB {CUSTOMERREQUEST}
+BEGIN WORK;
+
+Call TW_RegSetOrAddKey('EU','*','zajist','bankzaruka',3,1);
+
+
+ROLLBACK;

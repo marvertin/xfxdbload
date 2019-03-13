@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B114374_RN00403225_3
+-- @TC:ONCE: DESCRIPTION = Nesprávně zařazené DB registry {DEFECT}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('ES','zmena','testMoznostNavysCC','stupenHlasky', 1, 1, 'Spoření', 'Změna smlouvy SS', 'Change of BS contract', 'Úroveň hlášení při kontrole možnosti navýšení CČ');
+
+call TW_RegSetOrAddKey('ES','zmena','testMoznostSnizCC','stupenHlasky', 1, 1, 'Spoření', 'Změna smlouvy SS', 'Change of BS contract', 'Úroveň hlášení při kontrole možnosti snížení CČ');
+
+call TW_RegSetOrAddKey('ES','zmena','testSnizCC','lhutaOdSplacPU', 12, 1, 'Spoření', 'Změna smlouvy SS', 'Change of BS contract', 'Počet měsíců pro nepovolení snížení CČ po splacení PU');
+
+ROLLBACK WORK;
+
+--End of B114374_RN00403225_3

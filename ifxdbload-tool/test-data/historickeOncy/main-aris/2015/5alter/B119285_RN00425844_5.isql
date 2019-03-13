@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B119285_RN00425844_5
+-- @TC:ONCE: DESCRIPTION = NASAZENI 1 kolo v RSTS - pad alteru 1 {CUSTOMERREQUEST}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B118968_RN00424200_1
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE unique INDEX eu_expcreview_den_pk ON eu_expcreview_den (id_index,smlouva,tsml,poradi);
+
+ALTER TABLE eu_expcreview_den
+   ADD CONSTRAINT PRIMARY KEY (id_index,smlouva,tsml,poradi)  CONSTRAINT eu_expcreview_den_pk;
+
+ROLLBACK WORK;
+
+--End of B119285_RN00425844_5

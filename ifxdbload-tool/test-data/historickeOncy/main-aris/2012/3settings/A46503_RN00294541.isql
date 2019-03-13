@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, A46503_RN00294541
+-- @TC:ONCE: DESCRIPTION = Doplnìní pøíznaku historie klienta
+
+BEGIN WORK;
+
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'sporHist', 'dobaOdUkon1', 24, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Spoøicí historie', 'Spoøicí historie klienta 1 – doba od ukonèení');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'sporHist', 'dobaOdUzav1', 24, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Spoøicí historie', 'Spoøicí historie klienta 1 – doba od uzavøení smlouvy');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'sporHist', 'zustUkon1', 50000, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Spoøicí historie', 'Spoøicí historie klienta 1 – min. ukon. zùstatek spoøení');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'sporHist', 'zustAkt1', 50000, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Spoøicí historie', 'Spoøicí historie klienta 1 – min. akt. zùstatek spoøení');
+
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'sporHist', 'dobaOdUkon2', 24, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Spoøicí historie', 'Spoøicí historie klienta 2 – doba od ukonèení');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'sporHist', 'dobaOdUzav2', 24, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Spoøicí historie', 'Spoøicí historie klienta 2 – doba od uzavøení smlouvy');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'sporHist', 'zustUkon2', 100000, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Spoøicí historie', 'Spoøicí historie klienta 2 – min. ukon. zùstatek spoøení');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'sporHist', 'zustAkt2', 100000, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Spoøicí historie', 'Spoøicí historie klienta 2 – min. akt. zùstatek spoøení');
+
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'uverHist', 'dobaOdUkon1', 24, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Úvìrová historie', 'Úvìrová historie klienta 1 – doba od ukonèení');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'uverHist', 'dobaOdCerp1', 24, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Úvìrová historie', 'Úvìrová historie klienta 1 – doba od èerpání');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'uverHist', 'minVyseUv1', 100000, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Úvìrová historie', 'Úvìrová historie klienta 1 – minimální vıše úvìru');
+
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'uverHist', 'dobaOdUkon2', 24, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Úvìrová historie', 'Úvìrová historie klienta 2 – doba od ukonèení');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'uverHist', 'dobaOdCerp2', 24, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Úvìrová historie', 'Úvìrová historie klienta 2 – doba od èerpání');
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'uverHist', 'minVyseUv2', 200000, 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Úvìrová historie', 'Úvìrová historie klienta 2 – minimální vıše úvìru');
+
+
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'produktHist', 'exterOznaceniUr1', 'REKOpùjèka plus', 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Produktová historie - obchodní sí', 'Produktová historie klienta - úroveò 1 - externí oznaèení');
+call TW_RegSetOrAddKey('EP', 'podpNabidek', 'produktHist', 'exterOznaceniUr2', 'HYPOsplátka plus', 1, 'Podpora pro produkt', 'Podpora pro nabídky', 'Produktová historie - obchodní sí', 'Produktová historie klienta - úroveò 2 - externí oznaèení');
+
+ROLLBACK WORK;
+

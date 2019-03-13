@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A61898_RN00356690_OpravaCiselníkuNotifikaci
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Oprava èíselníku notifikací
+BEGIN WORK;
+
+UPDATE eo_notifikaceudalost_cis SET nazev = 'Schválení ú.n. s podm. (klient)' WHERE udalost = 'UverSchvalPodmKlient';
+UPDATE eo_notifikaceudalost_cis SET nazev = 'Schválení ú.n.s podm. (OZ)' WHERE udalost = 'UverSchvalPodmOZ';
+
+
+ROLLBACK WORK; --A61898_RN00356690_OpravaCiselníkuNotifikaci

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B125231_RN00443393_4
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- M3 - Označení řádků v cash-flow pro Modely splácení a spoření v Main
+
+update ep_splspormodcashflow_den
+set typsazby = 'SO';
+
+ROLLBACK WORK;
+
+--End of B125231_RN00443393_4

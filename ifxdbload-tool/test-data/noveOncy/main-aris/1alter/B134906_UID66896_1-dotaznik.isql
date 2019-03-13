@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B134906_UID66896_1-dotaznik
+-- @TC:ONCE: DESCRIPTION = RSTS-19260: Nedodělky v datových strukturách pro dotazník a pro návodné otázky {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+RENAME COLUMN pro_dotaznikvarpu.bsimulationcase_id TO bssimulationcase_id;
+RENAME COLUMN pro_navot.bsimulationcase_id TO bssimulationcase_id;
+
+ROLLBACK WORK;
+
+--End of B134906_UID66896_1-dotaznik

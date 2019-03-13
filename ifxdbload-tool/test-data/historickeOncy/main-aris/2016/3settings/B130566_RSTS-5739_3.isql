@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B130566_RSTS-5739_3
+-- @TC:ONCE: DESCRIPTION = OPRAVA: RSTS-5409_REAL: ISK - model toků - nesoulad v součtu {DEFECT}
+
+BEGIN WORK;
+
+update ep_typpohybumodel_cis set priority = 75 where typpohybumodel in ('S', '2')
+;
+
+ROLLBACK WORK;
+
+--End of B130566_RSTS-5739_3

@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A43594_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+BEGIN WORK;
+
+update  ep_sazebnik_cis
+set uhr = 200
+where tuhr = 'ZMCHARU';
+
+ROLLBACK WORK;

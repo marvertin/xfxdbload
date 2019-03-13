@@ -1,0 +1,235 @@
+-- @TC:ONCE: ID = V2, A60699_RN00335314_1
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ep_uhrsazeb_cis
+CREATE TABLE ep_uhrsazeb_cis (
+  predpis   SERIAL NOT NULL,
+  popis   CHAR(70) NOT NULL,
+  datod   DATE NOT NULL,
+  datdo   DATE,
+  defpar   Integer NOT NULL,
+  treal   CHAR(4),
+  perioda   CHAR(1),
+  stoppopl   Integer  DEFAULT 0 NOT NULL,
+  limitmin   DECIMAL(16, 2),
+  limitmax   DECIMAL(16, 2),
+  mena   CHAR(3) NOT NULL,
+  zaoktyp   CHAR(1),
+  zaokpresnost   Integer,
+  alikvotni   Integer NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (stoppopl IN (0,1)) CONSTRAINT ep_uhrsazeb_cis_d6az,
+  CHECK (zaoktyp IN ('P', 'N', 'D')) CONSTRAINT ep_uhrsazeb_cis_d6b3,
+  CHECK (alikvotni IN (0,1)) CONSTRAINT ep_uhrsazeb_cis_dbzc,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrsazeb_cis_d6ap
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrsazeb_cis_pk ON ep_uhrsazeb_cis(predpis);
+ALTER TABLE ep_uhrsazeb_cis ADD CONSTRAINT PRIMARY KEY(predpis) CONSTRAINT ep_uhrsazeb_cis_pk;
+
+--FK
+CREATE INDEX ep_uhrsazeb_cis_i1 ON ep_uhrsazeb_cis(defpar);
+ALTER TABLE ep_uhrsazeb_cis ADD CONSTRAINT FOREIGN KEY(defpar) REFERENCES ep_uhrdefpar_cis(defpar) CONSTRAINT ep_uhrsazeb_cis_f1;
+CREATE INDEX ep_uhrsazeb_cis_i_f2 ON ep_uhrsazeb_cis(treal);
+ALTER TABLE ep_uhrsazeb_cis ADD CONSTRAINT FOREIGN KEY(treal) REFERENCES rp_real_cis(treal) CONSTRAINT ep_uhrsazeb_cis_f2;
+
+--CHECKS
+ALTER TABLE ep_uhrsazeb_cis
+ADD CONSTRAINT (CHECK (perioda in ('J','D','T','M','Q','P','R')) CONSTRAINT ep_uhrsazeb_cis_c1),
+ADD CONSTRAINT (CHECK (zaoktyp in ('D','N','P')) CONSTRAINT ep_uhrsazeb_cis_c2);
+
+-- ep_uhrsazeb_acis
+CREATE TABLE ep_uhrsazeb_acis (
+  idarch   SERIAL NOT NULL,
+  predpis   INTEGER NOT NULL,
+  popis   CHAR(70) NOT NULL,
+  datod   DATE NOT NULL,
+  datdo   DATE,
+  defpar   Integer NOT NULL,
+  treal   CHAR(4),
+  perioda   CHAR(1),
+  stoppopl   Integer  DEFAULT 0 NOT NULL,
+  limitmin   DECIMAL(16, 2),
+  limitmax   DECIMAL(16, 2),
+  mena   CHAR(3) NOT NULL,
+  zaoktyp   CHAR(1),
+  zaokpresnost   Integer,
+  alikvotni   Integer NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (stoppopl IN (0,1)) CONSTRAINT ep_uhrsazeb_acis_d6az,
+  CHECK (zaoktyp IN ('P', 'N', 'D')) CONSTRAINT ep_uhrsazeb_acis_d6b3,
+  CHECK (alikvotni IN (0,1)) CONSTRAINT ep_uhrsazeb_acis_dbzc,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrsazeb_acis_d6ap
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrsazeb_acis_pk ON ep_uhrsazeb_acis(idarch);
+ALTER TABLE ep_uhrsazeb_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_uhrsazeb_acis_pk;
+
+--INDEXES
+CREATE INDEX ep_uhrsazeb_acis_i1 ON ep_uhrsazeb_acis(defpar);
+
+-- ep_uhrpravidlo_cis
+CREATE TABLE ep_uhrpravidlo_cis (
+  pravidlo   SERIAL NOT NULL,
+  popis   CHAR(70) NOT NULL,
+  priorita   Integer NOT NULL,
+  predpis   Integer NOT NULL,
+  koefproc   DECIMAL(6, 2),
+  koefcitatel   Integer,
+  koefjmenovatel   Integer,
+  fixnicast   DECIMAL(16, 2),
+  mena   CHAR(3) NOT NULL,
+  dostupmodel   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (dostupmodel IN (0,1)) CONSTRAINT ep_uhrpravidlo_cis_dc09,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrpravidlo_cis_d6bp
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrpravidlo_cis_pk ON ep_uhrpravidlo_cis(pravidlo);
+ALTER TABLE ep_uhrpravidlo_cis ADD CONSTRAINT PRIMARY KEY(pravidlo) CONSTRAINT ep_uhrpravidlo_cis_pk;
+
+--FK
+CREATE INDEX ep_uhrpravidlo_cis_i1 ON ep_uhrpravidlo_cis(predpis);
+ALTER TABLE ep_uhrpravidlo_cis ADD CONSTRAINT FOREIGN KEY(predpis) REFERENCES ep_uhrsazeb_cis(predpis) CONSTRAINT ep_uhrpravidlo_cis_f1;
+
+-- ep_uhrpravidlo_acis
+CREATE TABLE ep_uhrpravidlo_acis (
+  idarch   SERIAL NOT NULL,
+  pravidlo   INTEGER NOT NULL,
+  popis   CHAR(70) NOT NULL,
+  priorita   Integer NOT NULL,
+  predpis   Integer NOT NULL,
+  koefproc   DECIMAL(6, 2),
+  koefcitatel   Integer,
+  koefjmenovatel   Integer,
+  fixnicast   DECIMAL(16, 2),
+  mena   CHAR(3) NOT NULL,
+  dostupmodel   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (dostupmodel IN (0,1)) CONSTRAINT ep_uhrpravidlo_acis_dc09,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrpravidlo_acis_d6bp
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrpravidlo_acis_pk ON ep_uhrpravidlo_acis(idarch);
+ALTER TABLE ep_uhrpravidlo_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_uhrpravidlo_acis_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX ep_uhrpravidlo_acis_i1 ON ep_uhrpravidlo_acis(predpis);
+
+-- ep_uhrparam_bnd
+CREATE TABLE ep_uhrparam_bnd (
+  ser   SERIAL NOT NULL,
+  pravidlo   INTEGER NOT NULL,
+  vlastnost   Integer NOT NULL,
+  negace   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (negace IN (0,1)) CONSTRAINT ep_uhrparam_bnd_dc3b
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrparam_bnd_pk ON ep_uhrparam_bnd(ser);
+ALTER TABLE ep_uhrparam_bnd ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_uhrparam_bnd_pk;
+
+--FK
+CREATE INDEX ep_uhrparam_bnd_i1 ON ep_uhrparam_bnd(pravidlo);
+ALTER TABLE ep_uhrparam_bnd ADD CONSTRAINT FOREIGN KEY(pravidlo) REFERENCES ep_uhrpravidlo_cis(pravidlo) CONSTRAINT ep_uhrparam_bnd_f1;
+CREATE INDEX ep_uhrparam_bnd_i2 ON ep_uhrparam_bnd(vlastnost);
+ALTER TABLE ep_uhrparam_bnd ADD CONSTRAINT FOREIGN KEY(vlastnost) REFERENCES ep_uhrvlastnost_enum(vlastnost) CONSTRAINT ep_uhrparam_bnd_f2;
+
+-- ep_uhrparam_arch
+CREATE TABLE ep_uhrparam_arch (
+  idarch   SERIAL NOT NULL,
+  ser   INTEGER NOT NULL,
+  pravidlo   INTEGER NOT NULL,
+  vlastnost   Integer NOT NULL,
+  negace   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (negace IN (0,1)) CONSTRAINT ep_uhrparam_arch_dc3j
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrparam_arch_pk ON ep_uhrparam_arch(idarch);
+ALTER TABLE ep_uhrparam_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_uhrparam_arch_pk;
+
+--INDEXES
+CREATE INDEX ep_uhrparam_arch_i1 ON ep_uhrparam_arch(pravidlo);
+CREATE INDEX ep_uhrparam_arch_i2 ON ep_uhrparam_arch(vlastnost);
+
+
+-- ep_uhrparamhodnota_cis
+CREATE TABLE ep_uhrparamhodnota_cis (
+  ser   SERIAL NOT NULL,
+  paramser   INTEGER NOT NULL,
+  hodnota   VARCHAR(255),
+  oper   char(2),
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrparamhodnota_cis_dc3t
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrparamhodnota_cis_pk ON ep_uhrparamhodnota_cis(ser);
+ALTER TABLE ep_uhrparamhodnota_cis ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_uhrparamhodnota_cis_pk;
+
+--FK
+CREATE INDEX ep_uhrparamhodnota_cis_i1 ON ep_uhrparamhodnota_cis(paramser);
+ALTER TABLE ep_uhrparamhodnota_cis ADD CONSTRAINT FOREIGN KEY(paramser) REFERENCES ep_uhrparam_bnd(ser) CONSTRAINT ep_uhrparamhodnota_cis_f1;
+
+--CHECKS
+ALTER TABLE ep_uhrparamhodnota_cis
+ADD CONSTRAINT (CHECK (oper in ('=', '<', '>', '<=', '>=', 'in')) CONSTRAINT ep_uhrparamhodnota_cis_c1);
+
+-- ep_uhrparamhodnota_acis
+CREATE TABLE ep_uhrparamhodnota_acis (
+  idarch   SERIAL NOT NULL,
+  ser   INTEGER NOT NULL,
+  paramser   INTEGER NOT NULL,
+  hodnota   VARCHAR(255),
+  oper   char(2),
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrparamhodnota_acis_dc3w
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrparamhodnota_acis_pk ON ep_uhrparamhodnota_acis(idarch);
+ALTER TABLE ep_uhrparamhodnota_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_uhrparamhodnota_acis_pk;
+
+ROLLBACK WORK;
+
+--End of A60699_RN00335314_1

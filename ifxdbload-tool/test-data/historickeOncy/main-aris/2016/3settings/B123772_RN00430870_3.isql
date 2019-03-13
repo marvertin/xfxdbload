@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B123772_RN00430870_3
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis) VALUES('EU', 189, 'Vytvoření balíčku USD pro smlouvu <číslo smlouvy>');
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis) VALUES('EU', 190, 'Zrušení balíčku USD pro smlouvu <číslo smlouvy>');
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis) VALUES('DO', 303, 'Elektronická značka pomocí kvalifikovaného syst. certifikátu');
+
+ROLLBACK WORK;
+
+--End of B123772_RN00430870_3

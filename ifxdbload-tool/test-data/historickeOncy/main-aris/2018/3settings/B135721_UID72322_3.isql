@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135721_UID72322_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22075: Kontrola LTV v pokynech pro čerpání {EPIC}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'zajist', 'pokCerpProvKontrLTV', 'cibis-sale', 1, 1, 'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Provádět kontrolu produktového LTV v pokynech čerpání v cibis-sale', 1);
+call TW_RegSetOrAddKey('RU', 'zajist', 'pokCerpProvKontrLTV', 'cibis-web', 1, 1, 'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Provádět kontrolu produktového LTV v pokynech čerpání v cibis-web', 1);
+call TW_RegSetOrAddKey('RU', 'zajist', 'pokCerpPriorKontrLTV', 'cibis-sale',  2, 1, 'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Priorita kontroly LTV v pokynech pro čerpání pro cibis-sale', 1);
+call TW_RegSetOrAddKey('RU', 'zajist', 'pokCerpPriorKontrLTV', 'cibis-web',  2, 1, 'Úvěr', 'Zajištění úvěru', 'Kontrola LTV', 'Priorita kontroly LTV v pokynech pro čerpání pro cibis-web', 1);
+
+
+ROLLBACK WORK;
+
+--End of B135721_UID72322_3

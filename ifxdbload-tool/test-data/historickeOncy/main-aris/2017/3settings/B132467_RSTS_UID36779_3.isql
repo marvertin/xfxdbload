@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B132467_RSTS_UID36779_3
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--3.19.4  Nastavení zahrnutí pro nový typ pohybu v modelování 
+--Do číselníku Zahrnutí pohybů do RPSN a výnosů budou vloženy nové záznamy pro typ pohybu 
+--Prémie na kompenzaci základních úhrad (kód „c“) jakožto kopie všech platných záznamů pro typ pohybu Prémie (kód „{“).
+
+insert into ep_zahrnutipohybucfmodel_cis (
+    typpohybumodel, definition, tsml, rpsntype, period
+  , konto, include, cashflowday, inversesign, includesavings
+  , note, platnost
+  )
+ select 'c', definition, tsml, rpsntype, period
+  , konto, include, cashflowday, inversesign, includesavings
+  , note, platnost
+ from ep_zahrnutipohybucfmodel_cis
+ where typpohybumodel = '{' and platnost = 1
+;
+
+ROLLBACK WORK;
+
+--End of B132467_RSTS_UID36779_3

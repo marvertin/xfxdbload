@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A99867_RN00359353_3
+-- @TC:ONCE: DESCRIPTION = Změna vyhodnocování závazků osob pro ÚŽ {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE EO_VztahOs_Cis SET symetricky = 0 WHERE typvztah IN ('ZZ', 'RP', 'ZM', 'ZA', 'SO', 'PR', 'OP', 'ES', 'PP', 'SZ');
+
+UPDATE EO_VztahRod_Cis SET symetricky = 0 WHERE vztahrod = 1;
+UPDATE EO_VztahRod_Cis SET symetricky = 1 WHERE vztahrod = 2;
+UPDATE EO_VztahRod_Cis SET symetricky = 1, maxpocetb = 1 WHERE vztahrod = 3;
+UPDATE EO_VztahRod_Cis SET symetricky = 0 WHERE vztahrod = 4;
+UPDATE EO_VztahRod_Cis SET symetricky = 1, maxpocetb = 1 WHERE vztahrod = 5;
+
+ROLLBACK WORK;
+
+--End of A99867_RN00359353_3

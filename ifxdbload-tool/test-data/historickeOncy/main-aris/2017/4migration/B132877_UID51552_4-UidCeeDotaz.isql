@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, B132877_UID51552_4-UidCeeDotaz
+-- @TC:ONCE: DESCRIPTION = Provést RK typu CEE pro osobu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+-- serno pro ep_ceedotaz_den
+SET TRIGGERS FOR ep_ceedotaz_den DISABLED;
+
+UPDATE ep_ceedotaz_den SET serno = TW_NextSerno() WHERE serno IS NULL;
+
+SET TRIGGERS FOR ep_ceedotaz_den ENABLED;
+
+INSERT INTO tw_serno (serno, tabulka)
+  SELECT serno, 'ep_ceedotaz_den' FROM ep_ceedotaz_den WHERE serno NOT IN (SELECT serno FROM tw_serno WHERE tabulka = 'ep_ceedotaz_den')
+;
+
+
+-- doplneni ciziho klice z tabulky ep_ceedotaz_den do ep_ceeodpovedh_den.refceedotaz
+SET TRIGGERS FOR ep_ceeodpovedh_den DISABLED;
+
+UPDATE ep_ceeodpovedh_den 
+  SET refceedotaz = (SELECT serno FROM ep_ceedotaz_den ced WHERE ced.xold_serno = xold_refceedotaz) 
+  WHERE refceedotaz IS NULL
+;
+
+SET TRIGGERS FOR ep_ceeodpovedh_den ENABLED;
+
+
+
+ROLLBACK WORK;
+
+--End of B132877_UID51552_4-UidCeeDotaz

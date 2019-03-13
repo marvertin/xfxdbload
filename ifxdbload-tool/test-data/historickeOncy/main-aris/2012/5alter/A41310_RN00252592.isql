@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A41310_RN00252592
+-- @TC:ONCE: DESCRIPTION = Výzva pro ruèitele, doplnìní not null
+
+BEGIN WORK;
+
+alter table ru_vyzva_kart modify faze integer not null;
+alter table ru_vyzva_kart modify vyzva integer not null;
+alter table ru_vyzva_kart modify os integer not null;
+alter table ru_vyzva_kart modify typrole CHAR(2) not null; 
+
+ROLLBACK WORK;

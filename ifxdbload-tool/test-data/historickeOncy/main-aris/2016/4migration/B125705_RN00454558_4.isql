@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B125705_RN00454558_4
+-- @TC:ONCE: DESCRIPTION = Při rozúčtování SP se neprovedl pře`vod BU->BUZA {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+set triggers for sp_pripisy_kart disabled;
+UPDATE sp_pripisy_kart SET dozadani = 0 WHERE dozadani is null;
+set triggers for sp_pripisy_kart enabled;
+
+ROLLBACK WORK;
+
+--End of B125705_RN00454558_4

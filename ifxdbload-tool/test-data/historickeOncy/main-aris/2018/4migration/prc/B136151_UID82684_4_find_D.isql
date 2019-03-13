@@ -1,0 +1,80 @@
+CREATE PROCEDURE B136151_UID82684_4_find_D()
+
+define _ser          Int;
+DEFINE _refser    BIGINT;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+   DROP TABLE B136151_UID82684;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE B136151_UID82684(
+  Ser     Serial NOT NULL,  
+  NumErr  Int,              
+  ISAMErr Int,              
+  TextErr VarChar(255),     
+  zprac   SmallInt,
+  refser   BIGINT,
+  refkart  CHAR(1),
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+foreach cc2 with hold for
+  select distinct refseuuz
+  into  _refser
+  from seu_dotaznikvarpu_mat
+
+  -- naplnění řídící tabulky
+  INSERT INTO B136151_UID82684(refser, refkart, zprac)
+  VALUES(_refser, 'Z', -1);
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+foreach cc3 with hold for
+  select distinct bssimulationcase_id
+  into  _refser
+  from PRO_DotaznikVarPU
+
+  -- naplnění řídící tabulky
+  INSERT INTO B136151_UID82684(refser, refkart, zprac)
+  VALUES(_refser, 'M', -1);
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE B136151_UID82684;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+
+END PROCEDURE;

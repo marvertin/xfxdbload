@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B124353_RN00451899_3
+-- @TC:ONCE: DESCRIPTION = HS: Záznam "Fixace až do splacení" doplněný autom. parametrizací musí mít "Nabídka od" {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE eu_variaurokfixace_cis SET nabidkaod = mdy(1, 1, 1993) WHERE nazev = 'Fixace až do splacení';
+
+ROLLBACK WORK;
+
+--End of B124353_RN00451899_3

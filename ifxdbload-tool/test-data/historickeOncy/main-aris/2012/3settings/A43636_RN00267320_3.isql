@@ -1,0 +1,54 @@
+-- @TC:ONCE: ID = V2, A43636_RN00267320_3
+-- @TC:ONCE: DESCRIPTION = Odstranit nepotøebné registry již neexist. úlohy Skuteèná úroková sazba {DEFECT}
+
+
+BEGIN WORK;
+
+
+call tw_regdelkey('EU','EIR','model','roky')
+;
+call tw_regdelkey('EU','EIR','model','splatkapuden')
+;
+call tw_regdelkey('EU','EIR','model','splatkasuden')
+;
+call tw_regdelkey('EU','EIR','model','valutaspden')
+;
+call tw_regdelkey('EU','EIR','model','valutaspmes')
+;
+call tw_regdelkey('EU','EIR','model','vyseuhrvyppu')
+;
+call tw_regdelkey('EU','EIR','model','vyseuhrvypsu')
+;
+call tw_regdelkey('MO','*','*','sazba_dan_urok_FO')
+;
+call tw_regdelkey('MO','*','*','uhr_rocni_vypis')
+;
+call tw_regdelkey('MO','*','eir','debug')
+;
+call tw_regdelkey('MO','*','spluver','debug')
+;
+call tw_regdelkey('EU','EIR','POTV','akce')
+;
+call tw_regdelkey('EU','EIR','SCHV','akce')
+;
+call tw_regdelkey('EU','EIR','VYNS','akce')
+;
+call tw_regdelkey('EU','EIR','VYUN','akce')
+;
+call tw_regdelkey('EU','EIR','ZMEN','akce')
+;
+call tw_regdelkey('ES','EIR','vypocet','potvrzeni')
+;
+call tw_regdelkey('ES','EIR','vypocet','urokpopl')
+;
+call tw_regdelkey('CR','*','export','dolniPrahSplNVL')
+;
+call tw_regdelkey('EO','CREDIBILITY','EOD','povoleno')
+;
+
+call tw_regsetanalytickypopis('MO','*','*','sazba_dan_urok_PO', 'Spoøení', 'Realizace stavebního spoøení', 'Building saving realization', 'Sazba danì z úrokù pro zjednodušený odhad mìsíce pøidìlení', 1)
+;
+
+ROLLBACK WORK;
+
+--End of A43636_RN00267320_3

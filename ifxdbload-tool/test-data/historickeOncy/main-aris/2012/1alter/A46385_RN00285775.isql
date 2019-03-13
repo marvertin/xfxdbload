@@ -1,0 +1,55 @@
+-- @TC:ONCE: ID = V2, A46385_RN00285775
+-- @TC:ONCE: DESCRIPTION = Doplnìní funkèností automatického úètování pøíspìvkù dle pøíloh
+
+BEGIN WORK;
+
+ALTER TABLE es_urpremie_acis DROP CONSTRAINT es_urpremie_acis_c4;
+
+ALTER TABLE es_urpremie_acis DROP CONSTRAINT es_urpremie_acis_c2;
+
+ALTER TABLE es_urpremie_acis DROP CONSTRAINT es_urpremie_acis_c3;
+
+ALTER TABLE es_urpremie_acis DROP CONSTRAINT es_urpremie_acis_c1;
+
+ALTER TABLE es_urpremie_acis
+    ADD navysenicc      Integer DEFAULT 0  NOT NULL BEFORE poruser,
+    ADD datnavyseniccod DATE   BEFORE poruser,
+    ADD datnavyseniccdo DATE   BEFORE poruser,
+    ADD navyseniccmin   DECIMAL(16, 2)   BEFORE poruser,
+    ADD navyseniccmax   DECIMAL(16, 2)   BEFORE poruser,
+    ADD zpusobnavysenicc CHAR(1)   BEFORE poruser,
+    ADD presporeni      Integer DEFAULT 0  NOT NULL BEFORE poruser,
+    ADD nepripurok      Integer DEFAULT 0  NOT NULL BEFORE poruser;
+
+ALTER TABLE es_urpremie_cis
+    ADD navysenicc      Integer DEFAULT 0  NOT NULL BEFORE poruser,
+    ADD datnavyseniccod DATE   BEFORE poruser,
+    ADD datnavyseniccdo DATE   BEFORE poruser,
+    ADD navyseniccmin   DECIMAL(16, 2)   BEFORE poruser,
+    ADD navyseniccmax   DECIMAL(16, 2)   BEFORE poruser,
+    ADD zpusobnavysenicc CHAR(1)   BEFORE poruser,
+    ADD presporeni      Integer DEFAULT 0  NOT NULL BEFORE poruser,
+    ADD nepripurok      Integer DEFAULT 0  NOT NULL BEFORE poruser;
+
+ALTER TABLE es_urpremieproc_acis DROP CONSTRAINT es_urpremieproc_acis_c2;
+
+ALTER TABLE es_urpremieproc_acis DROP CONSTRAINT es_urpremieproc_acis_c1;
+
+ALTER TABLE es_urpremieproc_acis
+    ADD pocatekurobdobi DATE   BEFORE prispevekproc,
+    ADD dobaurok        Integer   BEFORE prispevekproc,
+    ADD urokultimo      Integer DEFAULT 0  NOT NULL BEFORE prispevekproc;
+
+ALTER TABLE es_urpremieproc_cis DROP CONSTRAINT es_urpremieproc_cis_c1;
+
+ALTER TABLE es_urpremieproc_cis
+    ADD pocatekurobdobi DATE   BEFORE prispevekproc,
+    ADD dobaurok        Integer   BEFORE prispevekproc,
+    ADD urokultimo      Integer DEFAULT 0  NOT NULL BEFORE prispevekproc;
+
+ALTER TABLE es_urpremieproc_cis
+    ADD CONSTRAINT CHECK (zaklad in ('V','R','O')) CONSTRAINT es_urpremieproc_cis_c1;
+
+
+
+ROLLBACK WORK;

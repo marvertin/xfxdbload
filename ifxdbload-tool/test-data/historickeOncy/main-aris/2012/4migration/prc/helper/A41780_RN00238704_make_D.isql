@@ -1,0 +1,251 @@
+create procedure A41780_RN00238704_make_D(-- vstupni paramtery
+                                    ADebugFile    Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                    ABezTransakci int default 0
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _zadost        dec(16,0);
+define _zadoststav    int;
+define _vek              integer;
+define _datakce       date; 
+define _datzad        date;
+define _lastser       int;
+define _personID      int;
+define _role          char(2);
+define _bic           char(16);
+define _rc            char(13); 
+define _smlStav   char(1);
+define _countOfMandatoryPersons Int;
+define _countOfOptionalPersons Int;
+define _countOfIncludedPersons Int;
+
+define _smlouva dec(16,0);
+define _tsml        char(4);
+define _maxOrder integer;
+define _maxScoringId    integer;
+define _vekLimit integer;
+define _veknezl integer;
+define _vekosoby integer;
+define _personCounter integer;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+  BEGIN WORK;
+end if;
+
+-- @RN00291636: Zruseni tabulky pokud jiz existuje.
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00238704_OSOBY_TMP;
+end; 
+
+--@RN00291636: Zalozime tabulku osob kam budeme ukladat...jednotlive osoby a hlavne parametr varianta skoringu,
+-- podle ktere pozname, zda je dana osoba povinna, ci ne.
+CREATE TEMP TABLE RN00238704_OSOBY_TMP(  
+  PersonScoringVariant char(3),
+  PersonMandatory char(1) DEFAULT 'N',
+  PersonIncluded char(1) DEFAULT 'N',
+  PersonID Integer,
+  PersonRole char(2),
+  PersonBIC char(16),
+  PersonIdent char(13),
+  PersonAge Integer,    
+  PersonResult Integer DEFAULT 0  
+) WITH NO LOG; 
+
+CREATE INDEX RN00238704_OSOBY_TMP_i1 ON RN00238704_OSOBY_TMP(PersonID);
+CREATE INDEX RN00238704_OSOBY_TMP_i2 ON RN00238704_OSOBY_TMP(PersonScoringVariant);
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka ('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00238704');
+let _vekLimit = TW_RegGetKey('PC', 'RePayAbility', '*', 'AgeCheckingCoef', 1000);
+let _veknezl =  TW_RegGetKey('ES', '*', '*', 'vekhranklient',18);
+
+--pres ridici tabulku
+foreach cc2 with hold for
+  select  ser, zadost, zadoststav, smlouva, tsml, smlstav, datakce, datzad, lastScoringId, lastScoringOrder
+  INTO _ser,_zadost,_zadoststav, _smlouva, _tsml, _smlstav, _datakce, _datzad, _maxScoringId, _maxOrder
+  from rn00238704 WHERE zprac < 0                               
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz 
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00238704
+        SET(NumErr,ISAMErr,TextErr, zprac)= (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+
+    let _countOfOptionalPersons = 0;
+    let _countOfMandatoryPersons = 0;    
+    let _countOfIncludedPersons = 0;
+    -- Pokud nemam zadny provedeny scoring, nastavme -1, pozdejsi procedura EP_DatGetScoringPar se na to chyta.     
+    IF (_maxScoringId is NULL) then
+        let _maxScoringId = -1;
+    end if;
+    -- Pokud nemam provedeny zadny scoring....pak bude xorder 0;
+    if (_maxOrder is NULL) then
+       let _maxOrder = 0;
+    end if;
+    --vlastni algoritmus migrace        
+    
+    -- @RN00238704: Migrace, 1. èást...úvìrové žádosti.
+    if (_zadost is not null AND _zadoststav is not null) then                                                      
+          insert into ScoringAction(xvalidity, xvariant, xcreditcontract, xcreditcontracttype, xcreditrequest,  
+                                                  countofmandatorypersons, countofoptionalpersons, countofincludedpersons, 
+                                                  xorder, scoringaction, xscoringstatus, xstatus, xactiondate)
+                   values(1, 'SC1', null, null, _zadost, 0, 0, 0, 
+                             _maxOrder + 1, 
+                                    case _zadoststav when 5 then 'MIG_HR' 
+                                                                 when 6 then 'MIG_DR'
+                                                               when 10 then 'MIG_RR'
+                                                               when 20 then 'MIG_CR'    
+                                               else null end, 'P', 'C', CURRENT);
+                                                   
+          let _lastser = tw_lastser();                                                                               
+          
+          -- Proposal:  Pro všechny pøedané a stornované úvìrové žádosti 
+          -- v CIBIS-Sale provede vyhodnocení SCA.                    
+          if _zadoststav in (5, 20) then
+             call EP_GetScoringPersons('SCA', _zadost, _zadoststav, null, null); 
+             foreach select 
+                                    PersonID, PersonRole,
+                                    PersonBIC, PersonIdent, PersonAge INTO _personID, _role, _bic, _rc,  _vek
+                                    FROM RN00238704_OSOBY_TMP WHERE PersonScoringVariant = 'SCA' ORDER BY PersonRole -- @RN00291636: Radim, abych dostal KL pres PR....                         
+                      call EU_DoScoring('SCA', _personID, _role, _vekLimit, _veknezl, _vek, _bic, _rc, _lastser, 
+                      _maxScoringId, _datakce, null, null, _zadost);                      
+             end foreach; 
+          end if; 
+          
+          -- Proposal: Kapitola @ 3.10.3.1
+          if _zadoststav in (5, 6, 10, 20) then
+             call EP_GetScoringPersons('SC1', _zadost, _zadoststav, null, null); 
+             foreach select 
+                                    PersonID, PersonRole,
+                                    PersonBIC, PersonIdent, PersonAge INTO _personID, _role, _bic, _rc,  _vek
+                                    FROM RN00238704_OSOBY_TMP WHERE PersonScoringVariant = 'SC1' ORDER BY PersonRole                        
+                      call EU_DoScoring('SC1', _personID, _role, _vekLimit, _veknezl,  _vek, _bic, _rc, _lastser, 
+                      _maxScoringId, _datakce, null, null, _zadost);                      
+             end foreach;                           
+          end if;                                                                
+          
+    -- @RN00238704: Migrace, 2. èást...úvìrové smlouvy.               
+    elif (_smlouva is not  null and _tsml is not null) then                                
+          insert into ScoringAction(xvalidity, xvariant, xcreditcontract, xcreditcontracttype, xcreditrequest,  
+                                                  countofmandatorypersons, countofoptionalpersons, countofincludedpersons, 
+                                                  xorder, scoringaction, xscoringstatus, xstatus, xactiondate)
+                   values(1, 'SC2', _smlouva, _tsml, null, 0, 0, 0, 
+                             _maxOrder + 1, 
+                                    case _smlStav when 'D' then 'MIG_AC'
+                                                            when 'L' then 'MIG_AC'
+                                                            when 'V' then 'MIG_AC'
+                                                            when 'S' then 'MIG_CC'
+                                                            when 'Z' then 'MIG_RC'
+                                               else null end, 'P', 'C', CURRENT);
+                                                    
+          let _lastser = tw_lastser();                            
+                    
+          call EP_GetScoringPersons('SCB', null, null, _smlouva, _tsml, _datakce); 
+          foreach select 
+                                    PersonID, PersonRole,
+                                    PersonBIC, PersonIdent, PersonAge INTO _personID, _role, _bic, _rc,  _vek
+                                    FROM RN00238704_OSOBY_TMP WHERE PersonScoringVariant = 'SCB' ORDER BY PersonRole                        
+                      call EU_DoScoring('SCB', _personID, _role, _vekLimit, _veknezl, _vek, _bic, _rc,_lastser, 
+                      _maxScoringId, _datakce, _smlouva, _tsml);                      
+          end foreach;           
+          
+          -- Proposal: Pro všechny živé (již schválené), stornované a zamítnuté úvìrové smlouvy FO, 
+          -- s datem vytvoøení žádosti po 1.1.2006 provede vyhodnocení SC2.
+          if (_datzad is not null and _datzad >= mdy(1, 1 , 2006)) then          
+             call EP_GetScoringPersons('SC2', null, null, _smlouva, _tsml, _datakce);
+             foreach select 
+                                    PersonID, PersonRole,
+                                    PersonBIC, PersonIdent, PersonAge INTO _personID, _role, _bic, _rc,  _vek
+                                    FROM RN00238704_OSOBY_TMP WHERE PersonScoringVariant = 'SC2' ORDER BY PersonRole                        
+                      call EU_DoScoring('SC2', _personID, _role,  _vekLimit, _veknezl,  _vek, _bic, _rc, _lastser, 
+                      _maxScoringId, _datakce, _smlouva, _tsml);                          
+             end foreach;           
+          end if;                        
+                                                             
+    end if;                                        
+    
+    --konec algoritmu migrace
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00238704 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null WHERE ser = _ser;
+    
+    -- @RN00291636: Napocitej seznam povinejch osob.     
+    let _countOfMandatoryPersons = (select count(*) from RN00238704_OSOBY_TMP where  PersonMandatory = 'Y');                   
+    let _countOfIncludedPersons = _countOfMandatoryPersons;          
+    let _countOfOptionalPersons = (select count(*) from RN00238704_OSOBY_TMP where  PersonMandatory = 'N');
+   
+   -- Nastav udaje do hlavicky scoringu.
+   UPDATE ScoringAction SET countOfMandatoryPersons = _countOfMandatoryPersons, countOfOptionalPersons = _countOfOptionalPersons, 
+                                       countOfIncludedPersons = _countOfIncludedPersons WHERE id = _lastser; 
+  
+  -- Vyprazdni temporalni tabulku osob.
+  DELETE FROM RN00238704_OSOBY_TMP;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+  
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--algoritmus dokonceni migrace
+
+
+--zápis o ukonèení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukonèení migrace/datové manipulace RN00238704');
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+end procedure;

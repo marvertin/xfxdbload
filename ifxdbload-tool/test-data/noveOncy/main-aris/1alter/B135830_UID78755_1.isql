@@ -1,0 +1,71 @@
+-- @TC:ONCE: ID = V2, B135830_UID78755_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24996: Zavést číselník "Definice povolených interních druhů pobytu" {STORY}
+
+
+BEGIN WORK;
+
+
+CREATE TABLE eo_druhpobytinterdef_cis (
+  id   SERIAL NOT NULL,
+  nazev   char(60) NOT NULL,
+  refstat   CHAR(2) NOT NULL,
+  refdruhpobytinterni   INTEGER NOT NULL,
+  povolenoo1   Integer  DEFAULT 0,
+  povolenoo2   Integer  DEFAULT 0,
+  povolenoo3o4   Integer  DEFAULT 0,
+  povolenomimouz   Integer  DEFAULT 0,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (povolenoo1 IN (0,1)) CONSTRAINT eo_druhpobytinterdef_cis_d6bb,
+  CHECK (povolenoo2 IN (0,1)) CONSTRAINT eo_druhpobytinterdef_cis_d6bc,
+  CHECK (povolenoo3o4 IN (0,1)) CONSTRAINT eo_druhpobytinterdef_cis_d6bd,
+  CHECK (povolenomimouz IN (0,1)) CONSTRAINT eo_druhpobytinterdef_cis_d6be,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_druhpobytinterdef_cis_d6bg
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_druhpobytinterdef_cis_pk ON eo_druhpobytinterdef_cis(id);
+ALTER TABLE eo_druhpobytinterdef_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_druhpobytinterdef_cis_pk;
+
+--FK
+CREATE INDEX eo_druhpobytinterdef_cis_i_f1 ON eo_druhpobytinterdef_cis(refdruhpobytinterni);
+ALTER TABLE eo_druhpobytinterdef_cis ADD CONSTRAINT FOREIGN KEY(refdruhpobytinterni) REFERENCES eo_druhpobytinterni_cis(id) CONSTRAINT eo_druhpobytinterdef_cis_f1;
+
+CREATE INDEX eo_druhpobytinterdef_cis_i_f2 ON eo_druhpobytinterdef_cis(refstat);
+ALTER TABLE eo_druhpobytinterdef_cis ADD CONSTRAINT FOREIGN KEY(refstat) REFERENCES eo_stat_cis(statprisl) CONSTRAINT eo_druhpobytinterdef_cis_f2;
+
+
+CREATE TABLE eo_druhpobytinterdef_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  nazev   char(60) NOT NULL,
+  refstat   CHAR(2) NOT NULL,
+  refdruhpobytinterni   INTEGER NOT NULL,
+  povolenoo1   Integer  DEFAULT 0,
+  povolenoo2   Integer  DEFAULT 0,
+  povolenoo3o4   Integer  DEFAULT 0,
+  povolenomimouz   Integer  DEFAULT 0,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (povolenoo1 IN (0,1)) CONSTRAINT eo_druhpobytinterdef_acis_d6bb,
+  CHECK (povolenoo2 IN (0,1)) CONSTRAINT eo_druhpobytinterdef_acis_d6bc,
+  CHECK (povolenoo3o4 IN (0,1)) CONSTRAINT eo_druhpobytinterdef_acis_d6bd,
+  CHECK (povolenomimouz IN (0,1)) CONSTRAINT eo_druhpobytinterdef_acis_d6be,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_druhpobytinterdef_acis_d6bg
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_druhpobytinterdef_acis_pk ON eo_druhpobytinterdef_acis(idarch);
+ALTER TABLE eo_druhpobytinterdef_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_druhpobytinterdef_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B135830_UID78755_1

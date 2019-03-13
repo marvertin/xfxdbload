@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B109102_RN00388539_1
+-- @TC:ONCE: DESCRIPTION = Číselník insolvenčních správců: drobné chyby {DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE EO_InsolvSpravce_ACis DROP spravceid;
+ALTER TABLE EO_InsolvSpravce_Cis DROP spravceid;
+
+ROLLBACK WORK;
+
+--End of B109102_RN00388539_1

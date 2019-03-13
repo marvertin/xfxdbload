@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A47122_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù, uhrady
+
+BEGIN WORK;
+
+  ALTER TABLE ec_uhrpojist_kart ADD cislopojist CHAR(16) BEFORE stav;
+  ALTER TABLE ec_uhrpojist_kart ADD smlouva DEC(16, 0)  BEFORE stav;
+  ALTER TABLE ec_uhrpojist_kart ADD tsml CHAR(4)  BEFORE stav;
+  ALTER TABLE ec_uhrpojist_kart ADD variantaid INT BEFORE stav;
+  ALTER TABLE ec_uhrpojist_kart ADD rozhdatumpoj DATE BEFORE stav;
+  ALTER TABLE ec_uhrpojist_kart ADD zrustime   datetime year to second BEFORE reftime;
+  ALTER TABLE ec_uhrpojist_kart ADD zrususer   CHAR(20) BEFORE reftime;
+
+ROLLBACK WORK;
+
+--End of A47122_RN00282474_1

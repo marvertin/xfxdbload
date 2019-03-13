@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B124326_RN00436364_3
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('PFSU', 'P', 10, mdy(12,1,2013), 1, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('PFSU', 'P', 11, mdy(1,1,2014), 0, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('PFSU', 'S', 14, mdy(5,1,2015), 0, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('SUFO', 'S', 14, mdy(5,1,2015), 0, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('KOME', 'K', 8, mdy(11,1,2012), 0, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('KOME', 'K', 12, mdy(5,4,2015), 0, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('KOME', 'K', 13, mdy(5,4,2015), 0, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('KOME', 'K', 15, mdy(6,1,2015), 0, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('KOME', 'K', 16, mdy(6,1,2015), 0, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, refvariaurokfixace, platnostod,nabizetsale,platnost) values ('KOME', 'K', 17, mdy(6,1,2015), 0, 1);
+
+
+ROLLBACK WORK;
+
+--End of B124326_RN00436364_3

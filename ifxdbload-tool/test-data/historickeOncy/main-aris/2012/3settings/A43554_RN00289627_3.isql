@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43554_RN00289627_3
+-- @TC:ONCE: DESCRIPTION = Modelování Web: Nebyl odstranìn parametr (DB registr) {DEFECT}
+
+BEGIN WORK;
+
+call TW_RegDelKey ('MO', 'modelKlient', 'problemy', 'lokalita');
+
+ROLLBACK WORK;
+
+--End of A43554_RN00289627_3

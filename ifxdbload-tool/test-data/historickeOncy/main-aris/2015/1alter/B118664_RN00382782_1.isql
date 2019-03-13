@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B118664_RN00382782_1
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_sazbavariantapu_acis ADD  variantapojist Integer BEFORE implicit;
+
+ALTER TABLE eu_sazbavariantapu_cis ADD  variantapojist Integer DEFAULT -1 NOT NULL BEFORE implicit;
+
+ROLLBACK WORK;
+
+--End of B118664_RN00382782_1

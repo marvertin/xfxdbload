@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A55281_RN00317078_1-es_problem_cis
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Problémy opisovaných formuláøù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE es_problem_cis ADD (
+  formsekce      VARCHAR(255)           BEFORE stupen,
+  kod            INT                    BEFORE stupen,
+  zakazpredani   INT DEFAULT 0 NOT NULL BEFORE poznamka,
+  odpovednapapir INT DEFAULT 0 NOT NULL BEFORE poznamka
+);
+
+ALTER TABLE es_problem_cis 
+  ADD CONSTRAINT CHECK (zakazpredani IN (0,1))            CONSTRAINT es_problem_cis_da2d,
+  ADD CONSTRAINT CHECK (odpovednapapir IN (0,1))          CONSTRAINT es_problem_cis_da2e
+  ;
+--  ADD CONSTRAINT CHECK (evidence IN ('N', 'Z', 'U', 'V')) CONSTRAINT es_problem_cis_c1
+
+ALTER TABLE es_problem_acis ADD (
+  formsekce      VARCHAR(255)    BEFORE stupen,
+  kod            INT             BEFORE stupen,
+  zakazpredani   INT             BEFORE poznamka,
+  odpovednapapir INT             BEFORE poznamka
+);
+
+ROLLBACK WORK;
+
+--A55281_RN00317078_1-es_problem_cis

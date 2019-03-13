@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, B133027_UID50230_1-ImplVarFixSale
+-- @TC:ONCE: DESCRIPTION = Rozšíření číselníku Přiřazení varianty úrokové fixace + migrace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+-- ###############################################################
+-- EU_VarUrokFixPrirad_Cis
+
+ALTER TABLE eu_varurokfixprirad_cis ADD (
+    implvarfixacesale   Integer  DEFAULT 0 NOT NULL BEFORE poznamka
+);
+
+
+ALTER TABLE eu_varurokfixprirad_cis ADD CONSTRAINT (
+    CHECK (implvarfixacesale IN (0,1)) CONSTRAINT eu_varurokfixprirad_cis_d2cw
+);
+
+
+-- ###############################################################
+-- EU_VarUrokFixPrirad_ACis
+
+-- schvalne vytvorim sloupec s DEFAULT hodnotou, aby tam mohlo byt NOT NULL
+-- sloupec se tak nastavi na danou defaultni hodnotu
+-- a nasledne defaultni hodnotu odebereme
+ALTER TABLE eu_varurokfixprirad_acis ADD (
+    implvarfixacesale   Integer  DEFAULT 0 NOT NULL BEFORE poznamka
+);
+
+-- odebrani defaultni hodnoty
+ALTER TABLE eu_varurokfixprirad_acis MODIFY (
+    implvarfixacesale   Integer NOT NULL
+);
+
+ALTER TABLE eu_varurokfixprirad_acis ADD CONSTRAINT (
+    CHECK (implvarfixacesale IN (0,1)) CONSTRAINT eu_varurokfixprirad_acis_d2cx
+);
+
+
+ROLLBACK WORK;
+
+--End of B133027_UID50230_1-ImplVarFixSale

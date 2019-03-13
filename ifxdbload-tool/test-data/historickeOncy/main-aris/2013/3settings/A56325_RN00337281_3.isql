@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A56325_RN00337281_3
+-- @TC:ONCE: DESCRIPTION = Pøeklep v èíselníku typù událostí {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE eo_notifikaceudalost_cis SET nazev='Neprovedení platebního pøíkazu' WHERE udalost='NeprovedeniPlatPrikazu';
+
+ROLLBACK WORK;
+
+--End of A56325_RN00337281_3

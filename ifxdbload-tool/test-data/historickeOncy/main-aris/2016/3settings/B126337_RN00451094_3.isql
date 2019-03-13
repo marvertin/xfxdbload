@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B126337_RN00451094_3
+-- @TC:ONCE: DESCRIPTION = Změna v nastavení konce fixace a automatický posun data fixace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost, poznamka) 
+  VALUES ('EU', 243, 'číslo smlouvě: <smlouva> byla provedena automatická obnova varianty fixace úrokové sazby', 1
+  , null)
+;
+
+ROLLBACK WORK;
+
+--End of B126337_RN00451094_3

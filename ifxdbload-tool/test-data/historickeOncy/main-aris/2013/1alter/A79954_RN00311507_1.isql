@@ -1,0 +1,295 @@
+-- @TC:ONCE: ID = V2, A79954_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE ep_uloha_cis (
+  serno   SERIAL NOT NULL,
+  id   CHAR(10) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uloha_cis_dct4
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uloha_cis_pk ON ep_uloha_cis(serno);
+ALTER TABLE ep_uloha_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_uloha_cis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_uloha_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  id   CHAR(10) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uloha_acis_dct4
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uloha_acis_pk ON ep_uloha_acis(idarch);
+ALTER TABLE ep_uloha_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_uloha_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ulohafunkce_cis (
+  serno   SERIAL NOT NULL,
+  refuloha   INTEGER NOT NULL,
+  id   CHAR(10) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  poznamka   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_ulohafunkce_cis_dcu0
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ulohafunkce_cis_pk ON ep_ulohafunkce_cis(serno);
+ALTER TABLE ep_ulohafunkce_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ulohafunkce_cis_pk;
+
+--FK
+CREATE INDEX ep_ulohafunkce_cis_i_f1 ON ep_ulohafunkce_cis(refuloha);
+ALTER TABLE ep_ulohafunkce_cis ADD CONSTRAINT FOREIGN KEY(refuloha) REFERENCES ep_uloha_cis(serno) CONSTRAINT ep_ulohafunkce_cis_f1;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_ulohafunkce_cis_u1 ON ep_ulohafunkce_cis(refuloha,id);
+ALTER TABLE ep_ulohafunkce_cis ADD CONSTRAINT (UNIQUE (refuloha,id) CONSTRAINT ep_ulohafunkce_cis_u1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ulohafunkce_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refuloha   INTEGER NOT NULL,
+  id   CHAR(10) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  poznamka   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_ulohafunkce_acis_dcu0
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ulohafunkce_acis_pk ON ep_ulohafunkce_acis(idarch);
+ALTER TABLE ep_ulohafunkce_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_ulohafunkce_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ukoltyp_cis (
+  serno   SERIAL NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  casjednotka   CHAR(1) NOT NULL,
+  caspocet   Integer NOT NULL,
+  pocetvytvukol   Integer NOT NULL,
+  refuloha   INTEGER,
+  poznamka   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (casjednotka IN ('D','T','M','R','Q','P','X')) CONSTRAINT ep_ukoltyp_cis_dcsi,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_ukoltyp_cis_dcsm
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ukoltyp_cis_pk ON ep_ukoltyp_cis(serno);
+ALTER TABLE ep_ukoltyp_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ukoltyp_cis_pk;
+
+--FK
+CREATE INDEX ep_ukoltyp_cis_i_f1 ON ep_ukoltyp_cis(refuloha);
+ALTER TABLE ep_ukoltyp_cis ADD CONSTRAINT FOREIGN KEY(refuloha) REFERENCES ep_uloha_cis(serno) CONSTRAINT ep_ukoltyp_cis_f1;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ukoltyp_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  casjednotka   CHAR(1) NOT NULL,
+  caspocet   Integer NOT NULL,
+  pocetvytvukol   Integer NOT NULL,
+  refuloha   INTEGER,
+  poznamka   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (casjednotka IN ('D','T','M','R','Q','P','X')) CONSTRAINT ep_ukoltyp_acis_dcss,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_ukoltyp_acis_dcsm
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ukoltyp_acis_pk ON ep_ukoltyp_acis(idarch);
+ALTER TABLE ep_ukoltyp_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_ukoltyp_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ukolreakce_cis (
+  serno   SERIAL NOT NULL,
+  reffunkce   INTEGER NOT NULL,
+  refukoltyp   INTEGER,
+  reakce   CHAR(1),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_ukolreakce_cis_dcth
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ukolreakce_cis_pk ON ep_ukolreakce_cis(serno);
+ALTER TABLE ep_ukolreakce_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ukolreakce_cis_pk;
+
+--FK
+CREATE INDEX ep_ukolreakce_cis_i_f2 ON ep_ukolreakce_cis(refukoltyp);
+ALTER TABLE ep_ukolreakce_cis ADD CONSTRAINT FOREIGN KEY(refukoltyp) REFERENCES ep_ukoltyp_cis(serno) CONSTRAINT ep_ukolreakce_cis_f2;
+CREATE INDEX ep_ukolreakce_cis_i_f1 ON ep_ukolreakce_cis(reffunkce);
+ALTER TABLE ep_ukolreakce_cis ADD CONSTRAINT FOREIGN KEY(reffunkce) REFERENCES ep_ulohafunkce_cis(serno) CONSTRAINT ep_ukolreakce_cis_f1;
+
+--CHECKS
+ALTER TABLE ep_ukolreakce_cis
+ADD CONSTRAINT (CHECK (reakce in ('P','R','S','V','Z')) CONSTRAINT ep_ukolreakce_cis_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ukolreakce_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  reffunkce   INTEGER,
+  refukoltyp   INTEGER,
+  reakce   CHAR(1),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_ukolreakce_acis_dcth
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ukolreakce_acis_pk ON ep_ukolreakce_acis(idarch);
+ALTER TABLE ep_ukolreakce_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_ukolreakce_acis_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ukol_mat (
+  serno   SERIAL NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  refreferent   Char(2),
+  refosoba   INTEGER,
+  refsmlouva   DECIMAL(16, 0),
+  reftsml   CHAR(4),
+  refukoltyp   INTEGER,
+  datplanspl   DATE,
+  datvytv   DATE NOT NULL,
+  datspln   DATE,
+  datzrus   DATE,
+  poznamka   VARCHAR(255),
+  vytvtime   datetime year to second NOT NULL,
+  vytvuser   CHAR(20) NOT NULL,
+  splntime   datetime year to second,
+  splnuser   CHAR(20),
+  zrustime   datetime year to second,
+  zrususer   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ukol_mat_pk ON ep_ukol_mat(serno);
+ALTER TABLE ep_ukol_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ukol_mat_pk;
+
+--FK
+CREATE INDEX ep_ukol_mat_i_f1 ON ep_ukol_mat(refreferent);
+ALTER TABLE ep_ukol_mat ADD CONSTRAINT FOREIGN KEY(refreferent) REFERENCES ep_referent_cis(zkratka) CONSTRAINT ep_ukol_mat_f1;
+CREATE INDEX ep_ukol_mat_i_f2 ON ep_ukol_mat(refosoba);
+ALTER TABLE ep_ukol_mat ADD CONSTRAINT FOREIGN KEY(refosoba) REFERENCES eo_osoba_mat(os) CONSTRAINT ep_ukol_mat_f2;
+CREATE INDEX ep_ukol_mat_i_f3 ON ep_ukol_mat(refsmlouva,reftsml);
+ALTER TABLE ep_ukol_mat ADD CONSTRAINT FOREIGN KEY(refsmlouva,reftsml) REFERENCES ep_sml_mat(smlouva,tsml) CONSTRAINT ep_ukol_mat_f3;
+CREATE INDEX ep_ukol_mat_i_f4 ON ep_ukol_mat(refukoltyp);
+ALTER TABLE ep_ukol_mat ADD CONSTRAINT FOREIGN KEY(refukoltyp) REFERENCES ep_ukoltyp_cis(serno) CONSTRAINT ep_ukol_mat_f4;
+
+--CHECKS
+ALTER TABLE ep_ukol_mat
+ADD CONSTRAINT (CHECK (stav in ('A','S','Z')) CONSTRAINT ep_ukol_mat_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ukol_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  refreferent   Char(2),
+  refosoba   INTEGER,
+  refsmlouva   DECIMAL(16, 0),
+  reftsml   CHAR(4),
+  refukoltyp   INTEGER,
+  datplanspl   DATE,
+  datvytv   DATE NOT NULL,
+  datspln   DATE,
+  datzrus   DATE,
+  poznamka   VARCHAR(255),
+  vytvtime   datetime year to second NOT NULL,
+  vytvuser   CHAR(20) NOT NULL,
+  splntime   datetime year to second,
+  splnuser   CHAR(20),
+  zrustime   datetime year to second,
+  zrususer   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ukol_arch_pk ON ep_ukol_arch(idarch);
+ALTER TABLE ep_ukol_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_ukol_arch_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ulohaukol_mat (
+  serno   SERIAL NOT NULL,
+  refuloha   INTEGER NOT NULL,
+  refobjekt   INTEGER,
+  refukol   INTEGER NOT NULL,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_ulohaukol_mat_dcvl
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ulohaukol_mat_pk ON ep_ulohaukol_mat(serno);
+ALTER TABLE ep_ulohaukol_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ulohaukol_mat_pk;
+
+--FK
+CREATE INDEX ep_ulohaukol_mat_i_f2 ON ep_ulohaukol_mat(refukol);
+ALTER TABLE ep_ulohaukol_mat ADD CONSTRAINT FOREIGN KEY(refukol) REFERENCES ep_ukol_mat(serno) CONSTRAINT ep_ulohaukol_mat_f2;
+CREATE INDEX ep_ulohaukol_mat_i_f1 ON ep_ulohaukol_mat(refuloha);
+ALTER TABLE ep_ulohaukol_mat ADD CONSTRAINT FOREIGN KEY(refuloha) REFERENCES ep_uloha_cis(serno) CONSTRAINT ep_ulohaukol_mat_f1;
+
+--INDEXES
+CREATE INDEX ep_ulohaukol_mat_i1 ON ep_ulohaukol_mat(refobjekt);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE ep_ulohaukol_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refuloha   INTEGER NOT NULL,
+  refobjekt   INTEGER,
+  refukol   INTEGER NOT NULL,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_ulohaukol_arch_dcvl
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_ulohaukol_arch_pk ON ep_ulohaukol_arch(idarch);
+ALTER TABLE ep_ulohaukol_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_ulohaukol_arch_pk;
+
+ROLLBACK WORK;
+
+--End of A81019_RN00311507_1

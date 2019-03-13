@@ -1,0 +1,61 @@
+CREATE PROCEDURE B135763_UID78151_4_find_D ()
+
+DEFINE _serno       BIGINT;
+DEFINE _budoucinhz  DEC(16,2);
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+BEGIN
+   ON EXCEPTION IN(-206)
+   END EXCEPTION;
+  DROP TABLE B135763_UID78151_4;
+END;
+
+--zalozime ridici tabulku
+CREATE TABLE B135763_UID78151_4 (
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  INT,              --číslo chyby, jež na řádku nastala
+  ISAMErr INT,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VARCHAR(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SMALLINT,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  -- vlastní data
+  serno      BIGINT,
+  budoucinhz DEC(16,2),
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--  Pro všechna zajištění úvěru, u kterých je nastaven údaj „Optimalizováno pro“ ...
+
+-- plneni ridici tabulky
+  FOREACH 
+    SELECT serno, budoucinhz
+    INTO _serno, _budoucinhz
+    FROM EU_Zajist_mat
+    WHERE refoptimsmlouva IS NOT NULL
+    ORDER BY smlouva, poradi
+    
+    INSERT INTO B135763_UID78151_4(serno, budoucinhz, zprac)
+    VALUES(_serno, _budoucinhz, -1);
+  END FOREACH;
+
+UPDATE STATISTICS HIGH FOR TABLE B135763_UID78151_4;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+END PROCEDURE;

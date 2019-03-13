@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B124945_RN00449462_3
+-- @TC:ONCE: DESCRIPTION = HS - řízení příznaku pod účinností HS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- #Datum účinnosti zákona o úvěru pro spotřebitele - HS#
+-- Parametr určuje, od kdy je účinný Zákon o úvěru pro spotřebitele (v souvislosti s implementací tzv. hypoteční směrnice - MCD)
+CALL tw_regsetoraddkeyd('EU', 'contract', 'legislativa', 'ucinSpotrZakona', mdy(7,1,2016), 1
+  , 'Úvěr', 'Úvěrová smlouva', 'Legislativa'
+  , 'Datum účinnosti zákona o úvěru pro spotřebitele - HS'
+);
+
+
+ROLLBACK WORK;
+
+--End of B124945_RN00449462_3

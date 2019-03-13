@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136227_UID82856_1
+-- @TC:ONCE: DESCRIPTION = RSTS-27180: Modelování s expozicí bez uložení modelu {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+alter table ep_splexpozicevyvoj_den 
+  modify refsplspormodsh   INTEGER
+;
+
+ROLLBACK WORK;
+
+--End of B136227_UID82856_1

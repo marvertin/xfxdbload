@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B132671_UID51552_3-UidCeeDotaz
+-- @TC:ONCE: DESCRIPTION = Provést RK typu CEE pro osobu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO TW_TypObjSerno_Cis(tabulka, nazev, platnost) 
+  VALUES ('ep_ceedotaz_den', 'Komunikace s CEE - Dotaz', 1)
+;
+
+ROLLBACK WORK;
+
+--End of B132671_UID51552_3-UidCeeDotaz

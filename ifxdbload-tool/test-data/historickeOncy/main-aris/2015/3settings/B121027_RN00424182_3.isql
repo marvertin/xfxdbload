@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B121027_RN00424182_3
+-- @TC:ONCE: DESCRIPTION = Změna struktury souboru CC {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE tw_defcond SET nazev = 'Odeslané interní žádosti o blokace', wherestr = 'zdroj = ''I'' AND typ = ''B'' AND stav = 1'  WHERE culohy=1800 AND nazev ='Interní žádosti o blokace';
+
+call TW_RegDelKey('CC', 'CCProcess', '*', 'e-mail_chybne_konto');
+
+call TW_RegDelKey('CC', 'CCProcess', '*', 'e-mail_konto_blokace');
+
+ROLLBACK WORK;
+
+--End of B121027_RN00424182_3

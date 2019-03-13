@@ -1,0 +1,66 @@
+-- @TC:ONCE: ID = V2, B131847_36779_1_opakt
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ru_op_kart DROP CONSTRAINT ru_op_kart_p;
+
+ALTER TABLE ru_op_kart
+    ADD  serno BIGINT BEFORE realn;
+
+RENAME COLUMN ru_op_kart.jistina  to jistinarozvaha;
+RENAME COLUMN ru_op_kart.poplatek to poplatekrozvaha;
+RENAME COLUMN ru_op_kart.urokbe to urokberozvaha;
+RENAME COLUMN ru_op_kart.uroksa to uroksapodrozvaha;
+RENAME COLUMN ru_op_kart.pokuta to pokutapodrozvaha;
+
+ALTER TABLE ru_op_kart
+    ADD smlouva DECIMAL(16,0) BEFORE stav,
+    ADD tsml char(4) BEFORE stav,
+    MODIFY realn INTEGER,
+    ADD prislibnecerpuver DECIMAL(16,2)  ,
+    ADD prislibcerpuver DECIMAL(16,2)  ,
+    ADD jistinapodrozvaha DECIMAL(16,2)  ,
+    ADD poplatekpodrozvaha DECIMAL(16,2)  ,
+    ADD urokbepodrozvaha DECIMAL(16,2)  ,
+    ADD uroksarozvaha   DECIMAL(16,2)  ,
+    ADD pokutarozvaha   DECIMAL(16,2)  ,
+    ADD pojistenirozvaha DECIMAL(16,2)  ,
+    ADD pojistenipodrozvaha DECIMAL(16,2)  ,
+    ADD podrozvahacelkem DECIMAL(16,2)  ,
+    ADD rozvahacelkem   DECIMAL(16,2)  ,
+    ADD zajistnemovitosti DECIMAL(16,2)  ,
+    ADD zajistvkladem   DECIMAL(16,2)  ,
+    ADD zajistostatni   DECIMAL(16,2)  ,
+    ADD opprislibnecerpuver DECIMAL(16,2)  ,
+    ADD opprislibcerpuver DECIMAL(16,2)  ,
+    ADD oppodrozvaha    DECIMAL(16,2)  ,
+    ADD opjistina       DECIMAL(16,2)  ,
+    ADD opurokbe        DECIMAL(16,2)  ,
+    ADD opuroksa        DECIMAL(16,2)  ,
+    ADD oppopl          DECIMAL(16,2)  ,
+    ADD oppojist        DECIMAL(16,2)  ,
+    ADD oppokuty        DECIMAL(16,2)  ,
+    ADD oprozvaha       DECIMAL(16,2)  ,
+    ADD stadiumifrs     Integer  ,
+    ADD stariuver       Integer  ,
+    ADD dobadefaultu    Integer  ,
+    ADD zbytksplat      CHAR(10)  ,
+    ADD indikzajistnemo Integer DEFAULT 0 ,
+    ADD urg             DECIMAL(16,2)  ,
+    ADD pd12mes         DECIMAL(7,4)  ,
+    ADD pdcelozivotni   DECIMAL(7,4)  ,
+    ADD lgd             DECIMAL(7,4)  ,
+    ADD beel            DECIMAL(7,4)  ,
+    ADD individualniparam Integer DEFAULT 0 ;
+
+ALTER TABLE ru_op_kart
+    ADD CONSTRAINT CHECK (indikzajistnemo IN (0,1)) CONSTRAINT ru_op_kart_dxf8,
+    ADD CONSTRAINT CHECK (urg in(0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5)) CONSTRAINT ru_op_kart_c4,
+    ADD CONSTRAINT CHECK (individualniparam IN (0,1)) CONSTRAINT ru_op_kart_dxfe,
+    ADD CONSTRAINT CHECK (stadiumifrs in (1,2,3)) CONSTRAINT ru_op_kart_c3;
+
+
+ROLLBACK WORK;
+
+--End of B131847_36779_1

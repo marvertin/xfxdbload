@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135701_UID76554_1
+-- @TC:ONCE: DESCRIPTION = RSTS-23745: Vytvořit/Změnit záznam do evidence problémových smluv SS
+
+
+BEGIN WORK;
+
+ALTER TABLE es_smlproblem_mat DROP CONSTRAINT es_smlproblem_mat_c1;
+ALTER TABLE es_smlproblem_mat ADD CONSTRAINT (CHECK (duvod IN ('Z', 'V', 'U' )) CONSTRAINT es_smlproblem_mat_c1);
+
+ROLLBACK WORK;
+
+--End of B135701_UID76554_1

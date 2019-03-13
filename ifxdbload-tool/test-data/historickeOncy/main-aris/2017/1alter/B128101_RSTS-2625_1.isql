@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B128101_RSTS-2625_1
+-- @TC:ONCE: DESCRIPTION = RSTS-2625 vlastnosti RUIAN pro zmenu osobnich udaju, zmenu korespondence
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_zadosoba
+    ADD kodadm    INT DEFAULT null   BEFORE refuser,
+    ADD adrruianpouzito    INT DEFAULT 0   BEFORE refuser,
+    ADD adrruiansynch    DateTime  YEAR to SECOND DEFAULT null BEFORE refuser;
+    
+ALTER TABLE ep_zadrole
+    ADD kodadm    INT DEFAULT null  BEFORE refuser,
+    ADD adrruianpouzito    INT DEFAULT 0   BEFORE refuser,
+    ADD adrruiansynch    DateTime  YEAR to SECOND DEFAULT null  BEFORE refuser;    
+
+
+ROLLBACK WORK;
+
+--End of B128101_RSTS-2625_1

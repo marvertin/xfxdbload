@@ -1,0 +1,63 @@
+-- @TC:ONCE: ID = V2, B133975_UID61863_1-uhrady
+-- @TC:ONCE: DESCRIPTION = Modelování úhrad
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_fee 
+  DROP simulatesavingaccentryfee,
+  DROP simulatesavingaccmaintenancefee, 
+  DROP simulatesavingaccstatementfee, 
+  DROP simulatesavingaccincreasetafee, 
+  DROP simulatesavingaccchangetarifffee,
+  DROP simulatebridgeloanacccontractionfee,
+  DROP simulatebridgeloanaccmaintenancefee,
+  DROP simulatebridgeloanaccstatementfee,
+  DROP simulatebridgeloanaccinsurancefee,
+  DROP simulatecreditaccwithbridgemaintenancefee,
+  DROP simulatecreditaccwithbridgestatementfee,
+  DROP simulatecreditaccwithbridgeinsurancefee,
+  DROP simulatecreditaccnobridgecontractionfee,
+  DROP simulatecreditaccnobridgemaintenancefee,
+  DROP simulatecreditaccnobridgestatementfee,
+  DROP simulatecreditaccnobridgeinsurancefee,
+  DROP simulatesavingcontrsettlementfee,
+  ADD withoutsavingaccentryfee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutsavingaccmaintenancefee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutsavingaccstatementfee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutsavingaccchangetarifffee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutsavingaccincreasetafee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutcreditacccontractionfee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutcreditaccmaintenancefee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutcreditaccstatementfee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutcreditaccinsurancefee   Integer  DEFAULT 0 NOT NULL BEFORE refuser,
+  ADD withoutsavingcontrsettlementfee   Integer DEFAULT 0 NOT NULL BEFORE refuser, 
+  ADD CONSTRAINT CHECK (withoutsavingaccentryfee IN (0,1)) CONSTRAINT pro_fee_df6b,
+  ADD CONSTRAINT CHECK (withoutsavingaccmaintenancefee IN (0,1)) CONSTRAINT pro_fee_df6c,
+  ADD CONSTRAINT CHECK (withoutsavingaccstatementfee IN (0,1)) CONSTRAINT pro_fee_df6d,
+  ADD CONSTRAINT CHECK (withoutsavingaccchangetarifffee IN (0,1)) CONSTRAINT pro_fee_dfhk,
+  ADD CONSTRAINT CHECK (withoutsavingaccincreasetafee IN (0,1)) CONSTRAINT pro_fee_df6e,
+  ADD CONSTRAINT CHECK (withoutcreditacccontractionfee IN (0,1)) CONSTRAINT pro_fee_df6m,
+  ADD CONSTRAINT CHECK (withoutcreditaccmaintenancefee IN (0,1)) CONSTRAINT pro_fee_df6j,
+  ADD CONSTRAINT CHECK (withoutcreditaccstatementfee IN (0,1)) CONSTRAINT pro_fee_df6k,
+  ADD CONSTRAINT CHECK (withoutcreditaccinsurancefee IN (0,1)) CONSTRAINT pro_fee_df6l,
+  ADD CONSTRAINT CHECK (withoutsavingcontrsettlementfee IN (0,1)) CONSTRAINT pro_fee_d6zm;
+  
+  ALTER TABLE EP_SPLSPORMODH_DEN
+    DROP popluzavuvsmlpu,
+    DROP poplveductuvpu,
+    DROP poplvypisuvpu,
+    DROP poplpojistpu,
+    DROP popluzavuvsmlsu,
+    DROP poplveductuvsu,
+    DROP poplvypisuvsu,
+    DROP poplpojistsu,
+    DROP popluzavsporsml,
+    DROP poplveductspor,
+    DROP poplvypisspor,
+    DROP poplzmentarif,
+    DROP poplzvyscc;
+
+ROLLBACK WORK;
+
+--End of B133975_UID61863_1-uhrady

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B127682_RSTS1577_1
+-- @TC:ONCE: DESCRIPTION = v uloženém modelování se kupí staré namodelované obraty {Bug}
+
+BEGIN WORK;
+
+update pro_simulatedturnover set xorigin='L'
+where xvalutaday < (
+  select xdatstartsimulation from pro_bssimulationcase s 
+    where s.id=pro_simulatedturnover.bssimulationcase_id
+)
+;
+
+ROLLBACK WORK;
+
+--End of B127682_RSTS1577_1

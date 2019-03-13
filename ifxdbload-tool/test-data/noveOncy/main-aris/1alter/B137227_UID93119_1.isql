@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137227_UID93119_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32824: Rozšíření evidence firem
+
+BEGIN WORK;
+
+alter table pef_firma_cis add pracagentura Integer DEFAULT 0 NOT NULL before overuser;
+
+alter table pef_firma_acis add pracagentura Integer before overuser;
+
+ROLLBACK WORK;
+
+--End of B137227_UID93119_1

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B132556_RSTS-10972_4
+-- @TC:ONCE: DESCRIPTION = TF001622 - Problematické zahrnování závazků do výpočtu ÚA, DSTI a DTI {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update eo_platnostzavazku_cis
+set zahrnsumaci = 1
+where stavplatnosti not in ('Splaceno před čerpáním', 'Ref tímto úvěrem', 'Již splaceno');
+
+ROLLBACK WORK;
+
+--End of B132556_RSTS-10972_4

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A57100_RN00341354_3
+-- @TC:ONCE: DESCRIPTION = Disp: Špatné poøadí v èíselníku Typy kontrol {DEFECT}
+
+BEGIN WORK;
+
+UPDATE EU_KontrolaTyp_Cis SET poradi = 1 WHERE typ = 'KO';
+
+ROLLBACK WORK;
+
+--End of A57100_RN00341354_3

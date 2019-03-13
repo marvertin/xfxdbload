@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B127350_RN00452758_1
+-- @TC:ONCE: DESCRIPTION = Registrované kontakty - omezení v Cibis Web
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE ru_cerpovereni_den (
+  realn   Integer NOT NULL,
+  poradicerp    SMALLINT NOT NULL,
+  poradiovereni    SMALLINT NOT NULL,
+  stav   CHAR(20),
+  vysledek   Integer,
+  poznamka   CHAR(255),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_cerpovereni_den_pk ON ru_cerpovereni_den(realn,poradicerp ,poradiovereni );
+ALTER TABLE ru_cerpovereni_den ADD CONSTRAINT PRIMARY KEY(realn,poradicerp ,poradiovereni ) CONSTRAINT ru_cerpovereni_den_pk;
+
+--FK
+ALTER TABLE ru_cerpovereni_den ADD CONSTRAINT FOREIGN KEY(realn,poradicerp ) REFERENCES ru_cerp_kart(realn,poradi) CONSTRAINT ru_cerpovereni_den_f1;
+
+--CHECKS
+ALTER TABLE ru_cerpovereni_den
+ADD CONSTRAINT (CHECK (vysledek IN(0,1,-1)) CONSTRAINT ru_cerpovereni_den_c1),
+ADD CONSTRAINT (CHECK (stav IN('NEOVERENO','OVERENO','NEOVEROVAT')) CONSTRAINT ru_cerpovereni_den_c2);
+
+ROLLBACK WORK;
+
+--End of B127350_RN00452758_1

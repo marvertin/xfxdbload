@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B136506_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+ALTER TABLE ru_real_mat DROP CONSTRAINT ru_real_mat_c8;
+
+ALTER TABLE ru_real_mat DROP CONSTRAINT ru_real_mat_c7;
+
+ALTER TABLE ru_real_mat DROP CONSTRAINT ru_real_mat_c20;
+
+ALTER TABLE ru_real_mat MODIFY klasifmin smallint default null;
+
+ROLLBACK WORK;
+
+--End of B136506_UID77507_1

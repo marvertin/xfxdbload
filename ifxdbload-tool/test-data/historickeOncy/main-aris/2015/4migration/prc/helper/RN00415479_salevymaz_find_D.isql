@@ -1,0 +1,61 @@
+create PROCEDURE RN00415479_salevymaz_find_D ()
+
+define _ser          Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00415479_salevymaz;
+end;
+
+--zalozime ridici tabulku
+CREATE RAW TABLE RN00415479_salevymaz(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  -1 - nezpracováno
+                            --                -2 - chyba
+                            --                -3 - provedeno vyhledání kandidátů 
+                            
+  id           INTEGER
+--  PRIMARY KEY(Ser)
+);
+
+COMMIT WORK;
+
+BEGIN WORK;
+--plnime ridici tabulku
+
+-- 1)   Kartotéka změn SS - Pokud v kartotéce změn smluv SS v Main je evidován (nezobrazovaný) odkaz do evidence žádostí   
+INSERT INTO RN00415479_salevymaz (id, zprac)
+  SELECT DISTINCT                 id, -1
+  FROM pro_bssimulationcase;
+COMMIT WORK;
+
+CREATE INDEX RN00415479_salevymaz_Ser_i1 ON RN00415479_salevymaz(ser);
+
+ALTER TABLE RN00415479_salevymaz TYPE (STANDARD);
+
+UPDATE STATISTICS HIGH FOR TABLE RN00415479_salevymaz;
+
+--konec transakce pripravy
+
+end procedure;

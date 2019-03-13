@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B113769_RN00377777_6
+-- @TC:ONCE: DESCRIPTION = Rozšíření exportu pro dopisy o splátkách {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  CALL tw_execSql('drop procedure ex_mms_t', -111);
+  CALL tw_execSql('drop function ex_mms_c', -111);
+  CALL tw_execSql('drop procedure eu_stornosplafce_t', -111);
+  CALL tw_execSql('drop procedure eu_stornosplaak', -111);
+  CALL tw_execSql('drop procedure eu_expsplainit_n', -111);
+  CALL tw_execSql('drop procedure eu_expsplaload_n', -111);
+  CALL tw_execSql('drop procedure eu_expsplasave_t', -111);
+  CALL tw_execSql('drop procedure eu_provedsplate_n', -111);
+  CALL tw_execSql('drop procedure eu_stornosplafce_t', -111);
+  CALL tw_execSql('drop procedure eu_stornosplate_n', -111);
+  CALL tw_execSql('drop procedure eu_provedsplafce_t', -111);
+  CALL tw_execSql('drop procedure eu_provedsplalo_n', -111);
+
+ROLLBACK WORK;
+
+--End of B113769_RN00377777_6

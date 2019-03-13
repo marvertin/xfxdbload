@@ -1,0 +1,121 @@
+create PROCEDURE A49615_RN00314434_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                    ABezTransakci int default 0
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _smlouva Dec(16,0);
+define _tsml Char(4);
+define _splatka Dec(16,2);
+define _perioda Char(1);
+define _datod Date;
+define _variantasplatky Char(1);
+define _poznamka Char(70);
+define _poradi Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+  BEGIN WORK;
+end if;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka ('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00314434');
+
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, smlouva, tsml
+      INTO _ser, _smlouva, _tsml
+    FROM RN00314434
+    WHERE zprac < 0
+      ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00314434
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+
+    --vlastni algoritmus migrace
+    UPDATE EU_SplatKal_Mat SET typsplatky = 'A' WHERE smlouva = _smlouva AND tsml = _tsml;
+
+    SELECT splatka, perioda INTO _splatka, _perioda FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _tsml;
+      
+    if _splatka is not null then
+      let _datod = AP_DatProv();
+      let _variantasplatky = EU_SVariantaSplatky(_smlouva, _tsml, _splatka);
+      let _poznamka = 'Nastaveno pøi migraci pøeklopených PPSU dne: ' || TW_DateToChar(_datod);
+        
+      let _poradi = EU_ProvedSplaAk(_smlouva, _tsml, _perioda, _splatka, _datod, Month(_datod), _poznamka, null, null, null, null, _variantasplatky);
+    end if;
+
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00314434 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--algoritmus dokonceni migrace
+--...
+
+
+--zápis o ukonèení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukonèení migrace/datové manipulace RN00314434');
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+end procedure;

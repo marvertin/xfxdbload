@@ -1,0 +1,142 @@
+CREATE PROCEDURE A61718_RN00335314 (
+    ASazba_sablona        Int,
+    ASazba_treal          Char(4),
+    ASazba_datod          Date,
+    ASazba_datdo          Date,
+    ASazba_perioda        Char(1),
+    ASazba_stoppopl       Int,
+    ASazba_limitmin       Dec(16,2),
+    ASazba_limitmax       Dec(16,2),
+    ASazba_zaoktyp        Char(1),
+    ASazba_zaokpresnost   Int,
+    ASazba_alikvotni      Int,
+    APravidlo_priorita    Int,
+    APravidlo_koefproc    Dec(6,2),
+    APravidlo_koefcitatel Int,
+    APravidlo_koefjmenovatel Int,
+    APravidlo_fixnicast   Dec(16,2),
+    APravidlo_dostupmodel Int,
+    ATestVlastnost_vlastnost Int,
+    ATestVlastnost_oper      Char(2),
+    ATestVlastnost_hodnota   VarChar(255),    -- Seznam hodnot pro jednotlivé testy vlastností oddìleno èárkou
+    ASablona_vlastnostibnd    Char(255)       -- Seznam povolených vlastností oddìlených èárkou
+);
+
+define _predpis  Int;
+define _pravidlo Int;
+define _uhrParamBndSer Int;
+define _index    Int;
+define _vlastnostiter Char(5);
+define _hodnotaiter Char(5);
+
+--
+define _sazbapopis char(70);
+define _pravidlopopis char(70);
+define _predpis_exist Int;
+
+--set debug file to "pravidlo.dbg";
+--trace on;
+
+let _predpis_exist = null;
+--FIXME Nìkteré atributy jsou v Excelu nevyplnìny (soubor p:\TCSW\TCCQHeap\CR\RN00335314_Variabilni_produktove_uhrady\Analyza\RN00335314_Proposal_04_parametrizace.doc )
+--      Pøitom jsou not null. tady je hned pøi vstupu do parametrizace mìníme - oblast až do komentáøe ENDFIX  
+if ASazba_alikvotni IS NULL then let ASazba_alikvotni = 0;
+end if;
+if ASazba_stoppopl IS NULL then let ASazba_stoppopl = 0;
+end if;
+if ASazba_datod IS NULL then 
+  --musím vyhledat pøedpis existující sazby;
+  let _predpis_exist =  (SELECT predpis FROM ep_uhrsazeb_cis WHERE defpar = ASazba_sablona);
+end if;
+if ASazba_stoppopl IS NULL then let ASazba_stoppopl = 0;
+end if;
+if ASazba_zaoktyp = 'M' then let ASazba_zaoktyp = 'P'; -- Asi chyba v exclu - všude, kde je vyplnìno, je M
+end if;
+if ASazba_treal in ('PFSU', 'PPSU', 'PUSU', 'PLPO') then let ASazba_treal = NULL; -- Neexistuje v èíselníku rp_real_cis
+end if;
+if APravidlo_dostupmodel IS NULL then let APravidlo_dostupmodel = 0;
+end if; 
+let _sazbapopis = (select trim(nazev) || ' (' || tsml || (CASE WHEN tw_emptynull(ASazba_treal) is not null then '/' || ASazba_treal else '' END) || ')'  from ep_uhrdefpar_cis where defpar = ASazba_sablona);
+let _pravidlopopis = (select trim(nazev) || ' (' || tsml || (CASE WHEN tw_emptynull(ASazba_treal) is not null then '/' || ASazba_treal else '' END) || ')' from ep_uhrdefpar_cis where defpar = ASazba_sablona);
+-- ------------------------- ENDFIX --------------------------------
+
+--vlož do ep_uhrsazeb_cis
+
+if _predpis_exist is null then
+  INSERT INTO ep_uhrsazeb_cis (defpar, treal, datod, datdo, perioda, stoppopl,
+      limitmin, limitmax, zaoktyp, zaokpresnost, alikvotni, mena, popis
+    )
+    VALUES (ASazba_sablona, ASazba_treal, ASazba_datod, ASazba_datdo, ASazba_perioda, ASazba_stoppopl, 
+      ASazba_limitmin, ASazba_limitmax, ASazba_zaoktyp, ASazba_zaokpresnost, ASazba_alikvotni, 'CZK', _sazbapopis  
+    );
+    
+    LET _predpis = TW_LastSer('ep_uhrsazeb_cis');
+else
+  let _predpis = _predpis_exist;
+end if
+
+--vlož do ep_uhrpravidlo_cis
+if not (APravidlo_koefproc is null and APravidlo_koefcitatel is null and APravidlo_koefjmenovatel  is null and APravidlo_fixnicast  is null) then
+  INSERT INTO ep_uhrpravidlo_cis (predpis, priorita, koefproc, koefcitatel, koefjmenovatel,
+      fixnicast, dostupmodel, mena, popis
+    )
+    VALUES (_predpis, APravidlo_priorita, APravidlo_koefproc, APravidlo_koefcitatel, APravidlo_koefjmenovatel,
+      APravidlo_fixnicast, APravidlo_dostupmodel, 'CZK', _pravidlopopis
+    );
+  
+    LET _pravidlo = TW_LastSer('ep_uhrpravidlo_cis');
+else
+    let _pravidlo = (SELECT pravidlo FROM ep_uhrpravidlo_cis WHERE predpis = _predpis and priorita = APravidlo_priorita);
+end if;
+  
+if _pravidlo > 0 then
+  update ep_uhrpravidlo_cis set popis = trim(_pravidlopopis) || ' - pravidlo ' || _pravidlo where pravidlo = _pravidlo;
+end if;
+
+
+--ep_uhrdefparvlast_bnd
+let _index = 0;
+let _vlastnostiter = 'xxx'; --kvùli cyklu
+
+if _predpis_exist is null then
+  WHILE (_vlastnostiter IS NOT NULL)
+    let _vlastnostiter = tw_strtoken(ASablona_vlastnostibnd, ',', _index);
+      
+    if _vlastnostiter IS NULL then 
+      exit while;
+    end if;
+    
+    INSERT INTO ep_uhrdefparvlast_bnd (defpar, vlastnost, platnost)
+      VALUES (ASazba_sablona, _vlastnostiter, 1);
+          
+    LET _index = _index + 1;
+  END WHILE;
+end if
+
+--ep_uhrparam_bnd
+if ATestVlastnost_vlastnost is not null then
+  INSERT INTO ep_uhrparam_bnd (pravidlo, vlastnost, negace)
+    VALUES (_pravidlo, ATestVlastnost_vlastnost, 0);
+end if;
+
+let _uhrParamBndSer = TW_LastSer('ep_uhrparam_bnd'); 
+
+--vlož do ep_uhrparamhodnota_cis
+--jen jestli je co vkládat
+let _index = 0;
+let _hodnotaiter = 'xxx'; --kvùli cyklu
+
+WHILE (_hodnotaiter IS NOT NULL)
+  let _hodnotaiter = tw_strtoken(ATestVlastnost_hodnota, ',', _index);
+    
+  if _hodnotaiter IS NULL then 
+    exit while;
+  end if;
+
+  INSERT INTO ep_uhrparamhodnota_cis (paramser, hodnota, oper, platnost)
+    VALUES (_uhrParamBndSer, _hodnotaiter, ATestVlastnost_oper, 1);
+      
+  LET _index = _index + 1;
+END WHILE;
+
+END PROCEDURE;

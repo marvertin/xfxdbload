@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B129638_RN00451095_3
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--ciselnik variant fixaci
+UPDATE eu_variaurokfixace_cis SET  ucelnakladypu = 0,  ucelnakladysu = 0, mimoradnaspl = 1
+ WHERE fixaceid between 1 and 18;
+ 
+UPDATE eu_variaurokfixace_cis SET  ucelnakladypu = 0,  ucelnakladysu = 0, mimoradnaspl = 1
+ WHERE fixaceid IN (19,20,21);
+ 
+--prumerna urokova sazba vkladu
+INSERT INTO eu_prumernasazba_cis (nazev, datplat, sazba, poznamka, platnost)
+                          VALUES ('Iniciální záznam od 2015',mdy(1,1,2015),2,'Iniciální záznam založený při zavedení funkčnosti',1);
+
+ 
+INSERT INTO ep_typpohybumodel_cis (typpohybumodel, text, priorityalg, priority, note, category, platnost)
+                         VALUES   ('b','Účelně vynaložené náklady',1,null,'Využíváno pouze pro variantu modelování předčasného splacení (L)',3,1);
+                         
+--migrace - kartoteka vyporadani - pripis ucelne vynalozenych nakladu
+UPDATE RU_Vypor_Kart SET pripucelnakl = 0 WHERE stav in ('A','B');                         
+
+ROLLBACK WORK;
+
+--End of B129638_RN00451095_3

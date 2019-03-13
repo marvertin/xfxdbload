@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136368_UID77502_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE acr_ucet_acis ADD platnost Integer BEFORE portime;
+
+ALTER TABLE acr_ucet_cis ADD platnost Integer  DEFAULT 1 NOT NULL BEFORE portime;
+ALTER TABLE acr_ucet_cis ADD CONSTRAINT ( CHECK (platnost IN (0,1)) CONSTRAINT acr_ucet_cis_d8nb);
+
+ROLLBACK WORK;
+
+--End of B136368_UID77502_1

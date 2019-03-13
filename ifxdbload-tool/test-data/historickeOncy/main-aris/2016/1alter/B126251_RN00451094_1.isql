@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B126251_RN00451094_1
+-- @TC:ONCE: DESCRIPTION = Změna v nastavení konce fixace a automatický posun data fixace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_varurokfixprirad_cis
+  ADD implvarfixace   Integer  DEFAULT 0 BEFORE poznamka,
+  ADD CONSTRAINT CHECK (implvarfixace IN (0,1)) CONSTRAINT eu_varurokfixprirad_cis_d24h;
+
+ALTER TABLE eu_varurokfixprirad_acis 
+  ADD implvarfixace   Integer  DEFAULT 0 BEFORE poznamka,
+  ADD CONSTRAINT CHECK (implvarfixace IN (0,1)) CONSTRAINT eu_varurokfixprirad_acis_d24i;
+
+
+ROLLBACK WORK;
+
+--End of B126251_RN00451094_1

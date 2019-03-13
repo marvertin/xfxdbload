@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136067_UID80043_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25719: Umožnit zadávat pro občanské průkazy SK kód série dokladu v CIBIS-Main {STORY}
+
+BEGIN WORK;
+
+UPDATE EO_DruhPrukaz_Cis SET oznacser = 1 WHERE zkratka = 'OS';
+
+ROLLBACK WORK;
+
+--End of B136067_UID80043_3

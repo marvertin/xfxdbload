@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A43758_RN00292524_1
+-- @TC:ONCE: DESCRIPTION = Pozdní vymáhání - poznámka soudní {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE EU_VymPohl_Mat
+  MODIFY poznpozdni LVARCHAR(2000),
+  MODIFY poznsoud LVARCHAR(2000),
+  MODIFY poznext LVARCHAR(2000);
+
+ALTER TABLE EU_VymPohl_Arch
+  MODIFY poznpozdni LVARCHAR(2000),
+  MODIFY poznsoud LVARCHAR(2000),
+  MODIFY poznext LVARCHAR(2000);
+
+ALTER TABLE EU_SnimekVymPohl_Den
+  MODIFY poznpozdni LVARCHAR(2000),
+  MODIFY poznsoud LVARCHAR(2000),
+  MODIFY poznext LVARCHAR(2000),
+  MODIFY poznamkainsolv LVARCHAR(2000);
+
+ALTER TABLE EU_Insolvence_Mat MODIFY poznamka LVARCHAR(2000);
+
+ALTER TABLE EU_Insolvence_Arch MODIFY poznamka LVARCHAR(2000);
+
+ROLLBACK WORK;
+
+--End of A43758_RN00292524_1

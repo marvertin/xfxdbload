@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B115196_RN00384921_1
+-- @TC:ONCE: DESCRIPTION = Main: Vytvoření nového exportu z kartotéky vypořádání {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE ex_auk_kart (
+ser SERIAL,
+smlouva DECIMAL(16,0) NOT NULL, 
+tsml CHAR(4) NOT NULL, 
+datuz DATE NOT NULL, 
+poradi INT NOT NULL, 
+datvznik DATE,
+datexp  DATE,
+poruser CHAR(20) NOT NULL, 
+portime DATETIME YEAR TO SECOND NOT NULL, 
+refuser CHAR(20) NOT NULL, 
+reftime DATETIME YEAR TO SECOND NOT NULL  
+) LOCK MODE ROW;
+
+ROLLBACK WORK;
+
+--End of B115196_RN00384921_1

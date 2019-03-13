@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B132529_RSTS-12052_1
+-- @TC:ONCE: DESCRIPTION = optimalizace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+create index eu_dodatekhead_mat_i1 on eu_dodatekhead_mat(smlouva, tsml);
+create index vy_vyplban_kart_i2 on vy_vyplban_kart(opervypl);
+create index rp_prevodsp_kart_i2 on rp_prevodsp_kart(vyplata);
+
+ROLLBACK WORK;
+
+--End of B132529_RSTS-12052_1

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B118827_RN00422600_3
+-- @TC:ONCE: DESCRIPTION = Neodesílá se mail po dokončení dávky {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE tw_emailtyp_cis SET predmet = '<<SERVER>>, Dávka odbytu: CHYBA' WHERE zkratka like 'DAVKA_ODBYT_CHYBA';
+UPDATE tw_emailtyp_cis SET predmet = '<<SERVER>>, Dávka odbytu: OK' WHERE zkratka like 'DAVKA_ODBYT_OK';
+
+ROLLBACK WORK;
+
+--End of B118827_RN00422600_3

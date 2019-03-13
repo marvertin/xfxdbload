@@ -1,0 +1,14 @@
+Create Procedure B121121_RN00420627_4()
+
+  define _zakon int;
+  define _naroksp int;
+  define _pobyt char(1);
+  
+  foreach SELECT zakon INTO _zakon  FROM es_zakon_cis  
+    foreach SELECT xssalowed, xcode INTO _naroksp, _pobyt FROM eo_residence_cis 
+      INSERT INTO sp_narokzakonpobyt_cis (zakon, pobyt, naroksp) 
+               VALUES(_zakon, _pobyt, _naroksp);      
+    end foreach;  
+  end foreach;
+ 
+end Procedure;

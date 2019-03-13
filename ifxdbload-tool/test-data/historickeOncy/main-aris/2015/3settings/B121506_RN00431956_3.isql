@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B121506_RN00431956_3
+-- @TC:ONCE: DESCRIPTION = ECM: Webové služby vystavené pro volání z ECM (vyjma konfirmace dokumentů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('WS','napojeniECM','metodyWS','lhutaDotaz4', 0, 1, 'WS', 'Napojení na ECM', 'Metody WS', 'Korekční lhůta k datu skenování ve dnech pro dotaz typu 4');
+
+call TW_RegSetOrAddKey('WS','napojeniECM','metodyWS','lhutaDotaz6', 0, 1, 'WS', 'Napojení na ECM', 'Metody WS', 'Korekční lhůta k datu skenování ve dnech pro dotaz typu 6');
+
+call TW_RegSetOrAddKey('WS','napojeniECM','metodyWS','lhutaDotaz7', 45, 1, 'WS', 'Napojení na ECM', 'Metody WS', 'Korekční lhůta k datu skenování ve dnech pro dotaz typu 7');
+
+call TW_RegSetOrAddKeyD ('WS','napojeniECM','metodyWS','odstineniSisDotaz7', mdy(6,25,2012), 1, 'WS', 'Napojení na ECM', 'Metody WS', 'Datum pro odstínění starých SIS při dotazu typu 7');
+
+ROLLBACK WORK;
+
+--End of B121506_RN00431956_3

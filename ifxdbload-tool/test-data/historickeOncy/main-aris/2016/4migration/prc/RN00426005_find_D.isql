@@ -1,0 +1,51 @@
+create PROCEDURE RN00426005_find_D ()
+
+define _ser          Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00426005;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00426005(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  serZad int, 
+  smlouva dec(16,0),
+  castka dec(16,2),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--plnime ridici tabulku
+INSERT INTO RN00426005 (serZad, smlouva, castka,zprac)
+SELECT ser, smlouva, castka,-1 FROM SP_ZadMF_Kart WHERE kolo = 1 AND rok = '2016' AND zmena = 0 and kodzprac in ('C','E');
+  
+UPDATE STATISTICS HIGH FOR TABLE RN00426005;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

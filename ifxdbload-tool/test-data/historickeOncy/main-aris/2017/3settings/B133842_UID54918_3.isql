@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B133842_UID54918_3
+-- @TC:ONCE: DESCRIPTION = zrušení DB registrů {CUSTOMERREQUEST}
+BEGIN WORK;
+
+call tw_regdelkey('EP', 'SOLUS', 'query', 'maxcache');
+call tw_regdelkey('EP', 'SOLUS', 'query', 'cacheonly');
+
+ROLLBACK WORK;
+
+--End of B133842_UID54918_3

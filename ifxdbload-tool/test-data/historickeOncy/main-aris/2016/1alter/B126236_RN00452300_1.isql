@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B126236_RN00452300_1
+-- @TC:ONCE: DESCRIPTION = Úvěry: evidence specifických údajů {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+ALTER TABLE EU_ExpSml_Den ADD zadavatspecudaj   Integer;
+
+
+CREATE TABLE eu_expspecudaj_mat (
+  id_index   Integer NOT NULL,
+  poradi   Integer,
+  reftypspecudaj   INTEGER NOT NULL,
+  nazev   CHAR(35),
+  poznamka   VARCHAR(255)
+)lock mode row;
+
+CREATE INDEX eu_expspecudaj_mat_i1 ON eu_expspecudaj_mat(id_index);
+
+
+ROLLBACK WORK;
+
+--End of B126236_RN00452300_1

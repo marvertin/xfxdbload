@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B123359_RN00436364_4
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE EU_Sml_Mat SET variafixace = (SELECT max(fixaceid) FROM EU_VariaUrokFixace_Cis WHERE fixdosplaceni = 1 AND platnost = 1)
+  WHERE fixsazba = 0 AND stav IN ('A', 'B', 'C', 'D', 'L');
+
+ROLLBACK WORK;
+
+--End of B123359_RN00436364_4

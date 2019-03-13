@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A56413_RN00317080_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP TRIGGER SOL_Action_U1', -634);
+call TW_ExecSql('DROP PROCEDURE SOL_ActionSl2', -674);
+
+call TW_ExecSql('DROP TRIGGER creditregaction_u1', -634);
+call TW_ExecSql('DROP PROCEDURE PC_CreditRegAction_U1', -674);
+
+ROLLBACK WORK;
+
+--End of A56413_RN00317080_1

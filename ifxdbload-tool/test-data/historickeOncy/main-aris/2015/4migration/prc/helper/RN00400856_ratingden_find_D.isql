@@ -1,0 +1,55 @@
+create PROCEDURE RN00400856_ratingden_find_D ()
+
+define _ser          Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00400856_ratingden;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00400856_ratingden(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  id_index int,
+  ico      char(10),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+--plnime ridici tabulku
+
+-- 1)   Kartotéka změn SS - Pokud v kartotéce změn smluv SS v Main je evidován (nezobrazovaný) odkaz do evidence žádostí   
+INSERT INTO RN00400856_ratingden (id_index, ico, zprac)
+  SELECT DISTINCT id_index, ico, -1
+  FROM eo_expratingpo_den;
+  
+UPDATE STATISTICS HIGH FOR TABLE RN00400856_ratingden;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

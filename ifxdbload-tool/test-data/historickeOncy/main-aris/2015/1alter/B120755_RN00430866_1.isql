@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B120755_RN00430866_1
+-- @TC:ONCE: DESCRIPTION = přiznání podkladu  i po datu ukončení aktivity OZ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE do_typdokumentutypobjektu_cis MODIFY  kvalitadok   VARCHAR(14, 14);
+
+ROLLBACK WORK;
+
+--End of B120755_RN00430866_1

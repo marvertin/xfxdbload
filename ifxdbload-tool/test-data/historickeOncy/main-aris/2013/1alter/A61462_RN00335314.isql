@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A61462_RN00335314
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ru_upom_kart
+    ADD zpusobpopl  CHAR(1) BEFORE pohl;
+    
+ALTER TABLE ru_upucel_kart
+    ADD zpusobpopl  CHAR(1)   BEFORE davka;
+    
+ALTER TABLE eu_upspecpodmb_kart
+    ADD zpusobpopl  CHAR(1)   BEFORE uhrada;    
+    
+ROLLBACK WORK;
+
+--End of A61462_RN00335314

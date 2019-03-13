@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B127885_RN00294234_1
+-- @TC:ONCE: DESCRIPTION = Podpora opakovaných úvěrů na jedné smlouvě SS
+
+BEGIN WORK;
+
+alter table eu_sml_mat
+  add poradi Integer DEFAULT 1 NOT NULL before regcissml;
+
+alter table eu_sml_arch
+  add poradi Integer before ser;
+  
+alter table es_vkladkin_mat
+  add iniciatordosp DECIMAL(16, 0);
+
+alter table es_vkladkin_arch
+   add iniciatordosp DECIMAL(16, 0);
+   
+alter table rs_upom_kart
+   add iniciatordosp DECIMAL(16, 0);   
+   
+alter table ac_ocsaldo_den
+   add iniciatordosp DECIMAL(16, 0);  
+   
+ROLLBACK WORK;
+
+--End of B127885_RN00294234_1

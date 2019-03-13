@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B121934_RN00439198_3
+-- @TC:ONCE: DESCRIPTION = Doplnit v číselníku ws_metoda_cis chybějící údaje {DEFECT}
+
+BEGIN WORK;
+
+-- Ověření odcizených a neplatných dokumentů
+-- (není metoda)
+update ws_metoda_cis
+set specifikace = 'http://aplikace.mvcr.cz/neplatne-doklady/doklady.aspx'
+where id = 34;
+
+-- Dotaz do SOLUS
+update ws_metoda_cis
+set specifikace = 'http://cms2.rsts.cz/solusservice/Report.ASMx'
+  , metoda = 'GetSolusReport'
+where id = 35;
+
+-- Dotaz do BRKI
+update ws_metoda_cis
+set specifikace = 'http://cms2.rsts.cz/cbc/addins/crif.asmx'
+  , metoda = 'CRIFSoap'
+where id = 36;
+
+ROLLBACK WORK;
+
+--End of B121934_RN00439198_3

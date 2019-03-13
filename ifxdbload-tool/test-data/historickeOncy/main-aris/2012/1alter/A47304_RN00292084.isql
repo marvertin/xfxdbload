@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A47304_RN00292084
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda 
+
+BEGIN WORK;
+
+ALTER TABLE eu_splatkal_mat ADD (rozhdenzahsledosspor   CHAR(1),
+                                                           aktzahdosporcerp   Integer,
+                                                           dorovnatvklad   Integer,
+                                                           rozhdenmesdospor   Integer,
+                                                           manzahdospor   Integer,
+                                                           rozhdenzahsplac   CHAR(1),
+                                                           posunzahsplac   Integer,
+                                                           rozhdenzahsledosuv   CHAR(1),
+                                                           rozhdenmessplac   Integer,
+                                                           manzahsplac   Integer);
+                                                           
+ALTER TABLE eu_splatkal_arch ADD (rozhdenzahsledosspor   CHAR(1),
+                                                           aktzahdosporcerp   Integer,
+                                                           dorovnatvklad   Integer,
+                                                           rozhdenmesdospor   Integer,
+                                                           manzahdospor   Integer,
+                                                           rozhdenzahsplac   CHAR(1),
+                                                           posunzahsplac   Integer,
+                                                           rozhdenzahsledosuv   CHAR(1),
+                                                           rozhdenmessplac   Integer,
+                                                           manzahsplac   Integer);
+                                                                                                                      
+ROLLBACK WORK;

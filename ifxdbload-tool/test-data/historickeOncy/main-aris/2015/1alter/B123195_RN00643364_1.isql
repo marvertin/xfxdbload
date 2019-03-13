@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, B123195_RN00643364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+RENAME COLUMN eu_typdalsinakl_cis.retfime TO reftime;
+RENAME COLUMN eu_typdalsinakl_acis.retfime TO reftime;
+
+ALTER TABLE eu_typdalsinakl_cis DROP zajist;
+ALTER TABLE eu_typdalsinakl_acis DROP zajist;
+
+CREATE TABLE eu_vazbazajistnakl_cis (
+  serno   SERIAL NOT NULL,
+  refzajist   SMALLINT NOT NULL,
+  reftypdalsinakl   INTEGER NOT NULL,
+  platnost   Integer  DEFAULT 1,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_vazbazajistnakl_cis_datu
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_vazbazajistnakl_cis_pk ON eu_vazbazajistnakl_cis(serno);
+ALTER TABLE eu_vazbazajistnakl_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_vazbazajistnakl_cis_pk;
+
+--FK
+CREATE INDEX eu_vazbazajistnakl_cis_i_f1 ON eu_vazbazajistnakl_cis(reftypdalsinakl);
+ALTER TABLE eu_vazbazajistnakl_cis ADD CONSTRAINT FOREIGN KEY(reftypdalsinakl) REFERENCES eu_typdalsinakl_cis(serno) CONSTRAINT eu_vazbazajistnakl_cis_f1;
+CREATE INDEX eu_vazbazajistnakl_cis_i_f2 ON eu_vazbazajistnakl_cis(refzajist);
+ALTER TABLE eu_vazbazajistnakl_cis ADD CONSTRAINT FOREIGN KEY(refzajist) REFERENCES eu_zajist_cis(zajist) CONSTRAINT eu_vazbazajistnakl_cis_f2;
+
+CREATE TABLE eu_vazbazajistnakl_acis (
+  idarch   CHAR(45),
+  serno   INTEGER NOT NULL,
+  refzajist   SMALLINT,
+  reftypdalsinakl   INTEGER,
+  platnost   Integer,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_vazbazajistnakl_acis_datv
+)lock mode row;
+
+ROLLBACK WORK;
+
+--End of B123195_RN00643364_1

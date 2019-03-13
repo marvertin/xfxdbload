@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A46477_RN00249565_3
+-- @TC:ONCE: DESCRIPTION = Zmìna kontroly telefonních a mobilních èísel v komunikaèních kanálech. {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('EO', 'osoba', 'komkanal', 'fax', 3, 1, 'Osoba', 'Komunikaèní kanály', null, 'Komunikaèní kanál pro Fax');
+
+
+ROLLBACK WORK;
+
+--End of A46477_RN00249565_3

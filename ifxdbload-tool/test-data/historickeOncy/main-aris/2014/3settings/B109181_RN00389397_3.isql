@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B109181_RN00389397_3
+-- @TC:ONCE: DESCRIPTION = Insolvence - nezavedebý registr {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EP', 'insolvence', 'sledovani-druhOperOdchozi', 'VPX7', 1, 1, 'Podpora pro produkt', 'Insolvence', 'Obecné', 'Sledování odchozí platby v insolvenci pro VPX7');
+call TW_RegSetOrAddKey('EP', 'insolvence', 'sledovani-druhOperOdchozi', 'VPX9', 1, 1, 'Podpora pro produkt', 'Insolvence', 'Obecné', 'Sledování odchozí platby v insolvenci pro VPX9');
+call TW_RegSetOrAddKey('EP', 'insolvence', 'sledovani-druhOperOdchozi', 'VP04', 1, 1, 'Podpora pro produkt', 'Insolvence', 'Obecné', 'Sledování odchozí platby v insolvenci pro VP04');
+call TW_RegSetOrAddKey('EP', 'insolvence', 'sledovani-druhOperOdchozi', 'VP09', 1, 1, 'Podpora pro produkt', 'Insolvence', 'Obecné', 'Sledování odchozí platby v insolvenci pro VP09');
+
+ROLLBACK WORK;
+
+--End of B109181_RN00389397_3

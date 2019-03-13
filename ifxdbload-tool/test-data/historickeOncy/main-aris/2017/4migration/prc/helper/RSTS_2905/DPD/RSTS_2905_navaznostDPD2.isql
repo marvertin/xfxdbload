@@ -1,0 +1,119 @@
+CREATE PROCEDURE RSTS_2905_navaznostDPD2(AKonto    DEC(16, 0),
+                                        ATko      CHAR(2),
+                                        ARealn    INT,
+                                        ADatOtev  DATE,   
+                                        ADatUzav  DATE,
+                                        ALogovat  INT) 
+
+  DEFINE _nesplaccastka             DEC(16, 2);
+  DEFINE _nesplaccastkaNasled       DEC(16, 2);  
+  DEFINE _datvyhodnoceni            DATE;
+  DEFINE _datvyhodnoceniPred        DATE;
+  DEFINE _datvyhodnoceniNasled      DATE;
+  DEFINE _datprvvyhodnoceni         DATE;
+  DEFINE _datprvvyhodnoceniNasled   DATE;
+  DEFINE _datprvvyhodnoceniPred     DATE;
+  DEFINE _currentDPD                INT;
+  DEFINE _nesplaccastkaPred         DEC(16, 2);
+  DEFINE _datvyhodnoceniLoop        DATE;
+  DEFINE _currentDPDPred            INT;
+  DEFINE _currentDPDLoop            INT;  
+  DEFINE _id                        INT;
+  DEFINE _idNasled                  INT;
+  DEFINE _ocsaldoevidNasled         INT;
+  DEFINE _lastDay                   DATE;
+  DEFINE _pocet                     INT;
+  DEFINE _datum                     DATE;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'NavaznostDPD'); END IF;  
+  
+  LET _nesplaccastkaPred      = NULL;   
+  LET _datvyhodnoceniPred     = NULL;
+  LET _datprvvyhodnoceniPred  = NULL;
+  LET _currentDPDPred         = NULL;
+  
+  LET _currentDPD = 0;
+    
+  FOREACH c1 WITH HOLD FOR
+    SELECT nesplaccastka, datvyhodnoceni, datprvvyhodnoceni, id
+    INTO _nesplaccastka, _datvyhodnoceni, _datprvvyhodnoceni, _id 
+    FROM rsts_2905_dpdevid
+    WHERE
+      ocsaldoevid = 1   
+    ORDER BY
+      datvyhodnoceni
+      
+    IF(_nesplaccastka > 0) THEN          
+      SELECT id, nesplaccastka, datvyhodnoceni, datprvvyhodnoceni, ocsaldoevid 
+      INTO _idNasled, _nesplaccastkaNasled, _datvyhodnoceniNasled, _datprvvyhodnoceniNasled, _ocsaldoevidNasled 
+      FROM rsts_2905_dpdevid
+      WHERE
+        reals              = ARealn AND
+        datprvvyhodnoceni  = _datvyhodnoceni + 1;
+      
+      LET _currentDPD = _currentDPD + 1;
+      UPDATE rsts_2905_dpdevid SET currentDPD = _currentDPD WHERE id = _id;
+             
+      IF(_ocsaldoevidNasled = 0) THEN
+        -- nasledujici zaznam je "nevyhodnoceny" interval dle evidence oc salda
+        
+        LET _datvyhodnoceniLoop = _datprvvyhodnoceniNasled;
+        WHILE(_datvyhodnoceniLoop <= _datvyhodnoceniNasled - 1)
+          LET _currentDPD = _currentDPD + 1;
+          INSERT INTO rsts_2905_dpdevid (reals, datvyhodnoceni, typvyhodnoceni, currentdpd, datprvvyhodnoceni, nesplaccastka)
+          VALUES(ARealn, _datvyhodnoceniLoop, 'D', _currentDPD, _datvyhodnoceniLoop, _nesplaccastka);          
+
+          LET _datvyhodnoceniLoop = _datvyhodnoceniLoop + 1;          
+        END WHILE;
+        
+        LET _currentDPD = _currentDPD + 1;
+        UPDATE rsts_2905_dpdevid SET nesplaccastka = _nesplaccastka, currentDPD = _currentDPD, datprvvyhodnoceni = datvyhodnoceni
+        WHERE id = _idNasled;        
+      END IF; 
+           
+    ELSE
+      LET _currentDPD = 0;
+    END IF;
+     
+  END FOREACH;
+  
+  -- zgrupovani nulovych intervalu
+  LET _datprvvyhodnoceniPred = NULL; 
+  FOREACH c2 WITH HOLD FOR
+    SELECT datvyhodnoceni, datprvvyhodnoceni, nesplaccastka INTO _datvyhodnoceni, _datprvvyhodnoceni, _nesplaccastka 
+    FROM rsts_2905_dpdevid 
+    ORDER BY 
+      datvyhodnoceni 
+    
+    LET _lastDay = TW_LastDayOf(_datvyhodnoceni, 'M');
+    LET _datum = NULL;  
+    IF(_nesplaccastka > 0) THEN
+      LET _datum = _datvyhodnoceni - 1;    
+    ELIF(_datvyhodnoceni = _lastDay) THEN
+      LET _datum = _datvyhodnoceni;  
+    END IF; 
+          
+    IF(_datum IS NOT NULL) THEN
+      IF(_datprvvyhodnoceniPred IS NOT NULL) THEN
+        DELETE FROM rsts_2905_dpdevid 
+        WHERE
+          datprvvyhodnoceni BETWEEN _datprvvyhodnoceniPred AND _datum AND
+          datvyhodnoceni BETWEEN _datprvvyhodnoceniPred AND _datum AND
+          nesplaccastka = 0;      
+        
+        INSERT INTO rsts_2905_dpdevid (reals, datvyhodnoceni, typvyhodnoceni, currentdpd, datprvvyhodnoceni, nesplaccastka)
+        VALUES(ARealn, _datum, 'D', 0, _datprvvyhodnoceniPred, 0);
+      END IF;
+    
+      LET _datprvvyhodnoceniPred = NULL;    
+    END IF;  
+  
+    IF(_nesplaccastka = 0 AND _datvyhodnoceni <> _lastDay AND _datprvvyhodnoceniPred IS NULL) THEN
+      LET _datprvvyhodnoceniPred = _datprvvyhodnoceni;
+    END IF;
+  
+  END FOREACH  
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;  
+     
+END PROCEDURE;

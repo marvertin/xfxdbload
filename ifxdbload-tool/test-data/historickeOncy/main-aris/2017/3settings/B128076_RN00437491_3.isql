@@ -1,0 +1,80 @@
+-- @TC:ONCE: ID = V2, B128076_RN00437491_3
+-- @TC:ONCE: DESCRIPTION = Elektronický návrh na vklad {CUSTOMERREQUEST}
+
+
+--@since RSTS-2935 (RN00437491)
+
+BEGIN WORK;
+
+--#Katastrální území banky#
+Call tw_regSetOrAddKey('AP', 'banka', '*', 'Kuz', 490261, 1/*Lze editovat*/);
+ 
+--#Ulice banky bez čísla domovního#
+Call tw_regSetOrAddKey('AP', 'banka', '*', 'uliceBezCisla', 'Koněvova', 1/*Lze editovat*/);
+
+--#Datová schránka#
+Call tw_regSetOrAddKey('AP', 'banka', '*', 'datovaSchranka', 'f6qr5pb', 1/*Lze editovat*/);
+
+--#Komunikační kanál pro Datovou schránku#
+Call tw_regSetOrAddKey('EO', 'osoba', 'komkanal', 'datovaSchranka', 17, 1/*Lze editovat*/);
+
+--#Typ dokumentu pro návrh navýmaz zástavního práva do KN pro FO#
+CALL tw_regSetOrAddKey('DO', 'docmng', 'typ_dokumentu', 'navrhVymazPravaFO'
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na výmaz práva do KN FO'), 1/*Lze editovat*/
+);
+
+--#Typ dokumentu pro návrh navklad zástavního práva do KN pro FO#
+CALL tw_regSetOrAddKey('DO', 'docmng', 'typ_dokumentu', 'navrhVkladPravaFO'
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na vklad práva do KN FO'), 1/*Lze editovat*/
+);
+
+--#Typ dokumentu pro návrh navýmaz zástavního práva do KN pro PO#
+CALL tw_regSetOrAddKey('DO', 'docmng', 'typ_dokumentu', 'navrhVymazPravaPO'
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na výmaz práva do KN PO'), 1/*Lze editovat*/
+);
+
+--#Typ dokumentu pro návrh navklad zástavního práva do KN pro PO#
+CALL tw_regSetOrAddKey('DO', 'docmng', 'typ_dokumentu', 'navrhVkladPravaPO'
+, (select doktyp from Do_TypDokumentu_Cis where text = 'Dokument návrhu na vklad práva do KN PO'), 1/*Lze editovat*/
+);
+
+--#Násobek jistiny úvěru pro ENV#
+--@since RSTS-2935 (RN00437491)
+call tw_regSetOrAddKey('EN', 'WS', 'WSNV', 'nasobekJistiny', 1.5, 1/*Lze editovat*/);
+
+--#Časový limit pro obdržení odpovědi WSNV#
+--@since RSTS-2935 (RN00437491)
+call tw_regSetOrAddKey('EN', 'WS', 'WSNV', 'CasovyLimit', 30000, 1/*Lze editovat*/);
+
+--#Koncový bod pro připojení služby WSNV#
+--@since RSTS-2935 (RN00437491)
+call tw_regSetOrAddKey('EN', 'WS', 'WSNV', 'KoncovyBod', 'https://nv.cuzk.cz/ws_2.9/NavrhyNaVklad.svc', 1/*Lze editovat*/);
+
+--Pokud už tam registr je, tak mu shodíme příznak, aby nám následující příkaz nespadnul
+update TW_Registr_Cis set sifrovano = 0
+where oblast = 'EN' AND uloha = 'WS' AND funkce = 'WSNV' AND udaj = 'Heslo';
+
+--#Heslo pro WSNV#
+--@since RSTS-2935 (RN00437491)
+--Musí se nastavit pomocí MAIN
+call tw_regSetOrAddKey('EN', 'WS', 'WSNV', 'Heslo', '', 1/*Lze editovat*/);
+
+update TW_Registr_Cis set sifrovano = 1
+where oblast = 'EN' AND uloha = 'WS' AND funkce = 'WSNV' AND udaj = 'Heslo';
+
+
+--#Jméno pro WSNV#
+--@since RSTS-2935 (RN00437491)
+call tw_regSetOrAddKey('EN', 'WS', 'WSNV', 'Jmeno', '', 1/*Lze editovat*/);
+
+--#Začátek rozpětí PSČ pro Prahu#
+--@since RSTS-2935 (RN00437491)
+call tw_regSetOrAddKey('EN', 'WS', 'WSNV', 'PSCProPrahuOd', 10000, 1/*Lze editovat*/);
+
+--#Konec rozpětí PSČ pro Prahu#
+--@since RSTS-2935 (RN00437491)
+call tw_regSetOrAddKey('EN', 'WS', 'WSNV', 'PSCProPrahuDo', 19999, 1/*Lze editovat*/);
+
+ROLLBACK WORK;
+
+--End of B128075_RN00XXXXX_3

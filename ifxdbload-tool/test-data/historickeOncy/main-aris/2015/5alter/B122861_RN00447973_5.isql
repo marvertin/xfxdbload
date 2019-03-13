@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B122861_RN00447973_5
+-- @TC:ONCE: DESCRIPTION = CIBIS Main: rozsah položky makléře {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  ALTER TABLE ru_cerp_kart modify ozorg CHAR(16);
+  ALTER TABLE ru_expcerp_den modify ozorg CHAR(16);
+
+ROLLBACK WORK;
+
+--End of B122861_RN00447973_5

@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, A99979_RN00356698_1
+-- @TC:ONCE: DESCRIPTION = Zavedení blacklistů pro podporu řízení rizik {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eo_vztahos_mat ADD (
+  poznamka   VARCHAR(255)
+);
+
+ALTER TABLE eo_vztahos_arch ADD (
+  poznamka   VARCHAR(255)
+);
+
+RENAME COLUMN es_smlzmos_kart.vztah TO typnav;
+
+ALTER TABLE es_smlzmos_kart ADD (
+  vztah Char(2) BEFORE datplatnostod,
+  Datplatvztahod Date BEFORE datplatnostod,
+  Datplatvztahdo Date BEFORE datplatnostod,
+  predanitime   DATETIME YEAR TO SECOND,
+  predaniuser   CHAR(20) 
+); 
+
+ALTER TABLE es_smlzmos_kart ADD CONSTRAINT(
+  CHECK (typnav in ('KL','ZA','ZD','DP','DD')) CONSTRAINT es_smlzmos_kart_typnav
+); 
+
+ALTER TABLE es_smlzmos_kart ADD CONSTRAINT FOREIGN KEY(vztah) REFERENCES eo_vztahos_cis(typvztah) CONSTRAINT es_smlzmos_kart_f1;
+
+ROLLBACK WORK;
+
+--End of A99979_RN00356698_1

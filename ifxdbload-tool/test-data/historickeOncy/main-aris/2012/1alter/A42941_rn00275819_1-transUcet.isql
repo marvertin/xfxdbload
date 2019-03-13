@@ -1,0 +1,65 @@
+-- @TC:ONCE: ID = V2, A42941_rn00275819_1-transUcet
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE ep_zadtransucet (
+  ser   SERIAL NOT NULL,
+  zadsmlss   INTEGER NOT NULL,
+  priorita   Integer NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  konto   DECIMAL(16, 0) NOT NULL,
+  banka   DECIMAL(7, 0) NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_zadtransucet_pk ON ep_zadtransucet(ser);
+ALTER TABLE ep_zadtransucet ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_zadtransucet_pk;
+
+--FK
+CREATE INDEX ep_zadtransucet_i_f1 ON ep_zadtransucet(zadsmlss);
+ALTER TABLE ep_zadtransucet ADD CONSTRAINT FOREIGN KEY(zadsmlss) REFERENCES ep_zadsmlss(ser) CONSTRAINT ep_zadtransucet_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ep_zadtransucet
+ADD CONSTRAINT (CHECK (stav in ('A','Z')) CONSTRAINT ep_zadtransucet_c1);
+----------------------------------------------------------------
+
+CREATE TABLE bsavingrqtransucetreg (
+  id   SERIAL NOT NULL,
+  bsavingreg   INTEGER,
+  priorita   Integer NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  konto   DECIMAL(16, 0) NOT NULL,
+  banka   DECIMAL(7, 0) NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bsavingrqtransucetreg_pk ON bsavingrqtransucetreg(id);
+ALTER TABLE bsavingrqtransucetreg ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT bsavingrqtransucetreg_pk;
+
+--FK
+CREATE INDEX bsavingrqtransucetreg_i_fk1 ON bsavingrqtransucetreg(bsavingreg);
+ALTER TABLE bsavingrqtransucetreg ADD CONSTRAINT FOREIGN KEY(bsavingreg) REFERENCES bsavingrqreg(id) CONSTRAINT bsavingrqtransucetreg_fk1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE bsavingrqtransucetreg
+ADD CONSTRAINT (CHECK (stav in ('A','Z')) CONSTRAINT bsavingrqtransucetreg_c1);
+
+ROLLBACK WORK;
+
+
+--End of A42941_rn00275819_1-transUcet

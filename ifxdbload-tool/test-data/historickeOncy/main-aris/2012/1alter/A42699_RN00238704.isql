@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A42699_RN00238704
+-- @TC:ONCE: DESCRIPTION = Zmìny v CBS a skóringu. (Optimalizace migrace, fáze jedna)
+
+BEGIN WORK;
+
+CREATE INDEX eu_sml_arch_a3 ON eu_sml_arch(smlspor, tsmlspor);
+
+ROLLBACK WORK;

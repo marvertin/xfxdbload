@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136198_UID83014_4
+-- @TC:ONCE: DESCRIPTION = RSTS-27230: Upravit zadávání a zobrazení USD v Central {STORY}
+
+
+BEGIN WORK;
+
+UPDATE eu_sml_mat SET refzpusobdorucusd = 1, typadresyusd = 'T' WHERE zpusobpodpisuusd = 'ZASPOST' AND STAV IN ('D', 'L');
+
+ROLLBACK WORK;
+
+--End of B136198_UID83014_4

@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B133686_UID58672_1
+-- @TC:ONCE: DESCRIPTION = Rozhodovací nástroj pro výběr produktu
+
+BEGIN WORK;
+
+ALTER TABLE eu_vazbarozhod_cis 
+  ADD terminalnivazba  Integer DEFAULT 0 NOT NULL BEFORE poznamka  ;
+  
+ALTER TABLE eu_vazbarozhod_cis
+    ADD CONSTRAINT CHECK (terminalnivazba IN (0,1)) CONSTRAINT eu_vazbarozhod_cis_d3aq;  
+
+ALTER TABLE eu_vazbarozhod_acis  
+  ADD terminalnivazba  Integer BEFORE poznamka  ;
+  
+ALTER TABLE eu_vazbarozhod_acis
+    ADD CONSTRAINT CHECK (terminalnivazba IN (0,1)) CONSTRAINT eu_vazbarozhod_acis_d3ar;  
+
+ROLLBACK WORK;
+
+--End of B133686_UID58672_1

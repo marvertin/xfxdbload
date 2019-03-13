@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B127103_RN00457294_1
+-- @TC:ONCE: DESCRIPTION = dokončení RN00457271 {DEFECT}
+
+BEGIN WORK;
+
+/*
+alter table EU_ExpUmorTabB_Den
+  MODIFY (ser BIGSERIAL(2147484000))
+; 
+*/
+ALTER TABLE EU_ExpUmorTabB_Den MODIFY ser BIGSERIAL
+; 
+INSERT INTO EU_ExpUmorTabB_Den (ser, headser, id_index) 
+  SELECT 2147484000, MIN(headser), 1 FROM ep_splspormodh_den
+; 
+DELETE FROM EU_ExpUmorTabB_Den WHERE ser = 2147484000 
+;
+  
+ROLLBACK WORK;
+
+--End of B127103_RN00457294_1

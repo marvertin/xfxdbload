@@ -1,0 +1,173 @@
+-----------------------------------------------------------------------------
+--
+--  Template migracni procedury pro featuru RN00338666
+--
+-----------------------------------------------------------------------------
+create PROCEDURE A61621_RN00338666_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+define _smlouva           Dec(16,0);
+define _tsml              Char(4);
+define _vec               INT;     
+define _rozhdatumpoj      Date;   
+define _zpusobzadani      Char(1);                  
+define _ramsmlpoj         Char(20);
+define _prvnipojist       INT;
+define _pojistpolhute     INT;
+define _prepojistpolhute  INT;
+define _pojposjednani     INT;      
+
+define _stavsml           Char(1);
+define _stavzaj           Char(1);
+define _poradi            INT;
+define _davkav            INT;
+define _stav              Char(1);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00338666', 'RN00338666', 'Migrace: Zmìna dávky UNIQA - nové vlastnosti pro urèení provizí');
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, smlouva, tsml, vec, rozhdatumpoj,
+          ramsmlpoj, prvnipojist, pojistpolhute, prepojistpolhute, pojposjednani
+   INTO  _ser,_smlouva,_tsml,_vec,_rozhdatumpoj,
+         _ramsmlpoj,_prvnipojist,_pojistpolhute,_prepojistpolhute,_pojposjednani
+   FROM RN00338666
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00338666
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    IF _prvnipojist NOT IN (0,1) THEN
+      call TW_RaiseError ('616O60TCUI', 'RN00338666_make:', 'Údaj Prvnipojist musí být 0/1.');
+    END IF;
+    
+    IF _pojistpolhute  NOT IN (0,1) THEN
+      call TW_RaiseError ('616P61TCUI', 'RN00338666_make:', 'Údaj Pojistpolhute musí být 0/1.');
+    END IF;
+    
+    IF _prepojistpolhute  NOT IN (0,1) THEN
+      call TW_RaiseError ('616Q62TCUI', 'RN00338666_make:', 'Údaj Prepojistpolhute musí být 0/1.');
+    END IF;
+    
+    IF _pojposjednani  NOT IN (0,1) THEN
+      call TW_RaiseError ('616R63TCUI', 'RN00338666_make:', 'Údaj Pojposjednani musí být 0/1.');
+    END IF;
+    
+    
+    --Evidence pojištìní Uniqa – Všechny položky – 
+    --migrace  provádìna pro smlouvy ve stavech: A,B,C,D,L a pro zajištìní ve stavech A,B,C
+    SELECT stav INTO _stavsml FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _tsml;
+    SELECT stav INTO _stavzaj FROM EU_Zajist_Mat WHERE smlouva = _smlouva AND tsml = _tsml AND vec = _vec;
+    IF _stavsml in ('A','B','C','D','L','V') AND _stavzaj in ('A','B','C') THEN
+      UPDATE EV_PojistCRP_Mat SET 
+          ( ramsmlpoj, prvnipojist, pojistpolhute, prepojistpolhute, pojposjednani)
+            =
+          (_ramsmlpoj,_prvnipojist,_pojistpolhute,_prepojistpolhute,_pojposjednani)  
+       WHERE vec = _vec;
+      let _serObjekt = TW_DM_VlozObjekt(_serDM, 'T', 'EV_PojistCRP_Mat', 'U', _vec);
+    END IF;   
+    
+    --Kartotéka zmìn fází pojištìní – k záznamùm, které ještì nebyly zaøazeny do výstupní dávky, všechny položky
+    -- k záznamùm, které byly zaøazeny do výstupní dávky, migrace položky Pojištìní po sjednání úvìru,
+    -- pokud zpùsob zadání nastaven na Nové nebo Dopojištìní  
+       
+    UPDATE EC_KomCRP_Kart  SET 
+        ( ramsmlpoj, prvnipojist, pojistpolhute, prepojistpolhute, pojposjednani)
+          =
+        (_ramsmlpoj,_prvnipojist,_pojistpolhute,_prepojistpolhute,_pojposjednani)  
+     WHERE vec = _vec AND stav IN ('A','B');
+
+    UPDATE EC_KomCRP_Kart  SET 
+        (  pojposjednani) = (_pojposjednani)  
+     WHERE vec = _vec AND stav IN ('C','D') AND zpusobzadani in ('N','D');
+
+    foreach ck with hold for
+       SELECT poradi, stav INTO _poradi, _stav 
+         FROM EC_KomCRP_Kart 
+        WHERE vec = _vec AND ( (stav in  ('A','B') )  OR (stav IN ('C','D') AND zpusobzadani in ('N','D') ) )
+        let _serObjekt = TW_DM_VlozObjekt(_serDM, 'T', 'EC_KomCRP_Kart', 'U', _vec, _poradi, _stav);
+    end foreach;    
+
+    --bohuzel neni vazba na vec, takze jdeme podle rozhodneho data 
+    UPDATE EC_VystDav_Rozp  SET 
+        (  pojposjednani) = (_pojposjednani)  
+     WHERE smlouva = _smlouva AND tsml = _tsml AND
+           rozhdatumpoj = _rozhdatumpoj AND zpusobzadani in ('N','D');
+           
+    foreach cv with hold for
+       SELECT davka, poradi INTO _davkav, _poradi 
+         FROM EC_VystDav_Rozp 
+        WHERE smlouva = _smlouva AND tsml = _tsml 
+          AND rozhdatumpoj = _rozhdatumpoj  AND zpusobzadani in ('N','D')
+        let _serObjekt = TW_DM_VlozObjekt(_serDM, 'T', 'EC_VystDav_Rozp', 'U', _davkav, _poradi);
+    end foreach;    
+
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00338666 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--algoritmus dokonceni migrace
+--...
+
+
+--zápis o ukonèení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

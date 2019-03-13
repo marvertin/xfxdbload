@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B113623_RN00375550_5-danucet
+-- @TC:ONCE: DESCRIPTION = Danění úroků vybraných PO {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ax_sazba_cis DROP CONSTRAINT ax_sazba_cis_u1;
+
+DROP INDEX ax_sazba_cis_u1;
+
+ALTER TABLE ax_dantyp_cis
+    DROP druhoper,
+    DROP danucet;
+
+ROLLBACK WORK;
+
+--End of B113623_RN00375550_5-danucet

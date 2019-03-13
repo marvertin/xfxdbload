@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A99976_RN00375571_1
+-- @TC:ONCE: DESCRIPTION = Vyřazení constraintu ep_rizsubjektkontr_den_f3 {DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE ep_rizsubjektkontr_den DROP CONSTRAINT ep_rizsubjektkontr_den_f2;
+ALTER TABLE ep_rizsubjektkontr_den DROP CONSTRAINT ep_rizsubjektkontr_den_f3;
+
+ROLLBACK WORK;
+
+--End of A99976_RN00375571_1

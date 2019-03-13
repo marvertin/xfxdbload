@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A46334_RN00302991_1
+-- @TC:ONCE: DESCRIPTION = Provozní konto - vyvedení  (provedení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  ALTER TABLE vy_vyplkon_arch MODIFY  roksp  DATETIME YEAR TO YEAR;
+
+ROLLBACK WORK;
+
+--End of A46334_RN00302991_1

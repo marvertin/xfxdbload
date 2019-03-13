@@ -1,0 +1,76 @@
+-- @TC:ONCE: ID = V2, B131863_36779-RU_OPIFRS9Uct_Cis_1
+-- @TC:ONCE: DESCRIPTION = IMPL: číselníky OP, parametrizace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE ru_opifrs9uct_cis (
+  serno   SERIAL NOT NULL,
+  stadiumifrs   Integer NOT NULL,
+  typdluhu   Integer NOT NULL,
+  retail   Integer NOT NULL,
+  promlcpohl   Integer NOT NULL,
+  ucetop   CHAR(9),
+  naklucetop   CHAR(9),
+  vynucetrozpop   CHAR(9),
+  vynucetpouzop   CHAR(9),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_opifrs9uct_cis_pk ON ru_opifrs9uct_cis(serno);
+ALTER TABLE ru_opifrs9uct_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_opifrs9uct_cis_pk;
+
+--FK
+CREATE INDEX ru_opifrs9uct_cis_i_f1 ON ru_opifrs9uct_cis(ucetop);
+ALTER TABLE ru_opifrs9uct_cis ADD CONSTRAINT FOREIGN KEY(ucetop) REFERENCES ac_ucet_mat(ucet) CONSTRAINT ru_opifrs9uct_cis_f1;
+CREATE INDEX ru_opifrs9uct_cis_i_f2 ON ru_opifrs9uct_cis(naklucetop);
+ALTER TABLE ru_opifrs9uct_cis ADD CONSTRAINT FOREIGN KEY(naklucetop) REFERENCES ac_ucet_mat(ucet) CONSTRAINT ru_opifrs9uct_cis_f2;
+CREATE INDEX ru_opifrs9uct_cis_i_f3 ON ru_opifrs9uct_cis(vynucetrozpop);
+ALTER TABLE ru_opifrs9uct_cis ADD CONSTRAINT FOREIGN KEY(vynucetrozpop) REFERENCES ac_ucet_mat(ucet) CONSTRAINT ru_opifrs9uct_cis_f3;
+CREATE INDEX ru_opifrs9uct_cis_i_f4 ON ru_opifrs9uct_cis(vynucetpouzop);
+ALTER TABLE ru_opifrs9uct_cis ADD CONSTRAINT FOREIGN KEY(vynucetpouzop) REFERENCES ac_ucet_mat(ucet) CONSTRAINT ru_opifrs9uct_cis_f4;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE ru_opifrs9uct_cis
+ADD CONSTRAINT (CHECK (stadiumifrs IN(1, 2, 3)) CONSTRAINT ru_opifrs9uct_cis_c1),
+ADD CONSTRAINT (CHECK (retail IN(0, 1)) CONSTRAINT ru_opifrs9uct_cis_c3),
+ADD CONSTRAINT (CHECK (promlcpohl IN(0, 1)) CONSTRAINT ru_opifrs9uct_cis_c4);
+
+
+----------------------------------------------------------------
+CREATE TABLE ru_opifrs9uct_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  stadiumifrs   Integer NOT NULL,
+  typdluhu   Integer NOT NULL,
+  retail   Integer NOT NULL,
+  promlcpohl   Integer NOT NULL,
+  ucetop   CHAR(9),
+  naklucetop   CHAR(9),
+  vynucetrozpop   CHAR(9),
+  vynucetpouzop   CHAR(9),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_opifrs9uct_acis_pk ON ru_opifrs9uct_acis(idarch);
+ALTER TABLE ru_opifrs9uct_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ru_opifrs9uct_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ROLLBACK WORK;
+
+--End of B131863_36779-RU_OPIFRS9Uct_Cis_1

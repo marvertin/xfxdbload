@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A65601_RN00358766_5
+-- @TC:ONCE: DESCRIPTION = Variabilní úhrady: Opravit test na koexistenci více šablon (zohlednit platnost) {DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE aris.ep_uhrdefpar_cis
+  DROP CONSTRAINT ( ep_uhrdefpar_cis_u1 ) ;
+
+DROP INDEX aris.ep_uhrdefpar_cis_u1;
+
+CREATE INDEX aris.ep_uhrdefpar_cis_14
+  ON aris.ep_uhrdefpar_cis(datod, charakter, tuhr, tsml);
+
+
+ROLLBACK WORK;
+
+--End of A65601_RN00358766_5

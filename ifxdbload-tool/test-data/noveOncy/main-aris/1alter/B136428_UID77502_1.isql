@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136428_UID77502_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ru_oppodklzauct_kart
+  MODIFY  urg char(20);
+
+RENAME COLUMN ru_oppodklzauct_kart.urg TO rating;
+
+ROLLBACK WORK;
+
+--End of B136428_UID77502_1

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B120597_RN00430430_3
+-- @TC:ONCE: DESCRIPTION = [sv] Doplnění customizace:RN00429528 Zisková přirážka {ACTIVITY}
+
+
+BEGIN WORK;
+
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(10, 'VL016');
+
+ROLLBACK WORK;
+
+--End of B120597_RN00430430_3

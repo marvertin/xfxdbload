@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, B120854_RN00426313_1
+-- @TC:ONCE: DESCRIPTION = Anonymizace II (dokončení RN00421311) {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE seo_inpselection ( 
+    id              SERIAL NOT NULL,
+    personid        BIGINT NOT NULL,
+    bic             CHAR(16),
+    personidentnum  CHAR(13),
+    personidenttype CHAR(1),
+    firstname       CHAR(24),    
+    surname         CHAR(35),
+    requesttype     CHAR(1),
+    requestnumber   BIGINT,
+    requeststate    CHAR(1),
+    processed       SMALLINT DEFAULT 0,
+    sqlcodenum      INTEGER,
+    isamcode        INTEGER,
+    errtext         VARCHAR(255),
+    reftime         DATETIME YEAR to SECOND DEFAULT CURRENT YEAR to SECOND NOT NULL,
+    refuser         CHAR(20) DEFAULT USER NOT NULL 
+); 
+
+
+ALTER TABLE seo_inpselection
+    ADD CONSTRAINT ( CHECK (processed IN (0 ,1 ,2 ,3 )) CONSTRAINT seo_inpselection_c_c2 );
+
+CREATE UNIQUE INDEX seo_inpselection_i_p ON seo_inpselection(id);
+
+CREATE INDEX seo_inpselection_i_i1 ON seo_inpselection(personid);
+    
+ALTER TABLE seo_inpselection ADD CONSTRAINT PRIMARY KEY (id)  CONSTRAINT seo_inpselection_pk;
+
+ALTER TABLE eo_inpselection ADD personidenttype char(1)  before firstname;
+
+ALTER TABLE seo_osoba_mat ADD anonymization integer default 0;
+ALTER TABLE seo_osoba_arch ADD anonymization integer default 0;
+
+ROLLBACK WORK;
+
+--End of B12854_RN00426313_1

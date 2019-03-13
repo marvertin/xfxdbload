@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A61410_RN00335314_1-01_zmeny-v-modelovani-global-parametry
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- viz RN00335314 "Solution Description Kap8 Modelování.doc"
+-- ø. 197-200 jsou v CR v "Request Capacities Calculation Form.xml"
+
+ALTER TABLE pro_globalbaseparameters DROP Xsimulatefeebyaccountdays;
+
+DROP TABLE pro_settlementfeesavcontr;
+
+ALTER TABLE pro_tariff DROP xannualstatementfee; 
+ALTER TABLE pro_tariff DROP xannualstatementfeebridgeloan;
+ALTER TABLE pro_tariff DROP xannualstatementfeecredit;
+ALTER TABLE pro_tariff DROP xssfoaccountmaintenancefee;
+ALTER TABLE pro_tariff DROP xsspoaccountmaintenancefee;
+ALTER TABLE pro_tariff DROP xbridgeloanaccountmaintfee;
+ALTER TABLE pro_tariff DROP xcreditaccountmaintenancefee;
+ALTER TABLE pro_tariff DROP xssfoaccountmaintenanceperiod;
+ALTER TABLE pro_tariff DROP xsspoaccountmaintenanceperiod;
+ALTER TABLE pro_tariff DROP xbridgeloanaccountmaintperiod;
+ALTER TABLE pro_tariff DROP xcreditaccountmaintperiod;
+
+ROLLBACK WORK;
+
+--End of A61410_RN00335314_1-01_zmeny-v-modelovani-global-parametry

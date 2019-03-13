@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, A56434_RN00317080_3
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE EU_KontrolaTyp_Cis SET poradi = 4 WHERE typ = 'SOL';
+UPDATE EU_KontrolaTyp_Cis SET poradi = 5, nazev = 'CB skóre' WHERE typ = 'CBSC';
+UPDATE EU_KontrolaTyp_Cis SET poradi = 5, nazev = 'KO kritéria' WHERE typ = 'KO';
+
+UPDATE TW_SMSTyp_Cis SET popis = 'Informace o negativním výsledku všech kontrol pro OZ' WHERE zkratka = 'NEGATIVNI_VSE_Z_OZ';
+
+UPDATE TW_Registr_Cis SET funkce = 'notifikace' WHERE oblast = 'EU' AND uloha IN ('creditrq', 'creditrq-zaklad') AND funkce = 'nofitikace';
+
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-negSolusOZ', 'NEGATIVNI_SOLUS_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-negCBCBOZ', 'NEGATIVNI_CBCB_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-vseNegOZ', 'NEGATIVNI_VSE_Z_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-OK-Z-OZ', 'OK_Z_VARIANTA_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-OK-Z-client', 'OK_Z_VARIANTA_KLIENT');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-OK-P-OZ', 'OK_P_VARIANTA_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'SMS-OK-P-client', 'OK_P_VARIANTA_KLIENT');
+
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'e-mail-negSolusOZ', 'NEGATIVNI_SOLUS_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'e-mail-negCBCBOZ', 'NEGATIVNI_CBCB_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'e-mail-vseNegOZ', 'NEGATIVNI_VSE_Z_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'e-mail-OK-Z-OZ', 'OK_Z_VARIANTA_OZ');
+call TW_RegSetKey('EU', 'creditrq-zaklad', 'notifikace', 'e-mail-OK-P-OZ', 'OK_P_VARIANTA_OZ');
+
+ROLLBACK WORK;
+
+--End of A56434_RN00317080_3

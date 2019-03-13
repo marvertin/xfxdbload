@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, A55568_RN00317080_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_contractchecking_kart 
+  MODIFY sc2note   VARCHAR(255),
+  MODIFY ur2note   VARCHAR(255),
+  MODIFY cb2note   VARCHAR(255),
+  MODIFY telephonenote   VARCHAR(255),
+  MODIFY incomenote   VARCHAR(255),
+  MODIFY firmnote   VARCHAR(255),
+  MODIFY documentnote   VARCHAR(255),
+  MODIFY propertynote   VARCHAR(255),
+  MODIFY rdnote   VARCHAR(255),
+  MODIFY indivappnote   VARCHAR(255),
+  MODIFY subdebtorlegalnote   VARCHAR(255),
+  MODIFY sl2note   VARCHAR(255),
+  MODIFY bonita2note   VARCHAR(255);
+
+ALTER TABLE eu_contractchecking_den 
+  MODIFY sc2note   VARCHAR(255),
+  MODIFY ur2note   VARCHAR(255),
+  MODIFY cb2note   VARCHAR(255),
+  MODIFY telephonenote   VARCHAR(255),
+  MODIFY incomenote   VARCHAR(255),
+  MODIFY firmnote   VARCHAR(255),
+  MODIFY documentnote   VARCHAR(255),
+  MODIFY propertynote   VARCHAR(255),
+  MODIFY rdnote   VARCHAR(255),
+  MODIFY indivappnote   VARCHAR(255),
+  MODIFY sl2note   VARCHAR(255),
+  MODIFY bonita2note   VARCHAR(255);
+
+ROLLBACK WORK;
+
+--End of A55568_RN00317080_1

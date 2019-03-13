@@ -1,0 +1,63 @@
+-- @TC:ONCE: ID = V2, B135831_UID78756_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24997: Zavést číselník "Druh dokladu pro ÚŽ" {STORY}
+
+BEGIN WORK;
+
+CREATE TABLE eo_druhprukazuz_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  nazev   char(60) NOT NULL,
+  refstat   CHAR(2) NOT NULL,
+  refdruhpobytinterni   INTEGER NOT NULL,
+  refdruhprukazprim   INTEGER NOT NULL,
+  refdruhprukazdruhy   INTEGER,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_druhprukazuz_acis_d6bg
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_druhprukazuz_acis_pk ON eo_druhprukazuz_acis(idarch);
+ALTER TABLE eo_druhprukazuz_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_druhprukazuz_acis_pk;
+
+
+CREATE TABLE eo_druhprukazuz_cis (
+  id   SERIAL NOT NULL,
+  nazev   char(60) NOT NULL,
+  refstat   CHAR(2) NOT NULL,
+  refdruhpobytinterni   INTEGER NOT NULL,
+  refdruhprukazprim   INTEGER NOT NULL,
+  refdruhprukazdruhy   INTEGER,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_druhprukazuz_cis_d6bg
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_druhprukazuz_cis_pk ON eo_druhprukazuz_cis(id);
+ALTER TABLE eo_druhprukazuz_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_druhprukazuz_cis_pk;
+
+--FK
+CREATE INDEX eo_druhprukazuz_cis_i_f1 ON eo_druhprukazuz_cis(refstat);
+ALTER TABLE eo_druhprukazuz_cis ADD CONSTRAINT FOREIGN KEY(refstat) REFERENCES eo_stat_cis(statprisl) CONSTRAINT eo_druhprukazuz_cis_f1;
+
+CREATE INDEX eo_druhprukazuz_cis_i_f2 ON eo_druhprukazuz_cis(refdruhpobytinterni);
+ALTER TABLE eo_druhprukazuz_cis ADD CONSTRAINT FOREIGN KEY(refdruhpobytinterni) REFERENCES eo_druhpobytinterni_cis(id) CONSTRAINT eo_druhprukazuz_cis_f2;
+
+CREATE INDEX eo_druhprukazuz_cis_i_f3 ON eo_druhprukazuz_cis(refdruhprukazprim);
+ALTER TABLE eo_druhprukazuz_cis ADD CONSTRAINT FOREIGN KEY(refdruhprukazprim) REFERENCES eo_druhprukaz_cis(druhprukaz) CONSTRAINT eo_druhprukazuz_cis_f3;
+
+CREATE INDEX eo_druhprukazuz_cis_i_f4 ON eo_druhprukazuz_cis(refdruhprukazdruhy);
+ALTER TABLE eo_druhprukazuz_cis ADD CONSTRAINT FOREIGN KEY(refdruhprukazdruhy) REFERENCES eo_druhprukaz_cis(druhprukaz) CONSTRAINT eo_druhprukazuz_cis_f4;
+
+ROLLBACK WORK;
+
+--End of B135831_UID78756_1

@@ -1,0 +1,13 @@
+ -- @TC:ONCE: ID = V2, A42766_RN00270144
+-- @TC:ONCE: DESCRIPTION = Pridat sloupcu pro export
+BEGIN WORK;
+
+ALTER TABLE ES_ExpSml_Den
+   ADD IndexBazeZvyhUr int,
+   ADD sazbaZvyhUr decimal(5,2) ,
+   ADD periodaZvyhUr decimal(5,2),
+   ADD UrokBazeZvyhUr char(1);
+
+
+    
+ROLLBACK WORK;

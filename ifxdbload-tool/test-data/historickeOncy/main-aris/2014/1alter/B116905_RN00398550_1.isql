@@ -1,0 +1,80 @@
+-- @TC:ONCE: ID = V2, B116905_RN00398550_1
+-- @TC:ONCE: DESCRIPTION = Main: export podkladov - problemy opisovanych formularov (nadrizeny OZ) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table es_pozpodklad_mat
+  add  extoz_titul1             CHAR(10) BEFORE ozter_cislo,
+  add  extoz_jmeno              CHAR(24) BEFORE ozter_cislo,
+  add  extoz_prijmeni           CHAR(35) BEFORE ozter_cislo,
+  add  extoz_titul2             CHAR(10) BEFORE ozter_cislo,
+  add  extoz_adr1               CHAR(45) BEFORE ozter_cislo,
+  add  extoz_adr2               CHAR(45) BEFORE ozter_cislo,
+  add  extoz_psc                CHAR(5)  BEFORE ozter_cislo,
+  add  extoz_adr3               CHAR(45) BEFORE ozter_cislo,
+  add  extoz_email              CHAR(40) BEFORE ozter_cislo,
+  add  extoz_telefon            CHAR(40) BEFORE ozter_cislo,
+  
+  add  teroz_cislo              Dec(16,0) BEFORE ozorg_cislo,
+  add  teroz_titul1             CHAR(10)  BEFORE ozorg_cislo,
+  add  teroz_jmeno              CHAR(24)  BEFORE ozorg_cislo,
+  add  teroz_prijmeni           CHAR(35)  BEFORE ozorg_cislo,
+  add  teroz_titul2             CHAR(10)  BEFORE ozorg_cislo,
+  add  teroz_adr1               CHAR(45)  BEFORE ozorg_cislo,
+  add  teroz_adr2               CHAR(45)  BEFORE ozorg_cislo,
+  add  teroz_psc                CHAR(5)   BEFORE ozorg_cislo,
+  add  teroz_adr3               CHAR(45)  BEFORE ozorg_cislo,
+  add  teroz_email              CHAR(40)  BEFORE ozorg_cislo,
+  add  teroz_telefon            CHAR(40)  BEFORE ozorg_cislo,
+  
+  add  terozhigh_cislo              Dec(16,0) BEFORE poz_smlouva,
+  add  terozhigh_titul1             CHAR(10)  BEFORE poz_smlouva,
+  add  terozhigh_jmeno              CHAR(24)  BEFORE poz_smlouva,
+  add  terozhigh_prijmeni           CHAR(35)  BEFORE poz_smlouva,
+  add  terozhigh_titul2             CHAR(10)  BEFORE poz_smlouva,
+  add  terozhigh_adr1               CHAR(45)  BEFORE poz_smlouva,
+  add  terozhigh_adr2               CHAR(45)  BEFORE poz_smlouva,
+  add  terozhigh_psc                CHAR(5)   BEFORE poz_smlouva,
+  add  terozhigh_adr3               CHAR(45)  BEFORE poz_smlouva,
+  add  terozhigh_email              CHAR(40)  BEFORE poz_smlouva,
+  add  terozhigh_telefon            CHAR(40)  BEFORE poz_smlouva;
+
+alter table es_pozpodklad_arch
+  add  extoz_titul1             CHAR(10) BEFORE ozter_cislo,
+  add  extoz_jmeno              CHAR(24) BEFORE ozter_cislo,
+  add  extoz_prijmeni           CHAR(35) BEFORE ozter_cislo,
+  add  extoz_titul2             CHAR(10) BEFORE ozter_cislo,
+  add  extoz_adr1               CHAR(45) BEFORE ozter_cislo,
+  add  extoz_adr2               CHAR(45) BEFORE ozter_cislo,
+  add  extoz_psc                CHAR(5)  BEFORE ozter_cislo,
+  add  extoz_adr3               CHAR(45) BEFORE ozter_cislo,
+  add  extoz_email              CHAR(40) BEFORE ozter_cislo,
+  add  extoz_telefon            CHAR(40) BEFORE ozter_cislo,
+  
+  add  teroz_cislo              Dec(16,0) BEFORE ozorg_cislo,
+  add  teroz_titul1             CHAR(10)  BEFORE ozorg_cislo,
+  add  teroz_jmeno              CHAR(24)  BEFORE ozorg_cislo,
+  add  teroz_prijmeni           CHAR(35)  BEFORE ozorg_cislo,
+  add  teroz_titul2             CHAR(10)  BEFORE ozorg_cislo,
+  add  teroz_adr1               CHAR(45)  BEFORE ozorg_cislo,
+  add  teroz_adr2               CHAR(45)  BEFORE ozorg_cislo,
+  add  teroz_psc                CHAR(5)   BEFORE ozorg_cislo,
+  add  teroz_adr3               CHAR(45)  BEFORE ozorg_cislo,
+  add  teroz_email              CHAR(40)  BEFORE ozorg_cislo,
+  add  teroz_telefon            CHAR(40)  BEFORE ozorg_cislo,
+  
+  add  terozhigh_cislo              Dec(16,0) BEFORE poz_smlouva,
+  add  terozhigh_titul1             CHAR(10)  BEFORE poz_smlouva,
+  add  terozhigh_jmeno              CHAR(24)  BEFORE poz_smlouva,
+  add  terozhigh_prijmeni           CHAR(35)  BEFORE poz_smlouva,
+  add  terozhigh_titul2             CHAR(10)  BEFORE poz_smlouva,
+  add  terozhigh_adr1               CHAR(45)  BEFORE poz_smlouva,
+  add  terozhigh_adr2               CHAR(45)  BEFORE poz_smlouva,
+  add  terozhigh_psc                CHAR(5)   BEFORE poz_smlouva,
+  add  terozhigh_adr3               CHAR(45)  BEFORE poz_smlouva,
+  add  terozhigh_email              CHAR(40)  BEFORE poz_smlouva,
+  add  terozhigh_telefon            CHAR(40)  BEFORE poz_smlouva;
+  
+ROLLBACK WORK;
+
+--End of B116905_RN00398550_1

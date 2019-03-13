@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B125398_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE ep_expsplspormodhdilc_den (
+  ser   SERIAL NOT NULL,
+  id_index   Integer NOT NULL,
+  headser   INTEGER,
+  rpsnpu   DECIMAL(6, 2),
+  rpsnsu   DECIMAL(6, 2),
+  celknaklpudlecf   DECIMAL(16, 2),
+  celknaklsudlecf   DECIMAL(16, 2),
+  celkzaplpudlecf   DECIMAL(16, 2),
+  celkzaplsudlecf   DECIMAL(16, 2),
+  celkvysepuesip   DECIMAL(16, 2),
+  celkvysesuesip   DECIMAL(16, 2),
+  sumanakluvermimopudlecf   DECIMAL(16, 2),
+  sumanakluvermimosudlecf   DECIMAL(16, 2)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_expsplspormodhdilc_den_pk ON ep_expsplspormodhdilc_den(ser);
+ALTER TABLE ep_expsplspormodhdilc_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_expsplspormodhdilc_den_pk;
+
+ROLLBACK WORK;
+
+--End of B125398_RN00443393_1

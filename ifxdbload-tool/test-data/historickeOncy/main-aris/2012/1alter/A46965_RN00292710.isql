@@ -1,0 +1,137 @@
+-- @TC:ONCE: ID = V2, A46965_RN00292710
+-- @TC:ONCE: DESCRIPTION = Rozšíøit evidenci osob o položku oslovování pøíjmení
+
+BEGIN WORK;
+
+ALTER TABLE ES_ExpSml_Den
+    ADD   oosloveni  CHAR(35) before okonto
+    , ADD otitul1    Char(10) before okonto
+    , ADD otitul2    Char(10) before okonto
+    , ADD ojmeno     Char(24) before okonto
+    , ADD oprijmeni  Char(35) before okonto 
+    , ADD rosloveni  CHAR(35) before rkonto
+    , ADD rtitul1    Char(10) before rkonto
+    , ADD rtitul2    Char(10) before rkonto
+    , ADD rjmeno     Char(24) before rkonto
+    , ADD rprijmeni  Char(35) before rkonto;
+    
+ALTER TABLE EO_ExpRole_Den
+    ADD   osloveni  CHAR(35) before konto
+    , ADD titul1    Char(10) before konto
+    , ADD titul2    Char(10) before konto
+    , ADD jmeno     Char(24) before konto
+    , ADD prijmeni  Char(35) before konto 
+    , ADD rosloveni  CHAR(35) before rkonto
+    , ADD rtitul1    Char(10) before rkonto
+    , ADD rtitul2    Char(10) before rkonto
+    , ADD rjmeno     Char(24) before rkonto
+    , ADD rprijmeni  Char(35) before rkonto;
+  
+ALTER TABLE rz_expZaVy_den
+    add pohlavi        int
+    , ADD   osloveni  CHAR(35)
+    , ADD titul1      Char(10)
+    , ADD titul2      Char(10)
+    , ADD jmeno       Char(24)
+    , ADD prijmeni    Char(35);   
+
+ALTER TABLE EU_ExpUmorTabH_Den
+    add pohlavi        int      before ozjmeno
+    , ADD   osloveni  CHAR(35)  before ozjmeno
+    , ADD titul1      Char(10)  before ozjmeno
+    , ADD titul2      Char(10) before ozjmeno;  
+
+ALTER TABLE EU_ExpSml_Den
+    ADD   oosloveni  CHAR(35) before okonto
+    , ADD otitul1    Char(10) before okonto
+    , ADD otitul2    Char(10) before okonto
+    , ADD rosloveni  CHAR(35) before rkonto
+    , ADD rtitul1    Char(10) before rkonto
+    , ADD rtitul2    Char(10) before rkonto;
+
+ALTER TABLE EU_ExpSml_Den
+    ADD rjmeno     Char(24) before rkonto
+    , ADD rprijmeni  Char(35) before rkonto
+    , ADD rpohlavi  INT before rkonto;
+
+
+ALTER TABLE EU_ExpPlSplH_Den
+    ADD   pohlavi  INT       before rnazev 
+    , ADD osloveni  CHAR(35) before rnazev
+    , ADD titul1    Char(10) before rnazev
+    , ADD titul2    Char(10) before rnazev
+    , ADD rpohlavi  INT       before vyse
+    , ADD rosloveni  CHAR(35) before vyse
+    , ADD rtitul1    Char(10) before vyse
+    , ADD rtitul2    Char(10) before vyse
+    , ADD rjmeno     Char(24) before vyse
+    , ADD rprijmeni  Char(35) before vyse;
+
+ALTER TABLE EV_ExpVzOsVec_Den
+    ADD osloveni  CHAR(35) before konto
+    , ADD titul1    Char(10) before konto
+    , ADD titul2    Char(10) before konto;
+    
+ALTER TABLE EO_ExpPartner_Den
+    ADD vokativ     CHAR(35) before konto
+    , ADD titul1    Char(10) before konto
+    , ADD titul2    Char(10) before konto;    
+
+ALTER TABLE EU_SnimekVymPohl_Den
+     ADD pohlavi  INT       before datzanikkl
+    , ADD osloveni  CHAR(35) before datzanikkl
+    , ADD titul1    Char(10) before datzanikkl
+    , ADD titul2    Char(10) before datzanikkl
+    , ADD jmeno     Char(24) before datzanikkl
+    , ADD prijmeni  Char(35) before datzanikkl;  
+
+ALTER TABLE EU_ExpHromVklad_Den
+    ADD osloveni     CHAR(35)
+    , ADD titul1    Char(10)
+    , ADD titul2    Char(10); 
+
+ALTER TABLE UP_Head_Den
+    ADD vokativ     CHAR(35) 
+    , ADD titul1    Char(10) 
+    , ADD titul2    Char(10) 
+    , ADD jmenoosl    Char(24) 
+    , ADD prijmeniosl Char(35) ; 
+
+
+ALTER TABLE UP_Roles_Den
+    add   pohlavi     int
+    , ADD vokativ     CHAR(35)
+    , ADD titul1    Char(10)
+    , ADD titul2    Char(10)
+    , ADD jmenoosl    Char(24)
+    , ADD prijmeniosl Char(35); 
+
+ALTER TABLE RU_ExpSplat_Den
+    ADD   oosloveni  CHAR(35) before okonto
+    , ADD otitul1    Char(10) before okonto
+    , ADD otitul2    Char(10) before okonto
+    , ADD rosloveni  CHAR(35) before rkonto
+    , ADD rtitul1    Char(10) before rkonto
+    , ADD rtitul2    Char(10) before rkonto
+    , ADD rjmeno     Char(24) before rkonto
+    , ADD rprijmeni  Char(35) before rkonto;
+
+ALTER TABLE RU_ExpSplat_Den
+    add rpohlavi        int before rosloveni;
+
+ALTER TABLE RU_ExpCerp_Den
+    ADD   oosloveni  CHAR(35) before rpohlavi
+    , ADD otitul1    Char(10) before rpohlavi
+    , ADD otitul2    Char(10) before rpohlavi
+    , ADD ojmeno     Char(24) before rpohlavi
+    , ADD oprijmeni  Char(35) before rpohlavi
+    , ADD rosloveni  CHAR(35) before stav
+    , ADD rtitul1    Char(10) before stav
+    , ADD rtitul2    Char(10) before stav
+    , ADD rjmeno     Char(24) before stav
+    , ADD rprijmeni  Char(35) before stav;
+            
+ROLLBACK WORK;
+
+--End of A46855_RN00292710
+    

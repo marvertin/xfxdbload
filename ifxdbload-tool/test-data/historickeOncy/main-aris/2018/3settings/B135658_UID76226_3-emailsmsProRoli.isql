@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B135658_UID76226_3-emailsmsProRoli
+-- @TC:ONCE: DESCRIPTION = RSTS-23590: Rozšíření notifikačních sms a emailů o roli (VIDO + callcentrum). {STORY}
+
+
+BEGIN WORK;
+
+UPDATE tw_smstyp_cis
+SET textsms = 'Pro smlouvu <<CISLO_SS>>, <<TYP_ROLE>> <<JMENO_PRIJMENI>>, spustte dotazy do registru v CIBIS-Sale. Raiffeisen stavebni spořitelna'
+WHERE zkratka = 'SCHVALENI_VIDO_OZ';
+
+UPDATE tw_smstyp_cis
+SET textsms = 'Pro smlouvu <<CISLO_SS>>, <<TYP_ROLE>> <<JMENO_PRIJMENI>>, zkontrolujte naskenovane dokumenty v CIBIS-Sale. Raiffeisen stavebni spořitelna'
+WHERE zkratka = 'ZAMITNUTI_VIDO_OZ';
+
+UPDATE tw_emailtyp_cis
+SET predmet = 'Dokončení kontroly dokumentů - schváleno:  smlouva: <<CISLO_SS>> <<TYP_ROLE>: <<JMENO_PRIJMENI>>',
+    obsah = 'Kontrola naskenovaných dokumentů pro úvěr <<CISLO_SS>>, <<TYP_ROLE>> <<JMENO_PRIJMENI>>, byla úspěšně dokončena, pro spuštění dotazů do registrů se vraťte do ÚŽ, sekce Úvěrová žádost, pokračujte stiskem tlačítka Pokračovat. Raiffeisen stavební spořitelna'
+WHERE zkratka = 'SCHVALENI_VIDO_OZ';
+
+UPDATE tw_emailtyp_cis
+SET predmet = 'Dokončení kontroly dokumentů - zamítnuto:  smlouva: <<CISLO_SS>> <<TYP_ROLE>>: <<JMENO_PRIJMENI>>',
+    obsah = 'Kontrola naskenovaných dokumentů pro úvěr <<CISLO_SS>>, <<TYP_ROLE>> <<JMENO_PRIJMENI>>, nebyla úspěšně dokončena, je nutné je upravit dle popisu v Sale a znovu zaslat ke kontrole. Podrobnosti najdete v sekci Úvěrová žádost u jednotlivých naskenovaných dokumentů.Raiffeisen stavební spořitelna'
+WHERE zkratka = 'ZAMITNUTI_VIDO_OZ';
+
+ROLLBACK WORK;
+
+--End of B135658_UID76226_3-emailsmsProRoli

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B121624_RN00400175_3
+-- @TC:ONCE: DESCRIPTION = Main: Hromadná změna úrokové sazby ve fázi spoření nad vybraným portfoliem smluv {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('ES', 1, 'Import změn úrokových sazeb spoření', 1);
+
+ROLLBACK WORK;
+
+--End of B121624_RN00400175_3

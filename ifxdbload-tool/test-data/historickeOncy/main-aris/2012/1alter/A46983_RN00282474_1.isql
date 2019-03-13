@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A46983_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE pro_insuranceRate
+  ADD  mirroredid   INTEGER
+;
+
+--INDEXES
+CREATE INDEX pro_insurancerate_i3 ON pro_insurancerate(mirroredid);
+
+ROLLBACK WORK;
+
+--End of A46983_RN00282474_1

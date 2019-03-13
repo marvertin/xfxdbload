@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B131906_UID36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--Jaktože vypadla definice PK ? Aspoň teda na TC databázích.
+--Pokud tento skript spadne na chybu, že PK již existuje, tak lze chybu ignorovat.
+ALTER TABLE ep_splspormodb_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splspormodb_den_pk;
+
+ROLLBACK WORK;
+
+--End of B131906_UID36779_1

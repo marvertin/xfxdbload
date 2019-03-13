@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B127215_RN00455098_3
+-- @TC:ONCE: DESCRIPTION = Optimalizace vytváření neklientských výpisů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE ac_konto_mat SET tvorbavypiszastav = 1 
+WHERE 
+  tko = 'PK' AND 
+  stav <> 2 AND
+  konto NOT IN (SELECT konto FROM ac_provkonto_mat WHERE kartoteka IN ('CSBA', 'CSDO'));
+
+ROLLBACK WORK;
+
+--End of B127215_RN00455098_3

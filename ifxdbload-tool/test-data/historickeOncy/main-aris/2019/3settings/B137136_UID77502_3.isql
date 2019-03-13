@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B137136_UID77502_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+SELECT mapkod, tko, sko, vynosucet FROM ac_skomap_cis WHERE platnost = 1 AND sko IN ('INTS') INTO TEMP t1;
+
+UPDATE ac_skomap_cis sko
+SET
+  vynosucet = (SELECT vynosucet FROM t1 WHERE sko = 'INTS' AND mapkod = sko.mapkod AND tko = sko.tko)
+WHERE 
+  sko.sko = 'MINT' AND
+  sko.platnost = 1 AND
+  sko.vynosucet IS NULL;
+
+ROLLBACK WORK;
+
+--End of B137136_UID77502_3

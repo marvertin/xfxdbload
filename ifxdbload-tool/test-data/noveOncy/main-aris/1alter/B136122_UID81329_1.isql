@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136122_UID81329_1
+-- @TC:ONCE: DESCRIPTION = RSTS-26368: Rozšířit export úvěrové smlouvy o více dokladů {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eo_exproleprukaz_den DROP (smlouva, tsml, trole);
+
+ROLLBACK WORK;
+
+--End of B136122_UID81329_1

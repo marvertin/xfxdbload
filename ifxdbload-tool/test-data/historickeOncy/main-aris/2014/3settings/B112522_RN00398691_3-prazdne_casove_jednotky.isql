@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B112522_RN00398691_3-prazdne_casove_jednotky
+-- @TC:ONCE: DESCRIPTION = Main: pri vyzve rucitele sa nevytvorili ukoly {CUSTOMERREQUEST}
+BEGIN WORK;
+
+update ep_ukoltyp_cis set casjednotka = 'N', caspocet = null where casjednotka = 'X' and caspocet = 0;
+
+set triggers for ep_ukoltyp_acis disabled;
+update ep_ukoltyp_acis set casjednotka = 'N' where casjednotka = 'X';
+set triggers for ep_ukoltyp_acis enabled;
+
+ROLLBACK WORK;
+--End of B112522_RN00398691_3-prazdne_casove_jednotky

@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B133430_UID54298_1
+-- @TC:ONCE: DESCRIPTION = Do EU_ESIP_N plnit referenci na zajištění na které se váže dodatečný náklad {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table ep_splspormodee_den ADD (
+  expenselevel   CHAR(1),
+  expensevalidfrom   DATE,
+  expensevalidto   DATE
+);
+
+--CHECKS
+ALTER TABLE ep_splspormodee_den
+ADD CONSTRAINT (CHECK (expenselevel IN ('S' ,'U' )) CONSTRAINT ep_splspormodee_den_c2);
+
+ROLLBACK WORK;
+
+--End of B133430_UID54298_1

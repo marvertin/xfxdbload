@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B132136_UID49121_3
+-- @TC:ONCE: DESCRIPTION = RK typu Věk v úvodní fázi splácení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- #Riziková kontrola Věk v úvodní fázi splácení - počet měsíců od data čerpání#
+Call TW_RegSetOrAddKey('EU', 'rizKon-spl-a-vek', 'vekVUvodFaziSpl', 'pocetMesicu', 60, 1);
+
+
+ROLLBACK WORK;
+
+--End of B132136_UID49121_3

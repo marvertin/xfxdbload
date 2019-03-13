@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A41246_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál - zprávy {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE ep_zprava_kart ADD (nacuser   CHAR(20),
+  nactime   DATETIME YEAR TO SECOND);
+                                    
+
+ROLLBACK;

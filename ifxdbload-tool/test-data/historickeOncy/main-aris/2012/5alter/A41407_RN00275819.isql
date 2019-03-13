@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A41407_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál - zprávy {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_zpravadavka_prot drop (poruser, portime);
+
+ROLLBACK;

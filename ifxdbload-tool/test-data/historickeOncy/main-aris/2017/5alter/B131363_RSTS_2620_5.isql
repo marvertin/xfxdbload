@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B131363_RSTS_2620_5
+-- @TC:ONCE: DESCRIPTION = RN00294234-Podpora opakovaných úvěrů na jedné smlouvě SS
+
+
+BEGIN WORK;
+
+  drop procedure RSTS_2620_migr_iniciator;
+
+ROLLBACK WORK;
+
+--End of B131363_RSTS_2620_5

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B132168_UID49121_3
+-- @TC:ONCE: DESCRIPTION = zrušení DB registrů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--  #AgeCheckingCoef#
+call TW_RegDelKey('FS', '*', '*', 'AgeCheckingCoef');
+
+--  #AgeCheckingCoefWoman#
+call TW_RegDelKey('FS', '*', 'AgeCheckingCoef', 'Woman');
+
+--  #AgeCheckingCoefMan#
+call TW_RegDelKey('FS', '*', 'AgeCheckingCoef', 'Man');
+
+ROLLBACK WORK;
+
+--End of B132168_UID49121_3

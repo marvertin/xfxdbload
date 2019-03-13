@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A40323_RN00229280_1
+-- @TC:ONCE: DESCRIPTION = Zefektivnìní tøídìní klientské korespondence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ex_mms_kart add koresp integer default 0;
+
+alter table ex_wzu_kart add koresp integer default 0;
+
+alter table ex_wz_kart add koresp integer default 0;
+
+alter table ex_usu_kart add koresp integer default 0;
+
+alter table ex_usp_kart add koresp integer default 0;
+
+alter table eu_expsml_den add koresp integer default 0;
+
+alter table up_head_den add koresp integer default 0;
+
+ROLLBACK WORK;
+
+--End of A40323_RN00229280_1

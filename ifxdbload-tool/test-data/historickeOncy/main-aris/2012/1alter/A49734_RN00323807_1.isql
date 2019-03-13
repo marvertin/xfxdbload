@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A49734_RN00323807_1
+-- @TC:ONCE: DESCRIPTION = Nastavení èísla souboru dávky CC {DEFECT}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       cc_davka_prot
+
+-- 3  cc_davka_prot-2/3       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE cc_davka_prot
+    ADD zpracchyba      Integer DEFAULT 0  NOT NULL;
+
+-- 4  cc_davka_prot-3/3       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE cc_davka_prot
+    ADD CONSTRAINT CHECK (((stav <> 2 AND zpracchyba = 0) OR (stav = 2 AND zpracchyba in (0,1,2)))) CONSTRAINT cc_davka_prot_c4;
+
+
+ROLLBACK WORK;
+
+--End of A49734_RN00323807_1

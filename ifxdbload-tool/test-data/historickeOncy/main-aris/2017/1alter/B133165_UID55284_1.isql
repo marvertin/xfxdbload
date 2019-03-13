@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B133165_UID55284_1
+-- @TC:ONCE: DESCRIPTION = IFRS - EIR - toky pro bEIR - část B {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodbankcf_den
+  DROP CONSTRAINT ep_splspormodbankcf_den_c1
+;
+
+ALTER TABLE ep_splspormodbankcf_den
+
+  ADD nezahrnut   Integer  DEFAULT 0,
+  ADD CONSTRAINT CHECK (nezahrnut IN (0,1)) CONSTRAINT ep_splspormodbankcf_den_d2ev
+;
+
+ALTER TABLE ep_splspormodbankcf_den
+  ADD CONSTRAINT (CHECK (typFiktivniho in ('U', 'P', 'C', 'T', 'S', 'V')) CONSTRAINT ep_splspormodbankcf_den_c1)
+;
+
+ALTER TABLE ep_expsplspormodbnkcf_den
+
+  ADD nezahrnut   Integer  DEFAULT 0,
+  ADD CONSTRAINT CHECK (nezahrnut IN (0,1)) CONSTRAINT ep_expsplspormodbnkcf_den_d2f5
+;
+
+ROLLBACK WORK;
+
+--End of B133165_UID55284_1

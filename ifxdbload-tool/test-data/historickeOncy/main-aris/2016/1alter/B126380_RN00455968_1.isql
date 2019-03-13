@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B126380_RN00455968_1
+-- @TC:ONCE: DESCRIPTION = Pomalý běh rozúčtování SP {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+create index sp_rozuctinfo_kart_i6 on sp_rozuctinfo_kart(serno);
+
+
+ROLLBACK WORK;
+
+--End of B126380_RN00455968_1

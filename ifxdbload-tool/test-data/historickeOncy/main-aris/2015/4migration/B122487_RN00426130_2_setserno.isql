@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B122487_RN00426130_2_setserno
+-- @TC:ONCE: DESCRIPTION = Požadavek k SP - Komunikace s MF{CUSTOMERREQUEST}
+
+BEGIN WORK;
+-- ###############################################################
+-- sp_valuty_cis
+
+INSERT INTO sp_valuty_cis (rok, datvalsp1, datvalsp2, portime, poruser, reftime, refuser)
+  SELECT rok, datvalsp1, datvalsp2, reftime, refuser, reftime, refuser FROM sp_valuty_cfg; 
+
+ROLLBACK WORK;
+
+--End of B122487_RN00426130_2_setserno
+
+

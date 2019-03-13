@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B126984_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table EP_ExpSplSporModH_Den
+  add cashranicenakleir date
+  , add  cashranicenaklrpsn date;
+  
+ROLLBACK WORK;
+
+--End of B126984_RN00451080_1

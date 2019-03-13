@@ -1,0 +1,123 @@
+create procedure A41780_RN00238704_find_D()
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00238704;   -- hlavni ridici tabulka
+  DROP TABLE RN00238704_WORK;  -- pracovni tabulka obsahujici smlouvy a zadosti...  
+  DROP TABLE RN00238704_ALREADY_SCORED; -- skorovane zadosti a smlouvy
+  DROP TABLE RN00238704_NOT_SCORED; -- neskorovane zadosti a smlouvy
+end;  
+
+--zalozime ridici tabulku
+CREATE TABLE RN00238704(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+
+  --vlastní data
+  smlouva     dec(16,0),
+  tsml        char(4),
+  smlstav     char(1),
+  zadost      dec(16,0),
+  zadoststav  int,
+  datakce     date, 
+  datzad      date default null,   -- datum žádosti....
+  lastScoringId integer, 
+  lastScoringOrder integer,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+-- Pracovni tabulka pro nacteni smluv a zadosti...
+CREATE TABLE RN00238704_WORK (
+  Ser     Serial NOT NULL,  --èíslo øádku  
+  zprac   SmallInt,         
+
+  smlouva     dec(16,0),
+  tsml        char(4),
+  smlstav     char(1),
+  zadost      dec(16,0),
+  zadoststav  int,
+  datakce     date, 
+  datzad      date default null,   
+     
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+insert into RN00238704_WORK (smlouva, tsml, smlstav, zprac, datakce, datzad)
+  select smlouva, tsml, stav, -1,
+         case stav when 'Z' then datzamit 
+                   when 'S' then datstorno 
+                   when 'D' then datschval 
+                   when 'L' then datschval 
+                   when 'V' then datschval 
+                   else null end datakce,
+                   datzad
+    from eu_sml_mat where stav in ('Z', 'S', 'D', 'L', 'V');     
+
+insert into RN00238704_WORK (zadost, zadoststav, zprac, datakce)
+  select xcreditrqnumber, xcreditrqstatus, -1,
+         case xcreditrqstatus when 5 then xdatecontractaction
+                              when 6 then xdatecontractaction
+                              when 10 then xdaterefusal
+                              when 20 then xdatestorno 
+                              else null end datakce                              
+    from creditrqcontrolreg where xcreditrqstatus in (5,6,10,20);
+
+  -- @RN00294580: V prvním kroku si do TEMP tabulky vyhreneme smlouvy a zadosti, ktere byly už skórované...   
+  select  ser, zadost, zadoststav, smlouva, tsml, smlstav, datakce, datzad, sc.id, sc.xorder    
+  from RN00238704_WORK rn JOIN scoringaction sc ON
+      (((rn.smlouva = sc.xcreditcontract and rn.tsml = sc.xcreditcontracttype)) or (rn.zadost = sc.xcreditrequest))
+        where 
+         sc.id = (select max(id) from scoringaction where 
+                    ((xcreditcontract = sc.xcreditcontract and xcreditcontracttype = sc.xcreditcontracttype) or 
+                     (xcreditrequest = sc.xcreditrequest)))
+        and sc.xorder = (select max(xorder) from scoringaction where 
+                           ((xcreditcontract = sc.xcreditcontract and xcreditcontracttype = sc.xcreditcontracttype) or 
+                            (xcreditrequest = sc.xcreditrequest)))
+        and zprac < 0 INTO TEMP RN00238704_ALREADY_SCORED;
+        
+ CREATE INDEX RN00238704_ALREADY_SCORED_i1 ON RN00238704_ALREADY_SCORED(ser);
+ UPDATE STATISTICS HIGH FOR TABLE RN00238704_ALREADY_SCORED;           
+
+  -- @RN00294580: Ve druhém kroku si vyhrneme do TEMP tabulky smlouvy a zadosti, ktere nemaji provedeny scoring...
+  -- Rozepisuji do dvou selectù èistì z dùvodu výkonnosti...
+  select ser, zadost, zadoststav, smlouva, tsml, smlstav, datakce, datzad from RN00238704_WORK
+  where ser not in (select ser from RN00238704_ALREADY_SCORED) INTO TEMP RN00238704_NOT_SCORED;                     
+  
+  -- @RN00294580: Z obou temp tabulek shrneme data zpìt do hlavní øídící tabulky...  
+  INSERT INTO RN00238704(zadost, zadoststav, smlouva, tsml, smlstav, datakce, datzad, lastScoringId, lastScoringOrder, zprac)
+  SELECT zadost, zadoststav, smlouva, tsml, smlstav, datakce, datzad, id, xorder, -1 FROM RN00238704_ALREADY_SCORED;  
+  INSERT INTO RN00238704(zadost, zadoststav, smlouva, tsml, smlstav, datakce, datzad, zprac)
+  SELECT zadost, zadoststav, smlouva, tsml, smlstav, datakce, datzad, -1 FROM RN00238704_NOT_SCORED;
+   
+COMMIT WORK;
+BEGIN WORK;
+      
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00238704;
+
+--konec transakce pripravy
+COMMIT WORK;
+end procedure;

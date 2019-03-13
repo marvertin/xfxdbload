@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B133553_10638_3
+-- @TC:ONCE: DESCRIPTION = Sloupec productid v eo_role_mat není plněn
+
+BEGIN WORK;
+
+update eo_role_mat set productid = (SELECT id FROM ep_sml_mat WHERE eo_role_mat.smlouva = ep_sml_mat.smlouva AND eo_role_mat.typ = ep_sml_mat.tsml) where productid is null;
+
+
+ROLLBACK WORK;
+
+--End of BB133553_10638_3

@@ -1,0 +1,72 @@
+-- @TC:ONCE: ID = V2, B124721_RN00423411_1
+-- @TC:ONCE: DESCRIPTION = Rozhodovací nástroj pro variantu PÚ - číselník  otázek rozhodovacího nástroje
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eu_otazkarozhod_acis
+
+-- 18  eu_otazkarozhod_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_otazkarozhod_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    id              Integer   NOT NULL,
+    text            VARCHAR(255)  ,
+    platnostod      DATE  ,
+    platnostdo      DATE  ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_otazkarozhod_acis_dp69
+) LOCK MODE ROW
+;
+
+-- 19  eu_otazkarozhod_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_otazkarozhod_acis_pk ON eu_otazkarozhod_acis (idarch) ;
+
+-- 20  eu_otazkarozhod_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_otazkarozhod_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_otazkarozhod_acis_pk;
+
+-- ###############################################################
+--       eu_otazkarozhod_cis
+
+-- 21  eu_otazkarozhod_cis-1/5       [CREATE.TABLE]
+CREATE TABLE eu_otazkarozhod_cis (
+    serno           SERIAL   NOT NULL,
+    id              Integer   NOT NULL,
+    text            VARCHAR(255)  ,
+    platnostod      DATE  ,
+    platnostdo      DATE  ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_otazkarozhod_cis_dp5y
+) LOCK MODE ROW
+;
+
+-- 22  eu_otazkarozhod_cis-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_otazkarozhod_cis_pk ON eu_otazkarozhod_cis (serno) ;
+
+-- 23  eu_otazkarozhod_cis-3/5       [CREATE.INDEX]
+CREATE unique INDEX eu_otazkarozhod_cis_uq_eu_otazkarozhod_cis_id ON eu_otazkarozhod_cis (id) ;
+
+-- 24  eu_otazkarozhod_cis-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_otazkarozhod_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_otazkarozhod_cis_pk;
+
+-- 25  eu_otazkarozhod_cis-5/5       [CREATE.CONSTRAINT_UNIQUE]
+ALTER TABLE eu_otazkarozhod_cis
+    ADD CONSTRAINT UNIQUE (id)  CONSTRAINT eu_otazkarozhod_cis_uq_eu_otazkarozhod_cis_id;
+
+
+ROLLBACK WORK;
+
+--End of B124721_RN00423411_1

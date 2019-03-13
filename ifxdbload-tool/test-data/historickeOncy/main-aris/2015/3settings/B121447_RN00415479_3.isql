@@ -1,0 +1,37 @@
+-- @TC:ONCE: ID = V2, B121447_RN00415479_3
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'UZPRIZ';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'UZDSPL';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'UZTUM1';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'UZTUM2';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (1,1,0,0,0,1,1) where akce = 'USTUMO';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'USZDSP';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'USVYUN';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (1,0,0,0,0,1,1) where akce = 'USSCHV';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'USPOTV';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (1,0,0,0,0,1,1) where akce = 'USDODA';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (1,1,0,1,1,1,1) where akce = 'USMANU';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,0,0,0,0,0) where akce = 'SSMANU';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,0,1,0,0) where akce = 'SSPOTV';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'USODSP';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,0,1,0,0) where akce = 'SSODPR';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'MOOBEC';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (1,1,0,0,0,1,1) where akce = 'USPUSU';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,0,0,1,1,1) where akce = 'USHYST';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,0,0,1,1,1) where akce = 'SSHYST';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,0,1,1,1,1) where akce = 'USVYMA';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'USTEST';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,0,1,1,1,1) where akce = 'USTUMK';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (1,0,0,1,1,1,1) where akce = 'UZFINA';
+update ep_splspormodakce_cis set (ulozcashflow, potlactokeir, potlactokrpsn, vymaztokukonuv, vymaztokukonss, vymazmodelstorno, vymazmodelzamit) = (0,1,1,1,1,1,1) where akce = 'UZBONI';
+
+update ep_splspormodakce_cis set (ulozmodel) = (0) where akce = 'UZTUM1';
+update ep_splspormodakce_cis set (ulozmodel) = (0) where akce = 'UZTUM2';
+update ep_splspormodakce_cis set (ulozmodel) = (0) where akce = 'SSPOTV';
+
+ROLLBACK WORK;
+
+--End of B121447_RN00415479_3

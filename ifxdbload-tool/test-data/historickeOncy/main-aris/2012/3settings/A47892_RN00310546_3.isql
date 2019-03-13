@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A47892_RN00310546_3
+-- @TC:ONCE: DESCRIPTION = Zrušit výètový typ CreditRqCommChannelsUtils.EChannelId v úvìrové žádosti {DEFECT}
+
+BEGIN WORK;
+
+-- #Komunikaèní kanál pro Telefon souèasné bydlištì#
+-- EO/osoba/komkanal/telsouc
+-- RSTS - 8
+-- default: není
+
+call TW_RegSetOrAddKey('EO', 'osoba', 'komkanal', 'telsouc', 8, 1)
+;
+
+CALL TW_RegSetAnalytickyPopis('EO','osoba','komkanal','telsouc'
+  ,'Osoba','Evidence osoby','Persons'
+  ,'Komunikaèní kanál Telefon souèasné bydlištì',1)
+;
+   
+ROLLBACK WORK;
+
+--End of A47892_RN00310546_3

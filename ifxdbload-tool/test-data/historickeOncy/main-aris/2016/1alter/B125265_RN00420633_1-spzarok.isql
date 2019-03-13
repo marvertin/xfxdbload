@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B125265_RN00420633_1-spzarok
+-- @TC:ONCE: DESCRIPTION = Úpravy ve vracení SP na MF {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter TABLE sp_vratka_exp DROP spzarok;
+
+alter TABLE sp_vchstr_imp DROP spzarok;
+
+alter TABLE sp_vchd_imp DROP spzarok;
+
+alter TABLE sp_vratka_exp 
+    add spzarok         datetime year to year before castka;
+
+alter TABLE sp_vchstr_imp 
+    add spzarok         datetime year to year before castka;
+
+alter TABLE sp_vchd_imp 
+    add spzarok         datetime year to year before castka;
+ROLLBACK WORK;
+
+--End of B125265_RN00420633_1-spzarok

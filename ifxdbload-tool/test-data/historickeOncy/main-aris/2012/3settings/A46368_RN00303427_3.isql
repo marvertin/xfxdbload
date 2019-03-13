@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A46368_RN00303427_3
+-- @TC:ONCE: DESCRIPTION = Chybnì zaøazené db registry pro výpisy z kont {DEFECT}
+
+BEGIN WORK;
+
+UPDATE tw_registr_cis SET idfunkcionalita = (SELECT id FROM tw_funkcionalita_cis WHERE funkcionalita = 'Výpis z konta') 
+WHERE oblast = 'TV' and uloha = 'vypis' AND funkce like 'druhvyp_%' and udaj like 'mimor_vypis%';
+
+ROLLBACK WORK;
+
+--End of A46368_RN00303427_3

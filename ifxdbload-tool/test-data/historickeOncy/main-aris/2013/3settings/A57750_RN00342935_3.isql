@@ -1,0 +1,946 @@
+-- @TC:ONCE: ID = V2, A57750_RN00342935_3
+-- @TC:ONCE: DESCRIPTION = Nezaøazené parametry v db registru {DEFECT}
+
+
+BEGIN WORK;
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('AP','*','*','sysdateprotesty','Správa systému','Sluby pro správu systému','Spoleèné parametry','Systémové datum',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('AP','*','*','systimeprotesty','Správa systému','Sluby pro správu systému','Spoleèné parametry','Systémovı èas',1);
+
+
+CALL TW_RegAktAnalytickyPopis('EP','zprava','web','nabidka_max_zobraz','Podpora pro produkt','Zprávy','Zobrazení zpráv na webu','Poèet zobrazovanıch akèních nabídek na hlavní stránce',1);
+CALL TW_RegAktAnalytickyPopis('EP','zprava','web','sdeleni_max_zobraz','Podpora pro produkt','Zprávy','Zobrazení zpráv na webu','Poèet zobrazovanıch sdìlení na hlavní stránce',1);
+CALL TW_RegAktAnalytickyPopis('EP','zprava','web','datum_do','Podpora pro produkt','Zprávy','Zobrazení zpráv na webu','Zobrazování data platnosti zprávy do',1);
+
+--Original analytics: Podpora pro produkt/Informace o produktu/Obecné/Parametr definuje, zda pøi zobrazení detailních informací o produktu mají bıt zobrazeny grafy./0
+CALL TW_RegAktAnalytickyPopis('EP','produkt','zobrazitgraf','CIBIS-Sale','Podpora pro produkt','Informace o produktu','Grafy','Zobrazovat grafy <aplikace>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','produkt','zobrazitgraf','CIBIS-Web','Podpora pro produkt','Informace o produktu','Grafy','Zobrazovat grafy <aplikace>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','crifEndPoint','Podpora pro produkt','Úvìrovı registr','Querry','crifEndPoint',1);
+
+CALL TW_RegAktAnalytickyPopis('AK','export','avizo','jmeno','Platební styk','Platba na sbìrné konto','Operating','jméno souboru exportu avíza platby na sbìrném kontì',0);
+
+--Original analytics: Správa systému/E-mailová komunikace/Pøílohy/Parametr urèuje, zda pøílohy e-mailù mají bıt po odeslání uloeny èi nikoliv./0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','priloha','ukladat','Správa systému','E-mailová komunikace','Pøílohy','Ukládat pøílohy e-mailù',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','typ','dotaz_nabidka','Správa systému','E-mailová komunikace','Vazby na typy e-mailù','Typ e-mailu pøi dotazu k nabídce',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','reportclientchange','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - hlásit zmìnu klienta na úvìrové smlouvì (z kartotéky akcí)',1);
+
+--Original analytics: Podpora pro produkt/Bankovní produkt/Bank Product/Zahrnovat nepracovní dny - stanovování datumù/0
+CALL TW_RegAktAnalytickyPopis('EP','*','*','ZahrNepracDny','Podpora pro produkt','Informace o produktu','Information about Product','Zahrnovat nepracovní dny - stanovování datumù',0);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','typ','odmitnuti_nabidka','Správa systému','E-mailová komunikace','Vazby na typy e-mailù','Typ e-mailu pøi odmítnutí nabídky',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Dùvod, kterı se nastaví pøi automatické aktivaci kontrol splácení do intervalu pro odklad ve splátkovém kalendáøi./0
+CALL TW_RegAktAnalytickyPopis('EU','*','odklad','duvod','Úvìr','Úvìrová smlouva','Management of credit contract','Dùvod automatického odkladu splácení',1);
+
+--Original analytics: Spoøení/Vytváøení smlouvy SS//Parametr definuje zpùsob korespondence PAPÍROVÌ./0
+CALL TW_RegAktAnalytickyPopis('ES','*','*','korespondencepapir','Spoøení','Vytváøení smlouvy SS','Creating of BS contract','Zpùsob korespondence – papírovì',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','errorfilecd','cuk','Podpora pro produkt','Úvìrovı registr','Batch','Chybovı soubor ÚR - pozice ÈUK v souboru smluv',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Soudní vymáhání - skupina zvl. re./0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','rezimy','skupinaSoudni','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Soudní vymáhání – skupina zvl. re.',1);
+
+--Original analytics: Klientské úèetnictví/Správa bankovních kont/Client's account/Omezení valuty na kontì/0
+CALL TW_RegAktAnalytickyPopis('AC','*','*','valutaotev','Klientské úèetnictví','Správa bankovních kont','Client''s account','Omezení valuty na kontì',1);
+
+--Original analytics: Externí produkt/Správa externího pojištìní úvìru/Maintenance of External Insurance/Typ úhrady za pojištìní Uniqa/0
+CALL TW_RegAktAnalytickyPopis('EC','uhrpoj','*','tuhr','Externí produkt','Správa externího pojištìní úvìru - Úhrada pojistného UNIQA','Maintenance of External Insurance','Typ úhrady za pojištìní Uniqa',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Text automaticky vkládanı do poznámky vkladového a splátkového kalendáøe pøi jejich aktivaci v rámci potvrzení úvìrové smlouvy./0
+CALL TW_RegAktAnalytickyPopis('EU','*','POTV','textnote','Úvìr','Úvìrová smlouva','Management of credit contract','Poznámka do kalendáøù pøi potvrzení úvìrové smlouvy',1);
+
+--Original analytics: Spoøení/Zúètování spoøení-úvìr/Transfer from saving to credit/Druh vıpisu PLPO/0
+CALL TW_RegAktAnalytickyPopis('RZ','zuct','<treal>','druhvyp','Spoøení','Zúètování spoøení-úvìr','Transfer from saving to credit','druh vıpisu <typ realizace>',1);
+
+--Original analytics: Podpora pro produkt/Podpora pro nabídky/Produktová historie - obchodní sí/Produktová historie klienta - úroveò 2 - externí oznaèení/0
+CALL TW_RegAktAnalytickyPopis('EP','podpNabidek','produktHist','exterOznaceniUr2','Podpora pro produkt','Podpora pro nabídky','Produktová historie – obchodní sí','Produktová historie klienta - úroveò 2 - externí oznaèení',1);
+
+--Original analytics: Spoøení/Zúètování spoøení-úvìr/Transfer from saving to credit/Text pro automaticky vytvoøenı doklad úèelového doloení pøi zúètování PÚ/0
+CALL TW_RegAktAnalytickyPopis('RZ','zuct','*','textdoklucel','Spoøení','Zúètování spoøení-úvìr','Transfer from saving to credit','text pro automaticky vytvoøenı doklad úèelového doloení pøi zúètování PÚ',1);
+
+--Original analytics: Podpora pro produkt/Podpora pro nabídky/Produktová historie - obchodní sí/Produktová historie klienta - úroveò 1 - externí oznaèení/0
+CALL TW_RegAktAnalytickyPopis('EP','podpNabidek','produktHist','exterOznaceniUr1','Podpora pro produkt','Podpora pro nabídky','Produktová historie – obchodní sí','Produktová historie klienta - úroveò 1 - externí oznaèení',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','typSMS','obnova','Správa systému','SMS komunikace','SMS komunikace','Typ SMS pro obnovu hesla',1);
+
+--Original analytics: Osoba/Evidence osoby/Persons/Komunikaèní kanál Telefon souèasné bydlištì/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','telsouc','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Telefon souèasné bydlištì',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','timeout','Podpora pro produkt','Úvìrovı registr','Query','Time-out pro komunikaci s ÚR',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Request for person credibility/Vytvoøit protokol po zpracování souboru s dotazy na dùvìryhodnost osoby/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','protocol','create','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Vytvoøit protokol po zpracování souboru s dotazy na dùvìryhodnost osoby',1);
+
+--Original analytics: Platební styk/Šek/Accounting/Vınosovı úèet poplatku za šek pøi úètování z fin. úètu/0
+CALL TW_RegAktAnalytickyPopis('AS','ipb','*','zkrucetpopl','Platební styk','Šek','Accounting','vınosovı úèet poplatku za šek pøi úètování z fin. úètu',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Pozdní vymáhání - podmínka poèet dní po spl./0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','zarazeni','prodleni','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Pozdní vymáhání – podmínka poèet dní po spl.',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Pøíznak, zda se má pøi potvrzení smlouvy otevøít realizace úvìru/0
+CALL TW_RegAktAnalytickyPopis('EU','<typ smlouvy>','potvr','otevreal','Úvìr','Úvìrová smlouva','Management of credit contract','Otevøení realizace pøi potvrzení',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Pøevody smluv mezi SS/0
+CALL TW_RegAktAnalytickyPopis('ES','*','*','prevod','Spoøení','(nezaøazeno)','Saving','Pøevody smluv mezi SS',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('RU','SUPO','uzav','uzavss','Úvìr','Vypoøádání úvìru','Credit Settlement','Uzavøení realizace SS pøi uzavøení realizace US pro <typ_realizace>',1);
+CALL TW_RegAktAnalytickyPopis('RU','VUFO','uzav','uzavss','Úvìr','Vypoøádání úvìru','Credit Settlement','Uzavøení realizace SS pøi uzavøení realizace US pro <typ_realizace>',1);
+CALL TW_RegAktAnalytickyPopis('RU','VUKO','uzav','uzavss','Úvìr','Vypoøádání úvìru','Credit Settlement','Uzavøení realizace SS pøi uzavøení realizace US pro <typ_realizace>',1);
+CALL TW_RegAktAnalytickyPopis('RU','VUPO','uzav','uzavss','Úvìr','Vypoøádání úvìru','Credit Settlement','Uzavøení realizace SS pøi uzavøení realizace US pro <typ_realizace>',1);
+
+--Original analytics: Podpora pro produkt/Údaje o platebním styku k produktu/Registry plateb/platba prostøednictvím Sipo pro smlouvu <tsml>/0
+CALL TW_RegAktAnalytickyPopis('PK','PFSU','*','platbaSIPO','Podpora pro produkt','Údaje o platebním styku k produktu','Registry plateb','platba prostøednictvím Sipo pro smlouvu a realizaci <tsml><treal>',1);
+
+--Original analytics: Podpora pro produkt/Údaje o platebním styku k produktu/Registry plateb/platba prostøednictvím poštovních poukázek pro smlouvu <tsml>/0
+CALL TW_RegAktAnalytickyPopis('PK','PUPO','*','platbaAV','Podpora pro produkt','Údaje o platebním styku k produktu','Registry plateb','platba prostøednictvím poštovních poukázek pro smlouvu a realizaci <tsml><treal>',1);
+
+--Original analytics: Podpora pro produkt/Údaje o platebním styku k produktu/Registry plateb/platba prostøednictvím Sipo pro smlouvu <tsml>/0
+CALL TW_RegAktAnalytickyPopis('PK','PPSU','*','platbaSIPO','Podpora pro produkt','Údaje o platebním styku k produktu','Registry plateb','platba prostøednictvím Sipo pro smlouvu a realizaci <tsml><treal>',1);
+
+--Original analytics: Podpora pro produkt/Údaje o platebním styku k produktu/Registry plateb/platba prostøednictvím poštovních poukázek pro smlouvu <tsml>/0
+CALL TW_RegAktAnalytickyPopis('PK','PPSU','*','platbaAV','Podpora pro produkt','Údaje o platebním styku k produktu','Registry plateb','platba prostøednictvím poštovních poukázek pro smlouvu a realizaci <tsml><treal>',1);
+
+
+--Original analytics: Úvìr/Úvìrová smlouva/Dbregistry/Provádìt kontroly návratnosti pøi zmìnì smluvních údajù/0
+CALL TW_RegAktAnalytickyPopis('EU','RevizeUN','KontrolyZmenaSm','*','Úvìr','Úvìrová smlouva','Management of credit contract','Provádìt kontroly návratnosti pøi zmìnì smluvních údajù',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','errorfilepd','date','Podpora pro produkt','Úvìrovı registr','Batch','Chybovı soubor ÚR - pozice datumu v souboru osob',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Seznam rolí osob pro kontrolu nedoplatkù/0
+CALL TW_RegAktAnalytickyPopis('EU','*','nedoplatek','navrh','Úvìr','Úvìrová smlouva','Management of credit contract','Provádìt kontrolu na nedoplatek pøi vytváøení úvìrového návrhu',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','mobil-SIS','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti pro zmìnu mobil-SIS',1);
+
+--Original analytics: Osoba/Evidence osoby/Persons/Komunikaèní kanál pro Fax/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','fax','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Fax',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','maxrequests','Podpora pro produkt','Úvìrovı registr','Query','Üvìrovı registr - maxRequests',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - název 4/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','NAME4','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - název 4',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - název 3/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','NAME3','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - název 3',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - název 2/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','NAME2','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - název 2',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - název 1/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','NAME1','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - název 1',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','email-SIS','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti pro zmìnu registrovaného e-mailu',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - název 5/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','NAME5','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - název 5',1);
+
+--Original analytics: Platební styk/Single payment/Single payment/Provádìt dodateèné zpracování jednorázovıch pøíkazù v dávce/0
+CALL TW_RegAktAnalytickyPopis('AN','*','batch','dodatZprac','Platební styk','Jednorázovı pøíkaz','Single Payment','Provádìt dodateèné zpracování jednorázovıch pøíkazù v dávce',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('RZ','pridel','*','max_mes_rdz_pridel','Spoøení','Realizace stavebního spoøení','Building saving realization','maximální poèet mìsícù mezi RDZ a pøidìlením',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Spoøení - Provádìt kontrolu oprávnìnosti OZ pro FO/0
+CALL TW_RegAktAnalytickyPopis('RZ','*','*','KontrolaOpravFO','Spoøení','(nezaøazeno)','Saving','Spoøení - Provádìt kontrolu oprávnìnosti OZ pro FO',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','allowedtoexchange','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - povoleno k vımìnì',1);
+
+--Original analytics: Klientské úèetnictví/Správa bankovních kont/Client's account/Oprávnìní pro typ konta/0
+CALL TW_RegAktAnalytickyPopis('AO','*','*','JeOpravneniTko','Klientské úèetnictví','Správa bankovních kont','Client''s account','Oprávnìní pro typ konta',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Appeal for Immediate Repaying of Credit/Úhrada za vızvu/0
+CALL TW_RegAktAnalytickyPopis('RU','<typ realizace>','vyzva-faze1','provuhr','Úvìr','Vızva ke splacení','Appeal for Immediate Repaying of Credit','Úhrada za vızvu - 1.fáze',1);
+
+--Original analytics: Platební styk/Single payment/Single payment/Provádìt pouze platby vzniklé v dávce/0
+CALL TW_RegAktAnalytickyPopis('AN','*','batch','pouzeDavkovePlatby','Platební styk','Jednorázovı pøíkaz','Single Payment','Provádìt pouze platby vzniklé v dávce',1);
+
+--Original analytics: Podpora pro produkt/Scoring/Dbregistry/Scorovat smlouvu pøi stornu/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','sc2','autoScStorno','Podpora pro produkt','Scoring','Scoring','Scorovat smlouvu pøi stornu',1);
+
+--Original analytics: Správa systému/SMS komunikace/Denní limit poètu odeslanıch SMS/Parametr urèuje text chybového hlášení, které je zobrazováno volá-li uivatel operaci, která vyaduje autorizaci, pøièem ji pøekroèil limit odeslanıch SMS./0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','limit','text_chyby','Správa systému','SMS komunikace','Denní limit poètu odeslanıch SMS','Text chybového hlášení pøi pøekroèení denního limitu poètu odeslanıch SMS',1);
+
+--Original analytics: Platební styk/Pokladna/Printing of cash-desk bill/slovní vyjádøení èísla <øád_èísla><èíslo>/0
+CALL TW_RegAktAnalytickyPopis('AL','*','<øád_èísla>','<èíslo>','Platební styk','Pokladna','Printing of cash-desk bill','slovní vyjádøení èísla <øád_èísla>\<èíslo>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EU','SUFO','POTV','provuhr','Úvìr','Úvìrová smlouva','Management of credit contract','Poplatek za smlouvu pøi potvrzení',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','phasecancelling','Podpora pro produkt','Úvìrovı registr','Query','Úvìrovı registr - fáze odmítnutí návrhu',1);
+
+--Original analytics: Správa systému/SMS komunikace/Denní limit poètu odeslanıch SMS/Parametr urèuje, kterı typ SMS má bıt zahrnut do kontroly na limit poètu odeslanıch SMS./0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','limit','<typ_sms>','Správa systému','SMS komunikace','Denní limit poètu odeslanıch SMS','Kontrolovat typ SMS na denní limit poètu odeslanıch SMS',1);
+
+--Original analytics: Správa systému/Sluby pro správu systému/Spoleèné parametry/Implicitní limit poètu zobrazenıch záznamù ve WEB aplikaci <app>/0
+CALL TW_RegAktAnalytickyPopis('JE','CW','*','defaultRecordsOnPage','Správa systému','Sluby pro správu systému','Common parameters','Implicitní limit poètu zobrazenıch záznamù v CIBIS-WEB',1);
+
+--Original analytics: Spoøení/Vypoøádání stavebního spoøení/Building saving settlement/minimální limit èástky pro zpùsob vıplaty/0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','vyplata','poplmimo','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','zpùsob strení poplatku pøi vıplatì',1);
+
+--Original analytics: Platební styk/Mezibankovní platba/CC Process/Maximální poèet poloek v neprioritní dávce/0
+CALL TW_RegAktAnalytickyPopis('CC','CCProcess','*','maxPocPolozekNeprior','Platební styk','Mezibankovní platba','CC Process','maximální poèet poloek v neprioritní dávce',1);
+
+--Original analytics: Spoøení/Noèní dávka - spoøení/Archiving/poèet mìsícù pro archivaci nepøipsanıch bonusù/0
+CALL TW_RegAktAnalytickyPopis('ES','bonus','archivace','poc_mes','Spoøení','Úrokové bonusy','Interest bonus','Poèet mìsícù pro archivaci nevyplacenıch bonusù',1);
+
+--Original analytics: Spoøení/Problémy opisovanıch formuláøù/Lhùty/Definuje poèet dnù od data vytvoøení podkladu, kterı je pouit pro vıpoèet data „zpracovatDo“/0
+CALL TW_RegAktAnalytickyPopis('ES','PROBLOPISU','*','ZPRACDO','Spoøení','Správa problémù','Lhùty','Poèet dnù pro zpracování problémù v opisovaném formuláøi”',1);
+
+--Original analytics: Podpora pro produkt/Scoring/Dbregistry/Scorovat ádost pøi odmítnutí/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','sc1','autoScOdmit','Podpora pro produkt','Scoring','Scoring','Scorovat ádost pøi odmítnutí',1);
+
+--Original analytics: Osoba/Evidence osoby/Persons/Komunikaèní kanál pro Telefon domù/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','teldom','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Telefon domù',1);
+
+--Original analytics: Klientské úèetnictví/Správa bankovních kont/Client's account/Typ úhrady pro vıpis obratù/0
+CALL TW_RegAktAnalytickyPopis('AO','intvypis','*','tuhr','Klientské úèetnictví','Správa bankovních kont','Client''s account','Typ úhrady pro vıpis obratù',1);
+
+--Original analytics: Platební styk/Mezibankovní ádost/Accounting/Druh operace úhrady mezibankovní ádosti o inkaso/0
+CALL TW_RegAktAnalytickyPopis('CZ','*','*','druhuin_m','Platební styk','Mezibankovní ádost','Accounting','Druh operace mezibankovní ádosti o inkaso',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Zpùsob vıpoètu disponibilního zùstatku pøi editaci/0
+CALL TW_RegAktAnalytickyPopis('AN','*','dispzustatek','editace','Platební styk','Jednorázovı pøíkaz','Single Payment','Zpùsob vıpoètu disponibilního zùstatku pøi editaci',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','noncriticalerror','Podpora pro produkt','Úvìrovı registr','Query','Dotaz ÚR - nekritické chyby',1);
+
+--Original analytics: Platební styk/Mezibankovní platba/CC Process/Maximální poèet poloek v prioritní dávce/0
+CALL TW_RegAktAnalytickyPopis('CC','CCProcess','*','maxPocPolozekPrior','Platební styk','Mezibankovní platba','CC Process','maximální poèet poloek v prioritní dávce',1);
+
+--Original analytics: Spoøení/Vypoøádání stavebního spoøení/Building saving settlement/minimální limit èástky pro zpùsob vıplaty/0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','vyplata','uplprav','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','uplatnit pravidlo ètyø oèí pøi vıplatì',1);
+
+--Original analytics: Spoøení/Vypoøádání stavebního spoøení/Building saving settlement/minimální limit èástky pro zpùsob vıplaty/0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','vyplata','zpozdvypl','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','odklad vıplaty po provedení',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Seznam rolí osob pro kontrolu nedoplatkù/0
+CALL TW_RegAktAnalytickyPopis('EU','*','nedoplatek','prijeti','Úvìr','Úvìrová smlouva','Management of credit contract','Provádìt kontrolu na nedoplatek pøi pøijetí úvìrové ádosti',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','indTelDom','12','Podpora pro produkt','Scoring','Scoring','<Typ_komunikaèního_kanálu> s vlivem na nastavení indikátoru scoringu „telefon domù“',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Pozdní vymáhání - distribuèní zvl. re./0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','rezimy','distribucniRezim','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Pozdní vymáhání – distribuèní zvl. re.',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Text automaticky vkládanı do poznámky vkladového a splátkového kalendáøe pøi jejich aktivaci v rámci prvního èerpání úvìru./0
+CALL TW_RegAktAnalytickyPopis('EU','*','1CERP','textnote','Úvìr','Úvìrová smlouva','Management of credit contract','Poznámka do kalendáøù pøi prvním èerpání úvìru',1);
+
+--Original analytics: Platební styk/Mezibankovní platba/Interbank payment/Povolovat dávky prioritních plateb/0
+CALL TW_RegAktAnalytickyPopis('CC','*','*','povolprior','Platební styk','Mezibankovní platba','Interbank Payment','Povolovat dávky prioritních plateb',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','timeoutwait','Podpora pro produkt','Úvìrovı registr','Query','Interval kontroly odpovìdi pro komunikaci s ÚR',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EO','CREDITRQ','CREATE','ADDMARRIAGEREL','Osoba','Evidence osoby','Persons','Automaticky doplòovat role k manelskım vztahùm na úvìrové ádosti',1);
+
+--Original analytics: Klientské úèetnictví/Správa bankovních kont/Client's account/Název vıpisu obratù/0
+CALL TW_RegAktAnalytickyPopis('AO','intvypis','*','nazevvypis','Klientské úèetnictví','Správa bankovních kont','Client''s account','Název vıpisu obratù',1);
+
+--Original analytics: Úvìr/Plán splátek úvìru/Plan of Credit Repayment/Pøíznak zda je povoleno vytváøet plán splátek pøed doèerpáním úvìru/0
+CALL TW_RegAktAnalytickyPopis('EU','*','plansplat','preddocerp','Úvìr','Úvìrová smlouva','Management of credit contract','Plán splátek pøed doèerpáním',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Request for person credibility/Dotazy na dùvìryhodnost – typ informace o dùvìryhodnosti pro IDFU/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','informationtype','idfu','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dotazy na dùvìryhodnost – typ informace o dùvìryhodnosti pro IDFU',1);
+
+--Original analytics: Správa systému/SMS komunikace/Typ SMS/Token v textu SMS, obsahující prefix definovanı tímto parametrem se neukládá v kartotéceSMS (napø. <<SKRYT_HESLO>>)/0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','*','skrytPrefix','Správa systému','SMS komunikace','SMS komunikace','Prefix zástupného tokenu pro ukrıvání citlivıch informací',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Request for person credibility/Dotazy na dùvìryhodnost – druh vinkulace/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','lock','kind','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dotazy na dùvìryhodnost – druh vinkulace',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Indikátory vymáhanıch pohledávek/Indikátor Rané vym. úvìr - stupeò upomínky/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','indikator','raneUver-stupUpom','Úvìr','Vymáhání úvìru','Indikátory vymáhanıch pohledávek','Indikátor Rané vym. úvìr – stupeò upomínky',1);
+
+--Original analytics: Podpora pro produkt/Skóring (WWW)/Scoring/Maximální poèet opakování scoringu pro <fázi_scoringu>/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','<fáze_scoringu>','maxNumber','Podpora pro produkt','Scoring','Scoring','Maximální poèet opakování scoringu pro <fázi_scoringu>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','fictiveclientid','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - fiktivní klient',1);
+
+--Original analytics: Spoøení/Zmìna smlouvy SS/Change of BS contract/Definuje zda se v prùbìhu uivatelské editace ádosti/návrhu smlouvy <tsml> a plánované zmìny smlouvy <tsml> má v editaèním formuláøi automaticky pøepoèítávat pravidelnı vklad./0
+CALL TW_RegAktAnalytickyPopis('ES','<tsml>','*','aktualizujvklad','Spoøení','Zmìna smlouvy SS','Change of BS contract','automatickı pøepoèet mìsíèního vkladu pro smlouvu <tsml>',1);
+
+--Original analytics: Podpora pro produkt/Údaje o platebním styku k produktu/Registry plateb/poèet hromadnì tvoøenıch pøedpisù poštovních poukázek pro danou periodu <perioda>/0
+CALL TW_RegAktAnalytickyPopis('PK','AV','<tsml>','hromadne<perioda>','Podpora pro produkt','Údaje o platebním styku k produktu','Registry plateb','poèet hromadnì tvoøenıch pøedpisù poštovních poukázek pro danı typ smlouvy a periodu <tsml><perioda>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EO','ENVIRONMENT','DEFPOPLATNIKDAN','*','Osoba','Evidence osoby','Persons','Defaultní pøíznak poplatník danì z pøíjmu v ÈR [rezident]',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','errorfilecd','bankcode','Podpora pro produkt','Úvìrovı registr','Batch','Chybovı soubor ÚR - pozice kódu banky v souboru smluv',1);
+
+--Original analytics: Osoba/Notifikace/Obecné parametry/Parametr øídí, za má bıt uivatel notifikován v pøípadì zmìny mobil-SIS./0
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','zmena_mobil-SIS','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi zmìnì mobil-SIS',1);
+
+--Original analytics: Spoøení/Problémy opisovanıch formuláøù/Cesty/Definuje defaultní nastavení cesty, v rámci adresáøové struktury filesystému, k adresáøi pro vıstupní export podkladù./0
+CALL TW_RegAktAnalytickyPopis('ES','PROBLOPISU','*','EXPORTDIR','Spoøení','Správa problémù','Cesty','Cesta k adresáøi pro export podkladù k problémùm v opisovaném formuláøi',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','operationfilename','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - soubor operací',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','zerocreditamout','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - zaøadit kontrakty s vıší úvìru 0"',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','contractdatefrom','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - datum od',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Indikátory vymáhanıch pohledávek/Indikátor Rané vym. spoø. - stupeò upomínky/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','indikator','raneSpor-stupUpom','Úvìr','Vymáhání úvìru','Indikátory vymáhanıch pohledávek','Indikátor Rané vym. spoø. – stupeò upomínky',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Generovat vızvu pro roli ve fázi/Parametr urèuje, zda pro osoby na daném úvìru v roli daného typu (<typ_role>) povolit vytvoøení vızvy i pro jejich manele/manelky (evidováno jako rodinné vztahy mezi osobami). Platí pro 2. fázi vızvy./0
+CALL TW_RegAktAnalytickyPopis('RU','vyzva','tvorba-faze2-manz','<typ_role>','Úvìr','Vızva ke splacení','Generovat vızvu pro roli ve fázi','Generovat vızvu ke splacení pro manela(-ku) osoby v roli <typ_role> fáze 2',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Povolit tvorbu inkas u jednorázovıch pøíkazù/0
+CALL TW_RegAktAnalytickyPopis('AN','*','*','povolitInkaso','Platební styk','Jednorázovı pøíkaz','Single Payment','Povolit tvorbu inkas u jednorázovıch pøíkazù',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EA','archivace','doc_type_new','tab_umor','Úvìr','Tabulka umoøení','Archivation','novı typ dokumentu pro archivaci tabulky umoøení',1);
+
+--Original analytics: Úvìr/Zajištìní úvìru/Dbregistry/Èíslo zajištìní typu Bez zajištìní/0
+CALL TW_RegAktAnalytickyPopis('EU','*','zajist','bezZajisteni','Úvìr','Zajištìní úvìru','Credit Insurance','Èíslo zajištìní typu „Bez zajištìní“',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','CRU','batch','nextbatchnumber','Podpora pro produkt','Centrální registr úvìrù (CRÚ)','Central Register of Credits','Poøadové èíslo dávky pro uzávìrkovı soubor do CRU',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Koncovka registraèního èísla smlouvy pro <typ smlouvy>/0
+CALL TW_RegAktAnalytickyPopis('EU','regcis','<typ_smlouvy>-<variantaPU>','typsml','Úvìr','Úvìrová smlouva','Management of credit contract','Koncovka registraèního èísla smlouvy pro <typ smlouvy> a <variantu PÚ>',1);
+
+--Original analytics: Spoøení/Realizace spoøení/Parameters of saving realization/Maximální vıše dotace spoøicího konta PLFO/0
+CALL TW_RegAktAnalytickyPopis('RS','<treal>','*','maxdotace','Spoøení','Realizace spoøení','Parameters of saving realization','maximální vıše dotace spoøícího konta <treal>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','typ','akceptace_nabidka','Správa systému','E-mailová komunikace','Vazby na typy e-mailù','Typ e-mailu pøi akceptaci nabídky',1);
+
+--Original analytics: Úvìr/Splátka nesplacená ve lhùtì/Not paid credit repayments/Limit pro nesplacené vklady povinného dospoøování pøi PÚ v mìsíci/0
+CALL TW_RegAktAnalytickyPopis('RU','*','nespsmldospor','limit','Úvìr','Splátka nesplacená ve lhùtì','Not paid credit repayments','Limit pro nesplacené dospoøování pøi PÚ v mìsíci',1);
+
+--Original analytics: Osoba/Kartotéka správy slueb/Deaktivace slueb/Poèet mìsícù pro hromadnou deaktivaci slueb/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','spravasluzeb','pocmesdeaktivace','Osoba','Kartotéka správy slueb','Kartotéka správy slueb','Poèet mìsícù pro hromadnou deaktivaci slueb',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','kanal','typ','Správa systému','SMS komunikace','Obecné parametry','kanál odesílání SMS',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','errorfilecd','date','Podpora pro produkt','Úvìrovı registr','Batch','Chybovı soubor ÚR - pozice datumu v souboru smluv',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Spoøení - Provádìt kontrolu oprávnìnosti OZ pro PO/0
+CALL TW_RegAktAnalytickyPopis('RZ','*','*','KontrolaOpravPO','Spoøení','(nezaøazeno)','Saving','Spoøení - Provádìt kontrolu oprávnìnosti OZ pro PO',1);
+
+--Original analytics: Osoba/Komunikaèní kanál k osobì/Functionality of communication channels/Komunikaèní kanál pro slubu SIS/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','sluzbaSIS','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro slubu SIS',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','minvymahuver','Podpora pro produkt','Úvìrovı registr','Batch','Minimální vymáhaná èástka pro urèení statusu operace do ÚR',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Pozdní vymáhání - podmínka dluné splátky/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','zarazeni','dluhSpl','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Pozdní vymáhání – podmínka dluné splátky',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','ub','prolonglimit','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','prodlouení období pro vıpoèet pøeúroèení',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','zmsmlSS','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti o zmìnu smlouvy SS',1);
+
+--Original analytics: Podpora pro produkt/Skóring (WWW)/Scoring/<Typ_komunikaèního_kanálu> s vlivem na nastavení indikátoru scoringu „existence mobilu s pøedplatnım“/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','indMobilPredpl','12','Podpora pro produkt','Scoring','Scoring','<Typ_komunikaèního_kanálu> s vlivem na nastavení indikátoru scoringu „existence mobilu s pøedplatnım“',1);
+
+--Original analytics: Úvìr/Zajištìní úvìru/Credit Insurance/Maximální vıše nezajištìného úvìru pro typ smlouvy/0
+CALL TW_RegAktAnalytickyPopis('EU','zajist','*','maxVyseNezajUver','Úvìr','Zajištìní úvìru','Credit Insurance','Limit nezajištìné èásti úvìru',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','email-SIS_chyba','Osoba','Komunikaèní kanál k osobì','Texty hlášení','Text chybového hlášení pøi neexistenci email-SIS',1);
+
+--Original analytics: Platební styk/Šek/Accounting/èástka poplatku pro pásmo <n>/0
+CALL TW_RegAktAnalytickyPopis('AS','ipb','*','poplcastkadalsi','Platební styk','Šek','Accounting','inkrement èástky poplatku pro nejvyšší pásmo',1);
+
+--Original analytics: Platební styk/Single payment/Single payment/Typy plateb pro dodateèné zpracování jednorázovıch pøíkazù/0
+CALL TW_RegAktAnalytickyPopis('AN','*','batch','typyPlateb','Platební styk','Jednorázovı pøíkaz','Single Payment','Typy plateb pro dodateèné zpracování jednorázovıch pøíkazù',1);
+
+--Original analytics: Správa systému/E-mailová komunikace/Pøílohy/Definuje lokalitu exportu pøílohy e-mailu/0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','priloha','export_dir','Správa systému','E-mailová komunikace','Pøílohy','Lokalita pro export pøílohy e-mailu',1);
+
+--Original analytics: Osoba/Evidence osoby/Persons/Komunikaèní kanál pro Telefon zamìstnání/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','telzam','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Telefon zamìstnání',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','includeguarantor','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - zahrnout ruèitele',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','prijemce','callcentrum','Správa systému','E-mailová komunikace','Adresy pøíjemcù','Implicitní adresa call centra pro e-mailovou komunikaci',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','personfilename','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - soubor osob',1);
+
+--Original analytics: Spoøení/Realizace spoøení/Parameters of saving realization/Typ realizace spoøení pro charakter úètu – platební stavební spoøení FO/0
+CALL TW_RegAktAnalytickyPopis('RS','FO','open','trealP','Spoøení','Realizace spoøení','Parameters of saving realization','typ realizace spoøení pro charakter úètu – platební stavební spoøení FO',1);
+
+--Original analytics: Správa systému/E-mailová komunikace/Vazby na typy e-mailù/Definuje typ e-mailu, kterı bude odeslán v pøípadì nastavení pøeposílání kopie novıch nabídek na e-mail uivatele./0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','typ','kopie_uziv','Správa systému','E-mailová komunikace','Vazby na typy e-mailù','Typ e-mailu pro kopii nabídky uivateli',1);
+
+--Original analytics: Spoøení/Realizace spoøení/Parameters of saving realization/Typ realizace spoøení pro charakter úètu - stavební spoøení FO/0
+CALL TW_RegAktAnalytickyPopis('RS','FO','open','trealS','Spoøení','Realizace spoøení','Parameters of saving realization','typ realizace spoøení pro charakter úètu - stavební spoøení FO',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','CRU','batch','createineom','Podpora pro produkt','Centrální registr úvìrù (CRÚ)','Central Register of Credits','Zaøazení uzávìrkového souboru CRÚ do mìsíèní dávky',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Indikátory vymáhanıch pohledávek/Indikátor Rané vym. úvìr - typ upomínky/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','indikator','raneUver-typUpom','Úvìr','Vymáhání úvìru','Indikátory vymáhanıch pohledávek','Indikátor Rané vym. úvìr – typ upomínky',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','SMTP','server','Správa systému','E-mailová komunikace','Odeslání','SMTP server pro e-mailovou komunikaci',1);
+
+--Original analytics: Spoøení/Vypoøádání stavebního spoøení/Building saving settlement/minimální limit èástky pro zpùsob vıplaty/0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','vyplata','odkladprov','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','odklad provedení vıplaty',1);
+
+--Original analytics: Platební styk/Šek/Accounting/druh pøi úètování dotace [PK] poplatku/0
+CALL TW_RegAktAnalytickyPopis('AS','dotacePK','*','druhpoplIPBpk','Platební styk','Šek','Accounting','druh pøi úètování dotace poplatku na PK',1);
+
+--Original analytics: Osoba/Notifikace/Obecné parametry/Parametr øídí, zda má bıt uivatel notifikován v pøípadì neprovedení platebního pøíkazu./0
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','neprprikazu','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi chybì zpracování jedn. pøíkazu',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('AX','typDane','modelovani','danZPremii','Klientské úèetnictví','Zdanìní','Tax kinds','Typ srákové danì pro modelování prémií',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','zmosobniudaj','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti o zmìnu osobních údajù',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Druh operace pro jednorázové pøíkazy ve vlastní bance/0
+CALL TW_RegAktAnalytickyPopis('AN','*','*','druhuhr_v','Platební styk','Jednorázovı pøíkaz','Single Payment','Druh operace pro jednorázové pøíkazy ve vlastní bance',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Skupina zvláštních reimù pro pozdní vymáhání./0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','rezimy','skupinaPozdni','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Pozdní vymáhání – skupina zvl. re.',1);
+
+--Original analytics: Spoøení/Vytváøení smlouvy SS/Creating of BS contract/Specifikovat èísla úètù platebního styku smlouvy SS v Ú/0
+CALL TW_RegAktAnalytickyPopis('ES','*','speccisluctu','smlouvySS','Spoøení','Vytváøení smlouvy SS','Creating of BS contract','specifikovat èísla úètù platebního styku smlouvy SS v Ú',1);
+
+--Original analytics: Osoba/Komunikaèní kanál k osobì/Functionality of communication channels/Komunikaèní kanál pro slubu SMS/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','sluzbaSMS','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro slubu SMS',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Indikátory vymáhanıch pohledávek/Indikátor Rané vym. úvìr - dluné splátky/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','indikator','raneUver-dluzSpl','Úvìr','Vymáhání úvìru','Indikátory vymáhanıch pohledávek','Indikátor Rané vym. úvìr – dluné splátky',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Jednorázové pøíkazy – povolit prior. platby/0
+CALL TW_RegAktAnalytickyPopis('AN','*','povolit','prioritniPlatby','Platební styk','Jednorázovı pøíkaz','Single Payment','Jednorázové pøíkazy – povolit prior. platby',1);
+
+--Original analytics: Spoøení/Problémy opisovanıch formuláøù/Generování/Èíslo spuštìné dávky, pro hromadné generování podkladù pro komunikaci o problémech v poadavku/0
+CALL TW_RegAktAnalytickyPopis('ES','PROBLOPISU','*','GENHROMSESSIONID','Spoøení','Správa problémù','Podklady','SessionId aktuálnì spuštìné dávky pro generování podkladù',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','batchdateallowed','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - nastavit datum platnosti dávky uivatelsky',1);
+
+--Original analytics: Podpora pro produkt/Scoring/Dbregistry/Scorovat ádost pøi pøedání/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','sc1','autoScPredani','Podpora pro produkt','Scoring','Scoring','Scorovat ádost pøi pøedání',1);
+
+--Original analytics: Osoba/Notifikace/Obecné parametry/Parametr øídí, za má bıt uivatel notifikován v pøípadì zmìny email-SIS./0
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','zmena_email-SIS','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi zmìnì email-SIS',1);
+
+--Original analytics: Externí produkt/Správa externího pojištìní úvìru/Maintenance of External Insurance/Zpùsob provedení úhrady za pojištìní Uniqa/0
+CALL TW_RegAktAnalytickyPopis('EC','uhrpoj','*','zpusobprov','Externí produkt','Správa externího pojištìní úvìru - Úhrada pojistného UNIQA','Maintenance of External Insurance','Zpùsob provedení úhrady za pojištìní Uniqa',1);
+
+--Original analytics: Podpora pro produkt/Vìci pro zajištìní úvìru/Objects/Udává poslední pouité èíslo v èíselné øadì unikátních identifikátorù pojištìní UNIQA./0
+CALL TW_RegAktAnalytickyPopis('EV','*','pojistUNIQA','lastCisloPoj','Podpora pro produkt','Vìci pro zajištìní úvìru','Object','Èíslo pojistky pro pojištìní UNIQA',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','indMobilPausal','12','Podpora pro produkt','Scoring','Scoring','<Typ_komunikaèního_kanálu> s vlivem na nastavení indikátoru scoringu „existence mobilu s paušálním tarifem“',1);
+
+--Original analytics: Externí produkt/Správa externího pojištìní úvìru/Maintenance of External Insurance/Pouívat pravidlo 4 oèí nad kartotékou zmìn fázi pojištìní Uniqa/0
+CALL TW_RegAktAnalytickyPopis('EC','komCRP','*','4oci','Externí produkt','Správa externího pojištìní úvìru - Smlouva UNIQA','Maintenance of External Insurance','Pouívat pravidlo 4 oèí nad kartotékou zmìn fázi pojištìní Uniqa',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','emtyfieldsnumeric','Podpora pro produkt','Úvìrovı registr','Batch','Vyplnìní prázdnıch èíselnıch poloek',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Seznam rolí osob pro kontrolu nedoplatkù/0
+CALL TW_RegAktAnalytickyPopis('EU','*','nedoplatek','schvalenispodm','Úvìr','Úvìrová smlouva','Management of credit contract','Provádìt kontrolu na nedoplatek pøi schválení úvìrové ádosti s podmínkou',1);
+
+--Original analytics: Podpora pro produkt/Údaje o platebním styku k produktu/Registry plateb/platba prostøednictvím Sipo pro smlouvu <tsml>/0
+CALL TW_RegAktAnalytickyPopis('PK','<tsml>','<treal>','platbasipo','Podpora pro produkt','Údaje o platebním styku k produktu','Registry plateb','platba prostøednictvím Sipo pro smlouvu a realizaci <tsml><treal>',1);
+
+--Original analytics: Spoøení/Problémy opisovanıch formuláøù/Emaily/Definuje e-mailovou adresu, ze které je automaticky odesílán e-mail./0
+CALL TW_RegAktAnalytickyPopis('ES','PROBLOPISU','*','EMAILODESILATELE','Spoøení','Správa problémù','Emaily','E-mailová adresa odesílatele problémù pøi opisu',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Appeal for Immediate Repaying of Credit/Lhùta splatnosti vızvy/0
+CALL TW_RegAktAnalytickyPopis('RU','<typ_realizace, *>','vyzva-faze1','lhutasplat','Úvìr','Vızva ke splacení','Appeal for Immediate Repaying of Credit','Lhùta splatnosti vızvy - 1.fáze',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','zmkontakt','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti o zmìnu kontaktních údajù',1);
+
+--Original analytics: Správa systému/E-mailová komunikace/Pøílohy/Definuje podporovanı formát pøílohy/0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','priloha','<id>','Správa systému','E-mailová komunikace','Pøílohy','Podporovanı formát pøílohy <id>',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Povolit editaci a zadávání jednorázovıch pøíkazù/0
+CALL TW_RegAktAnalytickyPopis('AN','*','povolit','editaci','Platební styk','Jednorázovı pøíkaz','Single Payment','Povolit editaci a zadávání jednorázovıch pøíkazù',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Defaultn9 hodnota - KO kritérium"/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','*','DefCheckedKO','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Defaultní hodnota - KO kritérium"',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Generovat vızvu pro roli ve fázi/Parametr urèuje, zda má bıt úètována úhrada za vızvu v 1.fázi/0
+CALL TW_RegAktAnalytickyPopis('RU','<typ realizace>','vyzva-faze2','provuhr','Úvìr','Vızva ke splacení','Generovat vızvu pro roli ve fázi','Úhrada za vızvu – 2.fáze',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','mimor_vypis','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti o mimoøádnı vıpis',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','zpus_koresp','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti pro zmìnu zpùsobu korespondence',1);
+
+--Original analytics: Podpora pro produkt/Scoring/Dbregistry/Vyhodnocovat Scoring2 pro nepovinné osoby/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','sc2','nepovinOsoby','Podpora pro produkt','Scoring','Scoring','Vyhodnocovat Scoring2 pro nepovinné osoby',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','*','synchronne','Správa systému','E-mailová komunikace','Základní nastavení','Synchronní odesílání e-mailù',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EU','remspco','1','popl','Úvìr','Upomínky specifickıch podmínek','Reminders of Specific Conditions','Vıše poplatku pro stupeò upomínky specifickıch podmínek',1);
+CALL TW_RegAktAnalytickyPopis('EU','remspco','2','popl','Úvìr','Upomínky specifickıch podmínek','Reminders of Specific Conditions','Vıše poplatku pro stupeò upomínky specifickıch podmínek',1);
+CALL TW_RegAktAnalytickyPopis('EU','remspco','3','popl','Úvìr','Upomínky specifickıch podmínek','Reminders of Specific Conditions','Vıše poplatku pro stupeò upomínky specifickıch podmínek',1);
+CALL TW_RegAktAnalytickyPopis('EU','remspco','4','popl','Úvìr','Upomínky specifickıch podmínek','Reminders of Specific Conditions','Vıše poplatku pro stupeò upomínky specifickıch podmínek',1);
+CALL TW_RegAktAnalytickyPopis('EU','remspco','5','popl','Úvìr','Upomínky specifickıch podmínek','Reminders of Specific Conditions','Vıše poplatku pro stupeò upomínky specifickıch podmínek',1);
+
+--Original analytics: Spoøení/Vytváøení smlouvy SS//Parametr definuje zpùsob korespondence E-mail./0
+CALL TW_RegAktAnalytickyPopis('ES','*','*','korespondenceemail','Spoøení','Vytváøení smlouvy SS','Creating of BS contract','Zpùsob korespondence – E-mail',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Indikátory vymáhanıch pohledávek/Indikátor pro Vymáhání - insolvence/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','indikator','insolvence-text','Úvìr','Vymáhání úvìru','Indikátory vymáhanıch pohledávek','Indikátor pro Vymáhání – insolvence',1);
+
+--Original analytics: Osoba/Vztah mezi osobami/Definition of relations between persons/Kód, kterım je v èíselníku oznaèen vztah rodinnı pøíslušník/0
+CALL TW_RegAktAnalytickyPopis('EO','ENVIRONMENT','VZTAHYOS','VZTAHRP','Osoba','Vztah mezi osobami','Definition of relations between persons','Typ vztahu mezi osobami pro rodinného pøíslušníka',1);
+
+--Original analytics: Osoba/Vztah mezi osobami/Definition of relations between persons/Kód, kterım je v èíselníku oznaèen vztah opatrovník/0
+CALL TW_RegAktAnalytickyPopis('EO','ENVIRONMENT','VZTAHYOS','VZTAHOP','Osoba','Vztah mezi osobami','Definition of relations between persons','Typ vztahu mezi osobami pro opatrovníka',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Dìlení smluv/0
+CALL TW_RegAktAnalytickyPopis('ES','*','*','deleni','Spoøení','(nezaøazeno)','Saving','Dìlení smluv',1);
+
+--Original analytics: Úvìr/Plán splátek úvìru/Plan of Credit Repayment/Pøíznak zda je povoleno vytváøet plán splátek pøi akci schválení úvìrového návrhu/0
+CALL TW_RegAktAnalytickyPopis('EU','*','schval','plansplat','Úvìr','Úvìrová smlouva','Management of credit contract','Plán splátek pøi schválení',1);
+
+--Original analytics: Platební styk/Pokladna/Printing of cash-desk bill/slovní vyjádøení èísla <øád_èísla><èíslo>/0
+CALL TW_RegAktAnalytickyPopis('AL','*','poplatek','prijem','Platební styk','Pokladna','Cash-desk fee','defaultní vıše poplatku za pøíjem',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Vymáhání - insolvence - skupina zvl. re./0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','rezimy','skupinaInsolv','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Vymáhání – insolvence – skupina zvl. re.',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','timeouterror','Podpora pro produkt','Úvìrovı registr','Query','Chyba pøi time-out pøi komunikaci s ÚR',1);
+
+--Original analytics: Správa systému/SMS komunikace/Obecné parametry/Definuje komunikaèní kanál pro operátora VF/0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','kanal','VF','Správa systému','SMS komunikace','Obecné parametry','Komunikaèní kanál pro operátora VF',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','nespllimitnvlsum','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - dolní práh splátek NVL',1);
+
+--Original analytics: Platební styk/Standing order/Standing order/Provádìt dodateèné zpracování trvalıch pøíkazù v dávce/0
+CALL TW_RegAktAnalytickyPopis('AT','*','batch','dodatZprac','Platební styk','Trvalı pøíkaz','Standing Order','Provádìt dodateèné zpracování trvalıch pøíkazù v dávce',1);
+
+--Original analytics: Osoba/Komunikaèní kanály/Komunikaèní kanály/Urèuje elektronickı typ komunikace, pøi jeho nastavení není úètována úhrada za vıpis u komerèních úvìrù/0
+CALL TW_RegAktAnalytickyPopis('EO','komkanal','*','komunElektr','Osoba','Komunikaèní kanál k osobì','Komunikaèní kanál','Typ elektronické komunikace',1);
+
+--Original analytics: Podpora pro produkt/Vìci pro zajištìní úvìru/Objects/Udává která pojišovna z èíselníku pojišoven je pojišovnou UNIQA./0
+CALL TW_RegAktAnalytickyPopis('EV','*','pojistUNIQA','ICO','Podpora pro produkt','Vìci pro zajištìní úvìru','Object','IÈO pojišovny UNIQA',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','crifendpoint','Podpora pro produkt','Úvìrovı registr','Querry','crifEndPoint',1);
+
+--Original analytics: Podpora pro produkt/Skóring (WWW)/Scoring/<Typ_komunikaèního_kanálu> s vlivem na nastavení indikátoru scoringu „telefon do práce“/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','indTelPrace','12','Podpora pro produkt','Scoring','Scoring','<Typ_komunikaèního_kanálu> s vlivem na nastavení indikátoru scoringu „telefon do práce“',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Defaultní hodnota - Kontrola pøi akci/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','*','DefCheckedDisburs','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Defaultní hodnota - Kontrola pøi akci',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Generovat vızvu pro roli ve fázi/Parametr urèuje, zda pro osoby na daném úvìru v roli daného typu (<typ_role>) povolit vytvoøení vızvy i pro jejich manele/manelky (evidováno jako rodinné vztahy mezi osobami). Platí pro 1. fázi vızvy./0
+CALL TW_RegAktAnalytickyPopis('RU','vyzva','tvorba-faze1-manz','<typ_role>','Úvìr','Vızva ke splacení','Generovat vızvu pro roli ve fázi','Generovat vızvu ke splacení pro manela(-ku) osoby v roli <typ_role> fáze 1',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Spoøení – typ certifikátu pro kontrolu oprávnìnosti OZ/0
+CALL TW_RegAktAnalytickyPopis('RZ','*','*','TypCertKontrolyOprav','Spoøení','(nezaøazeno)','Saving','Spoøení – typ certifikátu pro kontrolu oprávnìnosti OZ',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','phasestorno','Podpora pro produkt','Úvìrovı registr','Query','Úvìrovı registr - fáze storno návrhu',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','uhrada','*','URL','Podpora pro produkt','Produktová úhrada','URL','URL na sazebník poplatkù',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','e-mail','typ','dotaz_sdeleni','Správa systému','E-mailová komunikace','Vazby na typy e-mailù','Typ e-mailu pøi dotazu ke sdìlení',1);
+
+--Original analytics: Osoba/Notifikace/Obecné parametry/Parametr øídí, za má bıt uivatel notifikován v pøípadì zmìny hesla./0
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','zmena_hesla','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat uivatele pøi zmìnì hesla',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','batchdate','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - datum platnosti dávky',1);
+
+--Original analytics: Platební styk/Šek/Accounting/hranice pásma <n> poplatku za šek/0
+CALL TW_RegAktAnalytickyPopis('AS','ipb','*','poplmezdalsi','Platební styk','Šek','Accounting','inkrement hranice v nejvyšším pásmu poplatku za šek',1);
+
+--Original analytics: Podpora pro produkt/Scoring/Dbregistry/Scorovat smlouvu pøi zamítnutí/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','sc2','autoScZamit','Podpora pro produkt','Scoring','Scoring','Scorovat smlouvu pøi zamítnutí',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Mìnit stav pøíkazu na chyba pøi zpracování/0
+CALL TW_RegAktAnalytickyPopis('AN','*','*','chybaPriZpracovani','Platební styk','Jednorázovı pøíkaz','Single Payment','Mìnit stav pøíkazu na chyba pøi zpracování',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('ES','*','priloha','default_cesta','Spoøení','Parametry SS','Základní nastavení','Defaultní lokalita pro vıbìr souboru s pøílohou',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Indikátory vymáhanıch pohledávek/Indikátor Rané vym. spoø. - dluné vklady/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','indikator','raneSpor-dluhVkl','Úvìr','Vymáhání úvìru','Indikátory vymáhanıch pohledávek','Indikátor Rané vym. spoø. – dluné vklady',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','indEmail','12','Podpora pro produkt','Scoring','Scoring','<Typ_komunikaèního_kanálu> s vlivem na nastavení indikátoru scoringu „existence e-mailu“',1);
+
+--Original analytics: Spoøení/Vypoøádání stavebního spoøení/Building saving settlement/minimální limit èástky pro zpùsob vıplaty/0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','vyplata','ub','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','úroková bonifikace pøi vıplatì',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','phaseexisting','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - fáze existence',1);
+
+--Original analytics: Spoøení/Vytváøení smlouvy SS/Creating of BS contract/Podmínit platební stavební spoøení existujícím stavebním spoøením/0
+CALL TW_RegAktAnalytickyPopis('ES','*','platspor','jinasmlouva','Spoøení','Vytváøení smlouvy SS','Creating of BS contract','podmínit platební stavební spoøení existujícím stavebním spoøením',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Appeal for Immediate Repaying of Credit/Nulová sazba SU/0
+CALL TW_RegAktAnalytickyPopis('RU','*','vyzva','sazba','Úvìr','Vızva ke splacení','Appeal for Immediate Repaying of Credit','Nulová sazba SU - obecná',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','informationtype','insolvence','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Typ Informace o dùvìryhodnosti – insolvence',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Indikátory vymáhanıch pohledávek/Indikátor Rané vym. spoø. - nesplacená pohl./0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','indikator','raneSpor-nesplPohl','Úvìr','Vymáhání úvìru','Indikátory vymáhanıch pohledávek','Indikátor Rané vym. spoø. – nesplacená pohl.',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','phasepremclosing','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - fáze pøedèasného ukonèení',1);
+
+--Original analytics: Spoøení/Vypoøádání stavebního spoøení/Building saving settlement/minimální limit èástky pro zpùsob vıplaty/0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','vyplata','nahrvyplsek','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','náhradní vıplata na konto pøi vıplatì šekem pøi vypoøádání stavebního spoøení',1);
+
+--Original analytics: Podpora pro produkt/Vìci pro zajištìní úvìru/Objects/Udává, zda má bıt pojištìn klient nebo pøistupitel./0
+CALL TW_RegAktAnalytickyPopis('EV','pojistUNIQA','*','pojPristup','Podpora pro produkt','Vìci pro zajištìní úvìru','Object','Pojištìní pøistupitele',1);
+
+--Original analytics: Platební styk/Šek/Accounting/úèet pøi úètování dotace [PK] poplatku/0
+CALL TW_RegAktAnalytickyPopis('AS','dotacePK','*','ucetpoplIPBpk','Platební styk','Šek','Accounting','úèet pøi úètování dotace poplatku na PK',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Exportovat správu vymáhané pohledávky pro KL/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','export','<typ_role>','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Exportovat správu vymáhané pohledávky pro <typ_role>',1);
+
+--Original analytics: Podpora pro produkt/Nedefinováno/Parameters of electronical archive/Adresáø pro archivaci avíza platby na provozním kontì/0
+CALL TW_RegAktAnalytickyPopis('EA','archivace','provkonto','avizo','Platební styk','Platba na provozní konta','Operating','adresáø pro archivaci avíza k platbì na provozním kontì',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Smlouvy rodinného spoøení/0
+CALL TW_RegAktAnalytickyPopis('ES','*','*','rodspor','Spoøení','(nezaøazeno)','Saving','Smlouvy rodinného spoøení',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','errorfilecd','bic','Podpora pro produkt','Úvìrovı registr','Batch','Chybovı soubor ÚR - pozice BIÈ v souboru smluv',1);
+
+--Original analytics: Osoba/Evidence osoby/Persons/Komunikaèní kanál pro E-mail/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','email','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro E-mail',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','operationtype','Podpora pro produkt','Úvìrovı registr','Query','Úvìrovı registr - typ operace',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Zpracovávat pøíkazy se splatností do budoucnosti/0
+CALL TW_RegAktAnalytickyPopis('AN','*','*','predcasneZpracovani','Platební styk','Jednorázovı pøíkaz','Single Payment','Zpracovávat pøíkazy se splatností do budoucnosti',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','email-SIS','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro email-SIS',1);
+
+--Original analytics: Správa systému/Sluby pro správu systému/Spoleèné parametry/Maximální limit poètu zobrazenıch záznamù v WEB aplikaci <app>/0
+CALL TW_RegAktAnalytickyPopis('JE','CW','*','limitRecordsOnPage','Správa systému','Sluby pro správu systému','Common parameters','Maximální limit poètu zobrazenıch záznamù v CIBIS-WEB',1);
+
+--Original analytics: Podpora pro produkt/Scoring/Dbregistry/Scorovat ádost pøi stornu/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','sc1','autoScStorno','Podpora pro produkt','Scoring','Scoring','Scorovat ádost pøi stornu',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','*','online','Podpora pro produkt','Úvìrovı registr','Operational','Úvìrovı registr - on-line funkcionalita',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','*','uvergistr','Podpora pro produkt','Úvìrovı registr','Operational','Napojení na úvìrovı registr',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Spojování smluv/0
+CALL TW_RegAktAnalytickyPopis('ES','*','*','spojovani','Spoøení','(nezaøazeno)','Saving','Spojování smluv',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Seznam rolí osob pro kontrolu nedoplatkù/0
+CALL TW_RegAktAnalytickyPopis('EU','*','nedoplatek','schvaleni','Úvìr','Úvìrová smlouva','Management of credit contract','Provádìt kontrolu na nedoplatek pøi schválení úvìrové ádosti',1);
+
+--Original analytics: Platební styk/Standing order/Standing order/Typy plateb pro dodateèné zpracování trvalıch pøíkazù/0
+CALL TW_RegAktAnalytickyPopis('AT','*','batch','typyPlateb','Platební styk','Trvalı pøíkaz','Standing Order','Typy plateb pro dodateèné zpracování trvalıch pøíkazù',1);
+
+--Original analytics: Osoba/Evidence osoby/Persons/Komunikaèní kanál pro Mobilní telefon/0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','mobil','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Mobilní telefon',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Spoøení - limit manuální kontroly/0
+CALL TW_RegAktAnalytickyPopis('RZ','*','*','LimitManualniKontr','Spoøení','(nezaøazeno)','Saving','Spoøení - limit manuální kontroly',1);
+
+--Original analytics: Spoøení/Problémy opisovanıch formuláøù/Emaily/Definuje typ e-mailu,z èíselníku typù  e-mailù./0
+CALL TW_RegAktAnalytickyPopis('ES','PROBLOPISU','*','TYPEMAIL<TYP>','Spoøení','Správa problémù','Emaily','Typ e-mailu pro problémy pøi opisu<TYP>',1);
+
+--Original analytics: Spoøení/Realizace spoøení/Parameters of saving realization/Èíslo nákladového úètu pro dotaci spoøícího konta <treal>/0
+CALL TW_RegAktAnalytickyPopis('RS','<treal>','*','dotaceucet','Spoøení','Realizace spoøení','Parameters of saving realization','èíslo nákladového úètu pro dotaci spoøícího konta <treal>',1);
+
+--Original analytics: Platební styk/Pokladna/Printing of cash-desk bill/slovní vyjádøení èísla <øád_èísla><èíslo>/0
+CALL TW_RegAktAnalytickyPopis('AL','*','poplatek','vydej','Platební styk','Pokladna','Cash-desk fee','defaultní vıše poplatku za vıdej',1);
+
+--Original analytics: Spoøení/Vypoøádání stavebního spoøení/Building saving settlement/minimální limit èástky pro zpùsob vıplaty/0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','vyplata','dopredvaluta','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','vıplata s dopøednou valutou',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Druh operace pro jednorázové pøíkazy mezibankovní/0
+CALL TW_RegAktAnalytickyPopis('AN','*','*','druhuhr','Platební styk','Jednorázovı pøíkaz','Single Payment','Druh operace pro jednorázové pøíkazy mezibankovní',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Zpùsob vıpoètu disponibilního zùstatku pøi provedení/0
+CALL TW_RegAktAnalytickyPopis('AN','*','dispzustatek','zauctovani','Platební styk','Jednorázovı pøíkaz','Single Payment','Zpùsob vıpoètu disponibilního zùstatku pøi provedení',1);
+
+--Original analytics: Klientské úèetnictví/Zdanìní/Tax kinds/Druh danì dle èíselníku daní pro daò z pøíjmu./0
+CALL TW_RegAktAnalytickyPopis('AX','druhDane','danZPrijmu','*','Klientské úèetnictví','Zdanìní','Tax kinds','Druh danì pro daò z pøíjmu',1);
+
+--Original analytics: Podpora pro produkt/Vìci pro zajištìní úvìru/Objects/Udává jaká varianta pojištìní se má defaultnì nabídnout pøi pojištìní UNIQA./0
+CALL TW_RegAktAnalytickyPopis('EV','*','pojistUNIQA','DefVar','Podpora pro produkt','Vìci pro zajištìní úvìru','Object','Defaultní varianta pojištìní UNIQA',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','checkonline','Podpora pro produkt','Úvìrovı registr','Query','Úvìrovı registr - checkOnLine',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','personunique','Podpora pro produkt','Úvìrovı registr','Batch','Osoba jedineèná v dávce',0);
+
+--Original analytics: Úvìr/Realizace úvìru/Credit Realization/Text charakterizující danı typ realizace [<treal>]/0
+CALL TW_RegAktAnalytickyPopis('RU','<treal>','uver','text','Úvìr','Realizace úvìru','Credit Realization','Text charakterizující danı typ realizace <treal>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EO','CREDITRQ','REMOVE','MARRIAGEREL','Osoba','Evidence osoby','Persons','Automaticky rušit nadbyteèné manelské vztahy pøi pøedání Ú.',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Pøíznak, zda se má pøi potvrzení smlouvy vytvoøit realizace úvìru/0
+CALL TW_RegAktAnalytickyPopis('EU','<typ_smlouvy, *>','potvr','vytvreal','Úvìr','Úvìrová smlouva','Management of credit contract','Vytvoøení realizace pøi potvrzení',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Druh operace pro inkasa/0
+CALL TW_RegAktAnalytickyPopis('AN','*','*','druhink','Platební styk','Jednorázovı pøíkaz','Single Payment','Druh operace pro inkasa',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Editovat registraèní èíslo smlouvy pro <typ smlouvy>/0
+CALL TW_RegAktAnalytickyPopis('EU','SUPO','editable','regcissml','Úvìr','Úvìrová smlouva','Management of credit contract','Editovat registraèní èíslo smlouvy pro typ smluvy SUPO',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Pozdní vymáhání - podmínka stupeò upomínky/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','zarazeni','stupUpom','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Pozdní vymáhání – podmínka stupeò upomínky',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Appeal for Immediate Repaying of Credit/Typ úhrady za vızvu/0
+CALL TW_RegAktAnalytickyPopis('RU','vyzva-faze1','*','tuhr','Úvìr','Vızva ke splacení','Appeal for Immediate Repaying of Credit','Typ úhrady za vızvu - 1.fáze',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EU','*','zajist','bankzaruka','Úvìr','Zajištìní úvìru','Typy zajištìní','Èíslo zajištìní – bankovní záruka',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Request for person credibility/Dotazy na dùvìryhodnost – název protokolu zpracování/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','protocol','filename','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dotazy na dùvìryhodnost – název protokolu zpracování',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','ub','limit','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','omezení období pro vıpoèet pøeúroèení',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','errorfilepd','bankcode','Podpora pro produkt','Úvìrovı registr','Batch','Chybovı soubor ÚR - pozice kódu banky v souboru osob',1);
+
+--Original analytics: Podpora pro produkt/Vìci pro zajištìní úvìru/Objects/Minimální doba (ve dnech), po kterou jsou v deníku informací o zpracování pojištìní uchovávány zalogované záznamy o chybách./0
+CALL TW_RegAktAnalytickyPopis('EV','*','pojistUNIQA','dobaUchovChyb','Podpora pro produkt','Vìci pro zajištìní úvìru','Object','Doba pro uchování informací o chybách ze zpracování pojištìní',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('AW','*','prevod','prefix_<zkr_konta>','Platební styk','Poštovní poukázka','A-V file processing','Prefix pøevodovıch dávek A-V do jiného systému <zkr_konta>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','creditregistryuser','Podpora pro produkt','Úvìrovı registr','Query','Úvìrovı registr - uivatel',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','typSMS','registrace','Správa systému','SMS komunikace','SMS komunikace','Typ SMS pro registraci',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 1/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','RIGHT1','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 1',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 3/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','RIGHT3','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 3',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 2/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','RIGHT2','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 2',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 5/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','RIGHT5','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 5',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Credibility of person/Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 4/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','SPECRIGHT','RIGHT4','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dùvìryhodnost osoby - speciální oprávnìní - oprávnìní 4',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','CRU','batch','genEineom','Podpora pro produkt','Centrální registr úvìrù (CRÚ)','Central Register of Credits','Generovat ukonèovací vìtu E v uzávìrkovém souboru mìsíèní dávky do CRÚ',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','errorfilepd','bic','Podpora pro produkt','Úvìrovı registr','Batch','Chybovı soubor ÚR - pozice BIÈ v souboru osob',1);
+
+--Original analytics: Spoøení/Problémy opisovanıch formuláøù/Emaily/Definuje skrytá e-mailovou adresu, na kterou ze které je automaticky odesílán e-mail./0
+CALL TW_RegAktAnalytickyPopis('ES','PROBLOPISU','*','EMAILSKRYTA','Spoøení','Správa problémù','Emaily','E-mailová adresa (skrytá) pro problémy pøi opisu',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Generovat vızvu pro roli ve fázi/Parametr urèuje, které typy rolí mají bıt nabízeny pro generování vızvy ke splacení ve fázi 1/0
+CALL TW_RegAktAnalytickyPopis('RU','vyzva','tvorba-faze1','<typ_role>','Úvìr','Vızva ke splacení','Generovat vızvu pro roli ve fázi','Generovat vızvu ke splacení pro roli <typ_role> fáze 1',1);
+
+--Original analytics: Osoba/Vztahy mezi osobami/Definice vztahù mezi osobami/Typ vztahu mezi osobami pro statutárního zástupce PO/0
+CALL TW_RegAktAnalytickyPopis('EO','ENVIRONMENT','VZTAHYOS','STATUTARNIZASTUPCE','Osoba','Vztah mezi osobami','Definition of relations between persons','Typ vztahu mezi osobami pro statutárního zástupce PO',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','typSMS','autorizace','Správa systému','SMS komunikace','SMS komunikace','Typ SMS pro autorizaci',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Spoøení - limit kontroly certifikátu/0
+CALL TW_RegAktAnalytickyPopis('RZ','*','*','LimitKontrolyCert','Spoøení','(nezaøazeno)','Saving','Spoøení - limit kontroly certifikátu',1);
+
+--Original analytics: Spoøení/Vytváøení smlouvy SS/Creating of BS contract/Maximální poèet platebních stavebních spoøení pro klienta/0
+CALL TW_RegAktAnalytickyPopis('ES','*','platspor','maxpocet','Spoøení','Vytváøení smlouvy SS','Creating of BS contract','maximální poèet platebních stavebních spoøení pro klienta',1);
+
+--Original analytics: Spoøení/Problémové smlouvy SS/Problematic Building Saving Contracts/Minimální saldo spoøicího úètu, které musí bıt dosaeno, aby došlo k automatickému zpìt vzetí vıpovìdi./0
+CALL TW_RegAktAnalytickyPopis('ES','ProblemoveSmlouvy','ZpetVzetiVypovedi','MinSaldo','Spoøení','Problémové smlouvy SS','Problematic Building Saving Contracts','minimální saldo pro zpìt vzetí vıpovìdi',1);
+
+--Original analytics: Úvìr/Vıplata pøeplatku/Disbursement of Credit Overpayment/Zpùsob provedení akce pro <typ_realizace>/0
+CALL TW_RegAktAnalytickyPopis('RU','<typ_realizace>','VyplPO','zpusobprov','Úvìr','Vıplata pøeplatku','Disbursement of Credit Overpayment','Zpùsob provedení akce pro <typ_realizace>\',1);
+
+--Original analytics: Úvìr/Úvìrová smlouva/Management of credit contract/Lhùta pro stanovení data splatnosti/0
+CALL TW_RegAktAnalytickyPopis('EU','<typ smlouvy>','splatnost','rezerva','Úvìr','Úvìrová smlouva','Management of credit contract','Lhùta pro stanovení data splatnosti - rezerva',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Generovat vızvu pro roli ve fázi/Pokud je parametr nastaven na Ano, pak je moné tuté osobu oslovit vızvou ke splacení v 1. i 2. fázi vızvy. Jinak to moné není./0
+CALL TW_RegAktAnalytickyPopis('RU','vyzva','tvorba','povolOpakovatVyzvu','Úvìr','Vızva ke splacení','Generovat vızvu pro roli ve fázi','Povolit vytvoøení opakované vızvy ke splacení pro osobu',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','phaseclosing','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - fáze ukonèení',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','phasecukchange','Podpora pro produkt','Úvìrovı registr','Query','Úvìrovı registr - fáze zmìna ÈÚK',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','createineom','Podpora pro produkt','Úvìrovı registr','Batch','Vytvoøit dávku do ÚR v mìsíèní dávce',1);
+
+--Original analytics: Externí produkt/Správa externího pojištìní úvìru/Maintenance of External Insurance/Limit pojišované èástky pro pojištìní Uniqa/0
+CALL TW_RegAktAnalytickyPopis('EC','komCRP','*','limit','Externí produkt','Správa externího pojištìní úvìru - Smlouva UNIQA','Maintenance of External Insurance','Limit pojišované èástky pro pojištìní Uniqa',1);
+
+--Original analytics: Spoøení/Vypoøádání stavebního spoøení/Building saving settlement/minimální limit èástky pro zpùsob vıplaty/0
+CALL TW_RegAktAnalytickyPopis('RZ','storno','vyplata','zpusobvypl','Spoøení','Vypoøádání stavebního spoøení','Building saving settlement','zpùsob vıplaty',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Správa vymáhané pohledávky/Pozdní vymáhání - dluné vklady/0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','zarazeni','dluzVkl','Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Pozdní vymáhání – dluné vklady',1);
+
+--Original analytics: Platební styk/Mezibankovní platba/CC Process/Rozúètovat dávku CC automaticky/0
+CALL TW_RegAktAnalytickyPopis('CC','CCProcess','*','rozuctovatAuto','Platební styk','Mezibankovní platba','CC Process','rozúètovat dávku CC automaticky',1);
+
+--Original analytics: Spoøení/Realizace spoøení/Parameters of saving realization/Druh úèetní operace pro dotaci spoøícího konta/0
+CALL TW_RegAktAnalytickyPopis('RS','*','*','dotaceucdruh','Spoøení','Realizace spoøení','Parameters of saving realization','druh úèetní operace pro dotaci spoøícího konta',1);
+
+--Original analytics: Platební styk/Pokladna/Printing of cash-desk bill/pøíznak automatického tisku - <typ_dokladu>/0
+CALL TW_RegAktAnalytickyPopis('AL','*','tisk','majitel','Platební styk','Pokladna','Printing of cash-desk bill','Tisknout poloku majitele konta',1);
+
+--Original analytics: Spoøení/Parametry SS/Korespondence/Urèuje elektronickı zpùsob korespondence, pøi jeho nastavení není úètována úhrada za vıpis/0
+CALL TW_RegAktAnalytickyPopis('ES','korespondence','*','korespElektr','Spoøení','Parametry SS','Korespondence','Zpùsob elektronické korespondence',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Generovat vızvu pro roli ve fázi/Parametr urèuje typ úhrady za vızvy v 2.fázi/0
+CALL TW_RegAktAnalytickyPopis('RU','vyzva-faze2','*','tuhr','Úvìr','Vızva ke splacení','Generovat vızvu pro roli ve fázi','Typ úhrady za vızvu – 2.fáze',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Appeal for Immediate Repaying of Credit/Nulová sazba PU/0
+CALL TW_RegAktAnalytickyPopis('RU','*','vyzva','sazbaPU','Úvìr','Vızva ke splacení','Appeal for Immediate Repaying of Credit','Nulová sazba PU - obecná',1);
+
+--Original analytics: Podpora pro produkt/Skóring (WWW)/Scoring/Maximální stáøí pro uznatelnost vıpoètu ukazatele zhodnocení/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','*','maxAgeAllotNum','Podpora pro produkt','Scoring','Scoring','Maximální stáøí pro uznatelnost vıpoètu ukazatele zhodnocení',1);
+
+--Original analytics: Spoøení/Problémy opisovanıch formuláøù/Lhùty/Definuje lhùtu ve dnech od data zpracování podkladu (export, odeslání mailu) pro automatické vytvoøení podkladu pro urgenci./0
+CALL TW_RegAktAnalytickyPopis('ES','PROBLOPISU','*','URGENCE','Spoøení','Správa problémù','Lhùty','Lhùta pro vytvoøení urgence problému v opisovaném formuláøi',1);
+
+--Original analytics: Úvìr/Splátkovı kalendáø úvìru/Schedule of Credit Repayments/Limit pro nesplacené vklady povinného dospoøování pøi PÚ v mìsíci/0
+CALL TW_RegAktAnalytickyPopis('EU','<typ smlouvy>','splatint','EditVariantaSplatky','Úvìr','Splátkovı kalendáø úvìru','Schedule of Credit Repayments','Editovat variantu splátky <Tsml>',1);
+
+--Original analytics: Platební styk/Jednorázovı pøíkaz/Single payment/Zpracovávat online pøíkazy k úhradì uvnitø organizace/0
+CALL TW_RegAktAnalytickyPopis('AN','*','*','OnlineZprac','Platební styk','Jednorázovı pøíkaz','Single Payment','Zpracovávat online pøíkazy k úhradì uvnitø organizace',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','exportpath','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - adresáø dávky',1);
+
+--Original analytics: Spoøení/Realizace spoøení/Parameters of saving realization/Typ realizace spoøení pro charakter úètu - stavební spoøení PO#/0
+CALL TW_RegAktAnalytickyPopis('RS','PO','open','trealS','Spoøení','Realizace spoøení','Parameters of saving realization','typ realizace spoøení pro charakter úètu - stavební spoøení PO',1);
+
+--Original analytics: Spoøení/Realizace spoøení/Parameters of saving realization/Typ realizace spoøení pro charakter úètu – platební stavební spoøení PO/0
+CALL TW_RegAktAnalytickyPopis('RS','PO','open','trealP','Spoøení','Realizace spoøení','Parameters of saving realization','typ realizace spoøení pro charakter úètu – platební stavební spoøení PO',1);
+
+--Original analytics: Osoba/Komunikaèní kanál k osobì/Functionality of communication channels/existence komunikaèních kanálù/0
+CALL TW_RegAktAnalytickyPopis('EO','ENVIRONMENT','TASK','KOMKANAL','Osoba','Komunikaèní kanál k osobì','Komunikaèní kanál','existence komunikaèních kanálù',0);
+
+--Original analytics: Úvìr/Èerpání úvìru/Credit Withdrawals/Druh úè. operaci pøi èerpání na kontì SUK pro typ realizace/0
+CALL TW_RegAktAnalytickyPopis('RU','cerp','cerp','druhucopSUK','Úvìr','Èerpání úvìru','Credit Withdrawals','Druh úè. operaci pøi èerpání na kontì SUK',1);
+
+--Original analytics: Úvìr/Vymáhání úvìru/Indikátory vymáhanıch pohledávek/Indikátor Rané vym. úvìr - dní po spl./0
+CALL TW_RegAktAnalytickyPopis('RU','sprVym','indikator','raneUver-prodleni','Úvìr','Vymáhání úvìru','Indikátory vymáhanıch pohledávek','Indikátor Rané vym. úvìr – dní po spl.',1);
+
+--Original analytics: Osoba/Notifikace/Obecné parametry/Parametr øídí, za má bıt uivatel notifikován v pøípadì zmìny transakèního úètu./0
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','zmena_trnuctu','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi zmìnì transakèního úètu',1);
+
+--Original analytics: Osoba/Dùvìryhodnost osoby/Request for person credibility/Dotazy na dùvìryhodnost – typ informace o dùvìryhodnosti pro ISIR/0
+CALL TW_RegAktAnalytickyPopis('EO','CREDIBILITY','informationtype','isir','Osoba','Dùvìryhodnost osoby','Dùvìryhodnost osoby','Dotazy na dùvìryhodnost – typ informace o dùvìryhodnosti pro ISIR',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('ES','*','naslsml','mes_trv_puvsml','Spoøení','Vytváøení smlouvy SS','Creating of BS contract','poèet mìsícù trvání pùvodní smlouvy',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','batch','contractdateto','Podpora pro produkt','Úvìrovı registr','Batch','Úvìrovı registr - datum do',1);
+
+--Original analytics: Spoøení/Parametry SS/Parameters of building saving/Donatorsko akceptorské smlouvy/0
+CALL TW_RegAktAnalytickyPopis('ES','*','*','donatorakceptor','Spoøení','(nezaøazeno)','Saving','Donatorsko akceptorské smlouvy',1);
+
+--Original analytics: Externí produkt/Správa externího pojištìní úvìru/Maintenance of External Insurance/Pouívat pravidlo 4 oèí nad kartotékou úhrad pojištìní Uniqa/0
+CALL TW_RegAktAnalytickyPopis('EC','uhrpoj','*','4oci','Externí produkt','Správa externího pojištìní úvìru - Úhrada pojistného UNIQA','Maintenance of External Insurance','Pouívat pravidlo 4 oèí nad kartotékou úhrad pojištìní Uniqa',1);
+
+--Original analytics: Správa systému/SMS komunikace/Denní limit poètu odeslanıch SMS/Parametr urèuje maximální poèet SMS, které je moné pro èasovı úsek jeden den (èasovı úsek se stejnım provozním datem systému) odeslat ve vztahu k jednomu klientovi./0
+CALL TW_RegAktAnalytickyPopis('TW','SMS','limit','pocet_den','Správa systému','SMS komunikace','Denní limit poètu odeslanıch SMS','Denní limit poètu odeslanıch SMS',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','messagetopicality','Podpora pro produkt','Úvìrovı registr','Query','Úvìrovı registr - aktuálnost zprávy',1);
+
+--Original analytics: Podpora pro produkt/Modelovací pøípad SS/Technické parametry modelování/Parametr urèuje minimální prodlevu mezi dvìma pokusy o promítnutí globálních parametrù modelování do doèasnıch optimalizovanıch struktur webovıch aplikací. Hodnota je v minutách./0
+CALL TW_RegAktAnalytickyPopis('MO','modelCore','globParWeb','prodleva','Podpora pro produkt','Modelovací pøípad SS','Technické parametry modelování','Perioda promítnutí globálních parametrù modelování pro webové aplikace',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','mobil-SIS','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro mobil-SIS',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','CRU','batch','filename','Podpora pro produkt','Centrální registr úvìrù (CRÚ)','Central Register of Credits','Název exportního souboru CRÚ',1);
+
+--Original analytics: Podpora pro produkt/Skóring (WWW)/Scoring/Ukládat scoring i pøi chybì pøi <fázi_scoringu>/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','<fáze_scoringu>','createErrorRecord','Podpora pro produkt','Scoring','Scoring','Ukládat scoring i pøi chybì pøi <fázi_scoringu>',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EA','archivace','annotation_new','tab_umor','Úvìr','Tabulka umoøení','Archivation','nová anotace pro archivaci tabulky umoøení',1);
+
+--Original analytics: Podpora pro produkt/Scoring/Dbregistry/Vyhodnocovat Scoring1 pro nepovinné osoby/0
+CALL TW_RegAktAnalytickyPopis('EU','scoring','sc1','nepovinOsoby','Podpora pro produkt','Scoring','Scoring','Vyhodnocovat Scoring1 pro nepovinné osoby',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','role','web','ZA','Podpora pro produkt','Role osob','Roles','Pracovat s rolí <typ role> na webu',1);
+CALL TW_RegAktAnalytickyPopis('EP','role','web','KL','Podpora pro produkt','Role osob','Roles','Pracovat s rolí <typ role> na webu',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','zmkoresp','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti o zmìnu korespondence',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','mobil-SIS_chyba','Osoba','Komunikaèní kanál k osobì','Texty hlášení','Text chybového hlášení pøi neexistenci mobil-SIS',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Generovat vızvu pro roli ve fázi/Parametr urèuje dobu mezi zpracováním vızvy 1.fáze a oèekávanım pøevodem do vymáhání. Nastavuje se poèet mìsícù./0
+CALL TW_RegAktAnalytickyPopis('RU','<typ_realizace, *>','vyzva-faze2','lhutasplat','Úvìr','Vızva ke splacení','Generovat vızvu pro roli ve fázi','Lhùta splatnosti vızvy – 2.fáze',1);
+
+--Original analytics: Úvìr/Vızva ke splacení/Generovat vızvu pro roli ve fázi/Parametr urèuje, které typy rolí mají bıt nabízeny pro generování vızvy ke splacení ve fázi 2/0
+CALL TW_RegAktAnalytickyPopis('RU','vyzva','tvorba-faze2','<typ_role>','Úvìr','Vızva ke splacení','Generovat vızvu pro roli ve fázi','Generovat vızvu ke splacení pro roli <typ_role> fáze 2',1);
+
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','zadost','typy','novasmlSS','Podpora pro produkt','ádosti','Vazby na typy ádostí','Typ ádosti o novou smlouvu SS',1);
+
+ROLLBACK WORK;
+
+--End of A57750_RN00342935_3

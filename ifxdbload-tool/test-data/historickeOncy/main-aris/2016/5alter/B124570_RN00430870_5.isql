@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B124570_RN00430870_5
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+RENAME COLUMN RU_Cerp_Kart.zalohovecerp TO zalohovecerp_deprecated;
+
+ROLLBACK WORK;
+
+--End of B124570_RN00430870_5

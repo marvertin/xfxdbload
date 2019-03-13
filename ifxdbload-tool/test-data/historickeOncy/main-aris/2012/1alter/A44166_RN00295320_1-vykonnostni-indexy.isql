@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A44166_RN00295320_1-vykonnostni-indexy
+-- @TC:ONCE: DESCRIPTION = Doplnìní nových indexù (viz zátìžové testy CIBIS-Web) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE INDEX ep_zadost_kart_i1 ON ep_zadost_kart(zadatel);
+CREATE INDEX ep_zadost_kart_i2 ON ep_zadost_kart(zadatelpo);
+CREATE INDEX ep_zadost_kart_i3 ON ep_zadost_kart(stav,zpusob);
+
+CREATE INDEX ep_zadrole_i1 ON ep_zadrole(os);
+CREATE INDEX ep_zadrole_i2 ON ep_zadrole(smlouva,tsml);
+
+CREATE INDEX ep_zadkomkanal_i1 ON ep_zadkomkanal(os);
+
+CREATE INDEX ep_zadosoba_i1 ON ep_zadosoba(os);
+
+CREATE INDEX ep_zadsmlss_i1 ON ep_zadsmlss(smlouva,tsml);
+
+CREATE INDEX ep_zprava_kart_i1 ON ep_zprava_kart(nepersonifikovana,platnostdo,stav);
+
+CREATE INDEX ep_zpravaprijemce_kart_i1 ON ep_zpravaprijemce_kart(os);
+CREATE INDEX ep_zpravaprijemce_kart_i2 ON ep_zpravaprijemce_kart(smlouva);
+
+CREATE INDEX es_kombpriloh_cis_i1 ON es_kombpriloh_cis(datdo,platnost,ukon);
+
+ROLLBACK WORK;
+
+--End of A44166_RN00295320_1

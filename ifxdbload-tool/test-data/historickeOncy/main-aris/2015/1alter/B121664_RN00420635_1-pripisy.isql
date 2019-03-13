@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B121664_RN00420635_1-pripisy
+-- @TC:ONCE: DESCRIPTION = Žádost o uvolnění SP zadržované MF {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE sp_pripisy_kart ADD(
+  dozadani      Int before navuser,
+  refzadmfdopln Int before navuser);
+  
+  
+ROLLBACK WORK;
+
+--End of B121664_RN00420635_1-pripisy

@@ -147,7 +147,7 @@ public class CatalogHasher {
   public void updateHashes(final SplStatement stm) {
     checkStmType(stm);
     final Object[] params = new Object[] {
-        sha1(stm),
+        stm.getSha1Hash(),
         hashCatalogOne(stm.getNameLower(), stm.getStmType()),
         stm.getStmType().toString(),
         stm.getNameLower().toString(),
@@ -167,9 +167,9 @@ public class CatalogHasher {
     }
   }
 
-  private String sha1(final SplStatement stm) {
-    return DigestUtils.sha1Hex(stm.getText());
-  }
+  //  private String sha1(final SplStatement stm) {
+  //    return DigestUtils.sha1Hex(stm.getText());
+  //  }
 
 
 
@@ -191,7 +191,7 @@ public class CatalogHasher {
    */
   public Set<String> notChangedObjNames(final Collection<SplStatement> stms) {
     return stms.stream()
-        .filter(stm -> sha1(stm).equals(hešeDříveZavedených.get(stm.getNameLower())))
+        .filter(stm -> stm.getSha1Hash().equals(hešeDříveZavedených.get(stm.getNameLower())))
         .map(SplStatement::getNameLower)
         .collect(Collectors.toSet());
   }

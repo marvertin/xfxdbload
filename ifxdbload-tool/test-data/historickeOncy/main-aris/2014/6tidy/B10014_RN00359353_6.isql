@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B10014_RN00359353_6
+-- @TC:ONCE: DESCRIPTION = Změna vyhodnocování závazků osob pro ÚŽ {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+drop procedure ISal_GetFoPoByRcIc
+;
+
+ROLLBACK WORK;
+
+--End of B10014_RN00359353_6

@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B120798_RN00424182_5
+-- @TC:ONCE: DESCRIPTION = Změna struktury souboru CC {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+
+-- ###############################################################
+--       ao_blokace_kart
+
+-- 42  ao_blokace_kart-3/5       [ALTER.COLUMN]
+/* Byl pridan NOT NULL sloupec bez defaultu */
+ALTER TABLE ao_blokace_kart
+    MODIFY serno           SERIAL   NOT NULL                         ,
+    MODIFY refduvod        INTEGER   NOT NULL                        ;
+
+-- 46  ao_blokace_kart-7/10       [CREATE.INDEX]
+CREATE unique INDEX ao_blokace_kart_pk ON ao_blokace_kart (serno) ;
+
+-- 47  ao_blokace_kart-8/10       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ao_blokace_kart
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT ao_blokace_kart_pk;
+
+ALTER TABLE ao_blokace_kart ADD CONSTRAINT FOREIGN KEY(refduvod) REFERENCES ao_duvodblokace_cis(serno) CONSTRAINT ao_blokace_kart_f1;
+
+ROLLBACK WORK;
+
+--End of B120798_RN00424182_5

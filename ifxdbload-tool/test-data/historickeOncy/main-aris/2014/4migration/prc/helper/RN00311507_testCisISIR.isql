@@ -1,0 +1,65 @@
+create function RN00311507_testCisISIR(ACisJednaciISIR Char(45)) returning Int;
+-- návratové hodnoty:
+-- 0 - OK
+-- 1 - Není evidován žádný soud pro spisovou značku soudu
+-- 2 - Je evidováno více soudů pro spisovou značku soudu
+-- 3 - Spisová značka - senát není číslo
+-- 4 - Spisová značka - rejstřík není zkratka INS
+-- 5 - Spisová značka - bc není číslo
+-- 6 - Spisová značka - ročník není číslo, nebo není v rozmezí 1-9999
+
+define _spisznsenat       char(45);
+define _spisznrejstrik    char(45);
+define _spisznbc          char(45); 
+define _spisznrocnik      char(45);
+define _spisznsoud        char(45);
+define _token1            Varchar(45);
+define _hodnota           Varchar(45);
+define _index             Int;
+define _refsoud           Int;
+define _pocet             Int;
+
+let _index = 0;
+let _token1 = TW_StrToken(ACisJednaciISIR, '/', _index);
+let _index = 1;
+let _spisznrocnik = TW_StrToken(ACisJednaciISIR, '/', _index);
+
+-- pouzity replace z dovodu nahradenia medzery za jedinecny znak stupen '°', 
+-- aby sme mohli rozdelit varchar priklad 'MSPH 42 INS 9147' -> 'MSPH°42°INS°9147' na casti
+let _hodnota = replace(_token1, ' ', '°');
+let _index = 0;
+let _spisznsoud = TW_StrToken(_hodnota, '°', _index);
+let _index = 1;
+let _spisznsenat = TW_StrToken(_hodnota, '°', _index);
+let _index = 2;
+let _spisznrejstrik = TW_StrToken(_hodnota, '°', _index);
+let _index = 3;
+let _spisznbc = TW_StrToken(_hodnota, '°', _index);
+
+
+SELECT COUNT(*) INTO _pocet FROM EO_Soud_Cis WHERE zkratkaspis = _spisznsoud;
+if _pocet = 0 then
+  return 1;
+elif _pocet > 1 then
+  return 2;
+end if;
+
+if TW_IsCharNumOnly(_spisznsenat) = 0 then
+  return 3;
+end if;
+
+if _spisznrejstrik <> 'INS' then
+  return 4;
+end if;
+
+if TW_IsCharNumOnly(_spisznbc) = 0 then  
+  return 5;
+end if;
+
+if TW_IsCharNumOnly(_spisznrocnik) = 0 or  _spisznrocnik not between 1 and 9999 then  
+  return 6;
+end if;
+
+return 0;
+
+end function;

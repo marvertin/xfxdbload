@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B132227_36886_3-AC_Pair_Cis
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ac_pair_cis (typparu, popis, platnost, delenabled) VALUES ('CRPR', 'jednotlivý převod časového rozlišení', 1, 0);
+INSERT INTO ac_pair_cis (typparu, popis, platnost, delenabled) VALUES ('CRMA', 'přemapování časového rozlišení', 1, 0);
+INSERT INTO ac_pair_cis (typparu, popis, platnost, delenabled) VALUES ('CRST', 'storno časového rozlišení', 1, 0);
+INSERT INTO ac_pair_cis (typparu, popis, platnost, delenabled) VALUES ('CRHR', 'hromadný převod časového rozlišení', 1, 0);
+
+ROLLBACK WORK;
+
+--End of B132227_36886_3-AC_Pair_Cis

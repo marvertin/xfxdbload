@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A40470_RN00241425_3
+-- @TC:ONCE: DESCRIPTION = Odpis a postoupení nevymáhaných a neklasifikovaných úvìrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO RU_TypPrVym_Cis(typprvym, popis, splzbytdluh, schemasplac) VALUES('PRIMYODPIS', 'Pøímý odpis', 1, 'VYMAH-SOUD');
+
+ROLLBACK WORK;
+
+--End of A40470_RN00241425_3

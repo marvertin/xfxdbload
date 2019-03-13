@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A61786_RN00335314
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE es_sml_mat
+    ADD jeZadostWeb Int default 0 not null before poruser;   
+    
+ALTER TABLE es_sml_arch
+    ADD jeZadostWeb Int default 0 not null before poruser;   
+    
+ROLLBACK;
+
+--End of A61786_RN00335314

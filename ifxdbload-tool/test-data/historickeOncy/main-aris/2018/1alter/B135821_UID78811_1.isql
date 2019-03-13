@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135821_UID78811_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25030: Úprava číselníku států {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_stat_cis
+  ADD zadatnarodniid   Integer  DEFAULT 0 NOT NULL BEFORE poznamka
+  , ADD CONSTRAINT CHECK (zadatnarodniid IN (0,1)) CONSTRAINT eo_stat_cis_d68t;
+
+ALTER TABLE eo_stat_acis
+  ADD zadatnarodniid   Integer  DEFAULT 0 NOT NULL BEFORE poznamka
+  , ADD CONSTRAINT CHECK (zadatnarodniid IN (0,1)) CONSTRAINT eo_stat_acis_d68u;
+
+ROLLBACK WORK;
+
+--End of B135821_UID78811_1

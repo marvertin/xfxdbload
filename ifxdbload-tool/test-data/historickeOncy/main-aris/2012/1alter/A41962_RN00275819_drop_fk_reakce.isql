@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A41962_RN00275819_drop_fk_reakce
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál - zprávy {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+
+ALTER TABLE ep_zpravareakce_den DROP CONSTRAINT ep_zpravareakce_den_fk1;
+
+ALTER TABLE ep_zpravareakce_den ADD CONSTRAINT FOREIGN KEY(zpravaid) REFERENCES ep_zprava_kart(zpravaid) CONSTRAINT ep_zpravareakce_den_fk1;
+
+ROLLBACK;
+

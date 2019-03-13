@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, B133467_UID36886_1-AcrRzAcruTransBeh
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+CREATE TABLE acr_rzacrutransbeh_prot (
+  serno   SERIAL NOT NULL,
+  datprov   DATE NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  runerr   Integer  DEFAULT 0 NOT NULL,
+  starttime   datetime year to second,
+  endtime   datetime year to second,
+  excid   VARCHAR(255),
+  numerr   Integer,
+  texterr   VARCHAR(255),
+  errortime   datetime year to second,
+  akttime   datetime year to second,
+  stavtime   datetime year to second  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (runerr IN (0,1)) CONSTRAINT acr_rzacrutransbeh_prot_d2ul
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX acr_rzacrutransbeh_prot_pk ON acr_rzacrutransbeh_prot(serno);
+ALTER TABLE acr_rzacrutransbeh_prot ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT acr_rzacrutransbeh_prot_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+
+ROLLBACK WORK;
+
+--End of B133467_UID36886_1-AcrRzAcruTransBeh

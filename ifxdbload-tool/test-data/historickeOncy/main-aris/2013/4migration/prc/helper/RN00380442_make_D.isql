@@ -1,0 +1,757 @@
+create PROCEDURE RN00380442_make_D (-- vstupni paramtery
+                                    ABezTransakci integer default 0,    -- slouzi k testovacim ucelum,
+                                                                        -- kdy si uzivatel sam ridi transakce
+                                                                        -- muze pouzivat i zakaznik
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+
+define _ser             int;
+define _vec             int;
+define _jezajisteni     int;
+define _jeucel          int;
+define _katastruzemi    CHAR(50);
+define _parcela         CHAR(25);
+define _cislopopisne    CHAR(25); 
+define _cisloevidencni  CHAR(25);
+define _cislobytu       CHAR(25);
+define _druh            CHAR(1);
+define _smlouva         char(1024);
+define _stav            char(1024);
+define _reffo           char(1024);
+define _refbo           CHAR(1024);
+
+define _smlouvasml      dec(16,0);
+define _stavsml         char(1);
+define _tsmlsml         char(4);
+define _reffosml        char(2);
+define _refbosml        char(2);
+
+define _p1 int;
+define _p2 int;
+define _p3 int;
+define _p4 int;
+define _p5 int;
+define _p6 int;
+define _p7 int;
+define _p8 int;
+define _p9 int;
+define _p10 int;
+define _p11 int;
+define _p12 int;
+define _p13 int;
+define _p14 int;
+define _p15 int;
+define _p16 int;
+define _p17 int;
+define _p18 int;
+define _p19 int;
+define _p20 int;
+define _p21 int;
+define _p22 int;
+define _p23 int;
+define _p24 int;
+define _p25 int;
+define _p26 int;
+define _p27 int;
+define _p28 int;
+define _p29 int;
+define _p30 int;
+define _p31 int;
+define _p32 int;
+define _p33 int;
+define _p34 int;
+define _p35 int;
+define _p36 int;
+define _pocet int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+   BEGIN WORK;
+end if;
+
+begin
+  on exception
+  end exception
+  
+  create index ev_nemov_mat_dotaz on ev_nemov_mat(katastruzemi,  parcela,  cislopopisne,  cislobytu);
+end;  
+
+begin
+  on exception
+  end exception
+  
+  create index eu_ucel_mat_dotaz on eu_ucel_mat(vec);
+end; 
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+   BEGIN WORK;
+end if;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT distinct ser,  vec,  jezajisteni,  jeucel,  katastruzemi,  parcela,  cislopopisne,  cisloevidencni,  cislobytu,  druh
+    INTO          _ser, _vec, _jezajisteni, _jeucel, _katastruzemi, _parcela, _cislopopisne, _cisloevidencni, _cislobytu, _druh
+    FROM RN00380442
+    WHERE zprac < 0
+      ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00380442
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;      
+    
+    let _p1 = null;
+    let _p2 = null;
+    let _p3 = null;
+    let _p4 = null;
+    let _p5 = null;
+    let _p6 = null;
+    let _p7 = null;
+    let _p8 = null;
+    let _p9 = null;
+    let _p10 = null;
+    let _p11 = null;
+    let _p12 = null;
+    let _p13 = null;
+    let _p14 = null;
+    let _p15 = null;
+    let _p16 = null;
+    let _p17 = null;
+    let _p18 = null;
+    let _p19 = null;
+    let _p20 = null;
+    let _p21 = null;
+    let _p22 = null;
+    let _p23 = null;
+    let _p24 = null;
+    let _p25 = null;
+    let _p26 = null;
+    let _p27 = null;
+    let _p28 = null;
+    let _p29 = null;
+    let _p30 = null;
+    let _p31 = null;
+    let _p32 = null;
+    let _p33 = null;    
+    let _p34 = null;
+    let _p35 = null;    
+    let _p36 = null;
+    
+    ---------------------------------------------------------------
+    -- zajištìní
+    ---------------------------------------------------------------
+    if _jezajisteni = 1 then
+      -- 1 V platných zajištìních jsou zneplatnìné nemovitosti
+      let _pocet = 0;
+      
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav <> 'A'
+                  and z.stav in ('A', 'B', 'C')) then
+        let _p1 = 1;
+      end if;
+      
+      -- 2 V platných zajištìních nemovitostí je nevyplnìn záznam v evidenci nemovitostí
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec
+                      and m.stav = 'A'
+                      and z.stav in ('A', 'B', 'C')
+                      and (n.druh is null and n.katastruzemi is null and n.katastr is null and n.okres is null and n.vymera is null and n.cislovlastlistu is null and n.parcela is null and n.cislopopisne is null and
+                      n.cislobytu is null and n.cisloEvidencni is null and n.popis is null and n.cisloPosudku is null and n.datposudku is null and n.znalec is null and n.odhadCena is null and n.ucetCena is null and
+                      n.zasthodnota is null and n.trzniHodnota is null and n.celkHodnota is null and n.prednostnaroky is null and n.soud is null and n.cislovchodu is null and n.poschodi is null and
+                      n.katastrsprava is null and n.nazevgp is null and n.cislogp is null and n.zhotovitelgp is null and n.ulice is null and n.katastrurad is null and n.stavPojist is null)) then
+        let _p2 = 1;
+      end if;
+      
+      -- 3 V platných nemovitostech použitých v živých zajištìních jsou nemovitosti bez udání druhu
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh is null) then
+        let _p3 = 1;
+      end if;
+      
+      -- 4 Platné nemovitosti v živých zajištìních bez vyplnìného kódu katastrálního území
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.katastrkod is null) then
+        let _p4 = 1;
+      end if;
+      
+      -- 5 Platné nemovitosti v živých zajištìních bez vyplnìného èísla LV
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.cislovlastlistu is null) then
+        let _p5 = 1;
+      end if;
+      
+      -- 6 Platné nemovitosti v živých zajištìních s èíslem LV obsahující nìco jiného než èíslice, mezeru a èárku.
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.cislovlastlistu matches '*[^0-9, .;]*') then
+        let _p6 = 1;
+      end if;
+      
+      -- 7 Platné nemovitosti v živých zajištìních druhu parcela ('O', 'P') bez vyplnìného èísla parcely
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('O', 'P')
+                  and n.parcela is null) then
+        let _p7 = 1;
+      end if;
+      
+      -- 8 Platné nemovitosti v živých zajištìních, kde parcela ('O', 'P'), nebo rozestavìná stavba ('S') obsahuje v èísle parcely nìco jiného než èíslice, mezery, lomítka, èárky, pomlèky, støedníky 
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('O', 'P', 'S') 
+                  and n.parcela  matches '*[^0-9 /,;.-]*'
+                  and not (lower(n.parcela) like '%st%' or lower(n.parcela) like '%st.%')  ) then
+        let _p8 = 1;
+      end if;
+      
+      -- 9 Platné nemovitosti v živých zajištìních, kde je u parcely (druhy 'O', 'P') vyplnìno èíslo popisné nebo evidenèní
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('O', 'P') 
+                  and (n.cislopopisne is not null or n.cisloevidencni is not null)) then
+        let _p9 = 1;
+      end if;
+      
+      -- 10  Platné nemovitosti v živých zajištìních, kde  stavba ('D', 'F', 'G', 'R', 'T') nemá vyplnìno èíslo popisné ani evidenèní
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('D', 'F', 'G', 'R', 'T') 
+                  and (n.cislopopisne is null and n.cisloevidencni is null)) then
+        let _p10 = 1;
+      end if;
+      
+      -- 11  Platné nemovitosti v živých zajištìních, kde stavba, rozestavìná stavba, jednotka, nebo rozestavìná jednotka ('B', 'D', 'F', 'G', 'N', 'R', 'T', 'S')  obsahuje v -  èíslu popisném nìco jiného 
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('B', 'D', 'F', 'G', 'N', 'R', 'T', 'S')
+                  and (n.cislopopisne matches '*[^0-9 /,;.-]*' or n.cislopopisne like '%--%')) then
+        let _p11 = 1;
+      end if;
+      
+      -- 12  Platné nemovitosti v živých zajištìních, kde stavba, rozestavìná stavba, jednotka, nebo rozestavìná jednotka ('B', 'D', 'F', 'G', 'N', 'R', 'T', 'S') obsahuje v -  èíslu evidenèním nìco jiného 
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('B', 'D', 'F', 'G', 'N', 'R', 'T', 'S')
+                  and (n.cisloevidencni matches '*[^0-9 /,;.-]*' or n.cisloevidencni like '%--%')) then
+        let _p12 = 1;
+      end if;
+      
+      -- 13  Platné nemovitosti v živých zajištìních, kde stavba nebo parcela ('D', 'F', 'G', 'R', 'O', 'P') má vyplnìno èíslo bytové jednotky  
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in  ('D', 'F', 'G', 'R', 'O', 'P') 
+                  and n.cislobytu is not null) then
+        let _p13 = 1;
+      end if;
+      
+      -- 14  Platné nemovitosti v živých zajištìních, kde u jednotky ('B', 'N') není vyplnìno èíslo bytu  
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('B', 'N')
+                  and n.cislobytu is null) then
+        let _p14 = 1;
+      end if;
+      
+      -- 15  Platné nemovitosti v živých zajištìních, kde je druh nemovitosti 'M' + 'J' - Nepovolená kategorie nemovitostí v nové evidenci
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('M', 'J')) then
+        let _p15 = 1;
+      end if;
+      
+      -- 16  Platné nemovitosti v živých zajištìních, kde jednotka, nebo rozestavìná jednotka ('B', 'S', 'N') neobsahuje v èísle bytu èíslice, mezery, lomítka, èárky, teèky a støedníky (v údaji je zapsáno 
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('B', 'S', 'N')
+                  and n.cislobytu is not null and n.cislobytu matches '*[^0-9 /,.;]*') then
+        let _p16 = 1;
+      end if;
+      
+      -- 17  Duplicitní nemovitosti v živých zajištìních (shodné území, parcela, è.p., è.bytu)
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n1 on n1.vec = m.vec
+                where m.vec =_vec
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and exists(select  1
+                         from ev_nemov_mat n2
+                         join ev_vec_mat m2 on m2.vec = n2.vec
+                         join eu_zajist_mat z2 on z2.vec = m2.vec
+                         where (n2.katastruzemi = n1.katastruzemi  or (n2.katastruzemi is null and n1.katastruzemi is null))
+                           and (n2.parcela = n1.parcela  or (n2.parcela is null and n1.parcela is null))
+                           and (n2.cislopopisne = n1.cislopopisne  or (n2.cislopopisne is null and n1.cislopopisne is null))
+                           and (n2.cislobytu = n1.cislobytu or (n2.cislobytu is null and n1.cislobytu is null))
+                           and m2.stav = 'A'
+                           and z2.stav in ('A', 'B', 'C')
+                         group by katastruzemi, parcela, cislopopisne, cislobytu 
+                         having count(*) > 1)
+               ) then
+         let _p17 = 1; 
+      end if;
+      
+      -- 34 V živých zajištìních jsou platné nemovitosti, nebo v platných úvìrových smlouvách je úèelem vìc typu Právo stavby ('Z').
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh = 'Z') then
+        let _p34 = 1;
+      end if;
+      
+      -- 35 Platné nemovitosti v živých zajištìních, kde jiný druh nemovitosti než parcela ( vše kromì 'O', 'P') nemá vyplnìné èíslo parcely
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh not in ('O', 'P')
+                  and n.parcela is null) then
+        let _p35 = 1;
+      end if;
+      
+      -- 36 Platné nemovitosti v živých zajištìních, kde rozestavìná stavba, jednotka, nebo rozestavìná jednotka ('B', 'S', 'N') nemá vyplnìno èíslo popisné ani evidenèní
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_zajist_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('B', 'S', 'N') 
+                  and (n.cislopopisne is null and n.cisloevidencni is null)) then
+        let _p36 = 1;
+      end if;
+    end if;  
+    
+    ---------------------------------------------------------------
+    -- úèel
+    ---------------------------------------------------------------
+    if _jeucel = 1 then
+      -- 18  V platných úvìrových smlouvách je úèelem vìc typu nemovitost, která je zneplatnìná
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav <> 'A'
+                  and z.stav in ('A', 'B', 'C')) then
+        let _p18 = 1;
+      end if;
+    
+    
+      -- 19  V platných úvìrových smlouvách je úèelem vìc typu nemovitost, která nemá uvedený druh
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh is null) then
+        let _p19 = 1;
+      end if;
+      
+      -- 20  V platných úvìrových smlouvách je úèelem vìc typu nemovitost, která nemá vyplnìné KÚz
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.katastrkod is null) then
+        let _p20 = 1;
+      end if;
+      
+      -- 21  V platných úvìrových smlouvách je úèelem vìc typu nemovitost, která nemá vyplnìný LV
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.cislovlastlistu is null) then
+        let _p21 = 1;
+      end if;
+      
+      -- 22  V platných úvìrových smlouvách je úèelem vìc typu nemovitost, která v LV obsahujuje nìco jiného než èíslice, mezeru a èárku.
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.cislovlastlistu matches '*[^0-9, .;]*') then
+        let _p22 = 1;
+      end if;
+      
+      -- 23  V platných úvìrových smlouvách je úèelem vìc typu nemovitost, která nemá vyplnìné parcelní èíslo
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.parcela is null) then
+        let _p23 = 1;
+      end if;
+      
+      -- 24  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh nemovitosti je parcela ('O', 'P'), která obsahuje nìco jiného než èíslici, mezeru, lomítko, èárku, pomlèku, støedník (tedy je tam více parcel v jednom), teèku a znaky "st" (tedy je tam oznaèení stavební parcely)
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('O', 'P', 'S') 
+                  and n.parcela  matches '*[^0-9 /,;.-]*'
+                  and (n.parcela like '%st%' or n.parcela like '%st.%') ) then
+        let _p24 = 1;
+      end if;
+      
+      -- 25  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh nemovitosti je parcela ('O', 'P'), která má vyplnìné èíslo poisné nebo evidenèní
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('O', 'P', 'S') 
+                  and (n.cislopopisne is not null or n.cisloevidencni is not null)) then
+        let _p25 = 1;
+      end if;
+      
+      -- 26  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh stavba nebo jednotka ('B', 'D', 'F', 'G', 'N', 'R', 'T'), která nemá vyplnìno èíslo popisné ani evidenèní
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('B', 'D', 'F', 'G', 'N', 'R', 'T') 
+                  and (n.cislopopisne is null and n.cisloevidencni is null)) then
+        let _p26 = 1;
+      end if;
+      
+      -- 27  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh stavba nebo jednotka ('B', 'D', 'F', 'G', 'N', 'R', 'T'), která obsahuje v èíslu popisném nìco jiného než èíslice, mezery, èárky, støedníky, lomítka a pomlèky
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('B', 'D', 'F', 'G', 'N', 'R', 'T')
+                  and (n.cislopopisne matches '*[^0-9 /,;.-]*' or n.cislopopisne like '%--%')) then
+        let _p27 = 1;
+      end if;
+      
+      -- 28  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh stavba nebo jednotka ('B', 'D', 'F', 'G', 'N', 'R', 'T') obsahuje v -  èíslu evidenèním nìco jiného než èíslice, mezery, èárky, støedníky a pomlèky
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('B', 'D', 'F', 'G', 'N', 'R', 'T')
+                  and (n.cisloevidencni matches '*[^0-9 /,;.-]*' or n.cisloevidencni like '%--%')) then
+        let _p28 = 1;
+      end if;
+      
+      -- 29  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh stavba nebo parcela ('B', 'D', 'F', 'G', 'N', 'R', 'O', 'P') má vyplnìno èíslo bytové jednotky
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in  ('S', 'B', 'D', 'F', 'G', 'N', 'R', 'O', 'P') 
+                  and n.cislobytu is not null) then
+        let _p29 = 1;
+      end if;
+       
+      -- 30  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh jednotka ('B'), která nemá vyplnìno èíslo bytu
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh = 'B' 
+                  and n.cislobytu is null) then
+        let _p30 = 1;
+      end if;
+       
+      -- 31  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh nemovitosti 'M' + 'J' - Nepovolená kategorie nemovitostí v nové evidenci
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec 
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh in ('M', 'J')) then
+        let _p31 = 1;
+      end if;
+      
+      -- 32  V platných úvìrových smlouvách je úèelem vìc typu nemovitost a druh jednotka ('B') obsahuje v èísle bytu èíslice, mezery, lomítka a èárky (v údaji je zapsáno více bytù)
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh = 'B'
+                  and (n.cislobytu matches '*[0-9 /.;]*') and n.cislobytu like '%,%') then
+        let _p32 = 1;
+      end if;
+       
+      -- 33  Duplicitní nemovitosti jako úèel v platných úvìrových smlouvách (shodné území, parcela, è.p., è.bytu)
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n1 on n1.vec = m.vec
+                where m.vec =_vec
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and exists(select  1
+                         from ev_nemov_mat n2
+                         join ev_vec_mat m2 on m2.vec = n2.vec
+                         join eu_ucel_mat z2 on z2.vec = m2.vec
+                         where (n2.katastruzemi = n1.katastruzemi  or (n2.katastruzemi is null and n1.katastruzemi is null))
+                           and (n2.parcela = n1.parcela  or (n2.parcela is null and n1.parcela is null))
+                           and (n2.cislopopisne = n1.cislopopisne  or (n2.cislopopisne is null and n1.cislopopisne is null))
+                           and (n2.cislobytu = n1.cislobytu or (n2.cislobytu is null and n1.cislobytu is null))
+                           and m2.stav = 'A'
+                           and z2.stav in ('A', 'B', 'C')
+                         group by katastruzemi, parcela, cislopopisne, cislobytu 
+                         having count(*) > 1)
+               ) then
+         let _p33 = 1; 
+      end if;
+      
+      -- 34 V živých zajištìních jsou platné nemovitosti, nebo v platných úvìrových smlouvách je úèelem vìc typu Právo stavby ('Z').
+      --    Právo stavby ('Z') je v èíselníku druhù nemovitostí - viz annex01
+      if exists(select 1
+                from ev_vec_mat m
+                join eu_ucel_mat z on z.vec = m.vec
+                join ev_nemov_mat n on n.vec = m.vec
+                where m.vec =_vec
+                  and m.stav = 'A'
+                  and z.stav in ('A', 'B', 'C')
+                  and n.druh = 'Z') then
+        let _p34 = 1;
+      end if;
+    end if;  
+    
+    -- doplnìní údajù ze smluv
+    let _smlouva, _stav, _reffo, _refbo = null, null, null, null;
+    
+    foreach
+      select s.smlouva,   s.tsml,   s.stav,   s.reffo,   s.refbo 
+      into    _smlouvasml, _tsmlsml, _stavsml, _reffosml, _refbosml
+      from ev_nemov_mat n 
+      join eu_zajist_mat z on z.vec = n.vec
+      join eu_sml_mat s on s.smlouva = z.smlouva and s.tsml = z.tsml
+      where n.vec =_vec 
+        and s.stav in ('B', 'C', 'D', 'L')
+        
+      
+      if _smlouva is null then
+        let _smlouva = _smlouvasml || '/' || _tsmlsml;
+        let _stav = _stavsml;
+        let _reffo = _reffosml;
+        let _refbo = _refbosml;
+      else
+        let _smlouva = trim(_smlouva) || ',' || _smlouvasml || '/' || _tsmlsml;
+        let _stav = trim(_stav) || ',' || _stavsml;
+        let _reffo = trim(_reffo) || ',' || trim(nvl(_reffosml, ''));
+        let _refbo = trim(_refbo) || ',' || trim(nvl(_refbosml, ''));
+      end if;
+      
+    end foreach;
+    
+    foreach
+      select s.smlouva,   s.tsml,   s.stav,   s.reffo,   s.refbo 
+      into    _smlouvasml, _tsmlsml, _stavsml, _reffosml, _refbosml
+      from ev_nemov_mat n 
+      join eu_ucel_mat z on z.vec = n.vec
+      join eu_sml_mat s on s.smlouva = z.smlouva and s.tsml = z.tsml
+      where n.vec =_vec 
+        and s.stav in ('B', 'C', 'D', 'L')
+      
+      if _smlouva is null then
+        let _smlouva = _smlouvasml || '/' || _tsmlsml;
+        let _stav = _stavsml;
+        let _reffo = _reffosml;
+        let _refbo = _refbosml;
+      else
+        let _smlouva = trim(_smlouva) || ',' || _smlouvasml || '/' || _tsmlsml;
+        let _stav = trim(_stav) || ',' || _stavsml;
+        let _reffo = trim(_reffo) || ',' || trim(nvl(_reffosml, ''));
+        let _refbo = trim(_refbo) || ',' || trim(nvl(_refbosml, ''));
+      end if;
+      
+    end foreach;
+    
+    -- vlastní migrace
+    insert into RN00380442_nemovitost( vec,  jezajisteni,  jeucel,  katastruzemi,  parcela,  cislopopisne,  cisloevidencni,  cislobytu,  druh,  p1,  p2,  p3,  p4,  p5,  p6,  p7,  p8,  p9,  p10,  p11,  p12,  p13,  p14,  p15,  p16,  p17,  p18,  p19,  p20,  p21,  p22,  p23,  p24,  p25,  p26,  p27,  p28,  p29,  p30,  p31,  p32,  p33,  p34,  p35,  p36,  smlouva,  stav,  reffo,  refbo)
+    values                           (_vec, _jezajisteni, _jeucel, _katastruzemi, _parcela, _cislopopisne, _cisloevidencni, _cislobytu, _druh, _p1, _p2, _p3, _p4, _p5, _p6, _p7, _p8, _p9, _p10, _p11, _p12, _p13, _p14, _p15, _p16, _p17, _p18, _p19, _p20, _p21, _p22, _p23, _p24, _p25, _p26, _p27, _p28, _p29, _p30, _p31, _p32, _p33, _p34, _p35, _p36, _smlouva, _stav, _reffo, _refbo);
+    
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00380442 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+end if;
+
+
+-- ukonèení trasování
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+  trace off;
+end if;
+
+drop index ev_nemov_mat_dotaz;
+drop index eu_ucel_mat_dotaz;
+INSERT INTO db_info (kdo, co) VALUES (USER, 'Cibis-RSTS-2014F-02-md407_5 - executed');
+
+--KONEC dokonceni migrace
+
+end procedure;--end of RN00380442_make_D

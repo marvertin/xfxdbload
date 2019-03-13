@@ -1,0 +1,117 @@
+-- @TC:ONCE: ID = V2, B130723_RSTS-3447_1
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+CREATE TABLE eo_typzavazku_cis (
+  id   SERIAL NOT NULL,
+  poradi   Integer,
+  typzavazku   CHAR(50),
+  poznamka   CHAR(255),
+  platnost   Integer  DEFAULT 0,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_typzavazku_cis_d5wi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_typzavazku_cis_pk ON eo_typzavazku_cis(id);
+ALTER TABLE eo_typzavazku_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_typzavazku_cis_pk;
+
+CREATE TABLE eo_typzavazku_acis (
+  idarch   SERIAL NOT NULL,
+  id   Integer NOT NULL,
+  poradi   Integer,
+  typzavazku   CHAR(50),
+  poznamka   CHAR(255),
+  platnost   Integer  DEFAULT 0,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_typzavazku_acis_d5wi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_typzavazku_acis_pk ON eo_typzavazku_acis(idarch);
+ALTER TABLE eo_typzavazku_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_typzavazku_acis_pk;
+
+CREATE TABLE eo_ucelzavazku_cis (
+  id   SERIAL NOT NULL,
+  ucel   CHAR(50),
+  poznamka   CHAR(255),
+  platnost   Integer  DEFAULT 0,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_ucelzavazku_cis_d5wi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_ucelzavazku_cis_pk ON eo_ucelzavazku_cis(id);
+ALTER TABLE eo_ucelzavazku_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_ucelzavazku_cis_pk;
+
+CREATE TABLE eo_ucelzavazku_acis (
+  idarch   SERIAL NOT NULL,
+  id   Integer NOT NULL,
+  ucel   CHAR(50),
+  poznamka   CHAR(255),
+  platnost   Integer  DEFAULT 0,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_ucelzavazku_acis_d5wi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_ucelzavazku_acis_pk ON eo_ucelzavazku_acis(idarch);
+ALTER TABLE eo_ucelzavazku_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_ucelzavazku_acis_pk;
+
+
+CREATE TABLE eo_platnostzavazku_cis (
+  id   SERIAL NOT NULL,
+  stavplatnosti   CHAR(50),
+  poznamka   CHAR(255),
+  platnost   Integer  DEFAULT 0,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_platnostzavazku_cis_d5wi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_platnostzavazku_cis_pk ON eo_platnostzavazku_cis(id);
+ALTER TABLE eo_platnostzavazku_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_platnostzavazku_cis_pk;
+
+CREATE TABLE eo_platnostzavazku_acis (
+  idarch   SERIAL NOT NULL,
+  id   Integer NOT NULL,
+  stavplatnosti   CHAR(50),
+  poznamka   CHAR(255),
+  platnost   Integer  DEFAULT 0,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_platnostzavazku_acis_d5wi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_platnostzavazku_acis_pk ON eo_platnostzavazku_acis(idarch);
+ALTER TABLE eo_platnostzavazku_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_platnostzavazku_acis_pk;
+
+ALTER TABLE seo_osoba_mat 
+  ADD typzavazku    Integer BEFORE poruser,
+  ADD ucel   Integer BEFORE poruser,
+  ADD veritel   CHAR(20) BEFORE poruser,
+  ADD vznik   DATE BEFORE poruser,
+  ADD aktzustatek   DECIMAL(16, 2) BEFORE poruser,
+  ADD vyse   DECIMAL(16, 2) BEFORE poruser,
+  ADD stavplatnosti   Integer BEFORE poruser;
+
+ALTER TABLE seo_osoba_arch 
+  ADD typzavazku    Integer BEFORE poruser,
+  ADD ucel   Integer BEFORE poruser,
+  ADD veritel   CHAR(20) BEFORE poruser,
+  ADD vznik   DATE BEFORE poruser,
+  ADD aktzustatek   DECIMAL(16, 2) BEFORE poruser,
+  ADD vyse   DECIMAL(16, 2) BEFORE poruser,
+  ADD stavplatnosti   Integer BEFORE poruser;
+  
+ROLLBACK WORK;
+
+--End of B130723_RSTS-3447_1

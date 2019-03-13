@@ -1,0 +1,114 @@
+create PROCEDURE RSTS_3441_fix_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser                        Int;
+define _serDM                      Int;
+define _smlouva                    Dec(16,0);
+define _tsml                       Char(4);
+define _datschval                  Date;
+define _datklop                    Date;
+define _datdodatek                 Date;
+define _datzmhypo                  Datetime year to second;
+define _vznikpodhs                 char(10);
+define _varfixace                  Int;
+
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS3441_fix', 'RSTS3441_fix', 'Migrace vzniku pod HS');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  smlouva, tsml, datschval, datzmhypo, datdodatek, datklop
+   INTO  _ser, _smlouva, _tsml, _datschval, _datzmhypo, _datdodatek, _datklop
+   FROM RSTS3441_fix
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS3441_fix
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace    
+    let _vznikpodhs = null;
+    
+    if _datschval >= mdy(11,1,2016) then
+      let _vznikpodhs = 'ODPOCATKU';
+    else
+    
+      if _datdodatek is not null AND _datdodatek >=  mdy(12,1,2016) then
+        let _vznikpodhs = 'DODATKEM';
+      end if      
+      
+      if _datklop is not null AND _datklop >= mdy(11,1,2016) AND (_datdodatek is null OR _datklop < _datdodatek) then         
+        let _vznikpodhs = 'PREKLOPENI';     
+      end if
+      
+      if _vznikpodhs is null and _datzmhypo >= mdy(11,1,2016) AND EXISTS(SELECT 1 FROM eu_kalendarfixaci_mat where smlouva = _smlouva AND tsml = _tsml AND portime = _datzmhypo) then      
+        let _vznikpodhs = 'FIXACI';          
+      end if
+    end if;    
+    
+    UPDATE eu_sml_mat set vznikpodhs = _vznikpodhs WHERE smlouva = _smlouva AND tsml = _tsml;
+
+    UPDATE RSTS3441_fix SET zprac = 1, vznikpodhs = _vznikpodhs, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+      
+      
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

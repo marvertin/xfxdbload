@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B133016_RSTS-12804_6
+-- @TC:ONCE: DESCRIPTION = IFRS - výstup a3invent {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+set triggers for TW_RegistredProc_Kart disabled;
+delete from TW_RegistredProc_Kart where  procname = 'AC_E_15';
+set triggers for TW_RegistredProc_Kart enabled;
+
+ROLLBACK WORK;
+
+--End of B133016_RSTS-12804_6

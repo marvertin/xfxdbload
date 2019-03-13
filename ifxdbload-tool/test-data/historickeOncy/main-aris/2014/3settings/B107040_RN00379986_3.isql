@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B107040_RN00379986_3
+-- @TC:ONCE: DESCRIPTION = Nelze editovat typ vztahu "SD" Přistoupení k závazku PRAV, díky null hodhotě v poli Symetrický vztah. {DEFECT}
+
+
+BEGIN WORK;
+
+update EO_VztahOs_Cis set symetricky = 0;
+
+update EO_VztahOs_Cis set symetricky = 1 where typvztah in ('ES', 'PP');
+
+ROLLBACK WORK;
+
+--End of B107040_RN00379986_3

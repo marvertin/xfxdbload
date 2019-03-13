@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B120754_RN00430866_3
+-- @TC:ONCE: DESCRIPTION = přiznání podkladu  i po datu ukončení aktivity OZ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE do_typdokumentutypobjektu_cis SET kvalitadok = NULL WHERE tabulka != 'seu_checklistitem_mat';
+
+ROLLBACK WORK;
+
+--End of B120754_RN00430866_3

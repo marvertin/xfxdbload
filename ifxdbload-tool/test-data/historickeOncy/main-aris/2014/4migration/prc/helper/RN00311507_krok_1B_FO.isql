@@ -1,0 +1,115 @@
+create procedure RN00311507_krok_1B_FO()
+-- tvorba a naplnění řídící tabulky pro migraci insolvencí
+
+define _rcdec   Dec(16,0);
+define _rc      VarChar(13);
+define _den     Int;
+define _mesic   Int;
+define _rok     Int;
+define _refser  Int;
+define _typid   Char(1);
+define _pohlavi Int;
+define _datnar  Date;
+define _nasobek Int;
+define _fo      Int;
+
+BEGIN WORK;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_1_FO;
+end;
+
+-- řídící tabulka
+CREATE TABLE RN00311507_krok_1_FO(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt default -1,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+
+                            --vlastni data - např. cislo osoby
+  fo      Int,
+  typid   Char(1),
+  rc      Char(13),
+  pohlavi Int,
+  refser  Int,
+  datnar  Date,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+-- update statistik je až zde, protože data byla naplněna do řídící tabulky z excelu
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_krok_1_FO_data;
+     
+-- naplníme řídící tabulku RN00311507_krok_1_FO
+foreach
+  SELECT  ser,    rc, typid, pohlavi, datnar
+    INTO _refser,_rc,_typid,_pohlavi,_datnar
+    FROM RN00311507_krok_1_FO_data
+   ORDER BY ser
+   
+   if _rc is null then
+     -- pokud RČ není zadáno -> vygenerujeme nové RČ
+     let _den = Day(_datnar);
+     let _mesic = Month(_datnar); 
+     let _rok = Year(_datnar);
+     
+     -- úprava roku narození
+     IF _rok <= 1999 THEN
+       let _rok = _rok - 1900;
+     ELSE 
+       let _rok = _rok - 2000;
+     END IF;
+     
+     if _rok > 53 then
+       let _nasobek  = 10000;  
+     else
+       let _nasobek  = 1000;
+     end if
+         
+     -- úprava ženského rodného čísla  
+     IF _pohlavi = 1 THEN
+       let _mesic = _mesic + 50;
+     END IF;
+     
+     -- tvorba rodného čísla
+     let _rcdec = (_rok * 10000 + _mesic * 100 + _den) * _nasobek + 1;
+     
+     WHILE RN00311507_ValidRC(_rcdec) <> 0
+       let _rcdec = _rcdec +1;  
+     END WHILE;
+     
+     if _rok > 53 then
+       let _rc = LPAD(_rcdec, 10, '0');
+     else
+       let _rc = LPAD(_rcdec, 9, '0');
+     end if
+     let _fo = 0;     
+   else
+     let _rc = TRIM(REPLACE(_rc, '/',''));
+     let _fo = tw_null0((SELECT min(aa.fo) FROM eo_fo_mat aa, eo_osoba_mat b WHERE aa.rc = _rc and aa.fo = b.os and b.stav in ('A','U')));
+     
+     -- určíme pohlaví
+     if _pohlavi is null then
+       if _rc[3, 3] IN ('5', '6') then
+         let _pohlavi = 1;
+       else
+         let _pohlavi = 0;
+       end if;
+     end if;
+   end if
+   
+   INSERT INTO RN00311507_krok_1_FO
+       ( fo, rc, pohlavi, refser, datnar, typid)
+     VALUES
+       (_fo,_rc,_pohlavi,_refser,_datnar,_typid);      
+end foreach
+
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_krok_1_FO;
+
+COMMIT WORK;
+
+end procedure;

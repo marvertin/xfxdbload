@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B132237_RSTS-10913_3
+-- @TC:ONCE: DESCRIPTION = Logovat do provozního deníku exporty osob a úvěrů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EO', 1201, 'Exportovat seznam fyzických osob', 1);
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 1201, 'Exportovat seznam úvěrových smluv', 1);
+
+ROLLBACK WORK;
+
+--End of B132237_RSTS-10913_3

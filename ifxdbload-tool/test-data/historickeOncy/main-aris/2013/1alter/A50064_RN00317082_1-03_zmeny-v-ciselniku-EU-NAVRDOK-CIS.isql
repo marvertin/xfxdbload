@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_1-03_zmeny-v-ciselniku-EU-NAVRDOK-CIS
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CALL tw_addSerialColumn('eu_navrdok_cis', 'serno', 'navr');
+
+ALTER TABLE eu_navrdok_cis
+  DROP    navr,
+  DROP    poradi,
+  MODIFY  poznamka            CHAR(160),
+  ADD     typrole             CHAR(2)                     BEFORE portime,
+  ADD     zdrojprijmu         CHAR(1)                     BEFORE portime,
+  ADD     ostatniprijmy       VARCHAR(12, 12)             BEFORE portime,
+  ADD     variantauveru       CHAR(10)                    BEFORE portime,
+  ADD     zobrazitvzajisteni  INTEGER DEFAULT 0           BEFORE portime,
+  ADD     platnostod          DATE                        BEFORE portime,
+  ADD     platnostdo          DATE                        BEFORE portime,
+  ADD     platnost            INTEGER DEFAULT 1 NOT NULL  BEFORE portime
+;
+
+ALTER TABLE eu_navrdok_acis
+  DROP    navr,
+  DROP    poradi,
+  MODIFY  poznamka            CHAR(160),
+  ADD     typrole             CHAR(2)           BEFORE portime,
+  ADD     zdrojprijmu         CHAR(1)           BEFORE portime,
+  ADD     ostatniprijmy       VARCHAR(12, 12)   BEFORE portime,
+  ADD     variantauveru       CHAR(10)          BEFORE portime,
+  ADD     zobrazitvzajisteni  INTEGER DEFAULT 0 BEFORE portime,
+  ADD     platnostod          DATE              BEFORE portime,
+  ADD     platnostdo          DATE              BEFORE portime,
+  ADD     platnost            INTEGER DEFAULT 1 BEFORE portime
+;
+
+CREATE UNIQUE INDEX eu_navrdok_cis_pk ON eu_navrdok_cis(serno);
+ALTER TABLE eu_navrdok_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_navrdok_cis_pk;
+
+ALTER TABLE eu_navrdok_cis
+  ADD CONSTRAINT (CHECK (ostatniPrijmy IN ('NEROZLISENO', 'NEVYPLNENO', 'VYPLNENO')) CONSTRAINT eu_navrdok_cis_c2),
+  ADD CONSTRAINT (CHECK (platnostOd IS NULL OR platnostDo IS NULL OR platnostOd <= platnostDo) CONSTRAINT eu_navrdok_cis_c3),
+  ADD CONSTRAINT CHECK (zobrazitvzajisteni IN (0,1)) CONSTRAINT eu_navrdok_cis_dfdj,
+  ADD CONSTRAINT CHECK (platnost IN (0,1)) CONSTRAINT eu_navrdok_cis_dfdm
+;
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_1-03_zmeny-v-ciselniku-EU-NAVRDOK-CIS

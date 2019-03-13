@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, A61124_RN00325153_3
+-- @TC:ONCE: DESCRIPTION = Rozdìlení parametrù {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'minstupomPOSD', 2, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Minimální stupeò upomínky splátek úvìru PO pro export <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'minstupomPOPR', 2, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Minimální stupeò upomínky splátek úvìru PO pro export <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'minstupomPORU', 2, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Minimální stupeò upomínky splátek úvìru PO pro export <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'minstupomPODP', 2, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Minimální stupeò upomínky splátek úvìru PO pro export <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'minstupomPOZL', 2, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Minimální stupeò upomínky splátek úvìru PO pro export <role>', 1);
+
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'expupomPOSD', 1, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Exportovat upomínku splátek úvìru PO pro <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'expupomPOPR', 1, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Exportovat upomínku splátek úvìru PO pro <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'expupomPORU', 1, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Exportovat upomínku splátek úvìru PO pro <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'expupomPODP', 1, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Exportovat upomínku splátek úvìru PO pro <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'expupomPOZL', 1, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Exportovat upomínku splátek úvìru PO pro <role>', 1);
+
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'expupomPOMK', 0, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Exportovat upomínku splátek úvìru PO pro <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'expupomPOMP', 0, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Exportovat upomínku splátek úvìru PO pro <role>', 1);
+call TW_RegSetOrAddKey('RU', 'upom', 'expkart', 'expupomPOMR', 0, 1, 'Úvìr', 'Upomínka splátek úvìru', 'Remainders of Credit Repayment', 'Exportovat upomínku splátek úvìru PO pro <role>', 1);
+
+ROLLBACK WORK;
+
+--End of A61124_RN00325153_3

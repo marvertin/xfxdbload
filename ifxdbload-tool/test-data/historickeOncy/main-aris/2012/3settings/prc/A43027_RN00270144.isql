@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A43159_RN00270144
+-- @TC:ONCE: DESCRIPTION = Doplnìní VOP 20
+
+create PROCEDURE A43027_RN00270144 ()
+
+  on exception 
+  end exception with resume;
+  
+end procedure;

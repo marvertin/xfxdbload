@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B114414_RN00403728_1
+-- @TC:ONCE: DESCRIPTION = Opravy migrace nemovitostí dle zkušebního běhu migrace v RSTS {DEFECT}
+
+BEGIN WORK;
+
+CREATE INDEX eu_ucel_mat_i1 ON eu_ucel_mat(vec);
+
+ROLLBACK WORK;
+
+--End of B114414_RN00403728_1

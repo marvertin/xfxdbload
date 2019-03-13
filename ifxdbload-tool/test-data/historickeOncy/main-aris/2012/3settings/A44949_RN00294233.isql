@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A44949_RN00294233
+-- @TC:ONCE: DESCRIPTION = Mazání žádostí ve stavu neúplný
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('BD', 'produkt', 'request_delete', 'day', '20', 1, 
+  'Správa systému', 'Noèní dávka', 'Podpora pro produkt', 'Den pro výmaz neúplných žádostí');  
+  
+call tw_regsetoraddkey('BD', 'produkt', 'request_delete', 'time_period', '5', 1, 
+  'Správa systému', 'Noèní dávka', 'Podpora pro produkt', 'Interval pro výmaz neúplných žádostí');
+    
+ROLLBACK WORK;

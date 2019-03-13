@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B125453_RN00453691_1
+-- @TC:ONCE: DESCRIPTION = Pomalý výběr vratky SP na MF, když je zašrtnut příznak "Existence chyby" na Ano. {DEFECT}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE INDEX SP_VChD_Kart_n1 ON SP_VChD_Kart(refvratmf);
+
+CREATE INDEX SP_VChStr_Kart_n1 ON SP_VChStr_Kart(ser);
+
+ROLLBACK WORK;
+
+--End of B125453_RN00453691_1

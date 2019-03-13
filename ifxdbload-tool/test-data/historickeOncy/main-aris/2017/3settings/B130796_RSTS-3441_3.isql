@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B130796_RSTS-3441_3
+-- @TC:ONCE: DESCRIPTION = Zrobustneni dodatku
+
+
+BEGIN WORK;
+
+INSERT INTO  tw_typobjserno_cis (tabulka, nazev, platnost) VALUES ('eu_dodatekhead_mat', 'Dodatky - hlavička', 1)
+;
+
+INSERT INTO  tw_typobjserno_cis (tabulka, nazev, platnost) VALUES ('eu_dodatekzaklad_kart', 'Dodatky - základ', 1)
+;
+
+INSERT INTO  tw_typobjserno_cis (tabulka, nazev, platnost) VALUES ('eu_dodatekposun_mat', 'Dodatky - posun', 1)
+;
+
+INSERT INTO  tw_typobjserno_cis (tabulka, nazev, platnost) VALUES ('eu_dodatekzajist_kart', 'Dodatky - zajištění', 1)
+;
+
+INSERT INTO  tw_typobjserno_cis (tabulka, nazev, platnost) VALUES ('eu_dodatekucel_kart', 'Dodatky - účel', 1)
+;
+
+INSERT INTO  tw_typobjserno_cis (tabulka, nazev, platnost) VALUES ('eu_dodatekspecpodm_kart', 'Dodatky - spec.podm.', 1)
+;
+
+
+ROLLBACK WORK;
+
+--End of B130796_RSTS-3441_3

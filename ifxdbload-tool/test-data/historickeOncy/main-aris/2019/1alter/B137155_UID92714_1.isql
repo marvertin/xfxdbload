@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B137155_UID92714_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32657: IMPLEMENTACE (Export uverove smlouvy): RSTS-31226_Fixace - Modelování
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_expkalendarfixaci_den
+  ADD sazbabe   DECIMAL(6, 2) BEFORE refuser,
+  ADD periodabe   CHAR(1) BEFORE refuser,
+  ADD sazbasa   DECIMAL(6, 2) BEFORE refuser,
+  ADD periodasa   CHAR(1) BEFORE refuser,
+  ADD splatka   DECIMAL(16,2) BEFORE refuser,
+  ADD vznik   CHAR(1) BEFORE refuser;
+  
+ALTER TABLE eu_expkalendarfixaci_den
+ADD CONSTRAINT (CHECK (stav in ('A', 'Z', 'U', 'B')) CONSTRAINT eu_expkalendarfixaci_den_c1),
+ADD CONSTRAINT (CHECK (vznik in ('U', 'D', 'P', 'O', 'M', 'I')) CONSTRAINT eu_expkalendarfixaci_den_c2),
+ADD CONSTRAINT (CHECK (fazeuver IN ('P' ,'S' ,'K' )) CONSTRAINT eu_expkalendarfixaci_den_c3);  
+
+ROLLBACK WORK;
+
+--End of B137155_UID92714_1

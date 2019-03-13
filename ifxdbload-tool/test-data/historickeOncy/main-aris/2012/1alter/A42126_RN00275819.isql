@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A42126_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+RENAME COLUMN eo_sluzba_kart.fo TO os;
+  
+ROLLBACK WORK;
+
+--End of A41970_RN00275819_1

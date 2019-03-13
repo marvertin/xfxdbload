@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B109794_RN00386010_3
+-- @TC:ONCE: DESCRIPTION = chyby dávky BRKI {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into ur_smlstatus_cis
+(smlstatus, popis, vaha, zpusobvyhodnoceni, datumod, datumdo, poznamka, platnost, portime, poruser, reftime, refuser )
+SELECT 'R', popis, vaha, zpusobvyhodnoceni, datumod, datumdo, poznamka, platnost, portime, poruser, reftime, refuser 
+FROM ur_smlstatus_cis
+where smlstatus = 'C';
+
+update ur_smlstatus_cis
+set platnost = 0
+where smlstatus = 'C';
+
+ROLLBACK WORK;
+
+--End of B109794_RN00386010_3

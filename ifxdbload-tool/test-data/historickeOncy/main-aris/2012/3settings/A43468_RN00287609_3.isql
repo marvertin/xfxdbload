@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43468_RN00287609_3
+-- @TC:ONCE: DESCRIPTION = Úprava SMS aparátu pro požadavek RN00275819 (nový CIBIS web) {DEFECT}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('TW','SMS','*','skrytPrefix','SKRYT_',1,'Správa systému','SMS komunikace','Typ SMS','Token v textu SMS, obsahující prefix definovaný tímto parametrem se neukládá v kartotéceSMS (napø. <<SKRYT_HESLO>>)');
+
+ROLLBACK WORK;
+
+--End of A43468_RN00287609_3

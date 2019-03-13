@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A61777_RN00335314_4
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+call RN00335314_find_D();
+
+call RN00335314_make_D();
+
+--End of A61777_RN00335314_4

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B121439_RN00415479_5
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodakce_acis
+    DROP uloztok;
+
+ALTER TABLE ep_splspormodakce_cis
+    DROP uloztok;
+
+ALTER TABLE ep_splspormodb_den
+    DROP vlivnasazbu;
+    
+ROLLBACK WORK;
+
+--End of B121439_RN00415479_5

@@ -1,0 +1,224 @@
+create PROCEDURE RN00415479_vymaz_find_kand_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _headser       int;
+define _vymazmodel    int;
+define _vymazeir      int;
+define _vymazrpsn     int;
+define _akce          CHAR(6);
+define _ulozmodel     int;
+define _potlactokeir  int;
+define _potlactokrpsn int;
+define _smlouvauv     DECIMAL(16,0);
+define _tsmluv        CHAR(4);
+define _stavuv        CHAR(1);
+define _smlspor       DECIMAL(16,0);
+define _tsmlspor      CHAR(4);
+define _stavspor      CHAR(1);
+define _zadostuv      int;
+define _typvyp        CHAR(1);
+define _jeRPSN        int;
+define _jeEIR         int;
+define _vymaztokukonuv    int;
+define _vymaztokukonss    int;
+define _vymazmodelstorno  int;
+define _vymazmodelzamit   int;
+define _requestnumber     dec(16, 0);
+define _poradiakce        int;
+define _poradiakceMaxUZFINA int;
+
+define _priPredaniUZ      int;
+define _priSchvaleniUN    int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00415479', 'RN00415479_vymaz', 'Migrace: výmaz modelování, krok vyhledání kandidátů');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+let _priPredaniUZ = tw_regGetKey('EP', 'modSplacASpor', 'mazaniModelu', 'priPredaniUZ', 0);
+let _priSchvaleniUN = tw_regGetKey('EP', 'modSplacASpor', 'mazaniModelu', 'priSchvaleniUN', 0);
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  headser,  akce,  smlouvauv,  tsmluv,  smlspor,  tsmlspor,  zadostuv,  poradiakce
+   INTO  _ser, _headser, _akce, _smlouvauv, _tsmluv, _smlspor, _tsmlspor, _zadostuv, _poradiakce
+   FROM RN00415479_vymaz
+   WHERE zprac in (-1, -2) -- záporná hodnota -3 má význam, že bylo provedeno vyhledání kandidátů 
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00415479_vymaz
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --------------------------------------------------------------------
+    --vlastni algoritmus migrace
+    let _vymazmodel = 0;
+    let _vymazeir = 0;
+    let _vymazrpsn = 0;
+    let _jeRPSN = 0;
+    let _jeEIR = 0;
+    let _stavuv = null;
+    let _stavspor = null;
+    let _requestnumber = null;
+    
+    
+    -- zjistím, zda existuje EIR, RPSN
+    foreach
+      select typvyp
+      into  _typvyp
+      from ep_splspormodh_den
+      where headser = _headser
+      
+      if _typvyp = 'E' then
+        let _jeEIR = 1;
+      end if;
+      
+      if _typvyp = 'R' then
+        let _jeRPSN = 1;
+      end if;
+    end foreach
+    
+    -- zjistím stavy smluv
+    if _smlouvauv is not null then
+      select stav,    requestnumber
+      into  _stavuv, _requestnumber
+      from eu_sml_mat
+      where smlouva = _smlouvauv
+        and tsml = _tsmluv;
+    end if;
+    
+    if _smlspor is not null then
+      select stav
+      into  _stavspor
+      from es_sml_mat
+      where smlouva = _smlspor
+        and typ = _tsmlspor;
+    end if;
+    
+    select ulozmodel,  potlactokeir,  potlactokrpsn,  vymaztokukonuv,  vymaztokukonss,  vymazmodelstorno,  vymazmodelzamit
+    into  _ulozmodel, _potlactokeir, _potlactokrpsn, _vymaztokukonuv, _vymaztokukonss, _vymazmodelstorno, _vymazmodelzamit
+    from ep_splspormodakce_cis
+    where akce = _akce;
+    
+    -- vlastní vyhodnocení stavu
+    if _ulozmodel = 0 then
+      let _vymazmodel = 1;
+    end if;
+    
+    if _ulozmodel = 1 and _potlactokeir = 1 and _jeEIR = 1 then
+      let _vymazeir = 1;
+    end if;
+    
+    if _ulozmodel = 1 and _potlactokrpsn = 1 and _jeRPSN = 1 then
+      let _vymazrpsn = 1;
+    end if;
+    
+    if _stavspor = 'V' and _jeEIR = 1 and _vymazeir = 0 and _vymaztokukonss = 1 then
+      let _vymazeir = 2;
+    end if;
+
+    if _stavspor = 'V' and _jeRPSN = 1 and _vymazrpsn = 0 and _vymaztokukonss = 1 then
+      let _vymazrpsn = 2;
+    end if;
+    
+    if _stavuv = 'V' and _jeEIR = 1 and _requestnumber = _zadostuv and _vymazeir = 0 and _vymaztokukonuv = 1 then
+      let _vymazeir = 3;
+    end if;
+    
+    if _stavuv = 'V' and _jeRPSN = 1 and _requestnumber = _zadostuv and _vymazrpsn = 0 and _vymaztokukonuv = 1 then
+      let _vymazrpsn = 3;
+    end if;
+    
+    if _stavuv = 'S' and _requestnumber = _zadostuv and _vymazmodel = 0 and _vymazmodelstorno = 1 then
+     let _vymazmodel = 2;
+    end if;
+    
+    if _stavuv = 'Z' and _requestnumber = _zadostuv and _vymazmodel = 0 and _vymazmodelzamit = 1 then
+     let _vymazmodel = 3;
+    end if;
+    
+    if _priSchvaleniUN = 1 and _stavuv in ('D', 'L', 'V') and _requestnumber = _zadostuv and _akce <> 'USSCHV' and _akce like 'US%' and _vymazmodel = 0 then
+      let _vymazmodel = 4;
+    end if;
+    
+    if _priPredaniUZ = 1 and _requestnumber = _zadostuv and _akce like 'UZ%' and _vymazmodel = 0 then
+      -- nejedná se o poslední UZFINA
+      select max(poradiakce)
+      into  _poradiakceMaxUZFINA
+      from ep_splspormodsh_den
+      where smlouvauv = _smlouvauv
+        and tsmluv = _tsmluv
+        and akce == 'UZFINA'
+        ;
+      
+      if _poradiakce <> _poradiakceMaxUZFINA then
+        let _vymazmodel = 5;
+      end if;
+    end if;
+    
+    UPDATE RN00415479_vymaz 
+    SET zprac = -3, NumErr = null, ISAMErr = null, TextErr = null,
+        vymazmodel = _vymazmodel, vymazeir = _vymazeir, vymazrpsn = _vymazrpsn
+    WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

@@ -1,0 +1,32 @@
+create procedure RSTS_2620_migr_iniciator()
+
+define _smlSpor     Dec(16, 0);
+define _tsmlSpor    Char(4);
+define _tsml        Char(4);
+define _konto       Dec(16,0);
+define _tko         Char(2);
+
+
+foreach
+  select distinct smlSpor,  tsmlSpor,  tsml
+  into           _smlSpor, _tsmlSpor, _tsml
+  from eu_sml_mat
+  where stav in ('A', 'B', 'C', 'D', 'L') 
+
+  update es_vkladkin_mat 
+  set iniciatordosp = MOU_GetSmlNova(_smlSpor, nvl((select min(reftime) from es_vkladkin_arch aa where aa.smlouva = es_vkladkin_mat.smlouva and aa.poradi = es_vkladkin_mat.poradi and aa.uroven = es_vkladkin_mat.uroven), datod), _tsml)  
+  where  smlouva = _smlSpor;
+  
+  update rs_upom_kart 
+  set iniciatordosp = MOU_GetSmlNova(_smlSpor, navtime, _tsml)
+  where realn = (select reals from rz_real_mat where smlouva = _smlSpor and tsml = _tsmlSpor);
+  
+  let _konto, _tko = EP_KontoTkoSml(_smlSpor, _tsmlSpor);
+  
+  update ac_ocsaldo_den
+  set iniciatordosp = MOU_GetSmlNova(_smlSpor, reftime, _tsml)
+  where konto = _konto
+    and tko = _tko;
+end foreach
+
+end procedure

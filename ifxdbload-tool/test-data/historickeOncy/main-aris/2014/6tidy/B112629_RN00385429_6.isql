@@ -1,0 +1,50 @@
+-- @TC:ONCE: ID = V2, B112629_RN00385429_6
+-- @TC:ONCE: DESCRIPTION = Odstranění aplikace CIBIS-Rm {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ CALL tw_execSql('drop table bl_contracttype_acis', -206);       
+ CALL tw_execSql('drop table bl_contracttype_cis', -206);        
+ CALL tw_execSql('drop table bl_counterparty', -206);            
+ CALL tw_execSql('drop table bl_counterparty_dia', -206);        
+ CALL tw_execSql('drop table bl_counterparty_vio', -206);        
+ CALL tw_execSql('drop table bl_country_acis', -206);            
+ CALL tw_execSql('drop table bl_country_cis', -206);             
+ CALL tw_execSql('drop table bl_cpsegment_acis', -206);          
+ CALL tw_execSql('drop table bl_cpsegment_cis', -206);           
+ CALL tw_execSql('drop table bl_creditriskmitigant', -206);      
+ CALL tw_execSql('drop table bl_creditriskmitigant_dia', -206);  
+ CALL tw_execSql('drop table bl_creditriskmitigant_vio', -206);  
+ CALL tw_execSql('drop table bl_crmtype_acis', -206);            
+ CALL tw_execSql('drop table bl_crmtype_cis', -206);             
+ CALL tw_execSql('drop table bl_currency_acis', -206);           
+ CALL tw_execSql('drop table bl_currency_cis', -206);            
+ CALL tw_execSql('drop table bl_custacctype_acis', -206);        
+ CALL tw_execSql('drop table bl_custacctype_cis', -206);         
+ CALL tw_execSql('drop table bl_customeraccountbygl', -206);     
+ CALL tw_execSql('drop table bl_customeraccountbygl_dia', -206); 
+ CALL tw_execSql('drop table bl_customeraccountbygl_vio', -206); 
+ CALL tw_execSql('drop table bl_exportaction_prot', -206);       
+ CALL tw_execSql('drop table bl_exposure', -206);                
+ CALL tw_execSql('drop table bl_exposure_dia', -206);            
+ CALL tw_execSql('drop table bl_exposure_vio', -206);            
+ CALL tw_execSql('drop table bl_interestmethod_acis', -206);     
+ CALL tw_execSql('drop table bl_interestmethod_cis', -206);      
+ CALL tw_execSql('drop table bl_parameters', -206);              
+ CALL tw_execSql('drop table bl_rating_acis', -206);             
+ CALL tw_execSql('drop table bl_rating_cis', -206);              
+ CALL tw_execSql('drop table bl_ratingmodel_acis', -206);        
+ CALL tw_execSql('drop table bl_ratingmodel_cis', -206);         
+ CALL tw_execSql('drop table bl_realisationtype_acis', -206);    
+ CALL tw_execSql('drop table bl_realisationtype_cis', -206);     
+ CALL tw_execSql('drop table bl_specificprovision', -206);       
+ CALL tw_execSql('drop table bl_specificprovision_dia', -206);   
+ CALL tw_execSql('drop table bl_specificprovision_vio', -206);   
+ CALL tw_execSql('drop table bl_systemoforigin_acis', -206);     
+ CALL tw_execSql('drop table bl_systemoforigin_cis', -206);      
+ CALL tw_execSql('drop table bl_validationmessages', -206);      
+
+ROLLBACK WORK;
+
+--End of B112629_RN00385429_6

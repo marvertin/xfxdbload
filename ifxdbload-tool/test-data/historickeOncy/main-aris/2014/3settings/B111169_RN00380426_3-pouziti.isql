@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B111169_RN00380426_3-pouziti
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into ep_pouziti_cis (pouziti, nazev) values (4, 'Stavební technik');
+
+ROLLBACK WORK;
+
+--End of B111169_RN00380426_3-pouziti

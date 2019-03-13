@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B133434_UID54298_5
+-- @TC:ONCE: DESCRIPTION = Do EU_ESIP_N plnit referenci na zajištění na které se váže dodatečný náklad {CUSTOMERREQUEST} {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table pro_extraexpense 
+  modify refzajisteni Integer
+;
+
+alter table ep_splspormodee_den
+  modify refzajisteni Integer
+;
+
+
+ROLLBACK WORK;
+
+--End of B133434_UID54298_5

@@ -1,0 +1,42 @@
+-- @TC:ONCE: ID = V2, B108497_RN00386696_3
+-- @TC:ONCE: DESCRIPTION = Insolvence: nejsou naplněny číselníky insolvence {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Předáno OZU','v úpadku je nevymáhaný ručitel',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Nízký dluh - pravidelně spláceno','dluh dle rozhodnutí INS v souladu s příkazem o vymáhaní je nízký',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Úvěr ukončen','úvěr byl před podáním přihlášky do IŘ splacen a ukončen',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Insolvent dle rozhodnutí soudu již není povinen plnit','dle rozhodutí soudu bylo řízení vůči insolventovi ukončeno',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Pouze připodepsaný manžel/ka','na smlouvě je insolvent pouze připodepsaný, tudíž nelze dlužnou částku vůči němu vymáhat',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Insolvent omylem veden v CB jako zástavce','ke dni úpadku již není insolvent majitelem zastavené nemovitosti',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Promlčené','dle platných zákonů je pohledávka promlčena',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Chybí smluvní dokument','není právní podklad pro přihlášku do IŘ',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Skončená exekuce','dle sdělení příslušného EÚ byla pohledávka vymožena, ale v CB zatím nebylo ukončeno',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Hl.dl. nezletihl.dl. nezletilec bez opatrovnického soudu','pohledávka by činila 50% a více z celkové přihlášené částky nebo dle INS není možné se přihlásit',1);
+INSERT INTO ep_duvnepodprihl_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM ep_duvnepodprihl_cis)
+  ,'Jiné','důvod uveden v poznámce',1);
+
+ROLLBACK WORK;
+
+--End of B108497_RN00386696_3

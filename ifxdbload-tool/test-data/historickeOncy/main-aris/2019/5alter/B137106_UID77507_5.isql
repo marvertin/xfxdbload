@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B137106_UID77507_5
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+call tw_execSql('DROP PROCEDURE RU_IndikDefaultInit;', -674);
+call tw_execSql('DROP PROCEDURE RU_IndikDefaultPrep;', -674);
+call tw_execSql('DROP PROCEDURE RU_IndikDefaultZprac;', -674);
+call tw_execSql('DROP PROCEDURE RU_IndikDefault_D;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODRUIndikDefPrep_T;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODRUIndikDef_T;', -674);
+
+ROLLBACK WORK;
+
+--End of B137106_UID77507_5

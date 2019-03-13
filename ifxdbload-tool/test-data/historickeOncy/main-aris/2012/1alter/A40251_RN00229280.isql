@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, A40251_RN00229280
+-- @TC:ONCE: DESCRIPTION = Zefektivnìní tøídìní klientské korespondence
+
+BEGIN WORK;
+
+alter table ex_ps_kart add koresp int default 0;
+
+alter table ex_ca_kart add koresp int default 0;
+
+alter table EX_SC_Kart add koresp int default 0;
+    
+alter table EX_CX_KART add koresp int default 0;    
+
+alter table EX_PX_KART add koresp int default 0;
+
+alter table EX_PN_KART add koresp int default 0;
+
+alter table EX_X80_Kart add koresp int default 0;
+
+alter table EX_PP_Kart add koresp int default 0;     
+
+alter table ex_pk1_kart add koresp int default 0;
+
+alter table EX_LU_Kart add koresp int default 0;
+
+alter table EX_MU_Kart add koresp int default 0;
+
+alter table EX_MUP_Kart add koresp int default 0;
+
+alter table EX_ME_Kart add koresp int default 0;
+
+alter table Ex_SSU_Kart add koresp int default 0;
+
+alter table Ex_SSP_Kart add koresp int default 0;
+
+alter table EX_KP_Kart add koresp int default 0;
+
+ROLLBACK WORK;

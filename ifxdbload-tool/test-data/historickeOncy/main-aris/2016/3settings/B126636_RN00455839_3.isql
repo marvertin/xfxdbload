@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B126636_RN00455839_3
+-- @TC:ONCE: DESCRIPTION = Chybně implementované názvy registrů v DB
+BEGIN WORK;
+
+Call TW_RegDelKey('EN', 'WS', 'SSZ', 'RozsireneVypisy');
+
+Call TW_RegDelKey('EP', 'SOLUS', 'develop', 'responseFileName');
+
+Call TW_RegDelKey('ES', '*', 'importsmluv', '*');
+
+Call TW_RegDelKey('EU', 'contract', 'hypoSmernice', 'prevodPriFix');
+
+Call TW_RegDelKey('CL', 'akviz', '43', 'datzpracovani');
+
+Call TW_RegDelKey('CL', 'akviz', '44', 'datzpracovani');
+
+Call TW_RegDelKey('EU', 'creditrq-zaklad', 'podpisSml-povolBiom', 'P');
+
+Call TW_RegDelKey('EU', 'creditrq-zaklad', 'podpisSml-povolBiom', 'S');
+
+Call TW_RegDelKey('EU', 'creditrq-zaklad', 'podpisSml-povolBiom', 'Z');
+
+Call TW_RegDelKey('EU', 'creditrq-zaklad', 'podpisZad-povolBiom', 'P');
+
+Call TW_RegDelKey('EU', 'creditrq-zaklad', 'podpisZad-povolBiom', 'S');
+
+Call TW_RegDelKey('EU', 'creditrq-zaklad', 'podpisZad-povolBiom', 'Z');
+
+Call TW_RegDelKey('TW', 'web', 'prihlaseni', 'sysinfo');
+
+ROLLBACK WORK;
+--End of B126636_RN00455839_3

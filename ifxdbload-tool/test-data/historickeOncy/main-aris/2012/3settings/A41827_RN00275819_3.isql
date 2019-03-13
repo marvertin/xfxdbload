@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A41827_RN00275819_3
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  call tw_regsetoraddkey('EP', 'produkt', 'RPSN','zobraz', 1, 1);
+  
+ROLLBACK WORK;
+
+--End of A41827_RN00275819_3

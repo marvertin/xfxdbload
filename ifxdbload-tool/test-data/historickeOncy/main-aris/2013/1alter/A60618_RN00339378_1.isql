@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A60618_RN00339378_1
+-- @TC:ONCE: DESCRIPTION = Obmedzenie zvysenia CC {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_tariff
+    ADD xpovolzvyscc    Integer DEFAULT 1  NOT NULL;
+
+ALTER TABLE pro_tariff
+    ADD CONSTRAINT CHECK (xpovolzvyscc IN (0,1)) CONSTRAINT pro_tariff_d8i5;
+
+ROLLBACK WORK;
+
+--End of A60618_RN00339378_1

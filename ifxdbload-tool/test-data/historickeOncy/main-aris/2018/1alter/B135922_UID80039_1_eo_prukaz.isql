@@ -1,0 +1,70 @@
+-- @TC:ONCE: ID = V2, B135922_UID80039_1_eo_prukaz
+-- @TC:ONCE: DESCRIPTION = RSTS-25716: Umožnit zadat více dokladů totožnosti v CIBIS-Main {STORY}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eo_prukaz_arch
+
+-- 201  eo_prukaz_arch-1/4       [CREATE.COLUMN]
+/* Sloupec nema default a ma byt NOT NULL, bude pozdeji zmenen */
+ALTER TABLE eo_prukaz_arch
+    ADD priorita        Integer   BEFORE poruser,
+    ADD platnost        Integer DEFAULT 1  NOT NULL BEFORE poruser;
+
+/*pridano ruseni ciziho klice, aby se po zruseni indexu na fo nevytvoril nepojmenovany index*/
+ALTER TABLE eo_prukaz_mat  DROP CONSTRAINT eo_prukaz_mat_f1;
+
+-- 203  eo_prukaz_mat-1/7       [DROP.CONSTRAINT_UNIQUE]
+/* Rusen constraint: UNIQUE (fo)  CONSTRAINT "aris".eo_prukaz_mat_u2 */
+ALTER TABLE eo_prukaz_mat DROP CONSTRAINT eo_prukaz_mat_u2;
+
+-- 204  eo_prukaz_mat-2/7       [DROP.INDEX]
+/* Rusen index: CREATE UNIQUE INDEX "aris".eo_prukaz_mat_u2 ON eo_prukaz_mat (fo)  */
+DROP INDEX eo_prukaz_mat_u2;
+
+-- 205  eo_prukaz_mat-1/4       [CREATE.COLUMN]
+/* Sloupec nema default a ma byt NOT NULL, bude pozdeji zmenen */
+ALTER TABLE eo_prukaz_mat
+    ADD priorita        Integer   BEFORE poruser,
+    ADD platnost        Integer DEFAULT 1  NOT NULL BEFORE poruser;
+
+
+CREATE TABLE eo_prukazzmpl_kart (
+  serno       SERIAL NOT NULL,
+  fo          Integer NOT NULL,
+  poradi      SMALLINT NOT NULL,          /*zmeneno kvuli cizimu klici na eo_fozmpl_kart */
+  cisprukaz   CHAR(20),
+  druhprukaz  Integer,
+  vydal       CHAR(45),
+  neomezplat  Integer,
+  platnostdo  DATE,
+  kontrznak   CHAR(1),
+  priorita    Integer NOT NULL,
+  platnost    Integer  DEFAULT 1 NOT NULL,
+  poruser     CHAR(20)  DEFAULT USER NOT NULL,
+  portime     DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser     CHAR(20)  DEFAULT USER NOT NULL,
+  reftime     DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_prukazzmpl_kart_d74s
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_prukazzmpl_kart_pk ON eo_prukazzmpl_kart(serno);
+ALTER TABLE eo_prukazzmpl_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eo_prukazzmpl_kart_pk;
+
+--FK
+CREATE INDEX eo_prukazzmpl_kart_i_f1 ON eo_prukazzmpl_kart(fo,poradi);
+ALTER TABLE eo_prukazzmpl_kart ADD CONSTRAINT FOREIGN KEY(fo,poradi) REFERENCES eo_fozmpl_kart(fo,poradi) CONSTRAINT eo_prukazzmpl_kart_f1;
+CREATE INDEX eo_prukazzmpl_kart_i_f2 ON eo_prukazzmpl_kart(druhprukaz);
+ALTER TABLE eo_prukazzmpl_kart ADD CONSTRAINT FOREIGN KEY(druhprukaz) REFERENCES eo_druhprukaz_cis(druhprukaz) CONSTRAINT eo_prukazzmpl_kart_f2;
+
+--CHECKS
+ALTER TABLE eo_prukazzmpl_kart
+ADD CONSTRAINT (CHECK (neomezplat IN (1 ,0 )) CONSTRAINT eo_prukazzmpl_kart_c1);
+
+
+ROLLBACK WORK;
+
+--End of B135922_UID80039_1_eo_prukaz

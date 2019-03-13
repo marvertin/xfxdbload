@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A62232_RN00335314_1-vyporadaniS
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE aris.rs_vypor_kart
+  DROP CONSTRAINT ( rs_vypor_kart_c7 );
+
+
+ALTER TABLE aris.rs_vypor_kart
+  ADD CONSTRAINT ( CHECK (prippopl IN (0 ,1 ,2, 3 )) CONSTRAINT rs_vypor_kart_c7 );
+
+
+ROLLBACK WORK;
+
+--End of A62232_RN00335314_1-vyporadaniS

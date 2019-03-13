@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B111197_RN00380019_1
+-- @TC:ONCE: DESCRIPTION = Nový typ základu pro úhrady (var.sazebník) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  alter table PRO_ContractStatus
+  --Suma předchozích úhrad za změnu tarifu
+  add sumOfChgTarifFees DEC(16,2)
+;
+
+ROLLBACK WORK;
+
+--End of B111197_RN00380019_1

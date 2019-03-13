@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A55586_RN00317080
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost 
+
+BEGIN WORK;
+
+update eu_zajist_cis set nabizetprouz = 1, nabizetod = mdy(1,1,2013), verejnynazev = 'Životní pojištìní' where zajist = 9;
+update eu_zajist_cis set nabizetprouz = 1, nabizetod = mdy(1,1,2013), verejnynazev = 'Pojištìní nemovitosti' where zajist = 31;
+update eu_zajist_cis set nabizetprouz = 1, nabizetod = mdy(1,1,2013), verejnynazev = 'Vinkulace jiné smlouvy o st. spoøení u RSTS' where zajist = 102;
+update eu_zajist_cis set nabizetprouz = 1, nabizetod = mdy(1,1,2013), verejnynazev = 'Vinkulace vkladu u jiné banky' where zajist = 103;
+update eu_zajist_cis set nabizetprouz = 1, nabizetod = mdy(1,1,2013), verejnynazev = 'Zajištìní nemovitostí - stavbou' where zajist = 201;
+update eu_zajist_cis set nabizetprouz = 1, nabizetod = mdy(1,1,2013), verejnynazev = 'Zajištìní pozemkem' where zajist = 212;
+update eu_zajist_cis set nabizetprouz = 1, nabizetod = mdy(1,1,2013), verejnynazev = 'Bez zajištìní' where zajist = 401;
+
+
+ROLLBACK WORK;
+
+--End of A55586_RN00317080

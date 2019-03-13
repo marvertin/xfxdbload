@@ -1,0 +1,141 @@
+create PROCEDURE RN00451094_kalfixaci_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _smlouva      dec(16,0);
+define _tsml         char(4);
+define _fixaceod     date;
+define _fixacedo     date;
+define _variafixace  int;
+define _fazeuveru    char(1);
+define _datklop      date;
+define _datsml       date;
+define _stav         char(1);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00451094_kalfixaci', 'RN00451094_kalfixaci', 'Pokyny k čerpání - vazba spec. podm. na čerpání');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+update eu_sml_mat
+set fixacedo = tw_lastdayof(fixacedo, 'M')
+where stav not in ('S', 'V', 'Z');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  smlouva,  tsml,  fixaceod,  variafixace,  datklop,  datsml,  fixacedo,  stav
+   INTO  _ser, _smlouva, _tsml, _fixaceod, _variafixace, _datklop, _datsml, _fixacedo, _stav
+   FROM RN00451094_kalfixaci
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00451094_kalfixaci
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace ---------------------
+    
+    -- fáze úvěru   
+    if _tsml in ('PFSU', 'PPSU', 'PUSU') and _datklop is null then
+      let _fazeuveru = 'P';
+    else
+      if _tsml = 'KOME' then
+        let _fazeuveru = 'K';
+      else
+        let _fazeuveru = 'S';
+      end if;
+    end if;
+  
+    -- zápis do kalendáře fixací
+    if _tsml in ('PFSU', 'PPSU', 'PUSU') and _datklop is not null and _variafixace <> 14 then
+      
+      if _datklop is not null then
+        let _datklop = tw_lastdayof(_datklop, 'M');
+      end if;
+      
+      insert into eu_kalendarfixaci_mat( smlouva,  tsml,  cisloint, fixaceod,  fixacedo,  fixaceid,    fazeuveru, stav, uroven)
+      values                           (_smlouva, _tsml,  1,       _datsml,   _datklop,  _variafixace, 'P',       'A',        'A');
+      
+      insert into eu_kalendarfixaci_mat( smlouva,  tsml,  cisloint,   fixaceod,   fixacedo, fixaceid, fazeuveru, stav, uroven)
+      values                           (_smlouva, _tsml,  2,        (_datklop+1), null,     18,       'S',       'A',        'A');
+    else
+      if _variafixace = 18 and _fixaceod is null and _stav = 'L' then
+        let _fixaceod = _datsml;
+      end if;
+      
+      if _fixacedo is not null then
+        let _fixacedo = tw_lastdayof(_fixacedo, 'M');
+      end if;
+      
+      insert into eu_kalendarfixaci_mat( smlouva,  tsml,  cisloint, fixaceod,  fixacedo,  fixaceid,     fazeuveru, stav, uroven)
+      values                           (_smlouva, _tsml,  1,       _fixaceod, _fixacedo, _variafixace, _fazeuveru, 'A',        'A');
+    end if;
+    
+    
+    --nastaví příznak zpracováno na 1
+    UPDATE RN00451094_kalfixaci SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

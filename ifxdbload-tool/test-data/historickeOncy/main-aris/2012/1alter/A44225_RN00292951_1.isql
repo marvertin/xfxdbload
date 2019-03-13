@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A44225_RN00292951_1
+-- @TC:ONCE: DESCRIPTION = Pomalé úlohy pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE INDEX eu_vympohl_arch_i1 ON eu_vympohl_arch(ser);
+
+CREATE UNIQUE INDEX eu_exekuce_arch_pk ON eu_exekuce_arch(serarch);
+ALTER TABLE eu_exekuce_arch ADD CONSTRAINT PRIMARY KEY(serarch) CONSTRAINT eu_exekuce_arch_pk;
+
+CREATE INDEX eu_exekuce_arch_i1 ON eu_exekuce_arch(ser);
+CREATE INDEX eu_exekuce_arch_i2 ON eu_exekuce_arch(vympohlser);
+
+CREATE INDEX eu_exekprikaz_arch_i1 ON eu_exekprikaz_arch(ser);
+CREATE INDEX eu_exekprikaz_arch_i2 ON eu_exekprikaz_arch(exekuceser);
+
+CREATE INDEX eu_insolvence_arch_i1 ON eu_insolvence_arch(smlouva,tsml);
+
+ROLLBACK WORK;
+
+--End of A44225_RN00292951_1

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B130330_RSTS-5044_3
+-- @TC:ONCE: DESCRIPTION = ISK - nesoulad plateb ISK a pole platby pro CF {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CALL tw_regDelKey('MO', 'modelCore', 'RPSNcalculation', 'limitedSP');
+CALL tw_regSetOrAddKey('MO', 'modelCore', 'RPSNcalculation', 'limitedSP-PFSU', 1, 1/*lze editovat*/);
+CALL tw_regSetOrAddKey('MO', 'modelCore', 'RPSNcalculation', 'limitedSP-PUSU', 1, 1/*lze editovat*/);
+CALL tw_regSetOrAddKey('MO', 'modelCore', 'RPSNcalculation', 'limitedSP-SUFO', 0, 1/*lze editovat*/);
+
+ROLLBACK WORK;
+
+--End of B130330_RSTS-5044_3

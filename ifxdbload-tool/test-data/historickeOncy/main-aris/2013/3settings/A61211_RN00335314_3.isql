@@ -1,0 +1,75 @@
+-- @TC:ONCE: ID = V2, A61211_RN00335314_3
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(1, 'CÈ k datu uzavøení', 1, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(2, 'CÈ ke vztažnému datu', 1, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(3, 'Výše zvýšení CÈ', 1, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(4, 'Výše snížení CÈ', 1, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(5, 'Saldo spoøícího konta', 1, 1);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(6, 'Výše pøipsaných úrokù na spoøícím kontì', 1, 1);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(7, 'Výše pøipsaných i nepøipsaných úrokù na spoøícím kontì', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(8, 'Suma pøipsaných i nepøipsaných úrokù vynásobená podílem z rozdílu sazeb vùèi sazbì pùvodní', 1, 1);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(9, 'Výše vyplácené èástky ze spoøícího konta', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(10, 'Výše pøespoøení CÈ', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(11, 'Výše úvìru aktuální', 1, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(12, 'Výše úvìrového limitu aktuální', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(13, 'Vyèerpaná výše úvìru', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(14, 'Saldo úvìrového konta', 1, 1);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(15, 'Saldo konkrétní kombinace subkont', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(16, 'Výše bonusu 0 aktuální', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(17, 'Výše bonusu 1 aktuální', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(18, 'Výše bonusu 2 aktuální', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(19, 'Výše bonusu 3 aktuální', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(20, 'Poèet platebních pøíkazù', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(21, 'Výše mimoøádné splátky jistiny', 0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(22, 'Výše úhrady (pouze pro slevy)', 1, 1);
+
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(1, 'VOP spoøící smlouvy (k vztažnému datu)', 'INTEGER', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(2, 'Tarif spoøící smlouvy (k vztažnému datu)', 'INTEGER', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(3, 'Pøílohy na smlouvì SS', 'INTEGER', 1, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(4, 'Obchodní skupina', 'INTEGER', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(5, 'Sjednána státní podpora', 'BOOLEAN', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(6, 'Obchodní akce na smlouvì', 'CHAR(4)', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(7, 'Vkladová akce na smlouvì', 'INTEGER', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(8, 'Výše úrokové sazby SS ', 'DECIMAL(5,2)', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(9, 'Pøílohy  pøi ukonèení smlouvy SS', 'INTEGER', 1, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(10, 'Vìk klienta k datu uzavøení smlouvy ', 'INTEGER', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(11, 'Vìk klienta ', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(12, 'Poèet dosažených mìsícù od data schválení úvìru', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(13, 'Poèet dosažených mìsícù od data potvrzení úvìru', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(14, 'Poèet dosažených mìsícù od data prvního èerpání', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(15, 'Poèet dosažených mìsícù od data uzavøení spoøící smlouvy', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(16, 'Poèet dosažených mìsícù od poslední provedené zmìny smlouvy stavebního spoøení (obecná zmìna)', 'INTEGER', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(17, 'Poèet dosažených mìsícù od poslední provedené zmìny smlouvy stavebního spoøení (zmìna CÈ)', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(18, 'Poèet dosažených mìsícù od poslední provedené zmìny smlouvy stavebního spoøení (zmìna VOP nebo tarifu)', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(19, 'Vztahy smlouvy k jiné smlouvì', 'CHAR(1)', 1, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(20, 'Vztahy jiných smluv ke smlouvì', 'CHAR(1)', 1, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(21, 'Ukazatel zhodnocení', 'DECIMAL(8,4)', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(22, 'Typ vypoøádání smlouvy SS', 'CHAR(1)', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(23, 'Typ vypoøádání úvìru', 'CHAR(1)', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(24, 'Poèet mìsícù mezi datem doruèení vypoøádání a datem provedení vypoøádání SS', 'INTEGER', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(25, 'Pøílohy pøi zmìnì smlouvy (obecná zmìna)', 'INTEGER', 1, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(26, 'Pøílohy pøi zmìnì smlouvy – zmìna CÈ', 'INTEGER', 1, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(27, 'Pøílohy pøi zmìnì smlouvy – zmìna VOP nebo tarifu', 'INTEGER', 1, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(28, 'Datum uzavøení spoøicí smlouvy', 'DATE', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(29, 'Poslední zmìna smlouvy stavebního spoøení pøed vztažným datem (obecná zmìna)', 'DATE', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(30, 'Poslední zmìna smlouvy stavebního spoøení pøed vztažným datem (zmìna CÈ)', 'DATE', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(31, 'Poslední zmìna smlouvy stavebního spoøení pøed datem (zmìna VOP nebo tarifu)', 'DATE', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(32, 'Datum schválení úvìru', 'DATE', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(33, 'Datum potvrzení úvìru', 'DATE', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(34, 'Existence pøeklenovacího úvìru', 'BOOLEAN', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(35, 'Aktuální saldo', 'DECIMAL(16,2)', 0, 1, 1);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(36, 'Elektronická korespondence k aktuálnímu datu', 'BOOLEAN', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(37, 'Nárok na bonus 0 k aktuálnímu datu', 'BOOLEAN', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(38, 'Nárok na bonus 1 k aktuálnímu datu', 'BOOLEAN', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(39, 'Nárok na bonus 2 k aktuálnímu datu', 'BOOLEAN', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(40, 'Nárok na bonus 3 k aktuálnímu datu', 'BOOLEAN', 0, 0, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(41, 'Smlouva uzavøená pøes obchodní kanál CIBIS-Web', 'BOOLEAN', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(42, 'Zmìna smlouvy uzavøená pøes obchodní kanál CIBIS-Web', 'BOOLEAN', 0, 1, 0);
+INSERT INTO EP_UhrVlastnost_Enum(vlastnost, popis, dattyp, mnozina, dostupmodel, promenvcase) VALUES(43, 'Aktuální varianta úvìru', 'CHAR(10)', 0, 1, 0);
+
+ROLLBACK WORK;
+
+--End of A61211_RN00335314_3

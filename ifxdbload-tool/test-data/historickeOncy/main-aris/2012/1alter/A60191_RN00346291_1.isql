@@ -1,0 +1,56 @@
+-- @TC:ONCE: ID = V2, A60191_RN00346291_1
+-- @TC:ONCE: DESCRIPTION = Rozšíøení pole Druh pobytu MV na 2 znaky {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- ###############################################################
+--       sp_zrcmf_mat
+
+-- 27  sp_zrcmf_mat-1/1       [ALTER.COLUMN]
+ALTER TABLE sp_zrcmf_mat
+    MODIFY pobytmv         CHAR(2)                                   /* previouse: char (1) : ... : ... */;
+
+-- ###############################################################
+--       sp_zrcmfk_mat
+
+-- 28  sp_zrcmfk_mat-1/1       [ALTER.COLUMN]
+ALTER TABLE sp_zrcmfk_mat
+    MODIFY pobytmv         CHAR(2)                                   /* previouse: char (1) : ... : ... */;
+
+-- ###############################################################
+--       sp_zrcmfl_mat
+
+-- 29  sp_zrcmfl_mat-1/1       [ALTER.COLUMN]
+ALTER TABLE sp_zrcmfl_mat
+    MODIFY pobytmv         CHAR(2)                                   /* previouse: char (1) : ... : ... */;
+-- ###############################################################
+--       eo_druhpobytmv_acis
+
+-- 1  eo_druhpobytmv_acis-1/1       [ALTER.COLUMN]
+ALTER TABLE eo_druhpobytmv_acis
+    MODIFY druh            CHAR(2)   NOT NULL                        /* previouse: char (1) : ... : ... */;
+
+-- ###############################################################
+--       eo_druhpobytmv_cis
+
+-- 2  eo_druhpobytmv_cis-1/1       [ALTER.COLUMN]
+ALTER TABLE eo_druhpobytmv_cis
+    MODIFY druh            CHAR(2)   NOT NULL                        /* previouse: char (1) : ... : ... */;
+
+-- ###############################################################
+--       eo_osobudajmcr_arch
+
+-- 3  eo_osobudajmcr_arch-1/1       [ALTER.COLUMN]
+ALTER TABLE eo_osobudajmcr_arch
+    MODIFY druhpobyt       CHAR(2)                                   /* previouse: char (1) : ... : ... */;
+
+-- ###############################################################
+--       eo_osobudajmcr_mat
+
+-- 4  eo_osobudajmcr_mat-1/1       [ALTER.COLUMN]
+ALTER TABLE eo_osobudajmcr_mat
+    MODIFY druhpobyt       CHAR(2)                                   /* previouse: char (1) : ... : ... */;
+
+ROLLBACK WORK;
+
+--End of A60191_RN00346291_1

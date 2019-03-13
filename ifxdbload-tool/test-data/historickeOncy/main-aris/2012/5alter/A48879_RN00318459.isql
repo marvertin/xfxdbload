@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A48879_RN00318459
+-- @TC:ONCE: DESCRIPTION = Pad davky: mazání žádostí ve stavu Neúplný
+
+
+BEGIN WORK;
+
+
+DROP TRIGGER bsavingrqreg_d;
+
+DROP TRIGGER bsavingrqpersonreg_d;
+
+
+ROLLBACK WORK;
+

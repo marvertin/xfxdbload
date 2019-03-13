@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A46681_RN00296202_1-zrusitKorAdr
+-- @TC:ONCE: DESCRIPTION = CIBIS-Web: Kartotéka zadaných pøíkazù + rušení koresp. adresy ke smlouvì {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ep_zadrole
+    ADD zrusit          Integer DEFAULT 0  NOT NULL BEFORE refuser;
+
+ALTER TABLE ep_zadrole
+    ADD CONSTRAINT CHECK (zrusit IN (0,1)) CONSTRAINT ep_zadrole_det8;
+
+ROLLBACK WORK;
+
+--End of A46681_RN00296202_1-zrusitKorAdr

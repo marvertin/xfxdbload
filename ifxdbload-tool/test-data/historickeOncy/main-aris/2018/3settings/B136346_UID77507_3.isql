@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136346_UID77507_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+UPDATE eo_tigertyp_cis SET obec = 1 WHERE serno = 32;
+
+ROLLBACK WORK;
+
+--End of B136346_UID77507_3

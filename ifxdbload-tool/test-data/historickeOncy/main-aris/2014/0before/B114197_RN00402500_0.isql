@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, B114197_RN00402500_0
+-- @TC:ONCE: DESCRIPTION = [sv] Oprava BE: Chyba při instalaci PRUBINA-1388 {ACTIVITY}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_formaprav_cis MODIFY formaprav INTEGER;
+
+ALTER TABLE eo_formaprav_cis ADD CONSTRAINT PRIMARY KEY(formaprav) CONSTRAINT eo_formaprav_cis_pk;
+
+
+ALTER TABLE eo_formaprav_acis MODIFY formaprav INTEGER;
+
+
+ALTER TABLE opp_po_mat MODIFY formaprav INTEGER;
+
+ALTER TABLE opp_po_mat
+    ADD CONSTRAINT FOREIGN KEY (formaprav) REFERENCES eo_formaprav_cis(formaprav)  CONSTRAINT opp_po_mat_fk2;
+
+ALTER TABLE opp_po_arch MODIFY formaprav INTEGER;
+
+
+ALTER TABLE opp_podklad_mat MODIFY formaprav INTEGER;
+
+ALTER TABLE opp_podklad_mat 
+    ADD CONSTRAINT FOREIGN KEY(formaprav) REFERENCES eo_formaprav_cis(formaprav) CONSTRAINT opp_podklad_mat_fk8;
+        
+ALTER TABLE opp_podklad_arch MODIFY formaprav INTEGER;
+
+
+
+ROLLBACK WORK;
+
+--End of B114197_RN00402500_0

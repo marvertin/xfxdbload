@@ -1,0 +1,100 @@
+-- @TC:ONCE: ID = V2, B137213_UID93096_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32806: Nové typy dokumentů pro problémy opisovaných formulářů {STORY}
+
+BEGIN WORK;
+
+INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, 
+repname, exportdir, 
+keepinterval, bulkprint, bulkprintformat, 
+bulkprintsave, bulkprintdir, savewithoutpreview, formatchange, listinternalmail, 
+writedocument, signature, reporttechnology) VALUES ('SS050', 'SS', '05', 0, 0, 
+'Reakce OZ na problémy opisovaného formuláře spoření', 'p:\RSTS\PROJEKTY\CIBIS-RSTS-2019F-R\Test\Tisky\',
+ 1, 0, null,
+ 0, null, 1, 0, 0, 
+ 0, 0, 'reports_j2ee')
+;
+
+INSERT INTO rr_xreptype_cis (refrepcode, datod, datdo, predloha, cesta,
+soubor, lasttemplatedir, interniid, externiid, externidocid, 
+poznamka, platnost) 
+VALUES ('SS050', mdy(1, 1, 2018), null, 'J', 'c:\Tomcat\111\tcres\reports_j2ee\SS05',
+ 'SS050.jrxml', 'SS05', null, null, null,
+ null, 1)
+;
+
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany,
+  repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Podepisovaný dokument k reakci OZ na problémy opisovaného formuláře spoření - nová SS', null, null, 1, 25, 2505, null, 'OSSSS', 1, 
+  'SS050', 1, 1, null, null, null, 0);
+call TW_RegSetOrAddKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-pod-dok-no-SS', TW_LastSer(), 1);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu) 
+  VALUES (Tw_RegGetKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-pod-dok-no-SS'), 'ses_novasml_mat', 'ZOBRAZENI', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, 
+  repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Příloha k reakci OZ na problémy opisovaného formuláře spoření - nová SS', null, null, 1, 25, 2505, null, 'OSSSS', 0, 
+  null, 1, 0, null, null, null, 1);
+call TW_RegSetOrAddKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-dok-pril-no-SS', TW_LastSer(), 1);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu) 
+  VALUES (Tw_RegGetKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-dok-pril-no-SS'), 'ses_pozadavekproblem_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, 
+  repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Podepisovaný dokument k reakci OZ na problémy opisovaného formuláře spoření - změna SS', null, null, 1, 26, 2607, null, 'OSSSS', 1, 
+  'SS050', 1, 1, null, null, null, 0);
+call TW_RegSetOrAddKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-pod-dok-zm-SS', TW_LastSer(), 1);  
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu) 
+  VALUES (Tw_RegGetKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-pod-dok-zm-SS'), 'ses_zmenasml_mat', 'ZOBRAZENI', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, 
+  repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Příloha k reakci OZ na problémy opisovaného formuláře spoření - změna SS', null, null, 1, 26, 2607, null, 'OSSSS', 0, 
+  null, 1, 0, null, null, null, 1);
+call TW_RegSetOrAddKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-dok-pril-zm-SS', TW_LastSer(), 1);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu) 
+  VALUES (Tw_RegGetKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-dok-pril-zm-SS'), 'ses_pozadavekproblem_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, 
+  repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Podepisovaný dokument k reakci OZ na problémy opisovaného formuláře spoření - ukončení SS - výpověď', null, null, 1, 21, 2107, null, 'OSSSS', 1, 
+  'SS050', 1, 1, null, null, null, 0);
+call TW_RegSetOrAddKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-pod-dok-uk-SS-v', TW_LastSer(), 1);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu) 
+  VALUES (Tw_RegGetKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-pod-dok-uk-SS-v'), 'ses_ukonsml_mat', 'ZOBRAZENI', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, 
+  repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Příloha k reakci OZ na problémy opisovaného formuláře spoření - ukončení SS - výpověď', null, null, 1, 21, 2107, null, 'OSSSS', 0, 
+  null, 1, 0, null, null, null, 1);
+call TW_RegSetOrAddKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-dok-pril-uk-SS-v', TW_LastSer(), 1);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu) 
+  VALUES (Tw_RegGetKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-dok-pril-uk-SS-v'), 'ses_pozadavekproblem_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, 
+  repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Podepisovaný dokument k reakci OZ na problémy opisovaného formuláře spoření - ukončení SS - dohoda', null, null, 1, 22, 2203, null, 'OSSSS', 1, 
+  'SS050', 1, 1, null, null, null, 0);
+call TW_RegSetOrAddKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-pod-dok-uk-SS-d', TW_LastSer(), 1);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu) 
+  VALUES (Tw_RegGetKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-pod-dok-uk-SS-d'), 'ses_ukonsml_mat', 'ZOBRAZENI', null, 1, null, null, 1, mdy(1, 1, 2018), null, 1);
+
+
+INSERT INTO do_typdokumentu_cis (text, zkratka, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, 
+  repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm, slucovatproecm) 
+  VALUES ('Příloha k reakci OZ na problémy opisovaného formuláře spoření - ukončení SS - dohoda', null, null, 1, 22, 2203, null, 'OSSSS', 0, 
+  null, 1, 0, null, null, null, 1);
+call TW_RegSetOrAddKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-dok-pril-uk-SS-d', TW_LastSer(), 1);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok, poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu) 
+  VALUES (Tw_RegGetKey('ES', 'problemy-opisu-formu', 'dokumenty', 'typ-dok-pril-uk-SS-d'), 'ses_pozadavekproblem_mat', 'EDITACE', null, 1, null, null, 0, mdy(1, 1, 2018), null, 1);
+
+
+
+ROLLBACK WORK;
+
+--End of B137213_UID93096_3

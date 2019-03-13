@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B126481_RN00452673_1
+-- @TC:ONCE: DESCRIPTION = Změna evidence zadržené SP, resp. převodů zadržené SP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- 2  rp_prevodsp_kart-1/4       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (typ IN ('S' ,'P' ,'R' ,'U' ,'C' ,'V' ,'I' )) CONSTRAINT "aris".rpprevodspkart_c_c4 */
+ALTER TABLE rp_prevodsp_kart DROP CONSTRAINT rpprevodspkart_c_c4;
+
+-- 4  rp_prevodsp_kart-3/4       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE rp_prevodsp_kart
+    ADD relprevod       Integer,
+    ADD serprevod       Integer;
+
+-- 5  rp_prevodsp_kart-4/4       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE rp_prevodsp_kart
+    ADD CONSTRAINT CHECK (typ  IN('S','P','R','U','C','V','I','T','O')) CONSTRAINT rp_prevodsp_kart_c4;
+
+
+ROLLBACK WORK;
+
+--End of B126481_RN00452673_1

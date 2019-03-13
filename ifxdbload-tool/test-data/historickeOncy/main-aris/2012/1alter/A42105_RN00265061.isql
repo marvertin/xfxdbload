@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A42105_RN00265061
+-- @TC:ONCE: DESCRIPTION = Sladit zaokrouhlování bonity v CM a CW, zajisti kontrolu na bonitu v CM a zobrazit zmìny ve výpoètu bonity v CM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eu_contractchecking_kart
+
+-- 5  eu_contractchecking_kart-1/2       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_contractchecking_kart
+    ADD bonita2status   Char(1)  ,
+    ADD bonita2result   Integer DEFAULT 0 ,
+    ADD bonita2annul    Integer DEFAULT 0 ,
+    ADD bonita2note     CHAR(160)  ;
+
+-- 6  eu_contractchecking_kart-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eu_contractchecking_kart
+    ADD CONSTRAINT CHECK (bonita2status in ('P','N','S','R')) CONSTRAINT eu_contractchecking_kart_djhq,
+    ADD CONSTRAINT CHECK (bonita2annul IN (0,1)) CONSTRAINT eu_contractchecking_kart_djhs,
+    ADD CONSTRAINT CHECK (bonita2result IN (0,1)) CONSTRAINT eu_contractchecking_kart_djhr;
+
+
+ROLLBACK WORK;

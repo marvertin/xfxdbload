@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B129348_RSTS-2952_3
+-- @TC:ONCE: DESCRIPTION = RN00457749-Centrální evidence exekucí
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis) VALUES ('WS',7,'Dotaz na exekuci osoby do CEE');
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis) VALUES ('EU',191,'Dotaz na exekuce do CEE pro úvěrovou žádost <žádost>');
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis) VALUES ('EU',192,'Dotaz na exekuce do CEE pro úvěrovou smlouvu <smlouva>');
+
+ROLLBACK WORK;
+
+--End of B129348_RSTS-2952_3

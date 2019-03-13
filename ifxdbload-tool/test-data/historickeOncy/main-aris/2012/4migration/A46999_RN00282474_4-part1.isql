@@ -1,0 +1,57 @@
+-- @TC:ONCE: ID = V2, A46999_RN00282474_4-part1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--Èíselník koeficientù pojistného UNIQA bude nastaven následovnì:
+--Bude vytvoøena jedna sada koeficientù pro variantu pojištìní 1.
+--Varianta pojištìní    1
+--Datum od    Minimální datum potvrzení návrhu z matriky pojištìní UNIQA.
+--Datum do    <Nevyplnìno>
+--Název     „Koeficienty pojistného - Varianta A“
+--Sada bude obsahovat stávající obsah èíselníku koeficientù UNIQA (eu_zajcrpsazba_cis)
+--Pohlaví           pohlaví
+--Vìk od          vìk od  
+--Vìk do          vìk do
+--Koeficient úhrady[promile z výše dluhu] sazba
+--Platnost          1 - ano
+
+CREATE SEQUENCE eu_zajcrpsazba_cis_seq 
+   INCREMENT BY 1 START WITH 1
+;
+   
+INSERT INTO eu_zajsadakoef_cis (nazev, variantaid
+    , datumod, datumdo)
+  VALUES ('Koeficienty pojistného - Varianta A', 1
+    , (select min(datpotv) from ev_pojistcrp_mat where datpotv is not null), NULL)
+;
+
+INSERT INTO eu_zajcrpsazba_cis (sadaID
+    , poradi, pohlavi, vekod, vekdo, sazba, platnost, refuser, reftime)
+  SELECT (select id from eu_zajsadakoef_cis where variantaid=1) id
+    , eu_zajcrpsazba_cis_seq.NEXTVAL, pohlavi, vekod, vekdo, sazba, platnost, refuser, reftime
+    FROM eu_zajcrpsazba_cis_toDrop
+    WHERE platnost=1
+;
+
+DROP SEQUENCE eu_zajcrpsazba_cis_seq
+;
+
+--pøeveïme ještì ty neplatné.....
+CREATE SEQUENCE eu_zajcrpsazba_cis_seq 
+   INCREMENT BY 1 START WITH 1
+;
+
+INSERT INTO eu_zajcrpsazba_cis (sadaID, poradi, pohlavi, vekod, vekdo, sazba, platnost, refuser, reftime)
+  SELECT TW_NullInt(), eu_zajcrpsazba_cis_seq.NEXTVAL, pohlavi, vekod, vekdo, sazba, platnost, refuser, reftime
+    FROM eu_zajcrpsazba_cis_toDrop
+    WHERE platnost<>1
+;
+
+DROP SEQUENCE eu_zajcrpsazba_cis_seq
+;
+
+ROLLBACK WORK;
+
+--End of A46999_RN00282474_4-part1

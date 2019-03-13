@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B123376_RN00446315_3
+-- @TC:ONCE: DESCRIPTION = Změna typu vztahu FO k PO v rámci SIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CALL tw_regsetoraddkey('EO','ENVIRONMENT','VZTAHYOS','ZMOCNPOSIS', 'ZS', 1, 
+'Osoba',
+'Vztah mezi osobami',
+'Typ vztahu mezi osobami pro zmocněnce PO pro SIS',
+'Typ vztahu mezi osobami pro zmocněnce PO pro SIS');
+
+
+call TW_RegDelKey('EO','ENVIRONMENT','VZTAHYOS','STATUTARNIZASTUPCE');
+
+ROLLBACK WORK;
+
+--End of B123376_RN00446315_3

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B121606_RN00420635_3
+-- @TC:ONCE: DESCRIPTION = Žádost o uvolnění SP zadržované MF {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('SP','DOPLZAD','REPORT','TYP', 'SPDZ1', 1, 'Státní podpora', 'Komunikace s MF (CZ)', 'Communication with MF (CZ)', 'Typ reportu pro sumární protokol doplněné žádosti o SP na MF');
+
+INSERT INTO rr_reptype_cis(repcode, area, repkind, reptype, repvar, repname, exportdir, savewithoutpreview )
+  VALUES('SPDZ1','SP', 'DZ', 1, 0, 'Protokol k doplněné žádosti','', 0);
+  
+INSERT INTO rr_xreptype_cis(refrepcode, datod, poznamka, predloha, cesta, soubor)
+  VALUES('SPDZ1', mdy(1,1,2016), 'Protokol pro doplněnou žádost', 'J', '\\FPS1\Cibis\AR_Apl\Aplikace\_reports_fe\SP00\', 'SPDZ.jrxml');
+
+
+ROLLBACK WORK;
+
+--End of B121606_RN00420635_3

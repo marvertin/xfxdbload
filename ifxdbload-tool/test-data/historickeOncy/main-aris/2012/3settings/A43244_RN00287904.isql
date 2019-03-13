@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A43244_RN00287904
+-- @TC:ONCE: DESCRIPTION = Odstranit d db registru parametry systému, které jsou doèasnì zaøazené do vìcné oblasti Zrušené
+
+BEGIN WORK;
+
+call TW_RegDelKey ('RS','SPFO','open','mapovanikonta');
+call TW_RegDelKey ('RS','SPPO','open','mapovanikonta');
+
+ROLLBACK WORK;

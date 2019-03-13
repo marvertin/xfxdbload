@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B118680_RN00382782_1
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ev_pojistcrp_mat DROP CONSTRAINT ev_pojistcrp_mat_c6;
+
+ALTER TABLE ev_pojistcrp_mat ADD CONSTRAINT (CHECK (skupinapojist  IN('A','J')) CONSTRAINT ev_pojistcrp_mat_c6);
+
+ROLLBACK WORK;
+
+--End of B118680_RN00382782_1

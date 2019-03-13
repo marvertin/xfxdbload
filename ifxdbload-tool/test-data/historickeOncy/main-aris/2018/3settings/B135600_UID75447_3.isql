@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B135600_UID75447_3
+-- @TC:ONCE: DESCRIPTION = RSTS-23399: Parametrizace číselníku Typ revize {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, platnost, refdatprov)
+VALUES ('ALT_VYSE', 'Alternativní nabídka - snížení výše úvěru', null, 1, mdy(9, 1, 2018));
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, platnost, refdatprov) 
+VALUES ('ALT_PART', 'Alternativní nabídka - přidání partnera', null, 1, mdy(9, 1, 2018));
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, platnost, refdatprov) 
+VALUES ('ALT_PRPR', 'Alternativní nabídka - přidání přistupitele', null, 1, mdy(9, 1, 2018));
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, platnost, refdatprov) 
+VALUES ('ALT_VYPR', 'Alternativní nabídka - výměna přistupitele', null, 1, mdy(9, 1, 2018));
+
+ROLLBACK WORK;
+
+--End of B135600_UID75447_3

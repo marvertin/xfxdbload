@@ -1,0 +1,137 @@
+-- @TC:ONCE: ID = V2, B118791_RN00382782_3
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+-- Úvěr/Úvěrová žádost - základ
+-- DB registry budou po dokončení use-case Vyhodnotit povolené způsoby podepisování odebrány příkazem: 
+--   DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND uloha = 'creditrq-zaklad' AND funkce = 'podpisZad-zpusob';
+--#Povolen <způsob_podpisu> v ÚŽ u <varianty_procesu> pro <typ_dokumentu>#
+-- STANDARD 
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-S-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-S-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-S-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'ZASPOST-S-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen tisk, zasláno poštou v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'ZASPOST-S-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen tisk, zasláno poštou v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'ZASPOST-S-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen tisk, zasláno poštou v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'ZASPOST-S-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'novaSS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen tisk, zasláno poštou v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'novaSS'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'ZASPOST-S-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'zmenaSS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen tisk, zasláno poštou v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'zmenaSS'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'ZASPOST-S-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'SIS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen tisk, zasláno poštou v ÚŽ u standardní varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'SIS'))
+);
+
+-- PRESCORING 
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-P-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-P-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-P-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-P-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-P-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-P-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-P-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'novaSS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'novaSS'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-P-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'zmenaSS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'zmenaSS'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-P-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'SIS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u prescoring varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'SIS'))
+);
+
+
+-- ZRYCHLENA 
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-Z-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u zrychlené varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'zadost'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-Z-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u zrychlené varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlPrist'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'BIOMETR-Z-' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen biometrický podpis v ÚŽ u zrychlené varianty procesu pro ' || trim(TW_RegGetKey('EU', 'creditrq', 'generDok', 'prohlRuc'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-Z-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'novaSS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u zrychlené varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'novaSS'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-Z-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'zmenaSS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u zrychlené varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'zmenaSS'))
+);
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'podpisZad-zpusob', 'CENTRAL-Z-' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'SIS')), 1, 1
+  , 'Úvěr', 'Úvěrová žádost - základ', 'Způsob podepisování'
+  , 'Povolen ověření na centrále (VIDO) v ÚŽ u zrychlené varianty procesu pro ' || trim(TW_RegGetKey('ES', 'bsavingreq', 'generDok', 'SIS'))
+);
+
+
+ROLLBACK WORK;
+
+--End of B118791_RN00382782_3

@@ -1,0 +1,45 @@
+-- @TC:ONCE: ID = V2, B118615_RN00404916_B32
+-- @TC:ONCE: DESCRIPTION = Nové tiskové výstupy v CIBIS-Sale {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       do_expdokument_den
+
+-- 13  do_expdokument_den-1/3       [CREATE.TABLE]
+CREATE TABLE do_expdokument_den (
+    id_index        Integer   NOT NULL,
+    por_index       Integer   NOT NULL,
+    typexport       CHAR(1)   NOT NULL,
+    smlouva         Decimal(16,0),
+    tsml            CHAR(4),
+    dokserno        BIGINT,
+    doktyp          Integer,
+    doktyppopis     CHAR(160),
+    doknazev        VARCHAR(255),
+    dokpopis        CHAR(160),
+    nazevsouboru    LVARCHAR(4000),
+    dokreftime      datetime year to second,
+    dokstav         VARCHAR(15, 15),
+    vztaznedatum    DATE,
+    externiid       VARCHAR(255),
+    interniid       VARCHAR(255),
+    uzivatelskypristup   VARCHAR(11, 11),
+    dokgenerovany   Integer    
+) LOCK MODE ROW
+;
+
+
+-- 14  do_expdokument_den-2/3       [CREATE.INDEX]
+CREATE unique INDEX do_expdokument_den_pk ON do_expdokument_den (id_index,por_index, typexport) ;
+
+-- 15  do_expdokument_den-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE do_expdokument_den
+    ADD CONSTRAINT PRIMARY KEY (id_index,por_index,typexport)  CONSTRAINT do_expdokument_den_pk;
+
+
+
+ROLLBACK WORK;
+
+--End of B118615_RN00404916_B32

@@ -1,0 +1,151 @@
+-- @TC:ONCE: ID = V2, B126384_RN00452668_1
+-- @TC:ONCE: DESCRIPTION = Import BDS z podkladu MS Excel {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE ab_import_prot (
+  id   SERIAL NOT NULL,
+  typ   Char(4) NOT NULL,
+  stav   CHAR(1)  DEFAULT 'A' NOT NULL,
+  soubor   VARCHAR(255),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ab_import_prot_pk ON ab_import_prot(id);
+ALTER TABLE ab_import_prot ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ab_import_prot_pk;
+
+CREATE TABLE ab_importdoklad_kart (
+  dokladbds   SERIAL NOT NULL,
+  refimportid   INTEGER NOT NULL,  
+  dokladtyp   CHAR(2),
+  zprac   Integer  DEFAULT 0 NOT NULL,
+  druh   CHAR(4) NOT NULL,
+  smer   Integer  DEFAULT 1 NOT NULL,
+  akce   CHAR(4),
+  castka   DECIMAL(16, 2) NOT NULL,
+  datuct   DATE,
+  roksp   DATETIME YEAR TO YEAR DEFAULT current year to year,
+  valuta   DATE  DEFAULT today,
+  konstsym   DECIMAL(10,0),
+  dbucet   CHAR(9),
+  dbkonto   DECIMAL(16, 0),
+  dbsko   CHAR(4),
+  dbprefixzak   CHAR(3),
+  dbvarsym   DECIMAL(10,0),
+  dbspecsym   DECIMAL(10,0),
+  dbtextsouhrn   CHAR(20),
+  dbnaklstr   CHAR(10)  DEFAULT '__________',
+  crucet   CHAR(9),
+  crkonto   DECIMAL(16, 0),
+  crsko   CHAR(4),
+  crbanka   DECIMAL(7, 0),
+  crprefixzak   CHAR(3),
+  crvarsym   DECIMAL(10,0),
+  crspecsym   DECIMAL(10,0),
+  crtextsouhrn   CHAR(20),
+  crnaklstr   CHAR(10)  DEFAULT '__________',
+  chyba   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (dokladtyp in ('IB','IK','II','HB','HK','TP','TI')) CONSTRAINT ab_importdoklad_kart_di15
+)lock mode row;
+
+CREATE UNIQUE INDEX ab_importdoklad_kart_pk ON ab_importdoklad_kart(dokladbds);
+ALTER TABLE ab_importdoklad_kart ADD CONSTRAINT PRIMARY KEY(dokladbds) CONSTRAINT ab_importdoklad_kart_pk;
+
+CREATE INDEX ab_importdoklad_kart_i_f1 ON ab_importdoklad_kart(refimportid);
+ALTER TABLE ab_importdoklad_kart ADD CONSTRAINT FOREIGN KEY(refimportid) REFERENCES ab_import_prot(id) CONSTRAINT ab_importdoklad_kart_f1;
+
+CREATE TABLE ab_importhromsouhrn_kart (
+  dokladbds   SERIAL NOT NULL,
+  refimportid   INTEGER NOT NULL,  
+  dokladtyp   CHAR(2)  DEFAULT 'IB' NOT NULL,
+  zprac   Integer  DEFAULT 0 NOT NULL,
+  dbcr   Integer  DEFAULT 1 NOT NULL,
+  druh   CHAR(4) NOT NULL,
+  smer   Integer  DEFAULT 1 NOT NULL,
+  datuct   DATE,
+  roksp   DATETIME YEAR TO YEAR DEFAULT current year to year,
+  valuta   DATE  DEFAULT today,
+  konstsym   DECIMAL(10,0),
+  ucet   CHAR(9),
+  konto   DECIMAL(16, 0),
+  sko   CHAR(4),
+  banka   DECIMAL(7, 0),
+  textsouhrn   CHAR(20),
+  prefixzak   CHAR(3),
+  varsym   DECIMAL(10,0),
+  specsym   DECIMAL(10,0),
+  naklstr   CHAR(10)  DEFAULT '__________',
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (dokladtyp in ('IB','IK','II','HB','HK','TP','TI')) CONSTRAINT ab_importhromsouhrn_kart_di15,
+  CHECK (dbcr IN (-1,1)) CONSTRAINT ab_importhromsouhrn_kart_d47y
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ab_importhromsouhrn_kart_pk ON ab_importhromsouhrn_kart(dokladbds);
+ALTER TABLE ab_importhromsouhrn_kart ADD CONSTRAINT PRIMARY KEY(dokladbds) CONSTRAINT ab_importhromsouhrn_kart_pk;
+
+CREATE INDEX ab_importhromsouhrn_kart_i_f1 ON ab_importhromsouhrn_kart(refimportid);
+ALTER TABLE ab_importhromsouhrn_kart ADD CONSTRAINT FOREIGN KEY(refimportid) REFERENCES ab_import_prot(id) CONSTRAINT ab_importhromsouhrn_kart_f1;
+
+CREATE TABLE ab_importhromrozpis_kart (
+  refdokladbds   INTEGER NOT NULL,
+  radek   Integer NOT NULL,
+  castka   DECIMAL(16, 2),
+  ucet   CHAR(9),
+  konto   DECIMAL(16, 0),
+  sko   CHAR(4),
+  banka   DECIMAL(7, 0),
+  roksp   DATETIME YEAR TO YEAR DEFAULT current year to year,
+  valuta   DATE  DEFAULT today,
+  textrozpis   CHAR(20),
+  prefixzak   CHAR(3),
+  naklstr   CHAR(10)  DEFAULT '__________',
+  konstsym   DECIMAL(10,0),
+  varsym   DECIMAL(10,0),
+  specsym   DECIMAL(10,0),
+  chyba   VARCHAR(255),
+  owner   Integer
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ab_importhromrozpis_kart_pk ON ab_importhromrozpis_kart(refdokladbds,radek);
+ALTER TABLE ab_importhromrozpis_kart ADD CONSTRAINT PRIMARY KEY(refdokladbds,radek) CONSTRAINT ab_importhromrozpis_kart_pk;
+
+--FK
+ALTER TABLE ab_importhromrozpis_kart ADD CONSTRAINT FOREIGN KEY(refdokladbds) REFERENCES ab_importhromsouhrn_kart(dokladbds) CONSTRAINT ab_importhromrozpis_kart_f1;
+
+CREATE TABLE ab_importerror_log (
+  id   SERIAL NOT NULL,
+  refimportid   INTEGER NOT NULL,
+  msgnum   CHAR(15) NOT NULL,
+  text   VARCHAR(255) NOT NULL,
+  par1   VARCHAR(255),
+  par2   VARCHAR(255),
+  par3   VARCHAR(255),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ab_importerror_log_pk ON ab_importerror_log(id);
+ALTER TABLE ab_importerror_log ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ab_importerror_log_pk;
+
+--FK
+CREATE INDEX ab_importerror_log_i_f1 ON ab_importerror_log(refimportid);
+ALTER TABLE ab_importerror_log ADD CONSTRAINT FOREIGN KEY(refimportid) REFERENCES ab_import_prot(id) CONSTRAINT ab_importerror_log_f1;  
+
+ROLLBACK WORK;
+
+--End of B126384_RN00452668_1

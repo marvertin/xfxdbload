@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A42748_RN00285558
+-- @TC:ONCE: DESCRIPTION = Chybìjící registr
+
+BEGIN WORK;
+
+Call TW_RegSetOrAddKey ('EP', 'zprava', 'import', 'lokalita', 'C:\',1,'Podpora pro produkt', 'Zprávy', 'Import zpráv', 'Definuje defaultní lokalitu pro výbìr souborù zpráv');
+
+ROLLBACK WORK;
+
+

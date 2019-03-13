@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B131179_RSTS-3518_1
+-- @TC:ONCE: DESCRIPTION = RSTS-3518 Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_finsit_mat MODIFY splnenodsti integer default null; 
+ALTER TABLE eo_finsit_mat MODIFY splnenodti  integer default null; 
+ALTER TABLE eo_finsit_mat MODIFY splnenminprijemej integer default null; 
+
+ALTER TABLE eo_finsit_arch MODIFY splnenodsti integer default null; 
+ALTER TABLE eo_finsit_arch MODIFY splnenodti integer default null; 
+ALTER TABLE eo_finsit_arch MODIFY splnenminprijemej integer default null; 
+
+
+
+ROLLBACK WORK;
+
+--End of B131179_RSTS-3518_1

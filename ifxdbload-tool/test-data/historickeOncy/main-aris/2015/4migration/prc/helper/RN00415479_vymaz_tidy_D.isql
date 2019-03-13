@@ -1,0 +1,9 @@
+create procedure RN00415479_vymaz_tidy_D() 
+
+begin work;
+
+drop table RN00415479_vymaz;
+
+commit work;
+
+end procedure;

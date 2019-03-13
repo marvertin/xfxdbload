@@ -1,0 +1,49 @@
+-- @TC:ONCE: ID = V2, B116277_RN00404132_1
+-- @TC:ONCE: DESCRIPTION = OZ: Export úvěrové smlouvy {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table EU_ExpSml_Den add   obchzastext2 char(16);
+alter table EU_ExpSml_Den add   agenttipext2 char(16);
+alter table EU_ExpSml_Den add   agentputext2 char(16);
+alter table EU_ExpSml_Den add   ozorgover2 char(16);
+alter table EU_ExpSml_Den add   obchzastjmeno char(200)  ;
+alter table EU_ExpSml_Den add   agenttipjmeno char(200)  ;
+alter table EU_ExpSml_Den add   agentputjmeno char(200)  ;
+alter table EU_ExpSml_Den add   obchzasttelzam char(45) ;
+alter table EU_ExpSml_Den add   obchzastmobil char(45) ;
+alter table EU_ExpSml_Den add   obchzastemail char(45)  ;
+alter table EU_ExpSml_Den add   obchzastextnazev char(200)  ;
+alter table EU_ExpSml_Den add   obchzastexttelzam char(45)  ;
+alter table EU_ExpSml_Den add   obchzastextmobil char(45)  ;
+alter table EU_ExpSml_Den add   obchzastextemail char(45)  ;
+alter table EU_ExpSml_Den add   agenttiptelzam char(45)  ;
+alter table EU_ExpSml_Den add   agenttipmobil char(45)  ;
+alter table EU_ExpSml_Den add   agenttipemail char(45)  ;
+alter table EU_ExpSml_Den add   agenttipextnazev char(200)  ;
+alter table EU_ExpSml_Den add   agenttipexttelzam char(45)  ;
+alter table EU_ExpSml_Den add   agenttipextmobil char(45)  ;
+alter table EU_ExpSml_Den add   agenttipextemail char(45)  ;
+alter table EU_ExpSml_Den add   agentputtelzam char(45)  ;
+alter table EU_ExpSml_Den add   agentputmobil char(45)  ;
+alter table EU_ExpSml_Den add   agentputemail char(45)  ;
+alter table EU_ExpSml_Den add   agentputextnazev char(200)  ;
+alter table EU_ExpSml_Den add   agentputexttelzam char(45)  ;
+alter table EU_ExpSml_Den add   agentputextmobil char(45)  ;
+alter table EU_ExpSml_Den add   agentputextemail char(45)  ;
+alter table EU_ExpSml_Den add   ozastovertelzam char(45)  ;
+alter table EU_ExpSml_Den add   ozastovermobil char(45)  ;
+alter table EU_ExpSml_Den add   ozastoveremail char(45)  ;
+alter table EU_ExpSml_Den add   ozorgovernazev char(200)  ;
+alter table EU_ExpSml_Den add   ozorgovertelzam char(45)  ;
+alter table EU_ExpSml_Den add   ozorgovermobil char(45)  ;
+alter table EU_ExpSml_Den add   ozorgoveremail char(45);  
+alter table EU_ExpSml_Den modify  obchZastExt   Char(16);
+alter table EU_ExpSml_Den modify  agentTipExt   Char(16);
+alter table EU_ExpSml_Den modify  agentPutExt   Char(16);
+alter table EU_ExpSml_Den modify  ozorgover   Char(16);
+alter table EU_ExpSml_Den modify  ozastoverjmeno   Char(200);
+
+ROLLBACK WORK;
+
+--End of B116277_RN00404132_1

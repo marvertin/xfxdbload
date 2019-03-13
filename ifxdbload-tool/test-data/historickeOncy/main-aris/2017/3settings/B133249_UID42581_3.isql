@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B133249_UID42581_3
+-- @TC:ONCE: DESCRIPTION = Aktualizovat údaje o firmě daty z CRIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1301, 'Aktualizovat číselník firem daty z CRIBIS', null, 1);
+
+ROLLBACK WORK;
+
+--End of B133249_UID42581_3

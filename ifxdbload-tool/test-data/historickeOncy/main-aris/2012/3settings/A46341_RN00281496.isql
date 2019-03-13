@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A46341_RN00281496
+-- @TC:ONCE: DESCRIPTION = Zaokrouhlení výše minimálního mìsíèního vkladu na celé koruny
+
+BEGIN WORK;
+
+--#automatický pøepoèet mìsíèního vkladu pøi uzavøení smlouvy o PU#
+call TW_RegDelKey('ES', '*', 'PU', 'aktualizujvklad');
+
+-- #automatický pøepoèet mìsíèního vkladu pro smlouvu <tsml>#
+call TW_RegSetOrAddKey('ES', 'SSFO', '* ', 'aktualizujvklad', 1, 1, 'Spoøení', 'Zmìny smluv SS', 'Change of BS contract', 'Definuje zda se v prùbìhu uživatelské editace žádosti/návrhu smlouvy <tsml> a plánované zmìny smlouvy <tsml> má v editaèním formuláøi automaticky pøepoèítávat pravidelný vklad.');
+
+-- #automatický pøepoèet mìsíèního vkladu pøi uzavøení smlouvy o PU nad <tsml>#
+call TW_RegSetOrAddKey('ES', 'SSFO', 'PU ', 'aktualizujvklad', 0, 1, 'Spoøení', 'Zmìny smluv SS', 'Change of BS contract', 'Definuje, zda se má pøi uzavøení smlouvy o PU pro daný typ spoøicí smlouvy provádìt navýšení pravidelného vkladu na minimální výši mìsíèního vkladu podle CÈ a tarifu VOP. ');
+call TW_RegSetOrAddKey('ES', 'SSPO', 'PU ', 'aktualizujvklad', 1, 1, 'Spoøení', 'Zmìny smluv SS', 'Change of BS contract', 'Definuje, zda se má pøi uzavøení smlouvy o PU pro daný typ spoøicí smlouvy provádìt navýšení pravidelného vkladu na minimální výši mìsíèního vkladu podle CÈ a tarifu VOP. ');
+
+ROLLBACK WORK;
+
+--End of A46341_RN00281496
+

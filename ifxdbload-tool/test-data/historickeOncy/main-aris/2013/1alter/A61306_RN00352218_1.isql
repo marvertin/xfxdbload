@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A61306_RN00352218_1
+-- @TC:ONCE: DESCRIPTION = Zesouladit eu_variapu_cis a eu_variapu_acis
+
+BEGIN WORK;
+
+ALTER TABLE eu_variapu_acis 
+  ADD maxnezajvyse   DECIMAL(16, 2),
+  ADD klienttext   char(50),
+  ADD klientnabizet   Integer;
+
+ROLLBACK WORK;
+
+--End of A61306_RN00352218_1

@@ -1,0 +1,176 @@
+-- @TC:ONCE: ID = V2, A42120_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+BEGIN WORK;
+
+CREATE TABLE an_prikazh_kart (
+  prikazid   SERIAL NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  typ   CHAR(1) NOT NULL,
+  castkacelk   DECIMAL(16, 2),
+  konto   DECIMAL(16, 0) NOT NULL,
+  tko   CHAR(2) NOT NULL,
+  mena   CHAR(3) NOT NULL,
+  datplanprov   DATE NOT NULL,
+  datprov   DATE,
+  datvystav   DATE NOT NULL,
+  jeprior   Integer  DEFAULT 0 NOT NULL,
+  zdroj   CHAR(1)  DEFAULT 'M' NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  potvrduser   CHAR(20),
+  potvrdtime   datetime year to second,
+  provuser   CHAR(20),
+  provtime   datetime year to second,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (jeprior IN (0,1)) CONSTRAINT an_prikazh_kart_d0x1,
+  CHECK (zdroj IN ('M','W')) CONSTRAINT an_prikazh_kart_dr2i
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX an_prikazh_kart_pk ON an_prikazh_kart(prikazid);
+ALTER TABLE an_prikazh_kart ADD CONSTRAINT PRIMARY KEY(prikazid) CONSTRAINT an_prikazh_kart_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX an_prikazh_kart_i1 ON an_prikazh_kart(konto,tko);
+CREATE INDEX an_prikazh_kart_i2 ON an_prikazh_kart(datplanprov);
+CREATE INDEX an_prikazh_kart_i3 ON an_prikazh_kart(datprov);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE an_prikazh_kart
+ADD CONSTRAINT (CHECK (stav IN ('A', 'B', 'C', 'D', 'E', 'S', 'Z')) CONSTRAINT an_prikazh_kart_c1),
+ADD CONSTRAINT (CHECK (typ IN ('P', 'C')) CONSTRAINT an_prikazh_kart_c3),
+ADD CONSTRAINT (CHECK (castkacelk > 0) CONSTRAINT an_prikazh_kart_c2);
+
+CREATE TABLE an_prikazh_arch (
+  idarch   SERIAL NOT NULL,
+  prikazid   INTEGER NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  typ   CHAR(1) NOT NULL,
+  castkacelk   DECIMAL(16, 2),
+  konto   DECIMAL(16, 0) NOT NULL,
+  tko   CHAR(2) NOT NULL,
+  mena   CHAR(3) NOT NULL,
+  datplanprov   DATE NOT NULL,
+  datprov   DATE,
+  datvystav   DATE NOT NULL,  
+  jeprior   Integer  DEFAULT 0 NOT NULL,
+  zdroj   CHAR(1)  DEFAULT 'M' NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  potvrduser   CHAR(20),
+  potvrdtime   datetime year to second,
+  provuser   CHAR(20),
+  provtime   datetime year to second,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (jeprior IN (0,1)) CONSTRAINT an_prikazh_arch_d0x1,
+  CHECK (zdroj IN ('M','W')) CONSTRAINT an_prikazh_arch_dr2j
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX an_prikazh_arch_pk ON an_prikazh_arch(idarch);
+ALTER TABLE an_prikazh_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT an_prikazh_arch_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX an_prikazh_arch_i3 ON an_prikazh_arch(datprov);
+CREATE INDEX an_prikazh_arch_i1 ON an_prikazh_arch(konto,tko);
+CREATE INDEX an_prikazh_arch_i2 ON an_prikazh_arch(datplanprov);
+
+CREATE TABLE an_prikazb_kart (
+  polozkaid   SERIAL NOT NULL,
+  prikazid   INTEGER NOT NULL,
+  stav   CHAR(1)  DEFAULT 'A' NOT NULL,
+  datsplatnosti   DATE,
+  castka   DECIMAL(16, 2) NOT NULL,
+  mena   CHAR(3) NOT NULL,
+  kontocizi   DECIMAL(16, 0) NOT NULL,
+  bankacizi   DECIMAL(7, 0) NOT NULL,
+  varsym   DECIMAL(10,0)  DEFAULT 9,
+  konstsym   DECIMAL(10,0),
+  specsym   DECIMAL(10,0),
+  zpravaprijemce   VARCHAR(144),
+  zpravaprikazce   VARCHAR(144),
+  davkabds   Integer,
+  dokladbds   Integer,
+  serplatba   INTEGER,
+  serinkaso   INTEGER,
+  chyba   VARCHAR(255),
+  chybauziv   VARCHAR(255),
+  msgnum   Char(15),
+  msgdetail   VARCHAR(255),
+  msgimpltext   VARCHAR(255),
+  msgpar1   VARCHAR(255),
+  msgpar2   VARCHAR(255),
+  msgpar3   VARCHAR(255),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX an_prikazb_kart_pk ON an_prikazb_kart(polozkaid);
+ALTER TABLE an_prikazb_kart ADD CONSTRAINT PRIMARY KEY(polozkaid) CONSTRAINT an_prikazb_kart_pk;
+
+--FK
+ALTER TABLE an_prikazb_kart ADD CONSTRAINT FOREIGN KEY(prikazid) REFERENCES an_prikazh_kart(prikazid) CONSTRAINT an_prikazb_kart_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE an_prikazb_kart
+ADD CONSTRAINT (CHECK (castka > 0) CONSTRAINT an_prikazb_kart_c1),
+ADD CONSTRAINT (CHECK (STAV IN ('A', 'B', 'E', 'Z')) CONSTRAINT an_prikazb_kart_c2);
+
+CREATE TABLE an_prikazb_arch (
+  idarch   SERIAL NOT NULL,
+  polozkaid   Integer NOT NULL,
+  prikazid   INTEGER NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  datsplatnosti   DATE,
+  castka   DECIMAL(16, 2) NOT NULL,
+  mena   CHAR(3) NOT NULL,
+  kontocizi   DECIMAL(16, 0) NOT NULL,
+  bankacizi   DECIMAL(7, 0) NOT NULL,
+  varsym   DECIMAL(10,0)  DEFAULT 9,
+  konstsym   DECIMAL(10,0),
+  specsym   DECIMAL(10,0),
+  zpravaprijemce   VARCHAR(144),
+  zpravaprikazce   VARCHAR(144),
+  davkabds   Integer,
+  dokladbds   Integer,
+  serplatba   INTEGER,
+  serinkaso   INTEGER,
+  chyba   VARCHAR(255),
+  chybauziv   VARCHAR(255),
+  msgnum   Char(15),
+  msgdetail   VARCHAR(255),
+  msgimpltext   VARCHAR(255),
+  msgpar1   VARCHAR(255),
+  msgpar2   VARCHAR(255),
+  msgpar3   VARCHAR(255),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX an_prikazb_arch_pk ON an_prikazb_arch(idarch);
+ALTER TABLE an_prikazb_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT an_prikazb_arch_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX an_prikazb_arch_i1 ON an_prikazb_arch(prikazid);
+
+ROLLBACK WORK;

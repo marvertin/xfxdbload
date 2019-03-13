@@ -1,0 +1,103 @@
+-- @TC:ONCE: ID = V2, A53569_RN00317080_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_zajist_cis 
+  ADD nabizetprouz   Integer  DEFAULT 0,
+  ADD nabizetod   DATE,
+  ADD nabizetdo   DATE,
+  ADD verejnynazev   CHAR(35);
+
+ALTER TABLE eu_zajist_cis
+  ADD CONSTRAINT (CHECK (nabizetprouz IN (0,1)) CONSTRAINT eu_zajist_cis_dw8r),
+  ADD CONSTRAINT (CHECK (nabizetod <= nabizetdo) CONSTRAINT eu_zajist_cis_c11);
+
+ALTER TABLE eu_zajist_acis 
+  ADD nabizetprouz   Integer,
+  ADD nabizetod   DATE,
+  ADD nabizetdo   DATE,
+  ADD verejnynazev   CHAR(35);
+
+ALTER TABLE eu_zajist_acis
+  ADD CONSTRAINT (CHECK (nabizetprouz IN (0,1)) CONSTRAINT eu_zajist_acis_dw8v);
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE eu_ucel_cis
+  ADD nabizetprouz   Integer  DEFAULT 0,
+  ADD nabizetod   DATE,
+  ADD nabizetdo   DATE,
+  ADD verejnynazev   CHAR(35);
+  
+ALTER TABLE eu_ucel_cis
+  ADD CONSTRAINT (CHECK (nabizetprouz IN (0,1)) CONSTRAINT eu_ucel_cis_dw8z),
+  ADD CONSTRAINT (CHECK (nabizetod <= nabizetdo) CONSTRAINT eu_ucel_cis_c4);
+
+ALTER TABLE eu_ucel_acis 
+  ADD nabizetprouz   Integer,
+  ADD nabizetod   DATE,
+  ADD nabizetdo   DATE,
+  ADD verejnynazev   CHAR(35);
+
+ALTER TABLE eu_ucel_acis 
+  ADD CONSTRAINT (CHECK (nabizetprouz IN (0,1)) CONSTRAINT eu_ucel_acis_dw93);
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE eu_variapu_cis
+  ADD podmhistspor   Integer  DEFAULT 0,
+  ADD podmhistuv   Integer  DEFAULT 0,
+  ADD pozadpodmhist   CHAR(1);
+
+ALTER TABLE eu_variapu_cis
+  ADD CONSTRAINT (CHECK (podmhistspor in (0, 1, 2)) CONSTRAINT eu_variapu_cis_c2),
+  ADD CONSTRAINT (CHECK (podmhistuv in (0, 1, 2)) CONSTRAINT eu_variapu_cis_c3),
+  ADD CONSTRAINT (CHECK (pozadpodmhist in ('J', 'O')) CONSTRAINT eu_variapu_cis_c4);
+
+ALTER TABLE eu_variapu_acis
+  ADD podmhistspor   Integer,
+  ADD podmhistuv   Integer,
+  ADD pozadpodmhist   CHAR(1);
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE eu_sml_mat
+  ADD variantaprocesu   CHAR(1),
+  ADD variantaprocesupuv   CHAR(1),
+  ADD zajemnovespor   Integer  DEFAULT 0,
+  ADD zajemzmenaspor   Integer  DEFAULT 0,
+  ADD kandidatzamstor   CHAR(1);
+
+ALTER TABLE eu_sml_mat
+  ADD CONSTRAINT (CHECK (zajemnovespor IN (0,1)) CONSTRAINT eu_sml_mat_dw9f),
+  ADD CONSTRAINT (CHECK (zajemzmenaspor IN (0,1)) CONSTRAINT eu_sml_mat_dw9g),
+  ADD CONSTRAINT (CHECK (variantaprocesu in ('P', 'S', 'Z')) CONSTRAINT eu_sml_mat_c44),
+  ADD CONSTRAINT (CHECK (variantaprocesupuv in ('P', 'S', 'Z')) CONSTRAINT eu_sml_mat_c45),
+  ADD CONSTRAINT (CHECK (kandidatzamstor in ('S', 'Z')) CONSTRAINT eu_sml_mat_c46);
+
+ALTER TABLE eu_sml_arch
+  ADD variantaprocesu   CHAR(1),
+  ADD variantaprocesupuv   CHAR(1),
+  ADD zajemnovespor   Integer,
+  ADD zajemzmenaspor   Integer,
+  ADD kandidatzamstor   CHAR(1);
+
+ALTER TABLE eu_sml_arch
+  ADD CONSTRAINT (CHECK (zajemnovespor IN (0,1)) CONSTRAINT eu_sml_arch_dw9k),
+  ADD CONSTRAINT (CHECK (zajemzmenaspor IN (0,1)) CONSTRAINT eu_sml_arch_dw9l);
+
+ALTER TABLE eu_expsml_den 
+  ADD variantaprocesu   CHAR(1),
+  ADD variantaprocesupuv   CHAR(1),
+  ADD zajemnovespor   Integer,
+  ADD zajemzmenaspor   Integer,
+  ADD kandidatzamstor   CHAR(1);
+
+ALTER TABLE eu_expsml_den 
+  ADD CONSTRAINT (CHECK (zajemnovespor IN (0,1)) CONSTRAINT eu_expsml_den_dw9p),
+  ADD  CONSTRAINT (CHECK (zajemzmenaspor IN (0,1)) CONSTRAINT eu_expsml_den_dw9q);
+
+ROLLBACK WORK;
+
+--End of A53569_RN00317080_1

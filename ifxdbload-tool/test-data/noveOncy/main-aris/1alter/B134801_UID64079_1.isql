@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B134801_UID64079_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17802: LTV v úvěrové smlouvě {STORY}
+
+BEGIN WORK;
+
+CREATE TABLE eu_vypocetltv_den (
+  serno   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  datvypocet   DATE NOT NULL,
+  ltvaktualni   DECIMAL(16,2) NOT NULL,
+  jmenovatel   DECIMAL(16, 2) NOT NULL,
+  vyseuveru   DECIMAL(16, 2) NOT NULL,
+  odpocitanahodnota   DECIMAL(16, 2) NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_vypocetltv_den_pk ON eu_vypocetltv_den(serno);
+ALTER TABLE eu_vypocetltv_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_vypocetltv_den_pk;
+
+--FK
+CREATE INDEX eu_vypocetltv_den_i_f1 ON eu_vypocetltv_den(smlouva,tsml);
+ALTER TABLE eu_vypocetltv_den ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_vypocetltv_den_f1;
+
+ROLLBACK WORK;
+
+--End of B134801_UID64079_1

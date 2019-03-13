@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B131554_UID41968_1
+-- @TC:ONCE: DESCRIPTION = Evidovat nové role referentů k úvěrové smlouvě {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table eu_sml_arch add (
+
+  refRiskAnalytik   CHAR(2),
+  refRiskStavTechnik   CHAR(2),
+  refRiskFraud   CHAR(2)
+)
+;
+
+alter table eu_sml_mat add (
+
+  refRiskAnalytik   CHAR(2),
+  refRiskStavTechnik   CHAR(2),
+  refRiskFraud   CHAR(2)
+)
+;
+
+ROLLBACK WORK;
+
+--End of B131554_UID41968_1

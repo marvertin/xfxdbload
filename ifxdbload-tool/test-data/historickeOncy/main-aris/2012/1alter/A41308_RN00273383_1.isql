@@ -1,0 +1,48 @@
+-- @TC:ONCE: ID = V2, A41308_RN00273383_1
+-- @TC:ONCE: DESCRIPTION = Zavedení nové varianty modelování pro vyèíslení pøedèasného splacení úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE pro_SettlementFeeSavContr (
+  serno   SERIAL NOT NULL,
+  globalBaseParameters_id   Integer NOT NULL,
+  defName   CHAR(8) NOT NULL,
+  title   CHAR(35) NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  gbcId   Integer,
+  tariffId   Integer,
+  settlementType   CHAR(1) NOT NULL,
+  minMonthCount   Integer NOT NULL,
+  feeRstsIndividual   DECIMAL(16,2),
+  feeRstsLegalPerson   DECIMAL(16,2),
+  feeHypoIndividual   DECIMAL(16,2),
+  feeHypoLegalPerson   DECIMAL(16,2),
+  lowerLimitIndividual   DECIMAL(16, 2),
+  lowerLimitLegalPerson   DECIMAL(16, 2),
+  upperLimitIndividual   DECIMAL(16, 2),
+  upperLimitLegalPerson   DECIMAL(16, 2)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pro_settlementfeesavcontr_pk ON pro_settlementfeesavcontr(serno);
+ALTER TABLE pro_settlementfeesavcontr ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pro_settlementfeesavcontr_pk;
+
+--FK
+CREATE INDEX pro_settlementfeesavcontr_i_f1 ON pro_settlementfeesavcontr(globalbaseparameters_id);
+ALTER TABLE pro_settlementfeesavcontr ADD CONSTRAINT FOREIGN KEY(globalbaseparameters_id) REFERENCES pro_globalbaseparameters(id) CONSTRAINT pro_settlementfeesavcontr_f1;
+
+--INDEXES
+CREATE INDEX pro_settlementfeesavcontr_i1 ON pro_settlementfeesavcontr(globalbaseparameters_id,defname);
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX pro_settlementfeesavcontr_u1 ON pro_settlementfeesavcontr(gbcid,tariffid,settlementtype,minmonthcount);
+ALTER TABLE pro_settlementfeesavcontr ADD CONSTRAINT (UNIQUE (gbcid,tariffid,settlementtype,minmonthcount) CONSTRAINT pro_settlementfeesavcontr_u1);
+
+--CHECKS
+ALTER TABLE pro_settlementfeesavcontr
+ADD CONSTRAINT (CHECK (settlementType in ('A', 'B')) CONSTRAINT pro_settlementfeesavcontr_c1);
+
+ROLLBACK WORK;
+
+--End of A41308_RN00273383_1

@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A55704_RN00317078_3
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Problémy opisovaných formuláøù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+
+  INSERT INTO tw_emailtyp_cis  (zkratka, popis, odesilatel, odesilateljmeno, predmet,  
+    obsah,
+    odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, blokovano, priorita, platnost)
+    VALUES('SS_OPIS_PROBL', 'Problém pøi opisu formuláøe požadavku', NULL, NULL, 'Problém pøi opisu formuláøe požadavku <<Pozadavek>>', 
+           'Byly zjišteny následující problémy pøi opisu formuláøe <<Pozadavek>>, <<TEXT>>',
+            NULL, 0, 1, 24, 0, 'S', 0, 2, 1);
+   
+  call TW_RegSetOrAddKey('ES', 'PROBLOPISU' , '*', 'URGENCE', 10, 1);
+  call TW_RegSetOrAddKey('ES', 'PROBLOPISU' , '*', 'ZPRACDO',  7, 1);
+  call TW_RegSetOrAddKey('ES', 'PROBLOPISU' , '*', 'EXPORTDIR',  NULL, 1);
+  call TW_RegSetOrAddKey('ES', 'PROBLOPISU' , '*', 'TYPEMAIL',  'SS_OPIS_PROBL', 1);
+  call TW_RegSetOrAddKey('ES', 'PROBLOPISU' , '*', 'EMAILODESILATELE',  NULL, 1);
+  call TW_RegSetOrAddKey('ES', 'PROBLOPISU' , '*', 'EMAILSKRYTA',  NULL, 1);
+  call TW_RegSetOrAddKey('ES', 'PROBLOPISU' , '*', 'GENHROMSESSIONID',  NULL, 1);
+   
+ROLLBACK WORK;
+
+--End of A55704_RN00317078_3

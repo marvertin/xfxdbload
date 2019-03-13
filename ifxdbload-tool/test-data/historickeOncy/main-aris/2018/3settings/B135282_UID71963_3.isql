@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135282_UID71963_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21878: Kontrola při čerpání {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+call TW_RegDelKey('RU', 'zajist', 'kontrolaGlobLTV', 'provadet');
+
+call TW_RegDelKey('RU', 'zajist', 'kontrolaGlobLTVPrior', 'A');
+call TW_RegDelKey('RU', 'zajist', 'kontrolaGlobLTVPrior', 'B');
+call TW_RegDelKey('RU', 'zajist', 'kontrolaGlobLTVPrior', 'C');
+
+ROLLBACK WORK;
+
+--End of B135282_UID71963_3

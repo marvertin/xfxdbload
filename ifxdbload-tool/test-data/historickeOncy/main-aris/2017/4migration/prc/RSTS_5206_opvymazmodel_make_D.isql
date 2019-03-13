@@ -1,0 +1,124 @@
+create PROCEDURE RSTS_5206_opvymazmodel_make_D (-- vstupni paramtery
+                                              ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser       Int;
+define _serDM     Int;
+define _serobjekt Int;
+define _serh      Int;
+define _sersh     Int;
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS-5206', 'RSTS_5206_model', 'Výmaz nepotřebných modelů splácení a spoření');
+
+COMMIT WORK;
+
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  sersh
+   INTO  _ser, _sersh
+   FROM RSTS_5206_model
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS_5206_model
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+   --vlastni algoritmus migrace
+   let _serh = null;
+   let _serh = (select ser from ep_splspormodh_den where headser = _sersh  and typvyp = 'E');
+   
+   delete from ep_splspormodb_den
+   where headser = _serh;
+
+   delete from ep_splspormodcashflow_den
+   where headser = _serh;
+
+   delete from EP_SplSporModStFee_Den
+   where headser = _serh;
+
+   delete from ep_splspormodh_den 
+   where ser = _serh;
+   
+   delete from ep_splspormodbankcf_den 
+   where ser = _serh;
+   
+   if not exists (select 1 from ep_splspormodh_den where headser = _sersh) then
+    delete from ep_splspormoderrmsg_den
+    where headser in (select ser from ep_splspormoderr_den where headser in (select ser from ep_splspormodsh_den where ser = _sersh));
+    
+    delete from ep_splspormoderr_den
+    where headser in (select ser from ep_splspormodsh_den where ser = _sersh);
+    
+    delete from EP_SplSporModHDilc_den
+    where headser in (select ser from ep_splspormodsh_den where ser = _sersh);
+                      
+    delete from ep_splspormodee_den
+    where refheadser in (select ser from ep_splspormodsh_den where ser = _sersh);
+    
+    delete from ep_splspormodsh_den
+    where ser = _sersh;
+   end if;
+   
+   
+   UPDATE RSTS_5206_model SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+   
+   let _serObjekt = TW_DM_VlozObjekt(_serDM, 'T', 'ep_splspormodh_den', 'D', _sersh);
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

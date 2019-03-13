@@ -1,0 +1,104 @@
+create procedure RSTS_27791_tabs()
+
+begin
+  on exception in (-310, -958)
+    DELETE FROM RSTS_27791_eba_Tmp;
+  end exception;
+
+  CREATE RAW TABLE RSTS_27791_eba_Tmp (
+    id BigSerial not null,
+    realuv Int,
+    reals Int,
+    osoba Int,
+    poradi Int,
+    datvyhodnoceni Date,
+    typvyhodnoceni Char(1),
+    dpdeba Int,
+    nesplaccastka Dec(16,2),
+    datprvvyhodnoceni Date,
+    
+    vlozit Int
+  );
+
+  CREATE INDEX RSTS_27791_eba_Tmp_i1 ON RSTS_27791_eba_Tmp(id);
+end;
+
+begin
+  on exception in (-310, -958)
+    DELETE FROM RSTS_27791_role_Tmp;
+  end exception;
+
+  CREATE TEMP TABLE RSTS_27791_role_Tmp (
+    os Int,
+    typrole Char(2),
+    smlouvass Dec(16,0),
+    smlouvauv Dec(16,0),
+    datpor Date,
+    datukon Date,
+    klient Int
+  ) WITH NO LOG;
+end;
+
+begin
+  on exception in (-310, -958)
+    DELETE FROM RSTS_27791_real_Tmp;
+  end exception;
+
+  CREATE TEMP TABLE RSTS_27791_real_Tmp (
+    realn Int,
+    smlouva Dec(16,0),
+    konto Dec(16,0),
+    tko Char(2),
+    datotev Date,
+    datuzav Date
+  ) WITH NO LOG;
+
+  CREATE INDEX RSTS_27791_real_i1 ON RSTS_27791_real_Tmp(smlouva);
+end;
+
+begin
+  on exception in (-310, -958)
+    DELETE FROM RSTS_27791_vztah_Tmp;
+  end exception;
+
+  CREATE TEMP TABLE RSTS_27791_vztah_Tmp (
+    os Int,
+    datpor Date,
+    datukon Date
+  ) WITH NO LOG;
+end;
+
+begin
+  on exception in (-310, -958)
+    DELETE FROM RSTS_27791_memoGrp_Tmp;
+  end exception;
+
+  CREATE RAW TABLE RSTS_27791_memoGrp_Tmp(
+    konto Dec(16,0),
+    tko Char(2),
+    datuct Date,
+    dluhdospl Dec(16,2),
+    dluhpospl Dec(16,2)
+  );
+  
+  CREATE INDEX RSTS_27791_memoGrp_i1 ON RSTS_27791_memoGrp_Tmp(konto, tko, datuct);
+end;
+
+begin
+  on exception in (-310, -958)
+    DELETE FROM RSTS_27791_ebaUv_Tmp;
+  end exception;
+
+  CREATE RAW TABLE RSTS_27791_ebaUv_Tmp(
+    realuv Int,
+    datvyhodnoceni Date,
+    typvyhodnoceni Char(1),
+    dpdeba Int,
+    nesplaccastka Dec(16,2),
+    datprvvyhodnoceni Date
+  );
+  
+  CREATE INDEX RSTS_27791_ebaUv_Tmp_i1 ON RSTS_27791_ebaUv_Tmp(realuv, datprvvyhodnoceni, typvyhodnoceni);
+end;
+
+end procedure;

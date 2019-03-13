@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B130860_RSTS-3447_3
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table seu_bonitaosoba_arch
+  modify  pomerdluhuprijmu   Dec(8,4)
+  , modify  pomersplatekprijmu   Dec(8,4)
+;
+
+alter table seu_bonitaosoba_mat
+  modify  pomerdluhuprijmu   Dec(8,4)
+  , modify  pomersplatekprijmu   Dec(8,4)
+;
+
+
+ROLLBACK WORK;
+
+--End of B130860_RSTS-3447_3

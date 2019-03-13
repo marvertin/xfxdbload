@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B123358_RN00436364_3
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO eu_variaurokfixace_cis(fixaceid, nazev, platnost, fixdosplaceni)
+  VALUES((SELECT nvl(max(fixaceid), 0) + 1 FROM eu_variaurokfixace_cis), 'Fixace až do splacení', 1, 1);
+
+ROLLBACK WORK;
+
+--End of B123358_RN00436364_3

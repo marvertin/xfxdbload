@@ -1,0 +1,58 @@
+-- @TC:ONCE: ID = V2, A84143_RN00311507_5
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- Úvìrová smlouva - Insolvence pro produkt
+call TW_ExecSql('DROP VIEW eu_insolvence_mat_v', -206);
+
+call TW_ExecSql('DROP TRIGGER eu_insolvence_mat_d', -634);
+call TW_ExecSql('DROP TRIGGER eu_insolvence_mat_u', -634);
+call TW_ExecSql('DROP TRIGGER eu_insolvence_mat_i', -634);
+
+call TW_ExecSql('DROP TRIGGER eu_insolvence_arch_u', -634);
+
+--adresáø BCredit/MCredit/Insolvency
+call TW_ExecSql('DROP PROCEDURE EU_HiInsolvenceInit_N', -674);
+call TW_ExecSql('DROP PROCEDURE EU_HiInsolvenceInit', -674);
+call TW_ExecSql('DROP PROCEDURE EU_HiInsolvenceLoad_N', -674);
+call TW_ExecSql('DROP PROCEDURE EU_HiInsolvenceLoad', -674);
+call TW_ExecSql('DROP PROCEDURE EU_InsolvenceInit_N', -674);
+call TW_ExecSql('DROP PROCEDURE EU_InsolvenceInit', -674);
+call TW_ExecSql('DROP PROCEDURE EU_InsolvenceLoad_N', -674);
+call TW_ExecSql('DROP PROCEDURE EU_InsolvenceLoad', -674);
+call TW_ExecSql('DROP PROCEDURE EU_InsolvenceSave_T', -674);
+call TW_ExecSql('DROP PROCEDURE EU_InsolvenceSave', -674);
+call TW_ExecSql('DROP PROCEDURE EU_InsolvenceTest_N', -674);
+call TW_ExecSql('DROP PROCEDURE EU_InsolvenceTest', -674);
+call TW_ExecSql('DROP PROCEDURE EU_IsInsolvenceSml', -674);
+
+
+-- Režim insolvence pro produkt
+call TW_ExecSql('DROP TRIGGER eo_insolvence_cis_d', -634);
+call TW_ExecSql('DROP TRIGGER eo_insolvence_cis_u', -634);
+call TW_ExecSql('DROP TRIGGER eo_insolvence_cis_i', -634);
+
+call TW_ExecSql('DROP TRIGGER eo_insolvence_cis_d', -634);
+call TW_ExecSql('DROP TRIGGER eo_insolvence_cis_u', -634);
+call TW_ExecSql('DROP TRIGGER eo_insolvence_cis_i', -634);
+
+call TW_ExecSql('DROP TRIGGER Eo_insolvence_acis_d', -634);
+call TW_ExecSql('DROP TRIGGER Eo_insolvence_acis_u', -634);
+
+
+-- Procedury EO_RezimInsolvence* z BPerson/MPerson/cis/insolvence
+call TW_ExecSql('DROP PROCEDURE EO_RezimInsolvenceInit_T', -674);
+call TW_ExecSql('DROP PROCEDURE EO_RezimInsolvenceInit', -674);
+call TW_ExecSql('DROP PROCEDURE EO_RezimInsolvenceLoad_T', -674);
+call TW_ExecSql('DROP PROCEDURE EO_RezimInsolvenceSave_T', -674);
+call TW_ExecSql('DROP PROCEDURE EO_RezimInsolvenceSave', -674);
+call TW_ExecSql('DROP PROCEDURE EO_RezimInsolvenceTest_N', -674);
+call TW_ExecSql('DROP PROCEDURE EO_RezimInsolvenceTest', -674);
+
+
+
+ROLLBACK WORK;
+
+--End of A84143_RN00311507_5

@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, B130731_RSTS-3447_3
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazTypzavazku', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Typ závazku');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazVeritel', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Věřitel');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazVznik', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Vznik');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazAktZustatek', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Aktuální zůstatek');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazVyse', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Výše');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazRoleOsoby', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Role osoby');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazMesZatiz', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Měsíční zatížení');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazUcel', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Účel');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazPlatnost', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Platnost#');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ZobrazPoznamka', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Zobrazovat pole: Poznámka');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinTypzavazku', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Typ závazku');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinVeritel', 0, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Věřitel');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinVznik', 0, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Vznik');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinAktZustatek', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Aktuální zůstatek');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinVyse', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Výše');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinRoleOsoby', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Role osoby');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinMesZatiz', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Měsíční zatížení');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinUucel', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Účel');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'PovinPlatnost', 1, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'Závazky osoby ÚŽ - Povinnost vyplnění: Platnost');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ImplTypZavRSTS', null, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'implicitní typ závazku RSTS');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ImplUcelZavRSTS', null, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'implicitní účel závazku RSTS');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ImplPlatZavRSTS', null, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'implicitní stav platnosti závazku RSTS');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ImplTypZavMimoRSTS', null, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'implicitní typ závazku mimo RSTS');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ImplPlatZavMimoRSTS', null, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'implicitní stav platnosti závazku mimo RSTS');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'ImplPlatNovZav', null, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'implicitní stav platnost nového závazku');
+call tw_regSetOrAddKey('EO', 'osoba', 'zavazky', 'MaxPocZavMimoRsts', 10, 1, 'Osoba', 'Osoby pro úvěrovou žádost', 'Závazky', 'maximální počet závazků mimo RSTS úvěrové žádosti');
+
+ROLLBACK WORK;
+
+--End of B130731_RSTS-3447_3

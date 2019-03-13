@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A48654_RN00280305
+-- @TC:ONCE: DESCRIPTION = Oprava tabulky: Pasivní náhled pro osoby v insolvenci, exekuci a vymáhání v CIBIS-Web
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eo_negatplatmoral
+
+-- 22  eo_negatplatmoral-1/1       [ALTER.COLUMN]
+ALTER TABLE eo_negatplatmoral
+    MODIFY login           CHAR(20)   NOT NULL                       /* previouse: char (10) : ... : ... */;
+
+-- ###############################################################
+--       eo_negatplatmoralarch
+
+-- 23  eo_negatplatmoralarch-1/1       [ALTER.COLUMN]
+ALTER TABLE eo_negatplatmoralarch
+    MODIFY login           CHAR(20)                                  /* previouse: char (10) : ... : ... */;
+
+ROLLBACK WORK;
+
+--End of A48576_RN00312403

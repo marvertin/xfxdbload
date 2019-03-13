@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B114797_RN00406456_1
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Migrace (ANNEX_03) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--INDEXES
+CREATE INDEX ev_vzsmlvec_mat_i1 ON ev_vzsmlvec_mat(zastavsml)
+;
+
+update statistics high for table EV_VzSmlVec_Mat
+;
+
+ROLLBACK WORK;
+
+--End of B114797_RN00406456_1

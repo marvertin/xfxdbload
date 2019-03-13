@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B110567_RN00380435_1
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Číselníky {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table ev_vec_cis
+  add spravadruhu   Integer  DEFAULT 0 NOT NULL
+;
+
+alter table ev_vzsmlvec_cis
+  add povolzajist   Integer  DEFAULT 0 NOT NULL,
+  add povolucel   Integer  DEFAULT 0 NOT NULL,
+  add constraint CHECK (povolzajist IN (0,1)) CONSTRAINT ev_vzsmlvec_cis_c2,
+  add constraint   CHECK (povolucel IN (0,1)) CONSTRAINT ev_vzsmlvec_cis_c3
+;
+
+alter table ev_druhvec_cis drop nobytnost
+; 
+
+ROLLBACK WORK;
+
+--End of B110567_RN00380435_1

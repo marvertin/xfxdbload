@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A64289_RN00358608_3
+-- @TC:ONCE: DESCRIPTION = Není implementována automatická parametrizace variant úvìru k RN00333837 {DEFECT}
+
+BEGIN WORK;
+
+update eu_variapu_cis set
+  nabizprouz = 1,nabizod = MDY(3,1,2012)
+  where varid in ('F','FP','FPR','G','GP','GPB')
+;
+
+update eu_variapu_cis set
+  nabizprouz = 1,nabizod = MDY(7,1,2012)
+  where varid in ('ZO','ZOR','GPBU','GPU','FPU')
+;
+
+update eu_variapu_cis set
+  nabizprouz = 1,nabizod = MDY(2,19,2013)
+  where varid in ('FPRR')
+;
+
+ROLLBACK WORK;
+
+--End of A64289_RN00358608_3

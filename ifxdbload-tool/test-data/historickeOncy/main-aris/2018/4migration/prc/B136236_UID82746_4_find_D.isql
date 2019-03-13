@@ -1,0 +1,71 @@
+CREATE PROCEDURE B136236_UID82746_4_find_D ()
+
+define _ser          Int;
+
+define _os1               Int;
+define _os2               Int;
+define _typvztah      Char(2);
+define _stav              Char(1);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE B136236_UID82746;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE B136236_UID82746(
+  Ser               Serial NOT NULL,  
+  NumErr       Int,              
+  ISAMErr       Int,              
+  TextErr         VarChar(255),     
+  zprac           SmallInt,
+  os1               Int,
+  os2               Int,
+  typvztah      Char(2),
+  stav              Char(1),
+  PRIMARY    KEY(Ser)
+)LOCK MODE ROW;
+
+foreach cc2 with hold for
+  SELECT os1, os2, typvztah, stav
+  INTO _os1, _os2, _typvztah, _stav
+  FROM eo_vztahos_mat
+  WHERE typvztah = 'SZ' and stav = 'A'
+  
+  -- naplnění řídící tabulky
+  INSERT INTO B136236_UID82746 (os1, os2, typvztah, stav, zprac)
+  VALUES(_os1, _os2, _typvztah, _stav, -1);
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE B136236_UID82746;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;--end of B136236_UID82746_4_find_D

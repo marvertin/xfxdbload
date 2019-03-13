@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B131853_36779_1_opuct
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ru_opuct_kart DROP CONSTRAINT ruopuctkart_c_p;
+
+ALTER TABLE ru_opuct_kart
+    ADD  serno BIGINT BEFORE realn;
+
+ALTER TABLE ru_opuct_kart
+    ADD smlouva DECIMAL(16,0) BEFORE stav,
+    ADD tsml char(4) BEFORE stav,
+    MODIFY realn INTEGER;
+
+DROP INDEX ruopuctkart_i_p;
+
+ROLLBACK WORK;
+
+--End of B131853_36779_1_opuct

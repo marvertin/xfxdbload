@@ -1,0 +1,40 @@
+-- @TC:ONCE: ID = V2, B114101_RN00380438_1
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Další dopady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_execSql('DROP PROCEDURE EV_NemovInit', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovInit_N', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovLoad', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovLoad_N', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovTest', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovTest_N', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovSave', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovSave_T', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovZrus', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovZrusFc_T', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovZrusTe_N', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovNacti', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovNacti_T', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovFEZmena', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_NemovFEZmena_T', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_Nemov_M_Te', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_Nemov_M_Re', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_Nemov_M_Hi', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_HiNemovInit_N', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_HiNemovLoad_N', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_PrecenitNemovitost', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_PrecenNemAut', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_PrecenNemSave', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_PrecenNemMan', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_GetNemCelkHodn', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_SetNemTrzniHodn', -111, -674);
+call TW_execSql('DROP PROCEDURE EV_CalcVyuzitiVZaj', -111, -674);
+call TW_execSql('DROP PROCEDURE EU_ZajPrecenHrom_D', -111, -674);
+call TW_execSql('DROP PROCEDURE EU_ZajPrecenHromPrep', -111, -674);
+call TW_execSql('DROP PROCEDURE EU_PrecenSml', -111, -674);
+call TW_execSql('DROP PROCEDURE EU_ZajAktPriZmCHN', -111, -674);
+
+ROLLBACK WORK;
+
+--End of B114101_RN00380438_1

@@ -1,0 +1,25 @@
+CREATE PROCEDURE EP_InsertIntoSporHistory (ASmlouva DEC(16,0), ATsml Char(4), AStavRole Char(1), ADatAkce DATE) 
+    define _cc                Dec(16,2);    
+    define _stavsml        Char(1);    
+    define _datakce        Date;
+    define _datuz            Date;   
+
+    let _stavsml = null;
+    --nalezen zaznam v matrice roli tak se pokusim k zadanemu datu najit zaznam v matrice smluv
+    select stav, cc, datakce, datuz into _stavsml, _cc, _datakce, _datuz from ES_Sml_Mat 
+      where smlouva = ASmlouva and typ = ATsml and stav IN ('L', 'S', 'V') and date(reftime) <= ADatAkce;
+    --v matrice smluv zaznam k datu nenalezen 
+    if _stavsml is null then
+      --pro smlouvu projdu archiv smluv k datu  
+      foreach select stav, cc, datakce, datuz into _stavsml, _cc, _datakce, _datuz from ES_Sml_Arch 
+                where smlouva = ASmlouva and typ = ATsml and date(reftime) <= ADatAkce  
+                order by reftime desc
+        exit foreach;
+      end foreach;
+    end if;
+    --zaznam nalezen v archivu nebo v matrice tak vlozim do temp tabulky
+    if _stavsml is not null and _stavsml IN ('L', 'S', 'V') then
+      INSERT INTO EP_DatGetScoParHistSpor_Tmp(smlouva, tsml, stavrole, stavsml, cc, datakce, datuz)
+                                      values(ASmlouva,ATsml,AStavRole,_stavsml,_cc,_datakce,_datuz);
+    end if;
+end procedure;    

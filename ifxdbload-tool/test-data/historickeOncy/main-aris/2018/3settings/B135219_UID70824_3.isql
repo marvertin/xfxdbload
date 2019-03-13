@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135219_UID70824_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21259: Chybné použití db registru AP/*/serverURL/CIBIS-Central {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('AP', '*', 'serverURL', 'CIBIS-Nemov', '', 1, 'Správa systému', 'Služby pro správu systému', 'Obecné', 'URL aplikace CIBIS-Nemov',1);  
+
+ROLLBACK WORK;
+
+--End of B135219_UID70824_3

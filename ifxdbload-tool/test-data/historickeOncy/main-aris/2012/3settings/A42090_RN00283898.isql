@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A42090_RN00283898
+-- @TC:ONCE: DESCRIPTION = Nedošlo ke zrušení DB registrù  RN00252592
+
+BEGIN WORK;
+  
+  DELETE FROM tw_registr_cis WHERE oblast='RU' and uloha='vyzva' and udaj='expRole';
+  DELETE FROM tw_registr_cis WHERE oblast='RU' and uloha='vyzva' and udaj='expRoleManzel';
+ 
+ROLLBACK WORK;
+
+ 

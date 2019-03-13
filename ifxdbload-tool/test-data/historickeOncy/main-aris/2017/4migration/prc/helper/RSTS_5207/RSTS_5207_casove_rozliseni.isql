@@ -1,0 +1,35 @@
+create PROCEDURE RSTS_5207_casove_rozliseni (APotlacitKontrolu  INT DEFAULT 0)
+  
+  define global TW_ErrSql, TW_ErrIsam Int default null;
+  define global TW_ErrText VarChar (255) default null;
+  define global G_TRACE integer default 0;
+  
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+    call TW_ErrorTran();
+  end exception;  
+  
+  SET ISOLATION TO REPEATABLE READ;
+  BEGIN WORK;
+  
+  
+  -- Vlastni nastaveni ciselniku
+  
+  -- kontrola na datum spusteni 2.1.2018
+  IF(APotlacitKontrolu = 0 AND AP_DatProv() <> MDY(1, 2, 2018)) THEN
+    CALL TW_RaiseError ('132Q304TCUI', 'RSTS_5207_casove_rozliseni:', 'Nastaveni casoveho rozliseni se musi spustit k 2.1.2018. Nebo vypnout kontrolu pomoci vstupniho parametru nastaveneho na 1.');
+  END IF;
+  
+  -- ucetni uhrady
+  UPDATE ah_uhrada_cis SET casoverozliseni = 1 WHERE typuhrada IN (10, 51, 52);
+  
+  -- prispevky/marketingove akce
+  UPDATE ac_marketakce_cis SET casoverozliseni = 1 WHERE marketakce in ('171', '173','173a','176','182','183','185','186','187');
+  
+  -- provize
+  UPDATE opr_uctdruhprov_cis SET casoverozliseni = 1 WHERE refpartner = 1 and refprodukt is null and druhprov in ('AB', 'BO', 'C2', 'C3', 'C4', 'CB', 'CM', 'D3', 'D4', 'DB', 'EB', 'FB', 'L1', 'L2', 
+    'L3', 'LC', 'LU', 'LZ', 'MZ', 'NB', 'OB', 'PB', 'PT', 'PU', 'SB', 'SC', 'SP', 'SS', 'SU', 'U2', 'U3', 'U4', 'UA', 'UB', 'UV', 'UZ', 'Z2', 'Z3', 'Z4', 'ZB', 'ZC', 'ZM', 'ZO', 'ZP');
+  
+  COMMIT WORK;
+  SET ISOLATION TO COMMITTED READ;  
+
+end procedure;

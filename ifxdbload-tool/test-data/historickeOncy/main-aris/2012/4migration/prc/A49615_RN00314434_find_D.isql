@@ -1,0 +1,73 @@
+create PROCEDURE A49615_RN00314434_find_D ()
+
+define _ser          Int;
+define _smlouva Dec(16,0);
+define _tsml Char(4);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00314434;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00314434(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+
+
+  smlouva Dec(16,0),
+  tsml Char(4),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+--plnime ridici tabulku - napr. z osob
+--dulezite je poradi vybiranych radku - v tomto poradi se budou
+--ukladat do ridici tabulky a v tomto poradi se bude i migrovat
+foreach cc1 with hold for
+   SELECT s.smlouva, s.tsml INTO _smlouva, _tsml
+   FROM EU_Sml_Mat s JOIN RU_Real_Mat r ON s.smlouva = r.smlouva AND s.tsml = r.tsml
+   WHERE s.tsml = 'PPSU' AND s.stav = 'L' AND s.datklop IS NOT NULL AND r.treal <> 'VUPO' AND r.stav IN ('E', 'A', 'B', 'C')
+     AND EXISTS(SELECT * FROM EU_SplatKal_Mat WHERE smlouva = s.smlouva AND tsml = s.tsml AND typsplatky = 'J') 
+
+   --vlozeni dat do ridici tabulky
+  INSERT INTO RN00314434(smlouva, tsml, zprac)
+      VALUES(_smlouva, _tsml, -1);
+
+   --nova transakce
+   COMMIT WORK;
+   BEGIN WORK;
+
+end foreach;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00314434;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

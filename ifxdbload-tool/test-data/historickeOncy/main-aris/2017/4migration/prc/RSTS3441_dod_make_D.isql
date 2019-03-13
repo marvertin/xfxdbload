@@ -1,0 +1,234 @@
+create PROCEDURE RSTS3441_dod_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser                        Int;
+define _serDM                      Int;
+define _smlouva                    Dec(16,0);
+define _tsml                       Char(4);
+define _poradi                     Int;
+define _redefsplacuroven           Int;
+define _redefsplacporadi           Int;
+define _snizenisplatky             Int;
+define _pohledavkaposplatnosti     Int;
+define _vysepohledavkyposplatnosti Dec(16,2);
+define _novasplatkapu              Dec(16,2);
+define _novasplatkasu              Dec(16,2);
+define _novasazbapu                Dec(5,2);
+define _novasazbasu                Dec(5,2);
+define _vysedospor                 Dec(16,2);
+define _refvariaurokfixacepu       Int; 
+define _refvariaurokfixacesu       Int; 
+define _podpisklient               Int;  
+define _refuser                    Char(20);
+define _reftime                    Datetime year to second;
+define _ucinnosths                 Int; 
+define _datucinnost                Date; 
+define _posundospor                Int; 
+define _posundosporod              Date; 
+define _posundospordo              Date; 
+define _posunsplatkapu             Int;
+define _posunsplatkapuod           Date; 
+define _posunsplatkapudo           Date; 
+define _posunsplatkasu             Int; 
+define _posunsplatkasuod           Date; 
+define _posunsplatkasudo           Date; 
+define _refdodatekhead             BigInt;
+define _provuser                   Char(20);
+define _provtime                   Datetime year to second;
+define _kategoriezm                Char(10);
+define _katzmen                    Int;
+define _oskl                       INT;
+define _jmeno                      char(24);
+define _prijmeni                   char(35);
+define _nazev                      char(100);
+define _id                         char(13);
+define _smlspor                    dec(16,0);
+define _tsmlspor                   char(4);
+define _treal                      char(4);
+define _regcissml                  char(15);
+define _zadostcislo                dec(16,0);
+define _poradiuveru                int;
+define _poznamka                   varchar(255);
+define _konto                      dec(16,0);
+define _uhr                        int;
+define _dodatek                    int;
+define _stavpodpis                 char(10);
+define _datakc                     date;
+define _datprov                    date;
+define _splatka                    dec(16,2);
+define _datod                      date;
+define _datdo                      date;
+define _datklop                    date;
+define _stav                       char(1);
+define _stavdod                    char(10);
+
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS3441_dod', 'RSTS3441_dod', 'Migrace dodatků úvěrů');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  smlouva, tsml, poradi
+   INTO  _ser, _smlouva, _tsml, _poradi
+   FROM RSTS3441_dod
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS3441_dod
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    SELECT redefsplacuroven, redefsplacporadi, snizenisplatky, pohledavkaposplatnosti, vysepohledavkyposplatnosti, novasplatkapu, novasplatkasu, 
+           novasazbapu, novasazbasu, vysedospor, refvariaurokfixacepu, refvariaurokfixacesu, podpisklient, refuser, reftime, hyposmernice, 
+           datucinnost, posundospor, posundosporod, posundospordo, posunsplatkapu, posunsplatkapuod, posunsplatkapudo, posunsplatkasu, posunsplatkasuod, posunsplatkasudo 
+      INTO _redefsplacuroven,_redefsplacporadi,_snizenisplatky,_pohledavkaposplatnosti,_vysepohledavkyposplatnosti,_novasplatkapu,_novasplatkasu,
+           _novasazbapu,_novasazbasu,_vysedospor, _refvariaurokfixacepu, _refvariaurokfixacesu, _podpisklient, _refuser, _reftime, _ucinnosths, 
+           _datucinnost, _posundospor, _posundosporod, _posundospordo, _posunsplatkapu, _posunsplatkapuod, _posunsplatkapudo, _posunsplatkasu, _posunsplatkasuod, _posunsplatkasudo
+      FROM eu_dodatek_den
+      WHERE smlouva = _smlouva AND tsml = _tsml AND poradiakce = _poradi;
+    
+    SELECT   provtime, provuser, uhr, poznamka, dodatek, datakc, datprov, katzmen, stav
+      INTO  _provtime,_provuser,_uhr,_poznamka,_dodatek,_datakc,_datprov,_katzmen, _stav
+      FROM eu_akc_kart
+      WHERE smlouva = _smlouva AND tsml = _tsml AND poradi = _poradi;
+    
+    
+    if _stav = 'S' then
+      let _stavdod = 'ZRUSENY';
+    else
+      let _stavdod = 'MIGRACE';
+    end if
+    let _kategoriezm = DECODE(_katzmen,0,'OPRAVA',1,'ZMENASML',2,'RESTRUKTUR',3,'VYMENAKOME');
+    let _stavpodpis = DECODE(_podpisklient,0,'NE',1,'ANO',NULL);
+    let _oskl = EP_KlientSml(_smlouva, _tsml);
+    if eo_gettypos(_oskl) = 'F' then
+      let _nazev = null;
+      let _jmeno, _prijmeni, _id = (SELECT jmeno, prijmeni, rc FROM eo_fo_mat WHERE fo = _oskl);
+    else
+      let _jmeno, _prijmeni = null, null;
+      let _nazev, _id = (SELECT nazevmajitel, ico FROM eo_po_mat WHERE po = _oskl);
+    end if
+    
+    let _smlspor, _tsmlspor, _zadostcislo, _regcissml, _poradiuveru, _konto = 
+        (SELECT smlspor, tsmlspor, requestnumber, regcissml, poradi, konto FROM eu_sml_mat WHERE smlouva = _smlouva AND tsml = _tsml);
+    let _treal = (SELECT treal FROM ru_real_mat WHERE realn = EP_RealSml(_smlouva, _tsml)); 
+    
+    
+
+    INSERT INTO eu_dodatekhead_mat(smlspor, smlouva, tsml, treal, jmeno, prijmeni, nazev, id, konto, zadostcislo, regcissml, poradi, stav, dodatekcislo, kategoriezm, ucinnosths,
+                                   propis, datplatnost,  datucinnost, stavpodpis, datuzav, poznamka, refuhr, jepohlposplat, pohlposplat) 
+                            VALUES(_smlspor,_smlouva,_tsml,_treal,_jmeno,_prijmeni,_nazev,_id,_konto,_zadostcislo,_regcissml,_poradiuveru, _stavdod,_dodatek,_kategoriezm,_ucinnosths,
+                                       0, _datakc, _datucinnost, _stavpodpis, _datprov,  _poznamka, _uhr, _pohledavkaposplatnosti, _vysepohledavkyposplatnosti);
+
+    let _refdodatekhead = (SELECT max(serno) FROM EU_DodatekHead_Mat);
+    
+    if _kategoriezm = 'RESTRUKTUR' then
+       
+       if _snizenisplatky = 1 then
+         SELECT splatka, datod, datdo INTO _splatka, _datod, _datdo FROM eu_splatkin_mat WHERE smlouva = _smlouva AND tsml = _tsml AND uroven = _redefsplacuroven AND poradi = _redefsplacporadi;
+         
+         SELECT datklop INTO _datklop from eu_sml_mat where smlouva = _smlouva AND tsml = _tsml;
+         
+         if _datklop is not null AND _datod < _datklop then
+           let _novasplatkapu, _posunsplatkapuod, _posunsplatkapudo = _splatka, _datod, _datdo;             
+         else
+           let _novasplatkasu, _posunsplatkasuod, _posunsplatkasudo = _splatka, _datod, _datdo;
+         end if
+       end if
+       
+       UPDATE eu_splatkin_mat SET dodatekref = _refdodatekhead WHERE smlouva = _smlouva AND tsml = _tsml AND uroven = _redefsplacuroven AND poradi = _redefsplacporadi;
+       
+       
+    end if 
+    
+    UPDATE eu_akc_kart set dodatekref = _refdodatekhead WHERE smlouva = _smlouva AND tsml = _tsml AND poradi = _poradi;
+
+    INSERT INTO eu_dodatekzaklad_kart
+            ( refdodatekhead, novasazbapu, propsanosazbapu, provtimesazbapu, provusersazbapu, novasazbasu, propsanosazbasu, provtimesazbasu, provusersazbasu, 
+              novasplatkapu, propsanosplatkapu, provtimesplatkapu, provusersplatkapu, novasplatkasu, propsanosplatkasu, provtimesplatkasu, provusersplatkasu, 
+              refvariaurokfixacepu, propsanofixacepu, provtimefixacepu, provuserfixacepu, refvariaurokfixacesu, propsanofixacesu, provtimefixacesu, provuserfixacesu, 
+              vysedospor, propsanodospor, provtimedospor, provuserdospor) 
+      VALUES(_refdodatekhead, _novasazbapu, 0, CASE WHEN _novasazbapu IS NOT NULL THEN _provtime ELSE NULL END,CASE WHEN _novasazbapu IS NOT NULL THEN _provuser ELSE NULL END,_novasazbasu, 0, CASE WHEN _novasazbasu IS NOT NULL THEN _provtime ELSE NULL END,CASE WHEN _novasazbasu IS NOT NULL THEN _provuser ELSE NULL END,
+             _novasplatkapu, 0, CASE WHEN _novasplatkapu IS NOT NULL THEN _provtime ELSE NULL END,CASE WHEN _novasplatkapu IS NOT NULL THEN _provuser ELSE NULL END,_novasplatkasu, 0, CASE WHEN _novasplatkasu IS NOT NULL THEN _provtime ELSE NULL END,CASE WHEN _novasplatkasu IS NOT NULL THEN _provuser ELSE NULL END,
+             _refvariaurokfixacepu, 0, CASE WHEN _refvariaurokfixacepu IS NOT NULL THEN _provtime ELSE NULL END,CASE WHEN _refvariaurokfixacepu IS NOT NULL THEN _provuser ELSE NULL END,_refvariaurokfixacesu, 0, CASE WHEN _refvariaurokfixacesu IS NOT NULL THEN _provtime ELSE NULL END,CASE WHEN _refvariaurokfixacesu IS NOT NULL THEN _provuser ELSE NULL END,
+             _vysedospor, 0, CASE WHEN _vysedospor IS NOT NULL THEN _provtime ELSE NULL END,CASE WHEN _vysedospor IS NOT NULL THEN _provuser ELSE NULL END);
+    
+    IF _posundospor = 1 OR _posunsplatkapu = 1 OR _posunsplatkapu = 1 OR _snizenisplatky = 1 THEN
+    
+          
+      INSERT INTO eu_dodatekposun_kart
+              (refdodatekhead, editposundospor, posundospor, posundosporod, posundospordo, posundosporsnizenispl, propsanoposundospor, provtimedospor, provuserdospor, 
+               editposunsplatkapu, posunsplatkapu, posunsplatkapuod, posunsplatkapudo, posunsplatkapusnizenispl, propsanopossplpu, provtimesplatkapu,provusersplatkapu, 
+               editposunsplatkasu, posunsplatkasu, posunsplatkasuod, posunsplatkasudo, posunsplatkasusnizenispl, propsanopossplsu, provtimesplatkasu, provusersplatkasu, reftime, refuser) 
+        VALUES(_refdodatekhead, _posundospor, _vysedospor, _posundosporod, _posundospordo, _snizenisplatky,1,CASE WHEN _posundospor = 1 THEN _provtime ELSE NULL END,CASE WHEN _posundospor = 1 THEN _provuser ELSE NULL END,  
+               _posunsplatkapu, _novasplatkapu, _posunsplatkapuod, _posunsplatkapudo, _snizenisplatky,1,CASE WHEN _posunsplatkapu = 1 THEN _provtime ELSE NULL END,CASE WHEN _posunsplatkapu = 1 THEN _provuser ELSE NULL END,
+               _posunsplatkasu, _novasplatkasu, _posunsplatkasuod, _posunsplatkasudo, _snizenisplatky,1,CASE WHEN _posunsplatkasu = 1 THEN _provtime ELSE NULL END,CASE WHEN _posunsplatkasu = 1 THEN _provuser ELSE NULL END, _reftime, _refuser);
+        
+        
+    
+    END IF 
+
+    UPDATE RSTS3441_dod SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+      
+      
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;
+

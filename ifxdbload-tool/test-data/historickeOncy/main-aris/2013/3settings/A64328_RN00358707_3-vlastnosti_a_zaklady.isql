@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A64328_RN00358707_3-vlastnosti_a_zaklady
+-- @TC:ONCE: DESCRIPTION = Varabilní úhrady: Výèet vlastností a základù neodpovídá poslední verzi proposalu {DEFECT}
+
+
+BEGIN WORK;
+
+set triggers for ep_uhrvlastnost_enum disabled;
+set triggers for ep_uhrzaklad_enum disabled;
+
+DELETE FROM ep_uhrvlastnost_enum WHERE vlastnost in (13);
+DELETE FROM ep_uhrzaklad_enum WHERE zaklad in (15,21);
+
+set triggers for ep_uhrvlastnost_enum enabled;
+set triggers for ep_uhrzaklad_enum enabled;
+
+ROLLBACK WORK;
+
+--End of A64328_RN00358707_3-vlastnosti_a_zaklady

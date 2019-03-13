@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, A65945_RN00346285_1
+-- @TC:ONCE: DESCRIPTION = Zápis výsledkù kontrol provedených na Sale jako první øádek revizí ÚN po pøedání žádosti do Main
+
+BEGIN WORK;
+
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eucontractcheckingkart_c_checkingstatus_documentstatus;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eucontractcheckingkart_c_checkingstatus_incomestatus;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eu_contractchecking_kart_djhq;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eucontractcheckingkart_c_checkingstatus_rdstatus;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eu_contractchecking_kart_dcrp;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eu_contractchecking_kart_c1;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eucontractcheckingkart_c_checkingstatus_telephonestatus;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eucontractcheckingkart_c_checkingstatus_ur2status;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eucontractcheckingkart_c_checkingstatus_propertystatus;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eucontractcheckingkart_c_checkingstatus_sc2status;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eu_contractchecking_kart_dvqg;
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eucontractcheckingkart_c_checkingstatus_firmstatus;
+
+ALTER TABLE eu_contractchecking_kart
+    ADD CONSTRAINT CHECK (rdstatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dt84,
+    ADD CONSTRAINT CHECK (propertystatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dt80,
+    ADD CONSTRAINT CHECK (incomestatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dt7m,
+    ADD CONSTRAINT CHECK (cb2status in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dvqg,
+    ADD CONSTRAINT CHECK (ur2status in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dt7e,
+    ADD CONSTRAINT CHECK (bonita2status in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_djhq,
+    ADD CONSTRAINT CHECK (telephonestatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dt7i,
+    ADD CONSTRAINT CHECK (firmstatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dt7q,
+    ADD CONSTRAINT CHECK (takce IN ('MANU','DOCU','FIRM','INCO','TELE', 'URE2', 'SCO2', 'SETT','CRTE','INPR','INDI', 'WIRE','REPL','CANC','CANP','SOL2','REPE', 'KONS', 'POZM')) CONSTRAINT eu_contractchecking_kart_c1,
+    ADD CONSTRAINT CHECK (documentstatus in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dt7u,
+    ADD CONSTRAINT CHECK (sl2status in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dcrp,
+    ADD CONSTRAINT CHECK (sc2status in ('P','N','S','R','A')) CONSTRAINT eu_contractchecking_kart_dt7a;
+
+ROLLBACK WORK;
+
+--End of A65945_RN00346285_1

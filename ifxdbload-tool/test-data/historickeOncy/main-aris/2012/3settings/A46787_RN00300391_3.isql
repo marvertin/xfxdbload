@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, A46787_RN00300391_3
+-- @TC:ONCE: DESCRIPTION = Po startu EOD/EOM možnost zadávat pøíkazy v CIBIS-webu až na další den {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- #Provádìt dodateèné zpracování jednorázových pøíkazù v dávce#
+call TW_RegSetOrAddKey('AN','*','batch','dodatZprac','1',1, 
+                       'Platební styk','Single payment','Single payment','Urèuje, zda se v dodateèné akci v dávce po pøeklopení dne bude provádìt zpracování jednorázových pøíkazù');
+
+-- #Typy plateb pro dodateèné zpracování jednorázových pøíkazù#
+call TW_RegSetOrAddKey('AN','*','batch','typyPlateb','1',1, 
+                       'Platební styk','Single payment','Single payment','Urèuje, který typy plateb se budou v dávce dodateènì zpracovávat (1 – vnitrobankovní,2 – mezibankovní,3 – vše)');
+
+-- #Provádìt dodateèné zpracování trvalých pøíkazù v dávce#
+call TW_RegSetOrAddKey('AT','*','batch','dodatZprac','0',1, 
+                       'Platební styk','Standing order','Standing order','Urèuje, zda se v dodateèné akci v dávce po pøeklopení dne bude provádìt zpracování trvalých pøíkazù');
+
+-- #Typy plateb pro dodateèné zpracování trvalých pøíkazù#
+call TW_RegSetOrAddKey('AT','*','batch','typyPlateb','1',1, 
+                       'Platební styk','Standing order','Standing order','Urèuje, který typy trvalých pøíkazù se budou v dávce dodateènì zpracovávat (1 – vnitrobankovní,2 – mezibankovní,3 – vše)');
+
+-- #Provádìt pouze platby vzniklé v dávce#
+call TW_RegSetOrAddKey('AN','*','batch','pouzeDavkovePlatby','1',1, 
+                       'Platební styk','Single payment','Single payment','Urèuje, zda mají být v dodateèné akci v dávce zpracovávány pouze platby, které vznikly v prùbìhu dávky po pøeklopení na nový den nebo všechny platby (1 – provádìt pouze platby v dávce, 0 – provádìt všechny platby)');
+
+call TW_RegSetKey('AN','*','*','zpetneZpracovani',1);
+
+ROLLBACK WORK;
+
+--End of A46787_RN00300391_3

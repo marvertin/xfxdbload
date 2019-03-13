@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B117960_RN00412463_1
+-- @TC:ONCE: DESCRIPTION = Main: Úprava parametrů platebního stavebního spoření {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE es_voptarif_acis ADD aktivplattrans Int before refuser;
+
+ALTER TABLE es_voptarif_cis ADD aktivplattrans Int default 0 before refuser;
+
+ROLLBACK WORK;
+
+--End of B117960_RN00412463_1

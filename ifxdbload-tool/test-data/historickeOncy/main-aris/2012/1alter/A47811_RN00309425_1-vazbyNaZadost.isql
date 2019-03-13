@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, A47811_RN00309425_1-vazbyNaZadost
+-- @TC:ONCE: DESCRIPTION = Ziadosti zo SIS - nadvazuje na RN00305726 a RN00303078 {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE es_sml_arch
+    ADD zadost          INTEGER;
+
+ALTER TABLE es_sml_mat
+    ADD zadost          INTEGER;
+
+CREATE INDEX es_sml_mat_i_f6 ON es_sml_mat (zadost) ;
+
+ALTER TABLE es_zmplan_kart
+    ADD zadost          INTEGER;
+
+CREATE INDEX es_zmplan_kart_i_f8 ON es_zmplan_kart (zadost) ;
+
+ALTER TABLE es_sml_mat
+    ADD CONSTRAINT FOREIGN KEY (zadost) REFERENCES ep_zadost_kart(zadost)  CONSTRAINT es_sml_mat_f6;
+
+ALTER TABLE es_zmplan_kart
+    ADD CONSTRAINT FOREIGN KEY (zadost) REFERENCES ep_zadost_kart(zadost)  CONSTRAINT es_zmplan_kart_f8;
+
+ROLLBACK WORK;
+
+--End of A47811_RN00309425_1-vazby-na-zadost

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B123351_RN00436364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_variaurokfixace_cis ADD fixdosplaceni Integer DEFAULT 0 BEFORE platnost,
+            ADD CONSTRAINT CHECK (fixdosplaceni IN (0,1)) CONSTRAINT eu_variaurokfixace_cis_df4i;
+            
+ALTER TABLE eu_variaurokfixace_acis ADD fixdosplaceni Integer BEFORE platnost,
+            ADD CONSTRAINT CHECK (fixdosplaceni IN (0,1)) CONSTRAINT eu_variaurokfixace_acis_df4j;            
+
+ROLLBACK WORK;
+
+--End of B123351_RN00436364_1

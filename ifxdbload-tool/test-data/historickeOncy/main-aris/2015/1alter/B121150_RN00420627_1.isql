@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B121150_RN00420627_1
+-- @TC:ONCE: DESCRIPTION = Časové rozlišení pobytu {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE ES_ExpSml_Den
+  ADD pobytod   DATE,
+  ADD pobytdo   DATE,
+  ADD pobyt   CHAR(1)
+;
+
+ROLLBACK WORK;
+
+--End of B121150_RN00420627_1

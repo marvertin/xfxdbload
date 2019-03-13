@@ -1,0 +1,164 @@
+create procedure RN00311507_krok_1C_FO()
+-- vytvoření FO a insolvenčních správců
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+
+define _prijmeni      Char(35);
+define _jmeno         Char(24);
+define _datnar        Date;
+define _titulpred     Char(10);
+define _titulza       Char(10);
+define _vzdelani      Char(20);
+define _vzdelanii     Int;
+define _sidloulice    Char(45);
+define _sidlopsc      Char(6);
+define _sidlomesto    Char(60);
+define _sidlocp       Char(12);
+define _tpulice       Char(45);
+define _tppsc         Char(6);
+define _tpmesto       Char(60);
+define _tpcp          Char(12);
+define _cpopis        Char(8);
+define _corient       Char(8);
+define _pozice        Int;
+define _fo            Int;
+define _typid         Char(1);
+define _rc            Char(13);
+define _pohlavi       Int;
+define _refser        Int;
+define _ic            Int;
+define _id_cibis      int;
+define _serno         Int;
+define _sernoadresa   Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_1C_FO');
+
+COMMIT WORK;
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, fo, typid, rc, pohlavi, refser
+     INTO _ser,_fo,_typid,_rc,_pohlavi,_refser
+     FROM RN00311507_krok_1_FO
+    WHERE zprac < 0
+    ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_1_FO
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    -- algoritmus migrace
+    -- načtu údaje o FO 
+    SELECT  prijmeni, jmeno, datnar, titulpred, titulza, vzdelani, sidloulice, sidlopsc, sidlomesto, sidlocp, tpulice, tppsc, tpmesto, tpcp, ic, id_cibis
+      INTO _prijmeni,_jmeno,_datnar,_titulpred,_titulza,_vzdelani,_sidloulice,_sidlopsc,_sidlomesto,_sidlocp,_tpulice,_tppsc,_tpmesto,_tpcp,_ic,_id_cibis
+      FROM RN00311507_krok_1_FO_data
+     WHERE ser = _refser;
+    -- pokud FO v CIBISu neexistuje, musíme jí vytvořit
+    if  _fo = 0 then 
+      -- pokud není adresa TP uvedena, zajímá nás adresa sídla
+      if _tpulice is null then
+        let _tpulice,_tppsc,_tpmesto,_tpcp = _sidloulice,_sidlopsc,_sidlomesto,_sidlocp;
+      end if
+      
+      let _pozice = instr(_tpcp, '/',1,1);
+      if _pozice >0 then
+        let _cpopis = substr(_tpcp, 1, _pozice-1);
+        let _corient = trim(substr(_tpcp, _pozice+1));
+      else
+        let _cpopis = _tpcp;
+        let _corient = null;
+      end if
+      
+      let _tppsc = replace(_tppsc, ' ', '');
+      
+      let _vzdelanii = 0;
+      if _vzdelani is not null then
+        let _vzdelanii = 6; 
+      end if
+       
+      call EO_FOInit(999);
+      call EO_FOLoad(999); -- load dělám kvůli načtení defaultů
+      
+      UPDATE EO_FO_Temp SET
+        ( typid, rc,     sex, datnaroz, jmeno, prijmeni,    titul1,  titul2,  vzdelani,
+          ad2, ad3, psc, cpopis, corient)
+        =
+        (_typid,_rc,_pohlavi,  _datnar,_jmeno,_prijmeni,_titulpred,_titulza,_vzdelanii,
+         _tpulice,_tpmesto,_tppsc,_cpopis,_corient)
+       WHERE owner = 999;  
+      
+      let _fo = EO_FOSave(999, '**');
+    end if 
+    
+    let _pozice = instr(_sidlocp, '/',1,1);
+    if _pozice >0 then
+      let _cpopis = substr(_sidlocp, 1, _pozice-1);
+      let _corient = trim(substr(_sidlocp, _pozice+1));
+    else
+      let _cpopis = _sidlocp;
+      let _corient = null;
+    end if
+    
+    -- vytvořím insolvenčního správce
+    INSERT INTO EO_InsolvSpravce_Cis(serno, refosoba, ic, poznamka, platnost)
+      VALUES(_id_cibis, _fo, _ic, 'migrace', 1);
+    let _serno = TW_LastSer();
+    
+    INSERT INTO EO_Adresa_Mat(ulice, cpopis, corient, obec, psc, stat)
+      VALUES(_sidloulice, _cpopis, _corient, _sidlomesto, replace(_sidlopsc, ' ', ''), 'CZ');
+      
+    let _sernoadresa = TW_LastSer();
+      
+    INSERT INTO EO_OsobaAdresa_Mat(refosoba, refadresa, typadresy, platnost)
+      VALUES(_fo, _sernoadresa, 'AS', 1);
+      
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00311507_krok_1_FO SET fo = _fo, zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_1C_FO');
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

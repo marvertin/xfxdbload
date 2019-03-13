@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, A64295_RN00358329_1
+-- @TC:ONCE: DESCRIPTION = Variabilní úhrady: Není implementováno odstranìní položek z èíselníku parametrù modelování úhrad {DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_parammoduhr_cis
+  DROP    tuhruzavsporsml,
+  DROP    tuhrvedspor,  
+  DROP    tuhrvypisspor,
+  DROP    tuhrzmenacc,
+  DROP    tuhrzmenatarifu,
+  DROP    tuhruzavuvsml,
+  DROP    tuhrveduv,
+  DROP    tuhrvypisuv,
+  DROP    tuhrpojuniqa   
+  ;
+  
+ALTER TABLE ep_parammoduhr_acis
+  DROP    tuhruzavsporsml,
+  DROP    tuhrvedspor,  
+  DROP    tuhrvypisspor,
+  DROP    tuhrzmenacc,
+  DROP    tuhrzmenatarifu,
+  DROP    tuhruzavuvsml,
+  DROP    tuhrveduv,
+  DROP    tuhrvypisuv,
+  DROP    tuhrpojuniqa   
+  ;
+
+ROLLBACK WORK;
+
+--End of A64295_RN00358329_1

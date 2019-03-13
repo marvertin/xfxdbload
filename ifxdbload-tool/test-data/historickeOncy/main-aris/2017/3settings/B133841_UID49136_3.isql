@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B133841_UID49136_3
+-- @TC:ONCE: DESCRIPTION = RSTS-10591 = Přepojení modelu na novou ÚŽ - vytváření modelu {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+update ep_splspormodakce_cis set platnost = 0 where akce in ('UZBONI','UZPRIZ','UZFINA');
+
+update ep_splspormodakce_cis set ulozmodel = 0 where akce in ('UZDSPL');
+
+ROLLBACK WORK;
+
+--End of B132467_RSTS_UID36779_3

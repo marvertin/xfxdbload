@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B117979_RN00404916_1
+-- @TC:ONCE: DESCRIPTION = Nové tiskové výstupy v CIBIS-Sale {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_osoba_mat
+    ADD serno           BIGINT   BEFORE os;
+
+ALTER TABLE eo_osoba_arch
+    ADD serno           BIGINT   BEFORE os;
+    
+ALTER TABLE ep_sml_mat
+    ADD serno           BIGINT   BEFORE smlouva;
+
+ALTER TABLE ep_sml_arch
+    ADD serno           BIGINT   BEFORE smlouva;
+
+
+ROLLBACK WORK;
+
+--End of B117979_RN00404916_1

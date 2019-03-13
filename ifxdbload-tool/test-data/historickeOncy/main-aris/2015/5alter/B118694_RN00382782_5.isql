@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B118694_RN00382782_5
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP PROCEDURE EU_SazbaProVariaPU', -674);
+
+call TW_ExecSql('DROP FUNCTION EU_ReplenishedCContractInfo', -674);
+
+call TW_ExecSql('DROP PROCEDURE EU_SazbaOdpovidaVariante', -674);
+
+ROLLBACK WORK;
+
+--End of B118694_RN00382782_5

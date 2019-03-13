@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B133477_UID56312_1
+-- @TC:ONCE: DESCRIPTION = Dokončit nedodělky v CRIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pef_firmaodpovedo_den 
+  ADD ico CHAR(10) BEFORE name;
+
+
+ALTER TABLE pef_firmaosoba_cis 
+  ADD nazev   VARCHAR(200) BEFORE jmeno,
+  ADD ico     CHAR(10) BEFORE jmeno;
+
+ROLLBACK WORK;
+
+--End of B133477_UID56312_1

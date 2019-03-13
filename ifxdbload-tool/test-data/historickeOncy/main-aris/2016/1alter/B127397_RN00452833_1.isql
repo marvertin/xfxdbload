@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B127397_RN00452833_1
+-- @TC:ONCE: DESCRIPTION = Úpravy v Sale – úvěrová žádost (Prescoring, Elektronický odhad, Souhlas s úhradami) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE EU_ExpSml_Den ADD  souhlasuhr Integer;
+
+ROLLBACK WORK;
+
+--End of B127397_RN00452833_1

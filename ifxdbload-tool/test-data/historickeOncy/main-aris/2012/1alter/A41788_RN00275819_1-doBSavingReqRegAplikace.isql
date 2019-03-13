@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A41788_RN00275819_1-doBSavingReqRegAplikace
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+
+ALTER table BSavingRqReg 
+  ADD aplikace CHAR(4) default 'SALE' not null 
+      check (aplikace IN('SALE','MAIN'));
+
+ROLLBACK WORK;
+
+--End of A41788_RN00275819_1-doBSavingReqRegAplikace

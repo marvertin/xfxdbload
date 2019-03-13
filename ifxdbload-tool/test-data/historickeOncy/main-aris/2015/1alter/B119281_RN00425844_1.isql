@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B119281_RN00425844_1
+-- @TC:ONCE: DESCRIPTION = NASAZENI 1 kolo v RSTS - pad alteru 1 {CUSTOMERREQUEST}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B118968_RN00424200_1
+
+BEGIN WORK;
+
+alter table eu_expcreview_den add poradi int before platebmor;
+
+alter table eo_expratingpo_den add poradi int before rating;
+
+ALTER TABLE eu_expcreview_den DROP CONSTRAINT euexpcreviewden_p;
+
+DROP INDEX euexpcreviewden_i_p;
+
+
+ROLLBACK WORK;
+
+--End of B119281_RN00425844_1

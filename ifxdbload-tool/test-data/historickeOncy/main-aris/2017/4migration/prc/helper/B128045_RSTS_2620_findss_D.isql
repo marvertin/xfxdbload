@@ -1,0 +1,58 @@
+create PROCEDURE B128045_RSTS_2620_findss_D ()
+
+define _ser          Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RSTS_2620_VklOcSaldo;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RSTS_2620_VklOcSaldo(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+
+  smlspor     dec(16,0),
+  tsmlspor    char(4),
+  datukonpu   Date,
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--plnime ridici tabulku
+INSERT INTO RSTS_2620_VklOcSaldo (smlspor, tsmlspor, zprac)
+SELECT                          e.smlouva, e.typ,    -1
+FROM ES_Sml_Mat e
+WHERE stav = 'L' and (SELECT COUNT(*) FROM EU_Sml_mat u WHERE u.smlspor = e.smlouva and u.tsmlspor = e.typ
+                         AND (SELECT COUNT(*) FROM RU_real_mat r WHERE r.smlouva = u.smlouva and r.tsml = u.tsml 
+                                 AND treal in ('PUFO','PUPO')) > 0
+                         AND (SELECT COUNT(*) FROM RU_real_mat r WHERE r.smlouva = u.smlouva and r.tsml = u.tsml 
+                                 AND treal in ('PUFO','PUPO') AND stav IN ('A','B','C','E')) = 0) > 0;
+  
+UPDATE STATISTICS HIGH FOR TABLE RSTS_2620_VklOcSaldo;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, A42678_RN00269923_3
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'insolvence-text', 'Vym.insolv.', 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Text zobrazovaný v úlohách systému jako indikátor fáze vymáhání s insolvencí.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'rezimy', 'skupinaInsolv', 3, 1, 'Úvìr', 'Vymáhání úvìru', 'Správa vymáhané pohledávky', 'Skupina zvláštních režimù pro vymáhání s insolvencí.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'soudni-text', 'Soudní vym.', 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Text zobrazovaný v úlohách systému jako indikátor fáze soudního vymáhání.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'rezimy', 'skupinaSoudni', 2, 1, 'Úvìr', 'Vymáhání úvìru', 'Správa vymáhané pohledávky', 'Skupina zvláštních režimù pro soudní vymáhání.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'pozdni-text', 'Pozdní vym.', 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Text zobrazovaný v úlohách systému jako indikátor fáze pozdního vymáhání.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'rezimy', 'skupinaPozdni', 1, 1, 'Úvìr', 'Vymáhání úvìru', 'Správa vymáhané pohledávky', 'Skupina zvláštních režimù pro pozdní vymáhání.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneUver-text', 'Rané vym.-Ú', 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Text zobrazovaný v úlohách systému jako indikátor rané fáze vymáhání z dùvodu delikvence na stranì úvìru.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneUver-stupUpom', null, 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Jedna z možných podmínek pro vyhodnocení indikátoru Rané vymáhání úvìru. Podmínka na stupeò upomínky. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneUver-typUpom', null, 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Jedna z možných podmínek pro vyhodnocení indikátoru Rané vymáhání úvìru. Podmínka na typ upomínky. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneUver-prodleni', null, 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Jedna z možných podmínek pro vyhodnocení indikátoru Rané vymáhání úvìru. Podmínka na poèet dní po splatnosti. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneUver-dluzSpl', null, 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Jedna z možných podmínek pro vyhodnocení indikátoru Rané vymáhání úvìru. Podmínka na poèet dlužných splátek. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneSpor-text', 'Rané vym.-S', 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Text zobrazovaný v úlohách systému jako indikátor rané fáze vymáhání z dùvodu delikvence na stranì povinného spoøení.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneSpor-stupUpom', null, 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Jedna z možných podmínek pro vyhodnocení indikátoru Rané vymáhání spoøení. Podmínka na stupeò upomínky. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneSpor-dobaUpom', null, 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Jedna z možných podmínek pro vyhodnocení indikátoru Rané vymáhání spoøení. Podmínka na poèet dní od poslední upomínky. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneSpor-nesplPohl', null, 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Jedna z možných podmínek pro vyhodnocení indikátoru Rané vymáhání spoøení. Výše nesplacené (dlužné) pohledávky. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');
+call TW_RegSetOrAddKey('RU', 'sprVym', 'indikator', 'raneSpor-dluhVkl', null, 1, 'Úvìr', 'Vymáhání úvìru', 'Indikátory vymáhaných pohledávek', 'Jedna z možných podmínek pro vyhodnocení indikátoru Rané vymáhání spoøení. Poèet dlužných vkladù. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');
+
+ROLLBACK WORK;
+
+--End of A42678_RN00269923_3

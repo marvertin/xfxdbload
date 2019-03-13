@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B127178_RN00457070_1
+-- @TC:ONCE: DESCRIPTION = HBDS: při importu není zobrazena souhrnná informace o naimportovaných dokladech {DEFECT}
+
+
+BEGIN WORK;
+
+alter table ab_importdoklad_kart ADD ( refdokladbds int before dokladtyp);
+alter table ab_importhromsouhrn_kart ADD ( refhromdoklad int before dokladtyp);
+
+ROLLBACK WORK;
+
+--End of B127178_RN00457070_1

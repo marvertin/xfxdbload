@@ -1,0 +1,87 @@
+create procedure RN00311507_krok_4B_Find()
+-- vytvoření tabulky pronapojení záznamu insolvence na informaci o důvěryhodnosti
+define _os              Int;
+define _osprev          Int;
+define _sernoinsolv     Int;
+define _datzahajeni     Date;
+define _infotyp         Int;
+define _info            Int;
+define _datum           Date;
+
+BEGIN WORK;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_4B_log;
+end;
+
+-- logovací tabulka (problémy, informace, ...)
+CREATE TABLE RN00311507_krok_4B_log(
+  Ser Int, -- seriál z RN00311507_krok_2_insolv
+  text Varchar(255)
+)LOCK MODE ROW;
+
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_krok_4B;
+end;
+
+CREATE TABLE RN00311507_krok_4B(
+  Ser               Serial NOT NULL,  --číslo řádku
+  NumErr            Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr           Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr           VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac             SmallInt default -1,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  os                Int,
+  info              Int,
+  datum             Date,
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+-- založím tabulku insolventů
+begin
+  on exception IN(-206)
+  end exception;
+  DROP TABLE RN00311507_osoba_temp;
+end;
+
+CREATE TEMP TABLE RN00311507_osoba_temp(
+  os                Int,
+  PRIMARY KEY(os)
+)WITH NO LOG;
+
+-- naplním tabulku insolventů
+INSERT INTO RN00311507_osoba_temp(os) SELECT distinct refosoba FROM ep_insolvence_mat;
+UPDATE STATISTICS HIGH FOR TABLE RN00311507_osoba_temp;
+
+-- naplníme řící tabulku migrace - krok 4B
+let _infotyp = tw_reggetkey('EO','CREDIBILITY','informationtype','insolvence');
+let _osprev = 0;
+
+foreach
+  SELECT i.info, i.os, i.datum INTO _info,_os,_datum
+    FROM eo_infoduvos_mat i JOIN eo_osoba_mat o on i.os = o.os
+   WHERE i.platnost = 1 and i.urovnano = 0 and i.os not in (SELECT os FROM RN00311507_osoba_temp) and i.infotyp = _infotyp
+         and o.stav <> 'Z' and not exists(select * from EO_FO_Mat where fo = o.os and anonymization <> 0)
+   ORDER BY i.os, i.datum, i.info
+    
+  if _os = _osprev then
+    -- informaci pro tuto osbu jsme již zkoumali, další záznamy nás nezajímají
+    continue foreach;
+  end if 
+  
+  if not exists(SELECT 1 FROM ep_insolvence_mat WHERE refinfoduv = _info) then
+    -- pokud neexistuje vazba na tuto informaci v evidenci insolvence, je to náš člověk :)
+    INSERT INTO RN00311507_krok_4B(os, info, datum) VALUES(_os,_info,_datum);
+  end if
+  
+  let _osprev = _os;
+end foreach
+
+COMMIT WORK;
+
+end procedure;

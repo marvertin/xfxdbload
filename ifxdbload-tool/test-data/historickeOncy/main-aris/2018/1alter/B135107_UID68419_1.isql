@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135107_UID68419_1
+-- @TC:ONCE: DESCRIPTION = RSTS-19989: Zapisovat export úvěrové smlouvy do provozního deníku {STORY}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3006, 'Exportovat úvěrovou smlouvu',1);
+
+ROLLBACK WORK;
+
+--End of B135107_UID68419_1

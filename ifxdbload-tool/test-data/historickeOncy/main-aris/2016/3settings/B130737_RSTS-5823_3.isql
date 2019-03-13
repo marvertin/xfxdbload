@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B130737_RSTS-5823_3
+-- @TC:ONCE: DESCRIPTION = Překlopení - příznak HS
+
+BEGIN WORK;
+
+CALL tw_regSetOrAddKey('EU', 'Fixace', 'PreklopU', 'OznacPodHS', 1, 1,'Úvěr', 'Fixace úrokových sazeb', 'Fixace při překlpopení úvěru', 'Označovat smlouvy pod účinnost HS při překlopení PU-SU');  
+
+ROLLBACK WORK;
+
+--End of B130737_RSTS-5823_3

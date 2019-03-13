@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B120660_RN00428274_1
+-- @TC:ONCE: DESCRIPTION = Úprava v modelování pohybu Úhrada za smlouvu o úvěru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_contractdata
+  --Vypustit modelování úhrady za uzavření úvěru
+  --Příznak, pomocí kterého lze vynutit nemodelování úhrady za uzavření úvěru.
+  add disableCreditContractFee   Integer  DEFAULT 0 NOT NULL
+  , add constraint  CHECK (disablecreditcontractfee IN (0,1)) CONSTRAINT pro_contractdata_di9p
+;
+
+ROLLBACK WORK;
+
+--End of B120660_RN00428274_1

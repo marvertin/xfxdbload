@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B133155_UID52126_1-RizSubjektVysledek
+-- @TC:ONCE: DESCRIPTION = V evidenci výsledků kontrol rizikového subjektu evidovat číslo revize a OK/KO - jen BE {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+RENAME COLUMN ep_rizsubjektkontr_den.vysledek TO xold_vysledek;
+ALTER TABLE ep_rizsubjektkontr_den ADD (
+    vysledek Char(3) BEFORE xold_vysledek,
+    refschvalrevize BIGINT BEFORE typid
+);
+ALTER TABLE ep_rizsubjektkontr_den DROP CONSTRAINT ep_rizsubjektkontr_den_c1;
+
+ROLLBACK WORK;
+
+--End of B133155_UID52126_1-RizSubjektVysledek

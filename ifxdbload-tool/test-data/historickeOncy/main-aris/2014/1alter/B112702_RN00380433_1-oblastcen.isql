@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B112702_RN00380433_1-oblastcen
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Přeceňování {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- RN00380433_Proposal_03, 3.3.1  Funkcionalita „Přecenění nemovitosti“ – blok 1 [číselníky], kap. Cenová oblast
+ALTER TABLE ev_oblastcen_mat
+  --Položka určuje okres, na který se oblast cen váže
+  ADD okreskod INTEGER 
+    BEFORE poznamka;
+
+ROLLBACK WORK;
+
+--End of B112702_RN00380433_1-oblastcen

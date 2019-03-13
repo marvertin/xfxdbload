@@ -1,0 +1,53 @@
+-- @TC:ONCE: ID = V2, B127467_RN00455396_1
+-- @TC:ONCE: DESCRIPTION = Integrace registru RÚIAN do CIBISu
+
+
+BEGIN WORK;
+
+alter table eo_role_mat 
+  add kodadm   Integer,
+  add adrruianpouzito    Integer  DEFAULT 0,
+  add adrruiansynch    DATETIME YEAR TO SECOND  ;
+
+ALTER TABLE eo_role_mat
+ADD CONSTRAINT (CHECK (adrruianpouzito IN (0,1)) CONSTRAINT eo_role_mat_c1);  
+
+alter table eo_role_arch 
+  add kodadm   Integer,
+  add adrruianpouzito   Integer  ,
+  add adrruiansynch   DATETIME YEAR TO SECOND  ;
+  
+alter table eo_fozmpl_kart 
+  add kodadm   Integer,
+  add adrruianpouzito   Integer  DEFAULT 0,
+  add adrruiansynch   DATETIME YEAR TO SECOND  ;  
+  
+alter table eo_fo_mat 
+  add kodadm   Integer,
+  add adrruianpouzito   Integer  DEFAULT 0,
+  add adrruiansynch   DATETIME YEAR TO SECOND  ;
+
+ALTER TABLE eo_fo_mat
+ADD CONSTRAINT (CHECK (adrruianpouzito IN (0,1)) CONSTRAINT eo_fo_mat_c1);  
+
+alter table eo_fo_arch 
+  add kodadm   Integer,
+  add adrruianpouzito   Integer ,
+  add adrruiansynch   DATETIME YEAR TO SECOND  ;  
+  
+alter table eo_po_mat 
+  add kodadm   Integer,
+  add adrruianpouzito   Integer  DEFAULT 0,
+  add adrruiansynch   DATETIME YEAR TO SECOND  ;
+
+ALTER TABLE eo_po_mat
+ADD CONSTRAINT (CHECK (adrruianpouzito IN (0,1)) CONSTRAINT eo_po_mat_c1);  
+
+alter table eo_po_arch 
+  add kodadm   Integer,
+  add adrruianpouzito   Integer  ,
+  add adrruiansynch   DATETIME YEAR TO SECOND  ;    
+  
+ROLLBACK WORK;
+
+--End of B127467_RN00455396_1

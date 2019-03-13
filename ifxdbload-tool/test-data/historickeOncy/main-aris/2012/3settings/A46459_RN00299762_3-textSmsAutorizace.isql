@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A46459_RN00299762_3-textSmsAutorizace
+-- @TC:ONCE: DESCRIPTION = CIBIS-Web: Revize a úprava textù autorizaèních SMS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  UPDATE tw_smstyp_cis 
+  SET textsms = 'Kod pro provedeni akce <<typ akce>> je <<kod>>. Vygenerovan: <<DD:MM:RRRR HH:MM:SS>>. RSTS.'
+  WHERE zkratka = 'AUTORIZACE';
+
+ROLLBACK WORK;
+
+--End of A46459_RN00299762_3-textSmsAutorizace

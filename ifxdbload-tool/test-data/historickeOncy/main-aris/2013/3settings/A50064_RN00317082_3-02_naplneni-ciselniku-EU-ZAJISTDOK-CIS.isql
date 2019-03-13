@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_3-02_naplneni-ciselniku-EU-ZAJISTDOK-CIS
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(9, 50, 'Smlouva o životním, resp. úrazovém pojištìní', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(10, 48, 'Dotazník UNIQA', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(103, 52, 'Potvrzení banky s èíslem úètu, jeho typem, výší vkladu a dobou trvání', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(201, 44, 'Odhad ceny obvyklé zastavované nemovitosti vèetnì fotodokumentace', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(201, 45, 'Výpis z katastru na pøedmìt zástavního práva', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(201, 46, 'Nabývací titul', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(201, 47, 'Snímek pozemkové mapy', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(212, 44, 'Odhad ceny obvyklé zastavované nemovitosti vèetnì fotodokumentace', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(212, 45, 'Výpis z katastru na pøedmìt zástavního práva', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(212, 46, 'Nabývací titul', MDY(1, 1, 2013));
+INSERT INTO eu_zajistDok_cis(zajist, dok, poznamka, platnostOd) VALUES(212, 47, 'Snímek pozemkové mapy', MDY(1, 1, 2013));
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_3-02_naplneni-ciselniku-EU-ZAJISTDOK-CIS

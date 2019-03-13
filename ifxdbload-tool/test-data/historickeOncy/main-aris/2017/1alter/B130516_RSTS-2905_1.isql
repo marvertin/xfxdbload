@@ -1,0 +1,68 @@
+-- @TC:ONCE: ID = V2, B130516_RSTS-2905_1
+-- @TC:ONCE: DESCRIPTION = IFRS - Doplnění polí souvisejících s projektem IFRS9_IRBA
+
+BEGIN WORK;
+
+call tw_execSql('DROP TABLE ep_dpdevid_den;', -206);
+call tw_execSql('DROP TABLE ep_dpdzprac_work;', -206);
+
+CREATE TABLE ep_dpdevid_den (
+  id   BIGSERIAL NOT NULL,
+  realuv   Integer,
+  reals   Integer,
+  osoba   Integer,
+  poradi   Integer NOT NULL,
+  datvyhodnoceni   DATE NOT NULL,
+  typvyhodnoceni   CHAR(1) NOT NULL,
+  currentdpd   Integer NOT NULL,
+  maxdpd   Integer NOT NULL,
+  totaldpd   Integer NOT NULL,
+  nesplaccastka   DECIMAL(16, 2),
+  datprvvyhodnoceni   DATE NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)
+EXTENT SIZE 128000
+NEXT SIZE 307200
+lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_dpdevid_den_pk ON ep_dpdevid_den(id);
+ALTER TABLE ep_dpdevid_den ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ep_dpdevid_den_pk;
+
+--INDEXES
+CREATE INDEX ep_dpdevid_den_i1 ON ep_dpdevid_den(realuv,datvyhodnoceni,typvyhodnoceni);
+CREATE INDEX ep_dpdevid_den_i2 ON ep_dpdevid_den(reals,datvyhodnoceni);
+CREATE INDEX ep_dpdevid_den_i3 ON ep_dpdevid_den(osoba,datvyhodnoceni);
+
+--CHECKS
+ALTER TABLE ep_dpdevid_den
+ADD CONSTRAINT (CHECK (typvyhodnoceni IN('D','L','S','P')) CONSTRAINT ep_dpdevid_den_c1);
+
+CREATE TABLE ep_dpdzprac_work (
+  id   SERIAL NOT NULL,
+  datvyhodnoceni   DATE,
+  typobjektu   CHAR(1),
+  idobjektu   Integer,
+  stav   Integer,
+  chyba_sqlcode   Integer,
+  chyba_isamcode   Integer,
+  chyba_sqltext   VARCHAR(255),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_dpdzprac_work_pk ON ep_dpdzprac_work(id);
+ALTER TABLE ep_dpdzprac_work ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ep_dpdzprac_work_pk;
+
+--CHECKS
+ALTER TABLE ep_dpdzprac_work
+ADD CONSTRAINT (CHECK (typobjektu IN ('D','L','P')) CONSTRAINT ep_dpdzprac_work_c1),
+ADD CONSTRAINT (CHECK (stav IN (-2,-1,1)) CONSTRAINT ep_dpdzprac_work_c2);
+
+ROLLBACK WORK;
+
+--End of B130516_RSTS-2905_1

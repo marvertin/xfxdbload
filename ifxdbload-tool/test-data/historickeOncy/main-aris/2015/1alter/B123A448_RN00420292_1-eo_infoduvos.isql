@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B123A448_RN00420292_1-eo_infoduvos
+-- @TC:ONCE: DESCRIPTION = [sv] Impl.BE: RN00421310 Rozšíření úvěrových rolí pro verifikaci příjmů a zaměstnavatele/firmy + změna v kontrole telefonů {ACTIVITY}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eo_infoduvos_cis
+
+ALTER TABLE eo_infoduvos_cis
+    ADD nepotvautvypor Integer DEFAULT 0 BEFORE reftime;
+    
+
+-- ###############################################################
+--       eo_infoduvos_acis
+
+ALTER TABLE eo_infoduvos_acis    
+    ADD nepotvautvypor Integer DEFAULT 0 BEFORE refuser;
+
+
+ROLLBACK WORK;
+
+--End of B123A448_RN00420292_1-eo_infoduvos.isql

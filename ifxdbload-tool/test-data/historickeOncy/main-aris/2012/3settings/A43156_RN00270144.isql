@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, A43156_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+update es_voptarif_cis
+set povolennezlklient = 1
+  , typuctu = 'S'
+  , narokovatsp = 1
+  , transucet = 0
+  , zvyhoduroceni = 0
+  , maxpocettransuctu = 1
+  , uzavprekluver = 1
+where povolennezlklient is null;
+    
+update es_paramcastar_cis
+set periodas = 'R'
+  , periodau = 'R'
+  , periodaz = 'R'
+where periodaz is null;
+    
+ROLLBACK WORK;
+
+ 

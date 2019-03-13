@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B119003_RN00423574_3
+-- @TC:ONCE: DESCRIPTION = V modelování bonity není zohledněna splátka + chybí obecný řádek pro koeficienty živ. minim. {DEFECT}
+
+
+BEGIN WORK;
+
+insert into prodcoeflivmin
+  (xproducttype, xvariapu, xcoeflivmin
+   , xdescription, xnote
+   , xvalidity, xvaliddate, xunsecuredamount
+   , id
+  )
+  VALUES
+  ('PFSU', NULL, 1.5
+   , 'PÚ – bez určení varianty', 'Pro modelování'
+   , 1, MDY(1,1,1999), 0
+   , NVL((SELECT MAX(id) + 1 from prodcoeflivmin), 1)
+  )
+;
+
+
+ROLLBACK WORK;
+
+--End of B119003_RN00423574_3

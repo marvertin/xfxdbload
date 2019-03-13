@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134954_UID65768_3
+-- @TC:ONCE: DESCRIPTION = RSTS-18604: Zohlednit novou parametrizaci zajištění v hlášení do CRU {STORY}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EP', 'CRU', 'vyhod-poloz', 'typy-zajisteni', '201, 205, 221, 222, 223, 224, 225', 1,
+                       'Podpora pro produkt', 'Centrální registr úvěrů', 'Vyhodnocení položek', 'Typy zajištění pro zajištění nemovitostí u položky UCEL_UV pro CRÚ');
+
+ROLLBACK WORK;
+
+--End of B134954_UID65768_3

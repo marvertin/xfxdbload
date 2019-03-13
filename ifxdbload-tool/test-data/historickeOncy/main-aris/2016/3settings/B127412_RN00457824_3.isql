@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B127412_RN00457824_3
+-- @TC:ONCE: DESCRIPTION = Fixace - hlášení o chybné délce intervalu {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE tw_prov_typ_cis SET popis = 'Obnova varianty fixace úrokové sazby', 
+                           poznamka = 'Úvěrové smlouvě: <smlouva> byla provedena automatická obnova varianty fixace úrokové sazby' 
+  WHERE okruh = 'EU' AND typ = 243;
+
+ROLLBACK WORK;
+
+--End of B127412_RN00457824_3

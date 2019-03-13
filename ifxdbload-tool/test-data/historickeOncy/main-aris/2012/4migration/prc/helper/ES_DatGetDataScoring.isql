@@ -1,0 +1,100 @@
+CREATE FUNCTION ES_DatGetDataScoring (ADatAkce date, ASmlouva      Dec(16,0),
+                                   ATyp          Char(4) DEFAULT 'SSFO')
+returning integer,     --pøíznak, že na smlouvu probìhlo zvýšení CÈ (ne oprava CÈ)
+          integer,     --pøíznak, že na smlouvu probìhlo snížení CÈ (ne oprava CÈ)
+          Dec(16,2),    --poslední platná CÈ
+          integer,     --pøíznak, že na smlouvu probìhla zmìna tarifu (ne oprava tarifu)
+          Int;      --poslední platný tarif
+
+define  _ZvysCC       integer;     --pøíznak, že na smlouvu probìhlo zvýšení CÈ (ne oprava CÈ)
+define  _SnizCC       integer;     --pøíznak, že na smlouvu probìhlo snížení CÈ (ne oprava CÈ)
+define  _CC           Dec(16,2);    --poslední platná CÈ
+define  _ZmenaTarif   integer;     --pøíznak, že na smlouvu probìhla zmìna tarifu (ne oprava tarifu)
+define  _Tarif        Int;      --poslední platný tarif
+define  _CCOld        Dec(16,2);
+define  _CCNew        Dec(16,2);
+define  _TarifOld     Int;
+define  _TarifNew     Int;
+define  _Kategorie    integer;
+define  _Stav         Char(1);
+
+--zjistím CC a tarif ze smlouvy
+SELECT  CC, Tarif, Stav
+  INTO _CC,_Tarif,_Stav
+  FROM ES_Sml_Mat
+  WHERE Smlouva = ASmlouva and Typ = ATyp AND date(reftime) <= ADatAkce;
+  
+if _stav is null then
+  foreach
+    SELECT  CC, Tarif, Stav
+    INTO _CC,_Tarif,_Stav
+    FROM ES_Sml_Arch
+    WHERE Smlouva = ASmlouva and Typ = ATyp AND date(reftime) <= ADatAkce
+    ORDER BY reftime DESC
+    exit foreach;
+  end foreach;
+end if;
+
+--provádím pouze tehdy, pokud smlouva existuje v IS Cibis
+if _Stav is Null or (_Stav is not Null and _Stav not in ('L', 'S', 'V')) then
+  return Null, Null, _CC, Null, _Tarif;
+end if;
+
+--inicializace promìnných
+let _ZvysCC     = 0;
+let _SnizCC     = 0;
+let _ZmenaTarif = 0;
+let _CCOld      = Null;
+let _TarifOld   = Null;
+
+--vytvoøím si temp tabulku pro rekonstrukci historie
+Call ES_SmlHistInit (0);
+
+--naplním temp tabulku pro rekonstrukci historie
+Call ES_SmlHistLoad (0, ASmlouva, ATyp);
+
+--pùjdu pøes zrekonstruovanou historii od zdola, zajímají mì záznamy se stavy L,S,V
+--pokud se jedná o zmìnu, tak porovnám CC a tarif s údaji z pøedchozího záznamu
+--a vyhodnotím snížení/zvýšení CC a zmìnu tarifu
+foreach kur1 WITH HOLD FOR
+  SELECT  Kategorie, CC,    Tarif
+    INTO _Kategorie,_CCNew,_TarifNew
+    FROM ES_SmlHist_Temp
+    WHERE Owner = 0 and Stav in ('L', 'S', 'V') and date(reftime) <= ADatAkce
+    ORDER BY Zmena ASC
+
+    --pokud jde o zmìnu (a nejde o 1. záznam v historii, ten není s èím porovnávat)
+    --provedu porovnání z hodnotami z pøedchozího záznamu
+    if _Kategorie = 0 then
+
+      --snížení/zvýšení CC
+      if _CCOld is not Null then
+        if _ZvysCC = 0 and _CCOld < _CCNew then
+          let _ZvysCC = 1;
+        end if;
+
+        if _SnizCC = 0 and _CCOld > _CCNew then
+          let _SnizCC = 1;
+        end if;
+      end if;
+
+      --zmìna tarifu
+      if _TarifOld is not Null and _ZmenaTarif = 0 and _TarifOld <> _TarifNew then
+        let _ZmenaTarif = 1;
+      end if;
+    end if;
+
+    --pokud už mám všechno nastaveno, ukonèím procházení histori
+    if _ZvysCC = 1 and _SnizCC = 1 and _ZmenaTarif = 1 then
+      EXIT foreach;
+    end if;
+
+    --zapamatuji si hodnoty pro další zpracování
+    let _CCOld = _CCNew;
+    let _TarifOld = _TarifNew;
+
+end foreach;
+
+return _ZvysCC, _SnizCC, _CC, _ZmenaTarif, _Tarif;
+
+end function

@@ -1,0 +1,69 @@
+CREATE PROCEDURE RSTS_6993_find_D ()
+
+define _fo  int;
+define _zpusobb  int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RSTS_6993;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RSTS_6993(
+  Ser     Serial NOT NULL,  
+  NumErr  Int,              
+  ISAMErr Int,              
+  TextErr VarChar(255),     
+  zprac   SmallInt,         
+  fo         Int,              
+  zpusobb Int, 
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+--plnime ridici tabulku - napr. z osob
+--dulezite je poradi vybiranych radku - v tomto poradi se budou
+--ukladat do ridici tabulky a v tomto poradi se bude i migrovat
+foreach cc1 with hold for
+  SELECT  a.fo, a.zpusobb
+    INTO _fo, _zpusobb
+    FROM eo_bydleni_mat a 
+   WHERE a.stav = 'A' AND a.bydleni = (SELECT max(b.bydleni) FROM eo_bydleni_mat b WHERE b.fo=a.fo AND b.stav = 'A')  
+
+   --vlozeni do ridici tabulky
+   INSERT INTO RSTS_6993( fo, zpusobb, zprac) VALUES(_fo,_zpusobb , -1);
+
+   --nova transakce
+   COMMIT WORK;
+   BEGIN WORK;
+
+end foreach;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RSTS_6993;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;--end of RSTS_6993_find_D
+------------------------------------------------------------------------------
+

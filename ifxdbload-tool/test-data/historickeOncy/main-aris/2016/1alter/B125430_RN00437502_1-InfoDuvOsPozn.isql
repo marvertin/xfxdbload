@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B125430_RN00437502_1-InfoDuvOsPozn
+-- @TC:ONCE: DESCRIPTION = Rozšíření zpráv SSZ {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+
+-- ###############################################################
+-- eo_infoduvos_mat
+
+ALTER TABLE eo_infoduvos_mat
+    ADD refvytvoreni    BIGINT   BEFORE refuser
+;
+
+--INDEXES
+CREATE INDEX eo_infoduvos_mat_i6 ON eo_infoduvos_mat(refvytvoreni);
+
+
+-- ###############################################################
+-- eo_infoduvos_arch
+
+ALTER TABLE eo_infoduvos_arch
+    ADD refvytvoreni    BIGINT   BEFORE refuser
+;
+
+
+
+ROLLBACK WORK;
+
+--End of B125430_RN00437502_1-InfoDuvOsPozn

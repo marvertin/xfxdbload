@@ -1,0 +1,624 @@
+-- vrací údaje osoby
+create function EP_DatGetScoringParOsoba(ADatAkce Date, 
+                                          ATypSC Char(3), 
+                                          AIdOS Int, 
+                                          ARole Char(2), 
+                                          ASmlouva Dec(16,0), 
+                                          ATsml Char(4))
+returning
+  Char(5),     --region
+  Int,         --titulInd
+  Int,         --familyStatus
+  Int,         --occupationCodeS
+  Int,         --homeTelephoneInd
+  Int,         --workTelephoneInd
+  Int,         --mobilAllowInd
+  Int,         --mailInd
+  Int,         --mobilCardInd
+  Int,         --sex
+  Char(4),     --bankCode
+  Dec(16,2),   --repayAbility
+  Int,         --age
+  Dec(16,2),   --roleIncome
+  Dec(16,2),   --homeIncome
+  Dec(16,2),   --otherIncomeShare
+  Int,         --numbPers
+  Int,         --numbChildren
+  Int,         --highestClassification
+  Char(5),     --addrCurrRegion
+  Int,         --addrCurrDurationMonth
+  Int,         --habitationType
+  Int,         --education
+  Int,         --workPosition
+  Int,         --branch
+  Char(5),     --emplRegion
+  Int,         --emplDurationCurrMonth
+  Int,         --emplDurationLastMonth
+  Int,         --emplContractLimited
+  Date,        --emplFinish
+  Int,         --lifeInsur
+  Int,         --injuryInsur
+  Int,         --pensionInsur
+  Int,         --otherInsur
+  Int,         --AdressUnityInd      //    1 nebo 0
+  Char(1),     --residenceType      //RESIDENCEID
+  Char(2),     --Citizenship        //NATIONALITYID
+  Char(5),     --xaddrresidzipcode
+  Char(5),     --xaddrcurrzipcode
+  Char(5);     --xaddremployzipcode   
+
+define _region                Char(5);
+define _titulInd              Int;
+define _familyStatus          Int;
+define _occupationCodeS       Int;
+define _homeTelephoneInd      Int;
+define _workTelephoneInd      Int;
+define _mobilAllowInd         Int;
+define _mailInd               Int;
+define _mobilCardInd          Int;
+define _sex                   Int;
+define _bankCode              Char(4);
+define _repayAbility          Dec(16,2);
+define _age                   Int;
+define _roleIncome            Dec(16,2);
+define _homeIncome            Dec(16,2);
+define _otherIncomeShare      Dec(16,2);
+define _numbPers              Int;
+define _numbChildren          Int;
+define _highestClassification Int;
+define _addrCurrRegion        Char(5);
+define _addrCurrDurationMonth Int;
+define _habitationType        Int;
+define _education             Int;
+define _workPosition          Int;
+define _branch                Int;
+define _emplRegion            Char(5);
+define _emplDurationCurrMonth Int;
+define _emplDurationLastMonth Int;
+define _emplContractLimited   Int;
+define _emplFinish            Date;
+define _lifeInsur             Int;
+define _injuryInsur           Int;
+define _pensionInsur          Int;
+define _otherInsur            Int;
+define _xpersonidenttype      Char(1);
+define _xpersonidentnum       Char(13);
+define _adressUnityInd        Int;
+define _residenceid           Char(1);
+define _nationalityid         Char(2);
+define _xaddrresidzipcode     Char(5);
+define _xaddrcurrzipcode      Char(5);
+define _xaddremployzipcode    Char(5);
+
+define _datprov               Date;
+define _xtitleaftertext       Char(10);
+define _xtitlebeforetext      Char(10);
+define _idrep                 Int;
+define _xcreditrqnumber       Dec(16,0);
+define _xcreditrqstatus       Int;
+define _creditrqcontrolreg_id Int;
+define _tsmlrepay             Char(4);
+define _fo                    Int;
+define _xrevenueother         Dec(16,2);
+define _xrevenuepartner       Dec(16,2);
+define _xchildrento6          Int;
+define _xchildren6to10        Int;
+define _xchildren10to15       Int;
+define _xchildren15to26       Int;
+define _xadult                Int;
+define _xothermembers         Int;
+define _datpzu                Date;
+define _koefzivmin            Dec(8,2);
+define _castkazav             Dec(16,2);
+define _castkauver            Dec(16,2);
+define _castkaspor            Dec(16,2);
+define _pocvos1               Dec(16,2);
+define _pocvos2               Dec(16,2);
+define _pocvos3               Dec(16,2);
+define _pocvos4               Dec(16,2);
+define _pocvos5               Dec(16,2);
+define _pocosd1               Dec(16,2);
+define _pocosd2               Dec(16,2);
+define _pocosd3a4             Dec(16,2);
+define _pocosd5               Dec(16,2);
+define _naklos                Dec(16,2);
+define _nakldom               Dec(16,2);
+define _meszivmin             Dec(16,2);
+define _pocdom                Int;
+define _xbirthdate            Date;
+define _xrequestdate          Date;
+define _xcontracttype         Char(4);
+define _personID              Int;
+define _xvalidity             Int;
+define _trvpobytod            Date;
+define _datuktrp              Date;
+define _xaddrcurrdurationmonth Int;
+define _xaddrcurrdurationyear Int;
+define _xaddrresiddurationmonth Int;
+define _xaddrresiddurationyear Int;
+define _xaddrcurrcorresp       Int;
+define _bydleni                Int;
+define _xempldurationmonthcurr Int;
+define _xempldurationyearcurr  Int;
+define _dobaVZamAkt            Date;
+define _xempldurationmonthlast Int;
+define _xempldurationyearlast  Int;
+define _reftime DATETIME YEAR TO SECOND;
+
+define _idGet                  Int;
+define _idGet2                 Int;
+define _smlGet                 Dec(16, 0);
+define _stavGet                Char(1);
+define _reftimeGet             date;
+define _typroleGet             char(2);
+
+let _datprov = ADatAkce;
+
+let _titulInd = 0;
+let _homeTelephoneInd = 0;
+let _workTelephoneInd = 0;
+let _mailInd = 0;
+let _mobilAllowInd = 0;
+let _mobilCardInd = 0;
+let _repayAbility = 0;
+let _roleIncome = 0;
+let _homeIncome = 0;
+let _otherIncomeShare = 0;
+let _numbPers = 0;
+let _numbChildren = 0;
+let _idGet = null;
+
+
+if ATypSC in ('SC1', 'SCA') THEN
+  SELECT id, creditrqcontrolreg_id, xtitleaftertext, xtitlebeforetext, familystatusid, occupationid, xsex, xbankconnectionbank, xbirthdate,
+    personid, xvalidity, xaddrcurrdurationmonth, xaddrcurrdurationyear, xaddrresiddurationmonth, xaddrresiddurationyear,
+    xaddrcurrcorresp, addrresidhabitationtypeid, educationid, workpositionid, branchid, xempldurationmonthcurr, xempldurationyearcurr,
+    xempldurationmonthlast, xempldurationyearlast, xemplcontractlimited, xemplfinish, xpersonidenttype, xpersonidentnum,
+    xlifeinsur, xinjuryinsur, xpensioninsur, xotherinsur, residenceid, nationalityid, xaddrresidzipcode, xaddrcurrzipcode, xaddremployzipcode, reftime
+  INTO _idGet,_creditrqcontrolreg_id, _xtitleaftertext, _xtitlebeforetext, _familyStatus, _occupationCodeS, _sex, _bankCode, _xbirthdate,
+    _personid, _xvalidity, _xaddrcurrdurationmonth, _xaddrcurrdurationyear, _xaddrresiddurationmonth, _xaddrresiddurationyear,
+    _xaddrcurrcorresp, _habitationtype, _education, _workposition, _branch, _xempldurationmonthcurr, _xempldurationyearcurr,
+    _xempldurationmonthlast, _xempldurationyearlast, _emplcontractlimited, _emplfinish, _xpersonidenttype, _xpersonidentnum,
+    _lifeInsur, _injuryInsur, _pensionInsur, _otherInsur, _residenceid, _nationalityid, _xaddrresidzipcode, _xaddrcurrzipcode, _xaddremployzipcode, _reftime
+  FROM CreditRqPersonReg
+  WHERE id = AIdOS;-- and date(reftime) <= ADatAkce;
+
+  if _reftime > ADatAkce then 
+    foreach 
+      SELECT creditrqcontrolid, xtitleaftertext, xtitlebeforetext, familystatusid, occupationid, xsex, xbankconnectionbank, xbirthdate,
+        personid, xvalidity, xaddrcurrdurationmonth, xaddrcurrdurationyear, xaddrresiddurationmonth, xaddrresiddurationyear,
+        xaddrcurrcorresp, addrresidhabitationtypeid, educationid, workpositionid, branchid, xempldurationmonthcurr, xempldurationyearcurr,
+        xempldurationmonthlast, xempldurationyearlast, xemplcontractlimited, xemplfinish, xpersonidenttype, xpersonidentnum,
+        xlifeinsur, xinjuryinsur, xpensioninsur, xotherinsur, residenceid, nationalityid, xaddrresidzipcode, xaddrcurrzipcode, xaddremployzipcode
+      INTO  _creditrqcontrolreg_id, _xtitleaftertext, _xtitlebeforetext, _familyStatus, _occupationCodeS, _sex, _bankCode, _xbirthdate,
+        _personid, _xvalidity, _xaddrcurrdurationmonth, _xaddrcurrdurationyear, _xaddrresiddurationmonth, _xaddrresiddurationyear,
+        _xaddrcurrcorresp, _habitationtype, _education, _workposition, _branch, _xempldurationmonthcurr, _xempldurationyearcurr,
+        _xempldurationmonthlast, _xempldurationyearlast, _emplcontractlimited, _emplfinish, _xpersonidenttype, _xpersonidentnum,
+        _lifeInsur, _injuryInsur, _pensionInsur, _otherInsur, _residenceid, _nationalityid, _xaddrresidzipcode, _xaddrcurrzipcode, _xaddremployzipcode
+      FROM CreditRqPersonArch
+      WHERE creditrqpersonreg_id = AIdOS and date(xrefmodifytime) <= ADatAkce 
+      ORDER BY xrefmodifytime DESC
+      exit foreach; 
+    end foreach;
+  end if;
+
+
+  SELECT xcreditrqnumber, xcreditrqstatus INTO _xcreditrqnumber, _xcreditrqstatus FROM CreditRqControlReg WHERE id = _creditrqcontrolreg_id and date(reftime) <= ADatAkce;
+  
+  if _xcreditrqnumber is null then
+    foreach 
+    SELECT xcreditrqnumber, xcreditrqstatus 
+      INTO _xcreditrqnumber, _xcreditrqstatus 
+      FROM creditrqcontrolarch 
+      WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id and date(xrefmodifytimestamp) <= ADatAkce 
+      ORDER BY xrefmodifytimestamp DESC
+      exit foreach;
+    end foreach;
+  end if;
+
+  SELECT id, reftime, xrequestdate, xcontracttype INTO _idGet, _reftime, _xrequestdate, _xcontracttype FROM CreditRqCContractReg WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id; --and date(reftime) <= ADatAkce;
+  
+ if _reftime > ADatAkce then 
+    foreach 
+    SELECT xrequestdate, xcontracttype 
+      INTO _xrequestdate, _xcontracttype
+      FROM creditrqccontractarch 
+      WHERE creditrqccontractreg_id = _idGet and date(xrefmodifytimestamp) <= ADatAkce 
+      ORDER BY xrefmodifytimestamp DESC
+      exit foreach;
+    end foreach;
+  end if;
+
+  if _personID is null or _xvalidity <> 1 then
+    -- ještì zkusit hledat podle _xpersonidentnum, _xpersonidenttype páèc je v systému chyba
+    -- a klíè do centrální evidence se pøemaže pokud je na osobì evidována zmìna
+    if (SELECT COUNT(*) FROM EO_FO_Mat aa, EO_Osoba_Mat bb WHERE aa.rc = _xpersonidentnum AND typid = _xpersonidenttype AND bb.stav <> 'Z' AND bb.os = aa.fo) > 1 then
+      call TW_RaiseError('413G98TCUI','EP_GetScoringParOsoba', 'Duplicitní rodné èíslo');
+    else
+      --vyberu zaznam z matriky FO
+      SELECT fo INTO _personID FROM EO_FO_Mat WHERE rc = _xpersonidentnum AND typid = _xpersonidenttype AND date(reftime) <= ADatAkce;
+      --pro zaznam v matrice FO prohledam matriku osob
+      if _personID is not null then
+        if not exists (select * from EO_Osoba_Mat where stav <> 'Z' and os = _personID and date(reftime) <= ADatAkce) then
+          let _idGet = null;
+          let _stavGet = 'Z';
+          --nenasel jsem zaznam v matrice osob tak prohledam archiv osob
+          foreach
+            select os, stav into _idGet, _stavGet from EO_Osoba_Arch where os = _personID and date(reftime) <= ADatAkce order by reftime desc
+            exit foreach; 
+          end foreach;
+          if _idGet is null or _stavGet = 'Z' then 
+            --pro zaznam z matiky FO jsem nemasel odpovidajici zaznam ani v matrice ani v archivu osob
+            let _personID = null;
+          end if;
+        end if;
+      end if;
+      if _personID is null then
+        --prohledam archiv FO
+        foreach
+          SELECT fo INTO _personID FROM EO_FO_Arch WHERE rc = _xpersonidentnum AND typid = _xpersonidenttype AND date(reftime) <= ADatAkce order by reftime desc
+          -- pro zaznam za archivu FO zjistim jestli existuje zaznam v matrice osob
+          if not exists (select * from EO_Osoba_Mat where stav <> 'Z' and os = _personID and date(reftime) <= ADatAkce) then
+            let _idGet = null;
+            let _stavGet = 'Z';
+            --nenalezen zaznam v matrice osob ... prohledam archiv
+            foreach
+              select os, stav into _idGet, _stavGet from EO_Osoba_Arch where os = _personID and date(reftime) <= ADatAkce order by reftime desc
+              exit foreach; 
+            end foreach;
+            if _idGet is null or _stavGet = 'Z' then 
+              let _personID = null;
+            end if;
+          end if;
+          exit foreach;
+        end foreach;
+      end if; 
+    end if;
+  end if;
+
+  -- indikátor telefonu domù
+  let _homeTelephoneInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indTelDom', 'SC1', AIdOS);  
+  -- indikátor telefonu do práce  
+  let _workTelephoneInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indTelPrace', 'SC1', AIdOS);    
+  -- indikátor, že má email  
+  let _mailInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indEmail', 'SC1', AIdOS);      
+  -- indikátor, mobil paušál  
+  let _mobilAllowInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indMobilPausal', 'SC1', AIdOS);
+  -- indikátor, mobil pøedplacenka
+  let _mobilCardInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indMobilPredpl', 'SC1', AIdOS);  
+
+  --bonita
+  let _idrep = null;
+  foreach
+    SELECT id
+    INTO _idrep
+    FROM RepayabilityAction 
+    WHERE xrequestnumber = _xcreditrqnumber AND xpersonnumber = _xpersonidentnum
+      -- @RN00291636: Zajímá mì poslednì provedená bonita k datu a né poslednì mìnìná....
+      AND xactiondate = (SELECT MAX(xactiondate) FROM RepayabilityAction WHERE xrequestnumber = _xcreditrqnumber AND  xpersonnumber = _xpersonidentnum and date(xactiondate) <= ADatAkce)
+    ORDER BY id DESC
+    exit foreach;
+  end foreach;
+
+  SELECT xratio, xrevenuedebt, xrevenuetotal, xrevenueother,
+    TW_Null0(xchildrento6), TW_Null0(xchildren6to10), TW_Null0(xchildren10to15), TW_Null0(xchildren15to26), TW_Null0(xadult), TW_Null0(xothermembers)
+  INTO _repayability, _roleIncome, _homeIncome, _xrevenueother,
+    _xchildrento6, _xchildren6to10, _xchildren10to15, _xchildren15to26, _xadult, _xothermembers
+  FROM RepayAbility_N
+  WHERE repayabilityaction_id = _idrep;
+
+  let _addrCurrDurationMonth = (TW_Null0(_xaddrcurrdurationyear) * 12) + TW_Null0(_xaddrcurrdurationmonth);
+  let _emplDurationCurrMonth = (TW_Null0(_xempldurationyearcurr) * 12) + TW_Null0(_xempldurationmonthcurr);
+  let _emplDurationLastMonth = (TW_Null0(_xempldurationyearlast) * 12) + TW_Null0(_xempldurationmonthlast);
+
+  if _xaddrcurrzipcode is null or _xaddrcurrcorresp = 0 then
+    --soucasna adresa se nepretahuje do korespondencni, takze se jako korespondencni bere trvale bydliste
+    let _xaddrcurrzipcode = _xaddrresidzipcode;
+    let _addrCurrDurationMonth = (TW_Null0(_xaddrresiddurationyear) * 12) + TW_Null0(_xaddrresiddurationmonth);
+  end if;
+
+  if _xaddrcurrcorresp = 1 and _xaddrcurrzipcode is not null then
+    let _adressUnityInd = 0;
+  else
+    let _adressUnityInd = 1;
+  end if;
+
+  if _xcreditrqstatus = 6 then
+    SELECT datzad INTO _xrequestdate FROM EU_Sml_Mat WHERE smlouva = ASmlouva AND tsml = _xcontracttype;
+  end if;
+
+elif ATypSC in ('SC2', 'SCB') then
+  let _personid = AIdOS;
+
+  select datzad into _xrequestdate from EU_Sml_Mat where smlouva = ASmlouva AND tsml = ATsml;
+
+  select fo, fo.titul1, fo.titul2, fo.stavrod, fo.povolani, fo.sex, fo.bankanum, fo.datnaroz,
+         fo.trvpobytod, fo.datuktrp, fo.vzdelani, fo.typid, fo.rc, fo.pobyt, fo.statprisl,
+         fo.psc
+    into _idGet, _xtitleaftertext, _xtitlebeforetext, _familyStatus, _occupationCodeS, _sex, _bankCode, _xbirthdate,
+         _trvpobytod, _datuktrp, _education, _xpersonidenttype, _xpersonidentnum, _residenceid, _nationalityid,
+         _xaddrresidzipcode
+    from EO_FO_Mat fo
+    where fo.fo = AIdOS and date(reftime) <= ADatAkce;
+  
+  if _idGet is null then
+    foreach
+      select fo.titul1, fo.titul2, fo.stavrod, fo.povolani, fo.sex, fo.bankanum, fo.datnaroz,
+             fo.trvpobytod, fo.datuktrp, fo.vzdelani, fo.typid, fo.rc, fo.pobyt, fo.statprisl,
+             fo.psc
+        into _xtitleaftertext, _xtitlebeforetext, _familyStatus, _occupationCodeS, _sex, _bankCode, _xbirthdate,
+             _trvpobytod, _datuktrp, _education, _xpersonidenttype, _xpersonidentnum, _residenceid, _nationalityid,
+             _xaddrresidzipcode
+        from EO_FO_Arch fo
+        where fo.fo = AIdOS and date(reftime) <= ADatAkce
+        order by reftime desc
+      exit foreach;
+    end foreach;  
+  end if;      
+  
+  select zamestnani, pozice, obor, datpocakt, dobapred, dobaurcita, datukurcita, psc, reftime
+    into _idGet, _workposition, _branch, _dobaVZamAkt, _emplDurationLastMonth, _emplcontractlimited, 
+         _emplfinish, _xaddremployzipcode, _reftimeGet
+    from EO_Zamestnani_Mat
+    where fo = AIdOS;
+  
+  if _idGet is not null then
+    if _reftimeGet > ADatAkce then
+      foreach
+        select pozice, obor, datpocakt, dobapred, dobaurcita, datukurcita, psc, date(reftime)
+          into _workposition, _branch, _dobaVZamAkt, _emplDurationLastMonth, _emplcontractlimited, 
+               _emplfinish, _xaddremployzipcode, _reftimeGet
+          from EO_Zamestnani_Arch
+          where fo = AIdOS and date(reftime) <= ADatAkce
+          order by reftime desc
+        exit foreach;
+      end foreach;
+    end if;
+  end if;
+
+  -- indikátor telefonu domù
+  let _homeTelephoneInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indTelDom', 'SC2', AIdOS);  
+  -- indikátor telefonu do práce  
+  let _workTelephoneInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indTelPrace', 'SC2', AIdOS);    
+  -- indikátor, že má email  
+  let _mailInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indEmail', 'SC2', AIdOS);      
+  -- indikátor, mobil paušál  
+  let _mobilAllowInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indMobilPausal', 'SC2', AIdOS);
+  -- indikátor, mobil pøedplacenka
+  let _mobilCardInd = EP_DatIsIndicatorValid(ADatAkce, 'EU', 'scoring', 'indMobilPredpl', 'SC2', AIdOS);  
+
+  if ARole = 'KL' then
+    let _tsmlrepay = 'SSFO';
+  else
+    let _tsmlrepay = ATsml;
+  end if;
+
+  SELECT fo, TW_Null0Dec(prijemrole), TW_Null0Dec(prijemost), TW_Null0Dec(prijemmanz),
+    TW_Null0(pocetvos1), TW_Null0(pocetvos2), TW_Null0(pocetvos3), TW_Null0(pocetvos4), TW_Null0(pocetvos5), TW_Null0(pocetosost),
+    datpzu, koefzivmin, TW_Null0Dec(castkazav), TW_Null0Dec(castkauver), TW_Null0Dec(castkaspor)
+  INTO _fo, _roleIncome, _xrevenueother, _xrevenuepartner,
+    _xchildrento6, _xchildren6to10, _xchildren10to15, _xchildren15to26, _xadult, _xothermembers,
+    _datpzu, _koefzivmin, _castkazav, _castkauver, _castkaspor
+  FROM EO_FinSit_Mat
+  WHERE fo = AIdOS AND smlouva = ASmlouva AND typ = _tsmlrepay AND typrole = ARole 
+    AND datvypoc = (SELECT MAX(datvypoc) FROM EO_FinSit_Mat WHERE fo = AIdOS AND smlouva = ASmlouva AND typ = _tsmlrepay AND typrole = ARole and date(reftime) <= ADatAkce);
+
+  let _homeIncome = _roleIncome + _xrevenueother + _xrevenuepartner;
+
+  if _fo is not null then
+    -- výpoèet bonity (musí se dìlat takto složitì, protože v eo_finsit_mat to není nikde uložené; všechno se poèítá v PB
+    SELECT pocvos1, pocvos2, pocvos3, pocvos4, pocvos5, 
+      pocosd1, pocosd2, pocosd3a4, pocosd5
+    INTO _pocvos1, _pocvos2, _pocvos3, _pocvos4, _pocvos5,
+      _pocosd1, _pocosd2, _pocosd3a4, _pocosd5
+    FROM EO_ZivMinKoef_Cis
+    WHERE datod = (SELECT MAX(datod) FROM EO_ZivMinKoef_Cis WHERE datod <= _datpzu) AND platnost = 1;
+
+    -- náklady na jednotlivé osoby
+    let _naklos = (_xadult * _pocvos5) + (_xchildrento6 * _pocvos1) + (_xchildren6to10 * _pocvos2) + (_xchildren10to15 * _pocvos3) + (_xchildren15to26 * _pocvos4);
+
+    -- náklady na domácnost
+    let _pocdom = _xadult + _xchildrento6 +_xchildren6to10 + _xchildren10to15 + _xchildren15to26;
+
+    if _pocdom  = 1 then
+      let _nakldom = _pocosd1;
+    elif _pocdom = 2 then
+      let _nakldom = _pocosd2;
+    elif _pocdom = 3 or _pocdom = 4 then
+      let _nakldom = _pocosd3a4;
+    elif _pocdom >= 5 then
+      let _nakldom = _pocosd5;
+    else
+      let _nakldom = 0;
+    end if;
+
+    let _meszivmin = (_naklos + _nakldom) * _koefzivmin;
+
+    if (_castkazav + _castkauver + _castkaspor + TW_Null0Dec(_meszivmin) <> 0) then
+      let _repayability = _homeIncome / (_castkazav + _castkauver + _castkaspor + TW_Null0Dec(_meszivmin));
+    end if;
+  end if;
+
+  let _addrCurrDurationMonth = TW_MonthBetw(_trvpobytod, nvl(_datuktrp, _datprov));
+  let _emplDurationCurrMonth = TW_MonthBetw(_dobaVZamAkt, _datprov);
+
+  -- zpùsob bydlení
+  let _bydleni, _habitationtype = null, null;
+  foreach
+    SELECT bydleni, zpusobb INTO _bydleni, _habitationtype FROM EO_Bydleni_Mat WHERE fo = AIdOs AND stav = 'A' AND typadr = 1 AND date(reftime) <= ADatAkce ORDER BY bydleni DESC
+    exit foreach;
+  end foreach;
+  
+  --zkusim jeste prohledat archiv
+  if _bydleni is null then
+    foreach SELECT bydleni INTO _idGet FROM EO_Bydleni_Mat WHERE fo = AIdOs and date(reftime) > ADatAkce ORDER BY bydleni DESC
+      let _stavGet = null;
+      let _idGet2 = null;
+      foreach select stav, zpusobb, typadr into _stavGet, _habitationtype, _idGet2 from EO_Bydleni_Arch where bydleni = _idGet and date(reftime) <= ADatAkce order by reftime desc
+        exit foreach;
+      end foreach;
+      if (_stavGet is not null and _stavGet = 'A') and (_idGet2 is not null and _idGet2 = 1) then
+        let _bydleni = _idGet;
+        exit foreach;
+      else
+        let _habitationtype = null;
+      end if; 
+    end foreach;
+  end if;
+    
+  if _bydleni is null then
+    foreach
+      SELECT zpusobb INTO _habitationtype FROM EO_Bydleni_Mat WHERE fo = AIdOs AND stav = 'A' AND date(reftime) <= ADatAkce
+      exit foreach;
+    end foreach;
+    
+    --zkusim jeste prohledat archiv
+    if _bydleni is null then
+      foreach SELECT bydleni INTO _idGet FROM EO_Bydleni_Mat WHERE fo = AIdOs and date(reftime) > ADatAkce
+        let _stavGet = null;
+        let _idGet2 = null;
+        foreach select stav, zpusobb, typadr into _stavGet, _habitationtype, _idGet2 from EO_Bydleni_Arch where bydleni = _idGet and date(reftime) <= ADatAkce order by reftime desc
+          exit foreach;
+        end foreach;
+        if (_stavGet is not null and _stavGet = 'A') and (_idGet2 is not null and _idGet2 = 1) then
+          let _bydleni = _idGet;
+          exit foreach;
+        else
+          let _habitationtype = null;
+        end if; 
+      end foreach;
+    end if;
+  end if;
+  
+  SELECT udaj, zivpoj, urazpoj, penzpoj, jinepoj 
+  INTO _idGet, _lifeInsur, _injuryInsur, _pensionInsur, _otherInsur 
+  FROM EO_StatUdaje_Mat 
+  WHERE fo = AIdOs AND date(reftime) <= ADatAkce;
+  
+  if _idGet is null then
+    foreach
+      SELECT udaj, zivpoj, urazpoj, penzpoj, jinepoj 
+      INTO _idGet, _lifeInsur, _injuryInsur, _pensionInsur, _otherInsur 
+      FROM EO_StatUdaje_Arch 
+      WHERE fo = AIdOs AND date(reftime) <= ADatAkce
+      ORDER BY reftime DESC
+      exit foreach;
+    end foreach;
+  end if;
+  
+  
+  let _lifeInsur = TW_Null0(_lifeInsur);
+  let _injuryInsur = TW_Null0(_injuryInsur);
+  let _pensionInsur = TW_Null0(_pensionInsur);
+  let _otherInsur = TW_Null0(_otherInsur);
+
+  let _adressUnityInd = 1;
+ -- pokud osoba má pro alespoò jednu roli na dané úvìrové smlouvì nastavenu korespondenèní adresu vracím 0
+  foreach
+    select typrole, kontadr, stav, date(reftime) into _typroleGet, _idGet, _stavGet, _reftimeGet FROM EO_Role_Mat WHERE os = AIdOS AND smlouva = ASmlouva AND typ = ATsml
+    if _idGet = 1 AND _stavGet in ('A', 'U') AND _reftimeGet <= ADatAkce then
+      let _adressUnityInd = 0;
+      exit foreach;
+    elif _reftimeGet > ADatAkce then
+      let _idGet2 = null;
+      foreach 
+        select kontadr, stav into _idGet2, _stavGet from EO_Role_Arch where os = AIdOS AND smlouva = ASmlouva AND typ = ATsml AND typrole = _typroleGet AND date(reftime) <= ADatAkce order by reftime desc
+        exit foreach;
+      end foreach;
+      if _idGet2 is not null and _idGet2 = 1 AND _stavGet in ('A', 'U') then
+        let _adressUnityInd = 0;
+        exit foreach;
+      end if;
+    end if;  
+  end foreach;
+
+  
+  SELECT psc, kontadr INTO _xaddrcurrzipcode, _xaddrcurrcorresp FROM EO_Role_Mat WHERE os = AIdOS AND smlouva = ASmlouva AND typ = _tsmlrepay AND typrole = ARole AND date(reftime) <= ADatAkce;
+  
+  if _xaddrcurrcorresp is null then
+    foreach
+      SELECT psc, kontadr INTO _xaddrcurrzipcode, _xaddrcurrcorresp FROM EO_Role_Mat WHERE os = AIdOS AND smlouva = ASmlouva AND typ = _tsmlrepay AND typrole = ARole AND date(reftime) <= ADatAkce order by reftime desc
+      exit foreach;
+    end foreach;
+  end if;
+
+  if _xaddrcurrzipcode is null or _xaddrcurrcorresp = 0 then
+    -- pokud korespondenèní adresa není vyplnìna, dotáhneme PSÈ z trvalé adresy
+    let _xaddrcurrzipcode = _xaddrresidzipcode;
+  end if;
+end if;
+
+let _region = IMain_GetTerPsc(_xaddrresidzipcode, ADatAkce); 
+
+if TW_NullEmpty(_xtitleaftertext) <> '' or TW_NullEmpty(_xtitlebeforetext) <> '' then
+  let _titulInd = 1;
+end if;
+
+let _age = TW_MaxInt(TW_YearBetw(_xbirthdate, _xrequestdate), 0);
+
+if TW_NUll0Dec(_roleIncome) <> 0 then
+  let _otherIncomeShare = TW_Null0Dec(_xrevenueother) / TW_NUll0Dec(_roleIncome);
+end if;
+
+let _numbPers = _xchildrento6 +_xchildren6to10 + _xchildren10to15 + _xchildren15to26 + _xadult + _xothermembers;
+let _numbChildren = _xchildrento6 +_xchildren6to10 + _xchildren10to15 + _xchildren15to26;
+
+let _highestClassification = 0;
+if TW_Null0(_personID) <> 0 then
+  SELECT TW_MaxInt(MAX(klasklient), MAX(klasifikace)) INTO _highestClassification FROM EO_Osoba_Arch WHERE os = _personId AND date(reftime) <= ADatAkce;
+  SELECT TW_MaxInt(_highestClassification, TW_MaxInt(klasklient, klasifikace)) INTO _idGet FROM EO_Osoba_Mat WHERE os = _personId AND date(reftime) <= ADatAkce;
+  if _idGet is not null then
+    let _highestClassification = TW_MaxInt(_highestClassification, _idGet);
+  end if;
+end if;
+
+let _addrcurrregion = IMain_GetTerPsc(_xaddrcurrzipcode, ADatAkce); 
+let _emplregion = IMain_GetTerPsc(_xaddremployzipcode, ADatAkce); 
+
+if TW_Null0(_emplcontractlimited) = 0 then
+  let _emplfinish = null;
+end if;
+
+return
+_region, --Char(5)
+_titulInd, --Int
+_familyStatus, --Int
+_occupationCodeS, --Int
+_homeTelephoneInd, --Int
+_workTelephoneInd, --Int
+_mobilAllowInd, --Int
+_mailInd, --Int
+_mobilCardInd, --Int
+_sex, --Int
+_bankCode, --Char(4)
+_repayAbility, --Dec(16,2)
+_age, --Int
+_roleIncome, --Dec(16,2)
+_homeIncome, --Dec(16,2)
+_otherIncomeShare, --Dec(16,2)
+_numbPers, --Int
+_numbChildren, --Int
+_highestClassification, --Int
+_addrCurrRegion, --Char(5)
+_addrCurrDurationMonth, --Int
+_habitationType, --Int
+_education, --Int,
+_workPosition, --Int
+_branch, --Int 
+_emplRegion, --Char(5)
+_emplDurationCurrMonth, --Int
+_emplDurationLastMonth, --Int
+_emplContractLimited, --Int
+_emplFinish, --Date
+_lifeInsur, --Int
+_injuryInsur, --Int
+_pensionInsur, --Int
+_otherInsur, --Int
+_adressUnityInd,  --Int
+_residenceid, --Char(1)
+_nationalityid, --Char(2)
+_xaddrresidzipcode, --Char(5)
+_xaddrcurrzipcode, --Char(5)
+_xaddremployzipcode; --Char(5)
+
+end function;

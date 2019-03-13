@@ -1,0 +1,541 @@
+-- @TC:ONCE: ID = V2, B132427_36886_3-ac_ucet_mat
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE AC_Ucet_Mat SET popis = '1_FO_ÚHR_ČR', poznamka = 'Vklady kl.se splatností 1_FO_výnosy_úhrady_ČR' WHERE  ucet = 227130;
+
+UPDATE AC_Ucet_Mat SET popis = '2_FO_ÚHR_ČR', poznamka = 'Vklady.kl.s výp. lhůtou 2_FO_výnosy_úhrady_ČR' WHERE  ucet = 228130;
+
+UPDATE AC_Ucet_Mat SET popis = '3_FO_ÚHR_ČR', poznamka = 'Vklady.kl.spl.na pož. 3_FO_výnosy_úhrady_ČR' WHERE  ucet = 226130;
+
+UPDATE AC_Ucet_Mat SET popis = '3_FO_ÚHR_ČR (Z,F)', poznamka = 'Vklady.kl.spl.na pož. 3_FO_výnosy_úhrady_ČR (Z,F)' WHERE  ucet = 226131;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_FO_PU - výnosy_úhrady_ČR' WHERE  ucet = 215513;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_FO_SU - výnosy_úhrady_ČR' WHERE  ucet = 215523;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_FO_VU - výnosy_úhrady_ČR' WHERE  ucet = 215543;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_FO_PU - výnosy_úhrady_ČR' WHERE  ucet = 216513;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_FO_SU - výnosy_úhrady_ČR' WHERE  ucet = 216523;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_FO_VU - výnosy_úhrady_ČR' WHERE  ucet = 216543;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_FO_PU - výnosy_úhrady_ČR' WHERE  ucet = 218513;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_FO_SU - výnosy_úhrady_ČR' WHERE  ucet = 218523;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_FO_VU - výnosy_úhrady_ČR' WHERE  ucet = 218543;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_PU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_PU - výnosy_úhrady_ČR' WHERE  ucet = 241513;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_SU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_SU - výnosy_úhrady_ČR' WHERE  ucet = 241523;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_VU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_VU - výnosy_úhrady_ČR' WHERE  ucet = 241543;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_PU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_PU - výnosy_úhrady_ČR' WHERE  ucet = 242513;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_SU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_SU - výnosy_úhrady_ČR' WHERE  ucet = 242523;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_VU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_VU - výnosy_úhrady_ČR' WHERE  ucet = 242543;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_PU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_FO_PU - výnosy_úhrady_ČR' WHERE  ucet = 243513;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_SU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_FO_SU - výnosy_úhrady_ČR' WHERE  ucet = 243523;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_VU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_FO_VU - výnosy_úhrady_ČR' WHERE  ucet = 243543;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_PU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_PU - výnosy_úhrady_ČR' WHERE  ucet = 244513;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_SU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_SU - výnosy_úhrady_ČR' WHERE  ucet = 244523;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_VU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_VU - výnosy_úhrady_ČR' WHERE  ucet = 244543;
+
+UPDATE AC_Ucet_Mat SET popis = '1_PO-PZ_ÚHR_ČR', poznamka = 'Vklady kl.se splatností 1_PO-PZ_výnosy_úhrady_ČR' WHERE  ucet = 227230;
+
+UPDATE AC_Ucet_Mat SET popis = '2_PO-PZ_ÚHR_ČR', poznamka = 'Vklady.kl.s výp. lhůtou 2_PO-PZ_výnosy_úhrady_ČR' WHERE  ucet = 228230;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PZ_ÚHR_ČR', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PZ_výnosy_úhrady_ČR' WHERE  ucet = 226230;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PZ_ÚHR_ČR (Z,F)', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PZ_výnos_úhrady_ČR(Z,F)' WHERE  ucet = 226232;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_PZ_PU - výnosy_úhrady_ČR' WHERE  ucet = 215613;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_PZ_SU - výnosy_úhrady_ČR' WHERE  ucet = 215623;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_PZ_VU - výnosy_úhrady_ČR' WHERE  ucet = 215643;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_PZ_PU - výnosy_úhrady_ČR' WHERE  ucet = 216613;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_PZ_SU - výnosy_úhrady_ČR' WHERE  ucet = 216623;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_PZ_VU - výnosy_úhrady_ČR' WHERE  ucet = 216643;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_PZ_PU - výnosy_úhrady_ČR' WHERE  ucet = 218613;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_PZ_SU - výnosy_úhrady_ČR' WHERE  ucet = 218623;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_PZ_VU - výnosy_úhrady_ČR' WHERE  ucet = 218643;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_PU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_PU - výnosy_úhrady_ČR' WHERE  ucet = 241613;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_SU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_SU - výnosy_úhrady_ČR' WHERE  ucet = 241623;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_VU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_VU - výnosy_úhrady_ČR' WHERE  ucet = 241643;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_PU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_PU - výnosy_úhrady_ČR' WHERE  ucet = 242613;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_SU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_SU - výnosy_úhrady_ČR' WHERE  ucet = 242623;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_VU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_VU - výnosy_úhrady_ČR' WHERE  ucet = 242643;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_PU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_PU - výnosy_úhrady_ČR' WHERE  ucet = 243613;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_SU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_SU - výnosy_úhrady_ČR' WHERE  ucet = 243623;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_VU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_VU - výnosy_úhrady_ČR' WHERE  ucet = 243643;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_PU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_PU - výnosy_úhrady_ČR' WHERE  ucet = 244613;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_SU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_SU - výnosy_úhrady_ČR' WHERE  ucet = 244623;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_VU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_VU - výnosy_úhrady_ČR' WHERE  ucet = 244643;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_KO_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_PZ_KO - výnosy_úhrady_ČR' WHERE  ucet = 215633;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_KO_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_PZ_KO - výnosy_úhrady_ČR' WHERE  ucet = 216633;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_KO_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_PZ_KO - výnosy_úhrady_ČR' WHERE  ucet = 218633;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_KO_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_KO - výnosy_úhrady_ČR' WHERE  ucet = 241633;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_KO_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_KO - výnosy_úhrady_ČR' WHERE  ucet = 242633;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_KO_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_KO - výnosy_úhrady_ČR' WHERE  ucet = 243633;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_KO_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_KO - výnosy_úhrady_ČR' WHERE  ucet = 244633;
+
+UPDATE AC_Ucet_Mat SET popis = '1_PO-PN_ÚHR_ČR', poznamka = 'Vklady kl.se splatností 1_PO-PN_výnosy_úhrady_ČR' WHERE  ucet = 227330;
+
+UPDATE AC_Ucet_Mat SET popis = '2_PO-PN_ÚHR_ČR', poznamka = 'Vklady.kl.s výp. lhůtou 2_PO-PN_výnosy_úhrady_ČR' WHERE  ucet = 228330;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PN_ÚHR_ČR', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PN_výnosy_úhrady_ČR' WHERE  ucet = 226330;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PN_ÚHR_ČR (Z,F)', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PN_výnos_úhrady_ČR(Z,F)' WHERE  ucet = 226332;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_PN_PU - výnosy_úhrady_ČR' WHERE  ucet = 215713;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_PN_SU - výnosy_úhrady_ČR' WHERE  ucet = 215723;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_PN_VU - výnosy_úhrady_ČR' WHERE  ucet = 215743;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_PN_PU - výnosy_úhrady_ČR' WHERE  ucet = 216713;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_PN_SU - výnosy_úhrady_ČR' WHERE  ucet = 216723;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_PN_VU - výnosy_úhrady_ČR' WHERE  ucet = 216743;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_PU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_PN_PU - výnosy_úhrady_ČR' WHERE  ucet = 218713;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_SU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_PN_SU - výnosy_úhrady_ČR' WHERE  ucet = 218723;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_VU_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_PN_VU - výnosy_úhrady_ČR' WHERE  ucet = 218743;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_PU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_PU - výnosy_úhrady_ČR' WHERE  ucet = 241713;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_SU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_SU - výnosy_úhrady_ČR' WHERE  ucet = 241723;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_VU_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_VU - výnosy_úhrady_ČR' WHERE  ucet = 241743;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_PU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_PU - výnosy_úhrady_ČR' WHERE  ucet = 242713;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_SU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_SU - výnosy_úhrady_ČR' WHERE  ucet = 242723;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_VU_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_VU - výnosy_úhrady_ČR' WHERE  ucet = 242743;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_PU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_PN_PU - výnosy_úhrady_ČR' WHERE  ucet = 243713;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_SU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_PN_SU - výnosy_úhrady_ČR' WHERE  ucet = 243723;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_VU_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_PN_VU - výnosy_úhrady_ČR' WHERE  ucet = 243743;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_PU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_PU - výnosy_úhrady_ČR' WHERE  ucet = 244713;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_SU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_SU - výnosy_úhrady_ČR' WHERE  ucet = 244723;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_VU_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_VU - výnosy_úhrady_ČR' WHERE  ucet = 244743;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_KO_ÚHR_ČR', poznamka = 'Standarní úvěr 0_K_PN_KO - výnosy_úhrady_ČR' WHERE  ucet = 215733;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_KO_ÚHR_ČR', poznamka = 'Standarní úvěr 0_S_PN_KO - výnosy_úhrady_ČR' WHERE  ucet = 216733;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_KO_ÚHR_ČR', poznamka = 'Standarní úvěr 0_D_PN_KO - výnosy_úhrady_ČR' WHERE  ucet = 218733;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_KO_ÚHR_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_KO - výnosy_úhrady_ČR' WHERE  ucet = 241733;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_KO_ÚHR_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_KO - výnosy_úhrady_ČR' WHERE  ucet = 242733;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_KO_ÚHR_ČR', poznamka = 'Pochybný úvěr 3_X_PN_KO - výnosy_úhrady_ČR' WHERE  ucet = 243733;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_KO_ÚHR_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_KO - výnosy_úhrady_ČR' WHERE  ucet = 244733;
+
+UPDATE AC_Ucet_Mat SET popis = '1_FO_PROV_ČR', poznamka = 'Vklady kl.se splatností 1_FO_náklady_provize_ČR' WHERE  ucet = 227135;
+
+UPDATE AC_Ucet_Mat SET popis = '2_FO_PROV_ČR', poznamka = 'Vklady.kl.s výp. lhůtou 2_FO_náklady_provize_ČR' WHERE  ucet = 228135;
+
+UPDATE AC_Ucet_Mat SET popis = '3_FO_PROV_ČR', poznamka = 'Vklady.kl.spl.na pož. 3_FO_náklady_provize_ČR' WHERE  ucet = 226135;
+
+UPDATE AC_Ucet_Mat SET popis = '3_FO_PROV_ČR (Z,F)', poznamka = 'Vklady.kl.spl.na pož. 3_FO_náklad_provize_ČR (Z,F)' WHERE  ucet = 226136;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_FO_PU - náklady_provize_ČR' WHERE  ucet = 215514;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_FO_SU - náklady_provize_ČR' WHERE  ucet = 215524;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_FO_VU - náklady_provize_ČR' WHERE  ucet = 215544;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_FO_PU - náklady_provize_ČR' WHERE  ucet = 216514;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_FO_SU - náklady_provize_ČR' WHERE  ucet = 216524;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_FO_VU - náklady_provize_ČR' WHERE  ucet = 216544;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_FO_PU - náklady_provize_ČR' WHERE  ucet = 218514;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_FO_SU - náklady_provize_ČR' WHERE  ucet = 218524;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_FO_VU - náklady_provize_ČR' WHERE  ucet = 218544;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_PU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_PU - náklady_provize_ČR' WHERE  ucet = 241514;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_SU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_SU - náklady_provize_ČR' WHERE  ucet = 241524;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_VU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_VU - náklady_provize_ČR' WHERE  ucet = 241544;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_PU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_PU - náklady_provize_ČR' WHERE  ucet = 242514;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_SU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_SU - náklady_provize_ČR' WHERE  ucet = 242524;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_VU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_VU - náklady_provize_ČR' WHERE  ucet = 242544;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_PU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_FO_PU - náklady_provize_ČR' WHERE  ucet = 243514;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_SU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_FO_SU - náklady_provize_ČR' WHERE  ucet = 243524;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_VU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_FO_VU - náklady_provize_ČR' WHERE  ucet = 243544;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_PU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_PU - náklady_provize_ČR' WHERE  ucet = 244514;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_SU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_SU - náklady_provize_ČR' WHERE  ucet = 244524;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_VU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_VU - náklady_provize_ČR' WHERE  ucet = 244544;
+
+UPDATE AC_Ucet_Mat SET popis = '1_PO-PZ_PROV_ČR', poznamka = 'Vklady kl.se splatností 1_PO-PZ_náklady_provize_ČR' WHERE  ucet = 227235;
+
+UPDATE AC_Ucet_Mat SET popis = '2_PO-PZ_PROV_ČR', poznamka = 'Vklady.kl.s výp. lhůtou 2_PO-PZ_náklady_provize_ČR' WHERE  ucet = 228235;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PZ_PROV_ČR', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PZ_náklady_provize_ČR' WHERE  ucet = 226235;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PZ_PROV_ČR(Z,F)', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PZ_náklad_prov_ČR(Z,F)' WHERE  ucet = 226236;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_PZ_PU - náklady_provize_ČR' WHERE  ucet = 215614;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_PZ_SU - náklady_provize_ČR' WHERE  ucet = 215624;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_PZ_VU - náklady_provize_ČR' WHERE  ucet = 215644;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_PZ_PU - náklady_provize_ČR' WHERE  ucet = 216614;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_PZ_SU - náklady_provize_ČR' WHERE  ucet = 216624;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_PZ_VU - náklady_provize_ČR' WHERE  ucet = 216644;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_PZ_PU - náklady_provize_ČR' WHERE  ucet = 218614;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_PZ_SU - náklady_provize_ČR' WHERE  ucet = 218624;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_PZ_VU - náklady_provize_ČR' WHERE  ucet = 218644;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_PU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_PU - náklady_provize_ČR' WHERE  ucet = 241614;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_SU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_SU - náklady_provize_ČR' WHERE  ucet = 241624;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_VU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_VU - náklady_provize_ČR' WHERE  ucet = 241644;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_PU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_PU - náklady_provize_ČR' WHERE  ucet = 242614;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_SU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_SU - náklady_provize_ČR' WHERE  ucet = 242624;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_VU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_VU - náklady_provize_ČR' WHERE  ucet = 242644;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_PU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_PU - náklady_provize_ČR' WHERE  ucet = 243614;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_SU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_SU - náklady_provize_ČR' WHERE  ucet = 243624;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_VU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_VU - náklady_provize_ČR' WHERE  ucet = 243644;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_PU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_PU - náklady_provize_ČR' WHERE  ucet = 244614;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_SU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_SU - náklady_provize_ČR' WHERE  ucet = 244624;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_VU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_VU - náklady_provize_ČR' WHERE  ucet = 244644;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_KO_PROV_ČR', poznamka = 'Standarní úvěr 0_K_PZ_KO - náklady_provize_ČR' WHERE  ucet = 215634;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_KO_PROV_ČR', poznamka = 'Standarní úvěr 0_S_PZ_KO - náklady_provize_ČR' WHERE  ucet = 216634;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_KO_PROV_ČR', poznamka = 'Standarní úvěr 0_D_PZ_KO - náklady_provize_ČR' WHERE  ucet = 218634;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_KO_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_KO - náklady_provize_ČR' WHERE  ucet = 241634;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_KO_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_KO - náklady_provize_ČR' WHERE  ucet = 242634;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_KO_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_KO - náklady_provize_ČR' WHERE  ucet = 243634;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_KO_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_KO - náklady_provize_ČR' WHERE  ucet = 244634;
+
+UPDATE AC_Ucet_Mat SET popis = '1_PO-PN_PROV_ČR', poznamka = 'Vklady kl.se splatností 1_PO-PN_náklady_provize_ČR' WHERE  ucet = 227335;
+
+UPDATE AC_Ucet_Mat SET popis = '2_PO-PN_PROV_ČR', poznamka = 'Vklady.kl.s výp. lhůtou 2_PO-PN_náklady_provize_ČR' WHERE  ucet = 228335;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PN_PROV_ČR', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PN_náklady_provize_ČR' WHERE  ucet = 226335;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PN_PROV_ČR(Z,F)', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PN_náklad_prov_ČR(Z,F)' WHERE  ucet = 226336;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_PN_PU - náklady_provize_ČR' WHERE  ucet = 215714;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_PN_SU - náklady_provize_ČR' WHERE  ucet = 215724;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_K_PN_VU - náklady_provize_ČR' WHERE  ucet = 215744;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_PN_PU - náklady_provize_ČR' WHERE  ucet = 216714;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_PN_SU - náklady_provize_ČR' WHERE  ucet = 216724;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_S_PN_VU - náklady_provize_ČR' WHERE  ucet = 216744;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_PU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_PN_PU - náklady_provize_ČR' WHERE  ucet = 218714;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_SU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_PN_SU - náklady_provize_ČR' WHERE  ucet = 218724;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_VU_PROV_ČR', poznamka = 'Standarní úvěr 0_D_PN_VU - náklady_provize_ČR' WHERE  ucet = 218744;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_PU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_PU - náklady_provize_ČR' WHERE  ucet = 241714;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_SU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_SU - náklady_provize_ČR' WHERE  ucet = 241724;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_VU_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_VU - náklady_provize_ČR' WHERE  ucet = 241744;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_PU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_PU - náklady_provize_ČR' WHERE  ucet = 242714;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_SU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_SU - náklady_provize_ČR' WHERE  ucet = 242724;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_VU_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_VU - náklady_provize_ČR' WHERE  ucet = 242744;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_PU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_PN_PU - náklady_provize_ČR' WHERE  ucet = 243714;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_SU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_PN_SU - náklady_provize_ČR' WHERE  ucet = 243724;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_VU_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_PN_VU - náklady_provize_ČR' WHERE  ucet = 243744;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_PU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_PU - náklady_provize_ČR' WHERE  ucet = 244714;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_SU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_SU - náklady_provize_ČR' WHERE  ucet = 244724;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_VU_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_VU - náklady_provize_ČR' WHERE  ucet = 244744;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_KO_PROV_ČR', poznamka = 'Standarní úvěr 0_K_PN_KO - náklady_provize_ČR' WHERE  ucet = 215734;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_KO_PROV_ČR', poznamka = 'Standarní úvěr 0_S_PN_KO - náklady_provize_ČR' WHERE  ucet = 216734;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_KO_PROV_ČR', poznamka = 'Standarní úvěr 0_D_PN_KO - náklady_provize_ČR' WHERE  ucet = 218734;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_KO_PROV_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_KO - náklady_provize_ČR' WHERE  ucet = 241734;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_KO_PROV_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_KO - náklady_provize_ČR' WHERE  ucet = 242734;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_KO_PROV_ČR', poznamka = 'Pochybný úvěr 3_X_PN_KO - náklady_provize_ČR' WHERE  ucet = 243734;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_KO_PROV_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_KO - náklady_provize_ČR' WHERE  ucet = 244734;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_FO_PU - náklady_kl.akce_ČR' WHERE  ucet = 215515;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_FO_SU - náklady_kl.akce_ČR' WHERE  ucet = 215525;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_FO_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_FO_VU - náklady_kl.akce_ČR' WHERE  ucet = 215545;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_FO_PU - náklady_kl.akce_ČR' WHERE  ucet = 216515;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_FO_SU - náklady_kl.akce_ČR' WHERE  ucet = 216525;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_FO_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_FO_VU - náklady_kl.akce_ČR' WHERE  ucet = 216545;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_FO_PU - náklady_kl.akce_ČR' WHERE  ucet = 218515;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_FO_SU - náklady_kl.akce_ČR' WHERE  ucet = 218525;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_FO_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_FO_VU - náklady_kl.akce_ČR' WHERE  ucet = 218545;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_PU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_PU - náklady_kl.akce_ČR' WHERE  ucet = 241515;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_SU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_SU - náklady_kl.akce_ČR' WHERE  ucet = 241525;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_FO_VU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_FO_VU - náklady_kl.akce_ČR' WHERE  ucet = 241545;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_PU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_PU - náklady_kl.akce_ČR' WHERE  ucet = 242515;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_SU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_SU - náklady_kl.akce_ČR' WHERE  ucet = 242525;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_FO_VU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_FO_VU - náklady_kl.akce_ČR' WHERE  ucet = 242545;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_PU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_FO_PU - náklady_kl.akce_ČR' WHERE  ucet = 243515;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_SU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_FO_SU - náklady_kl.akce_ČR' WHERE  ucet = 243525;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_FO_VU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_FO_VU - náklady_kl.akce_ČR' WHERE  ucet = 243545;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_PU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_PU - náklady_kl.akce_ČR' WHERE  ucet = 244515;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_SU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_SU - náklady_kl.akce_ČR' WHERE  ucet = 244525;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_FO_VU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_FO_VU - náklady_kl.akce_ČR' WHERE  ucet = 244545;
+
+UPDATE AC_Ucet_Mat SET popis = '1_PO-PZ_AKCE_ČR', poznamka = 'Vklady kl.se splatností 1_PO-PZ_náklady_kl.akce_ČR' WHERE  ucet = 227237;
+
+UPDATE AC_Ucet_Mat SET popis = '2_PO-PZ_AKCE_ČR', poznamka = 'Vklady.kl.s výp. lhůtou 2_PO-PZ_náklady_kl.akce_ČR' WHERE  ucet = 228237;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PZ_AKCE_ČR', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PZ_náklady_kl.akce_ČR' WHERE  ucet = 226237;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PZ_AKCE_ČR(Z,F)', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PZ_náklad_kl.ak_ČR(Z,F)' WHERE  ucet = 226238;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_PZ_PU - náklady_kl.akce_ČR' WHERE  ucet = 215615;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_PZ_SU - náklady_kl.akce_ČR' WHERE  ucet = 215625;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_PZ_VU - náklady_kl.akce_ČR' WHERE  ucet = 215645;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_PZ_PU - náklady_kl.akce_ČR' WHERE  ucet = 216615;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_PZ_SU - náklady_kl.akce_ČR' WHERE  ucet = 216625;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_PZ_VU - náklady_kl.akce_ČR' WHERE  ucet = 216645;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_PZ_PU - náklady_kl.akce_ČR' WHERE  ucet = 218615;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_PZ_SU - náklady_kl.akce_ČR' WHERE  ucet = 218625;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_PZ_VU - náklady_kl.akce_ČR' WHERE  ucet = 218645;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_PU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_PU - náklady_kl.akce_ČR' WHERE  ucet = 241615;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_SU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_SU - náklady_kl.akce_ČR' WHERE  ucet = 241625;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_VU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_VU - náklady_kl.akce_ČR' WHERE  ucet = 241645;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_PU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_PU - náklady_kl.akce_ČR' WHERE  ucet = 242615;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_SU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_SU - náklady_kl.akce_ČR' WHERE  ucet = 242625;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_VU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_VU - náklady_kl.akce_ČR' WHERE  ucet = 242645;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_PU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_PU - náklady_kl.akce_ČR' WHERE  ucet = 243615;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_SU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_SU - náklady_kl.akce_ČR' WHERE  ucet = 243625;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_VU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_VU - náklady_kl.akce_ČR' WHERE  ucet = 243645;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_PU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_PU - náklady_kl.akce_ČR' WHERE  ucet = 244615;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_SU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_SU - náklady_kl.akce_ČR' WHERE  ucet = 244625;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_VU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_VU - náklady_kl.akce_ČR' WHERE  ucet = 244645;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PZ_KO_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_PZ_KO - náklady_kl.akce_ČR' WHERE  ucet = 215635;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PZ_KO_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_PZ_KO - náklady_kl.akce_ČR' WHERE  ucet = 216635;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PZ_KO_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_PZ_KO - náklady_kl.akce_ČR' WHERE  ucet = 218635;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PZ_KO_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_PZ_KO - náklady_kl.akce_ČR' WHERE  ucet = 241635;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PZ_KO_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_PZ_KO - náklady_kl.akce_ČR' WHERE  ucet = 242635;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PZ_KO_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_PZ_KO - náklady_kl.akce_ČR' WHERE  ucet = 243635;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PZ_KO_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_PZ_KO - náklady_kl.akce_ČR' WHERE  ucet = 244635;
+
+UPDATE AC_Ucet_Mat SET popis = '1_PO-PN_AKCE_ČR', poznamka = 'Vklady kl.se splatností 1_PO-PN_náklady_kl.akce_ČR' WHERE  ucet = 227337;
+
+UPDATE AC_Ucet_Mat SET popis = '2_PO-PN_AKCE_ČR', poznamka = 'Vklady.kl.s výp. lhůtou 2_PO-PN_náklady_kl.akce_ČR' WHERE  ucet = 228337;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PN_AKCE_ČR', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PN_náklady_kl.akce_ČR' WHERE  ucet = 226337;
+
+UPDATE AC_Ucet_Mat SET popis = '3_PO-PN_AKCE_ČR(Z,F)', poznamka = 'Vklady.kl.spl.na pož. 3_PO-PN_náklad_kl.ak_ČR(Z,F)' WHERE  ucet = 226338;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_PN_PU - náklady_kl.akce_ČR' WHERE  ucet = 215715;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_PN_SU - náklady_kl.akce_ČR' WHERE  ucet = 215725;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_PN_VU - náklady_kl.akce_ČR' WHERE  ucet = 215745;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_PN_PU - náklady_kl.akce_ČR' WHERE  ucet = 216715;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_PN_SU - náklady_kl.akce_ČR' WHERE  ucet = 216725;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_PN_VU - náklady_kl.akce_ČR' WHERE  ucet = 216745;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_PU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_PN_PU - náklady_kl.akce_ČR' WHERE  ucet = 218715;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_SU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_PN_SU - náklady_kl.akce_ČR' WHERE  ucet = 218725;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_VU_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_PN_VU - náklady_kl.akce_ČR' WHERE  ucet = 218745;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_PU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_PU - náklady_kl.akce_ČR' WHERE  ucet = 241715;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_SU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_SU - náklady_kl.akce_ČR' WHERE  ucet = 241725;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_VU_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_VU - náklady_kl.akce_ČR' WHERE  ucet = 241745;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_PU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_PU - náklady_kl.akce_ČR' WHERE  ucet = 242715;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_SU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_SU - náklady_kl.akce_ČR' WHERE  ucet = 242725;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_VU_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_VU - náklady_kl.akce_ČR' WHERE  ucet = 242745;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_PU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_PN_PU - náklady_kl.akce_ČR' WHERE  ucet = 243715;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_SU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_PN_SU - náklady_kl.akce_ČR' WHERE  ucet = 243725;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_VU_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_PN_VU - náklady_kl.akce_ČR' WHERE  ucet = 243745;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_PU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_PU - náklady_kl.akce_ČR' WHERE  ucet = 244715;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_SU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_SU - náklady_kl.akce_ČR' WHERE  ucet = 244725;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_VU_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_VU - náklady_kl.akce_ČR' WHERE  ucet = 244745;
+
+UPDATE AC_Ucet_Mat SET popis = '0_K_PN_KO_AKCE_ČR', poznamka = 'Standarní úvěr 0_K_PN_KO - náklady_kl.akce_ČR' WHERE  ucet = 215735;
+
+UPDATE AC_Ucet_Mat SET popis = '0_S_PN_KO_AKCE_ČR', poznamka = 'Standarní úvěr 0_S_PN_KO - náklady_kl.akce_ČR' WHERE  ucet = 216735;
+
+UPDATE AC_Ucet_Mat SET popis = '0_D_PN_KO_AKCE_ČR', poznamka = 'Standarní úvěr 0_D_PN_KO - náklady_kl.akce_ČR' WHERE  ucet = 218735;
+
+UPDATE AC_Ucet_Mat SET popis = '1_X_PN_KO_AKCE_ČR', poznamka = 'Sledovaný úvěr 1_X_PN_KO - náklady_kl.akce_ČR' WHERE  ucet = 241735;
+
+UPDATE AC_Ucet_Mat SET popis = '2_X_PN_KO_AKCE_ČR', poznamka = 'Nestandardní úvěr 2_X_PN_KO - náklady_kl.akce_ČR' WHERE  ucet = 242735;
+
+UPDATE AC_Ucet_Mat SET popis = '3_X_PN_KO_AKCE_ČR', poznamka = 'Pochybný úvěr 3_X_PN_KO - náklady_kl.akce_ČR' WHERE  ucet = 243735;
+
+UPDATE AC_Ucet_Mat SET popis = '4_X_PN_KO_AKCE_ČR', poznamka = 'Ztrátový úvěr 4_X_PN_KO - náklady_kl.akce_ČR' WHERE  ucet = 244735;
+
+INSERT INTO ac_ucet_mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, basel)
+VALUES ('226138', 'A', 0, null, null, 1, 1, 1, 0, null, null, 'CZK', '3_FO_AKCE_ČR (Z,F)', 'Vklady.kl.spl.na pož. 3_FO_náklad_kl.akce_ČR (Z,F)', 0);
+
+INSERT INTO ac_ucet_mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, basel)
+VALUES ('226136', 'A', 0, null, null, 1, 1, 1, 0, null, null, 'CZK', '3_FO_PROV_ČR (Z,F)', 'Vklady.kl.spl.na pož. 3_FO_náklad_provize_ČR (Z,F)', 0);
+
+ROLLBACK WORK;
+
+--End of B132427_36886_3-ac_ucet_mat

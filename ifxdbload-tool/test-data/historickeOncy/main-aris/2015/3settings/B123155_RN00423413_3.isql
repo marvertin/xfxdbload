@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B123155_RN00423413_3
+-- @TC:ONCE: DESCRIPTION = Úpravy v modelování {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO rr_reptype_cis(repcode, area, repkind, reptype, repvar, repname, exportdir)
+  VALUES('SS004','SS', '00', 4, 0, 'Modelování SS – základní tisk','')
+;
+ 
+INSERT INTO rr_xreptype_cis(refrepcode, datod, predloha, soubor, platnost)
+  VALUES('SS004', mdy(7,1,1993), 'J', 'SS004.jrxml', 1);
+
+ROLLBACK WORK;
+
+--End of B123155_RN00423413_3

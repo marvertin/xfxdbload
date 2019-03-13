@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, B135253_UID71033_3
+-- @TC:ONCE: DESCRIPTION = Nastavit položku "uznatelné z pohledu angažovanosti" v číselníku zajištění
+
+BEGIN WORK;
+
+UPDATE EU_Zajist_Cis SET uznatelnostangaz = 0 WHERE zajist IN (101, 102);
+
+ROLLBACK WORK;

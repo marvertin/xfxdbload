@@ -1,0 +1,59 @@
+-- @TC:ONCE: ID = V2, B132881_UID50224_5
+-- @TC:ONCE: DESCRIPTION = Rozdělení číselníku variant PÚ na základ a časové rozlišení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- HR Dropy rozděleny na více příkazů kvůli TCSD-1419 
+
+-- 80  eu_variapu_acis-3/3       [DROP.COLUMN]
+ALTER TABLE eu_variapu_acis
+    DROP akce,
+    DROP podakce,
+    DROP vsechnytarify,
+    DROP procnasp;
+    
+ALTER TABLE eu_variapu_acis    DROP minuz,
+    DROP prizzvlzprac,
+    DROP kontrsaldosscerp,
+    DROP minsaldosscerp,
+    DROP podmhistspor;
+    
+ALTER TABLE eu_variapu_acis    DROP podmhistuv,
+    DROP pozadpodmhist,
+    DROP maxnezajvyse,
+    DROP klientnabizet,
+    DROP nabizprouz;
+    
+ ALTER TABLE eu_variapu_acis   DROP nabizod,
+    DROP nabizdo,
+    DROP podepsatbiom,
+    DROP vysepubiom;
+
+-- 86  eu_variapu_cis-6/6       [DROP.COLUMN]
+
+ALTER TABLE eu_variapu_cis    DROP akce,
+    DROP podakce;
+    
+ALTER TABLE eu_variapu_cis    DROP vsechnytarify,
+    DROP procnasp,
+    DROP minuz,
+    DROP prizzvlzprac,
+    DROP maxnezajvyse;
+    
+ALTER TABLE eu_variapu_cis    DROP kontrsaldosscerp,
+    DROP minsaldosscerp,
+    DROP klientnabizet,
+    DROP podmhistuv;
+    
+ALTER TABLE eu_variapu_cis    DROP pozadpodmhist,
+    DROP nabizprouz,
+    DROP nabizod;
+    
+ALTER TABLE eu_variapu_cis    DROP nabizdo,
+    DROP podepsatbiom,
+    DROP vysepubiom;
+
+ROLLBACK WORK;
+
+--End of B132881_UID50224_5

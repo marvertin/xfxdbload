@@ -1,0 +1,52 @@
+CREATE FUNCTION A43186_ZalozOsobu (
+  AIc       CHAR(13),
+  ANazev    CHAR(200),
+  AUlice    CHAR(45),
+  Acpopis   CHAR(8),
+  Acorient  CHAR(8),
+  Aad3      CHAR(60),
+  Apsc      CHAR(5)  
+  ) 
+  RETURNING INTEGER;
+  
+  DEFINE _po            INTEGER;
+  DEFINE _statprisl     CHAR(2);
+  DEFINE _statut        INTEGER;
+  DEFINE _formaprav     INTEGER;
+  DEFINE _cinnostdruh   INTEGER;
+  DEFINE _sektor        INTEGER;
+  DEFINE _klasif        INTEGER;
+  DEFINE _resident      INTEGER;
+  
+  LET _po = EO_GetIDFromRcIco(AIc,'PO');
+  
+  IF _po IS NOT NULL THEN
+    RETURN _po;
+  ELSE
+  
+    let _statprisl   = TW_RegGetKey('EO','ENVIRONMENT','STATEPRISL','*');
+    let _statut      = TW_RegGetKey('EO','ENVIRONMENT','STATUT','*',0);
+    let _sektor      = 0;
+    let _klasif      = 0;
+    let _formaprav   = 13;
+    let _cinnostdruh = 0;
+    let _resident    = TW_RegGetKey('EO','ENVIRONMENT','DEFPOPLATNIKDAN','*',1);
+  
+    INSERT INTO EO_Osoba_Mat (typos, klasifikace, klasklient, stav, datzanik, residentflag)
+    VALUES ('P', 0, 0, 'A', NULL, _resident );
+    let _po = TW_LastSer();
+
+    UPDATE eo_osoba_mat
+    SET bic = _po
+    WHERE os = _po;
+
+    INSERT INTO EO_PO_Mat ( PO, ico, nazevmajitel, formaprav,ad2,ad3,ad4,psc,statprisl,
+                           sektoreko, klasodv,zapisobrej, cinnostdruh, statut, cpopis, corient)
+    VALUES  ( _po, AIc, ANazev, _formaprav,AUlice,Aad3,NULL,Apsc,_statprisl,
+                           _sektor, _klasif,0, _cinnostdruh, _statut, Acpopis, Acorient);  
+  
+  END IF;
+  
+  RETURN _po;
+  
+END FUNCTION;

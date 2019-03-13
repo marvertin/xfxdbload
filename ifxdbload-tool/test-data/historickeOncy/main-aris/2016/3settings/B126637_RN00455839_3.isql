@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B126637_RN00455839_3
+-- @TC:ONCE: DESCRIPTION = Chybně implementované názvy registrů v DB
+BEGIN WORK;
+
+call TW_RegSetAnalytickyPopis('SP','NAROK_SP','VYPOCET','ZAKAZ','Státní podpora','Státní podpora - Akce přípis','Crediting SS','Zákaz výpočtu nároku na SP',1);
+
+call TW_RegSetAnalytickyPopis('EU','*','*','useTcImplScoringProc','Úvěr','Úvěrová smlouva','Management of credit contract','Používat testovací procuduru pro ladění skórovací funkce',1);
+
+call TW_RegSetAnalytickyPopis('CL','akviz','20','predstih','RSTS','Nedefinováno','Nedefinováno','Nedefinováno',1);
+
+call TW_RegSetAnalytickyPopis('CL','akviz','50','limitnasporPU','RSTS','Nedefinováno','Nedefinováno','Nedefinováno',1);
+
+ROLLBACK WORK;
+--End of B126637_RN00455839_3

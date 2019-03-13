@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B120533_RN00413743_3
+-- @TC:ONCE: DESCRIPTION = Rozšíření kontroly rizikových subjektů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU',187, 'Spuštění kontroly rizikových subjektů pro smlouvu: <smlouva>',1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU',188, 'Spuštění kontroly osobních dokladů pro smlouvu: <smlouva>',1);
+
+ROLLBACK WORK;
+
+--End of B120533_RN00413743_3

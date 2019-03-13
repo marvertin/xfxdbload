@@ -1,0 +1,37 @@
+-- @TC:ONCE: ID = V2, B114072_RN00380432_1
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Export úvěrové smlouvy {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table EU_ExpUcel_Den 
+  drop nParcela
+  , drop nCisloPopisne
+  , drop nKatastr
+  , drop nkatastrkod
+  , drop nkatastruzemi
+  , drop nkaturadkod
+  , drop nkaturadnazev
+  , drop nOkres
+  , drop nOdhadCena
+  , drop nUcetCena
+  , drop nCisloVlastListu
+  , add refskupina bigint;
+
+alter table EU_ExpZaj_Den
+  drop nzastHodnota
+  , drop prednostNaroky
+  , drop ncisloEvidencni
+  , drop ntrzniHodnota
+  , drop ncelkHodnota
+  , drop nvyuzitiVZaj
+  , drop nstavPojist
+  , drop nznalec
+  , drop ncisloPosudku
+  , drop npopis
+  , add refzastavnisml bigint
+  , add reffunkcnicelek bigint; 
+  
+ROLLBACK WORK;
+
+--End of B114072_RN00380432_1

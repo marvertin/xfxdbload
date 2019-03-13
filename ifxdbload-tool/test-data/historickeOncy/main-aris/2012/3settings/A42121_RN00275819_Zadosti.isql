@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, A42121_RN00275819_Zadosti
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - doplnìní typù žádosti
+
+BEGIN WORK;
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o zmìnu registrovaného e-mailu.' WHERE typzadost = 'A';
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o zmìnu mobil SIS.' WHERE typzadost = 'B';
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o zmìnu zpùsobu korespondence mezi klientem a spoøitelnou.' WHERE typzadost = 'C';
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o mimoøádný výpis z úètu.' WHERE typzadost = 'D';
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o zmìnu smlouvy SS.' WHERE typzadost = 'E';
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o novou smlouvu SS' WHERE typzadost = 'F';
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o zmìnu osobních údajù.' WHERE typzadost = 'G';
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o zmìnu kontaktních údajù.' WHERE typzadost = 'H';
+
+UPDATE ep_typzadost_cis SET poznamka = 'Žádost o zmìnu korespondence.' WHERE typzadost = 'I';
+
+ROLLBACK WORK;
+

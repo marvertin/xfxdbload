@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135427_UID73558_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22637: Výkonnost: Procedure: aris.cpd_naplnfcetmp {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+CREATE INDEX ecm_pozadavek_kart_i5 ON ecm_pozadavek_kart(portime);
+
+ROLLBACK WORK;
+
+--End of B135427_UID73558_1

@@ -1,0 +1,128 @@
+-- @TC:ONCE: ID = V2, B124842_RN00423411_3
+-- @TC:ONCE: DESCRIPTION = Rozhodovací nástroj pro variantu PÚ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--procedury
+insert into eu_procedurarozhod_cis (nazev, platnost) VALUES ('Úvěrová historie klienta úrovně 2', 1);
+
+
+insert into eu_procedurarozhod_cis (nazev, platnost) VALUES ('Úvěrová historie klienta úrovně 1', 1);
+
+
+--otazky
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (1,'Zaměstnanecký úvěr?','',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (2,'Zajištění nemovitostí?','',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (3,'Refinancování?','HYPO větev',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (4,'EKO?','HYPO větev',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (5,'Historie?','HYPO větev',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (51,'Manuálně doložená historie?','HYPO větev',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (6,'Refinancování?','REKO větev',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (7,'EKO?','REKO větev',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (8,'Historie?','REKO větev',mdy(1,1,2016),null,1);
+
+
+insert into eu_otazkarozhod_cis (id,text,poznamka,platnostod,platnostdo,platnost) VALUES (81,'Manuálně doložená historie?','REKO větev',mdy(1,1,2016),null,1);
+
+--odpovedi
+insert into eu_odpovedrozhod_cis (id,typodpoved,platnostod,platnostdo,textodpoved,refprocedurarozhod,povolhodnoty,platnost) 
+                         VALUES (1,'DEFTEXT', mdy(1,1,2016),null,'Ano',null,null,1);
+
+insert into eu_odpovedrozhod_cis (id,typodpoved,platnostod,platnostdo,textodpoved,refprocedurarozhod,povolhodnoty,platnost) 
+                         VALUES (2,'DEFTEXT', mdy(1,1,2016),null,'Ne',null,null,1);
+
+insert into eu_odpovedrozhod_cis (id,typodpoved,platnostod,platnostdo,textodpoved,refprocedurarozhod,povolhodnoty,platnost) 
+                         VALUES (3,'VYSLPROC', mdy(1,1,2016),null,null,(SELECT serno FROM eu_procedurarozhod_cis WHERE nazev = 'Úvěrová historie klienta úrovně 2'),null,1);
+
+insert into eu_odpovedrozhod_cis (id,typodpoved,platnostod,platnostdo,textodpoved,refprocedurarozhod,povolhodnoty,platnost) 
+                         VALUES (4,'VYSLPROC', mdy(1,1,2016),null,null,(SELECT serno FROM eu_procedurarozhod_cis WHERE nazev = 'Úvěrová historie klienta úrovně 1'),null,1);
+
+
+----sada vazeb
+insert into eu_sadavazebrozhod_cis (nazev, platnostod, platnost) VALUES ('Sada 1', mdy(1,1,2016), 1);
+
+----vazby
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 1),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1),null,null,null,1);
+                        
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 1),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2),null,null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 2),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 2),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1),null,null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 3),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 2),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2),null,null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 3),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1),null,null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 3),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2),null,null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 4),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 4),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1),null,null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 4),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2),null,null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3),'Ano',null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3),'Ne',null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 51),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 51),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1),null,null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 51),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2),null,null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1),null,null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2),null,null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 7),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 7),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1),null,null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 7),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2),null,null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 8),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 8),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 4),'Ano',null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 8),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 4),'Ne',null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 81),1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 81),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 1),null,null,null,1);
+
+insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 81),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 2),null,null,null,1);
+
+--varianty
+--protoze je tam cizi klic na varianty a ne vsechny varianty z excelu jsou na vsech databazich,
+--udelano procedurou ve fazi 4migration
+ 
+ROLLBACK WORK;
+
+--End of B124842_RN00423411_3

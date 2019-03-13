@@ -1,0 +1,48 @@
+-- @TC:ONCE: ID = V2, B134609_UID58704_1
+-- @TC:ONCE: DESCRIPTION = RSTS-15028: IFRS - bEIR {DEFECT}
+
+BEGIN WORK;
+
+alter table ep_splspormoderr_den add (
+
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  refdatprov   DATE
+)
+;
+
+CREATE TABLE ep_splspormoderrbody_den (
+  ser   SERIAL NOT NULL,
+  headser   INTEGER,
+  origin   CHAR(1),
+  accounttype   CHAR(1),
+  ordernumber   Integer,
+  operationtype   CHAR(1),
+  valutaday   DATE,
+  amount   DECIMAL(16, 2),
+  amountprincipal   DECIMAL(16, 2),
+  amountsupplement   DECIMAL(16, 2),
+  sumsavedamount   DECIMAL(16, 2),
+  sumsavedamountprincipal   DECIMAL(16, 2),
+  sumsavedamountsupplement   DECIMAL(16, 2),
+  onlytosupplrpsn   Integer  DEFAULT 0,
+  CHECK (onlytosupplrpsn IN (0,1)) CONSTRAINT ep_splspormoderrbody_den_d4rf
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splspormoderrbody_den_pk ON ep_splspormoderrbody_den(ser);
+ALTER TABLE ep_splspormoderrbody_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splspormoderrbody_den_pk;
+
+--FK
+CREATE INDEX ep_splspormoderrbody_den_i_f1 ON ep_splspormoderrbody_den(headser);
+ALTER TABLE ep_splspormoderrbody_den ADD CONSTRAINT FOREIGN KEY(headser) REFERENCES ep_splspormoderr_den(ser) CONSTRAINT ep_splspormoderrbody_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+ROLLBACK WORK;
+
+--End of B134609_UID58704_1

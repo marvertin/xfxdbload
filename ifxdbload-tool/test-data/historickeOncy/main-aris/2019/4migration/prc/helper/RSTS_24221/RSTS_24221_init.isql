@@ -1,0 +1,117 @@
+CREATE PROCEDURE RSTS_24221_init(ATest INT DEFAULT 0)   
+
+  DEFINE _mapkod      CHAR(20);
+  DEFINE _sko         CHAR(4); 
+  DEFINE _typdluhu    INT;
+  DEFINE _tsml        CHAR(4);
+
+  IF(ATest = 0) THEN
+    BEGIN WORK;
+  END IF;  
+  
+  IF(EXISTS(SELECT 1 FROM ac_mapkod_cis WHERE kod = 'PREUC')) THEN
+    CALL TW_RaiseError ('136Y784TCUI', 'RSTS_24221_init:', 'INIT fáze již byla spuštěna.');
+  END IF;
+  
+  INSERT INTO ac_ucet_mat (ucet, mena, popis, basel) VALUES ('229990', 'CZK', 'přeúčtování úvěrové pohledávky', 0);
+  INSERT INTO ac_ucet_mat (ucet, mena, popis, basel) VALUES ('229991', 'CZK', 'ostatní přeúčtování v rozvaze', 0);
+  INSERT INTO ac_ucet_mat (ucet, mena, popis, basel, jepodrozvaha) VALUES ('999991', 'CZK', 'přeúčtování v podrozvaze', 0, 1);
+  INSERT INTO ac_ucet_mat (ucet, mena, popis, basel, jepodrozvaha) VALUES ('999992', 'CZK', 'přeúčtování v podrozvaze - souvztažný účet', 0, 1);
+  
+  LET _mapkod = 'PREUC';
+  
+  INSERT INTO ac_mapkod_cis (kod, popis, platnost) VALUES (_mapkod, 'mapkod pro přeúčtování', 1);
+  
+  FOR _sko IN ('PRIN', 'MPRI', 'INTS', 'MINT')
+    INSERT INTO ac_skomap_cis (mapkod, tko, sko, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+    VALUES (_mapkod, 'CA', _sko, '229990', NULL, NULL, 0, 1); 
+  END FOR;
+  
+  FOR _sko IN ('PINT', 'MPIN')
+    INSERT INTO ac_skomap_cis (mapkod, tko, sko, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+    VALUES (_mapkod, 'CA', _sko, '999991', '999992', NULL, 1, 1); 
+  END FOR;  
+  
+  FOR _sko IN ('PYMT', 'OVRP')
+    INSERT INTO ac_skomap_cis (mapkod, tko, sko, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+    VALUES (_mapkod, 'CA', _sko, '229991', NULL, NULL, 0, 1); 
+  END FOR;  
+  
+  FOREACH c1 WITH HOLD FOR 
+    SELECT typ INTO _typdluhu FROM ac_typdluhu_cis WHERE typ BETWEEN 300 AND 399 ORDER BY typ
+    
+    INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, jepodrozvaha, platnost)
+    VALUES (_typdluhu, _mapkod, 0, '229990', 0, 1);
+    
+    INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, jepodrozvaha, platnost)
+    VALUES (_typdluhu, _mapkod, 1, '229990', 0, 1);
+  END FOREACH;
+  
+  FOREACH c1 WITH HOLD FOR 
+    SELECT typ INTO _typdluhu FROM ac_typdluhu_cis WHERE typ BETWEEN 500 AND 599 ORDER BY typ
+    
+    INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, jepodrozvaha, platnost)
+    VALUES (_typdluhu, _mapkod, 0, '999991', '999998', 1, 1);
+    
+    INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, jepodrozvaha, platnost)
+    VALUES (_typdluhu, _mapkod, 1, '999991', '999998', 1, 1);
+  END FOREACH;       
+  
+  FOREACH c1 WITH HOLD FOR
+    SELECT DISTINCT tsml INTO _tsml FROM acr_ucet_cis WHERE tsml NOT IN ('SSFO', 'SSPO')
+    
+    INSERT INTO acr_ucet_cis (tsml, mapkod, typobj, ucet, platnost) VALUES (_tsml, _mapkod, 'U', '229990', 1);
+    INSERT INTO acr_ucet_cis (tsml, mapkod, typobj, ucet, platnost) VALUES (_tsml, _mapkod, 'A', '229990', 1);
+    INSERT INTO acr_ucet_cis (tsml, mapkod, typobj, ucet, platnost) VALUES (_tsml, _mapkod, 'P', '229990', 1);
+  END FOREACH;
+  
+  FOR _typdluhu IN (0, 1, 3, 6, 7)
+    INSERT INTO ru_opifrs9uct_cis (mapkod, typdluhu, promlcpohl, ucetop) 
+    VALUES (_mapkod, _typdluhu, 0, '229991');
+    
+    INSERT INTO ru_opifrs9uct_cis (mapkod, typdluhu, promlcpohl, ucetop) 
+    VALUES (_mapkod, _typdluhu, 1, '229991');     
+  END FOR;   
+  
+  INSERT INTO am_uvprislib_cis (mapkod, ucet, protiucet, popis) VALUES (_mapkod, '999991', '999992', 'Úvěrový příslib');  
+  
+  LET _mapkod = 'PREUC_ODEPS';
+  
+  INSERT INTO ac_mapkod_cis (kod, popis, platnost) VALUES (_mapkod, 'mapkod pro přeúčtování - odepsané', 1);
+  
+  FOR _sko IN ('PRIN', 'MPRI', 'INTS', 'MINT', 'PINT', 'MPIN')
+    INSERT INTO ac_skomap_cis (mapkod, tko, sko, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+    VALUES (_mapkod, 'CA', _sko, '999991', '999992', NULL, 1, 1); 
+  END FOR;
+  
+  FOR _sko IN ('PYMT', 'OVRP')
+    INSERT INTO ac_skomap_cis (mapkod, tko, sko, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+    VALUES (_mapkod, 'CA', _sko, '229991', NULL, NULL, 0, 1); 
+  END FOR;  
+  
+  FOREACH c1 WITH HOLD FOR 
+    SELECT typ INTO _typdluhu FROM ac_typdluhu_cis WHERE typ BETWEEN 300 AND 399 ORDER BY typ
+    
+    INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, jepodrozvaha, platnost)
+    VALUES (_typdluhu, _mapkod, 0, '999991', '999992', 1, 1);
+    
+    INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, jepodrozvaha, platnost)
+    VALUES (_typdluhu, _mapkod, 1, '999991', '999992', 1, 1);
+  END FOREACH;
+  
+  FOREACH c1 WITH HOLD FOR 
+    SELECT typ INTO _typdluhu FROM ac_typdluhu_cis WHERE typ BETWEEN 500 AND 599 ORDER BY typ
+    
+    INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, jepodrozvaha, platnost)
+    VALUES (_typdluhu, _mapkod, 0, '999991', '999992', 1, 1);
+    
+    INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, jepodrozvaha, platnost)
+    VALUES (_typdluhu, _mapkod, 1, '999991', '999992', 1, 1);
+  END FOREACH;       
+  
+  IF(ATest = 0) THEN
+    COMMIT WORK;
+  END IF;   
+    
+END PROCEDURE;
+

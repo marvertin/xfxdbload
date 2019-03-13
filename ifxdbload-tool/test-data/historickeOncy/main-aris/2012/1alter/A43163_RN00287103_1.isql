@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A43163_RN00287103_1
+-- @TC:ONCE: DESCRIPTION = Chybné/chybìjící referenèní údaje v èasovém snímku vym. pohledávky {DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE EU_SnimekVymPohl_Den
+  ADD reftimevympohl datetime year to second BEFORE treal,
+  ADD refuservympohl CHAR(20) BEFORE treal;
+  
+ALTER TABLE EU_SnimekExekuce_Den
+  ADD portimeexek datetime year to second BEFORE reftime,
+  ADD poruserexek CHAR(20) BEFORE reftime,
+  ADD reftimeexek datetime year to second BEFORE reftime,
+  ADD refuserexek CHAR(20) BEFORE reftime;
+  
+ALTER TABLE EU_SnimekExekPrikaz_Den
+  ADD portimeprikaz datetime year to second BEFORE reftime,
+  ADD poruserprikaz CHAR(20) BEFORE reftime,
+  ADD reftimeprikaz datetime year to second BEFORE reftime,
+  ADD refuserprikaz CHAR(20) BEFORE reftime;
+  
+ROLLBACK WORK;
+
+--End of A43163_RN00287103_1

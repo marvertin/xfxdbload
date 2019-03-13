@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B126444_RN00452673_3
+-- @TC:ONCE: DESCRIPTION = Změna evidence zadržené SP, resp. převodů zadržené SP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- #Druh přeúčtování vrácení zadržené SP#
+Call TW_RegSetOrAddKey('RP', 'kontosp', '*', 'druhuctprevodvraceni', 'SP33', 1, 'Spoření', 'Zadržená SP', 'Vrácení', 'Druh přeúčtování vrácení zadržené SP');
+
+-- #Provozní konto vrácení zadržené SP#
+Call TW_RegSetOrAddKey('RP', 'kontosp', '*', 'pkprevodvraceni', null, 1, 'Spoření', 'Zadržená SP', 'Vrácení', 'Provozní konto vrácení zadržené SP');
+
+
+ROLLBACK WORK;
+
+--End of B126444_RN00452673_3

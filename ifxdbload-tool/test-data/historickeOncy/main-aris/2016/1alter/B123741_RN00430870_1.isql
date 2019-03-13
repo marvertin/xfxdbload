@@ -1,0 +1,192 @@
+-- @TC:ONCE: ID = V2, B123741_RN00430870_1
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_otazkagenusd_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  popis   CHAR(35),
+  textotazky   VARCHAR(255),
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  platnostod   DATE,
+  platnostdo   DATE,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_otazkagenusd_acis_dnoi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_otazkagenusd_acis_pk ON eu_otazkagenusd_acis(idarch);
+
+ALTER TABLE eu_otazkagenusd_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_otazkagenusd_acis_pk;
+
+CREATE TABLE eu_otazkagenusd_cis (
+  serno   SERIAL NOT NULL,
+  popis   CHAR(35),
+  textotazky   VARCHAR(255),
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  platnostod   DATE,
+  platnostdo   DATE,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_otazkagenusd_cis_dno7
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_otazkagenusd_cis_pk ON eu_otazkagenusd_cis(serno);
+
+ALTER TABLE eu_otazkagenusd_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_otazkagenusd_cis_pk;
+
+CREATE TABLE eu_odpovedgenusd_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  refotazkagenusd   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  odpoved   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_odpovedgenusd_arch_pk ON eu_odpovedgenusd_arch(idarch);
+
+ALTER TABLE eu_odpovedgenusd_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_odpovedgenusd_arch_pk;
+
+CREATE TABLE eu_odpovedgenusd_mat (
+  serno   BIGINT NOT NULL,
+  refotazkagenusd   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  odpoved   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_odpovedgenusd_mat_pk ON eu_odpovedgenusd_mat(serno);
+
+ALTER TABLE eu_odpovedgenusd_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_odpovedgenusd_mat_pk;
+
+--FK
+CREATE INDEX eu_odpovedgenusd_mat_i_f1 ON eu_odpovedgenusd_mat(refotazkagenusd);
+
+ALTER TABLE eu_odpovedgenusd_mat ADD CONSTRAINT FOREIGN KEY(refotazkagenusd) REFERENCES eu_otazkagenusd_cis(serno) CONSTRAINT eu_odpovedgenusd_mat_f1;
+
+CREATE INDEX eu_odpovedgenusd_mat_i_f2 ON eu_odpovedgenusd_mat(smlouva,tsml);
+
+ALTER TABLE eu_odpovedgenusd_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_odpovedgenusd_mat_f2;
+
+----------------------------------------------------------------
+CREATE TABLE eu_pozdokumentusd_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT,
+  reftypdokumentu   INTEGER,
+  refdokument   BIGINT,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  typecm   CHAR(35),
+  obsahecm   CHAR(35),
+  podobsahecm   CHAR(35),
+  vazanynaosobu   Integer  DEFAULT 0,
+  osobaid   CHAR(10),
+  osobarolesml   Integer  DEFAULT 0,
+  pozadovano   Integer  DEFAULT 0,
+  pripravenoecm   Integer  DEFAULT 0,
+  ecmid   Integer,
+  problem  Integer,
+  nadramecpozad   Integer,
+  nepozadovat   CHAR(1),
+  nazevdokecm   char(120),
+  platnost   Integer  DEFAULT 1,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (vazanynaosobu IN (0,1)) CONSTRAINT eu_pozdokumentusd_arch_dnqm,
+  CHECK (osobarolesml IN (0,1)) CONSTRAINT eu_pozdokumentusd_arch_dnq0,
+  CHECK (pozadovano IN (0,1)) CONSTRAINT eu_pozdokumentusd_arch_dnq1,
+  CHECK (pripravenoecm IN (0,1)) CONSTRAINT eu_pozdokumentusd_arch_dnq2,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_pozdokumentusd_arch_dnq8
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_pozdokumentusd_arch_pk ON eu_pozdokumentusd_arch(idarch);
+
+ALTER TABLE eu_pozdokumentusd_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_pozdokumentusd_arch_pk;
+
+CREATE TABLE eu_pozdokumentusd_mat (
+  serno   BIGINT NOT NULL,
+  reftypdokumentu   INTEGER,
+  refdokument   BIGINT,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  typecm   CHAR(35),
+  obsahecm   CHAR(35),
+  podobsahecm   CHAR(35),
+  vazanynaosobu   Integer  DEFAULT 0,
+  osobaid   CHAR(10),
+  osobarolesml   Integer  DEFAULT 0,
+  pozadovano   Integer  DEFAULT 0,
+  pripravenoecm   Integer  DEFAULT 0,
+  ecmid   Integer,
+  problem   Integer,
+  nadramecpozad   Integer,
+  nepozadovat   CHAR(1),
+  nazevdokecm   char(120),
+  platnost   Integer  DEFAULT 1,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (vazanynaosobu IN (0,1)) CONSTRAINT eu_pozdokumentusd_mat_dnph,
+  CHECK (osobarolesml IN (0,1)) CONSTRAINT eu_pozdokumentusd_mat_dnpj,
+  CHECK (pozadovano IN (0,1)) CONSTRAINT eu_pozdokumentusd_mat_dnpk,
+  CHECK (pripravenoecm IN (0,1)) CONSTRAINT eu_pozdokumentusd_mat_dnpl,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_pozdokumentusd_mat_dnpr
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_pozdokumentusd_mat_pk ON eu_pozdokumentusd_mat(serno);
+
+ALTER TABLE eu_pozdokumentusd_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_pozdokumentusd_mat_pk;
+
+--FK
+CREATE INDEX eu_pozdokumentusd_mat_i_f1 ON eu_pozdokumentusd_mat(smlouva,tsml);
+
+ALTER TABLE eu_pozdokumentusd_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_pozdokumentusd_mat_f1;
+
+CREATE INDEX eu_pozdokumentusd_mat_i_f2 ON eu_pozdokumentusd_mat(reftypdokumentu);
+
+ALTER TABLE eu_pozdokumentusd_mat ADD CONSTRAINT FOREIGN KEY(refdokument) REFERENCES do_dokument_mat(serno) CONSTRAINT eu_pozdokumentusd_mat_f2;
+
+ALTER TABLE eu_pozdokumentusd_mat ADD CONSTRAINT FOREIGN KEY(reftypdokumentu) REFERENCES do_typdokumentu_cis(doktyp) CONSTRAINT eu_pozdokumentusd_mat_f3;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE eu_pozdokumentusd_mat
+ADD CONSTRAINT (CHECK (problem in (0,1,2)) CONSTRAINT eu_pozdokumentusd_mat_c1),
+ADD CONSTRAINT (CHECK (nadramecpozad in (0,1,-1)) CONSTRAINT eu_pozdokumentusd_mat_c2),
+ADD CONSTRAINT (CHECK (nepozadovat in ('N', 'P')) CONSTRAINT eu_pozdokumentusd_mat_c3);
+
+
+ROLLBACK WORK;
+
+--End of B123741_RN00430870_1

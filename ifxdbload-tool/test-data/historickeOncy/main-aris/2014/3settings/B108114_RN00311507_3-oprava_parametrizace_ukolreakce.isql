@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B108114_RN00311507_3-oprava_parametrizace_ukolreakce
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+Update EP_UkolReakce_Cis
+    Set refukoltyp = (Select u.serno From EP_UkolTyp_Cis u Where u.nazev = 'Kontrola stavu insolvenčního řízení bez úpadku, odmítnutí nebo ukončení')
+  Where reffunkce = (Select uf.serno From EP_UlohaFunkce_Cis uf Where uf.id = 'ZAHAJIT')
+    and refukoltyp = (Select ut.serno From EP_UkolTyp_Cis ut Where ut.nazev = 'Termín splatnosti výzvy pro fázi 2');
+
+Update EP_UkolReakce_Cis
+    Set refukoltyp = (Select u.serno From EP_UkolTyp_Cis u Where u.nazev = 'Termín pro způsob řešení úpadku')
+  Where reffunkce = (Select uf.serno From EP_UlohaFunkce_Cis uf Where uf.id = 'ZADKONKURZ')
+    and refukoltyp = (Select ut.serno From EP_UkolTyp_Cis ut Where ut.nazev = 'Promlčecí lhůta k výzvě pro fázi 1');
+
+Update EP_UkolReakce_Cis
+    Set refukoltyp = (Select u.serno From EP_UkolTyp_Cis u Where u.nazev = 'Termín pro způsob řešení oddlužení')
+  Where reffunkce = (Select uf.serno From EP_UlohaFunkce_Cis uf Where uf.id = 'ZADSPLKAL')
+    and refukoltyp = (Select ut.serno From EP_UkolTyp_Cis ut Where ut.nazev = 'Promlčecí lhůta k výzvě pro fázi 2');
+
+ROLLBACK WORK;
+--End of B108114_RN00311507_3-oprava_parametrizace_ukolreakce

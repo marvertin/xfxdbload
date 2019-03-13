@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A47309_RN00292084
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda
+
+BEGIN WORK;
+
+ALTER TABLE EU_SplatKIn_Mat ADD (odkladduvod INTEGER); 
+
+CREATE INDEX eu_splatkin_mat_i_f2 ON eu_splatkin_mat(odkladduvod);
+ALTER TABLE eu_splatkin_mat ADD CONSTRAINT FOREIGN KEY(odkladduvod) REFERENCES eu_odkladduvod_cis(id) CONSTRAINT eu_splatkin_mat_f2;
+
+ALTER TABLE EU_SplatKIn_Arch ADD (odkladduvod INTEGER);
+
+ROLLBACK WORK;

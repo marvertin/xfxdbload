@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A41807_RN00282867
+-- @TC:ONCE: DESCRIPTION = Nový typ identifikátoru osoby pro právnické osoby
+
+BEGIN WORK;
+
+INSERT INTO eo_typid_cis(typid, popis, typos, defaulttype, pl)
+  VALUES('C', 'IÈ', 'P', 0, 1);
+
+ROLLBACK;

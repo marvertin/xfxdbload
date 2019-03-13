@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B111170_RN00380426_3-zruseniRegistru
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegDelKey('EV','nemov','katastruzemi','chybanenivcis');
+call TW_RegDelKey('EV','nemov','katastruzemi','edit');
+call TW_RegDelKey('EV','*','nemovitost','katastrFE');
+call TW_RegDelKey('EV','preceneni','druhvec','kontrola');
+
+ROLLBACK WORK;
+
+--End of B111170_RN00380426_3-zruseniRegistru

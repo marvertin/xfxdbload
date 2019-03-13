@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B131746_36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table eo_tigertyp_acis
+   --Příznak, zda se jedná  typ retailového klienta 
+   add retail Integer
+ , add constraint CHECK (retail IN (0,1)) CONSTRAINT eo_tigertyp_acis_dwem
+;
+
+alter table eo_tigertyp_cis
+   --Příznak, zda se jedná  typ retailového klienta 
+   add retail Integer DEFAULT 0 NOT NULL
+ , add constraint CHECK (retail IN (0,1)) CONSTRAINT eo_tigertyp_cis_dwel
+;
+  
+ROLLBACK WORK;
+
+--End of B131746_36779_1

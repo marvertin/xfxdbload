@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A56882_RN00214648_3-hypo
+-- @TC:ONCE: DESCRIPTION = Odstranìní funkcionality související se soubìžným provozem StarBuildu a CIBISu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegDelKey('EP', 'HYPO' , '*', 'data');
+
+ROLLBACK WORK;
+
+--End of A56850_RN00214648_3-hypo

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A43495_RN00269923_1
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE UNIQUE INDEX rn00269923_exek_prik_pk
+    ON rn00269923_exek_prik (smlouva, cisloPrikazu);
+    
+ALTER TABLE rn00269923_exek_prik ADD CONSTRAINT PRIMARY KEY(smlouva, cisloPrikazu) CONSTRAINT rn00269923_exek_prik_pk;
+
+ROLLBACK WORK;
+
+--End of A43495_RN00269923_1

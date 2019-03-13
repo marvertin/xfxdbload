@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B112328_RN00370154_1
+-- @TC:ONCE: DESCRIPTION = Úpravy modelování - CIBIS-Sale a CIBIS-Web {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_contractdata
+  drop accountOwnerType
+;
+
+ROLLBACK WORK;
+
+--End of B112328_RN00370154_1

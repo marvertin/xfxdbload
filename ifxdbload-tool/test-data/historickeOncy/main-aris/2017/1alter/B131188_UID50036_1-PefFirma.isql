@@ -1,0 +1,171 @@
+-- @TC:ONCE: ID = V2, B131188_UID50036_1-PefFirma
+-- @TC:ONCE: DESCRIPTION = Rozšířit číselníky dat z CRIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+-- ###############################################################
+-- ###############################################################
+-- pef_firma_cis
+
+CREATE TABLE pef_firma_cis (
+  serno   SERIAL NOT NULL,
+  nazev   CHAR(60) NOT NULL,
+  ico   CHAR(10) NOT NULL,
+  whitelist   Integer  DEFAULT 0 NOT NULL,
+  existcribis   Integer  DEFAULT 0 NOT NULL,
+  ulice   VARCHAR(60),
+  cpopis   CHAR(8),
+  corient   CHAR(8),
+  obec   VARCHAR(100),
+  psc   CHAR(5),
+  stat   VARCHAR(60),
+  adresa   VARCHAR(255),
+  kodadm   CHAR(10),
+  adrruianpouzito   Integer  DEFAULT 0 NOT NULL,
+  adrruiansynch   datetime year to second,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  overeno   Integer  DEFAULT 0 NOT NULL,
+  zpusobporizeni   CHAR(10),
+  datumzalozeni   DATE,
+  datzrusregdph   DATE,
+  katpoczam   VARCHAR(70),
+  aktcribisuser   CHAR(20),
+  aktcribistime   datetime year to second,
+  overuser   CHAR(20),
+  overtime   datetime year to second,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (whitelist IN (0,1)) CONSTRAINT pef_firma_cis_dttg,
+  CHECK (existcribis IN (0,1)) CONSTRAINT pef_firma_cis_dttm,
+  CHECK (adrruianpouzito IN (0,1)) CONSTRAINT pef_firma_cis_dttf,
+  CHECK (platnost IN (0,1)) CONSTRAINT pef_firma_cis_dttj,
+  CHECK (overeno IN (0,1)) CONSTRAINT pef_firma_cis_dttn
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firma_cis_pk ON pef_firma_cis(serno);
+ALTER TABLE pef_firma_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firma_cis_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX pef_firma_cis_i1 ON pef_firma_cis(nazev);
+
+
+
+-- ###############################################################
+-- pef_firma_acis
+
+CREATE TABLE pef_firma_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  nazev   CHAR(60) NOT NULL,
+  ico   CHAR(10) NOT NULL,
+  whitelist   Integer NOT NULL,
+  existcribis   Integer NOT NULL,
+  ulice   VARCHAR(60),
+  cpopis   CHAR(8),
+  corient   CHAR(8),
+  obec   VARCHAR(100),
+  psc   CHAR(5),
+  stat   VARCHAR(60),
+  adresa   VARCHAR(255),
+  kodadm   CHAR(10),
+  adrruianpouzito   Integer NOT NULL,
+  adrruiansynch   datetime year to second,
+  poznamka   CHAR(70),
+  platnost   Integer NOT NULL,
+  overeno   Integer NOT NULL,
+  zpusobporizeni   CHAR(10),
+  datumzalozeni   DATE,
+  datzrusregdph   DATE,
+  katpoczam   VARCHAR(70),
+  aktcribisuser   CHAR(20),
+  aktcribistime   datetime year to second,
+  overuser   CHAR(20),
+  overtime   datetime year to second,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (whitelist IN (0,1)) CONSTRAINT pef_firma_acis_dtud,
+  CHECK (existcribis IN (0,1)) CONSTRAINT pef_firma_acis_dtue,
+  CHECK (adrruianpouzito IN (0,1)) CONSTRAINT pef_firma_acis_dtuf,
+  CHECK (platnost IN (0,1)) CONSTRAINT pef_firma_acis_dtun,
+  CHECK (overeno IN (0,1)) CONSTRAINT pef_firma_acis_dtuo
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firma_acis_pk ON pef_firma_acis(idarch);
+ALTER TABLE pef_firma_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT pef_firma_acis_pk;
+;
+
+
+
+-- ###############################################################
+-- ###############################################################
+-- pef_firmaPracovnik_mat
+
+CREATE TABLE pef_firmapracovnik_mat (
+  serno   BIGINT NOT NULL,
+  reffirma   INTEGER NOT NULL,
+  nazev   VARCHAR(60) NOT NULL,
+  telefon   CHAR(20),
+  overenido   DATE,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT pef_firmapracovnik_mat_dtv4
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmapracovnik_mat_pk ON pef_firmapracovnik_mat(serno);
+ALTER TABLE pef_firmapracovnik_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firmapracovnik_mat_pk;
+
+--FK
+CREATE INDEX pef_firmapracovnik_mat_i_fk1 ON pef_firmapracovnik_mat(reffirma);
+ALTER TABLE pef_firmapracovnik_mat ADD CONSTRAINT FOREIGN KEY(reffirma) REFERENCES pef_firma_cis(serno) CONSTRAINT pef_firmapracovnik_mat_fk1;
+
+
+
+-- ###############################################################
+-- pef_firmaPracovnik_arch
+
+CREATE TABLE pef_firmapracovnik_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  reffirma   INTEGER NOT NULL,
+  nazev   VARCHAR(60) NOT NULL,
+  telefon   CHAR(20),
+  overenido   DATE,
+  platnost   Integer NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT pef_firmapracovnik_arch_dtvg
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX pef_firmapracovnik_arch_pk ON pef_firmapracovnik_arch(idarch);
+ALTER TABLE pef_firmapracovnik_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT pef_firmapracovnik_arch_pk;
+
+
+
+-- ###############################################################
+
+
+ROLLBACK WORK;
+
+--End of B131188_UID50036_1-PefFirma

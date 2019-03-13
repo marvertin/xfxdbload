@@ -1,0 +1,64 @@
+-- @TC:ONCE: ID = V2, A47035_RN00282474_4-part3
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--Tyto migrace musíme udìlat napøed, protože úvìrová smlouva a typ je 
+--vazba do zmìn fází UNIQA(nemám totiž vìc)
+
+--5.  Inicializace kartotéky fází pojištìní 
+--Nové údaje jsou nastaveny do všech záznamù následovnì:
+--Èíslo pojištìné úvìrové smlouvy Èíslo úvìrové smlouvy
+--Typ pojištìné úvìrové smlouvy Typ úvìrové smlouvy
+--Splátka úvìru     <Prázdné >  - nebude se migrovat
+--Varianta pojištìní      #Defaultní varianta pojištìní UNIQA#
+--Rozhodné datum pro pojistné Datum návrhu (v matrice pojištìní UNIQA)
+--  Zpùsob zadání (Nové/Dodateèné)  <N – Nové>    –nebude se migrovat, v pøípadì  potøeby si RSTS pøenastaví manuálnì
+--Reference uživatele a èasu zrušen <Prázdné>   -- nebude se migrovat
+update ec_komcrp_kart set
+  (smlouva,tsml,variantaid,rozhdatumpoj,zpusobzadani) = ((
+    select p.smlouva,p.tsml,tw_reggetKey('EV','*','pojistUNIQA','DefVar'),rozhdatumpoj,'N'
+     from ev_pojistcrp_mat p where p.vec = ec_komcrp_kart.vec
+  ))
+  where vec in (select vec from ev_pojistcrp_mat)
+;
+
+--7.  Inicializace evidence výstupních dávek UNIQA
+--Nové údaje jsou nastaveny do všech záznamù následovnì:
+--Èíslo pojištìné úvìrové smlouvy Èíslo úvìrové smlouvy
+--Typ pojištìné úvìrové smlouvy Typ úvìrové smlouvy
+--Varianta pojištìní      #Defaultní varianta pojištìní UNIQA#
+--Externí identifikátor   Externí identifikátor pro #Defaultní varianta pojištìní 
+--UNIQA#
+--Rozhodné datum pro pojistné Datum návrhu (v matrice pojištìní UNIQA)
+--Zpùsob zadání (Nové/Dodateèné)  <N – Nové>    –nebude se migrovat, v pøípadì potøeby si RSTS pøenastaví manuálnì
+update ec_vystdav_rozp set
+ tsml = (select distinct f.tsml from ec_komcrp_kart f where f.smlouva=ec_vystdav_rozp.smlouva)
+ , variantaid = tw_reggetKey('EV','*','pojistUNIQA','DefVar')
+ , extident = (select extident from ev_varpojist_cis where id=tw_reggetKey('EV','*','pojistUNIQA','DefVar'))
+ , zpusobzadani = 'N'
+;
+
+update ec_vystdav_rozp set
+  rozhdatumpoj = (select MAX(p.rozhdatumpoj) from ev_pojistcrp_mat p 
+                    where p.smlouva=ec_vystdav_rozp.smlouva and p.tsml=ec_vystdav_rozp.tsml)
+;
+
+--8.  Inicializace evidence vstupních dávek UNIQA
+--Nové údaje jsou nastaveny do všech záznamù následovnì:
+--  Èíslo pojištìné úvìrové smlouvy Èíslo úvìrové smlouvy
+--  Typ pojištìné úvìrové smlouvy Typ úvìrové smlouvy
+--Externí identifikátor   Externí identifikátor pro #Defaultní varianta pojištìní 
+--UNIQA#
+--Varianta pojištìní      #Defaultní varianta pojištìní UNIQA#
+-- Zmìna varianty (1 -Ano/0 - Ne) <0 – Ne>
+update ec_vstdav_rozp set
+ tsml = (select distinct f.tsml from ec_komcrp_kart f where f.smlouva=ec_vstdav_rozp.smlouva)
+ , variantaid = tw_reggetKey('EV','*','pojistUNIQA','DefVar')
+ , extident = (select extident from ev_varpojist_cis where id=tw_reggetKey('EV','*','pojistUNIQA','DefVar'))
+ , variantazmena = 0
+;
+
+ROLLBACK WORK;
+
+--End of A47035_RN00282474_4-part3

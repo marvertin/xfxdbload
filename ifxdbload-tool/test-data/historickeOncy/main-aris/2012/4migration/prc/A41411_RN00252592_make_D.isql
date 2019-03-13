@@ -1,0 +1,144 @@
+create procedure A41411_RN00252592_make_D(-- vstupni paramtery
+                                    ADebugFile    Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                    ABezTransakci int default 0
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _realn         Int;
+define _konto         Dec(16,0);
+define _tko           char(2);
+define _poradi        int;
+define _smlouva       Dec(16,0);
+define _tsml          char(4);
+define _aktfaze       int;
+define _maxdatsplatfaze1    date;
+define _pocetobeslfaze1     int;
+define _os                  int;
+define _typrole             char(2);
+define _faze                int;
+define _vyzva               int; 
+define _datpor              date;    
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+  BEGIN WORK;
+end if;
+
+set triggers ru_vyzva_kart_u enabled;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka ('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00252592');
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, realn, poradi
+     INTO _ser,_realn, _poradi
+     FROM RN00252592
+    WHERE zprac < 0
+ ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00252592
+        SET(NumErr,ISAMErr,TextErr, zprac)= (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+
+    --vlastni algoritmus migrace
+    let _smlouva, _tsml = EP_SmlouvaReal(_realn);
+    IF(not exists(select 1 from ru_vyzvah_kart where smlouva = _smlouva and tsml = _tsml)) THEN
+      let _aktfaze = 0;
+      IF(exists(select 1 from ru_vyzva_kart where realn = _realn and stav = 'C')) THEN
+        let _aktfaze = 1;
+      END IF; 
+      IF(_smlouva is null) THEN
+        call TW_RaiseError ('414V13TCUI', 'A41412_RN00252592_make_D:', 'K realizaci nejde dohledat smlouvu.');
+      END IF;
+      let _maxdatsplatfaze1 = (select max(datvyzva) from ru_vyzva_kart where realn = _realn and stav='C');
+      IF(_maxdatsplatfaze1 IS NULL) THEN
+        let _maxdatsplatfaze1 = (select max(datvyzva) from ru_vyzva_kart where realn = _realn);
+      END IF;
+      let _pocetobeslfaze1 = (select count(*) from ru_vyzva_kart where realn = _realn and stav='C');
+      let _datpor = (select min(navtime) from ru_vyzva_kart where realn = _realn);    
+      INSERT INTO ru_vyzvah_kart (smlouva, tsml, cyklus, aktfaze, maxdatsplatfaze1, pocetobeslfaze1, pocetobeslfaze2, datpor)
+      VALUES (_smlouva, _tsml, 1, _aktfaze, _maxdatsplatfaze1, _pocetobeslfaze1, 0, _datpor);
+      let _vyzva = TW_LastSer();
+    ELSE
+      let _vyzva = (select ser from ru_vyzvah_kart where smlouva = _smlouva and tsml = _tsml);
+    END IF;    
+    
+    let _os = EP_KlientReal(_realn);
+    let _typrole = 'KL';
+    let _faze = 1;
+    
+    update ru_vyzva_kart set os = _os, typrole = _typrole, faze = _faze, vyzva = _vyzva where realn = _realn and poradi = _poradi;
+    --konec algoritmu migrace
+
+    --nastaví pøíznak na zpracováno +1
+    UPDATE RN00252592 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null WHERE ser = _ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--algoritmus dokonceni migrace
+set triggers ru_vyzva_kart_u disabled;
+
+--zápis o ukonèení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukonèení migrace/datové manipulace RN00252592');
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+end procedure;

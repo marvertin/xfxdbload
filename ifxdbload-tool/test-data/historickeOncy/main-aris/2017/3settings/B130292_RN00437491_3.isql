@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B130292_RN00437491_3
+-- @TC:ONCE: DESCRIPTION = Elektronický návrh na vklad {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update Do_TypDokumentu_Cis
+  set podobsah = '02' 
+  where text = 'Dokument návrhu na výmaz práva do KN FO'
+;
+
+update Do_TypDokumentu_Cis
+  set podobsah = '00' 
+  where text = 'Dokument návrhu na výmaz práva do KN PO'
+;
+
+ROLLBACK WORK;
+
+--End of B130292_RN00437491_3

@@ -1,0 +1,79 @@
+CREATE FUNCTION ES_DatExtParam ( aVyber          Char(30),
+                             aSmlouva        Dec(16,0) default null,  -- smlouva SS
+                             aTyp            Char(4) default null,    -- typ smlouvy SS
+                             aZakon          Integer default null,    -- zákon
+                             aVOP            Integer default null,    -- VOP
+                             aTarif          Integer default null,    -- tarif
+                             aDatNa          Date default null,       -- datum návrhu
+                             aDatUz          Date default null,       -- datum uzavøení
+                             aDatplatzakonOd Date default null,       -- datum nastavení zákona
+                             aDatplatvopOd   Date default null,       -- datum nastavení VOP
+                             aDatplattarifOd Date default null,       -- datum nastavení tarifu
+                             ADatNavZm       Date default null,       -- datum návrhu zmìny smlouvy
+                             aDatPlatZm      Date default null,       -- datum platnosti zmìny smlouvy
+                             aDatum          Date default null,       -- rozhodné datum
+                             AVariantaPU     CHAR(10) DEFAULT NULL,    -- varianta PU
+                             ADatSchvalPU    DATE DEFAULT NULL,       -- datum schválení PU
+                             AVek            integer default Null,   -- vìk klienta
+                             AVOPOld         Int default Null,        -- stará VOP
+                             ATarifOld       Int default Null     -- starý tarif
+                            )
+RETURNING char(40);
+
+define _rozhdatum       Date;
+define _VOP             Int;
+define _tarif           Int;
+define _zakon           Int;
+define _typ             Char(4);
+define _datna           Date;
+define _datuz           Date;
+define _datplatzakonod  Date;
+define _datplatvopod    Date;
+define _datplattarifod  Date;
+define _datnavzm        Date;
+define _datplatzm       Date;
+define _smlGet          Dec(16,0);
+
+
+if aSmlouva is not null then
+  SELECT  smlouva, VOP, tarif, zakon, datna, datuz, datplatzakonod, datplatvopod,
+          datplattarifod, datplatnostod, datplatnostod, typ
+    INTO _smlGet, _VOP,_tarif,_zakon,_datna,_datuz,_datplatzakonod,_datplatvopod,
+         _datplattarifod,_datnavzm,_datplatzm,_typ
+    FROM ES_Sml_Mat
+    WHERE smlouva = ASmlouva and typ = aTyp AND date(reftime) <= aDatum;
+  
+  if _smlGet is null then
+    foreach
+      SELECT  smlouva, VOP, tarif, zakon, datna, datuz, datplatzakonod, datplatvopod,
+              datplattarifod, datplatnostod, datplatnostod, typ
+        INTO _smlGet, _VOP,_tarif,_zakon,_datna,_datuz,_datplatzakonod,_datplatvopod,
+             _datplattarifod,_datnavzm,_datplatzm,_typ
+        FROM ES_Sml_Arch
+        WHERE smlouva = ASmlouva and typ = aTyp AND date(reftime) <= aDatum
+        ORDER BY reftime DESC
+      exit foreach;
+    end foreach;
+  end if; 
+   
+   
+else
+  let _VOP            = aVOP;
+  let _tarif          = aTarif;
+  let _zakon          = aZakon;
+  let _typ            = aTyp ;
+  let _datna          = aDatna;
+  let _datuz          = aDatuz;
+  let _datplatzakonod = adatplatzakonod;
+  let _datplatvopod   = adatplatvopod;
+  let _datplattarifod = adatplattarifod;
+  let _datnavzm       = adatnavzm;
+  let _datplatzm      = adatplatzm;
+end if
+
+let _rozhdatum  = es_getdatpar(avyber, _datna, _datuz, _datplatzakonod, _datplatvopod, _datplattarifod, _datnavzm, _datplatzm, adatum, ADatSchvalPU);
+
+return ES_GetParam (AVyber, _rozhdatum, _VOP, _tarif, _typ, _zakon, AVariantaPU, AVek, AVOPOld, ATarifOld,ASmlouva);
+
+end function;
+

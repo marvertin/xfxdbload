@@ -1,0 +1,81 @@
+CREATE PROCEDURE RSTS_13533_find_D ()
+
+define _ser          Int;
+define _sernodod     BigInt;
+define o_datplatnost Date;
+define o_datuzav     Date;
+define _datplatnost  Date;
+define _datuzav      Date;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RSTS_13533;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RSTS_13533(
+  Ser     Serial NOT NULL,  
+  NumErr  Int,              
+  ISAMErr Int,              
+  TextErr VarChar(255),     
+  zprac   SmallInt,         
+                            
+
+
+  sernodod        BigInt,
+  datplatnostold  Date,
+  datuzavold      Date,
+  datplatnost     Date,
+  datuzav         Date,
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+--plnime ridici tabulku - napr. z osob
+--dulezite je poradi vybiranych radku - v tomto poradi se budou
+--ukladat do ridici tabulky a v tomto poradi se bude i migrovat
+foreach cc1 with hold for
+  SELECT   a.serno,a.datplatnost,a.datuzav,   b.datakc,b.datprov
+    INTO _sernodod,o_datplatnost,o_datuzav,_datplatnost,_datuzav
+    FROM eu_dodatekhead_mat a, eu_akc_kart b
+   WHERE a.stav = 'MIGRACE' and a.serno = b.dodatekref 
+
+   --vlozeni do ridici tabulky
+  INSERT INTO RSTS_13533( sernodod, datplatnostold, datuzavold, datplatnost, datuzav , zprac)
+      VALUES(_sernodod,o_datplatnost,o_datuzav,_datplatnost,_datuzav , -1);
+
+   --nova transakce
+   COMMIT WORK;
+   BEGIN WORK;
+
+end foreach;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RSTS_13533;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;--end of RSTS_13533_find_D
+------------------------------------------------------------------------------
+

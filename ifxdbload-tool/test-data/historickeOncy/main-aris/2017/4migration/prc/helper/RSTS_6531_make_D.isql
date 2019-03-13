@@ -1,0 +1,140 @@
+create PROCEDURE RSTS_6531_make_D (-- vstupni paramtery
+                              ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _zprac         Int;
+define _debtid        char(35);
+define _debtidnew     char(35);
+define _smlouvapuvod  dec(16,0);
+define _smlouvanova   dec(16,0);
+  
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_6531', 'RSTS_6531', 'vytvoření souboru k přečíslování SOLUS');
+
+COMMIT WORK;
+
+begin
+   on exception IN(-316)
+   end exception;
+  create index SOL_Veta_Den_iwork on SOL_Veta_Den(idsolusold);
+end;
+
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  REPLACE(REPLACE(debtid, CHR(13), ''), CHR(10), '')
+   INTO  _ser, _debtid
+   FROM RSTS_6531
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulky
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS_6531
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)  
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    let _zprac, _debtidnew, _smlouvapuvod, _smlouvanova = null, null, null, null;
+    
+    let _smlouvapuvod = substr(_debtid, 1, charindex('_', _debtid)-1);
+    
+    if exists (select 1 from es_sml_mat where smlouva = _smlouvapuvod) then
+      foreach
+        select smlouva
+        into  _smlouvanova
+        from eu_sml_mat
+        where smlspor = _smlouvapuvod
+        order by poradi desc 
+        
+        exit foreach;
+      end foreach;
+      
+      if _smlouvanova is not null then
+        foreach
+          select idsolus
+          into  _debtidnew
+          from SOL_Veta_Den
+          where idsolusold = _debtid
+          
+          exit foreach;
+        end foreach;
+        
+        if _debtidnew is null then
+          let _zprac = 2; -- DebtID nenalezeno v evidenci SOLUS, ale navázaný úvěr existuje
+        else
+          let _zprac = 1; -- DebtID nalezeno v evidenci SOLUS
+        end if;
+      else
+        let _zprac = -1; -- Bylo nalezeno číslo smlouvy SS, ale nebyl nalezen navázaný úvěr
+      end if;
+    else
+      let _zprac = -2; -- Nebylo nalezeno odpovídající číslo smlouvy SS
+    end if;
+    
+    insert into rsts_6531_solus_vysl( zprac,  debtid,  debtidnew,  smlouvapuvod,  smlouvanova)
+    values                          (_zprac, _debtid, _debtidnew, _smlouvapuvod, _smlouvanova);
+    
+    --nastaví příznak zpracováno na 1
+    UPDATE RSTS_6531 SET zprac = 1,  NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+drop index SOL_Veta_Den_iwork;
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

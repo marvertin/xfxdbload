@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B135786_UID65089_1
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE ru_opmof_wrk (
+  serno   SERIAL NOT NULL,
+  radek   Integer,
+  mesic   Integer,
+  puvodnitreal   CHAR(4),
+  zajistnemov   Integer  DEFAULT 0,
+  scenar   Integer,
+  mofpd   decimal(10,6),
+  moflgd  decimal(10,6),
+  owner   int
+)lock mode row;
+
+CREATE UNIQUE INDEX ru_opmof_wrk_pk ON ru_opmof_wrk(serno);
+ALTER TABLE ru_opmof_wrk ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_opmof_wrk_pk;
+
+CREATE INDEX ru_opmof_wrk_i1 ON ru_opmof_wrk(mesic,puvodnitreal,zajistnemov,scenar);
+
+ROLLBACK WORK;
+
+--End of B135786_UID65089_1

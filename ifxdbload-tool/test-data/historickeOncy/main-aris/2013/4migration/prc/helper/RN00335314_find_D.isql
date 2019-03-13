@@ -1,0 +1,69 @@
+create PROCEDURE RN00335314_find_D ()
+
+define _ser          Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00335314;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00335314(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+
+
+  smlouva    Dec(16,0),         -- èíslo smlouvy
+  tsml       Char(4),           -- typ smlouvy
+  poradi     Int,               -- poøadí akce v evidenci
+  evidence   Char(1),           -- 'Z' - zmìny smlouvy SS, 'S' - matrika smluv SS, 'P' - evidence požadavkù nový Sale
+  
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+--plnime ridici tabulku -> budeme plnit pouze smlouvami, u kterých se nový pøíznak = 1 (default atributu v tabulkách je 0)
+
+-- 1)   Kartotéka zmìn SS - Pokud v kartotéce zmìn smluv SS v Main je evidován (nezobrazovaný) odkaz do evidence žádostí   
+INSERT INTO RN00335314 (smlouva, tsml, poradi, evidence, zprac)
+  SELECT smlouva, typ, poradi, 'Z', -1 FROM es_zmplan_kart WHERE zadost is not null;
+  
+-- 2)  Martika smluv SS -> Pokud existuje pøedaný návrh na novou smlouvu SS v evidenci starého Sale
+--     zároveò je v nìm evidována vazba na evidenci žádostí z CIBIS-Web
+INSERT INTO RN00335314 (smlouva, tsml, poradi, evidence, zprac)
+  SELECT contractnumber, 'SSFO', id, 'S', -1 FROM bsavingrqreg  WHERE zadost is not null and refpasstime is not null;                                                                                                                                                  
+-- 3) evidence požadavkù nového Sale - U požadavkù typu Nová smlouva SS, kde existuje vazba na žádost klienta z Web
+   --vlozeni dat do ridici tabulky
+INSERT INTO RN00335314 (smlouva, tsml, poradi, evidence, zprac)
+  SELECT b.smlouva, b.tsml, b.serno, 'P', -1 FROM ses_novasml_mat a, ses_pozadavekh_mat b WHERE a.refepzadost is not null and a.refpozadavekh = b.serno and b.stav = 'E'; 
+
+
+UPDATE STATISTICS HIGH FOR TABLE RN00335314;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

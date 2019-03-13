@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B118697_RN00382782_1
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE INDEX eu_sazba_cis_i1 ON eu_sazba_cis(tsml,typuver,datplat);
+
+ROLLBACK WORK;
+
+--End of B118697_RN00382782_1

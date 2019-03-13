@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B133357_UID56436_1
+-- @TC:ONCE: DESCRIPTION = IFRS - bEIR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ep_splspormodbankcf_den
+  add typpoh char(1) before datum
+;
+
+ROLLBACK WORK;
+
+--End of B133357_UID56436_1

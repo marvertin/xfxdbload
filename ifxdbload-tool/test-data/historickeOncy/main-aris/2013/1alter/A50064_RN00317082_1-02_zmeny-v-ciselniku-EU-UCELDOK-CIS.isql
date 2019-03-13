@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_1-02_zmeny-v-ciselniku-EU-UCELDOK-CIS
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CALL tw_addSerialColumn('eu_uceldok_cis', 'serno', 'ucel');
+
+ALTER TABLE eu_uceldok_cis
+  DROP    poradi,
+  ADD     platnostod  DATE                        BEFORE portime,
+  ADD     platnostdo  DATE                        BEFORE portime,
+  ADD     platnost    INTEGER DEFAULT 1 NOT NULL  BEFORE portime
+;  
+
+ALTER TABLE eu_uceldok_acis
+  DROP    poradi,
+  ADD     platnostod  DATE              BEFORE portime,
+  ADD     platnostdo  DATE              BEFORE portime,
+  ADD     platnost    INTEGER DEFAULT 1 BEFORE portime
+;  
+
+CREATE UNIQUE INDEX eu_uceldok_cis_pk ON eu_uceldok_cis(serno);
+ALTER TABLE eu_uceldok_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_uceldok_cis_pk;
+
+ALTER TABLE eu_uceldok_cis
+  ADD CONSTRAINT CHECK (platnost IN (0,1)) CONSTRAINT eu_uceldok_cis_dfd9,
+  ADD CONSTRAINT (CHECK (platnostOd IS NULL OR platnostDo IS NULL OR platnostOd <= platnostDo) CONSTRAINT eu_uceldok_cis_c2)
+;
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_1-02_zmeny-v-ciselniku-EU-UCELDOK-CIS

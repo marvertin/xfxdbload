@@ -1,0 +1,89 @@
+create function RSTS_27791_skup(ADatumPrev Date, ADatum Date, ATypVyhodnoceni Char(1), ALogovat Int default 0) returning Dec(16,2), Dec(16,2);
+-- výpočet nesplacené částky a celkové pohledávky z ostatních smluv skupiny
+
+define _smlouvaSS Dec(16,0);
+define _smlouvaUv Dec(16,0);
+define _nesplaccastkaSkup Dec(16,2);
+define _celkdluhpohlSkup Dec(16,2);
+define _realS Int;
+define _kontoUv Dec(16,0);
+define _tkoUv Char(2);
+define _nesplaccastka Dec(16,2);
+define _celkdluhpohl Dec(16,2);
+define _dluhDoSpl Dec(16,2);
+define _dluhPoSpl Dec(16,2);
+
+let _nesplaccastkaSkup, _celkdluhpohlSkup = 0, 0;
+
+foreach
+  SELECT DISTINCT smlouvass, smlouvauv
+  INTO _smlouvaSS, _smlouvaUv
+  FROM RSTS_27791_role_Tmp
+  WHERE datpor <= ADatum AND (datukon IS NULL OR ADatum <= datukon)
+  
+  let _nesplaccastka, _celkdluhpohl = 0, 0;
+  
+  -- celková pohledávka
+  let _kontoUv, _tkoUv = null, null;
+  foreach
+    SELECT konto, tko
+    INTO _kontoUv, _tkoUv
+    FROM RSTS_27791_real_Tmp
+    WHERE smlouva = _smlouvaUv AND ADatum BETWEEN datotev AND NVL(datuzav, ADatum)
+    ORDER BY realn DESC
+      
+    exit foreach;
+  end foreach;
+
+  let _dluhDoSpl, _dluhPoSpl = 0, 0;
+  
+  if _kontoUv is not null then
+    if ALogovat <> 0 then
+      call tw_monitor2_block_start(400, 'Skup-memo');
+    end if;
+
+    -- vložení obratů konta do pomocné evidence, pokud tam ještě nejsou
+    call RSTS_27791_memo(_kontoUv, _tkoUv);
+    
+    if ALogovat <> 0 then
+      call tw_monitor2_block_finish(400);
+    end if;
+    
+    if ALogovat <> 0 then
+      call tw_monitor2_block_start(410, 'Skup-sel');
+    end if;
+
+    -- zjištění celkové pohledávky k danému datu
+    SELECT -1 * NVL(SUM(dluhdospl), 0), -1 * NVL(SUM(dluhpospl), 0)
+    INTO _dluhDoSpl, _dluhPoSpl
+    FROM RSTS_27791_memoGrp_Tmp
+    WHERE konto = _kontoUv AND tko = _tkoUv AND datuct <= ADatum AND (ADatumPrev IS NULL OR datuct > ADatumPrev);
+    
+    if ALogovat <> 0 then
+      call tw_monitor2_block_finish(410);
+    end if;
+    
+    let _celkdluhpohl = _dluhDoSpl + _dluhPoSpl;
+  end if;
+
+  -- nesplacená částka
+  if ATypVyhodnoceni = 'D' then
+    SELECT realn INTO _realS FROM RS_Real_Mat WHERE smlouva = _smlouvaSS AND treal IN ('SPFO', 'SPPO');
+    
+    -- nesplacenou částku spoření k danému datu vezmeme z příslušného záznamu DPD
+    SELECT nesplaccastka
+    INTO _nesplaccastka
+    FROM EP_DPDEvid_Den
+    WHERE reals = _realS AND typvyhodnoceni = ATypVyhodnoceni AND ADatum BETWEEN datprvvyhodnoceni AND datvyhodnoceni;
+    
+  elif ATypVyhodnoceni = 'L' then
+    let _nesplaccastka = _dluhPoSpl;
+  end if;
+
+  let _nesplaccastkaSkup = _nesplaccastkaSkup + nvl(_nesplaccastka, 0);
+  let _celkdluhpohlSkup = _celkdluhpohlSkup + nvl(_celkdluhpohl, 0);
+end foreach;
+
+return _nesplaccastkaSkup, _celkdluhpohlSkup;
+
+end function;

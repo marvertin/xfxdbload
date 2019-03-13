@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, A47133_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE repayability_n
+  ADD insurUniqaVariantId INTEGER
+;
+
+ALTER TABLE creditrqccontractreg
+  ADD insurUniqaVariantId INTEGER
+;
+
+ALTER TABLE creditrqccontractarch
+  ADD insurUniqaVariantId INTEGER
+;
+
+ROLLBACK WORK;
+
+--End of A47133_RN00282474_1

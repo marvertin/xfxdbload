@@ -1,0 +1,55 @@
+CREATE PROCEDURE RSTS_24221_premapovani(ASerDM        INT,
+                                        AKonto        DEC(16, 0),
+                                        ATko          CHAR(2),
+                                        ASmlouva      DEC(16, 0),
+                                        ATsml         CHAR(4),                                        
+                                        AMapkodPreuc  CHAR(20),
+                                        AMapkodNew    CHAR(20))   
+  
+  DEFINE _serObjekt   INT;
+  DEFINE _prislib     DEC(16, 2);
+  DEFINE _poradi      INT;                                        
+  DEFINE _dbucet      VARCHAR(9);
+  DEFINE _crucet      VARCHAR(9);
+  DEFINE _operuct     INT;  
+                                        
+  IF(AKonto IS NOT NULL) THEN                                        
+    LET _serObjekt = TW_DM_VlozObjekt(ASerDM, 'P', 'AM_KontoUvSet', 'E', AKonto, Atko, AMapkodPreuc);
+    CALL RSTS_24221_KontoUvSet(AKonto, Atko, AMapkodPreuc);
+    LET _serObjekt = TW_DM_VlozObjekt(ASerDM, 'P', 'AM_KontoUvSet', 'E', AKonto, Atko, AMapkodNew);
+    CALL RSTS_24221_KontoUvSet(AKonto, Atko, AMapkodNew);
+  ELSE
+    -- premapovani prislibu
+    SELECT prislib INTO _prislib FROM eu_sml_mat WHERE smlouva = ASmlouva AND tsml = ATsml;
+    SELECT dbucet, crucet, operuct INTO _dbucet, _crucet, _operuct FROM eu_pris_kart
+    WHERE
+      smlouva = ASmlouva AND tsml = ATsml AND
+      poradi = (SELECT MAX(poradi) FROM eu_pris_kart WHERE smlouva = ASmlouva AND tsml = ATsml AND stav = 'C' AND smer = 1);
+      
+    IF(LENGTH(_dbucet) > 6 OR LENGTH(_crucet) > 6) THEN
+      -- obejiti chyby v anonymizaci, kdy ucet v kartotece byl zanonymizovan
+      SELECT ucet INTO _dbucet FROM ac_ucbody_den WHERE ser = _operuct AND dbcr = -1;
+      SELECT ucet INTO _crucet FROM ac_ucbody_den WHERE ser = _operuct AND dbcr = 1;
+    END IF;  
+    
+    -- nejdriv oductujeme na puvodnich uctech - prohazuju proto DB a CR ucet 
+    LET _poradi = EU_ProvedPrisAk(ASmlouva, ATsml, -1 {ASmer}, _prislib, _crUcet {dbucet}, _dbUcet {crucet}, NULL {ADavka}, 1 {AVzdy});
+    LET _serObjekt = TW_DM_VlozObjekt(ASerDM, 'P', 'EU_ProvedPrisAk', 'E', ASmlouva, ATsml, -1, _prislib);
+    
+    -- nauctuju na PREUCT
+    SELECT ucet, protiucet INTO _dbucet, _crucet FROM am_uvprislib_cis WHERE mapkod = 'PREUC';
+    LET _poradi = EU_ProvedPrisAk(ASmlouva, ATsml, 1 {ASmer}, _prislib, _dbUcet {dbucet}, _crUcet {crucet}, NULL {ADavka}, 1 {AVzdy});
+    LET _serObjekt = TW_DM_VlozObjekt(ASerDM, 'P', 'EU_ProvedPrisAk', 'E', ASmlouva, ATsml, 1, _prislib);
+    
+    -- oductuju z PREUCT
+    LET _poradi = EU_ProvedPrisAk(ASmlouva, ATsml, -1 {ASmer}, _prislib, _crUcet {dbucet}, _dbUcet {crucet}, NULL {ADavka}, 1 {AVzdy});
+    LET _serObjekt = TW_DM_VlozObjekt(ASerDM, 'P', 'EU_ProvedPrisAk', 'E', ASmlouva, ATsml, -1, _prislib);
+    
+    -- nauctuju na novy mapovaci kod
+    SELECT ucet, protiucet INTO _dbucet, _crucet FROM am_uvprislib_cis WHERE mapkod = AMapkodNew;
+    LET _poradi = EU_ProvedPrisAk(ASmlouva, ATsml, 1 {ASmer}, _prislib, _dbUcet {dbucet}, _crUcet {crucet}, NULL {ADavka}, 1 {AVzdy});
+    LET _serObjekt = TW_DM_VlozObjekt(ASerDM, 'P', 'EU_ProvedPrisAk', 'E', ASmlouva, ATsml, 1, _prislib);
+  END IF;
+    
+END PROCEDURE;
+

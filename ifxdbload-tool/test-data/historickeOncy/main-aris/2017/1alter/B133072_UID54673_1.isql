@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B133072_UID54673_1
+-- @TC:ONCE: DESCRIPTION = FK do tabulky EU_VARIAPU_CIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE INDEX eu_varurokfixprirad_cis_i_f1 ON eu_varurokfixprirad_cis(refvariantapu);
+ALTER TABLE eu_varurokfixprirad_cis ADD CONSTRAINT FOREIGN KEY(refvariantapu) REFERENCES eu_variapu_cis(varid) CONSTRAINT eu_varurokfixprirad_cis_f1;
+
+ROLLBACK WORK;
+
+--End of B133072_UID54673_1

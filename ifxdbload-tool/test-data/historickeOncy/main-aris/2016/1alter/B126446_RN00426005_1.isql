@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B126446_RN00426005_1
+-- @TC:ONCE: DESCRIPTION = Změny pravidel v přeúčtování BU -> BUZA
+
+BEGIN WORK;
+
+alter table pro_contractStatus 
+
+  --Typ smlouvy z pohledu MF: N=Nová,S=Stará,H=Hybrid
+  add ssContractType   CHAR(1),
+  
+  --Příznak, zda byla smlouva historicky vždy se SP
+  add ssAlways   Integer  DEFAULT 1,
+  
+  ADD CONSTRAINT CHECK (ssalways IN (0,1)) CONSTRAINT pro_contractstatus_d4b7
+;
+
+--CHECKS
+ALTER TABLE pro_contractstatus
+  ADD CONSTRAINT (CHECK (ssContractType in ('N', 'S', 'H')) CONSTRAINT pro_contractstatus_c4)
+;
+ 
+ROLLBACK WORK;
+
+--End of B126446_RN00426009_1

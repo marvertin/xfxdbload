@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B123487_RN00450217_1
+-- @TC:ONCE: DESCRIPTION = Chybně vyplněné požadované datum SÚ {DEFECT}
+
+BEGIN WORK;
+
+  RENAME COLUMN pro_contractdata.xbridgeloandate TO requestedBridgeLoanDate
+;
+
+  ALTER TABLE pro_contractdata
+    ADD requestedCreditDate   DATE
+;
+
+ROLLBACK WORK;
+
+--End of B123487_RN00450217_1

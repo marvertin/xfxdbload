@@ -1,0 +1,491 @@
+CREATE FUNCTION EP_DatGetScoringPar(ALastScoringActionId Integer,
+                                    ADatAkce         Date,
+                                    ATypSC           Char(3),
+                                    AIdOS            Int,                       -- pro SC1/SCA je to id z tabulky creditrqpersonreg, pro SC2/SCB je to fo z tabulky eo_fo_mat
+                                                                                       -- buÔ je to ID osoby na Webu (SC1/SCA), nebo ËÌslo osoby v CIBISu (SC2/SCB)
+                                    ABIC             Char(16),                                                                                                                           
+                                    ARole            Char(2),
+                                    AVariantaVypoctu Int,                       -- uû se nepouûÌv· (d¯Ìve pro RZ_UZGet)
+                                    ASmlouva         Dec(16,0)   default null, -- u SC1/SCA bude null
+                                    ATsml       Char(4)     default null,   -- u SC1/SCA bude null
+                                    AZadost   Integer default null -- u SC2/SCB bude null...
+)
+returning
+Char(5),     --region
+Int,         --titulInd 
+Int,         --familyStatus
+Int,         --occupationCodeS
+Int,         --homeTelephoneInd
+Int,         --workTelephoneInd
+Int,         --mobilAllowInd
+Int,         --mailInd
+Int,         --mobilCardInd
+Int,         --sex
+Char(4),     --bankCode
+dec(16,2),   --repayAbility
+Int,         --age
+dec(16,2),   --roleIncome
+dec(16,2),   --homeIncome
+dec(16,2),   --otherIncomeShare
+Int,         --numbPers
+Int,         --numbChildren
+dec(16,2),   --totalDebt
+Int,         --numbCredits
+Int,         --highestClassification
+dec(16,2),   --targetAmount
+Int,         --taIncreasing
+Int,         --taDecreasing
+Int,         --tariffChange
+dec(16,2),   --regPayment
+Char(1),     --paymentPeriod
+Char(1),     --expUsage
+Char(5),     --bsAgentRegion
+Int,         --ssInd
+Int,         --savingDuration
+dec(16,2),   --savedAmount
+dec(8,4),    --allotmentNumber
+dec(16,2),   --savingShare
+Char(2),     --creditType
+dec(16,2),   --bcAmount
+dec(16,2),   --creditAmount
+dec(16,2),   --bcRepayment
+dec(16,2),   --creditRepayment
+Int,         --creditDuration
+Char(1),     --withdrawalWay
+Int,         --purposeBuy
+Int,         --purposeModernFlat
+Int,         --purposeModernHouse
+Int,         --purposeConstruct
+Int,         --purposeOther
+Char(5),     --ccAgentRegion
+Int,         --insurNone
+Int,         --insurRealty
+Int,         --insurGuarantor
+Int,         --insurOther
+Char(10),    --variant
+Int,         --repaymentWay
+Char(2),     --personRole
+Char(5),     --addrCurrRegion
+Int,         --addrCurrDurationMonth
+Int,         --habitationType
+Int,         --education
+Int,         --workPosition
+Int,         --branch
+Char(5),     --emplRegion
+Int,         --emplDurationCurrMonth
+Int,         --emplDurationLastMonth
+Int,         --emplContractLimited
+date,        --emplFinish
+Int,         --lifeInsur
+Int,         --injuryInsur
+Int,         --pensionInsur
+Int,         --otherInsur
+dec(16,0),   --bsContract
+Int,         --SMSInd
+Int,         --AdressUnityInd
+Int,         --Tariff
+Int,         --magazineInd
+Int,         --BCDuration
+Int,         --subdebtorNo
+Int,         --creditsFinishedOK
+Char(1),     --residenceType
+Char(2),     --Citizenship
+Int,         --Bsnumber
+dec(16,2),   --Bsamount
+Char(1),     --AllotmentType
+Char(5),     --xaddrresidzipcode
+Char(5),     --xaddrcurrzipcode
+Char(5),     --xaddremployzipcode   
+Dec(16,2),   --sumTABSClient
+Int,         --countBSEU
+Dec(16,2),   --sumSaldoBSEU
+Dec(16,2),   --sumTABSEU
+Int,         --countFinishedBSClient
+Int,         --countFinishedBSEU
+Dec(16,2),   --sumTAFinishedBSClient
+Dec(16,2),   --sumTAFinishedBSEU
+Dec(16,2),   --sumSaldoFinishedBSClient
+Dec(16,2),   --sumSaldoFinishedBSEU
+Int,         --countAssignedBSClient
+Int,         --countAssignedBSEU
+Dec(16,2),   --sumTAAssignmentBSClient
+Dec(16,2),   --sumTAAssignmentBSEU
+Dec(16,2),   --sumSaldoAssignmentBSClient
+Dec(16,2),   --sumSaldoAssignmentBEU
+Int,         --ageOldestAllBSClient
+Int,         --ageOldestAllBSEU
+Int,         --ageOldestAllTransferredBSClient
+Int,         --ageOldestAllTransferredBSEU
+Int,         --sumAgeAllBSClient
+Int,         --sumAgeAllBSEU
+Int,         --sumAgeAllTransferredBSClient
+Int,         --sumAgeAllTransferredBSEU
+Int,         --sumDurationAllBSClient
+Int,         --sumDurationAllBSEU
+Int,         --sumDurationAllTransferredBSClient
+Int,         --sumDurationAllTransferredBSEU
+Int,         --maxDurationAllBSClient
+Int,         --maxDurationAllBSEU
+Int,         --maxDurationAllTransferredBSClient
+Int,         --maxDurationAllTransferredBSEU
+Int,         --countFinishedCredits
+Int,         --maxReminderLevel
+Int,         --countReminderRequests
+Dec(16,2),   --maxReminderAmount
+Dec(16,2),   --sumReminderAmount
+Int,         --ageOldestAllCredit
+Int,         --durationOldestCredit
+Int,         --sumAgeAllCredits
+Int,         --sumDurationAllCredits
+Dec(16,2),   --sumBridgeLoanAmount
+Dec(16,2),   --sumCreditAmount
+Dec(16,2),   --sumTransferredBridgeLoanAmount
+Dec(16,2),   --sumAllEnforcedCredits
+Int,         --countBridgeLoans
+Int,         --countCredits
+Int,         --countTransferredCredits
+Int;         --countEnforcedCredits
+
+define _region Char(5);
+define _titulInd Int;
+define _familyStatus Int;
+define _occupationCodeS Int;
+define _homeTelephoneInd Int;
+define _workTelephoneInd Int;
+define _mobilAllowInd Int;
+define _mailInd Int;
+define _mobilCardInd Int;
+define _sex Int;
+define _bankCode Char(4);
+define _repayAbility Dec(16,2);
+define _age Int;
+define _roleIncome Dec(16,2);
+define _homeIncome Dec(16,2);
+define _otherIncomeShare Dec(16,2);
+define _numbPers Int;
+define _numbChildren Int;
+define _totalDebt Dec(16,2);
+define _numbCredits Int;
+define _highestClassification Int;
+define _targetAmount Dec(16,2);
+define _taIncreasing Int;
+define _taDecreasing Int;
+define _tariffChange Int;
+define _regPayment Dec(16,2);
+define _paymentPeriod Char(1);
+define _expUsage Char(1);
+define _bsAgentRegion Char(5);
+define _ssInd Int;
+define _savingDuration Int;
+define _savedAmount Dec(16,2);
+define _allotmentNumber Dec(8,4);
+define _allotmenttype Char(1);
+define _savingShare Dec(16,2);
+define _creditType Char(2);
+define _bcAmount Dec(16,2);
+define _creditAmount Dec(16,2);
+define _bcRepayment Dec(16,2);
+define _creditRepayment Dec(16,2);
+define _creditDuration Int;
+define _withdrawalWay Char(1);
+define _purposeBuy Int;
+define _purposeModernFlat Int;
+define _purposeModernHouse Int;
+define _purposeConstruct Int;
+define _purposeOther Int;
+define _ccAgentRegion Char(5);
+define _insurNone Int;
+define _insurRealty Int;
+define _insurGuarantor Int;
+define _insurOther Int;
+define _variant Char(10);
+define _repaymentWay Int;
+define _addrCurrRegion Char(5);
+define _addrCurrDurationMonth Int;
+define _habitationType Int;
+define _education Int;
+define _workPosition Int;
+define _branch Int;
+define _emplRegion Char(5);
+define _emplDurationCurrMonth Int;
+define _emplDurationLastMonth Int;
+define _emplContractLimited Int;
+define _emplFinish Date;
+define _lifeInsur Int;
+define _injuryInsur Int;
+define _pensionInsur Int;
+define _otherInsur Int;
+define _xaddrresidzipcode Char(5);
+define _xaddrcurrzipcode Char(5);
+define _xaddremployzipcode Char(5);
+define _xtariffcode Int ;
+define _xsmsactivation Int;
+define _xmagazine Int;
+define _residenceid Char(1);
+define _nationalityid Char(2);
+define _adressUnityInd Int;
+define _bcDuration Int;
+define _creditsFinishedOK Int;
+define _subdebtorNo Int;
+define _bsnumber Int;
+define _bsamount Dec(16,2);
+define _bsContract Dec(16,0);
+define _sumTABSClient Dec(16,2);
+define _countBSEU Int;
+define _sumSaldoBSEU Dec(16,2);
+define _sumTABSEU Dec(16,2);
+define _countFinishedBSClient Int;
+define _countFinishedBSEU Int;
+define _sumTAFinishedBSClient Dec(16,2);
+define _sumTAFinishedBSEU Dec(16,2);
+define _sumSaldoFinishedBSClient Dec(16,2);
+define _sumSaldoFinishedBSEU Dec(16,2);
+define _countAssignedBSClient Int;
+define _countAssignedBSEU Int;
+define _sumTAAssignmentBSClient Dec(16,2);
+define _sumTAAssignmentBSEU Dec(16,2);
+define _sumSaldoAssignmentBSClient Dec(16,2);
+define _sumSaldoAssignmentBEU Dec(16,2);
+define _ageOldestAllBSClient Int;
+define _ageOldestAllBSEU Int;
+define _ageOldestAllTransferredBSClient Int;
+define _ageOldestAllTransferredBSEU Int;
+define _sumAgeAllBSClient Int;
+define _sumAgeAllBSEU Int;
+define _sumAgeAllTransferredBSClient Int;
+define _sumAgeAllTransferredBSEU Int;
+define _sumDurationAllBSClient Int;
+define _sumDurationAllBSEU Int;
+define _sumDurationAllTransferredBSClient Int;
+define _sumDurationAllTransferredBSEU Int;
+define _maxDurationAllBSClient Int;
+define _maxDurationAllBSEU Int;
+define _maxDurationAllTransferredBSClient Int;
+define _maxDurationAllTransferredBSEU Int;
+define _countFinishedCredits Int;
+define _maxReminderLevel Int;
+define _countReminderRequests Int;
+define _maxReminderAmount Dec(16,2);
+define _sumReminderAmount Dec(16,2);
+define _ageOldestAllCredit Int;
+define _durationOldestCredit Int;
+define _sumAgeAllCredits Int;
+define _sumDurationAllCredits Int;
+define _sumBridgeLoanAmount Dec(16,2);
+define _sumCreditAmount Dec(16,2);
+define _sumTransferredBridgeLoanAmount Dec(16,2);
+define _sumAllEnforcedCredits Dec(16,2);
+define _countBridgeLoans Int;
+define _countCredits Int;
+define _countTransferredCredits Int;
+define _countEnforcedCredits Int;
+
+-- defninice globalni promenne G_TRACE
+DEFINE GLOBAL G_TRACE Int DEFAULT 0;
+
+-- zahajeni trasovani TRACE_BEGIN_1
+if G_TRACE = 1 then
+  if pd_tracebegin('ep_datgetscoringpar') = 1 then 
+    trace on;
+  end if;
+end if;
+-- zahajeni trasovani TRACE_BEGIN_2
+
+
+-- @RN00289175: DalöÌ optimalizace...P¯i SC1 nebo SC2 ber ber starÈ parametry p¯Ìmo z tabulek skÛringu, 
+-- protoûe jsou stejnÏ branÈ k datu danÈ akce...p¯enos û·dosti Ëi schv·lenÌ smlouvy...atd.
+if ((ATypSC in ('SC1', 'SC2') AND ALastScoringActionId <> -1) AND
+  -- @RN00300602: Dan· osoba samoz¯ejmÏ musÌ b˝t mezi skÛrovan˝mi, jinak by vr·cenÈ parametry z EP_GetOldSCSentenceParameters byly NULL.    
+  EXISTS(select 1 from scoringperson where scoringaction_id = ALastScoringActionId and xbankpersnumber = ABIC)) then 
+  let  _region, _titulInd, _familyStatus, _occupationCodeS, _homeTelephoneInd, _workTelephoneInd, _mobilAllowInd, _mailInd, _mobilCardInd,
+      _sex, _bankCode, _repayAbility, _age, _roleIncome, _homeIncome, _otherIncomeShare, _numbPers, _numbChildren, _highestClassification, 
+      _addrCurrRegion, _addrCurrDurationMonth, _habitationType, _education, _workPosition, _branch, _emplRegion, _emplDurationCurrMonth, 
+      _emplDurationLastMonth, _emplContractLimited, _emplFinish, _lifeInsur, _injuryInsur, _pensionInsur, _otherInsur,  
+      _adressUnityInd, _residenceid, _nationalityid, _xaddrresidzipcode, _xaddrcurrzipcode, _xaddremployzipcode,
+     
+      _targetAmount, _taIncreasing, _taDecreasing, _tariffChange, _regPayment, _paymentPeriod, _expUsage, _bsAgentRegion, _ssInd, _savingDuration, 
+      _savedAmount, _allotmentNumber, _savingShare, _bsContract, _xsmsactivation, _xtariffcode, _xmagazine, _allotmenttype,
+      
+      _creditType, _bcAmount, _creditAmount, _bcRepayment, _creditRepayment, _creditDuration, _withdrawalWay, _purposeBuy, _purposeModernFlat, 
+      _purposeModernHouse, _purposeConstruct, _purposeOther, _ccAgentRegion, _insurNone, _insurRealty, _insurGuarantor, _insurOther, _variant, 
+      _repaymentWay, _bcDuration, _subdebtorNo = EP_GetOldSCSentenceParameters(ALastScoringActionId, ATypSC, ABIC, ASmlouva, ATsml, AZadost);    
+-- P¯i SCA / SCB vyhodnoù kompletnÌ parametry.       
+else 
+    -- ˙daje osoby
+    let _region, _titulInd, _familyStatus, _occupationCodeS, _homeTelephoneInd, _workTelephoneInd, _mobilAllowInd, _mailInd, _mobilCardInd,
+      _sex, _bankCode, _repayAbility, _age, _roleIncome, _homeIncome, _otherIncomeShare, _numbPers, _numbChildren, _highestClassification, 
+      _addrCurrRegion, _addrCurrDurationMonth, _habitationType, _education, _workPosition, _branch, _emplRegion, _emplDurationCurrMonth, 
+      _emplDurationLastMonth, _emplContractLimited, _emplFinish, _lifeInsur, _injuryInsur, _pensionInsur, _otherInsur, _adressUnityInd, _residenceid, 
+      _nationalityid, _xaddrresidzipcode, _xaddrcurrzipcode, _xaddremployzipcode 
+      = EP_DatGetScoringParOsoba(ADatAkce, ATypSC, AIdOS, ARole, ASmlouva, ATsml);
+  
+    -- ˙daje spo¯enÌ
+    let _targetAmount, _taIncreasing, _taDecreasing, _tariffChange, _regPayment, _paymentPeriod, _expUsage, _bsAgentRegion, _ssInd, _savingDuration, 
+      _savedAmount, _allotmentNumber, _savingShare, _bsContract, _xsmsactivation, _xtariffcode, _xmagazine, _allotmenttype
+      = EP_DatGetScoringParSpor(ADatAkce, ATypSC, AIdOS, ASmlouva, ATsml);
+
+    -- ˙daje ˙vÏru
+    let _creditType, _bcAmount, _creditAmount, _bcRepayment, _creditRepayment, _creditDuration, _withdrawalWay, _purposeBuy, _purposeModernFlat, 
+      _purposeModernHouse, _purposeConstruct, _purposeOther, _ccAgentRegion, _insurNone, _insurRealty, _insurGuarantor, _insurOther, _variant, 
+      _repaymentWay, _bcDuration, _subdebtorNo = EP_DatGetScoringParUv(ADatAkce, ATypSC, AIdOS, ASmlouva, ATsml);
+end if;      
+
+-- historickÈ ˙daje spo¯enÌ
+let _bsnumber, _bsamount, _sumTABSClient, _countBSEU, _sumSaldoBSEU, _sumTABSEU, _countFinishedBSClient, _countFinishedBSEU, _sumTAFinishedBSClient, 
+  _sumTAFinishedBSEU, _sumSaldoFinishedBSClient, _sumSaldoFinishedBSEU, _countAssignedBSClient, _countAssignedBSEU, _sumTAAssignmentBSClient, 
+  _sumTAAssignmentBSEU, _sumSaldoAssignmentBSClient, _sumSaldoAssignmentBEU, _ageOldestAllBSClient, _ageOldestAllBSEU, _ageOldestAllTransferredBSClient, 
+  _ageOldestAllTransferredBSEU, _sumAgeAllBSClient, _sumAgeAllBSEU, _sumAgeAllTransferredBSClient, _sumAgeAllTransferredBSEU, _sumDurationAllBSClient, 
+  _sumDurationAllBSEU, _sumDurationAllTransferredBSClient, _sumDurationAllTransferredBSEU, _maxDurationAllBSClient, _maxDurationAllBSEU, 
+  _maxDurationAllTransferredBSClient, _maxDurationAllTransferredBSEU = EP_DatGetScoringParHistSpor(ADatAkce, ATypSC, AIdOS, ARole, ASmlouva, ATsml);
+
+-- historickÈ ˙daje ˙vÏru
+let _totalDebt, _numbCredits, _creditsFinishedOK, _countFinishedCredits, _maxReminderLevel, _countReminderRequests, _maxReminderAmount, 
+  _sumReminderAmount, _ageOldestAllCredit, _durationOldestCredit, _sumAgeAllCredits, _sumDurationAllCredits, _sumBridgeLoanAmount, 
+  _sumCreditAmount, _sumTransferredBridgeLoanAmount, _sumAllEnforcedCredits, _countBridgeLoans, _countCredits, _countTransferredCredits, 
+  _countEnforcedCredits = EP_DatGetScoringParHistUv(ADatAkce, ATypSC, AIdOS, ASmlouva, ATsml);
+
+-- ukonceni trasovani TRACE_END_1
+if G_TRACE = 1  then
+  if pd_traceend('ep_datgetscoringpar') = 1 then
+    trace off;
+  end if;
+end if;
+-- ukonceni trasovani TRACE_END_2
+return
+
+_region, --Char(5)
+_titulInd, --Int,
+_familyStatus, --Int
+_occupationCodeS, --Int
+_homeTelephoneInd, --Int
+_workTelephoneInd, --Int
+_mobilAllowInd, --Int
+_mailInd, --Int
+_mobilCardInd, --Int
+_sex, --Int
+_bankCode, --Char(4)
+_repayAbility, --Dec(16,2)
+_age, --Int
+_roleIncome, --Dec(16,2)
+_homeIncome, --Dec(16,2)
+_otherIncomeShare, --Dec(16,2)
+_numbPers, --Int
+_numbChildren, --Int
+_totalDebt, --Dec(16,2)
+_numbCredits, --Int
+_highestClassification, --Int
+_targetAmount, --Dec(16,2)
+_taIncreasing, --Int
+_taDecreasing, --Int
+_tariffChange, --Int
+_regPayment, --Dec(16,2)
+_paymentPeriod, --Char(1)
+_expUsage, --Char(1)
+_bsAgentRegion, --Char(5)
+_ssInd, --Int
+_savingDuration, --Int
+_savedAmount, --Dec(16,2)
+_allotmentNumber, --Dec(8,4)
+_savingShare, --Dec(16,2)
+_creditType, --Char(2)
+_bcAmount, --Dec(16,2)
+_creditAmount, --Dec(16,2)
+_bcRepayment, --Dec(16,2)
+_creditRepayment, --Dec(16,2)
+_creditDuration, --Int
+_withdrawalWay, --Char(1)
+_purposeBuy, --Int
+_purposeModernFlat, --Int
+_purposeModernHouse, --Int
+_purposeConstruct, --Int
+_purposeOther, --Int
+_ccAgentRegion, --Char(5)
+_insurNone, --Int
+_insurRealty, --Int
+_insurGuarantor, --Int
+_insurOther, --Int
+_variant, --Char(10)
+_repaymentWay, --Int
+ Arole, --Char(2)
+_addrCurrRegion, --Char(5)
+_addrCurrDurationMonth, --Int
+_habitationType, --Int
+_education, --Int
+_workPosition, --Int
+_branch, --Int
+_emplRegion, --Char(5)
+_emplDurationCurrMonth, --Int
+_emplDurationLastMonth, --Int
+_emplContractLimited, --Int
+_emplFinish, --Date
+_lifeInsur, --Int
+_injuryInsur, --Int
+_pensionInsur, --Int
+_otherInsur, --Int
+_bsContract, --Dec(16,0)
+_xsmsactivation, --Int
+_adressUnityInd, --Int
+_xtariffcode, --Int
+_xmagazine, --Int
+_bcDuration, --Int
+_subdebtorNo, --Int
+_creditsFinishedOK, --Int
+_residenceid, --Char(1)
+_nationalityid, --Char(2)
+_bsnumber, --Int
+_bsamount, --Dec(16,2)
+_allotmenttype, --Char(1)
+_xaddrresidzipcode, --Char(5)
+_xaddrcurrzipcode, --Char(5)
+_xaddremployzipcode, --Char(5)   
+_sumTABSClient, --Dec(16,2)
+_countBSEU, --Int
+_sumSaldoBSEU, --Dec(16,2)
+_sumTABSEU, --Dec(16,2)
+_countFinishedBSClient, --Int
+_countFinishedBSEU, --Int
+_sumTAFinishedBSClient, --Dec(16,2)
+_sumTAFinishedBSEU, --Dec(16,2)
+_sumSaldoFinishedBSClient, --Dec(16,2)
+_sumSaldoFinishedBSEU, --Dec(16,2)
+_countAssignedBSClient, --Int
+_countAssignedBSEU, --Int
+_sumTAAssignmentBSClient, --Dec(16,2)
+_sumTAAssignmentBSEU, --Dec(16,2)
+_sumSaldoAssignmentBSClient, --Dec(16,2)
+_sumSaldoAssignmentBEU, --Dec(16,2)
+_ageOldestAllBSClient, --Int
+_ageOldestAllBSEU, --Int
+_ageOldestAllTransferredBSClient, --Int
+_ageOldestAllTransferredBSEU, --Int
+_sumAgeAllBSClient, --Int
+_sumAgeAllBSEU, --Int
+_sumAgeAllTransferredBSClient, --Int
+_sumAgeAllTransferredBSEU, --Int
+_sumDurationAllBSClient, --Int
+_sumDurationAllBSEU, --Int
+_sumDurationAllTransferredBSClient, --Int
+_sumDurationAllTransferredBSEU, --Int
+_maxDurationAllBSClient, --Int
+_maxDurationAllBSEU, --Int
+_maxDurationAllTransferredBSClient, --Int
+_maxDurationAllTransferredBSEU, --Int
+_countFinishedCredits, --Int
+_maxReminderLevel, --Int
+_countReminderRequests, --Int
+_maxReminderAmount, --Dec(16,2)
+_sumReminderAmount, --Dec(16,2)
+_ageOldestAllCredit, --Int
+_durationOldestCredit, --Int
+_sumAgeAllCredits, --Int
+_sumDurationAllCredits, --Int
+_sumBridgeLoanAmount, --Dec(16,2)
+_sumCreditAmount, --Dec(16,2)
+_sumTransferredBridgeLoanAmount, --Dec(16,2)
+_sumAllEnforcedCredits, --Dec(16,2)
+_countBridgeLoans, --Int
+_countCredits, --Int
+_countTransferredCredits, --Int
+_countEnforcedCredits; --Int
+
+END FUNCTION

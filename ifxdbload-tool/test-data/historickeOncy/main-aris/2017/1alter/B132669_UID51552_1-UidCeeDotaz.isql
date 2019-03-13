@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B132669_UID51552_1-UidCeeDotaz
+-- @TC:ONCE: DESCRIPTION = Provést RK typu CEE pro osobu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+-- prejmenuji PK sloupec "serno", abych na jeho miste mohl vytvorit novy typu BIGINT
+RENAME COLUMN ep_ceedotaz_den.serno TO xold_serno;
+
+ALTER TABLE ep_ceedotaz_den ADD (
+    serno BIGINT BEFORE xold_serno
+);
+
+
+-- prejmenuji FK sloupec "refceedotaz", abych na jeho miste mohl vytvorit novy typu BIGINT
+RENAME COLUMN ep_ceeodpovedh_den.refceedotaz TO xold_refceedotaz;
+
+ALTER TABLE ep_ceeodpovedh_den ADD (
+    refceedotaz BIGINT BEFORE xold_refceedotaz
+);
+
+
+
+ROLLBACK WORK;
+
+--End of B132669_UID51552_1-UidCeeDotaz

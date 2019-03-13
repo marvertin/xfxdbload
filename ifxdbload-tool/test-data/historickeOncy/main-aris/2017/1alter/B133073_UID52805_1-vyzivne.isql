@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B133073_UID52805_1-vyzivne
+-- @TC:ONCE: DESCRIPTION = Problém s plněním pole Závazky mimo RSTS {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eo_finsit_mat
+ADD vyzivne DECIMAL(16,2);
+
+ALTER TABLE eo_finsit_arch 
+ADD vyzivne DECIMAL(16, 2);
+
+ROLLBACK WORK;
+
+--End of B133073_UID52805_1-vyzivne

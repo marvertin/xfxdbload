@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B133852_UID59567_1
+-- @TC:ONCE: DESCRIPTION = Aktualizovat osoby ve vztahu k firmě, které ukončí činnost {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pef_firmaosoba_cis ADD entid INTEGER BEFORE skupina;
+
+ALTER TABLE pef_firmaodpovedo_den ADD entid INTEGER BEFORE skupina;
+
+ROLLBACK WORK;
+
+--End of B133852_UID59567_1

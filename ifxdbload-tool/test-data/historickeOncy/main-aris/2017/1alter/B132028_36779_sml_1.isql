@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B132028_36779_sml_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table eu_sml_mat
+  add bankeir   Double precision,
+  add bankeirprep   DATE;
+
+alter table eu_sml_arch
+  add bankeir   Double precision,
+  add bankeirprep   DATE;
+    
+ROLLBACK WORK;
+
+--End of B132028_36779_1

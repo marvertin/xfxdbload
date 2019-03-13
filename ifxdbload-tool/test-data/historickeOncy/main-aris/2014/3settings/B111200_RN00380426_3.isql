@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, B111200_RN00380426_3
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into EV_VzSmlVecDef_Cis
+      (tsml, tvec, vztah, poznamka, platnost, vyj1, vyj2, vyj3)
+select tsml, 'S',  vztah, poznamka, platnost, 0,    0,    1
+from EV_VzSmlVecDef_Cis 
+where tvec = 'N' 
+  and vztah = 'U';
+  
+update EV_VzSmlVecDef_Cis 
+set platnost = 0 
+where tvec = 'N' 
+  and vztah = 'U';
+
+
+insert into EV_VzSmlVecDef_Cis
+(      tsml, tvec, vztah, poznamka, platnost, vyj1, vyj2, vyj3)
+select tsml, 'F',  vztah, poznamka, platnost, 0,    0,    1 
+from EV_VzSmlVecDef_Cis 
+where tvec = 'N' 
+  and vztah = 'Z';
+
+update EV_VzSmlVecDef_Cis 
+set platnost = 0 
+where tvec = 'N' 
+  and vztah = 'Z'; 
+
+  
+ROLLBACK WORK;
+
+--End of B111200_RN00380426_3

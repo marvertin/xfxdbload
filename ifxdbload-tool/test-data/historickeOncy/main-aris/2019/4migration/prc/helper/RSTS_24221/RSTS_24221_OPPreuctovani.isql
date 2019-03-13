@@ -1,0 +1,80 @@
+CREATE PROCEDURE RSTS_24221_OPPreuctovani (AReal Int
+                                      , ADavka Int DEFAULT NULL
+                                      , AStavReal integer DEFAULT 1
+                                      , AStadiumifrsPuvodni Int DEFAULT NULL
+                                      , AMapkodPuvodni  CHAR(20) DEFAULT NULL
+                                      , AMapkod CHAR(20) DEFAULT NULL);
+
+
+  define _realn            Int;
+  define _smlouva         Dec(16,0);
+  define _tsml            Char(4);
+  define _stav            Char(1);
+  define _datProv         Date;
+  define _provtime        DateTime Year to Second;
+  define _provuser        Char(20);
+  define _porakt          integer;
+  define _mena            Char(3);
+  define _stadiumifrs     integer;
+  define _mapkod          CHAR(20);
+  
+
+  let _datProv = ap_datprov();
+  let _provtime, _provuser = TW_CurrentRef();
+  
+-- Aktuální informace o realizaci úvěru ----------------------------------------
+  SELECT realn, smlouva, tsml, stav
+    INTO _realn, _smlouva, _tsml, _stav
+    FROM RU_Real_Mat
+    WHERE realn = AReal;
+
+  let _mena = TW_RegGetKey('AC','*','*','uctmena');
+
+-- Test předaných parametrů ----------------------------------------------------
+  if (_realn is null) then
+     call TW_RaiseError ('132V413TCUI', 'RU_OPPreuctIfrs9', 'Realizace úvěru neexistuje.', AReal);
+  end if;
+
+-- Nedělá se nic v případě, že jsou v tabulce údaje o neotevřené realizaci -----
+  if (AStavReal = 1) and (_stav not in ('A', 'B', 'C', 'P')) then
+     call TW_RaiseError ('132U412TCUI', 'RU_OPPreuctIfrs9', 'Realizace úvěru není ve stavu "Otevřená", "Čerpaná" nebo "Dočerpaná".', AReal);
+  end if;
+  
+  let _stadiumifrs = RU_OpGetStadiumIfrsStad(AReal);
+  let _mapkod = AMapkod;
+  
+  if _stadiumifrs < AStadiumifrsPuvodni then
+    begin
+      define opaktser Int;
+      let opaktser = RU_OPAktualizace(AReal = AReal, AOPCelkem = null, AMapkodPuvodni = AMapkodPuvodni);
+    end;
+  end if;
+  
+  let _porakt = (SELECT Max(poradi) FROM RU_OP_Kart WHERE smlouva = _smlouva and tsml = _tsml);
+  let _porakt = TW_Null0(_porakt) + 1;
+
+  insert into RU_OP_Kart (serno,          realn,  smlouva,  tsml,  poradi, stav, typ, datProv,  davka,   provtime,  provuser,  mena,  stadiumifrs)
+  values                 (tw_nextserno(), AReal, _smlouva, _tsml, _porakt, 'C', 'U', _datProv,  ADavka, _provtime, _provuser, _mena, _stadiumifrs);
+  
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 7, 0, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 7, 1, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 0, 0, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 0, 1, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 1, 0, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 1, 1, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 2, 0, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 2, 1, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 3, 0, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 3, 1, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 6, 0, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 6, 1, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 5, 0, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  call RU_OPPreuctIfrs9Dluh(AReal, _smlouva, _tsml, _porakt, 5, 1, _mena, _datProv, _provtime, _provuser, _mapkod, ADavka, AMapkodPuvodni);
+  
+end procedure

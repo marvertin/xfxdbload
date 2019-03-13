@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B127173_RN00457366_1
+-- @TC:ONCE: DESCRIPTION = TUMOaISK: Nejede vypořádání úvěrové smlouvy {DEFECT}
+
+
+BEGIN WORK;
+
+  CREATE TABLE bd_prpoturprep_kart ( 
+    serno           SERIAL NOT NULL,
+    realn           INTEGER,
+    datum           DATE,    
+    stav            INTEGER DEFAULT 0, 
+    starttime       DATETIME YEAR to FRACTION(5),
+    finishtime      DATETIME YEAR to FRACTION(5),
+    sqlcodenum      INTEGER,
+    isamcode        INTEGER,
+    sqltext         VARCHAR(255),
+    tw_msgdetail    VARCHAR(255),
+    tw_msgimpltext  VARCHAR(255),
+    tw_msgnum       CHAR(15),
+    tw_msgpar1      CHAR(100),
+    tw_msgpar2      CHAR(100),
+    tw_msgpar3      CHAR(100),
+    refuser         CHAR(20) DEFAULT USER,
+    reftime         DATETIME YEAR to SECOND DEFAULT CURRENT YEAR TO SECOND,
+    PRIMARY KEY (serno)
+    ) EXTENT SIZE 128 NEXT SIZE 128 LOCK MODE ROW;
+
+ROLLBACK WORK;
+
+--End of B127173_RN00457366_1

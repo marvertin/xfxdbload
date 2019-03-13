@@ -1,0 +1,103 @@
+-- @TC:ONCE: ID = V2, A46984_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù
+
+BEGIN WORK;
+
+-- 169  eu_zajsadakoef_cis-1/5       [CREATE.TABLE]
+CREATE TABLE eu_zajsadakoef_cis (
+    id              SERIAL   NOT NULL,
+    variantaid      INTEGER   NOT NULL,
+    datumod         DATE   NOT NULL,
+    datumdo         DATE  ,
+    nazev           CHAR(70)  ,
+    poznamka        CHAR(160)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    refuser         CHAR(20) DEFAULT USER ,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_zajsadakoef_cis_dicd
+) LOCK MODE ROW;
+
+-- 171  eu_zajsadakoef_cis-3/5       [CREATE.INDEX]
+CREATE INDEX eu_zajsadakoef_cis_i_f1 ON eu_zajsadakoef_cis (variantaid) ;
+
+ALTER TABLE eu_zajsadakoef_cis
+    ADD CONSTRAINT FOREIGN KEY (variantaid) REFERENCES ev_varpojist_cis(id)  CONSTRAINT eu_zajsadakoef_cis_f1;
+
+-- 170  eu_zajsadakoef_cis-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_zajsadakoef_cis_pk ON eu_zajsadakoef_cis (id) ;
+
+-- 172  eu_zajsadakoef_cis-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_zajsadakoef_cis
+    ADD CONSTRAINT PRIMARY KEY (id)  CONSTRAINT eu_zajsadakoef_cis_pk;              
+    
+CREATE TABLE eu_zajsadakoef_acis (
+    idarch          SERIAL   NOT NULL,
+    id              INTEGER   NOT NULL,
+    variantaid      INTEGER   NOT NULL,
+    datumod         DATE   NOT NULL,
+    datumdo         DATE  ,
+    nazev           CHAR(70)  ,
+    poznamka        CHAR(160)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    refuser         CHAR(20) DEFAULT USER ,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_zajsadakoef_acis_dico
+) LOCK MODE ROW;
+
+-- 167  eu_zajsadakoef_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_zajsadakoef_acis_pk ON eu_zajsadakoef_acis (idarch) ;
+
+-- 168  eu_zajsadakoef_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_zajsadakoef_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_zajsadakoef_acis_pk;          
+    
+ALTER TABLE eu_zajcrpsazba_acis
+    ADD id              INTEGER   BEFORE sazba,
+    ADD sadaid          INTEGER   BEFORE sazba,
+    ADD poradi          Integer   BEFORE sazba,
+    MODIFY pohlavi         Integer   NOT NULL                        /* previouse: smallint : ... : ... */,
+    MODIFY vekod           Integer   NOT NULL                        /* previouse: smallint : ... : ... */,
+    MODIFY vekdo           Integer   NOT NULL                        /* previouse: smallint : ... : ... */,
+    MODIFY platnost        Integer   NOT NULL;
+    
+RENAME TABLE eu_zajcrpsazba_cis TO eu_zajcrpsazba_cis_toDrop;
+
+CREATE TABLE eu_zajcrpsazba_cis (
+  id   SERIAL NOT NULL,
+  sadaid   INTEGER,
+  poradi   Integer,
+  pohlavi   Integer NOT NULL,
+  vekod   Integer NOT NULL,
+  vekdo   Integer NOT NULL,
+  sazba   DECIMAL(4,2) NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_zajcrpsazba_cis_pk ON eu_zajcrpsazba_cis(id);
+ALTER TABLE eu_zajcrpsazba_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eu_zajcrpsazba_cis_pk;
+
+--FK
+CREATE INDEX eu_zajcrpsazba_cis_i_f1 ON eu_zajcrpsazba_cis(sadaid);
+ALTER TABLE eu_zajcrpsazba_cis ADD CONSTRAINT FOREIGN KEY(sadaid) REFERENCES eu_zajsadakoef_cis(id) CONSTRAINT eu_zajcrpsazba_cis_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX eu_zajcrpsazba_cis_u1 ON eu_zajcrpsazba_cis(sadaid,poradi);
+ALTER TABLE eu_zajcrpsazba_cis ADD CONSTRAINT (UNIQUE (sadaid,poradi) CONSTRAINT eu_zajcrpsazba_cis_u1);
+
+--CHECKS
+ALTER TABLE eu_zajcrpsazba_cis
+ADD CONSTRAINT (CHECK (vekod <= vekdo) CONSTRAINT eu_zajcrpsazba_cis_c1),
+ADD CONSTRAINT (CHECK (platnost in (0,1)) CONSTRAINT eu_zajcrpsazba_cis_c2);
+
+ROLLBACK WORK;
+
+--End of A46984_RN00282474_1

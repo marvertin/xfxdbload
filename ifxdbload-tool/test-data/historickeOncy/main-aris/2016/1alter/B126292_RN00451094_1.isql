@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B126292_RN00451094_1
+-- @TC:ONCE: DESCRIPTION = Změna v nastavení konce fixace a automatický posun data fixace {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_expkalendarfixaci_den (
+  id_index   Integer NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml      CHAR(4) NOT NULL,
+  cisint    Integer,
+  stav      char(1), 
+  variafixace   Integer,
+  fixaceod   DATE,
+  fixacedo   DATE,
+  fazeuver   CHAR(1),
+  uroven   CHAR(1),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+CREATE INDEX eu_expkalendarfixaci_den_i1 ON eu_expkalendarfixaci_den(id_index);
+
+ROLLBACK WORK;
+
+--End of B126292_RN00451094_1

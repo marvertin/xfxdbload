@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B116138_RN00407830_5
+-- @TC:ONCE: DESCRIPTION = Dořešení dopadů odstranění funkcí zrušení pověřence ze Smlouvy SS {DEFECT}
+
+
+BEGIN WORK;
+ DROP PROCEDURE es_smlzmzrpvak_t;
+ DROP PROCEDURE es_smlzmzrpvak;
+ DROP PROCEDURE es_smlzmzrpvtest_t;
+ DROP PROCEDURE es_smlzmzrpvtest;
+ DROP PROCEDURE es_smlzmzruspov_d;
+ DROP PROCEDURE es_smlzmzruspovadr;
+ DROP PROCEDURE es_smlzmzruspov_t;
+ DROP PROCEDURE es_smlzmzruspov;
+ROLLBACK WORK;
+
+--End of B116138_RN00407830_5

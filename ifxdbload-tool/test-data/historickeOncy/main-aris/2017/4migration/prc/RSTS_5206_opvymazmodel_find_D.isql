@@ -1,0 +1,51 @@
+create PROCEDURE RSTS_5206_opvymazmodel_find_D ()
+
+define _ser          Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RSTS_5206_model;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RSTS_5206_model(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  sersh   int,
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--plnime ridici tabulku
+insert into RSTS_5206_model (   sersh, zprac)
+select                       sh.ser,   -1
+from ep_splspormodsh_den sh
+where exists(select 1 from ep_splspormodh_den h where h.headser = sh.ser  and h.typvyp = 'E');
+
+UPDATE STATISTICS HIGH FOR TABLE RSTS_5206_model;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

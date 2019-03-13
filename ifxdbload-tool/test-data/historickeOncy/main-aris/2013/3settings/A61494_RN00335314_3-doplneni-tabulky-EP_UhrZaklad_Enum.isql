@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A61494_RN00335314_3-doplneni-tabulky-EP_UhrZaklad_Enum
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(23, 'Nedoèerpaná výše úvìru aktuální',  0, 0);
+INSERT INTO EP_UhrZaklad_Enum(zaklad, popis, dostupmodel, promenvcase) VALUES(24, 'Dluh z jistiny', 1, 1);
+
+ROLLBACK WORK;
+
+--End of A61494_RN00335314_3-doplneni-tabulky-EP_UhrZaklad_Enum

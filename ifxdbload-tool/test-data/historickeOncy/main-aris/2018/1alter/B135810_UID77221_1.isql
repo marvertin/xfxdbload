@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135810_UID77221_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24072: Implementace: RSTS-18291_REAL: IFRS - OP - modelování + integrace {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+alter table pro_contractstatus
+
+  --IFRS9 stádium realizace. @since RSTS-18266
+  add ifrsstadium int
+;
+ROLLBACK WORK;
+
+--End of B135810_UID77221_1

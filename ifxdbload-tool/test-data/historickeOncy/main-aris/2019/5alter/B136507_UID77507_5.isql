@@ -1,0 +1,125 @@
+-- @TC:ONCE: ID = V2, B136507_UID77507_5
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+call tw_execSql('DROP PROCEDURE RU_GenerKlNavrh_T;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifInit_N;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifLoad_N;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifSave;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifSave_T;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifTest;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifTest_N;', -674);
+call tw_execSql('DROP PROCEDURE RU_Klasif_N;', -674);
+call tw_execSql('DROP PROCEDURE RU_PotvrdKlasFc_T;', -674);
+call tw_execSql('DROP PROCEDURE RU_PotvrdKlasTe_N;', -674);
+call tw_execSql('DROP PROCEDURE RU_PotvrdKlasifAk;', -674);
+call tw_execSql('DROP PROCEDURE RU_ProvedKlasFc_T;', -674);
+call tw_execSql('DROP PROCEDURE RU_ProvedKlasTe_N;', -674);
+call tw_execSql('DROP PROCEDURE RU_ProvedKlasifAk;', -674);
+call tw_execSql('DROP PROCEDURE RU_ZrusKlNavrhAk;', -674);
+call tw_execSql('DROP PROCEDURE RU_ZrusKlasFc_T;', -674);
+call tw_execSql('DROP PROCEDURE RU_ZrusKlasTe_N;', -674);
+call tw_execSql('DROP PROCEDURE RU_KontrKlasifSys;', -674);
+call tw_execSql('DROP PROCEDURE RU_RealTest_N;', -674);
+
+call tw_execSql('DROP PROCEDURE EO_SetVzVlivKlas_T;', -674);
+call tw_execSql('DROP PROCEDURE EO_KlasChange_T;', -674);
+call tw_execSql('DROP PROCEDURE EO_PrepareKlasif;', -674);
+call tw_execSql('DROP PROCEDURE EO_PrepareKlasifSkup1;', -674);
+
+call tw_execSql('DROP PROCEDURE RS_KlasifExport;', -674);
+call tw_execSql('DROP PROCEDURE RS_KlasifGetDobaPohl;', -674);
+call tw_execSql('DROP PROCEDURE RS_KlasifProved;', -674);
+call tw_execSql('DROP PROCEDURE RS_KlasifSys;', -674);
+call tw_execSql('DROP PROCEDURE RS_JeKlasif;', -674);
+call tw_execSql('DROP PROCEDURE RS_GetKlasif;', -674);
+call tw_execSql('DROP PROCEDURE RS_OPSys;', -674);
+
+call tw_execSql('DROP PROCEDURE EX_KP_C;', -674);
+call tw_execSql('DROP PROCEDURE EX_KP_T;', -674);
+
+call tw_execSql('DROP PROCEDURE BD_EODKlasPrep_T;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODKlas_T;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODKlasSdruzPrep_T;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODKlasSdruz_T;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODKlasSdruzFin_T;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODKlasFin_T;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODOsoba_T;', -674);
+
+call tw_execSql('DROP PROCEDURE RU_Klas_Test;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruz_Test;', -674);
+call tw_execSql('DROP PROCEDURE RU_Klas_D;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasFin_D;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasFinClean;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasFinInit;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasFinPrep;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasFinZprac;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasInit;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasPrep;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasPrepTest;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruz_D;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruzFin_D;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruzFinInit;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruzFinPrep;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruzFinZprac;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruzInit;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruzPrep;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruzZprac;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasZprac;', -674);
+call tw_execSql('DROP PROCEDURE RU_LogDavkaNum;', -674);
+
+call tw_execSql('DROP PROCEDURE RU_TransCalcKlas;', -674);
+call tw_execSql('DROP PROCEDURE RU_TransKlasifUvOsoba;', -674);
+call tw_execSql('DROP PROCEDURE RU_TransKlasifUvSkup;', -674);
+call tw_execSql('DROP PROCEDURE RU_TransKlas;', -674);
+call tw_execSql('DROP PROCEDURE RU_TransKlasifVysl;', -674);
+call tw_execSql('DROP PROCEDURE RU_TransKlasNavrh;', -674);
+call tw_execSql('DROP PROCEDURE RU_TransKlasifTest;', -674);
+call tw_execSql('DROP PROCEDURE RU_WorstKlasifUvOsoba;', -674);
+call tw_execSql('DROP PROCEDURE RU_GetAktKlasifUv;', -674);
+call tw_execSql('DROP PROCEDURE RU_WorstKlasifUvSkup;', -674);
+call tw_execSql('DROP PROCEDURE RU_GetMatDebtNum;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasKonsolZdrojOs;', -674);
+call tw_execSql('DROP PROCEDURE RU_GetTypSkupKlas;', -674);
+call tw_execSql('DROP PROCEDURE RU_Klasif_K_Te;', -674);
+call tw_execSql('DROP PROCEDURE RU_VysokyDluhZmena;', -674);
+call tw_execSql('DROP PROCEDURE RU_VysokyDluhNavrh;', -674);
+call tw_execSql('DROP PROCEDURE RU_NovaKlNavrhAk;', -674);
+call tw_execSql('DROP PROCEDURE RU_SdruzKlasifPrep;', -674);
+call tw_execSql('DROP PROCEDURE RU_SdruzKlasif;', -674);
+call tw_execSql('DROP PROCEDURE RU_SdruzKlasifPrepOs;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasSdruzPlatReal;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasPlatUvSml;', -674);
+call tw_execSql('DROP PROCEDURE RU_LogKlasifDenNavrh;', -674);
+call tw_execSql('DROP PROCEDURE RU_LogSdruzKlasifTran;', -674);
+call tw_execSql('DROP PROCEDURE RU_LogKlasifDen;', -674);
+call tw_execSql('DROP PROCEDURE RU_LogSdruzKlasif;', -674);
+call tw_execSql('DROP PROCEDURE RU_LogKlasifGetStup;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifDatAPocPoSpl;', -674);
+call tw_execSql('DROP PROCEDURE RU_VyhodnotKlasif;', -674);
+call tw_execSql('DROP PROCEDURE RU_ZmenaRSUKlasif;', -674);
+call tw_execSql('DROP PROCEDURE RU_ZmenaKlNavrh;', -674);
+call tw_execSql('DROP PROCEDURE RU_ZmenaKlasif;', -674);
+call tw_execSql('DROP PROCEDURE RU_ZmenaKlasifPo;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifUvKontr;', -674);
+call tw_execSql('DROP PROCEDURE RU_KlasifKontr;', -674);
+call tw_execSql('DROP PROCEDURE RU_GetKlasif;', -674);
+call tw_execSql('DROP PROCEDURE RU_CalcMatDebtNum;', -674);
+call tw_execSql('DROP PROCEDURE RU_Klasif;', -674);
+
+call tw_execSql('DROP PROCEDURE RU_JeStupKlas;', -674);
+call tw_execSql('DROP PROCEDURE RU_DefaultStupKlas;', -674);
+
+call tw_execSql('DROP PROCEDURE RS_IndikDefaultZprac;', -674);
+call tw_execSql('DROP PROCEDURE RS_IndikDefault_D;', -674);
+call tw_execSql('DROP PROCEDURE RS_IndikDefaultPrep;', -674);
+call tw_execSql('DROP PROCEDURE RS_IndikDefaultInit;', -674);
+call tw_execSql('DROP PROCEDURE RS_NastavDospor;', -674);
+call tw_execSql('DROP PROCEDURE RS_KlasifSpor;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODRSIndikDefPrep_T;', -674);
+call tw_execSql('DROP PROCEDURE BD_EODRSIndikDef_T;', -674);
+
+ROLLBACK WORK;
+
+--End of B136507_UID77507_5

@@ -1,0 +1,131 @@
+CREATE PROCEDURE RSTS_2905_zpracStavDospor(ARealn    INT)
+                                    
+  DEFINE GLOBAL G_MONITOR_ON INTEGER DEFAULT 0;                                    
+  DEFINE _logovat   INT;
+  
+  DEFINE _klasifreal        INT;
+  DEFINE _klasif            INT; 
+  DEFINE _klasifrealpred    INT;
+  DEFINE _datumpred         DATE;
+  DEFINE _pocetVyleceni     INT;  
+  DEFINE _datumDefault      DATE;
+  DEFINE _datumVyleceni     DATE;
+  DEFINE _indikator         INT;
+  DEFINE _provtime          DATETIME YEAR TO SECOND;
+  DEFINE _klasklient        INT;
+  DEFINE _currentDPD        INT;  
+  DEFINE _lhutaNestandardni INT;
+  DEFINE _lhutaPochybne     INT;
+  DEFINE _lhutaSledovane    INT;
+  DEFINE _lhutaStandardni   INT;
+  DEFINE _lhutaZtratove     INT;
+  DEFINE _minDatum          DATE;
+  DEFINE _maxDatum          DATE;
+  DEFINE _datumVyhodnoceni  DATE;  
+   
+  BEGIN
+    ON EXCEPTION IN(-206)
+    END EXCEPTION;
+    
+    DROP TABLE rsts_2905_stavDospor_tmp;
+  END;
+  
+  --zalozime temp tabulku pro evidenci DPD
+  CREATE TEMP TABLE rsts_2905_stavDospor_tmp(
+    realn             int,
+    poradi            serial,
+    datvyhodnoceni    date,     
+    indikdefault      int,
+    datdefault        date,
+    datvyleceni       date,
+    pocetvyleceni     int,
+    klasifreal        int
+  )LOCK MODE ROW;    
+   
+  CALL tw_monitor_init(ARealn,'MigraceStavDospor');
+  LET _logovat = 0;   
+
+  LET _pocetVyleceni  = 0;
+  LET _klasifrealpred = 0;
+  LET _datumpred      = NULL; 
+  LET _datumDefault   = NULL;
+  LET _datumVyleceni  = NULL;
+  LET _indikator      = 0;
+  LET _klasif         = 0;
+  LET _lhutaStandardni    = TW_RegGetKey('RU', 'klasif', '0', 'lhuta');  
+  LET _lhutaSledovane     = TW_RegGetKey('RU', 'klasif', '1', 'lhuta');
+  LET _lhutaNestandardni  = TW_RegGetKey('RU', 'klasif', '2', 'lhuta');
+  LET _lhutaPochybne      = TW_RegGetKey('RU', 'klasif', '3', 'lhuta');
+  LET _lhutaZtratove      = TW_RegGetKey('RU', 'klasif', '4', 'lhuta'); 
+  
+  SELECT MIN(datprvvyhodnoceni), MAX(datvyhodnoceni) INTO _minDatum, _maxDatum FROM ep_dpdevid_den WHERE reals = ARealn;      
+  LET _klasifreal = 0;
+          
+  LET _datumVyhodnoceni = TW_LastDayOf(_minDatum, 'M');
+  WHILE(_datumVyhodnoceni <= _maxDatum)                                    
+    SELECT currentDPD INTO _currentDPD FROM ep_dpdevid_den WHERE reals = ARealn AND datvyhodnoceni = _datumVyhodnoceni;    
+    
+    IF(_currentDPD <= _lhutaStandardni) THEN
+      LET _klasifreal = 0;
+    ELIF(_currentDPD <= _lhutaSledovane) THEN
+      LET _klasifreal = 1;
+    ELIF(_currentDPD <= _lhutaNestandardni) THEN
+      LET _klasifreal = 2;
+    ELIF(_currentDPD <= _lhutaPochybne) THEN  
+      LET _klasifreal = 3;
+    ELSE  
+      LET _klasifreal = 4;
+    END IF;          
+    
+    -- indikator defaultu
+    LET _provtime = (_datumVyhodnoceni + 1 UNITS DAY);
+    LET _provtime = _provtime - 1 UNITS SECOND;
+    LET _klasklient = RSTS_2905_klientStavDospor(ARealn, _provtime);
+    IF(_klasifreal <= 1 AND _klasklient <= 1) THEN
+      LET _indikator = 0;
+    ELIF(_klasifreal <= 1 AND _klasklient > 1) THEN
+      LET _indikator = 1;
+    ELIF(_klasifreal > 1 AND _klasklient <= 1) THEN
+      LET _indikator = 2;
+    ELSE
+      LET _indikator = 3;
+    END IF;  
+    
+    SELECT datdefault, datvyleceni INTO _datumDefault, _datumVyleceni 
+    FROM rsts_2905_stavDospor_tmp
+    WHERE
+      realn = ARealn AND
+      datvyhodnoceni = (SELECT MAX(datvyhodnoceni) FROM rsts_2905_stavDospor_tmp 
+                        WHERE
+                          realn = ARealn AND
+                          datvyhodnoceni < _datumVyhodnoceni);      
+    
+    -- defaulty
+    IF(_klasifreal IN (2, 3, 4) AND _klasifrealpred IN (0, 1)) THEN
+      LET _datumDefault = _datumVyhodnoceni;
+    END IF;
+    
+    IF(_klasifreal IN (0, 1) AND _klasifrealpred IN (2, 3, 4)) THEN
+      LET _datumVyleceni = _datumVyhodnoceni;
+      LET _pocetVyleceni = _pocetVyleceni + 1;
+    END IF;    
+    
+    LET _klasifrealpred = _klasifreal;
+    LET _datumpred      = _datumVyhodnoceni;  
+    
+    INSERT INTO rsts_2905_stavDospor_tmp (realn, datvyhodnoceni, indikdefault, datdefault, datvyleceni, pocetvyleceni, klasifreal)
+    VALUES(Arealn, _datumVyhodnoceni, _indikator, _datumDefault, _datumVyleceni, _pocetvyleceni, _klasifreal);
+             
+    LET _datumVyhodnoceni = TW_LastDayOf(_datumVyhodnoceni + 1 UNITS DAY, 'M');
+  END WHILE;  
+  
+  UPDATE rs_real_mat SET realklasif = _klasifreal WHERE realn = ARealn;              
+  
+  INSERT INTO rs_stavsplaceni_den (realn, poradi, datvyhodnoceni, indikdefault, datdefault, datvyleceni, pocetvyleceni, realklasif)
+    SELECT
+      realn, poradi, datvyhodnoceni, indikdefault, datdefault, datvyleceni, pocetvyleceni, klasifreal
+    FROM rsts_2905_stavDospor_tmp;    
+  
+  CALL tw_monitor_finish();  
+  
+END PROCEDURE;

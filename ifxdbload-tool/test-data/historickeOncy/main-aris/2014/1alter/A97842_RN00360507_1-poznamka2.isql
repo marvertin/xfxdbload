@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A97842_RN00360507_1-poznamka2
+-- @TC:ONCE: DESCRIPTION = Zavedení blacklistů pro podporu řízení rizik {CUSTOMERREQUEST}
+BEGIN WORK;
+
+RENAME COLUMN ep_rizsubjekt_mat.poznamka TO poznamka1; 
+RENAME COLUMN ep_rizsubjekt_arch.poznamka TO poznamka1;
+
+ALTER TABLE ep_rizsubjekt_mat ADD poznamka2 CHAR(70) BEFORE hodnota1;
+ALTER TABLE ep_rizsubjekt_arch ADD poznamka2 CHAR(70) BEFORE hodnota1;
+
+ROLLBACK WORK;
+--End of A97842_RN00360507_1-poznamka2

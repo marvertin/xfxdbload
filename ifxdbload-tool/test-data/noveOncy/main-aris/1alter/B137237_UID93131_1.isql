@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137237_UID93131_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32835: Main: Rozšíření číselníku bank a vznik nových číselníků
+
+BEGIN WORK;
+
+alter table ac_bank_cis add certifvypis Integer DEFAULT 0 NOT NULL;
+
+alter table ac_bank_acis  add certifvypis   Integer;
+
+ROLLBACK WORK;
+
+--End of B137237_UID93131_1

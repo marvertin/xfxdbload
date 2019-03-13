@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B122063_RN00442436_5
+-- @TC:ONCE: DESCRIPTION = Pád dávky EOD na 401N31TCUI Nastala chyba pri archivaci tabulky es_bonusnepr_kart, -746. {DEFECT}
+
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP TRIGGER es_bonusnepr_kart_d', -634);
+
+ROLLBACK WORK;
+
+--End of B122063_RN00442436_5

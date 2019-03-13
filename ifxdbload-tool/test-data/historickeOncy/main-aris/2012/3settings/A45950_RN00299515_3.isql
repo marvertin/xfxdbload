@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A45950_RN00299515_3
+-- @TC:ONCE: DESCRIPTION = V èíselníku rr_reptype_cis sa nenachádza šablóna pre prílohu 131. {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO rr_reptype_cis(repcode, area, repkind, reptype, repvar, repname, exportdir, formatdir, formatfile, keepinterval) 
+    VALUES('SS040', 'SS', '04', '0', 0, 'Pøíloha k platebním stavebnímu spoøení', '', '', 'SS040.jrxml', 1);
+
+ROLLBACK WORK;
+
+--End of A45950_RN00299515_3

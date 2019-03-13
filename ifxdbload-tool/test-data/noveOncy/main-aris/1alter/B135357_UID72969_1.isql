@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135357_UID72969_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22359: Výkonnost: Seq scan nad per_firma_cis {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+CREATE INDEX pef_firma_cis_i2 ON pef_firma_cis(ico);
+CREATE INDEX pef_firma_cis_i3 ON pef_firma_cis(tw_lower(nazev));
+
+ROLLBACK WORK;
+
+--End of B135357_UID72969_1

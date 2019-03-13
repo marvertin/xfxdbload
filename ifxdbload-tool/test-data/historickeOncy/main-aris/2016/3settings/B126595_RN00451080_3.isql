@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B126595_RN00451080_3
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('EU', 'TUMO', 'tisk', 'typDokumentu', (select doktyp from do_typdokumentu_cis where repcode = 'EU010'));
+
+ROLLBACK WORK;
+
+--End of B126595_RN00451080_3

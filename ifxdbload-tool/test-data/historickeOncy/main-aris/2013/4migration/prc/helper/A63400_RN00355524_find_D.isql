@@ -1,0 +1,85 @@
+-----------------------------------------------------------------------------
+--
+--  Template migracni pripravne procedury pro featuru RN00355524
+--
+-----------------------------------------------------------------------------
+create PROCEDURE A63400_RN00355524_find_D ()
+
+define _ser          Int;
+define _smlouva      Dec(16,0);
+define _tsml         Char(4);
+define _os           Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00355524;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00355524(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+  
+  smlouva Dec(16,0),
+  tsml    Char(4),
+  os      Int,
+
+                            --vlastni data - napø. cislo osoby
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+--plnime ridici tabulku - napr. z osob
+--dulezite je poradi vybiranych radku - v tomto poradi se budou
+--ukladat do ridici tabulky a v tomto poradi se bude i migrovat
+foreach cc1 with hold for
+   -- select pro vyber dat
+   
+   SELECT ep.smlouva, ep.tsml, eo.os
+   INTO   _smlouva, _tsml, _os FROM ep_sml_mat ep         
+      LEFT JOIN es_sml_mat es on ep.smlouva = es.smlouva and ep.tsml = es.typ
+      LEFT JOIN eu_sml_mat eu on ep.smlouva = eu.smlouva and ep.tsml = eu.tsml
+      JOIN eo_role_mat eo on ep.smlouva = eo.smlouva and ep.tsml = eo.typ
+      WHERE (es.stav = 'V' or eu.stav = 'V') and eo.stav = 'A' 
+
+   --vlozeni do ridici tabulky
+  INSERT INTO RN00355524( smlouva, tsml, os, zprac)
+      VALUES(  _smlouva, _tsml, _os, -1);
+
+   --nova transakce
+   COMMIT WORK;
+   BEGIN WORK;
+
+end foreach;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00355524;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

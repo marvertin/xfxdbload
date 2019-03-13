@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B112833_RN00380433_5
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Přeceňování {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- #Přeceňovat nemovitost pro <druh_věci>#
+delete from tw_registr_cis where oblast = 'EV' and uloha = 'preceneni' and funkce = 'druhvec';
+
+ROLLBACK WORK;
+
+--End of B112833_RN00380433_5

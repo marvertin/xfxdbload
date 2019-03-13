@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A56590_RN00338874
+-- @TC:ONCE: DESCRIPTION = Archiv správy vymáhané pohledávky
+
+BEGIN WORK;
+
+ALTER TABLE eu_vympohl_arch
+    MODIFY cisnabyvtitul            CHAR(50) ;
+
+ROLLBACK WORK;
+
+

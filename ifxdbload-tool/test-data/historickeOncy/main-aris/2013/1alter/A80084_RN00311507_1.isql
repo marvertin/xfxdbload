@@ -1,0 +1,182 @@
+-- @TC:ONCE: ID = V2, A80084_RN00311507_1
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE eo_adresa_mat (
+  serno   SERIAL NOT NULL,
+  upresneniadresata   CHAR(45),
+  ulice   CHAR(45),
+  cpopis   CHAR(8),
+  corient   CHAR(8),
+  obec   CHAR(60),
+  psc   CHAR(5),
+  stat   CHAR(2),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_adresa_mat_pk ON eo_adresa_mat(serno);
+ALTER TABLE eo_adresa_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eo_adresa_mat_pk;
+
+--FK
+CREATE INDEX eo_adresa_mat_i_f1 ON eo_adresa_mat(psc);
+ALTER TABLE eo_adresa_mat ADD CONSTRAINT FOREIGN KEY(psc) REFERENCES eo_psc_cis(psc) CONSTRAINT eo_adresa_mat_f1;
+CREATE INDEX eo_adresa_mat_i_f2 ON eo_adresa_mat(stat);
+ALTER TABLE eo_adresa_mat ADD CONSTRAINT FOREIGN KEY(stat) REFERENCES eo_stat_cis(statprisl) CONSTRAINT eo_adresa_mat_f2;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE eo_adresa_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  upresneniadresata   CHAR(45),
+  ulice   CHAR(45),
+  cpopis   CHAR(8),
+  corient   CHAR(8),
+  obec   CHAR(60),
+  psc   CHAR(5),
+  stat   CHAR(2),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_adresa_arch_pk ON eo_adresa_arch(idarch);
+ALTER TABLE eo_adresa_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_adresa_arch_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE eo_osobaadresa_mat (
+  serno   SERIAL NOT NULL,
+  refosoba   INTEGER NOT NULL,
+  refadresa   INTEGER NOT NULL,
+  typadresy   CHAR(2) NOT NULL,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_osobaadresa_mat_d9ol
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_osobaadresa_mat_pk ON eo_osobaadresa_mat(serno);
+ALTER TABLE eo_osobaadresa_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eo_osobaadresa_mat_pk;
+
+--FK
+CREATE INDEX eo_osobaadresa_mat_i_f1 ON eo_osobaadresa_mat(refosoba);
+ALTER TABLE eo_osobaadresa_mat ADD CONSTRAINT FOREIGN KEY(refosoba) REFERENCES eo_osoba_mat(os) CONSTRAINT eo_osobaadresa_mat_f1;
+CREATE INDEX eo_osobaadresa_mat_i_f2 ON eo_osobaadresa_mat(refadresa);
+ALTER TABLE eo_osobaadresa_mat ADD CONSTRAINT FOREIGN KEY(refadresa) REFERENCES eo_adresa_mat(serno) CONSTRAINT eo_osobaadresa_mat_f2;
+
+--CHECKS
+ALTER TABLE eo_osobaadresa_mat
+ADD CONSTRAINT (CHECK (typadresy in ('AS')) CONSTRAINT eo_osobaadresa_mat_c1);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE eo_osobaadresa_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refosoba   INTEGER NOT NULL,
+  refadresa   INTEGER NOT NULL,
+  typadresy   CHAR(2) NOT NULL,
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_osobaadresa_arch_d9ol
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_osobaadresa_arch_pk ON eo_osobaadresa_arch(idarch);
+ALTER TABLE eo_osobaadresa_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_osobaadresa_arch_pk;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE eo_insolvspravce_cis (
+  serno   SERIAL NOT NULL,
+  spravceid   Integer NOT NULL,
+  refosoba   INTEGER NOT NULL,
+  datschrankaid   CHAR(10),
+  ic   CHAR(10),
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_insolvspravce_cis_d9pg
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_insolvspravce_cis_pk ON eo_insolvspravce_cis(serno);
+ALTER TABLE eo_insolvspravce_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eo_insolvspravce_cis_pk;
+
+--FK
+CREATE INDEX eo_insolvspravce_cis_i_f1 ON eo_insolvspravce_cis(refosoba);
+ALTER TABLE eo_insolvspravce_cis ADD CONSTRAINT FOREIGN KEY(refosoba) REFERENCES eo_osoba_mat(os) CONSTRAINT eo_insolvspravce_cis_f1;
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE eo_insolvspravce_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  spravceid   Integer NOT NULL,
+  refosoba   INTEGER NOT NULL,
+  datschrankaid   CHAR(10),
+  ic   CHAR(10),
+  poznamka   CHAR(160),
+  platnost   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_insolvspravce_acis_d9pg
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_insolvspravce_acis_pk ON eo_insolvspravce_acis(idarch);
+ALTER TABLE eo_insolvspravce_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_insolvspravce_acis_pk;
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE eo_exekutor_cis ADD  datschrankaid   CHAR(10);
+ALTER TABLE eo_exekutor_acis ADD  datschrankaid   CHAR(10);
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE eo_soud_cis ADD (
+  datschrankaid   CHAR(10),
+  insolvence   Integer  DEFAULT 0 NOT NULL,
+  zkratkasoud   CHAR(10),
+  zkratkaspis   CHAR(10));
+  
+ALTER TABLE eo_soud_cis ADD CONSTRAINT CHECK (insolvence IN (0,1)) CONSTRAINT eo_soud_cis_db6g;
+
+ALTER TABLE eo_soud_acis ADD (
+  datschrankaid   CHAR(10),
+  insolvence   Integer,
+  zkratkasoud   CHAR(10),
+  zkratkaspis   CHAR(10));
+  
+ALTER TABLE eo_soud_acis ADD CONSTRAINT CHECK (insolvence IN (0,1)) CONSTRAINT eo_soud_acis_db6k;
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE eo_roleos_cis ADD insolvence   Integer  DEFAULT 0 NOT NULL;
+ALTER TABLE eo_roleos_cis ADD CONSTRAINT CHECK (insolvence IN (0,1)) CONSTRAINT eo_roleos_cis_dem9;
+
+ALTER TABLE eo_roleos_acis ADD insolvence   Integer;
+ALTER TABLE eo_roleos_acis ADD CONSTRAINT CHECK (insolvence IN (0,1)) CONSTRAINT eo_roleos_acis_dema;
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE ep_referent_cis ADD (
+  telefon   CHAR(45),
+  email   CHAR(45),
+  fax   CHAR(45));
+
+ALTER TABLE ep_referent_acis ADD (
+  telefon   CHAR(45),
+  email   CHAR(45),
+  fax   CHAR(45));
+
+ROLLBACK WORK;
+
+--End of A80084_RN00311507_1

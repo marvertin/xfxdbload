@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137214_UID90372_1-varpojist
+-- @TC:ONCE: DESCRIPTION = RSTS-31489: IMPLEMENTACE (Datovy model): RSTS-26843_REAL: Konstantní pojistné UNIQA {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+alter table ev_varpojist_cis modify typvypoctu char(1);
+
+ROLLBACK WORK;
+
+--End of B137214_UID90372_1-varpojist

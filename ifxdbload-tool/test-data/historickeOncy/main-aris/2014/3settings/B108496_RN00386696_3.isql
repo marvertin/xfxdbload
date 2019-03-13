@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, B108496_RN00386696_3
+-- @TC:ONCE: DESCRIPTION = Insolvence: nejsou naplněny číselníky insolvence {DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO ep_duvnepodpokyn_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM EP_DuvNepodPokyn_Cis)
+  ,'Přistoupení k dluhu 3.osobou','písemná dohoda o způsobu úhrady dluhu s 3.osobou',1)
+;
+
+INSERT INTO ep_duvnepodpokyn_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM EP_DuvNepodPokyn_Cis)
+  ,'Mimosoudní dohoda','písemná dohoda o způsobu úhrady dluhu s ostat.dlužníky',1)
+;
+
+INSERT INTO ep_duvnepodpokyn_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM EP_DuvNepodPokyn_Cis)
+  ,'Ústní dohoda','dohoda se zástavcem o způsobu úhrady dluhu',1)
+;
+
+INSERT INTO ep_duvnepodpokyn_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM EP_DuvNepodPokyn_Cis)
+  ,'Spoluvlastnický podíl','nemovitost ve vlastnictví více osob',1)
+;
+  
+INSERT INTO ep_duvnepodpokyn_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM EP_DuvNepodPokyn_Cis)
+  ,'Úmrtí','úmrtí zástavce-dědické řízení',1)
+;
+
+INSERT INTO ep_duvnepodpokyn_cis(duvod,Popis,Poznamka,Platnost) VALUES (
+(SELECT NVL(MAX(duvod), 0) + 1 FROM EP_DuvNepodPokyn_Cis)
+  ,'Jiný','důvod uveden v poznámce',1)
+;
+
+ROLLBACK WORK;
+
+--End of B108496_RN00386696_3

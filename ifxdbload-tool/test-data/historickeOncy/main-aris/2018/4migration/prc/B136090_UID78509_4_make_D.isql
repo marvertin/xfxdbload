@@ -1,0 +1,91 @@
+CREATE PROCEDURE B136090_UID78509_4_make_D (-- vstupni parametry
+  ADebugFile  CHAR(30) DEFAULT NULL -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+--U všech úvěrových smluv bude nastaven údaj:
+--  Cizoměnový úvěr – bude nastavena hodnota Ano, pokud existuje ke smlouvě specifický údaj typu 
+--  z množiny hodnot parametru #Specifický údaj pro příjem v cizí <měně>#, jinak bude nastavena hodnota Ne.
+
+DEFINE _ser         INT;
+DEFINE _serDM       INT;
+DEFINE _serobjekt   INT;
+
+DEFINE _smlouva     DEC(16, 0);
+DEFINE _tsml        CHAR(4);
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+
+--osetreni chyby pri konstrukci kursoru
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+IF(PD_TraceRequestedBegin(ADebugFile) = 1) THEN
+  trace ON;
+END IF;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_24837', 'UID78509', 'Migrace příjmů a úvěrových smluv');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+FOREACH c1 WITH hold FOR
+  SELECT ser,  smlouva,  tsml
+  INTO  _ser, _smlouva, _tsml
+  FROM B136090_UID78509
+  WHERE zprac < 0
+  ORDER BY ser
+  
+  BEGIN
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulky
+    ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE B136090_UID78509
+      SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+      WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    END EXCEPTION;
+
+    -- Vlastní nastavení
+    UPDATE eu_sml_mat SET cizimena = 1 WHERE smlouva  = _smlouva AND tsml = _tsml;
+
+    --nastaví příznak zpracováno na 1
+    UPDATE B136090_UID78509 SET zprac = 1, NumErr = NULL, ISAMErr = NULL, TextErr = NULL WHERE ser = _ser;
+  END;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+END FOREACH;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+CALL TW_DM_End(_serDM);
+
+IF(PD_TraceRequestedEnd(ADebugFile) = 1) THEN
+   trace OFF;
+END IF;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+END PROCEDURE;

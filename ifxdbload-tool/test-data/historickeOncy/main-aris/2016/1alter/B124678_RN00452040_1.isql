@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B124678_RN00452040_1
+-- @TC:ONCE: DESCRIPTION = HS: Neexportují se další náklady spojené s úvěrem v Úvěry / Smlouvy {DEFECT}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+DROP TABLE ep_expsplspormodee_den;
+
+CREATE TABLE eu_expzajistdalnaklad_den (
+  serno   SERIAL NOT NULL,
+  id_index   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradizajist   Integer,
+  reftypdalsinakl   INTEGER,
+  reftypdalsinakltext   VARCHAR(255),
+  uhrada   DECIMAL(16, 2),
+  perioda   CHAR(1),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_expzajistdalnaklad_den_pk ON eu_expzajistdalnaklad_den(serno);
+ALTER TABLE eu_expzajistdalnaklad_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_expzajistdalnaklad_den_pk;
+
+ROLLBACK WORK;
+
+--End of B124678_RN00452040_1

@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B114899_RN00406234_5
+-- @TC:ONCE: DESCRIPTION = DbCut RSTS - chyby při uploadu triggerů {DEFECT}
+
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP TRIGGER ah_pohlos_kart_i', -634);
+call TW_ExecSql('DROP TRIGGER ah_pohlos_kart_u', -634);
+call TW_ExecSql('DROP TRIGGER creditrqreturnabilityreason_i', -634);
+call TW_ExecSql('DROP TRIGGER creditrqreturnabilityreason_i', -634);
+call TW_ExecSql('DROP TRIGGER os_davka_cis_i', -634);
+call TW_ExecSql('DROP TRIGGER os_davka_cis_u', -634);
+call TW_ExecSql('DROP TRIGGER os_davkyden_u', -634);
+call TW_ExecSql('DROP TRIGGER os_priddp_kart_i', -634);
+call TW_ExecSql('DROP TRIGGER os_priddp_kart_u', -634);
+call TW_ExecSql('DROP TRIGGER os_vypl_kart_i', -634);
+call TW_ExecSql('DROP TRIGGER os_vypl_kart_u', -634);
+
+ROLLBACK WORK;
+
+--End of B114899_RN00406234_5

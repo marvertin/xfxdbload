@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B134773_UID65516_5-businessmode
+-- @TC:ONCE: DESCRIPTION = RSTS-18467: Různé - dokončení {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_bssimulationcase DROP businessmode;
+
+
+ROLLBACK WORK;
+
+--End of B134773_UID65516_5-businessmode

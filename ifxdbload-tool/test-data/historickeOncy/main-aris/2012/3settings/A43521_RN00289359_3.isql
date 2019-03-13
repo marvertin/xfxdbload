@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A43521_RN00289359_3
+-- @TC:ONCE: DESCRIPTION = Chyby automatické parametrizace. {DEFECT}
+
+BEGIN WORK;
+
+UPDATE tw_smstyp_cis SET popis = 'Autorizace operací' WHERE zkratka = 'AUTORIZACE';
+
+UPDATE tw_smstyp_cis SET popis = 'Obnova hesla' WHERE zkratka = 'OBNOVA_HESLA';
+
+UPDATE tw_smstyp_cis SET popis = 'Registrace nových klientù' WHERE zkratka = 'REGISTRACNI';
+
+UPDATE tw_smstyp_cis SET popis = 'Neprovedení pøíkazu' WHERE zkratka = 'NEPRPRIKAZU';
+
+
+
+ROLLBACK WORK;
+
+--End of A43521_RN00289359_3

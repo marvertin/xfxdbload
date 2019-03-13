@@ -1,0 +1,73 @@
+CREATE PROCEDURE B136065_UID78509_4_find_D()
+--U všech příjmů bude nastaveno:
+--  Měna příjmu = CZK
+--  Uznatelná měsíční částka = průměrná měsíční částka
+
+define _ser          Int;
+
+DEFINE _serno         BIGINT;
+DEFINE _castka        DEC(16, 2);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE B136065_UID78509;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE B136065_UID78509(
+  Ser     Serial NOT NULL,  
+  NumErr  Int,              
+  ISAMErr Int,              
+  TextErr VarChar(255),     
+  zprac   SmallInt,
+
+  serno   BIGINT,
+  mena    CHAR(3),
+  castka  DEC(16, 2),
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+foreach cc2 with hold for
+  SELECT serno, castka
+  INTO  _serno, _castka
+  FROM cfs_prijem_mat
+
+  -- naplnění řídící tabulky
+  INSERT INTO B136065_UID78509(serno, mena, castka, zprac)
+  VALUES(_serno, 'CZK', _castka, -1);
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE B136065_UID78509;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+
+END PROCEDURE;

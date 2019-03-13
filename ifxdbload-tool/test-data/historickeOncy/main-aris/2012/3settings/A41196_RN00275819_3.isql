@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A41196_RN00275819_3
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+   INSERT INTO tw_runningapp (appname, appstatus)
+   VALUES ('EMAIL_SENDER', 0);
+
+ROLLBACK WORK;
+
+--End of A41196_RN00275819_3

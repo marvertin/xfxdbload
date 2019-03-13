@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, A47384_RN00292084_1
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE RU_NespReal_Kart ADD rozhden Integer;
+
+CREATE TABLE ru_nesprealdospor_kart (
+  realn   Integer NOT NULL,
+  treal   CHAR(4) NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  realnspor   INTEGER,
+  trealspor   CHAR(4),
+  smlspor   DECIMAL(16, 0),
+  tsmlspor   CHAR(4),
+  kontospor   DECIMAL(16, 0),
+  tkospor   CHAR(2),
+  rozdil   DECIMAL(16, 2),
+  ocsaldospor   DECIMAL(16, 2),
+  saldospor   DECIMAL(16, 2),
+  vklad   DECIMAL(16, 2),
+  rozhden   Integer,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_nesprealdospor_kart_pk ON ru_nesprealdospor_kart(realn);
+ALTER TABLE ru_nesprealdospor_kart ADD CONSTRAINT PRIMARY KEY(realn) CONSTRAINT ru_nesprealdospor_kart_pk;
+
+ROLLBACK WORK;
+
+--End of A47384_RN00292084_1

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A46400_RN00297152
+-- @TC:ONCE: DESCRIPTION = Pøenos pøíznaku korespondence z Cibis Web na smlouvu SS
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('ES', '*', '*', 'korespondencepapir', 0, 1, 'Spoøení', 'Vytvoøení smlouvy stavebního spoøení', null, 'Parametr definuje zpùsob korespondence PAPÍROVÌ.');
+
+call TW_RegSetOrAddKey('ES', '*', '*', 'korespondenceemail', 6, 1, 'Spoøení', 'Vytvoøení smlouvy stavebního spoøení', null, 'Parametr definuje zpùsob korespondence E-mail.');
+
+INSERT INTO es_zpusobkor_cis(zpusobkor, nazev,          tisk, poznamka, platnost) 
+VALUES                      (6,         'Elektronicky', 0,    null,     1);
+
+UPDATE es_zpusobkor_cis
+SET nazev = 'Poštou (papírovì)'
+WHERE zpusobkor = 0;
+
+ROLLBACK WORK;
+

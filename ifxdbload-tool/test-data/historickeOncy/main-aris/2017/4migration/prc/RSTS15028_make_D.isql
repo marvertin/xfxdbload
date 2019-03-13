@@ -1,0 +1,47 @@
+create procedure RSTS15028_make_D()
+
+  define _headSer int;
+  define _refTime datetime YEAR to SECOND;
+  define _refUser char(20);
+  define _refDatProv date;
+  
+  define _prevRefTime datetime YEAR to SECOND;
+  define _prevRefDatProv date;
+  
+  begin work;
+  
+  let _prevRefDatProv = MDY(1,1,1990);
+  let _prevRefTime = _prevRefDatProv;
+  
+  set triggers for ep_splspormoderr_den disabled;
+  
+  foreach model_cursor for
+    SELECT headser
+     into _headSer
+     FROM ep_splspormoderr_den
+     where refdatprov is null
+
+    select datvytv, portime, poruser
+     into  _refDatProv, _refTime, _refUser
+     from ep_splspormodsh_den
+     where ser = _headSer;
+     
+    if _refDatProv is null then
+      let _refDatProv = _prevRefDatProv;
+      let _refTime = _prevRefTime;
+      let _refUser = 'unknown';
+    end if;
+    
+    update ep_splspormoderr_den set
+       refdatprov = _refDatProv, ep_splspormoderr_den.reftime = _refTime, refuser = _refUser
+       WHERE CURRENT OF model_cursor
+    ;
+    
+    let _prevRefDatProv = _refDatProv;
+    let _prevRefTime = _refTime;
+  end foreach;
+  
+  set triggers for ep_splspormoderr_den enabled;
+  
+  commit;
+end procedure;--RSTS15028_make_D

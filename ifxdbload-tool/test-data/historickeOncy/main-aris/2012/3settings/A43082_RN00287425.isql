@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43082_RN00287425
+-- @TC:ONCE: DESCRIPTION = Chybné nastavení registru
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'obnova', 'OBNOVA_HESLA',1);
+  
+
+
+ROLLBACK WORK;

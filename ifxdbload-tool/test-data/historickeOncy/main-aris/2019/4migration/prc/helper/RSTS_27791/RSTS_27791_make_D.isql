@@ -1,0 +1,230 @@
+create PROCEDURE RSTS_27791_make_D (-- vstupni paramtery
+                                    AFaze Int, -- 1 - realizace spoření a úvěru, 2 - osoby
+                                    ADebugFile Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                    ALogovat Int default 0
+)
+
+define _ser          Int;
+define _serDM Int;
+
+define _prvni       integer;
+define _posledni    integer;
+define _curr        integer; 
+define _AID         varchar(20);  
+define _SID         integer;
+
+define _urapldef Char(1);
+define _jeretail Int;
+define _klient Int;
+
+define _serprod Int;
+define _reals Int;
+define _realuv Int;
+
+define _absPrah Dec(16,2);
+define _absPrahRetail Dec(16,2);
+define _absPrahNonRetail Dec(16,2);
+define _relPrah Dec(16,2);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+SET LOCK MODE TO WAIT 600;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+let _serDM = TW_DM_Start('RSTS-27791', 'RSTS_27791', 'Migrace historie EBA DPD - fáze ' || AFaze);
+
+if ALogovat <> 0 then
+  call TW_RegSetOrAddKey('TW', 'monitor', 'Migrace_EBA_DPD', 'ON', 1);
+  call tw_monitor2_prep('Migrace_EBA_DPD');
+  call tw_monitor2_init('Migrace_EBA_DPD');
+end if;
+
+-- vytvoření pomocných struktur
+call RSTS_27791_tabs();
+
+COMMIT WORK;
+BEGIN WORK;
+
+let _AID = 'RSTS_27791_make_D';
+let _SID = DBINFO('sessionid');
+
+if not exists(SELECT * FROM RSTS_27791 WHERE (AFaze = 1 AND zpracspor = 1) OR (AFaze = 2 AND zpracuv = 1) OR (AFaze = 3 AND zpracos = 1)) then
+  -- provést pokud proběhl čístící běh
+  call tw_para_clean(_AID);
+end if;
+
+-- nejvetsi a nejmensi serial
+let _prvni, _posledni = (SELECT MIN(ser), MAX(ser) FROM RSTS_27791 WHERE (AFaze = 1 AND zpracspor IN (-1, -2)) OR (AFaze = 2 AND zpracuv IN (-1, -2)) OR (AFaze = 3 AND zpracos IN (-1, -2)));
+
+let _absPrahRetail = TW_RegGetKeyDec('EU', 'EBADPD', 'absPrah', 'retail');
+let _absPrahNonRetail = TW_RegGetKeyDec('EU', 'EBADPD', 'absPrah', 'nonRetail');
+let _relPrah = TW_RegGetKeyDec('EU', 'EBADPD', 'relPrah', '*');
+
+COMMIT WORK;
+
+-- vnejsi cyklus pres ridici tabulku
+while tw_para_find(_AID,_SID,_prvni,_posledni) = 1
+  -- vnitrni cyklus pres ridici tabulku
+  while tw_para_hasnext(_AID,_SID) = 1
+    -- zahajim transakci
+    BEGIN WORK;
+
+    -- vezmu záznam
+    let _curr = tw_para_next(_AID,_SID);
+    
+    -- dohledam zpracovavany zaznam
+    SELECT ser, klient, urapldef, jeretail
+    INTO _ser, _klient, _urapldef, _jeretail
+    FROM RSTS_27791
+    WHERE ser = _curr AND ((AFaze = 1 AND zpracspor IN (-1, -2)) OR (AFaze = 2 AND zpracuv IN (-1, -2)) OR (AFaze = 3 AND zpracos IN (-1, -2)));
+
+    if _ser is null then
+      COMMIT WORK;
+      continue while; --pokud byl zaznam jiz zpracovan jdu dal
+    end if;
+ 
+    begin
+      on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+        begin
+          on exception in (-255)
+          end exception;
+          
+          ROLLBACK;
+        end;         
+        if (TW_ErrSql in (-213,-457, -721)) then
+          call TW_RaiseTechError ('136J769TCUI', 'RSTS_27791_make_D: Action has been cancelled by operator');
+        end if;            
+        
+        BEGIN WORK;
+        
+        if AFaze = 1 then
+          UPDATE RSTS_27791 SET (NumErr, ISAMErr, TextErr, zpracspor, sid) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2, _SID) WHERE ser = _curr;
+        elif AFaze = 2 then
+          UPDATE RSTS_27791 SET (NumErr, ISAMErr, TextErr, zpracuv, sid) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2, _SID) WHERE ser = _curr;
+        elif AFaze = 3 then
+          UPDATE RSTS_27791 SET (NumErr, ISAMErr, TextErr, zpracos, sid) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2, _SID) WHERE ser = _curr;
+        end if;
+    
+        COMMIT;
+        BEGIN WORK;          
+  
+        --znovu vezmu záznam - reknu, ze je chyba (1)
+        let _curr = tw_para_next(_AID,_SID,1);
+        call TW_ClearMessage();
+        
+        COMMIT WORK;
+        
+        continue while;
+      end exception with resume;
+          
+      --vlastni algoritmus migrace
+      if AFaze = 1 then
+        UPDATE RSTS_27791 SET starttimespor = get_timestamp() WHERE ser = _curr;
+      elif AFaze = 2 then
+        UPDATE RSTS_27791 SET starttimeuv = get_timestamp() WHERE ser = _curr;
+      elif AFaze = 3 then
+        UPDATE RSTS_27791 SET starttimeos = get_timestamp() WHERE ser = _curr;
+      end if;
+          
+      if _jeretail <> 0 then
+        let _absPrah = _absPrahRetail;
+      else
+        let _absPrah = _absPrahNonRetail;
+      end if;
+      
+      if AFaze = 1 then
+        -- vyprázdnění tabulek pro obraty dotčených kont
+        DELETE FROM RSTS_27791_memoGrp_Tmp;
+  
+        -- zpracování spoření
+        foreach cspor with hold for
+          SELECT ser, reals
+          INTO _serprod, _reals
+          FROM RSTS_27791_prod
+          WHERE klient = _klient AND reals IS NOT NULL AND zprac IN (-1, -2)
+  
+          call RSTS_27791_spor(_reals, _klient, _urapldef, _absPrah, _relPrah, ALogovat);
+  
+          UPDATE RSTS_27791_prod SET zprac = 1 WHERE ser = _serprod;
+  
+          COMMIT WORK;
+          BEGIN WORK;
+        end foreach;
+  
+      elif AFaze = 2 then
+        -- vyprázdnění tabulek pro obraty dotčených kont
+        DELETE FROM RSTS_27791_memoGrp_Tmp;
+
+        -- zpracování úvěrů
+        foreach cuver with hold for
+          SELECT ser, realuv
+          INTO _serprod, _realuv
+          FROM RSTS_27791_prod
+          WHERE klient = _klient AND realuv IS NOT NULL AND zprac IN (-1, -2)
+  
+          call RSTS_27791_uv(_realuv, _klient, _urapldef, _absPrah, _relPrah, ALogovat);
+  
+          UPDATE RSTS_27791_prod SET zprac = 1 WHERE ser = _serprod;
+  
+          COMMIT WORK;
+          BEGIN WORK;
+        end foreach;
+
+      elif AFaze = 3 then
+        -- zpracování osoby
+        call RSTS_27791_os(_klient, ALogovat);
+      end if;
+          
+      -- aktualizuju zaznam v ridici tabulce
+      if AFaze = 1 then
+        UPDATE RSTS_27791 SET zpracspor = 1, sid = _SID, numerr = NULL, isamerr = NULL, texterr = NULL, finishtimespor = get_timestamp() WHERE ser = _curr;
+      elif AFaze = 2 then
+        UPDATE RSTS_27791 SET zpracuv = 1, sid = _SID, numerr = NULL, isamerr = NULL, texterr = NULL, finishtimeuv = get_timestamp() WHERE ser = _curr;
+      elif AFaze = 3 then
+        UPDATE RSTS_27791 SET zpracos = 1, sid = _SID, numerr = NULL, isamerr = NULL, texterr = NULL, finishtimeos = get_timestamp() WHERE ser = _curr;
+      end if;
+          
+      COMMIT WORK;
+      BEGIN WORK;
+    end;
+  
+    -- potvrdim transakci
+    COMMIT WORK;
+  end while;
+end while;
+
+BEGIN WORK;
+
+--algoritmus dokonceni migrace
+
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+  trace off;
+end if;
+
+if ALogovat <> 0 then
+  call tw_monitor2_finalize();
+  call TW_RegDelKey('TW', 'monitor', 'Migrace_EBA_DPD', 'ON');
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

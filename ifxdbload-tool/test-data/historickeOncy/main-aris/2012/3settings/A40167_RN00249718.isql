@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A40167_RN00249718
+-- @TC:ONCE: DESCRIPTION = parametr definující typ infa o dùvìryhodnosti - INSOLVENCE
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EO', 'CREDIBILITY', 'informationtype', 'insolvence', '5', 1);
+
+ROLLBACK WORK;

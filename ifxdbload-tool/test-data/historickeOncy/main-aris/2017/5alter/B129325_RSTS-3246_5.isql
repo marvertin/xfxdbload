@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B129325_RSTS-3246_5
+-- @TC:ONCE: DESCRIPTION = Odstranění nepoužívaných sloupců v tabulce eu_sml_mat
+
+BEGIN WORK;
+
+alter table eu_sml_mat
+  drop fixsazba;
+
+alter table eu_sml_arch
+  drop fixsazba;
+  
+ROLLBACK WORK;
+
+--End of B129325_RN00XXXXX_5

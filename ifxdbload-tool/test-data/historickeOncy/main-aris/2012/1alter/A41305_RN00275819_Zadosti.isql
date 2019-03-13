@@ -1,0 +1,297 @@
+-- @TC:ONCE: ID = V2, A41305_RN00275819_Zadosti
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - Main - Žádosti
+
+BEGIN WORK;
+
+-- ###############################################################
+--       ep_typzadost_cis
+
+-- 1  ep_typzadost_cis-1/3       [CREATE.TABLE]
+CREATE TABLE ep_typzadost_cis (
+    typzadost       CHAR(1)   NOT NULL,
+    text            CHAR(35)   NOT NULL,
+    zpracdavka      Integer DEFAULT 1  NOT NULL,
+    zpusob          CHAR(1) DEFAULT 'A'  NOT NULL,
+    zpusobevid      CHAR(1) DEFAULT 'A' ,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1 ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ep_typzadost_cis_dk1t
+) LOCK MODE ROW
+;
+
+-- 2  ep_typzadost_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX ep_typzadost_cis_pk ON ep_typzadost_cis (typzadost) ;
+
+-- 3  ep_typzadost_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_typzadost_cis
+    ADD CONSTRAINT PRIMARY KEY (typzadost)  CONSTRAINT ep_typzadost_cis_pk;
+
+-- ###############################################################
+--       ep_zadosoba
+
+-- 4  ep_zadosoba-1/5       [CREATE.TABLE]
+CREATE TABLE ep_zadosoba (
+    ser             SERIAL   NOT NULL,
+    zadost          INTEGER   NOT NULL,
+    os              Integer   NOT NULL,
+    typos           CHAR(1) ,
+    jmeno           CHAR(24) ,
+    prijmeni        CHAR(35) ,
+    nazevmajitel    CHAR(100),
+    ulice           char(45) ,
+    obec            CHAR(45) ,
+    psc             CHAR(5),
+    stat            CHAR(2) DEFAULT 'CZ' ,
+    cpopis          CHAR(8)  ,
+    corient         CHAR(8)  ,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 5  ep_zadosoba-2/5       [CREATE.INDEX]
+CREATE unique INDEX ep_zadosoba_pk ON ep_zadosoba (ser) ;
+
+-- 6  ep_zadosoba-3/5       [CREATE.INDEX]
+CREATE INDEX ep_zadosoba_i_f1 ON ep_zadosoba (zadost) ;
+
+-- 7  ep_zadosoba-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_zadosoba
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ep_zadosoba_pk;
+
+-- ###############################################################
+--       ep_zadkomkanal
+
+-- 8  ep_zadkomkanal-1/5       [CREATE.TABLE]
+CREATE TABLE ep_zadkomkanal (
+    ser             SERIAL   NOT NULL,
+    zadost          INTEGER   NOT NULL,
+    kanal           Integer   NOT NULL,
+    os              Integer   NOT NULL,
+    typkom          Integer   NOT NULL,
+    adresa          CHAR(45)   NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 9  ep_zadkomkanal-2/5       [CREATE.INDEX]
+CREATE unique INDEX ep_zadkomkanal_pk ON ep_zadkomkanal (ser) ;
+
+-- 10  ep_zadkomkanal-3/5       [CREATE.INDEX]
+CREATE INDEX ep_zadkomkanal_i_f1 ON ep_zadkomkanal (zadost) ;
+
+-- 11  ep_zadkomkanal-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_zadkomkanal
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ep_zadkomkanal_pk;
+
+-- ###############################################################
+--       ep_zadost_kart
+
+-- 12  ep_zadost_kart-1/3       [CREATE.TABLE]
+CREATE TABLE ep_zadost_kart (
+    zadost          SERIAL   NOT NULL,
+    typzadost       CHAR(1)  ,
+    stav            CHAR(1)   NOT NULL,
+    zpusob          CHAR(1) DEFAULT 'A'  NOT NULL,
+    uplprav         Integer DEFAULT 0  NOT NULL,
+    datprov         DATE  ,
+    datnav          DATE  ,
+    datpotv         DATE  ,
+    datzrus         DATE  ,
+    poznamka        CHAR(70)  ,
+    zadatel         INTEGER  ,
+    zpracevid       Integer DEFAULT 0  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    navtime         datetime year to second  ,
+    navuser         CHAR(20)  ,
+    potvtime        datetime year to second  ,
+    potvuser        CHAR(20)  ,
+    provtime        DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    provuser        CHAR(20) DEFAULT USER ,
+    zrustime        datetime year to second  ,
+    zrususer        CHAR(20)
+) LOCK MODE ROW
+;
+
+-- 13  ep_zadost_kart-2/3       [CREATE.INDEX]
+CREATE unique INDEX ep_zadost_kart_pk ON ep_zadost_kart (zadost) ;
+
+-- 14  ep_zadost_kart-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_zadost_kart
+    ADD CONSTRAINT PRIMARY KEY (zadost)  CONSTRAINT ep_zadost_kart_pk;
+
+-- ###############################################################
+--       ep_zadpo
+
+-- 15  ep_zadpo-1/5       [CREATE.TABLE]
+CREATE TABLE ep_zadpo (
+    ser             SERIAL   NOT NULL,
+    zadost          INTEGER   NOT NULL,
+    po              Integer   NOT NULL,
+    nazevmajitel    CHAR(100)   NOT NULL,
+    ulice           char(45)  ,
+    stat            CHAR(2) DEFAULT 'CZ' ,
+    cpopis          CHAR(8)  ,
+    corient         CHAR(8)  ,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 16  ep_zadpo-2/5       [CREATE.INDEX]
+CREATE unique INDEX ep_zadpo_pk ON ep_zadpo (ser) ;
+
+-- 17  ep_zadpo-3/5       [CREATE.INDEX]
+CREATE INDEX ep_zadpo_i_f1 ON ep_zadpo (zadost) ;
+
+-- 18  ep_zadpo-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_zadpo
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ep_zadpo_pk;
+
+-- ###############################################################
+--       ep_zadrole
+
+-- 19  ep_zadrole-1/5       [CREATE.TABLE]
+CREATE TABLE ep_zadrole (
+    ser             SERIAL   NOT NULL,
+    zadost          INTEGER   NOT NULL,
+    os              Integer   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    typrole         CHAR(2)   NOT NULL,
+    upresadr        char(45)  ,
+    ulice           char(45)  ,
+    cpopis          CHAR(8)  ,
+    corient         CHAR(8)  ,
+    psc             CHAR(5)  ,
+    obec            CHAR(45) ,
+    stat            CHAR(2) DEFAULT 'CZ' ,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 20  ep_zadrole-2/5       [CREATE.INDEX]
+CREATE unique INDEX ep_zadrole_pk ON ep_zadrole (ser) ;
+
+-- 21  ep_zadrole-3/5       [CREATE.INDEX]
+CREATE INDEX ep_zadrole_i_f1 ON ep_zadrole (zadost) ;
+
+-- 22  ep_zadrole-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_zadrole
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ep_zadrole_pk;
+
+-- ###############################################################
+--       ep_zadsmlss
+
+-- 23  ep_zadsmlss-1/5       [CREATE.TABLE]
+CREATE TABLE ep_zadsmlss (
+    ser             SERIAL   NOT NULL,
+    zadost          INTEGER   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    cc              DECIMAL(16, 2)  ,
+    vop             Integer  ,
+    tarif           Integer  ,
+    vklad           DECIMAL(16, 2)  ,
+    sp              Integer  ,
+    priloha1        Integer  ,
+    priloha2        Integer  ,
+    priloha3        Integer  ,
+    priloha4        Integer  ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 24  ep_zadsmlss-2/5       [CREATE.INDEX]
+CREATE unique INDEX ep_zadsmlss_pk ON ep_zadsmlss (ser) ;
+
+-- 25  ep_zadsmlss-3/5       [CREATE.INDEX]
+CREATE INDEX ep_zadsmlss_i_f1 ON ep_zadsmlss (zadost) ;
+
+-- 26  ep_zadsmlss-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_zadsmlss
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ep_zadsmlss_pk;
+
+-- ###############################################################
+--       ep_zadvypis
+
+-- 27  ep_zadvypis-1/5       [CREATE.TABLE]
+CREATE TABLE ep_zadvypis (
+    ser             SERIAL   NOT NULL,
+    zadost          INTEGER   NOT NULL,
+    konto           DECIMAL(16, 0)   NOT NULL,
+    tko             CHAR(2)   NOT NULL,
+    druhvypis       Integer   NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 28  ep_zadvypis-2/5       [CREATE.INDEX]
+CREATE unique INDEX ep_zadvypis_pk ON ep_zadvypis (ser) ;
+
+-- 29  ep_zadvypis-3/5       [CREATE.INDEX]
+CREATE INDEX ep_zadvypis_i_f1 ON ep_zadvypis (zadost) ;
+
+-- 30  ep_zadvypis-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ep_zadvypis
+    ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT ep_zadvypis_pk;
+
+
+
+--XXX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX
+
+
+-- ###############################################################
+--       ep_zadosoba
+
+-- 31  ep_zadosoba-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE ep_zadosoba
+    ADD CONSTRAINT FOREIGN KEY (zadost) REFERENCES ep_zadost_kart(zadost)  CONSTRAINT ep_zadosoba_f1;
+
+-- ###############################################################
+--       ep_zadkomkanal
+
+-- 32  ep_zadkomkanal-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE ep_zadkomkanal
+    ADD CONSTRAINT FOREIGN KEY (zadost) REFERENCES ep_zadost_kart(zadost)  CONSTRAINT ep_zadkomkanal_f1;
+
+-- ###############################################################
+--       ep_zadpo
+
+-- 33  ep_zadpo-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE ep_zadpo
+    ADD CONSTRAINT FOREIGN KEY (zadost) REFERENCES ep_zadost_kart(zadost)  CONSTRAINT ep_zadpo_f1;
+
+-- ###############################################################
+--       ep_zadrole
+
+-- 34  ep_zadrole-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE ep_zadrole
+    ADD CONSTRAINT FOREIGN KEY (zadost) REFERENCES ep_zadost_kart(zadost)  CONSTRAINT ep_zadrole_f1;
+
+-- ###############################################################
+--       ep_zadsmlss
+
+-- 35  ep_zadsmlss-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE ep_zadsmlss
+    ADD CONSTRAINT FOREIGN KEY (zadost) REFERENCES ep_zadost_kart(zadost)  CONSTRAINT ep_zadsmlss_f1;
+
+-- ###############################################################
+--       ep_zadvypis
+
+-- 36  ep_zadvypis-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE ep_zadvypis
+    ADD CONSTRAINT FOREIGN KEY (zadost) REFERENCES ep_zadost_kart(zadost)  CONSTRAINT ep_zadvypis_f1;
+
+
+ROLLBACK WORK;
+

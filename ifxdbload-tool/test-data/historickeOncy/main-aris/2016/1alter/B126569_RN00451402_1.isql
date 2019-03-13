@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B126569_RN00451402_1
+-- @TC:ONCE: DESCRIPTION = Web/SIS: Povolit uživateli změnit přihlašovací jméno {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE EO_Sluzba_Kart ADD sisloginaliaspuv char(128) before stav;
+
+ALTER TABLE EO_Sluzba_Kart ADD sisloginaliasnew char(128) before stav;
+
+
+ROLLBACK WORK;
+
+--End of B126569_RN00451402_1

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B129988_30244_4
+-- @TC:ONCE: DESCRIPTION = Nastavení mapovacího kódu při odpisu pohledávky
+
+
+BEGIN WORK;
+
+UPDATE ac_konto_mat  SET mapkod = ep_getfincodemap(konto, tko)
+WHERE
+  tko = 'CA' AND
+  stav <> 2 AND
+  EXISTS(SELECT 1 FROM ru_odppohl_kart odp, ru_real_mat ru WHERE ru.konto = konto AND ru.tko = tko AND odp.realn = ru.realn AND odp.stav = 'C') AND
+  mapkod <> ep_getfincodemap(konto, tko);
+
+ROLLBACK WORK;
+
+--End of B129988_30244_4

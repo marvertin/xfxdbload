@@ -1,0 +1,42 @@
+-- @TC:ONCE: ID = V2, A43029_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+update ep_produkt_cis 
+set treal2 = 'PLFO'
+  , tko2 = 'SS'
+where tprod = 'SPORFO';
+
+update ep_produkt_cis 
+set treal2 = 'PLPO'
+  , tko2 = 'PS'
+where tprod = 'SPORPO';
+ 
+insert into rz_eod_cis  (id, description,                   actiontype)
+values                  (69, 'Obnova zvýhodnìného úroèení', 'U');
+
+insert into rz_eod_cis  (id, description,                           actiontype)
+values                  (70, 'Úètování úhrady za platební pøíkazy', 'U');
+
+
+insert into ep_fincodemap_cis (tarif, druhvklad, fincode)
+values                        (0, 4, 4);
+
+insert into es_voptarif_cis(vop, tarif, text,         textint,      datod,          datkon, minvklad, maxvek, mincczvyh, hodnoceni, minhodnoceni, kuz, odkldobazvyscc, odkldobasnizcc, odkldobazmtarif,minzustpridel, mindobapridel, lhutaprideluver, lhutaprideluverlong, zvyscc, uctuhrprespor, splatkauzaklad, splatkau, status, minsplatkau, maxzustpridel, tolerakont, vratnaspor, pocprespvklad, textindikator, narokovatsp, minccfo, maxccfo,  minccpo,  maxccpo, povolennezlklient, typuctu, transucet, zvyhoduroceni, minzustatekucet, platbyzdarmacelk, maxpocettransuctu, uzavprekluver)
+values                     (18,  200,  'Žluté konto', 'Žluté konto', mdy(7,1,2012), null,   0.2,      null,   null,      'U',       64,           2,   0,              0,              0,              40,            24,            9,               12,                  1,      0,             'C',              1,        1,      null,        null,          0,          null,       null,          'Žluté konto', 0,           50000,   2000000,  50000,    5000000, 0,                 'P',     1,         1,             2000,            4,                1,                 0);
+
+insert into es_paramcastar_cis(tarif, datod,         indexbazes, odchylkaurs, periodas, indexbazeu, odchylkauru, periodau, koefuhr, vstuhrvek, vyseuhrmin, vyseuhrmax, uhrzvysccvek, koefuhrzvyscc, veductussfo, veductusspo, status, indexbazez, odchylkaurz, periodaz)
+values                        (200,   mdy(7,1,2012), 0,          1.5,         'M',      1,          4.5,         'M',      0,       0,         null,       null,       0,            0,             0,           0,           1,      101,        0,           'M');
+
+insert into ep_uhrada_cis(tuhr,        text,              cetnost, tuhruct, poznamka)
+values                   ('PLATPRIK', 'Platební pøíkazy', 'P',     81,      null);
+
+insert into ep_uhrada_cis(tuhr,        text,                  cetnost, tuhruct,    poznamka)
+values                   ('ZMCHARU', 'Zmìna charakteru úètu', 'J',     82,         null);
+
+ROLLBACK WORK;
+
+--End of A42718_RN00270144
+ 

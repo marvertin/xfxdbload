@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B129573_RN00451095_1
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ru_cerp_kart
+    ADD interrefinanc   Integer DEFAULT 0;
+    
+ALTER TABLE ru_cerp_kart
+    ADD CONSTRAINT CHECK (interrefinanc IN (0,1)) CONSTRAINT ru_cerp_kart_d4cq;
+
+ROLLBACK WORK;
+
+--End of B129573_RN00451095_1

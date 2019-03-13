@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B126400_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE pro_simulatedturnover 
+  ADD feespayment   DECIMAL(16,2);
+
+ROLLBACK WORK;
+
+--End of B126400_RN00451080_1

@@ -1,0 +1,52 @@
+-- @TC:ONCE: ID = V2, A47308_RN00292084_3
+-- @TC:ONCE: DESCRIPTION = Zmìny ve zpùsobu zahájení splácení, dospoøování a sledování oèekávaného salda {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO eu_odkladDuvod_cis(id, nazev, platnost)
+  VALUES (1, 'Úmrtí', 1)
+;
+INSERT INTO eu_odkladDuvod_cis(id, nazev, platnost)
+  VALUES (2, 'Restrukturalizace', 1)
+;
+INSERT INTO eu_odkladDuvod_cis(id, nazev, platnost)
+  VALUES (3, 'Smluvní', 1)
+;
+INSERT INTO eu_odkladDuvod_cis(id, nazev, platnost)
+  VALUES (4, 'Prázdniny', 1)
+;
+INSERT INTO eu_odkladDuvod_cis(id, nazev, platnost)
+  VALUES (5, 'Mimosoudní', 1)
+;
+INSERT INTO eu_odkladDuvod_cis(id, nazev, platnost)
+  VALUES (6, 'Dohoda', 1)
+;
+INSERT INTO eu_odkladDuvod_cis(id, nazev, platnost)
+  VALUES (7, 'Jiný', 1)
+;
+
+INSERT INTO eu_paramsplacdospor_cis(datod, tos, tsml, variantapu, rozhdenzahdospor
+    , posunzahdospor, aktzahdosporcerp,rozhdenzahsledosspor, dorovnatvklad, rozhdenmesdospor
+    , rozhdenzahsplac, posunzahsplac, rozhdenzahsledosuv, posunzahcerp, rozhdenmessplac
+    , platnost, poznamka)
+  VALUES (MDY(1,1,1996), 'F', NULL, NULL, 'P'
+    , 0, 0, 'P', 0, 25
+    , 'P', 0, 'P', 1, 25
+    , 1, 'Iniciální nastavení'
+)
+;  
+
+INSERT INTO eu_paramsplacdospor_cis(datod, tos, tsml, variantapu, rozhdenzahdospor
+    , posunzahdospor, aktzahdosporcerp, rozhdenzahsledosspor, dorovnatvklad, rozhdenmesdospor
+    , rozhdenzahsplac, posunzahsplac, rozhdenzahsledosuv, posunzahcerp, rozhdenmessplac
+    , platnost, poznamka)
+  VALUES (MDY(1,1,1996), 'P', NULL, NULL, 'P'
+    , 0, 1, 'P', 1, 25
+    , 'P', 0, 'P', 0, 25
+    , 1, 'Iniciální nastavení'
+)
+;
+
+ROLLBACK WORK;
+
+--End of A47308_RN00292084_3

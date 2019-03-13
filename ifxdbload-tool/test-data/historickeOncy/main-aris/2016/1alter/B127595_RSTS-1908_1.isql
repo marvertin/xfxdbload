@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B127595_RSTS-1908_1
+-- @TC:ONCE: DESCRIPTION = TR1: Nová koncepce archivace - pilot {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE tv_head_den MODIFY zdrojser INTEGER NOT NULL;
+
+ROLLBACK WORK;
+
+--End of B127595_RSTS-1908_1

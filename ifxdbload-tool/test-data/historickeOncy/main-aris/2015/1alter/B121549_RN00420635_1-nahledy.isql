@@ -1,0 +1,74 @@
+-- @TC:ONCE: ID = V2, B121549_RN00420635_1-nahledy
+-- @TC:ONCE: DESCRIPTION = Žádost o uvolnění SP zadržované MF {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+
+BEGIN WORK;
+
+ALTER TABLE sp_zadmf_kart ADD(
+  blokovano   Dec(16,2) before sazbadan,
+  odblokovano Dec(16,2) before sazbadan
+);
+
+-- ###############################################################
+--       sp_zadmfdoplnerr_kart
+
+-- 68  sp_zadmfdoplnerr_kart-1/5       [CREATE.TABLE]
+CREATE TABLE sp_zadmfdoplnerr_kart (
+    serno           SERIAL   NOT NULL,
+    refzadmfdopln   INTEGER   NOT NULL,
+    chyba           Integer   NOT NULL,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND
+) LOCK MODE ROW
+;
+
+-- 69  sp_zadmfdoplnerr_kart-2/5       [CREATE.INDEX]
+CREATE unique INDEX sp_zadmfdoplnerr_kart_pk ON sp_zadmfdoplnerr_kart (serno) ;
+
+-- 70  sp_zadmfdoplnerr_kart-3/5       [CREATE.INDEX]
+CREATE INDEX sp_zadmfdoplnerr_kart_i_f1 ON sp_zadmfdoplnerr_kart (refzadmfdopln) ;
+
+-- 71  sp_zadmfdoplnerr_kart-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_zadmfdoplnerr_kart
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT sp_zadmfdoplnerr_kart_pk;
+
+-- ###############################################################
+--       sp_zadmfzprac_kart
+
+-- 72  sp_zadmfzprac_kart-1/5       [CREATE.TABLE]
+CREATE TABLE sp_zadmfzprac_kart (
+    serno           SERIAL   NOT NULL,
+    refzadmfdopln   INTEGER   NOT NULL,
+    zmena           Integer   NOT NULL,
+    rok             datetime year to year   NOT NULL,
+    kolo            Integer   NOT NULL,
+    obdobi          Integer   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    rc              CHAR(10)   NOT NULL,
+    roksp           datetime year to year   NOT NULL,
+    chyba           Integer   NOT NULL,
+    odblokovano     DECIMAL(16, 2)  ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND
+) LOCK MODE ROW
+;
+
+-- 73  sp_zadmfzprac_kart-2/5       [CREATE.INDEX]
+CREATE unique INDEX sp_zadmfzprac_kart_pk ON sp_zadmfzprac_kart (serno) ;
+
+-- 74  sp_zadmfzprac_kart-3/5       [CREATE.INDEX]
+CREATE INDEX sp_zadmfzprac_kart_i_f1 ON sp_zadmfzprac_kart (refzadmfdopln) ;
+
+-- 75  sp_zadmfzprac_kart-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_zadmfzprac_kart
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT sp_zadmfzprac_kart_pk;
+
+
+ROLLBACK WORK;
+
+--End of B121549_RN00420635_1-nahledy

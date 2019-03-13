@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A40324_RN00246306_1
+-- @TC:ONCE: DESCRIPTION = Uprava vyporadani v Cibis Main 2 {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  CREATE INDEX vy_vypl_arch_i1 ON vy_vypl_arch (vyplata) ;
+
+  CREATE INDEX vy_vyplzpusob_arch_i1 ON vy_vyplzpusob_arch (vyplata) ;
+
+  CREATE INDEX vy_vyplzpusob_arch_i2 ON vy_vyplzpusob_arch (vyplatazp) ;
+
+  CREATE INDEX vy_vyplban_arch_i1 ON vy_vyplban_arch (vyplatazp) ;
+
+  CREATE INDEX vy_vyplipb_arch_i1 ON vy_vyplipb_arch (vyplatazp) ;
+
+  CREATE INDEX vy_vyplkon_arch_i1 ON vy_vyplkon_arch (vyplatazp) ;
+
+  CREATE INDEX vy_vyplpkl_arch_i1 ON vy_vyplpkl_arch (vyplatazp) ;
+
+  CREATE INDEX vy_vyplpko_arch_i1 ON vy_vyplpko_arch (vyplatazp) ;
+
+  CREATE INDEX vy_vyplpos_arch_i1 ON vy_vyplpos_arch (vyplatazp) ;
+
+  CREATE INDEX vy_vypluct_arch_i1 ON vy_vypluct_arch (vyplatazp) ;
+
+ROLLBACK WORK;
+
+--End of A40324_RN00246306_1

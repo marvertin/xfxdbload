@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B130763_RSTS-2951_3
+-- @TC:ONCE: DESCRIPTION = RN00457749-Centrální evidence exekucí
+
+
+BEGIN WORK;
+
+INSERT INTO eu_duvodpredbeznavr_cis(duvod, popis,                        platnost) 
+VALUES                             (9,     'Centrální evidence exekucí', 1);
+
+ROLLBACK WORK;
+
+--End of B130763_RSTS-2951_3

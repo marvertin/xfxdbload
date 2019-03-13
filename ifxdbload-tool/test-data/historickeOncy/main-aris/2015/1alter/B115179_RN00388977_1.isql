@@ -1,0 +1,125 @@
+-- @TC:ONCE: ID = V2, B115179_RN00388977_1
+-- @TC:ONCE: DESCRIPTION = Evidence SME v CIBIS {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eo_tigertyp_acis
+
+-- 67  eo_tigertyp_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eo_tigertyp_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER  ,
+    nazev           CHAR(35)  ,
+    platnost        Integer   NOT NULL,
+    poznamka        CHAR(70)  ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_tigertyp_acis_d9ol
+) LOCK MODE ROW
+;
+
+-- 68  eo_tigertyp_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_tigertyp_acis_pk ON eo_tigertyp_acis (idarch) ;
+
+-- 69  eo_tigertyp_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_tigertyp_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eo_tigertyp_acis_pk;
+
+-- ###############################################################
+--       eo_tigertyp_cis
+
+-- 70  eo_tigertyp_cis-1/3       [CREATE.TABLE]
+CREATE TABLE eo_tigertyp_cis (
+    serno           SERIAL   NOT NULL,
+    nazev           CHAR(35)  ,
+    platnost        Integer   NOT NULL,
+    poznamka        CHAR(70)  ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_tigertyp_cis_d9ol
+) LOCK MODE ROW
+;
+
+-- 71  eo_tigertyp_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_tigertyp_cis_pk ON eo_tigertyp_cis (serno) ;
+
+-- 72  eo_tigertyp_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_tigertyp_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_tigertyp_cis_pk;
+
+-- ###############################################################
+--       eo_pospecifdata_arch
+
+-- 33  eo_pospecifdata_arch-1/3       [CREATE.TABLE]
+CREATE TABLE eo_pospecifdata_arch (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER  NOT NULL,
+    po              INTEGER  NOT NULL,
+    reftigertyp     INTEGER  ,
+    cocunut         CHAR(20)  ,
+    pocetzamest     Integer  ,
+    obrat           DECIMAL(16, 2)  ,
+    bilancnisuma    DECIMAL(16, 2)  ,
+    castka          DECIMAL(16, 2)  ,
+    text            VARCHAR(255)  ,
+    platnostdo      DATE  ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND
+) LOCK MODE ROW
+;
+
+-- 34  eo_pospecifdata_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_pospecifdata_arch_pk ON eo_pospecifdata_arch (idarch) ;
+
+-- 35  eo_pospecifdata_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_pospecifdata_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eo_pospecifdata_arch_pk;
+
+-- ###############################################################
+--       eo_pospecifdata_mat
+
+-- 36  eo_pospecifdata_mat-1/7       [CREATE.TABLE]
+CREATE TABLE eo_pospecifdata_mat (
+    serno           SERIAL   NOT NULL,
+    po              INTEGER   NOT NULL,
+    reftigertyp     INTEGER  ,
+    cocunut         CHAR(20)  ,
+    pocetzamest     Integer  ,
+    obrat           DECIMAL(16, 2)  ,
+    bilancnisuma    DECIMAL(16, 2)  ,
+    castka          DECIMAL(16, 2)  ,
+    text            VARCHAR(255)  ,
+    platnostdo      DATE  ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND
+) LOCK MODE ROW
+;
+
+-- 37  eo_pospecifdata_mat-2/7       [CREATE.INDEX]
+CREATE unique INDEX eo_pospecifdata_mat_pk ON eo_pospecifdata_mat (serno) ;
+
+-- 38  eo_pospecifdata_mat-3/7       [CREATE.INDEX]
+CREATE INDEX eo_pospecifdata_mat_i_f1 ON eo_pospecifdata_mat (po) ;
+
+-- 39  eo_pospecifdata_mat-4/7       [CREATE.INDEX]
+CREATE INDEX eo_pospecifdata_mat_i_f2 ON eo_pospecifdata_mat (reftigertyp) ;
+
+-- 40  eo_pospecifdata_mat-5/7       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_pospecifdata_mat
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_pospecifdata_mat_pk;
+
+
+
+ROLLBACK WORK;
+
+--End of B115179_RN00388977_1

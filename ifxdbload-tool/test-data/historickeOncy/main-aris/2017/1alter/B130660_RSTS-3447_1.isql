@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, B130660_RSTS-3447_1
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_kontrolatyp_acis DROP CONSTRAINT eu_kontrolatyp_acis_dn61;
+
+ALTER TABLE eu_kontrolatyp_acis DROP CONSTRAINT eu_kontrolatyp_acis_dn62;
+
+ALTER TABLE eu_kontrolatyp_acis
+    ADD potlaceni       Integer DEFAULT 0  BEFORE platnost,
+    DROP faze1,
+    DROP faze2,
+    DROP poradi;
+
+ALTER TABLE eu_kontrolatyp_acis
+    ADD CONSTRAINT CHECK (potlaceni IN (0,1)) CONSTRAINT eu_kontrolatyp_acis_d1sn;
+
+
+ALTER TABLE eu_kontrolatyp_cis DROP CONSTRAINT eu_kontrolatyp_cis_dn61;
+
+ALTER TABLE eu_kontrolatyp_cis DROP CONSTRAINT eu_kontrolatyp_cis_dn62;
+
+ALTER TABLE eu_kontrolatyp_cis
+    ADD potlaceni       Integer DEFAULT 0  BEFORE platnost,
+    DROP faze1,
+    DROP faze2,
+    DROP poradi;
+
+ALTER TABLE eu_kontrolatyp_cis
+    ADD CONSTRAINT CHECK (potlaceni IN (0,1)) CONSTRAINT eu_kontrolatyp_cis_d1sm;
+
+ROLLBACK WORK;
+
+--End of B130660_RSTS-3447_1

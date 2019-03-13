@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A50064_RN00317082_3-01_vyprazdneni-menenych-ciselniku-oblasti-EU
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost - checklist {CUSTOMERREQUEST}
+BEGIN WORK;
+
+DELETE FROM eu_zajistdok_cis;
+DELETE FROM eu_uceldok_cis;
+DELETE FROM eu_navrdok_cis;
+
+ROLLBACK WORK;
+--End of A50064_RN00317082_3-01_vyprazdneni-menenych-ciselniku-oblasti-EU

@@ -1,0 +1,37 @@
+create procedure B127488_RN00457828_3()
+
+  define _doktyp1 int;
+  define _doktyp2 int;
+
+
+UPDATE do_typdokumentu_cis SET text = 'Ukončení smlouvy SSFO - výpověď' WHERE doktyp = 140;
+  
+-- #Typ dokumentu, pro vygenerování „Návrhu na ukončení smlouvy o stavebním spoření“ v ukončování smluv SS#
+CALL tw_regDelKey('ES', 'ukoncenismlouvy', 'generDok', 'ukoncSS');  
+
+-- #Typ dokumentu, pro vygenerování „Návrhu na ukončení smlouvy o stavebním spoření“ v ukončování smluv SS - výpověď#
+CALL tw_regSetOrAddKey('ES', 'ukoncenismlouvy', 'generDok', 'ukoncSS-vypoved', 140, 1,'Spoření','Požadavek - Ukončení smlouvy SSFO', 'Ukončení smlouvy SS', 'Typ dokumentu pro návrh na ukončení smlouvy o stavebním spoření - výpověď') ;  
+  
+INSERT INTO do_typdokumentu_cis (text,zkratka,poznamka,platnost,biztyp,obsah,podobsah,garant,generovany,repcode,archivovat,podepisovany,typproecm,obsahproecm,podobsahproecm)
+SELECT 'Ukončení smlouvy SSFO - dohoda',zkratka,poznamka,platnost,biztyp,'2204',podobsah,garant,generovany,repcode,archivovat,podepisovany,typproecm,obsahproecm,podobsahproecm FROM do_typdokumentu_cis WHERE doktyp = 140;
+
+let _doktyp1 = Tw_LastSer();
+
+-- #Typ dokumentu, pro vygenerování „Návrhu na ukončení smlouvy o stavebním spoření“ v ukončování smluv SS - dohoda#
+CALL tw_regSetOrAddKey('ES', 'ukoncenismlouvy', 'generDok', 'ukoncSS-dohoda', _doktyp1, 1,'Spoření', 'Požadavek - Ukončení smlouvy SSFO', 'Ukončení smlouvy SS', 'Typ dokumentu pro návrh na ukončení smlouvy o stavebním spoření - dohoda');  
+
+INSERT INTO do_typdokumentu_cis (text,zkratka,poznamka,platnost,biztyp,obsah,podobsah,garant,generovany,repcode,archivovat,podepisovany,typproecm,obsahproecm,podobsahproecm)
+SELECT 'Ukončení smlouvy SSFO - dohoda - rychlá',zkratka,poznamka,platnost,biztyp,'2209',podobsah,garant,generovany,repcode,archivovat,podepisovany,typproecm,obsahproecm,podobsahproecm FROM do_typdokumentu_cis WHERE doktyp = 140;
+
+let _doktyp2 = Tw_LastSer();
+
+-- #Typ dokumentu, pro vygenerování „Návrhu na ukončení smlouvy o stavebním spoření“ v ukončování smluv SS - dohoda - rychlá výplata pro věrné klienty (příloha)#
+CALL tw_regSetOrAddKey('ES', 'ukoncenismlouvy', 'generDok', 'ukoncSS-dohoda-r', _doktyp2, 1,'Spoření', 'Požadavek - Ukončení smlouvy SSFO', 'Ukončení smlouvy SS', 'Typ dokumentu pro návrh na ukončení smlouvy o stavebním spoření - dohoda - rychlá');  
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp,tabulka,uzivatelskypristup,poznamka,platnost,kvalitadok,poradi,explicitgener,platnostod,platnostdo,elektronickaverze)
+SELECT _doktyp1,tabulka,uzivatelskypristup,poznamka,platnost,kvalitadok,poradi,explicitgener,platnostod,platnostdo,elektronickaverze FROM do_typdokumentutypobjektu_cis WHERE doktyp = 140;
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp,tabulka,uzivatelskypristup,poznamka,platnost,kvalitadok,poradi,explicitgener,platnostod,platnostdo,elektronickaverze)
+SELECT _doktyp2,tabulka,uzivatelskypristup,poznamka,platnost,kvalitadok,poradi,explicitgener,platnostod,platnostdo,elektronickaverze FROM do_typdokumentutypobjektu_cis WHERE doktyp = 140;
+  
+end procedure;--B127488_RN00457828_3

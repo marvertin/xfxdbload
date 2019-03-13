@@ -1,0 +1,56 @@
+create procedure RSTS_27791_sluc()
+-- sloučení záznamů s nulovým EBA DPD a nastavení pořadí
+define _id BigInt;
+define _poradi Int;
+define _datvyhodnoceni Date;
+define _typvyhodnoceni Char(1);
+define _dpdeba Int;
+define _idPrev BigInt;
+define _datvyhodnoceniPrev Date;
+define _dpdebaPrev Int;
+define _idPrev2 BigInt;
+define _datvyhodnoceniPrev2 Date;
+define _dpdebaPrev2 Int;
+
+let _idPrev, _dpdebaPrev, _datvyhodnoceniPrev = null, null, null;
+let _idPrev2, _dpdebaPrev2, _datvyhodnoceniPrev2 = null, null, null;
+let _poradi = 1;
+foreach
+  SELECT id, dpdeba, datvyhodnoceni, typvyhodnoceni
+  INTO _id, _dpdeba, _datvyhodnoceni, _typvyhodnoceni
+  FROM RSTS_27791_eba_Tmp
+  ORDER BY id
+  
+  -- aktuální i předchozí záznam má 0 a jsou ve stejném měsíci
+  if (_typvyhodnoceni in ('D', 'L', 'P') and _dpdebaPrev is not null and _dpdebaPrev = 0 and _dpdeba = 0 and extend(_datvyhodnoceniPrev, Year to Month) = extend(_datvyhodnoceni, Year to Month)) or
+     (_typvyhodnoceni = 'S' and _dpdebaPrev2 is not null and _dpdebaPrev2 = 0 and _dpdeba = 0 and extend(_datvyhodnoceniPrev2, Year to Month) = extend(_datvyhodnoceni, Year to Month))
+  then
+    -- záznam nebudeme vkládat do cílové evidence
+    UPDATE RSTS_27791_eba_Tmp SET vlozit = 0 WHERE id = _id;
+
+    -- datum vyhodnocení promítneme do předchozího záznamu
+    if _typvyhodnoceni in ('D', 'L', 'P') then
+      UPDATE RSTS_27791_eba_Tmp SET datvyhodnoceni = _datvyhodnoceni WHERE id = _idPrev;
+    else
+      UPDATE RSTS_27791_eba_Tmp SET datvyhodnoceni = _datvyhodnoceni WHERE id = _idPrev2;
+    end if;
+    
+  else
+    UPDATE RSTS_27791_eba_Tmp SET poradi = _poradi WHERE id = _id;
+
+    let _poradi = _poradi + 1;
+    if _typvyhodnoceni in ('D', 'L', 'P') then
+      let _idPrev = _id;
+    else
+      let _idPrev2 = _id;
+    end if;
+  end if;
+  
+  if _typvyhodnoceni in ('D', 'L', 'P') then
+    let _dpdebaPrev, _datvyhodnoceniPrev = _dpdeba, _datvyhodnoceni;
+  else
+    let _dpdebaPrev2, _datvyhodnoceniPrev2 = _dpdeba, _datvyhodnoceni;
+  end if;
+end foreach;
+
+end procedure;

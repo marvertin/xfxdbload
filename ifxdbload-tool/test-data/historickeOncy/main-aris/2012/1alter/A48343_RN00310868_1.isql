@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A48343_RN00310868_1
+-- @TC:ONCE: DESCRIPTION = Index v cc_doklad_kart {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE INDEX cc_doklad_kart_i1 ON cc_doklad_kart(ukkonto);
+
+ROLLBACK WORK;
+
+--End of A48343_RN00310868_1

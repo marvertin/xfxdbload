@@ -1,0 +1,57 @@
+-- @TC:ONCE: ID = V2, B123135_RN00436364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_varurokfixprirad_cis (
+  ser   SERIAL NOT NULL,
+  refvariaurokfixace   INTEGER,
+  platnostod   DATE,
+  platnostdo   DATE,
+  platnost   Integer  DEFAULT 1,
+  nabizetsale   Integer  DEFAULT 0,
+  fazeuveru   Char(4),
+  refvariantapu   CHAR(10),
+  tsml   CHAR(4),
+  poznamka   CHAR(70),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_varurokfixprirad_cis_da14,
+  CHECK (nabizetsale IN (0,1)) CONSTRAINT eu_varurokfixprirad_cis_da15
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_varurokfixprirad_cis_pk ON eu_varurokfixprirad_cis(ser);
+ALTER TABLE eu_varurokfixprirad_cis ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT eu_varurokfixprirad_cis_pk;
+
+--FK
+CREATE INDEX eu_varurokfixprirad_cis_i_f2 ON eu_varurokfixprirad_cis(refvariaurokfixace);
+ALTER TABLE eu_varurokfixprirad_cis ADD CONSTRAINT FOREIGN KEY(refvariaurokfixace) REFERENCES eu_variaurokfixace_cis(ser) CONSTRAINT eu_varurokfixprirad_cis_f2;
+
+CREATE TABLE eu_varurokfixprirad_acis (
+  idarch   SERIAL NOT NULL,
+  ser   INTEGER NOT NULL,
+  refvariaurokfixace   INTEGER,
+  platnostod   DATE,
+  platnostdo   DATE,
+  platnost   Integer  DEFAULT 1,
+  nabizetsale   Integer  DEFAULT 0,
+  fazeuveru   Char(4),
+  refvariantapu   CHAR(10),
+  tsml   CHAR(4),
+  poznamka   CHAR(70),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_varurokfixprirad_acis_da1s,
+  CHECK (nabizetsale IN (0,1)) CONSTRAINT eu_varurokfixprirad_acis_da1t
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_varurokfixprirad_acis_pk ON eu_varurokfixprirad_acis(idarch);
+ALTER TABLE eu_varurokfixprirad_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_varurokfixprirad_acis_pk;
+
+
+ROLLBACK WORK;
+
+--End of B123135_RN00436364_1

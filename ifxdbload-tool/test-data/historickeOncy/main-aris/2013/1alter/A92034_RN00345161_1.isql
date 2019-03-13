@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, A92034_RN00345161_1
+-- @TC:ONCE: DESCRIPTION = Zaznam o uzivatelovi pri operaciach zo Sale {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE rz_storno_kart
+    ADD predaniuser     CHAR(20)   BEFORE datzad,
+    ADD predanitime     datetime year to second   BEFORE datzad;
+
+ALTER TABLE rz_storno_arch
+    ADD predaniuser     CHAR(20)   BEFORE refuser,
+    ADD predanitime     datetime year to second   BEFORE refuser;
+
+ALTER TABLE es_sml_arch
+    ADD predaniuser     CHAR(20)   BEFORE refuser,
+    ADD predanitime     datetime year to second   BEFORE refuser;
+    
+ALTER TABLE es_sml_mat
+    ADD predaniuser     CHAR(20)   BEFORE refuser,
+    ADD predanitime     datetime year to second   BEFORE refuser;
+    
+ALTER TABLE es_zmplan_kart
+    ADD predaniuser     CHAR(20)   BEFORE refuser,
+    ADD predanitime     datetime year to second   BEFORE refuser;
+    
+ALTER TABLE eo_fo_arch
+    ADD predaniuser     CHAR(20)   BEFORE refuser,
+    ADD predanitime     datetime year to second   BEFORE refuser;
+    
+ALTER TABLE eo_fo_mat
+    ADD predaniuser     CHAR(20)   BEFORE refuser,
+    ADD predanitime     datetime year to second   BEFORE refuser;
+
+ALTER TABLE eo_fozmpl_kart
+    ADD predanitime     datetime year to second   BEFORE reftime,
+    ADD predaniuser     CHAR(20)   BEFORE reftime;
+    
+ROLLBACK WORK;
+
+--End of A92034_RN00345161_1

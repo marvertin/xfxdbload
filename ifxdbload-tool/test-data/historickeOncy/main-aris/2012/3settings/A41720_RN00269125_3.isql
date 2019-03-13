@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A41720_RN00269125_3
+-- @TC:ONCE: DESCRIPTION = Zmìnit zpùsob ukládání pøístupových informací {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('TW',
+                       'dbreg',
+                       'encrypted',
+                       'displaytext',
+                       '@encrypted@',
+                       1,
+                       'Správa systému',
+                       'Služby pro správu systému',
+                       'Spoleèné parametry',
+                       'Zobrazovaný text v pøípadì šifrovaného parametru',
+                       1);
+                       
+UPDATE tw_registr_cis 
+SET sifrovano = 1 
+WHERE oblast='AR' AND uloha='Basel' AND funkce='*' AND udaj='BaselExportPassword';                          
+
+UPDATE tw_registr_cis 
+SET sifrovano = 1 
+WHERE oblast='JE' AND uloha='LD' AND funkce='*' AND udaj='securityCredentials';                          
+
+ROLLBACK WORK;
+
+--End of A41720_RN00269125_3

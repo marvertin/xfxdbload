@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, A43226_RN00287810_3
+-- @TC:ONCE: DESCRIPTION = Zmìnit parametrizaci sledovaných operací pro pozdní vymáhání- dodatek 3 {DEFECT}
+
+BEGIN WORK;
+
+call TW_RegDelKey('RU', 'sprVym', 'sledovani', 'druhOperOdchozi');
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'sledovani-druhOperOdchozi', 'OU01', 1, 1, 
+                       'Úvìr', 
+                       'Vymáhání úvìru', 
+                       'Správa vymáhané pohledávky', 
+                       'Sledování odchozí platby ve vymáhání pro UO01');
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'sledovani-druhOperOdchozi', 'VP09', 1, 1, 
+                       'Úvìr', 
+                       'Vymáhání úvìru', 
+                       'Správa vymáhané pohledávky', 
+                       'Sledování odchozí platby ve vymáhání pro VP09');
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'sledovani-druhOperOdchozi', 'VPX7', 1, 1, 
+                       'Úvìr', 
+                       'Vymáhání úvìru', 
+                       'Správa vymáhané pohledávky', 
+                       'Sledování odchozí platby ve vymáhání pro VPX7');
+
+call TW_RegSetOrAddKey('RU', 'sprVym', 'sledovani-druhOperOdchozi', 'VPX9', 1, 1, 
+                       'Úvìr', 
+                       'Vymáhání úvìru', 
+                       'Správa vymáhané pohledávky', 
+                       'Sledování odchozí platby ve vymáhání pro VPX9');
+
+ROLLBACK WORK;
+
+--End of A43226_RN00287810_3

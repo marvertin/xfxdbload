@@ -1,0 +1,144 @@
+create PROCEDURE B136310_UID62592_4_make_D (-- vstupni paramtery
+                                    ABezTransakci integer default 0,    -- slouzi k testovacim ucelum,
+                                                                        -- kdy si uzivatel sam ridi transakce
+                                                                        -- muze pouzivat i zakaznik
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+
+define _smlouva     dec(16, 0);
+define _productid   Int;
+define _tabulka     char(50);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+   BEGIN WORK;
+end if;
+
+if ABezTransakci = 0 then
+   COMMIT WORK;
+   BEGIN WORK;
+end if;
+
+set triggers for eo_role_mat  disabled;
+set triggers for eo_role_arch disabled;
+set triggers for ep_snimobjsledtran_den disabled;
+set triggers for eu_contractchecking_den disabled;
+create index ep_snimobjsledtran_den_iwrk on ep_snimobjsledtran_den(smlouva);
+create index eu_contractchecking_den_iwrk on eu_contractchecking_den(smlouva);
+
+--pres ridici tabulku
+foreach cc2 with hold for
+  SELECT ser,  smlouva,  productid,  tabulka
+  INTO  _ser, _smlouva, _productid, _tabulka
+  FROM B136310_UID62592
+  WHERE zprac < 0
+  ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE B136310_UID62592
+        SET(NumErr,ISAMErr,TextErr) = (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    
+    if _tabulka = 'eo_role_arch' then
+      update eo_role_arch set productid = _productid where smlouva = _smlouva;
+      
+    elif _tabulka = 'eo_role_mat' then
+      update eo_role_mat set productid = _productid where smlouva = _smlouva;
+      
+    elif _tabulka = 'ep_snimobjsledtran_den' then
+      update ep_snimobjsledtran_den set productid = _productid where smlouva = _smlouva;
+      
+    elif _tabulka = 'eu_akc_kart' then
+      update eu_akc_kart set productid = _productid where smlouva = _smlouva;
+      
+    elif _tabulka = 'eu_contractchecking_den' then
+      update eu_contractchecking_den set productid = _productid where smlouva = _smlouva;
+      
+    elif _tabulka = 'eu_contractchecking_kart' then
+      update eu_contractchecking_kart set productid = _productid where smlouva = _smlouva;
+      
+    elif _tabulka = 'ru_real_mat' then
+      update ru_real_mat set productid = _productid where smlouva = _smlouva;
+      
+    elif _tabulka = 'wa_prep_kart' then
+      update wa_prep_kart set productid = _productid where smlouva = _smlouva;
+      
+    elif _tabulka = 'wa_removed_kart' then
+      update wa_removed_kart set productid = _productid where smlouva = _smlouva;
+    end if;
+    --konec algoritmu migrace
+    
+    UPDATE B136310_UID62592 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+set triggers for eo_role_arch enabled;
+set triggers for eo_role_mat enabled;
+set triggers for ep_snimobjsledtran_den enabled;
+set triggers for eu_contractchecking_den enabled;
+drop index ep_snimobjsledtran_den_iwrk;
+drop index eu_contractchecking_den_iwrk;
+--algoritmus dokonceni migrace
+--...
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+  trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+if exists(SELECT * FROM B136310_UID62592 WHERE zprac < 0) then
+  call TW_RaiseError('136B241TCUI', 'B136310_UID62592_4_make_D', 'Během migrace došlo k chybě.'); 
+end if;
+
+end procedure;

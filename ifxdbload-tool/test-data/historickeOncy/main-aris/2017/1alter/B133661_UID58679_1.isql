@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B133661_UID58679_1
+-- @TC:ONCE: DESCRIPTION = Úpravy stávajících číselníků Main
+
+BEGIN WORK;
+
+ RENAME COLUMN eu_ucel_cis.kodcru TO kodrsts;
+
+ RENAME COLUMN eu_ucel_acis.kodcru TO kodrsts;
+
+ ALTER TABLE eu_ucel_cis DROP ekologprogr;
+
+ ALTER TABLE eu_ucel_acis DROP  ekologprogr;
+
+ alter table eu_navrdok_cis drop constraint eu_navrdok_cis_f3;
+
+ alter table eo_zamestnani_mat drop constraint eo_zamestnani_mat_f1;
+
+ alter table EO_RoleDruhDavkyOS_mat drop constraint eo_roledruhdavkyos_mat_f1;
+
+ alter table eo_finsit_mat drop constraint eofinsitmat_f_f1;
+
+ alter table seo_davka_mat drop constraint seo_davka_mat_f2;
+
+ alter table seo_finsit_mat drop constraint seo_finsit_mat_f2;
+
+ROLLBACK WORK;
+
+--End of B133661_UID58679_1

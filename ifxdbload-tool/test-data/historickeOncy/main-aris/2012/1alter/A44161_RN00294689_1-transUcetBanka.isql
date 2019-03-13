@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A44161_RN00294689_1-transUcetBanka
+-- @TC:ONCE: DESCRIPTION = žádost o novou smlouvu SS - úhrada {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ep_zadtransucet
+  modify konto decimal(16,0),
+  modify banka decimal(7,0);
+  
+ROLLBACK WORK;
+
+--End of A44161_RN00294689_1-transUcetBanka

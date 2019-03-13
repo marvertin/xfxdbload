@@ -1,0 +1,749 @@
+-- vrací historické údaje spoøení
+create function EP_DatGetScoringParHistSpor(ADatAkce Date,
+                                            ATypSC Char(3), 
+                                            AIdOS Int, 
+                                            ARole Char(2), 
+                                            ASmlouva Dec(16,0), 
+                                            ATsml Char(4))
+returning
+  Int,         --Bsnumber
+  Dec(16,2),   --Bsamount
+  Dec(16,2),   --sumTABSClient
+  Int,         --countBSEU
+  Dec(16,2),   --sumSaldoBSEU
+  Dec(16,2),   --sumTABSEU
+  Int,         --countFinishedBSClient
+  Int,         --countFinishedBSEU
+  Dec(16,2),   --sumTAFinishedBSClient
+  Dec(16,2),   --sumTAFinishedBSEU
+  Dec(16,2),   --sumSaldoFinishedBSClient
+  Dec(16,2),   --sumSaldoFinishedBSEU
+  Int,         --countAssignedBSClient
+  Int,         --countAssignedBSEU
+  Dec(16,2),   --sumTAAssignmentBSClient
+  Dec(16,2),   --sumTAAssignmentBSEU
+  Dec(16,2),   --sumSaldoAssignmentBSClient
+  Dec(16,2),   --sumSaldoAssignmentBEU
+  Int,         --ageOldestAllBSClient
+  Int,         --ageOldestAllBSEU
+  Int,         --ageOldestAllTransferredBSClient
+  Int,         --ageOldestAllTransferredBSEU
+  Int,         --sumAgeAllBSClient
+  Int,         --sumAgeAllBSEU
+  Int,         --sumAgeAllTransferredBSClient
+  Int,         --sumAgeAllTransferredBSEU
+  Int,         --sumDurationAllBSClient
+  Int,         --sumDurationAllBSEU
+  Int,         --sumDurationAllTransferredBSClient
+  Int,         --sumDurationAllTransferredBSEU
+  Int,         --maxDurationAllBSClient
+  Int,         --maxDurationAllBSEU
+  Int,         --maxDurationAllTransferredBSClient
+  Int;         --maxDurationAllTransferredBSEU
+
+define _bsnumber                             Int;
+define _bsamount                             Dec(16,2);
+define _sumTABSClient                        Dec(16,2);
+define _countBSEU                            Int;
+define _sumSaldoBSEU                         Dec(16,2);
+define _sumTABSEU                            Dec(16,2);
+define _countFinishedBSClient                Int;
+define _countFinishedBSEU                    Int;
+define _sumTAFinishedBSClient                Dec(16,2);
+define _sumTAFinishedBSEU                    Dec(16,2);
+define _sumSaldoFinishedBSClient             Dec(16,2);
+define _sumSaldoFinishedBSEU                 Dec(16,2);
+define _countAssignedBSClient                Int;
+define _countAssignedBSEU                    Int; 
+define _sumTAAssignmentBSClient              Dec(16,2);
+define _sumTAAssignmentBSEU                  Dec(16,2);
+define _sumSaldoAssignmentBSClient           Dec(16,2);
+define _sumSaldoAssignmentBEU                Dec(16,2);
+define _ageOldestAllBSClient                 Int;
+define _ageOldestAllBSEU                     Int;
+define _ageOldestAllTransferredBSClient      Int;
+define _ageOldestAllTransferredBSEU          Int;
+define _sumAgeAllBSClient                    Int;
+define _sumAgeAllBSEU                        Int;
+define _sumAgeAllTransferredBSClient         Int;
+define _sumAgeAllTransferredBSEU             Int;
+define _sumDurationAllBSClient               Int;
+define _sumDurationAllBSEU                   Int;
+define _sumDurationAllTransferredBSClient    Int;
+define _sumDurationAllTransferredBSEU        Int;
+define _maxDurationAllBSClient               Int;
+define _maxDurationAllBSEU                   Int;
+define _maxDurationAllTransferredBSClient    Int;
+define _maxDurationAllTransferredBSEU        Int;
+
+define _datprov                              Date;
+define _creditrqcontrolreg_id                Int;
+define _xpersonidentnum                      Char(13);
+define _xpersonidenttype                     Char(1);
+define _bsContract                           Dec(16,0);
+define _personID                             Int;
+define _smlouva                              Dec(16,0);
+define _tsml                                 Char(4);
+define _stavrole                             Char(1);
+define _stavsml                              Char(1);
+define _cc                                   Dec(16,2);
+define _datakce                              Date;
+define _datuz                                Date;
+define _realn                                Int;
+define _reals                                Int;
+define _stavreal                             Char(1);
+define _mp                                   Date;
+define _konto                                Dec(16,0);
+define _tko                                  Char(2);
+define _saldo                                Dec(16,2);
+define _ccpridel                             Dec(16,2);
+define _datklop                              Date;
+define _stari                                Int;
+define _trvani                               Int;
+define _idGet                                Int;
+define _os                                   Int;
+define _typrole                              char(2);
+define _real                                 Int;
+define _poradi                               Int;
+define _smlGet                               Dec(16, 0);
+define _manzel                               Int;
+define _stavGet                              Char(1);
+define _reftimeGet                           date;
+define _reftimeGet2                          date;
+
+define global AC_Archiv integer default 0;
+
+let _bsnumber = 0;
+let _bsamount = 0;
+let _sumTABSClient = 0;
+let _countBSEU = 0;
+let _sumSaldoBSEU = 0;
+let _sumTABSEU = 0;
+let _countFinishedBSClient = 0;
+let _countFinishedBSEU = 0;
+let _sumTAFinishedBSClient = 0;
+let _sumTAFinishedBSEU = 0;
+let _sumSaldoFinishedBSClient = 0;
+let _sumSaldoFinishedBSEU = 0;
+let _countAssignedBSClient = 0;
+let _countAssignedBSEU = 0;
+let _sumTAAssignmentBSClient = 0;
+let _sumTAAssignmentBSEU = 0;
+let _sumSaldoAssignmentBSClient = 0;
+let _sumSaldoAssignmentBEU = 0;
+let _ageOldestAllBSClient = 0;
+let _ageOldestAllBSEU = 0;
+let _ageOldestAllTransferredBSClient = 0;
+let _ageOldestAllTransferredBSEU = 0;
+let _sumAgeAllBSClient = 0;
+let _sumAgeAllBSEU = 0;
+let _sumAgeAllTransferredBSClient = 0;
+let _sumAgeAllTransferredBSEU = 0;
+let _sumDurationAllBSClient = 0;
+let _sumDurationAllBSEU = 0;
+let _sumDurationAllTransferredBSClient = 0;
+let _sumDurationAllTransferredBSEU = 0;
+let _maxDurationAllBSClient = 0;
+let _maxDurationAllBSEU = 0;
+let _maxDurationAllTransferredBSClient = 0;
+let _maxDurationAllTransferredBSEU = 0;
+let _idGet = null;
+
+let _datprov = ADatAkce;                 
+
+if ATypSC in ('SC1', 'SCA') THEN
+  --nevklada se do archivu
+  SELECT creditrqcontrolreg_id INTO _creditrqcontrolreg_id FROM creditrqpersonreg WHERE id = AIdOS;
+
+  SELECT     id, xpersonidentnum, xpersonidenttype 
+    INTO _idGet,_xpersonidentnum,_xpersonidenttype 
+    FROM creditrqpersonreg WHERE id = AIdOS and date(reftime) <= ADatAkce;
+
+  if _idGet is null then
+    foreach SELECT  xpersonidentnum, xpersonidenttype 
+              INTO _xpersonidentnum,_xpersonidenttype 
+              FROM creditrqpersonarch WHERE creditrqpersonreg_id = AIdOS and date(xrefmodifytime) <= ADatAkce
+              ORDER BY xrefmodifytime DESC
+      exit foreach;
+    end foreach;
+  end if;
+  
+  --v soucasne dobe neni funkcni trigger pro vkladani do xpersonidenttype archivu
+  if _xpersonidentnum is not null and _xpersonidenttype is null then
+    SELECT xpersonidenttype INTO _xpersonidenttype FROM creditrqpersonreg WHERE id = AIdOS;
+  end if;
+  
+  SELECT xcontractnumber INTO _bsContract FROM CreditRqBSContractReg WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id;
+
+  SELECT id, personid INTO _idGet,_personID FROM creditrqpersonreg WHERE id = AIdOs AND xvalidity = 1 AND date(reftime) <= ADatAkce;
+  if _idGet is null then
+    let _personID = null;
+    foreach SELECT personid, xvalidity INTO _personID, _idGet FROM creditrqpersonarch 
+              WHERE creditrqpersonreg_id = AIdOS and date(xrefmodifytime) <= ADatAkce 
+              ORDER BY xrefmodifytime DESC
+      exit foreach;
+    end foreach;
+    if _personID is not null and _idGet = 0 then
+      let _personID = null;
+    end if; 
+  end if;
+  
+  --aby nepadala nasledujiti podminka resp. znamena to ze osoba neni v cibisu
+  if _personID is null then
+    --jeste skusit hledat podle _xpersonidentnum, _xpersonidenttype pac je v systemu chyba
+    --a klic do centralni evidence se premaze pokud je na osobe evidovana zmena
+    if (SELECT COUNT(*) FROM EO_FO_Mat aa, EO_Osoba_Mat bb WHERE aa.rc = _xpersonidentnum AND typid = _xpersonidenttype AND bb.stav <> 'Z' AND bb.os = aa.fo) > 1 then
+      call TW_RaiseError('413R83TCUI','EP_DatGetScoringParHistSpor', 'Duplicitní rodné èíslo');
+    else
+      select ff.fo, date(ff.reftime) into _personID, _reftimeGet from eo_fo_mat ff join eo_osoba_mat oo on ff.fo = oo.os where ff.rc = _xpersonidentnum AND ff.typid = _xpersonidenttype AND oo.stav <> 'Z';
+      if _reftimeGet <= ADatAkce then
+        select stav, date(reftime) into _stavGet, _reftimeGet2 from eo_osoba_mat where os = _personID;
+        if _reftimeGet2 <= ADatAkce and _stavGet = 'Z' then
+          let _personID = null;
+        elif _reftimeGet2 > ADatAkce then
+          let _stavGet = null;
+          foreach select stav into _stavGet from eo_osoba_arch where os = _personID and date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavGet is not null and _stavGet = 'Z' then
+            let _personID = null;
+          end if;
+        end if;
+      else
+        foreach
+          select fo into _personID from eo_fo_arch where rc = _xpersonidentnum AND typid = _xpersonidenttype and date(reftime) <= ADatAkce order by reftime desc
+          exit foreach;
+        end foreach;
+        if _personID is not null then
+          select stav, date(reftime) into _stavGet, _reftimeGet2 from eo_osoba_mat where os = _personID;
+          if _reftimeGet2 <= ADatAkce and _stavGet = 'Z' then
+            let _personID = null;
+          elif _reftimeGet2 > ADatAkce then
+            let _stavGet = null;
+            foreach select stav into _stavGet from eo_osoba_arch where os = _personID and date(reftime) <= ADatAkce order by reftime desc
+              exit foreach;
+            end foreach;
+            if _stavGet is not null and _stavGet = 'Z' then
+              let _personID = null;
+            end if;
+          end if;
+        end if;
+      end if;
+    end if;
+    if _personID is null then
+      let _personID = -1;
+    end if;
+  end if;
+else
+  let _personID = AIdOs;
+  let _bsContract = ASmlouva;
+end if;
+
+-- vyhodnocení pouze pokud je osoba v evidenci main
+if exists(SELECT * FROM EO_FO_Mat WHERE fo = _personID) then
+  
+  begin
+    on exception in (-206)
+    end exception;
+    DROP TABLE EP_DatGetScoParHistSpor_Tmp;
+  end;
+  CREATE TEMP TABLE EP_DatGetScoParHistSpor_Tmp (
+    smlouva   dec(16,0),
+    tsml      char(4),
+    stavrole  char(1),
+    stavsml   char(1),
+    cc        dec(16,2),
+    datakce   date,
+    datuz     date
+  );
+  
+  -- @RN00289175: Do tabulky je pøistupováno pøes smlouvu a tsml...
+  CREATE INDEX EP_DatGetScoParHistSpor_Tmp_i1 ON EP_DatGetScoParHistSpor_Tmp(smlouva, tsml);  
+  
+  --projdu vsechny role v matrice roli
+  foreach select smlouva, typ, stav, os, typrole into _smlouva, _tsml, _stavrole, _os, _typrole
+            from EO_Role_Mat 
+            where stav IN ('A', 'U') and os = _personID and typrole = 'KL' and 
+                  smlouva <> _bsContract and typ = 'SSFO' and date(reftime) <= ADatAkce
+    let _stavsml = null;
+    --nalezen zaznam v matrice roli tak se pokusim k zadanemu datu najit zaznam v matrice smluv
+    select stav, cc, datakce, datuz into _stavsml, _cc, _datakce, _datuz from ES_Sml_Mat 
+      where smlouva = _smlouva and typ = _tsml and stav IN ('L', 'S', 'V') and date(reftime) <= ADatAkce;
+    --v matrice smluv zaznam k datu nenalezen 
+    if _stavsml is null then
+      --pro smlouvu projdu archiv smluv k datu  
+      foreach select stav, cc, datakce, datuz into _stavsml, _cc, _datakce, _datuz from ES_Sml_Arch 
+                where smlouva = _smlouva and typ = _tsml and date(reftime) <= ADatAkce  
+                order by reftime desc
+        exit foreach;
+      end foreach;
+    end if;
+    --zaznam nalezen v archivu nebo v matrice tak vlozim do temp tabulky
+    if _stavsml is not null and _stavsml IN ('L', 'S', 'V') then
+      INSERT INTO EP_DatGetScoParHistSpor_Tmp(smlouva, tsml, stavrole, stavsml, cc, datakce, datuz)
+                                      values(_smlouva,_tsml,_stavrole,_stavsml,_cc,_datakce,_datuz);
+    end if;
+  end foreach;
+  
+  --projdu vsechny zaznymy v archivu roli pro smlouvy, ktere jeste nejsou v temp tabulce
+  foreach select smlouva, typ, stav, os, typrole into _smlouva, _tsml, _stavrole, _os, _typrole
+            from EO_Role_Arch archA
+            where os = _personID and typrole = 'KL' and 
+            smlouva <> _bsContract and typ = 'SSFO' and date(reftime) <= ADatAkce and
+            --smlouva jeste nesmi byt v temp tabulce
+            not exists(select * from EP_DatGetScoParHistSpor_Tmp where smlouva = archA.smlouva and tsml = archA.typ) and
+            --chci jen posledni zaznamy pro roli na smlouve
+            reftime = (select max(reftime) from EO_Role_Arch archB where archB.smlouva = archA.smlouva and archB.typ = archA.typ and archB.os = archA.os and archB.typrole = archA.typrole and date(archB.reftime) <= ADatAkce)
+    if _stavrole IN ('A', 'U') then        
+      let _stavsml = null;
+      --nalezen zaznam v archivu roli tak se pokusim k zadanemu datu najit zaznam v matrice smluv
+      select stav, cc, datakce, datuz into _stavsml, _cc, _datakce, _datuz from ES_Sml_Mat 
+        where smlouva = _smlouva and typ = _tsml and stav IN ('L', 'S', 'V') and date(reftime) <= ADatAkce;
+      --v matrice smluv zaznam k datu nenalezen 
+      if _stavsml is null then
+        --prohledam pro smlouvu archiv
+        foreach select stav, cc, datakce, datuz into _stavsml, _cc, _datakce, _datuz from ES_Sml_Arch 
+                  where smlouva = _smlouva and typ = _tsml and date(reftime) <= ADatAkce
+                  order by reftime desc
+          exit foreach;
+        end foreach;
+      end if;
+      --zaznam nalezen v archivu nebo v matrice tak vlozim do tem tabulky
+      if _stavsml is not null and _stavsml IN ('L', 'S', 'V') then
+        INSERT INTO EP_DatGetScoParHistSpor_Tmp(smlouva, tsml, stavrole, stavsml, cc, datakce, datuz)
+                                        values(_smlouva,_tsml,_stavrole,_stavsml,_cc,_datakce,_datuz);  
+      end if;
+    end if;
+  end foreach;
+
+  -- smlouvy klienta s výjimkou té, pro kterou je poèítán scoring
+  foreach select  smlouva, tsml, stavrole, stavsml, cc, datakce, datuz
+            into _smlouva,_tsml,_stavrole,_stavsml,_cc,_datakce,_datuz
+            from EP_DatGetScoParHistSpor_Tmp
+
+    let _realn = null;
+    SELECT realn, reals, stavreal, mp 
+      INTO _realn, _reals, _stavreal, _mp FROM RZ_Real_Mat 
+      WHERE smlouva = _smlouva AND tsml = _tsml and date(reftime) <= ADatAkce;
+    if _realn is null then
+      foreach 
+        SELECT realn, reals, stavreal, mp 
+          INTO _realn, _reals, _stavreal, _mp FROM RZ_Real_Arch 
+          WHERE smlouva = _smlouva AND tsml = _tsml and date(reftime) <= ADatAkce 
+          ORDER BY reftime desc
+        exit foreach;
+      end foreach;
+    end if;
+  
+    if (_reals is not null) then
+      SELECT konto, tko INTO _konto, _tko FROM RS_Real_Mat WHERE (realn = _reals) and date(reftime) <= ADatAkce;
+      if _konto is null then
+        foreach 
+          SELECT konto, tko INTO _konto, _tko FROM RS_Real_Arch 
+            WHERE (realn = _reals) and date(reftime) <= ADatAkce 
+            ORDER BY reftime desc
+          exit foreach;
+        end foreach;  
+      end if;
+    else
+      let _konto, _tko = null, null;
+    end if;
+    
+    -- kategorie "spoøicí smlouvy"
+    if _stavrole = 'A' and _stavsml = 'L' and _stavreal <> 'I' then
+      let _bsnumber = _bsnumber + 1;
+      
+      if _reals is not null then
+        let AC_Archiv  = AO_IsOperArchived_N(_konto, _tko); 
+        let _bsamount = 0;
+        -- @RN00290755: Pokud AO_GetSaldoSkoDat vyletí na 746, že nemá v archivu k datu operace, migrace smlouvy nesmí spadnout!
+        -- Dohoda se ZG je taková, že daný parametr je prostì nula. 
+        begin
+          on exception IN(-746)            
+          end exception;
+          let _bsamount = _bsamount + RS_GetUspCast(_reals, 1, ADatAkce) + AO_GetSaldoSkoDat(_konto, _tko, 'PRMF', ADatAkce) + AO_GetSaldoSkoDat(_konto, _tko, 'PRAR', ADatAkce);
+          end;        
+      end if;
+      
+      let _sumTABSClient = _sumTABSClient + _cc;
+    
+    -- kategorie "ukonèené smlouvy"
+    elif _mp is null and ((_stavrole = 'A' and _stavsml = 'L' and _stavreal = 'I') or (_stavrole = 'U' and _stavsml in ('S', 'V'))) then
+      let _countFinishedBSClient = _countFinishedBSClient + 1;
+      let _sumTAFinishedBSClient = _sumTAFinishedBSClient + _cc;
+            
+      if _stavsml in ('S', 'V') then
+        let _saldo = null;
+        SELECT uspcastka + spmf + spar INTO _saldo FROM RZ_Storno_Kart WHERE realn = _realn AND stav = 'C' and date(reftime) <= ADatAkce;
+        if _saldo is null then
+          let _stavGet = null;
+          foreach SELECT uspcastka + spmf + spar, stav INTO _saldo, _stavGet FROM RZ_Storno_Arch WHERE realn = _realn and date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavGet is not null and _stavGet <> 'C' then
+            let _saldo = null;
+          end if;
+        end if;
+      else
+        let _poradi = null;
+        SELECT MIN(poradi) into _poradi FROM RZ_VyplUC_Kart WHERE realn = _realn AND datprov <= ADatAkce;
+        SELECT uspcastka + sp INTO _saldo FROM RZ_VyplUC_Kart WHERE realn = _realn AND poradi = _poradi;
+      end if;
+      let _sumSaldoFinishedBSClient = _sumSaldoFinishedBSClient + _saldo;
+    
+    -- kategorie "pøidìlené smlouvy"
+    elif _mp is not null and ((_stavrole = 'A' and _stavsml = 'L' and _stavreal = 'I') or (_stavrole = 'U' and _stavsml in ('S', 'V'))) then
+      let _countAssignedBSClient = _countAssignedBSClient + 1;
+      
+      SELECT cc, saldo INTO _ccpridel, _saldo FROM RZ_UZ_Kart_V WHERE realss = _realn AND datk = _mp;
+      
+      if _ccpridel is null then
+        let _ccpridel = ES_GetUdajSmlDat(_smlouva, _tsml, _mp, 3);
+      end if;
+      
+      if _saldo is null then
+        SELECT uspcastka + sp INTO _saldo FROM RZ_Vy_Kart WHERE realss = _realn AND datvy = _mp AND stav = 'C';
+        
+        if _saldo is null then
+          let AC_Archiv  = AO_IsOperArchived_N(_konto, _tko);
+          -- @RN00290755: Pokud AO_GetSaldoSkoDat vyletí na 746, že nemá v archivu k datu operace, migrace smlouvy nesmí spadnout!
+          -- Dohoda se ZG je taková, že daný parametr je prostì nula.
+          let _saldo = 0;
+          begin
+          on exception IN(-746)            
+          end exception;
+          let _saldo = AO_GetSaldoSkoDat(_konto, _tko, NULL, _mp);
+          end;          
+        end if;
+      end if;
+
+      let _sumTAAssignmentBSClient = _sumTAAssignmentBSClient + _ccpridel; 
+      let _sumSaldoAssignmentBSClient = _sumSaldoAssignmentBSClient + _saldo;
+    end if;
+    
+    -- platné/ukonèené smlouvy
+    if (_stavrole = 'A' and _stavsml = 'L') or (_stavrole = 'U' and _stavsml in ('S', 'V')) then
+      SELECT smlouva, datklop INTO _smlGet, _datklop FROM EU_Sml_Mat WHERE smlspor = _smlouva AND tsmlspor = _tsml AND datklop is not null  AND date(reftime) <= ADatAkce;
+      if _smlGet is null then
+        foreach SELECT datklop INTO _datklop FROM EU_Sml_Arch WHERE smlspor = _smlouva AND tsmlspor = _tsml AND datklop is not NULL and date(reftime) <= ADatAkce order by reftime desc 
+          exit foreach;
+        end foreach;
+      end if;
+
+      let _stari = TW_MonthBetw(_datuz, _datprov);
+      let _trvani = TW_MonthBetw(_datuz, nvl(_datklop, nvl(case when _stavsml in ('S', 'V') then _datakce else null end, _datprov)));
+
+      let _ageOldestAllBSClient = TW_MaxInt(_ageOldestAllBSClient, _stari);
+      
+      if _datklop is not null then
+        let _ageOldestAllTransferredBSClient = TW_MaxInt(_ageOldestAllTransferredBSClient, _stari);
+        let _sumAgeAllTransferredBSClient = _sumAgeAllTransferredBSClient + _stari;
+        let _sumDurationAllTransferredBSClient = _sumDurationAllTransferredBSClient + _trvani;
+        let _maxDurationAllTransferredBSClient = TW_MaxInt(_maxDurationAllTransferredBSClient, _trvani);
+      end if;
+      
+      let _sumAgeAllBSClient = _sumAgeAllBSClient + _stari;
+      let _sumDurationAllBSClient = _sumDurationAllBSClient + _trvani;
+      let _maxDurationAllBSClient = TW_MaxInt(_maxDurationAllBSClient, _trvani);
+    end if; 
+  end foreach;
+  
+  -- smlouvy ekonomické jednotky
+  begin
+    on exception in (-310, -958)
+      DELETE FROM EO_Manzel_Tmp;
+    end exception;
+    
+    CREATE TEMP TABLE EO_Manzel_Tmp(os Int) WITH NO LOG;
+  end;
+
+  let _manzel = NULL;
+  foreach
+      SELECT os1, stav INTO _manzel, _stavGet FROM EO_VztahOs_Mat 
+      WHERE os2 = _personID AND typvztah = 'RP' 
+              AND vztahrod = 3 AND date(reftime) <= ADatAkce  
+              order by reftime DESC
+              exit foreach;
+  end foreach;              
+        
+  if _manzel is not null AND _stavGet = 'A' then    
+      INSERT INTO EO_Manzel_Tmp(os) values(_manzel);    
+  else                  
+      let _idGet = null;
+      foreach SELECT os1, stav INTO _idGet, _stavGet FROM EO_VztahOs_Arch WHERE os2 = _personID AND typvztah = 'RP' AND vztahrod = 3 and date(reftime) <= ADatAkce order by reftime desc
+        exit foreach;
+      end foreach;
+      if _idGet is not null and _stavGet = 'A' then
+        INSERT INTO EO_Manzel_Tmp(os) values(_idGet);
+      end if;    
+  end if;
+
+  foreach
+    SELECT os2, stav INTO _manzel, _stavGet FROM EO_VztahOs_Mat 
+    WHERE os1 = _personID AND typvztah = 'RP' AND vztahrod = 3 AND date(reftime) <= ADatAkce  
+    order by reftime DESC
+    exit foreach;
+  end foreach;     
+  
+  if _manzel is not null AND _stavGet = 'A' then    
+      INSERT INTO EO_Manzel_Tmp(os) values(_manzel);    
+  else    
+      let _idGet = null;
+      foreach SELECT os2, stav INTO _idGet, _stavGet FROM EO_VztahOs_Arch WHERE os1 = _personID AND typvztah = 'RP' AND vztahrod = 3 and date(reftime) <= ADatAkce order by reftime desc
+        exit foreach;
+      end foreach;
+      if _idGet is not null and _stavGet = 'A' then
+        INSERT INTO EO_Manzel_Tmp(os) values(_idGet);
+      end if;    
+  end if;
+  
+  -- pokud manžel nenalezen v matrice vztahù osob a vyhodnocovaná osoba je v roli KL, MK, zkusíme najít manžela pøes role
+  if (SELECT COUNT(*) FROM EO_Manzel_Tmp) = 0 and ARole in ('KL', 'MK') then
+    SELECT os, stav, date(reftime) INTO _manzel, _stavGet, _reftimeGet FROM EO_Role_Mat WHERE smlouva = _bsContract AND ((ARole = 'KL' AND typrole = 'MK') OR (ARole = 'MK' AND typrole = 'KL'));
+    if _manzel is not null then 
+      if _reftimeGet <= ADatAkce and _stavGet = 'A' then
+        INSERT INTO EO_Manzel_Tmp(os) values(_manzel);
+      elif _reftimeGet > ADatAkce then
+        let _idGet = null;
+        foreach SELECT os, stav INTO _idGet, _stavGet FROM EO_Role_Arch WHERE os = _manzel AND smlouva = _bsContract AND ((ARole = 'KL' AND typrole = 'MK') OR (ARole = 'MK' AND typrole = 'KL')) and date(reftime) <= ADatAkce order by reftime desc
+          exit foreach;
+        end foreach;
+        if _idGet is not null and _stavGet = 'A' then
+          INSERT INTO EO_Manzel_Tmp(os) values(_manzel);
+        end if;
+      end if;
+    end if;
+  end if;
+
+  delete from EP_DatGetScoParHistSpor_Tmp;    
+    
+  --projdu vsechny role v matrice roli
+  -- @RN00289175: Pùvodní složitý select, jedoucí sekvenèním scanem pøes eo_role_mat, rozepisuji do dvou jednodušších...
+  -- Index by dle IFXExplainer mìl být využíván.
+  foreach select smlouva, typ, stav, os, typrole into _smlouva, _tsml, _stavrole, _os, _typrole
+            from EO_Role_Mat 
+            where (os in (SELECT os FROM EO_Manzel_Tmp)) 
+                    AND smlouva <> _bsContract
+                    AND typ = 'SSFO'  
+                    AND stav IN ('A', 'U') 
+                    AND typrole IN ('KL', 'ZA')                     
+                    AND date(reftime) <= ADatAkce                                               
+          call EP_InsertIntoSporHistory(_smlouva, _tsml, _stavrole, ADatAkce);                                  
+  end foreach;
+  
+  foreach select smlouva, typ, stav, os, typrole into _smlouva, _tsml, _stavrole, _os, _typrole
+            from EO_Role_Mat 
+            where os = _personID 
+                    AND smlouva <> _bsContract
+                    AND typ = 'SSFO'  
+                    AND stav IN ('A', 'U') 
+                    AND typrole = 'ZA'                     
+                    AND date(reftime) <= ADatAkce                                               
+          call EP_InsertIntoSporHistory(_smlouva, _tsml, _stavrole, ADatAkce);                                  
+  end foreach;
+  
+  --projdu vsechny zaznymy v archivu roli pro smlouvy, ktere jeste nejsou v temp tabulce
+ --@RN00289175: Opìt jako v pøedešlém pøípadì, rozepisuji do dvou jednodušších selectù, 
+ -- aby byl využit index.
+  foreach select smlouva, typ, stav, os, typrole into _smlouva, _tsml, _stavrole, _os, _typrole
+            from EO_Role_Arch archA
+            where os = _personID and  
+            smlouva <> _bsContract and 
+            typrole = 'ZA' and
+            typ = 'SSFO' and
+            stav in ('A', 'U') and 
+            date(reftime) <= ADatAkce and
+            --smlouva jeste nesmi byt v temp tabulce
+            not exists(select * from EP_DatGetScoParHistSpor_Tmp where smlouva = archA.smlouva and tsml = archA.typ) and
+            --chci jen posledni zaznamy pro roli na smlouve
+            reftime = (select max(reftime) from EO_Role_Arch archB where archB.smlouva = archA.smlouva and archB.typ = archA.typ and archB.os = archA.os and archB.typrole = archA.typrole and date(archB.reftime) <= ADatAkce)            
+       call EP_InsertIntoSporHistory(_smlouva, _tsml, _stavrole, ADatAkce);
+  end foreach;
+  
+  foreach select smlouva, typ, stav, os, typrole into _smlouva, _tsml, _stavrole, _os, _typrole
+            from EO_Role_Arch archA
+            where (os in (SELECT os FROM EO_Manzel_Tmp)) and  
+            smlouva <> _bsContract and 
+            typrole in ('KL', 'ZA') and
+            typ = 'SSFO' and
+            stav in ('A', 'U') and 
+            date(reftime) <= ADatAkce and
+            --smlouva jeste nesmi byt v temp tabulce
+            not exists(select * from EP_DatGetScoParHistSpor_Tmp where smlouva = archA.smlouva and tsml = archA.typ) and
+            --chci jen posledni zaznamy pro roli na smlouve
+            reftime = (select max(reftime) from EO_Role_Arch archB where archB.smlouva = archA.smlouva and archB.typ = archA.typ and archB.os = archA.os and archB.typrole = archA.typrole and date(archB.reftime) <= ADatAkce)    
+       call EP_InsertIntoSporHistory(_smlouva, _tsml, _stavrole, ADatAkce);    
+  end foreach;
+  
+
+  foreach select  smlouva, tsml, stavrole, stavsml, cc, datakce, datuz
+            into _smlouva,_tsml,_stavrole,_stavsml,_cc,_datakce,_datuz
+            from EP_DatGetScoParHistSpor_Tmp
+
+    let _realn = null;
+    SELECT realn, reals, stavreal, mp 
+      INTO _realn, _reals, _stavreal, _mp FROM RZ_Real_Mat 
+      WHERE smlouva = _smlouva AND tsml = _tsml and date(reftime) <= ADatAkce;
+    if _realn is null then
+      foreach 
+        SELECT realn, reals, stavreal, mp 
+          INTO _realn, _reals, _stavreal, _mp FROM RZ_Real_Arch 
+          WHERE smlouva = _smlouva AND tsml = _tsml and date(reftime) <= ADatAkce 
+          ORDER BY reftime desc
+        exit foreach;
+      end foreach;
+    end if;
+  
+    if (_reals is not null) then
+      SELECT konto, tko INTO _konto, _tko FROM RS_Real_Mat WHERE (realn = _reals) and date(reftime) <= ADatAkce;
+      if _konto is null then
+        foreach 
+          SELECT konto, tko INTO _konto, _tko FROM RS_Real_Arch 
+            WHERE (realn = _reals) and date(reftime) <= ADatAkce 
+            ORDER BY reftime desc
+          exit foreach;
+        end foreach;  
+      end if;
+    else
+      let _konto, _tko = null, null;
+    end if;
+    
+    -- kategorie "spoøicí smlouvy"
+    if _stavrole = 'A' and _stavsml = 'L' and _stavreal <> 'I' then
+      let _countBSEU = _countBSEU + 1;
+      
+      if _reals is not null then
+        let AC_Archiv  = AO_IsOperArchived_N(_konto, _tko);
+        -- @RN00290755: Pokud AO_GetSaldoSkoDat vyletí na 746, že nemá v archivu k datu operace, migrace smlouvy nesmí spadnout!
+        -- Dohoda se ZG je taková, že daný parametr je prostì nula. 
+        let _sumSaldoBSEU = 0;
+        begin
+          on exception IN(-746)            
+          end exception;
+          let _sumSaldoBSEU = _sumSaldoBSEU + RS_GetUspCast(_reals, 1, ADatAkce) + AO_GetSaldoSkoDat(_konto, _tko, 'PRMF', ADatAkce) + AO_GetSaldoSkoDat(_konto, _tko, 'PRAR', ADatAkce);
+          end;        
+      end if;
+      
+      let _sumTABSEU = _sumTABSEU + _cc;
+    
+    -- kategorie "ukonèené smlouvy"
+    elif _mp is null and ((_stavrole = 'A' and _stavsml = 'L' and _stavreal = 'I') or (_stavrole = 'U' and _stavsml in ('S', 'V'))) then
+      let _countFinishedBSEU = _countFinishedBSEU + 1;
+      let _sumTAFinishedBSEU = _sumTAFinishedBSEU + _cc;
+       
+      if _stavsml in ('S', 'V') then
+        let _saldo = null;
+        SELECT uspcastka + spmf + spar INTO _saldo FROM RZ_Storno_Kart WHERE realn = _realn AND stav = 'C' and date(reftime) <= ADatAkce;
+        if _saldo is null then
+          let _stavGet = null;
+          foreach SELECT uspcastka + spmf + spar, stav INTO _saldo, _stavGet FROM RZ_Storno_Arch WHERE realn = _realn and date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavGet is not null and _stavGet <> 'C' then
+            let _saldo = null;
+          end if;
+        end if;
+      else
+        let _poradi = null;
+        SELECT MIN(poradi) into _poradi FROM RZ_VyplUC_Kart WHERE realn = _realn AND datprov <= ADatAkce;
+        SELECT uspcastka + sp INTO _saldo FROM RZ_VyplUC_Kart WHERE realn = _realn AND poradi = _poradi;
+      end if;
+      let _sumSaldoFinishedBSEU = _sumSaldoFinishedBSEU + _saldo;
+
+    -- kategorie "pøidìlené smlouvy"
+    elif _mp is not null and ((_stavrole = 'A' and _stavsml = 'L' and _stavreal = 'I') or (_stavrole = 'U' and _stavsml in ('S', 'V'))) then
+      let _countAssignedBSEU = _countAssignedBSEU + 1;
+
+      SELECT cc, saldo INTO _ccpridel, _saldo FROM RZ_UZ_Kart_V WHERE realss = _realn AND datk = _mp;
+      
+      if _ccpridel is null then
+        let _ccpridel = ES_GetUdajSmlDat(_smlouva, _tsml, _mp, 3);
+      end if;
+      
+      if _saldo is null then
+        SELECT uspcastka + sp INTO _saldo FROM RZ_Vy_Kart WHERE realss = _realn AND datvy = _mp AND stav = 'C';
+        
+        if _saldo is null then
+          let AC_Archiv  = AO_IsOperArchived_N(_konto, _tko);
+          -- @RN00290755: Pokud AO_GetSaldoSkoDat vyletí na 746, že nemá v archivu k datu operace, migrace smlouvy nesmí spadnout!
+          -- Dohoda se ZG je taková, že daný parametr je prostì nula.
+          let _saldo = 0;
+          begin
+          on exception IN(-746)            
+          end exception;
+            let _saldo = AO_GetSaldoSkoDat(_konto, _tko, NULL, _mp);
+          end;          
+        end if;
+      end if;
+
+      let _sumTAAssignmentBSEU = _sumTAAssignmentBSEU + _ccpridel; 
+      let _sumSaldoAssignmentBEU = _sumSaldoAssignmentBEU + _saldo;
+    end if;
+    
+    
+    -- platné/ukonèené smlouvy
+    if (_stavrole = 'A' and _stavsml = 'L') or (_stavrole = 'U' and _stavsml in ('S', 'V')) then      
+      SELECT smlouva, datklop INTO _smlGet, _datklop FROM EU_Sml_Mat WHERE smlspor = _smlouva AND tsmlspor = _tsml AND datklop is not null AND date(reftime) <= ADatAkce;
+      if _smlGet is null then
+        foreach SELECT datklop INTO _datklop FROM EU_Sml_Arch WHERE smlspor = _smlouva AND tsmlspor = _tsml AND datklop is not null AND date(reftime) <= ADatAkce order by reftime desc 
+          exit foreach;
+        end foreach;
+      end if;
+    
+      let _stari = TW_MonthBetw(_datuz, _datprov);
+      let _trvani = TW_MonthBetw(_datuz, nvl(_datklop, nvl(case when _stavsml in ('S', 'V') then _datakce else null end, _datprov)));
+      
+      let _ageOldestAllBSEU = TW_MaxInt(_ageOldestAllBSEU, _stari);
+
+      if _datklop is not null then
+        let _ageOldestAllTransferredBSEU = TW_MaxInt(_ageOldestAllTransferredBSEU, _stari);
+        let _sumAgeAllTransferredBSEU = _sumAgeAllTransferredBSEU + _stari;
+        let _sumDurationAllTransferredBSEU = _sumDurationAllTransferredBSEU + _trvani;
+        let _maxDurationAllTransferredBSEU = TW_MaxInt(_maxDurationAllTransferredBSEU, _trvani);
+      end if;
+
+      let _sumAgeAllBSEU = _sumAgeAllBSEU + _stari;
+      let _sumDurationAllBSEU = _sumDurationAllBSEU + _trvani;
+      let _maxDurationAllBSEU = TW_MaxInt(_maxDurationAllBSEU, _trvani);
+    end if; 
+  end foreach;
+
+end if;
+
+return
+_bsnumber, --Int
+_bsamount, --Dec(16,2)
+_sumTABSClient, --Dec(16,2)
+_countBSEU, --Int
+_sumSaldoBSEU, --Dec(16,2)
+_sumTABSEU, --Dec(16,2)
+_countFinishedBSClient, --Int
+_countFinishedBSEU, --Int
+_sumTAFinishedBSClient, --Dec(16,2)
+_sumTAFinishedBSEU, --Dec(16,2)
+_sumSaldoFinishedBSClient, --Dec(16,2)
+_sumSaldoFinishedBSEU, --Dec(16,2)
+_countAssignedBSClient, --Int
+_countAssignedBSEU, --Int
+_sumTAAssignmentBSClient, --Dec(16,2)
+_sumTAAssignmentBSEU, --Dec(16,2)
+_sumSaldoAssignmentBSClient, --Dec(16,2)
+_sumSaldoAssignmentBEU, --Dec(16,2)
+_ageOldestAllBSClient, --Int
+_ageOldestAllBSEU, --Int
+_ageOldestAllTransferredBSClient, --Int
+_ageOldestAllTransferredBSEU, --Int
+_sumAgeAllBSClient, --Int
+_sumAgeAllBSEU, --Int
+_sumAgeAllTransferredBSClient, --Int
+_sumAgeAllTransferredBSEU, --Int
+_sumDurationAllBSClient, --Int
+_sumDurationAllBSEU, --Int
+_sumDurationAllTransferredBSClient, --Int
+_sumDurationAllTransferredBSEU, --Int
+_maxDurationAllBSClient, --Int
+_maxDurationAllBSEU, --Int
+_maxDurationAllTransferredBSClient, --Int
+_maxDurationAllTransferredBSEU; --Int
+
+end function;

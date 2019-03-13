@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B127918_RN00458833_3
+-- @TC:ONCE: DESCRIPTION = Modifikace popisu v číselníku Způsob získání informací o příjmu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE EO_ZiskPrijm_Cis
+   SET popis = 'Prokazování příjmů formou prohlášení'
+ WHERE zpusob = 'E';
+
+ROLLBACK WORK;
+
+--End of B127918_RN00458833_3

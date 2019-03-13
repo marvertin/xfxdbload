@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, B131167_RSTS-3441_3
+-- @TC:ONCE: DESCRIPTION = RN00458178_Dodatky-zrobustneni_reseni
+
+BEGIN WORK;
+
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'dopSankcProcPU', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky – dopočet sankční úr. sazby PÚ pomocí procentních bodů');
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'sankcProcPU', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky - o kolik procentních bodů má být sankční sazba PÚ vyšší než běžná');
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'sankcFixPU', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky – fixní sankční sazba PÚ');
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'dopSankcProcSU', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky – dopočet sankční úr. sazby SÚ pomocí procentních bodů');
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'sankcProcSU', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky - o kolik procentních bodů má být sankční sazba SÚ vyšší než běžná');
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'sankcFixSU', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky – fixní sankční sazba SÚ');
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'dopSankcProcKOME', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky – dopočet sankční úr. sazby KOME pomocí procentních bodů');
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'sankcProcKOME', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky - o kolik procentních bodů má být sankční sazba KOME vyšší než běžná');
+Call tw_regSetOrAddKey('EU','dodatky','sazby', 'sankcFixKOME', '', 1, 'Úvěr', 'Dodatky', 'Sankční sazby', 'Dodatky – fixní sankční sazba KOME');
+Call tw_regSetOrAddKey('EU','dodatky','uhrPriVytvDod', 'SUFO', '', 1, 'Úvěr', 'Dodatky', 'Úhrada za dodatek', 'Účtovat úhradu za dodatek již při vytvoření dodatku SUFO');
+Call tw_regSetOrAddKey('EU','dodatky','uhrPriVytvDod', 'PUSU', '', 1, 'Úvěr', 'Dodatky', 'Úhrada za dodatek', 'Účtovat úhradu za dodatek již při vytvoření dodatku PUSU');
+Call tw_regSetOrAddKey('EU','dodatky','uhrPriVytvDod', 'PFSU', '', 1, 'Úvěr', 'Dodatky', 'Úhrada za dodatek', 'Účtovat úhradu za dodatek již při vytvoření dodatku PFSU');
+Call tw_regSetOrAddKey('EU','dodatky','uhrPriVytvDod', 'SUPO', '', 1, 'Úvěr', 'Dodatky', 'Úhrada za dodatek', 'Účtovat úhradu za dodatek již při vytvoření dodatku SUPO');
+Call tw_regSetOrAddKey('EU','dodatky','uhrPriVytvDod', 'PUPO', '', 1, 'Úvěr', 'Dodatky', 'Úhrada za dodatek', 'Účtovat úhradu za dodatek již při vytvoření dodatku PUPO');
+Call tw_regSetOrAddKey('EU','dodatky','uhrPriVytvDod', 'KOME', '', 1, 'Úvěr', 'Dodatky', 'Úhrada za dodatek', 'Účtovat úhradu za dodatek již při vytvoření dodatku KOME');
+Call tw_regSetOrAddKey('EU','dodatky','uhrPriVytvDod', 'PPSU', '', 1, 'Úvěr', 'Dodatky', 'Úhrada za dodatek', 'Účtovat úhradu za dodatek již při vytvoření dodatku PPSU');
+
+
+INSERT INTO tw_prov_typ_cis(okruh, typ, popis, platnost) VALUES('EU', 258, 'Změna stavu dodatku k ÚS', 1); 
+
+INSERT INTO eu_duvodzrusdod_cis(duvodtext, platnost) VALUES('Chyba uživatele', 1);
+INSERT INTO eu_duvodzrusdod_cis(duvodtext, platnost) VALUES('Odmítnuto klientem', 1);
+
+ROLLBACK WORK;
+
+--End of B131167_RSTS-3441_3

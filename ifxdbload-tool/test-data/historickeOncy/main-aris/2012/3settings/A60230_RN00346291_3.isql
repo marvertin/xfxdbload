@@ -1,0 +1,51 @@
+-- @TC:ONCE: ID = V2, A60230_RN00346291_3
+-- @TC:ONCE: DESCRIPTION = Rozšíøení pole Druh pobytu MV na 2 znaky {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('L0','Platný trvalý pobyt', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('L2','Poslední trvalý pobyt- obèan v zahranièí', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('L3','Poslední trvalý pobyt - obèan bez trvalého pobytu', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('L8','Ukonèený trvalý pobyt - obèana ÈR', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('LE','Pozbytí obèanství - obèana ÈR', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('LF','Osvojení do ciziny -obèana ÈR', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('LG','ZPOCHYBNÌNO v šetøení MV u zdrojového místa', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('LH','Platný trvalý pobyt úøednì zrušený pobyt obèana ÈR – trvalý pobyt obèana na adrese ohlašovny', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('LX','Nezjištìno', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('L','Nevyplnìno', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('K-','Neuvedeno', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KB','Žadatel bez povolení k pobytu', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KD','Cizinec s dlouhodobým pobytem', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KT','Cizinec 3. státu s trvalým pobytem', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KU','Cizinci udìlen azyl', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KK','Cizinec s doèasným pobytem', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KV','Cizinec s udìleným vízem nad 90 dnù', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KA','Archivovaný cizinec', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KN','Neudìleno povolení k pobytu', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KE','Obèan EU s trvalým pobytem', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KF','Rodinný pøíslušník obèana EU s trvalým pobytem', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KC','Cizinec - partner - bez pobytu', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KP','Obèan EU s pøechodným pobytem', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KR','Rodinný pøíslušník obèana EU s pøechodným pobytem', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KL','Cizinec 3. státu s dlouhodobým pøechodným pobytem', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KZ','Žadatel na OAMP', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KX','MCS skartovány', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KS','Strpìní podle zákona è. 326/1999 Sb.', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KJ','Strpìní podle zákona è. 325/1999 Sb.', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KH','Trvalý rodinného pøíslušníka obèana ÈR', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KM','Trvalý - náhradní výchova § 87', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KG','Doèasná ochrana', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KW','Cizinec 3. státu s trvalým pobytem – rezident', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KQ','Cizinec 3. státu s dlouhodobým pøechodným pobytem-rezident', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('K1','Žadatel na OAMP - § 88', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KI','Cizinec - voják', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KY','Mezinárodní ochrana', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('K0','Požádal o pobyt, ale žádost vzal zpìt nebo zastaveno øízení', 0, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('K2','Trvalý pobyt rodinného pøíslušníka obèana ÈR-rezident', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('K3','Trvalý pobyt rodinného pøíslušníka obèana EU-rezident', 1, 1);
+INSERT INTO eo_druhpobytmv_cis(druh, popis, naroksp, platnost) VALUES('KO','Obèan ÈR – partner', 0, 1);
+
+ROLLBACK WORK;
+
+--End of A60230_RN00346291_3

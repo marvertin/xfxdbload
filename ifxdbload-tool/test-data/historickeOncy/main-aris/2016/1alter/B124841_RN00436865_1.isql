@@ -1,0 +1,75 @@
+-- @TC:ONCE: ID = V2, B124841_RN00436865_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - 3. část - ESIP, rozšíření exportů {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_expesipo_den (
+  id_index   Integer,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  rpsn   FLOAT,
+  supplrpsn   FLOAT,
+  pocvklsspu   Integer,
+  provize   DECIMAL(16,2),
+  provizekoef   DECIMAL(16,2),
+  poradi   Integer
+)lock mode row;
+
+CREATE INDEX eu_expesipo_den_i1 ON eu_expesipo_den(id_index);
+
+CREATE TABLE eu_expesipu_den (
+  id_index   Integer,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  phase   char(2),
+  savingaccentryfee   DECIMAL(16, 2),
+  savingaccincreasetafee   DECIMAL(16, 2),
+  savingaccchangetarifffee   DECIMAL(16, 2),
+  acccontractionfee   DECIMAL(16, 2),
+  accinsurancefee   DECIMAL(16, 2),
+  savingaccstatementfee   DECIMAL(16, 2),
+  bridgeloanaccstatementfee   DECIMAL(16, 2),
+  creditaccstatementfee   DECIMAL(16, 2),
+  savingaccmaintenancefee   DECIMAL(16, 2),
+  bridgeloanaccmaintenancefee   DECIMAL(16, 2),
+  creditaccmaintenancefee   DECIMAL(16, 2),
+  savingaccmaintenanceperiod   CHAR(1),
+  bridgeloanaccmaintenanceperiod   CHAR(1),
+  creditaccmaintenanceperiod   CHAR(1),
+  CHECK (savingaccmaintenanceperiod in ('D','M','Q','R','P','J')) CONSTRAINT eu_expesipu_den_dqfs,
+  CHECK (bridgeloanaccmaintenanceperiod in ('D','M','Q','R','P','J')) CONSTRAINT eu_expesipu_den_dqft,
+  CHECK (creditaccmaintenanceperiod in ('D','M','Q','R','P','J')) CONSTRAINT eu_expesipu_den_dqfu
+)lock mode row;
+
+CREATE INDEX eu_expesipu_den_i1 ON eu_expesipu_den(id_index);
+
+CREATE TABLE eu_expesipn_den (
+  id_index   Integer NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  reftypdalsinakl   Integer,
+  uhrada   DECIMAL(16, 2),
+  perioda   CHAR(1)
+)lock mode row;
+
+CREATE INDEX eu_expesipn_den_i1 ON eu_expesipn_den(id_index);
+
+CREATE TABLE eu_expesipk_den (
+  id_index   Integer NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  poradi   Integer NOT NULL,
+  typ   CHAR(1),
+  datumposlsplatky   DATE,
+  splatka   DECIMAL(16, 2),
+  zaplurok   DECIMAL(16, 2),
+  zapluhrady   DECIMAL(16, 2),
+  zapljistina   DECIMAL(16, 2),
+  zbyvnespljistina   DECIMAL(16, 2)
+)lock mode row;
+
+CREATE INDEX eu_expesipk_den_i1 ON eu_expesipk_den(id_index);
+ROLLBACK WORK;
+
+--End of B124841_RN00436865_1

@@ -1,0 +1,115 @@
+create PROCEDURE B136236_UID82746_4_make_D (-- vstupni paramtery
+                                    ABezTransakci integer default 0,    -- slouzi k testovacim ucelum,
+                                                                        -- kdy si uzivatel sam ridi transakce
+                                                                        -- muze pouzivat i zakaznik
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+
+define _os1                    Int;
+define _os2                    Int;
+define _typvztah           Char(2);
+define _stav                   Char(1);
+define _datplatnostod Date;
+define _datzapis           Date;
+define _poznamka       VarChar(255);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+   BEGIN WORK;
+end if;
+
+if ABezTransakci = 0 then
+   COMMIT WORK;
+   BEGIN WORK;
+end if;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+  SELECT ser, os1, os2, typvztah, stav
+  INTO _ser, _os1, _os2, _typvztah, _stav
+  FROM B136236_UID82746
+  WHERE zprac < 0
+  ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE B136236_UID82746
+        SET(NumErr,ISAMErr,TextErr) = (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    
+    SELECT datplatnostod, datzapis, poznamka INTO _datplatnostod, _datzapis, _poznamka
+     FROM eo_vztahos_mat
+    WHERE os1 = _os1 and os2 = _os2 and typvztah = _typvztah and stav = _stav;
+    
+    INSERT INTO eo_vztahos_mat (os1,os2,typvztah,datplatnostod,datplatnostdo,datzapis,datvym,datnast,datukon,vztahrod,Vlivklasif,Stav,poznamka)
+                                          VALUES (_os1,_os2,'MA',_datplatnostod,null,_datzapis,null,null,null,null,0,'A',_poznamka);
+
+    --konec algoritmu migrace
+    
+    UPDATE B136236_UID82746 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--algoritmus dokonceni migrace
+--...
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+  trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+if exists(SELECT * FROM B136236_UID82746 WHERE zprac < 0) then
+  call TW_RaiseError('136B241TCUI', 'B136236_UID82746_4_make_D', 'Během migrace doplnění vztahů mezi osbami došlo k chybě.'); 
+end if;
+
+end procedure;

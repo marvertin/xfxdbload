@@ -1,0 +1,158 @@
+create procedure RN00311507_krok_2E()
+-- vytvoření vztahů mezi insolvencemi
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+
+define _cj_IR Char(45);
+define _os1 Int;
+define _cjednaci1 Char(10);
+define _os2 Int;
+define _cjednaci2 Char(10);
+define _puvIR Char(45);
+
+define _sernoins like EP_Insolvence_Mat.serno;
+define _spisznsenat like EP_Insolvence_Mat.spisznsenat;
+define _spisznrejstrik like EP_Insolvence_Mat.spisznrejstrik;
+define _spisznbc like EP_Insolvence_Mat.spisznbc;
+define _spisznrocnik like EP_Insolvence_Mat.spisznrocnik;
+define _cisjednaciporadi like EP_Insolvence_Mat.cisjednaciporadi;
+define _cisjednacirok like EP_Insolvence_Mat.cisjednacirok;
+define _refsoud like EP_Insolvence_Mat.refsoud;
+define _reftime1 like EP_Insolvence_Mat.reftime;
+define _reftime2 like EP_Insolvence_Mat.reftime;
+
+define _typ like EP_VztahInsolv_Mat.typ;
+define _refinsolv1 like EP_VztahInsolv_Mat.refinsolv1;
+define _refinsolv2 like EP_VztahInsolv_Mat.refinsolv2;
+define _insolv2evid like EP_VztahInsolv_Mat.insolv2evid;
+define _puvrefsoud like EP_VztahInsolv_Mat.puvrefsoud;
+define _puvspisznsenat like EP_VztahInsolv_Mat.puvspisznsenat;
+define _puvspisznrejstrik like EP_VztahInsolv_Mat.puvspisznrejstrik;
+define _puvspisznbc like EP_VztahInsolv_Mat.puvspisznbc;
+define _puvspisznrocnik like EP_VztahInsolv_Mat.puvspisznrocnik;
+define _reftime like EP_VztahInsolv_Mat.reftime;
+define _refuser like EP_VztahInsolv_Mat.refuser;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+SET TRIGGERS FOR EP_VztahInsolv_Mat DISABLED;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_2E');
+
+let _typ = TW_RegGetKey('EP','insolvence', 'vztah', 'spojeniveci');
+let _refuser = 'migrace';
+
+COMMIT WORK;
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser, cj_IR, os1, cjednaci1, os2, cjednaci2, puvIR
+   INTO _ser, _cj_IR, _os1, _cjednaci1, _os2, _cjednaci2, _puvIR
+   FROM RN00311507_krok_2_vztah
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_2_vztah
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    -- dohledání insolvence
+    let _refsoud, _spisznsenat, _spisznrejstrik, _spisznbc, _spisznrocnik = EP_SlozkyCisJednaciISIR(trim(_cj_IR));
+    let _cisjednaciporadi = TW_StrToken(trim(_cjednaci1), '/', 0);
+    let _cisjednacirok = TW_StrToken(trim(_cjednaci1), '/', 1);
+
+    SELECT serno, reftime INTO _refinsolv1, _reftime1
+    FROM EP_Insolvence_Mat
+    WHERE refosoba = _os1 AND refsoud = _refsoud AND spisznsenat = _spisznsenat AND spisznrejstrik = _spisznrejstrik AND spisznbc = _spisznbc AND spisznrocnik = _spisznrocnik
+      AND cisjednaciporadi = _cisjednaciporadi AND cisjednacirok = _cisjednacirok;
+    
+    if _refinsolv1 is null then
+      call TW_RaiseError('107K130TCUI', 'RN00311507_krok_2E', 'Nenalezen příslušný záznam v evidenci insolvencí.');
+    end if;
+    
+    if _os2 is null then
+      -- pouze jedna insolvence je evidována
+      let _refinsolv2, _insolv2evid, _reftime = null, 0, _reftime1;
+      let _puvrefsoud, _puvspisznsenat, _puvspisznrejstrik, _puvspisznbc, _puvspisznrocnik = EP_SlozkyCisJednaciISIR(trim(_puvIR));
+
+    else
+      -- evidovány obě insolvence
+      let _cisjednaciporadi = TW_StrToken(trim(_cjednaci2), '/', 0);
+      let _cisjednacirok = TW_StrToken(trim(_cjednaci2), '/', 1);
+  
+      SELECT serno, reftime INTO _refinsolv2, _reftime2
+      FROM EP_Insolvence_Mat
+      WHERE refosoba = _os2 AND refsoud = _refsoud AND spisznsenat = _spisznsenat AND spisznrejstrik = _spisznrejstrik AND spisznbc = _spisznbc AND spisznrocnik = _spisznrocnik
+        AND cisjednaciporadi = _cisjednaciporadi AND cisjednacirok = _cisjednacirok;
+
+      let _insolv2evid, _reftime = 1, _reftime1;
+      if _reftime < _reftime2 then
+        let _reftime = _reftime2;
+      end if;
+      
+      let _puvrefsoud, _puvspisznsenat, _puvspisznrejstrik, _puvspisznbc, _puvspisznrocnik = null, null, null, null, null;
+      if _puvIR is not null and trim(_puvIR) <> '' then
+        let _puvrefsoud, _puvspisznsenat, _puvspisznrejstrik, _puvspisznbc, _puvspisznrocnik = EP_SlozkyCisJednaciISIR(trim(_puvIR));
+      end if;
+    end if;
+
+    INSERT INTO EP_VztahInsolv_Mat(typ, refinsolv1, refinsolv2, insolv2evid, puvrefsoud, puvspisznsenat, puvspisznrejstrik, puvspisznbc, puvspisznrocnik, platnost, reftime, refuser)
+    VALUES(_typ, _refinsolv1, _refinsolv2, _insolv2evid, _puvrefsoud, _puvspisznsenat, _puvspisznrejstrik, _puvspisznbc, _puvspisznrocnik, 1, _reftime, _refuser);
+    
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00311507_krok_2_vztah SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--algoritmus dokonceni migrace
+--...
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_2E');
+
+SET TRIGGERS FOR EP_VztahInsolv_Mat ENABLED;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

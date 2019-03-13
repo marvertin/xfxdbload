@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A56826_RN00317077_3-importBuffer
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Správa spoøicích produktù - žádosti {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegDelKey('BA', 'AnonParams' , 'PrePrimPD', 'MonthsInIBFSinceChng');
+call TW_RegDelKey('BA', 'AnonParams' , 'PrePrimPD', 'MonthsInIBFSinceTran');
+call TW_RegDelKey('RZ', '*' , 'importsmluv', 'ratesfromtarifcis');
+call TW_RegDelKey('ES', '*' , 'importsmluv', '*');
+call TW_RegDelKey('ES', '*' , '*', 'pouzitdefporm');
+call TW_RegDelKey('ES', '*' , '*', 'pouzitdefsouhlas');
+call TW_RegDelKey('ES', '*' , '*', 'pouzitdefstatprisl');
+call TW_RegDelKey('ES', '*' , 'importsmluv', 'sysimport');
+
+ROLLBACK WORK;
+
+--End of A56826_RN00317077_3-importBuffer

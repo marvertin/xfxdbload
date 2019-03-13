@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B109482_RN00389205_3
+-- @TC:ONCE: DESCRIPTION = Insolvence - přihlášení pohledávky (exist více rolí) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetKey('EP', 'insolvence', 'duplicitaosoby', 'vyradit', 1);
+
+ROLLBACK WORK;
+
+--End of B109482_RN00389205_3

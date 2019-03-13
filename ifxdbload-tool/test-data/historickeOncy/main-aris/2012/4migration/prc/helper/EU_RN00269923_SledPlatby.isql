@@ -1,0 +1,121 @@
+
+CREATE PROCEDURE EU_RN00269923_SledPlatby(    
+  aSmlouva       Dec(16,0),
+  aTsml          Char(4),
+  aDatPrechodOVP Date,
+  aSledovanoDo   Date
+)
+
+define _datprov           Date;
+define _smlspor           Dec(16,0);
+define _tsmlspor          Char(4);
+define _konto             Dec(16,0);
+define _tko               Char(2);
+define _kontopu           Dec(16,0);
+define _tkopu             Char(2);
+define _kontoSpor         Dec(16,0);
+define _tkoSpor           Char(2);
+define _ser               Int;
+define _dbcr              Int;
+define _actualKonto       Dec(16,0);
+define _actualTko         Char(2);
+define _stornovanySer     Int;
+define _stornovanyZdrojser Int;
+define _aAkce             Varchar(20);
+define _vytvorsnimek      Int;
+define _datzad            Date;
+define _datprvym          Date;
+define _datvyzva          Date;
+define _datod             Date;
+
+SELECT datprov INTO _datprov FROM AP_Status; 
+
+SELECT smlspor, tsmlspor, kontopu, tkopu, konto, tko, datzad 
+INTO _smlspor, _tsmlspor, _kontopu, _tkopu, _konto, _tko, _datzad
+FROM eu_sml_mat 
+WHERE smlouva = aSmlouva and tsml = aTsml;
+
+let _kontoSpor, _tkoSpor = null, null;
+if _smlspor is not null then
+  let _kontoSpor, _tkoSpor = EP_KontoTkoSml(_smlspor, _tsmlspor);
+end if;
+
+let _datod = MDY(1, 1, YEAR(_datprov));
+
+SELECT MIN(datprov) INTO _datprvym
+FROM RU_PrVym_Kart prvym JOIN RU_Real_Mat rea on prvym.realn = rea.realn
+WHERE rea.smlouva = aSmlouva AND rea.tsml = aTsml AND rea.datotev > _datzad AND prvym.stav = 'C';
+
+SELECT MIN(datprov) INTO _datvyzva
+FROM RU_Vyzva_Kart vyzva JOIN RU_Real_Mat rea on vyzva.realn = rea.realn
+WHERE rea.smlouva = aSmlouva AND rea.tsml = aTsml AND rea.datotev > _datzad AND vyzva.stav = 'C';
+
+if _datprvym is not null and _datvyzva is not null then
+  let _datod = TW_MaxDate(TW_MinDate(_datprvym, _datvyzva), _datod);
+elif _datprvym is not null then
+  let _datod = TW_MaxDate(_datprvym, _datod);
+elif _datvyzva is not null then
+  let _datod = TW_MaxDate(_datvyzva, _datod);
+elif aDatPrechodOVP is not null then
+  let _datod = TW_MaxDate(aDatPrechodOVP, _datod);
+end if;
+
+-- sledovaná konta
+foreach cc2 for
+   SELECT ser, dbcr, konto, tko     
+     INTO _ser, _dbcr, _actualKonto, _actualTko 
+     FROM ao_obrat_view
+    WHERE ((konto = _konto and tko = _tko) OR 
+          (konto = _kontopu and tko = _tkopu) OR
+          (konto = _kontoSpor and tko = _tkoSpor)) AND
+          datuct >= _datod AND
+          (aSledovanoDo IS NULL OR datuct <= aSledovanoDo)
+    ORDER BY ser
+        
+  let _stornovanySer, _stornovanyZdrojser = (SELECT ser1, ser1_zdrojSer FROM AC_Pair_Den WHERE ser2 = _ser and typParu = 'PS');      
+ 
+  IF (_dbcr = 1)
+  THEN
+  
+    IF (_stornovanySer IS NOT NULL)
+    THEN
+      let _aAkce = 'STORNO_OUT';
+    ELSE      
+      let _aAkce = 'PLATBA_IN';
+    END IF; 
+
+  ELSE
+  
+    IF (_stornovanySer IS NOT NULL)
+    THEN
+      let _aAkce = 'STORNO_IN';
+    ELSE  
+      let _aAkce = 'PLATBA_OUT';
+    END IF; 
+  
+  END IF;    
+  
+  
+  if _actualTko in ('SS', 'PS') then
+  
+    call RS_RN00269923_ZpracPohybKonta(_actualKonto, _actualTko, _aAkce, _ser, _stornovanySer, _stornovanyZdrojser);
+    
+  elif (_actualTko IN ('CA')) then 
+    
+    -- test, zda vytvorit snimek pro pohyb
+    let _vytvorsnimek = RU_ZpracPohybSnimVymPohl(_aAkce, _ser, _stornovanySer, _stornovanyZdrojser);
+  
+    IF (_vytvorsnimek <> 0)
+    THEN
+      call EU_RN00269923_SnimekVymPohl('S', aSmlouva, aTsml, _actualKonto, _actualTko, _ser,
+         DECODE (_aAkce, 'PLATBA_IN' , 'P',
+                         'PLATBA_OUT', 'O',
+                         'STORNO_IN',  'S',
+                         'STORNO_OUT', 'T')); 
+    END IF;
+    
+  end if;
+  
+end foreach; 
+
+END PROCEDURE;

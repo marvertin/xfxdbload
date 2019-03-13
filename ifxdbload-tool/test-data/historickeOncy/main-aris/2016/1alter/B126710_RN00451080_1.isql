@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B126710_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table eu_umorh_den drop constraint  eu_umorh_den_f2;
+
+ROLLBACK WORK;
+
+--End of B126710_RN00451080_1

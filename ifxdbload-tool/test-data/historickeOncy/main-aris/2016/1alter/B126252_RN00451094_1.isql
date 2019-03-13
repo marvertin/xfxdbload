@@ -1,0 +1,63 @@
+-- @TC:ONCE: ID = V2, B126252_RN00451094_1
+-- @TC:ONCE: DESCRIPTION = Změna v nastavení konce fixace a automatický posun data fixace {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_kalendarfixaci_mat (
+  serno   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  cisloint   Integer,
+  fixaceid   Integer,
+  fixaceod   DATE,
+  fixacedo   DATE,
+  fazeuveru   CHAR(1),
+  stav     CHAR(1), 
+  uroven   CHAR(1),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (stav IN ('A','Z')) CONSTRAINT eu_kalendarfixaci_mat_d24r
+)lock mode row;
+
+CREATE UNIQUE INDEX eu_kalendarfixaci_mat_pk ON eu_kalendarfixaci_mat(serno);
+
+ALTER TABLE eu_kalendarfixaci_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_kalendarfixaci_mat_pk;
+
+CREATE INDEX eu_kalendarfixaci_mat_i_f1 ON eu_kalendarfixaci_mat(smlouva,tsml);
+
+ALTER TABLE eu_kalendarfixaci_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_kalendarfixaci_mat_f1;
+
+ALTER TABLE eu_kalendarfixaci_mat
+ADD CONSTRAINT (CHECK (fazeuveru IN ('P' ,'S' ,'K' )) CONSTRAINT eu_kalendarfixaci_mat_c1),
+ADD CONSTRAINT (CHECK (uroven in ('A', 'M')) CONSTRAINT eu_kalendarfixaci_mat_c2);
+
+
+CREATE TABLE eu_kalendarfixaci_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  cisloint   Integer,
+  fixaceid   Integer,
+  fixaceod   DATE,
+  fixacedo   DATE,
+  fazeuveru   CHAR(1),
+ stav     CHAR(1), 
+  uroven   CHAR(1),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (stav IN ('A','Z')) CONSTRAINT eu_kalendarfixaci_arch_d255
+)lock mode row;
+
+CREATE UNIQUE INDEX eu_kalendarfixaci_arch_pk ON eu_kalendarfixaci_arch(idarch);
+
+ALTER TABLE eu_kalendarfixaci_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_kalendarfixaci_arch_pk;
+
+ROLLBACK WORK;
+
+--End of B126252_RN00451094_1

@@ -1,0 +1,543 @@
+-- @TC:ONCE: ID = V2, B132229_36886_3-ac_ucet_mat
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215513, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215514, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215515, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES ('215523', 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215524, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215525, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215543, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215544, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215545, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215613, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215614, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215615, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215623, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215624, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215625, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215633, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215634, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215635, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215643, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215644, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215645, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215713, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215714, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215715, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215723, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215724, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215725, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215733, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215734, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215735, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215743, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215744, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (215745, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216513, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216514, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216515, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216523, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216524, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216525, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216543, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216544, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216545, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216613, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216614, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216615, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216623, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216624, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216625, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216633, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216634, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216635, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216643, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216644, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216645, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216713, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216714, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216715, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216723, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216724, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216725, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216733, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216734, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216735, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216743, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216744, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (216745, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218513, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218514, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218515, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218523, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218524, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218525, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218543, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218544, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218545, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218613, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218614, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218615, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218623, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218624, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218625, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218633, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218634, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218635, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218643, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218644, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218645, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218713, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218714, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218715, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218723, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218724, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218725, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218733, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218734, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218735, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218743, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218744, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (218745, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226130, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226131, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226132, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226135, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226137, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226230, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226232, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226235, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226236, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226237, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226238, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226330, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226332, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226335, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226336, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226337, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (226338, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227130, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227135, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227137, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227230, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227235, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227237, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227330, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227335, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (227337, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228130, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228135, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228137, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228230, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228235, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228237, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228330, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228335, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (228337, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241513, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241514, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241515, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241523, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241524, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241525, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241543, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241544, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241545, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241613, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241614, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241615, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241623, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241624, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241625, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241633, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241634, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241635, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241643, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241644, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241645, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241713, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241714, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241715, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241723, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241724, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241725, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241733, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241734, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241735, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241743, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241744, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (241745, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242513, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242514, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242515, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242523, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242524, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242525, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242543, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242544, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242545, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242613, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242614, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242615, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242623, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242624, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242625, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242633, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242634, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242635, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242643, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242644, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242645, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242713, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242714, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242715, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242723, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242724, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242725, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242733, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242734, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242735, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242743, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242744, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (242745, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243513, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243514, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243515, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243523, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243524, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243525, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243543, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243544, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243545, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243613, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243614, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243615, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243623, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243624, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243625, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243633, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243634, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243635, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243643, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243644, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243645, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243713, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243714, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243715, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243723, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243724, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243725, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243733, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243734, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243735, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243743, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243744, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (243745, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244513, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244514, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244515, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244523, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244524, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244525, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244543, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244544, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244545, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244613, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244614, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244615, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244623, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244624, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244625, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244633, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244634, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244635, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244643, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244644, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244645, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244713, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244714, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244715, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244723, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244724, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244725, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244733, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244734, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244735, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244743, 'P', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244744, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+INSERT INTO AC_Ucet_Mat (ucet, typ, jepodrozvaha, kodnv, zkratka, stav, jedb, jecr, typco, czprefix, naklstr, mena, popis, poznamka, kursrozucet, separexport, basel) VALUES (244745, 'A', '0', null, null, 1, 1, 1, 0, null, null, 'CZK', 'Časové rozlišení', null, null, 0, 0);
+
+
+
+ROLLBACK WORK;
+
+--End of B132229_36886_3-ac_ucet_mat

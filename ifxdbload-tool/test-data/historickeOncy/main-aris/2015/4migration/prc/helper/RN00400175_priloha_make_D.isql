@@ -1,0 +1,121 @@
+create PROCEDURE RN00400175_priloha_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _smlouva      dec(16,0);
+define _tsml         char(4);
+define _priloha1     Int;
+define _priloha2     Int;
+define _priloha3     Int;
+define _priloha4     Int;
+define _zmena        Int; 
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00400175', 'RN00400175_priloha', 'Migrace: odstranění přílohy');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+
+begin
+  on exception in (-206)
+  end exception;
+  DROP TABLE RN00400175_priloha_temp;
+end;
+
+
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  smlouva,  tsml, priloha1, priloha2, priloha3, priloha4
+   INTO  _ser, _smlouva, _tsml, _priloha1, _priloha2, _priloha3, _priloha4
+   FROM RN00400175_priloha
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00400175_priloha
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    if _priloha1 is not null then 
+      UPDATE es_sml_mat set priloha1 = null WHERE smlouva = _smlouva AND typ = _tsml; 
+    elif _priloha2 is not null then
+      UPDATE es_sml_mat set priloha2 = null WHERE smlouva = _smlouva AND typ = _tsml;
+    elif _priloha3 is not null then
+     UPDATE es_sml_mat set priloha3 = null WHERE smlouva = _smlouva AND typ = _tsml;
+    elif _priloha4 is not null then
+     UPDATE es_sml_mat set priloha4 = null WHERE smlouva = _smlouva AND typ = _tsml;
+    end if; 
+    
+    --zaevidování opravy smlouvy
+    let _zmena =  ES_SmlZmInsZm(_smlouva, _tsml, 1);
+    
+    --nastaví příznak zpracováno na 1
+    UPDATE RN00400175_priloha SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+begin
+  on exception in (-206)
+  end exception;
+  DROP TABLE RN00400175_priloha_temp;
+end;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

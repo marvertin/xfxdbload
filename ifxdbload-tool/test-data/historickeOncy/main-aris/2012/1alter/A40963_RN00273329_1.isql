@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, A40963_RN00273329_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní pole Daòová úspora do výsledkù pøi modelování úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ax_dantyp_cis 
+  modify   typ   CHAR(20)
+;
+
+alter table ax_dantyp_cis
+
+  --Kind of a tax
+  --S=Deduction tax (Srážková daò)
+  --D=Income tax (Daò z pøíjmu)
+  add druhdan   CHAR(1) DEFAULT 'S' NOT NULL
+;
+
+--CHECKS
+ALTER TABLE ax_dantyp_cis
+ADD CONSTRAINT (CHECK (druhdan in ('S', 'D')) CONSTRAINT ax_dantyp_cis_c1)
+;
+
+alter table ax_dantyp_Acis 
+  modify   typ   CHAR(20)
+;
+
+alter table ax_dantyp_Acis
+
+  --Kind of a tax
+  --S=Deduction tax (Srážková daò)
+  --D=Income tax (Daò z pøíjmu)
+  add druhdan   CHAR(1)
+;
+
+alter table ax_sazba_cis
+  --maximal annual tax base
+  add maxzaklad   DECIMAL(16, 2)
+;
+
+alter table ax_sazba_acis
+  --maximal annual tax base
+  add maxzaklad   DECIMAL(16, 2)
+;
+
+ROLLBACK WORK;
+
+--End of A40963_RN00273329_1

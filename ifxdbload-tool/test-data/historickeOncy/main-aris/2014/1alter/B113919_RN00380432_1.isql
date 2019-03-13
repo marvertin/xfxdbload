@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B113919_RN00380432_1
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Export úvěrové smlouvy {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table eu_zajist_mat
+  add   stavukonceni char(1);
+
+alter table eu_zajist_arch
+  add   stavukonceni char(1);
+
+alter table EU_ExpSml_Den add vlastni int;
+
+ROLLBACK WORK;
+
+--End of B113919_RN00380432_1

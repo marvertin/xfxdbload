@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B126421_RN00452650_1
+-- @TC:ONCE: DESCRIPTION = Úpravy v úloze Smlouva, Změna {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+ CREATE INDEX eo_fo_mat_n4 ON eo_fo_mat(povolani);
+
+ROLLBACK WORK;
+
+--End of B126421_RN00452650_1

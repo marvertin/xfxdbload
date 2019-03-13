@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A59951_RN00348140
+-- @TC:ONCE: DESCRIPTION = Opakované zastavování provozu
+
+BEGIN WORK;
+
+create index eo_prukaz_mat_i2 on eo_prukaz_mat (cisprukaz);
+
+ROLLBACK WORK;

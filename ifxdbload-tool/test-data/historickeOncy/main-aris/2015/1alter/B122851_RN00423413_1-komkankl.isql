@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, B122851_RN00423413_1-komkankl
+-- @TC:ONCE: DESCRIPTION = Úpravy v modelování {CUSTOMERREQUEST}
+BEGIN WORK;
+
+Alter Table pro_client Add (mobil CHAR(45), email CHAR(45));
+
+ROLLBACK WORK;
+--End of B122851_RN00423413_1-komkankl

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B127415_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+RENAME COLUMN eu_expesipisk_den.odbod TO obdod;
+
+RENAME COLUMN eu_expesipisk_den.odbdo TO obddo;
+
+ROLLBACK WORK;
+
+--End of B127415_RN00451080_1

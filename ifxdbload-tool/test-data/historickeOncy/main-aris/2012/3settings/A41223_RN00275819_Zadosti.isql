@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, A41223_RN00275819_Zadosti
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - typ žádostí
+
+BEGIN WORK;
+
+INSERT INTO ep_typzadost_cis(typzadost, text, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('A', 'Zmìna registrovaného e-mailu', 1, 'A', 'A', 1);
+
+INSERT INTO ep_typzadost_cis(typzadost, text, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('B', 'Zmìna mobilu SIS', 0, 'M', 'A', 1);
+
+INSERT INTO ep_typzadost_cis(typzadost, text, poznamka, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('C', 'Zmìna zpùsobu korespondence', 'Žádost o zmìnu zpùsobu korespondence mezi klientem a spoøitelnou', 0, 'A', 'A', 1);
+
+INSERT INTO ep_typzadost_cis(typzadost, text, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('D', 'Mimoøádný výpis z úètu', 0, 'A', 'A', 1);
+
+INSERT INTO ep_typzadost_cis(typzadost, text, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('E', 'Zmìna smlouvy SS', 0, 'A', 'A', 1);
+
+INSERT INTO ep_typzadost_cis(typzadost, text, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('F', 'Nová smlouva SS', 1, 'A', 'M', 1);
+
+INSERT INTO ep_typzadost_cis(typzadost, text, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('G', 'Zmìna osobních údajù', 0, 'A', 'A', 1);
+
+INSERT INTO ep_typzadost_cis(typzadost, text, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('H', 'Zmìna kontaktních údajù', 1, 'A', 'A', 1);
+
+INSERT INTO ep_typzadost_cis(typzadost, text, zpracdavka, zpusob, zpusobevid, platnost) 
+  VALUES('I', 'Zmìna korespondence', 0, 'A', 'A', 1);
+
+ROLLBACK WORK;

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135369_UID73081_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22418: Výkonnost: Optimalizace {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+create index crk_kontrolapredmet_mat_i3 on crk_kontrolapredmet_mat(refeuprijem);
+create index crk_kontrolapredmet_mat_i4 on crk_kontrolapredmet_mat(refseuprijem);
+ 
+ROLLBACK WORK;
+
+--End of B135369_UID73081_1

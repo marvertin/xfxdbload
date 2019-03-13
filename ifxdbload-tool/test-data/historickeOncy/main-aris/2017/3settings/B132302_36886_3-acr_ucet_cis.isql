@@ -1,0 +1,1403 @@
+-- @TC:ONCE: ID = V2, B132302_36886_3-acr_ucet_cis
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '1', 'U', null, '227130');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '2', 'U', null, '228130');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '3', 'U', null, '226130');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '4', 'U', null, '226131');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '5', 'U', null, '226132');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '1', 'P', null, '227135');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '2', 'P', null, '228135');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '3', 'P', null, '226135');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '4', 'P', null, '226135');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '5', 'P', null, '226135');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '1', 'A', null, '227137');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '2', 'A', null, '228137');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '3', 'A', null, '226137');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '4', 'A', null, '226137');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSFO', '5', 'A', null, '226137');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '1', 'U', 'PZ', '227230');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '2', 'U', 'PZ', '228230');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '3', 'U', 'PZ', '226230');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '4', 'U', 'PZ', '226232');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '5', 'U', 'PZ', '226232');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '1', 'P', 'PZ', '227235');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '2', 'P', 'PZ', '228235');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '3', 'P', 'PZ', '226235');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '4', 'P', 'PZ', '226236');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '5', 'P', 'PZ', '226236');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '1', 'A', 'PZ', '227237');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '2', 'A', 'PZ', '228237');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '3', 'A', 'PZ', '226237');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '4', 'A', 'PZ', '226238');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '5', 'A', 'PZ', '226238');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '1', 'U', 'PN', '227330');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '2', 'U', 'PN', '228330');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '3', 'U', 'PN', '226330');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '4', 'U', 'PN', '226332');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '5', 'U', 'PN', '226332');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '1', 'P', 'PN', '227335');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '2', 'P', 'PN', '228335');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '3', 'P', 'PN', '226335');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '4', 'P', 'PN', '226336');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '5', 'P', 'PN', '226336');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '1', 'A', 'PN', '227337');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '2', 'A', 'PN', '228337');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '3', 'A', 'PN', '226337');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '4', 'A', 'PN', '226338');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SSPO', '5', 'A', 'PN', '226338');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_PU', 'U', null, '215513');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_SU', 'U', null, '215523');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_VU', 'U', null, '215543');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_PU', 'U', null, '216513');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_SU', 'U', null, '216523');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_VU', 'U', null, '216543');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_PU', 'U', null, '218513');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_SU', 'U', null, '218523');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_VU', 'U', null, '218543');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_PU', 'U', null, '241513');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_SU', 'U', null, '241523');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_VU', 'U', null, '241543');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_PU', 'U', null, '242513');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_SU', 'U', null, '242523');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_VU', 'U', null, '242543');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_PU', 'U', null, '243513');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_SU', 'U', null, '243523');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_VU', 'U', null, '243543');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_PU', 'U', null, '244513');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_SU', 'U', null, '244523');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_VU', 'U', null, '244543');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_PU', 'P', null, '215514');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_SU', 'P', null, '215524');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_VU', 'P', null, '215544');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_PU', 'P', null, '216514');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_SU', 'P', null, '216524');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_VU', 'P', null, '216544');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_PU', 'P', null, '218514');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_SU', 'P', null, '218524');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_VU', 'P', null, '218544');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_PU', 'P', null, '241514');
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_SU', 'P', null, 241524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_VU', 'P', null, 241544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_PU', 'P', null, 242514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_SU', 'P', null, 242524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_VU', 'P', null, 242544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_PU', 'P', null, 243514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_SU', 'P', null, 243524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_VU', 'P', null, 243544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_PU', 'P', null, 244514);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_SU', 'P', null, 244524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_VU', 'P', null, 244544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_PU', 'A', null, 215515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_SU', 'A', null, 215525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_K_FO_VU', 'A', null, 215545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_PU', 'A', null, 216515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_SU', 'A', null, 216525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_S_FO_VU', 'A', null, 216545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_PU', 'A', null, 218515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_SU', 'A', null, 218525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '0_D_FO_VU', 'A', null, 218545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_PU', 'A', null, 241515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_SU', 'A', null, 241525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '1_X_FO_VU', 'A', null, 241545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_PU', 'A', null, 242515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_SU', 'A', null, 242525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '2_X_FO_VU', 'A', null, 242545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_PU', 'A', null, 243515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_SU', 'A', null, 243525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '3_X_FO_VU', 'A', null, 243545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_PU', 'A', null, 244515);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_SU', 'A', null, 244525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUSU', '4_X_FO_VU', 'A', null, 244545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_K_FO_SU', 'U', null, 215523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_K_FO_VU', 'U', null, 215543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_S_FO_SU', 'U', null, 216523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_S_FO_VU', 'U', null, 216543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_D_FO_SU', 'U', null, 218523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_D_FO_VU', 'U', null, 218543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '1_X_FO_SU', 'U', null, 241523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '1_X_FO_VU', 'U', null, 241543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '2_X_FO_SU', 'U', null, 242523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '2_X_FO_VU', 'U', null, 242543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '3_X_FO_SU', 'U', null, 243523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '3_X_FO_VU', 'U', null, 243543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '4_X_FO_SU', 'U', null, 244523);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '4_X_FO_VU', 'U', null, 244543);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_K_FO_SU', 'P', null, 215524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_K_FO_VU', 'P', null, 215544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_S_FO_SU', 'P', null, 216524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_S_FO_VU', 'P', null, 216544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_D_FO_SU', 'P', null, 218524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_D_FO_VU', 'P', null, 218544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '1_X_FO_SU', 'P', null, 241524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '1_X_FO_VU', 'P', null, 241544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '2_X_FO_SU', 'P', null, 242524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '2_X_FO_VU', 'P', null, 242544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '3_X_FO_SU', 'P', null, 243524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '3_X_FO_VU', 'P', null, 243544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '4_X_FO_SU', 'P', null, 244524);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '4_X_FO_VU', 'P', null, 244544);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_K_FO_SU', 'A', null, 215525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_K_FO_VU', 'A', null, 215545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_S_FO_SU', 'A', null, 216525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_S_FO_VU', 'A', null, 216545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_D_FO_SU', 'A', null, 218525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '0_D_FO_VU', 'A', null, 218545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '1_X_FO_SU', 'A', null, 241525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '1_X_FO_VU', 'A', null, 241545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '2_X_FO_SU', 'A', null, 242525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '2_X_FO_VU', 'A', null, 242545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '3_X_FO_SU', 'A', null, 243525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '3_X_FO_VU', 'A', null, 243545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '4_X_FO_SU', 'A', null, 244525);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUFO', '4_X_FO_VU', 'A', null, 244545);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_PU', 'U', null, 215613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_SU', 'U', null, 215623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_VU', 'U', null, 215643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_PU', 'U', null, 215713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_SU', 'U', null, 215723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_VU', 'U', null, 215743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_PU', 'U', null, 216613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_SU', 'U', null, 216623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_VU', 'U', null, 216643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_PU', 'U', null, 216713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_SU', 'U', null, 216723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_VU', 'U', null, 216743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_PU', 'U', null, 218613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_SU', 'U', null, 218623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_VU', 'U', null, 218643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_PU', 'U', null, 218713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_SU', 'U', null, 218723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_VU', 'U', null, 218743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_PU', 'U', null, 241613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_SU', 'U', null, 241623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_VU', 'U', null, 241643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_PU', 'U', null, 241713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_SU', 'U', null, 241723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_VU', 'U', null, 241743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_PU', 'U', null, 242613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_SU', 'U', null, 242623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_VU', 'U', null, 242643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_PU', 'U', null, 242713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_SU', 'U', null, 242723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_VU', 'U', null, 242743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_PU', 'U', null, 243613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_SU', 'U', null, 243623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_VU', 'U', null, 243643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_PU', 'U', null, 243713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_SU', 'U', null, 243723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_VU', 'U', null, 243743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_PU', 'U', null, 244613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_SU', 'U', null, 244623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_VU', 'U', null, 244643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_PU', 'U', null, 244713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_SU', 'U', null, 244723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_VU', 'U', null, 244743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PZ_SU', 'U', null, 215623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PZ_VU', 'U', null, 215643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PN_SU', 'U', null, 215723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PN_VU', 'U', null, 215743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PZ_SU', 'U', null, 216623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PZ_VU', 'U', null, 216643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PN_SU', 'U', null, 216723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PN_VU', 'U', null, 216743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PZ_SU', 'U', null, 218623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PZ_VU', 'U', null, 218643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PN_SU', 'U', null, 218723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PN_VU', 'U', null, 218743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PZ_SU', 'U', null, 241623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PZ_VU', 'U', null, 241643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PN_SU', 'U', null, 241723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PN_VU', 'U', null, 241743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PZ_SU', 'U', null, 242623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PZ_VU', 'U', null, 242643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PN_SU', 'U', null, 242723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PN_VU', 'U', null, 242743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PZ_SU', 'U', null, 243623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PZ_VU', 'U', null, 243643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PN_SU', 'U', null, 243723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PN_VU', 'U', null, 243743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PZ_SU', 'U', null, 244623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PZ_VU', 'U', null, 244643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PN_SU', 'U', null, 244723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PN_VU', 'U', null, 244743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PZ_KO', 'U', null, 215633);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PZ_VU', 'U', null, 215643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PN_KO', 'U', null, 215733);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PN_VU', 'U', null, 215743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PZ_KO', 'U', null, 216633);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PZ_VU', 'U', null, 216643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PN_KO', 'U', null, 216733);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PN_VU', 'U', null, 216743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PZ_KO', 'U', null, 218633);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PZ_VU', 'U', null, 218643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PN_KO', 'U', null, 218733);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PN_VU', 'U', null, 218743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PZ_KO', 'U', null, 241633);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PZ_VU', 'U', null, 241643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PN_KO', 'U', null, 241733);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PN_VU', 'U', null, 241743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PZ_KO', 'U', null, 242633);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PZ_VU', 'U', null, 242643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PN_KO', 'U', null, 242733);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PN_VU', 'U', null, 242743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PZ_KO', 'U', null, 243633);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PZ_VU', 'U', null, 243643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PN_KO', 'U', null, 243733);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PN_VU', 'U', null, 243743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PZ_KO', 'U', null, 244633);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PZ_VU', 'U', null, 244643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PN_KO', 'U', null, 244733);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PN_VU', 'U', null, 244743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_PU', 'U', null, 215613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_SU', 'U', null, 215623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_VU', 'U', null, 215643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_PU', 'U', null, 215713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_SU', 'U', null, 215723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_VU', 'U', null, 215743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_PU', 'U', null, 216613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_SU', 'U', null, 216623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_VU', 'U', null, 216643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_PU', 'U', null, 216713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_SU', 'U', null, 216723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_VU', 'U', null, 216743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_PU', 'U', null, 218613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_SU', 'U', null, 218623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_VU', 'U', null, 218643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_PU', 'U', null, 218713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_SU', 'U', null, 218723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_VU', 'U', null, 218743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_PU', 'U', null, 241613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_SU', 'U', null, 241623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_VU', 'U', null, 241643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_PU', 'U', null, 241713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_SU', 'U', null, 241723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_VU', 'U', null, 241743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_PU', 'U', null, 242613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_SU', 'U', null, 242623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_VU', 'U', null, 242643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_PU', 'U', null, 242713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_SU', 'U', null, 242723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_VU', 'U', null, 242743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_PU', 'U', null, 243613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_SU', 'U', null, 243623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_VU', 'U', null, 243643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_PU', 'U', null, 243713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_SU', 'U', null, 243723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_VU', 'U', null, 243743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_PU', 'U', null, 244613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_SU', 'U', null, 244623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_VU', 'U', null, 244643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_PU', 'U', null, 244713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_SU', 'U', null, 244723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_VU', 'U', null, 244743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_PU', 'U', null, 215613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_SU', 'U', null, 215623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_VU', 'U', null, 215643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_PU', 'U', null, 215713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_SU', 'U', null, 215723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_VU', 'U', null, 215743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_PU', 'U', null, 216613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_SU', 'U', null, 216623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_VU', 'U', null, 216643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_PU', 'U', null, 216713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_SU', 'U', null, 216723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_VU', 'U', null, 216743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_PU', 'U', null, 218613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_SU', 'U', null, 218623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_VU', 'U', null, 218643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_PU', 'U', null, 218713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_SU', 'U', null, 218723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_VU', 'U', null, 218743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_PU', 'U', null, 241613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_SU', 'U', null, 241623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_VU', 'U', null, 241643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_PU', 'U', null, 241713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_SU', 'U', null, 241723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_VU', 'U', null, 241743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_PU', 'U', null, 242613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_SU', 'U', null, 242623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_VU', 'U', null, 242643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_PU', 'U', null, 242713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_SU', 'U', null, 242723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_VU', 'U', null, 242743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_PU', 'U', null, 243613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_SU', 'U', null, 243623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_VU', 'U', null, 243643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_PU', 'U', null, 243713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_SU', 'U', null, 243723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_VU', 'U', null, 243743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_PU', 'U', null, 244613);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_SU', 'U', null, 244623);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_VU', 'U', null, 244643);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_PU', 'U', null, 244713);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_SU', 'U', null, 244723);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_VU', 'U', null, 244743);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_PU', 'P', null, 215614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_SU', 'P', null, 215624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_VU', 'P', null, 215644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_PU', 'P', null, 215714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_SU', 'P', null, 215724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_VU', 'P', null, 215744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_PU', 'P', null, 216614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_SU', 'P', null, 216624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_VU', 'P', null, 216644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_PU', 'P', null, 216714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_SU', 'P', null, 216724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_VU', 'P', null, 216744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_PU', 'P', null, 218614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_SU', 'P', null, 218624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_VU', 'P', null, 218644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_PU', 'P', null, 218714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_SU', 'P', null, 218724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_VU', 'P', null, 218745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_PU', 'P', null, 241614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_SU', 'P', null, 241624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_VU', 'P', null, 241644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_PU', 'P', null, 241714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_SU', 'P', null, 241724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_VU', 'P', null, 241744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_PU', 'P', null, 241614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_SU', 'P', null, 242624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_VU', 'P', null, 242644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_PU', 'P', null, 242714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_SU', 'P', null, 242724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_VU', 'P', null, 242744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_PU', 'P', null, 243614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_SU', 'P', null, 243624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_VU', 'P', null, 243644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_PU', 'P', null, 243714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_SU', 'P', null, 243724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_VU', 'P', null, 243744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_PU', 'P', null, 244614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_SU', 'P', null, 244624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_VU', 'P', null, 244644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_PU', 'P', null, 244714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_SU', 'P', null, 244724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_VU', 'P', null, 244744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PZ_SU', 'P', null, 215624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PZ_VU', 'P', null, 215644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PN_SU', 'P', null, 215724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PN_VU', 'P', null, 215744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PZ_SU', 'P', null, 216624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PZ_VU', 'P', null, 216644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PN_SU', 'P', null, 216724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PN_VU', 'P', null, 216744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PZ_SU', 'P', null, 218624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PZ_VU', 'P', null, 218644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PN_SU', 'P', null, 218724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PN_VU', 'P', null, 218744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PZ_SU', 'P', null, 241624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PZ_VU', 'P', null, 241644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PN_SU', 'P', null, 241724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PN_VU', 'P', null, 241744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PZ_SU', 'P', null, 242624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PZ_VU', 'P', null, 242644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PN_SU', 'P', null, 242724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PN_VU', 'P', null, 242744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PZ_SU', 'P', null, 243624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PZ_VU', 'P', null, 243644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PN_SU', 'P', null, 243724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PN_VU', 'P', null, 243744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PZ_SU', 'P', null, 244624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PZ_VU', 'P', null, 244644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PN_SU', 'P', null, 244724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PN_VU', 'P', null, 244744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PZ_KO', 'P', null, 215634);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PZ_VU', 'P', null, 215644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PN_KO', 'P', null, 215734);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PN_VU', 'P', null, 215744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PZ_KO', 'P', null, 216634);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PZ_VU', 'P', null, 216644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PN_KO', 'P', null, 216734);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PN_VU', 'P', null, 216744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PZ_KO', 'P', null, 218634);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PZ_VU', 'P', null, 218644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PN_KO', 'P', null, 218734);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PN_VU', 'P', null, 218744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PZ_KO', 'P', null, 241634);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PZ_VU', 'P', null, 241644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PN_KO', 'P', null, 241734);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PN_VU', 'P', null, 241744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PZ_KO', 'P', null, 242634);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PZ_VU', 'P', null, 242644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PN_KO', 'P', null, 242734);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PN_VU', 'P', null, 242744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PZ_KO', 'P', null, 243634);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PZ_VU', 'P', null, 243644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PN_KO', 'P', null, 243734);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PN_VU', 'P', null, 243744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PZ_KO', 'P', null, 244634);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PZ_VU', 'P', null, 244644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PN_KO', 'P', null, 244734);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PN_VU', 'P', null, 244744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_PU', 'P', null, 215614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_SU', 'P', null, 215624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_VU', 'P', null, 215644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_PU', 'P', null, 215714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_SU', 'P', null, 215724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_VU', 'P', null, 215744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_PU', 'P', null, 216614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_SU', 'P', null, 216624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_VU', 'P', null, 216644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_PU', 'P', null, 216714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_SU', 'P', null, 216724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_VU', 'P', null, 216744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_PU', 'P', null, 218614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_SU', 'P', null, 218624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_VU', 'P', null, 218644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_PU', 'P', null, 218714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_SU', 'P', null, 218724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_VU', 'P', null, 218744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_PU', 'P', null, 241614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_SU', 'P', null, 241624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_VU', 'P', null, 241644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_PU', 'P', null, 241714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_SU', 'P', null, 241724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_VU', 'P', null, 241744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_PU', 'P', null, 241614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_SU', 'P', null, 241624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_VU', 'P', null, 241644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_PU', 'P', null, 242714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_SU', 'P', null, 242724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_VU', 'P', null, 242744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_PU', 'P', null, 243614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_SU', 'P', null, 243624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_VU', 'P', null, 243644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_PU', 'P', null, 243714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_SU', 'P', null, 243724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_VU', 'P', null, 243744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_PU', 'P', null, 244614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_SU', 'P', null, 244624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_VU', 'P', null, 244644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_PU', 'P', null, 244714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_SU', 'P', null, 244724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_VU', 'P', null, 244744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_PU', 'P', null, 215614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_SU', 'P', null, 215624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_VU', 'P', null, 215644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_PU', 'P', null, 215714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_SU', 'P', null, 215724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_VU', 'P', null, 215744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_PU', 'P', null, 216614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_SU', 'P', null, 216624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_VU', 'P', null, 216644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_PU', 'P', null, 216714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_SU', 'P', null, 216724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_VU', 'P', null, 216744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_PU', 'P', null, 218614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_SU', 'P', null, 218624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_VU', 'P', null, 218644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_PU', 'P', null, 218714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_SU', 'P', null, 218724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_VU', 'P', null, 218744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_PU', 'P', null, 241614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_SU', 'P', null, 241624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_VU', 'P', null, 241644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_PU', 'P', null, 241714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_SU', 'P', null, 241724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_VU', 'P', null, 241744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_PU', 'P', null, 242614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_SU', 'P', null, 242624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_VU', 'P', null, 242644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_PU', 'P', null, 242714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_SU', 'P', null, 242724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_VU', 'P', null, 242744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_PU', 'P', null, 243614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_SU', 'P', null, 243624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_VU', 'P', null, 243644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_PU', 'P', null, 243714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_SU', 'P', null, 243724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_VU', 'P', null, 243744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_PU', 'P', null, 244614);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_SU', 'P', null, 244624);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_VU', 'P', null, 244644);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_PU', 'P', null, 244714);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_SU', 'P', null, 244724);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_VU', 'P', null, 244744);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_PU', 'A', null, 215615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_SU', 'A', null, 215625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PZ_VU', 'A', null, 215645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_PU', 'A', null, 215715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_SU', 'A', null, 215725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_K_PN_VU', 'A', null, 215745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_PU', 'A', null, 216615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_SU', 'A', null, 216625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PZ_VU', 'A', null, 216645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_PU', 'A', null, 216715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_SU', 'A', null, 216725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_S_PN_VU', 'A', null, 216745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_PU', 'A', null, 218615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_SU', 'A', null, 218625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PZ_VU', 'A', null, 218645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_PU', 'A', null, 218715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_SU', 'A', null, 218725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '0_D_PN_VU', 'A', null, 218745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_PU', 'A', null, 241615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_SU', 'A', null, 241625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PZ_VU', 'A', null, 241645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_PU', 'A', null, 241715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_SU', 'A', null, 241725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '1_X_PN_VU', 'A', null, 241745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_PU', 'A', null, 241615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_SU', 'A', null, 242625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PZ_VU', 'A', null, 242645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_PU', 'A', null, 242715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_SU', 'A', null, 242725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '2_X_PN_VU', 'A', null, 242745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_PU', 'A', null, 243615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_SU', 'A', null, 243625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PZ_VU', 'A', null, 243645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_PU', 'A', null, 243715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_SU', 'A', null, 243725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '3_X_PN_VU', 'A', null, 243745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_PU', 'A', null, 244615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_SU', 'A', null, 244625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PZ_VU', 'A', null, 244645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_PU', 'A', null, 244715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_SU', 'A', null, 244725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PUPO', '4_X_PN_VU', 'A', null, 244745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PZ_SU', 'A', null, 215625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PZ_VU', 'A', null, 215645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PN_SU', 'A', null, 215725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_K_PN_VU', 'A', null, 215745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PZ_SU', 'A', null, 216625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PZ_VU', 'A', null, 216645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PN_SU', 'A', null, 216725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_S_PN_VU', 'A', null, 216745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PZ_SU', 'A', null, 218625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PZ_VU', 'A', null, 218645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PN_SU', 'A', null, 218725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '0_D_PN_VU', 'A', null, 218745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PZ_SU', 'A', null, 241625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PZ_VU', 'A', null, 241645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PN_SU', 'A', null, 241725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '1_X_PN_VU', 'A', null, 241745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PZ_SU', 'A', null, 242625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PZ_VU', 'A', null, 242645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PN_SU', 'A', null, 242725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '2_X_PN_VU', 'A', null, 242745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PZ_SU', 'A', null, 243625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PZ_VU', 'A', null, 243645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PN_SU', 'A', null, 243725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '3_X_PN_VU', 'A', null, 243745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PZ_SU', 'A', null, 244625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PZ_VU', 'A', null, 244645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PN_SU', 'A', null, 244725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('SUPO', '4_X_PN_VU', 'A', null, 244745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PZ_KO', 'A', null, 215635);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PZ_VU', 'A', null, 215645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PN_KO', 'A', null, 215735);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_K_PN_VU', 'A', null, 215745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PZ_KO', 'A', null, 216635);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PZ_VU', 'A', null, 216645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PN_KO', 'A', null, 216735);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_S_PN_VU', 'A', null, 216745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PZ_KO', 'A', null, 218635);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PZ_VU', 'A', null, 218645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PN_KO', 'A', null, 218735);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '0_D_PN_VU', 'A', null, 218745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PZ_KO', 'A', null, 241635);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PZ_VU', 'A', null, 241645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PN_KO', 'A', null, 241735);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '1_X_PN_VU', 'A', null, 241745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PZ_KO', 'A', null, 242635);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PZ_VU', 'A', null, 242645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PN_KO', 'A', null, 242735);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '2_X_PN_VU', 'A', null, 242745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PZ_KO', 'A', null, 243635);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PZ_VU', 'A', null, 243645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PN_KO', 'A', null, 243735);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '3_X_PN_VU', 'A', null, 243745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PZ_KO', 'A', null, 244635);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PZ_VU', 'A', null, 244645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PN_KO', 'A', null, 244735);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('KOME', '4_X_PN_VU', 'A', null, 244745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_PU', 'A', null, 215615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_SU', 'A', null, 215625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PZ_VU', 'A', null, 215645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_PU', 'A', null, 215715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_SU', 'A', null, 215725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_K_PN_VU', 'A', null, 215745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_PU', 'A', null, 216615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_SU', 'A', null, 216625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PZ_VU', 'A', null, 216645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_PU', 'A', null, 216715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_SU', 'A', null, 216725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_S_PN_VU', 'A', null, 216745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_PU', 'A', null, 218615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_SU', 'A', null, 218625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PZ_VU', 'A', null, 218645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_PU', 'A', null, 218715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_SU', 'A', null, 218725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '0_D_PN_VU', 'A', null, 218745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_PU', 'A', null, 241615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_SU', 'A', null, 241625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PZ_VU', 'A', null, 241645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_PU', 'A', null, 241715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_SU', 'A', null, 241725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '1_X_PN_VU', 'A', null, 241745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_PU', 'A', null, 241615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_SU', 'A', null, 241625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PZ_VU', 'A', null, 241645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_PU', 'A', null, 242715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_SU', 'A', null, 242725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '2_X_PN_VU', 'A', null, 242745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_PU', 'A', null, 243615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_SU', 'A', null, 243625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PZ_VU', 'A', null, 243645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_PU', 'A', null, 243715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_SU', 'A', null, 243725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '3_X_PN_VU', 'A', null, 243745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_PU', 'A', null, 244615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_SU', 'A', null, 244625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PZ_VU', 'A', null, 244645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_PU', 'A', null, 244715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_SU', 'A', null, 244725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PFSU', '4_X_PN_VU', 'A', null, 244745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_PU', 'A', null, 215615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_SU', 'A', null, 215625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PZ_VU', 'A', null, 215645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_PU', 'A', null, 215715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_SU', 'A', null, 215725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_K_PN_VU', 'A', null, 215745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_PU', 'A', null, 216615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_SU', 'A', null, 216625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PZ_VU', 'A', null, 216645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_PU', 'A', null, 216715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_SU', 'A', null, 216725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_S_PN_VU', 'A', null, 216745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_PU', 'A', null, 218615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_SU', 'A', null, 218625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PZ_VU', 'A', null, 218645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_PU', 'A', null, 218715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_SU', 'A', null, 218725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '0_D_PN_VU', 'A', null, 218745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_PU', 'A', null, 241615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_SU', 'A', null, 241625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PZ_VU', 'A', null, 241645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_PU', 'A', null, 241715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_SU', 'A', null, 241725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '1_X_PN_VU', 'A', null, 241745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_PU', 'A', null, 242615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_SU', 'A', null, 242625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PZ_VU', 'A', null, 242645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_PU', 'A', null, 242715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_SU', 'A', null, 242725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '2_X_PN_VU', 'A', null, 242745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_PU', 'A', null, 243615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_SU', 'A', null, 243625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PZ_VU', 'A', null, 243645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_PU', 'A', null, 243715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_SU', 'A', null, 243725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '3_X_PN_VU', 'A', null, 243745);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_PU', 'A', null, 244615);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_SU', 'A', null, 244625);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PZ_VU', 'A', null, 244645);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_PU', 'A', null, 244715);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_SU', 'A', null, 244725);
+
+INSERT INTO ACR_Ucet_Cis (tsml, mapkod, typobj, typmaj, ucet) VALUES ('PPSU', '4_X_PN_VU', 'A', null, 244745);
+
+
+
+ROLLBACK WORK;
+
+--End of B132302_36886_3-acr_ucet_cis

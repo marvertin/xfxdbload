@@ -1,0 +1,40 @@
+-- @TC:ONCE: ID = V2, A46578_RN00282679
+-- @TC:ONCE: DESCRIPTION = Výzva a pøevod do vymáhání bez ukonèení spoøení
+
+BEGIN WORK;
+
+CREATE TABLE eu_priznak_kart (
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    poradi          Integer   NOT NULL,
+    typ             CHAR(1)   NOT NULL,
+    duvod           CHAR(1)   NOT NULL,
+    upresneni       CHAR(70)  ,
+    stav            CHAR(1)   NOT NULL,
+    datpriznak      DATE   NOT NULL,
+    portime         datetime year to second   NOT NULL,
+    poruser         CHAR(20)   NOT NULL,
+    potvtime        datetime year to second  ,
+    potvuser        CHAR(20)  ,
+    provtime        datetime year to second  ,
+    provuser        CHAR(20)  ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (typ in ('D', 'S')) CONSTRAINT eu_priznak_kart_c1,
+    CHECK (duvod in ('P', 'V', 'Z')) CONSTRAINT eu_priznak_kart_c2,
+    CHECK (stav in ('A', 'B', 'C', 'Z')) CONSTRAINT eu_priznak_kart_c3
+) LOCK MODE ROW
+;
+
+CREATE unique INDEX eu_priznak_kart_pk ON eu_priznak_kart (smlouva,tsml,poradi) ;
+
+CREATE INDEX eu_priznak_kart_i_f1 ON eu_priznak_kart (smlouva,tsml) ;
+
+ALTER TABLE eu_priznak_kart
+    ADD CONSTRAINT PRIMARY KEY (smlouva,tsml,poradi)  CONSTRAINT eu_priznak_kart_pk;
+
+ALTER TABLE eu_priznak_kart
+    ADD CONSTRAINT FOREIGN KEY (smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml)  CONSTRAINT eu_priznak_kart_f1;
+
+
+ROLLBACK WORK;

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A42081_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+BEGIN WORK;
+
+ALTER TABLE es_voptarprech_acis
+    ADD notice          VARCHAR(255);
+
+ALTER TABLE es_voptarprech_cis
+    ADD notice          VARCHAR(255);
+
+ROLLBACK WORK;

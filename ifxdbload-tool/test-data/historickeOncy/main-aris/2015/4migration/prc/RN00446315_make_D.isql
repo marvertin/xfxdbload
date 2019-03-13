@@ -1,0 +1,110 @@
+create PROCEDURE RN00446315_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _os1        int;
+define _os2        int;
+define _typvztah   char(2);
+
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00446315', 'RN00446315', 'Změna typu vztahu FO k PO v rámci SIS');
+
+
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  os1, os2, typvztah
+   INTO  _ser, _os1, _os2, _typvztah
+   FROM RN00446315
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00446315
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    IF _typvztah = 'SZ' THEN
+      IF NOT EXISTS (SELECT 1 FROM eo_vztahos_mat WHERE os1 = _os1 AND os2 = _os2 AND typvztah = 'ZS') THEN
+        INSERT INTO eo_vztahos_mat (os1, os2, typvztah, stav) VALUES (_os1, _os2, 'ZS','A');
+      ELIF EXISTS (SELECT 1 FROM eo_vztahos_mat WHERE os1 = _os1 AND os2 = _os2 AND typvztah = 'ZS' AND stav <> 'A') THEN
+        UPDATE eo_vztahos_mat SET stav = 'A' WHERE os1 = _os1 AND os2 = _os2 AND typvztah = 'ZS'; 
+      END IF
+    ELSE
+      IF NOT EXISTS (SELECT 1 FROM eo_vztahos_mat WHERE os1 = _os1 AND os2 = _os2 AND typvztah = 'SO') THEN
+        INSERT INTO eo_vztahos_mat (os1, os2, typvztah, stav) VALUES (_os1, _os2, 'SO','A');
+      ELIF EXISTS (SELECT 1 FROM eo_vztahos_mat WHERE os1 = _os1 AND os2 = _os2 AND typvztah = 'SO' AND stav <> 'A') THEN
+        UPDATE eo_vztahos_mat SET stav = 'A' WHERE os1 = _os1 AND os2 = _os2 AND typvztah = 'SO'; 
+      END IF
+    END IF
+    
+    --nastaví příznak zpracováno na 1
+    UPDATE RN00446315 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+SET TRIGGERS ao_blokace_kart_U ENABLED; 
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

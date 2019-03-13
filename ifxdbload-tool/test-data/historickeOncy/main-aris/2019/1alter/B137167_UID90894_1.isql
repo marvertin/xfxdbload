@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B137167_UID90894_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31753: IMPLEMENTACE (BE): RSTS-31226_Fixace - Modelování {INTERNAL_WORK}
+
+BEGIN WORK;
+
+ALTER TABLE ev_varpojist_cis ADD  typvypoctu   CHAR(1)  BEFORE platnost;
+
+ALTER TABLE ev_varpojist_cis
+ADD CONSTRAINT (CHECK (typvypoctu in ('F','V')) CONSTRAINT ev_varpojist_cis_c1);
+
+ALTER TABLE ev_varpojist_acis ADD  typvypoctu   CHAR(1)  BEFORE platnost;
+
+ROLLBACK WORK;
+
+--End of B137167_UID90894_1

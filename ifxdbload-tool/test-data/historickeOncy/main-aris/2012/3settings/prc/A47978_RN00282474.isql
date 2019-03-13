@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, A47978_RN00282474
+-- @TC:ONCE: DESCRIPTION = zalozeni pojistovny UNIQA
+
+CREATE PROCEDURE A47978_RN00282474 ()
+
+  define _id  Int;
+  define _os  Int;
+  define _poj INT;
+  
+  LET _poj = (select cispojistov from ev_pojistovna_cis where 
+                po in (select po from eo_po_mat where ico= tw_reggetkey('EV', '*', 'pojistUNIQA', 'ICO')));
+
+  IF(_poj IS NULL) THEN
+    -- osob tam muze byt vice (migrace HYPO), proto vezmu tu drivejsi z RSTS
+    LET _os = (SELECT MIN(po) FROM eo_po_mat WHERE ico=tw_reggetkey('EV', '*', 'pojistUNIQA', 'ICO'));
+    
+    IF(_os IS NULL)
+    THEN
+      let _os = A46956_ZalozOsobu('49240480', 'UNIQA pojiöùovna, a.s.', 'Evropsk·', '', '136', 'Praha 6', '16012');
+    END IF;    
+    
+    INSERT INTO EV_Pojistovna_cis(po, platnost) VALUES(_os, 1);  
+  END IF;  
+
+END PROCEDURE;

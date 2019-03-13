@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B109226_RN00311507_3-soudnipoplatky_326
+-- @TC:ONCE: DESCRIPTION = Insolvence {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- #Typ dluhu pro insolvenci - soudní poplatky#
+Call TW_RegSetOrAddKey('EP', 'insolvence', 'typdluhu', 'soudnipoplatky', 326, 1);
+
+-- #Akreditovaný poskytovatel certifikačních služeb banky#
+Call TW_RegSetOrAddKey('AP', 'banka', '*', 'poskytcertifsluzeb', 'I. CA', 1);
+
+ROLLBACK WORK;
+--End of B109226_RN00311507_3-soudnipoplatky_326

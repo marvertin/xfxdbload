@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136342_UID85205_5
+-- @TC:ONCE: DESCRIPTION = RSTS-28698: V dotazníku přestalo fungovat předgenerování pojištění Uniqa {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_sadavazebrozhod_cis modify id   CHAR(10) NOT NULL;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX eu_sadavazebrozhod_cis_u1 ON eu_sadavazebrozhod_cis(id);
+ALTER TABLE eu_sadavazebrozhod_cis ADD CONSTRAINT (UNIQUE (id) CONSTRAINT eu_sadavazebrozhod_cis_u1);
+
+ROLLBACK WORK;
+
+--End of B136342_UID85205_5

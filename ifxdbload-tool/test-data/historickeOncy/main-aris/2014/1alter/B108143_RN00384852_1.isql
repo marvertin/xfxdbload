@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B108143_RN00384852_1
+-- @TC:ONCE: DESCRIPTION = Nemožná identifikace "nové" osoby z úvěrové žádosti do logu chyb (ep_rizsubjektkontr_den) pomocí id osoby {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_rizsubjektkontr_den 
+  ADD typid   CHAR(1) BEFORE smlouva,
+  ADD rc      CHAR(13) BEFORE smlouva;
+
+CREATE INDEX ep_rizsubjektkontr_den_i2 ON ep_rizsubjektkontr_den(rc);
+
+ROLLBACK WORK;
+
+--End of B108143_RN00384852_1

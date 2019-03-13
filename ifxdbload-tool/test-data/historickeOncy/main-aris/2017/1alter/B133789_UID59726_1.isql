@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B133789_UID59726_1
+-- @TC:ONCE: DESCRIPTION = Přidání položky Datum registrace k DPH do číselníku firem (pef_firma_cis)
+
+BEGIN WORK;
+
+ALTER TABLE pef_firma_cis ADD datregdph DATE BEFORE datzrusregdph;
+
+ALTER TABLE pef_firma_acis ADD datregdph DATE BEFORE datzrusregdph;
+
+ROLLBACK WORK;
+
+--End of B133789_UID59726_1

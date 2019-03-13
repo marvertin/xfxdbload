@@ -1,0 +1,102 @@
+-- @TC:ONCE: ID = V2, B127090_RN00451080_3
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+CREATE PROCEDURE B127090_RN00451080_3() 
+
+
+define _typpohybumodel  like ep_zahrnutipohybucfmodel_cis.typpohybumodel;
+define _definition      like ep_zahrnutipohybucfmodel_cis.definition;
+define _tsml            like ep_zahrnutipohybucfmodel_cis.tsml;
+define _rpsntype        like ep_zahrnutipohybucfmodel_cis.rpsntype;
+define _period          like ep_zahrnutipohybucfmodel_cis.period;
+define _konto           like ep_zahrnutipohybucfmodel_cis.konto;
+
+-- Inicializace temp tabulky B127090_RN00451080_3_typ_temp -----------------------------------------
+begin
+  on exception in (-206)
+  end exception;
+  DROP TABLE B127090_RN00451080_3_typ_temp;
+end;
+
+CREATE TABLE B127090_RN00451080_3_typ_temp (
+  typpohybumodel  CHAR(1)
+);
+
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('U');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('W');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('#');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('D');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('I');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('J');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('G');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('K');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('L');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('O');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('$');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('%');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('^');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('&');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('*');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('@');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('2');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('{');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('}');
+insert into B127090_RN00451080_3_typ_temp (typpohybumodel) values ('S');
+
+foreach
+  select typpohybumodel
+  into  _typpohybumodel
+  from B127090_RN00451080_3_typ_temp
+  
+  if _typpohybumodel = '2' then
+    let _konto = 'U';
+    let _period = null;
+  else
+    let _konto = 'S';
+    let _period = 'A';
+  end if;
+  
+  call B127090_RN00451080_3_vloz(_typpohybumodel, 'PUSU', 'SO', _konto, _period);
+  call B127090_RN00451080_3_vloz(_typpohybumodel, 'PUPO', 'SO', _konto, _period);
+  call B127090_RN00451080_3_vloz(_typpohybumodel, 'PFSU', 'SO', _konto, _period);
+  call B127090_RN00451080_3_vloz(_typpohybumodel, 'PPSU', 'SO', _konto, _period);
+  
+  call B127090_RN00451080_3_vloz(_typpohybumodel, 'PUSU', 'PU', _konto, _period);
+  call B127090_RN00451080_3_vloz(_typpohybumodel, 'PUPO', 'PU', _konto, _period);
+  call B127090_RN00451080_3_vloz(_typpohybumodel, 'PFSU', 'PU', _konto, _period);
+  call B127090_RN00451080_3_vloz(_typpohybumodel, 'PPSU', 'PU', _konto, _period);
+end foreach;
+
+
+DROP TABLE B127090_RN00451080_3_typ_temp;
+
+end procedure;
+
+create procedure B127090_RN00451080_3_vloz(ATypPohybuModel  like ep_zahrnutipohybucfmodel_cis.typpohybumodel
+                                           , ATsml          like ep_zahrnutipohybucfmodel_cis.tsml
+                                           , ARrpsnType     like ep_zahrnutipohybucfmodel_cis.rpsntype
+                                           , AKonto         like ep_zahrnutipohybucfmodel_cis.konto
+                                           , APeriod        like ep_zahrnutipohybucfmodel_cis.period)
+
+if exists(select 1 
+                from ep_zahrnutipohybucfmodel_cis 
+                where typpohybumodel = ATypPohybuModel
+                  and tsml = ATsml
+                  and rpsntype = ARrpsntype
+                  and (period = APeriod or (period is null and APeriod is null))
+                  and konto = AKonto) then
+
+    update ep_zahrnutipohybucfmodel_cis
+    set includesavings = 1
+    where typpohybumodel = ATypPohybuModel
+      and tsml = ATsml
+      and rpsntype = ARrpsntype
+      and (period = APeriod or (period is null and APeriod is null))
+      and konto = AKonto;
+  else            
+    insert into ep_zahrnutipohybucfmodel_cis ( typpohybumodel, definition,  tsml,  rpsntype,   period,  konto, includesavings, include, cashflowday, inversesign) 
+    values                                   (ATypPohybuModel, 'U',        ATsml, ARrpsnType, APeriod, AKonto, 1,              0,       null,        0);
+  end if;
+end procedure; 
+
+--End of B127090_RN00451080_3

@@ -1,0 +1,37 @@
+-- @TC:ONCE: ID = V2, A56435_RN00317080_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+DROP TABLE eu_kontrolatyp_acis;
+
+CREATE TABLE eu_kontrolatyp_acis (
+  idarch   SERIAL NOT NULL,
+  typ   Char(6) NOT NULL,
+  nazev   CHAR(40) NOT NULL,
+  faze1   Integer NOT NULL,
+  faze2   Integer NOT NULL,
+  poradi   Integer NOT NULL,
+  platnost   Integer NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (faze1 IN (0,1)) CONSTRAINT eu_kontrolatyp_acis_dn61,
+  CHECK (faze2 IN (0,1)) CONSTRAINT eu_kontrolatyp_acis_dn62,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_kontrolatyp_acis_dn64
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolatyp_acis_pk ON eu_kontrolatyp_acis(idarch);
+ALTER TABLE eu_kontrolatyp_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_kontrolatyp_acis_pk;
+
+CREATE UNIQUE INDEX seu_dispeckontrzad_mat_u1 ON seu_dispeckontrzad_mat(refseuzadost,typ);
+ALTER TABLE seu_dispeckontrzad_mat ADD CONSTRAINT (UNIQUE (refseuzadost,typ) CONSTRAINT seu_dispeckontrzad_mat_u1);
+
+CREATE UNIQUE INDEX seu_dispeckontros_mat_u1 ON seu_dispeckontros_mat(refdispeckontrzad,refosoba);
+ALTER TABLE seu_dispeckontros_mat ADD CONSTRAINT (UNIQUE (refdispeckontrzad,refosoba) CONSTRAINT seu_dispeckontros_mat_u1);
+
+ROLLBACK WORK;
+
+--End of A56435_RN00317080_1

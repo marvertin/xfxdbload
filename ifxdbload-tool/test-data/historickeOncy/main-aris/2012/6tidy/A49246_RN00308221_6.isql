@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A49246_RN00308221_6
+-- @TC:ONCE: DESCRIPTION = Automatizace stahování/odesílání a zpracování souborù/dávek z/do CC ÈNB {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+create procedure A49246_RN00308221_6_dropprc()
+begin
+  on exception in (-674)
+  end exception with resume
+    DROP PROCEDURE CC_EndPrevod_N;
+    DROP PROCEDURE CC_ExpPrevodDavka_N;
+  end; 
+end procedure;
+
+call A49246_RN00308221_6_dropprc();
+
+drop procedure A49246_RN00308221_6_dropprc;
+
+
+
+ROLLBACK WORK;
+
+--End of A49246_RN00308221_6

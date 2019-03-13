@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A60453_RN00348736_2
+-- @TC:ONCE: DESCRIPTION = Chyba aparátu odesílání SMS s typem SMS NEGATIVNI_SOLUS_OZ.
+
+BEGIN WORK;
+
+update tw_smstyp_cis set textsms = 'Solus u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> neúspìšný, kontaktujte e-mailem OØR nebo zpracování ukonèete v Sale.' where  zkratka = 'NEGATIVNI_SOLUS_OZ';
+update tw_smstyp_cis set textsms = 'Úvìr. registr u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> neúspìšný, pøedejte do stand. varianty nebo zpracování ukonèete v Sale.' where  zkratka = 'NEGATIVNI_CBCB_OZ';
+update tw_smstyp_cis set textsms = 'Nejednoznaèné výsledky kontrol u úvìru <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>, pøedejte do stand. Varianty nebo zpracování ukonèete v Sale.' where  zkratka = 'NEGATIVNI_VSE_Z_OZ';
+update tw_smstyp_cis set textsms = 'Kladné výsledky kontrol, žádost o úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>> byla schválena. Pro vyhotovení dokumentace pøedejte úvìr na centrálu.' where  zkratka = 'OK_Z_VARIANTA_OZ';
+update tw_smstyp_cis set textsms = 'Výsledky všech kontrol byly úspìšné u Vaší žádosti o úvìr  ve výši<<VYSE_UVERU>>, žádost byla pøedbìžnì schválena.' where  zkratka = 'OK_Z_VARIANTA_KLIENT';
+update tw_smstyp_cis set textsms = 'Dotazy do registrù byly úspìšné pro žádost o úvìr <<CISLO_SS>>, klient <<JMENO_PRIJMENI>>. Další pøedepsané kontroly pokraèují.' where  zkratka = 'OK_P_VARIANTA_OZ';
+
+ROLLBACK WORK;
+
+--End of A60453_RN00348736

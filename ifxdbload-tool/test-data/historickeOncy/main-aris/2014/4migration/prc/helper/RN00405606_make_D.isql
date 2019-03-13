@@ -1,0 +1,211 @@
+-----------------------------------------------------------------------------
+--
+--  Template migracni procedury pro featuru RN00405606
+--
+-----------------------------------------------------------------------------
+create PROCEDURE RN00405606_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _konto Dec(16,0);
+define _tko   Char(2);
+
+define _smlouva like EP_Sml_Mat.smlouva;
+define _tsml like EP_Sml_Mat.tsml;
+
+define _sernoins    int;
+define _aktivita    int;
+define _sernoins1   int;
+define _sernoins2   int;
+define _plnitOsobu  int;
+define _pocet       int;
+define _hlavni      int;
+define _refosobains int;
+
+define _insolvspravcekonto like EP_Insolvence_Mat.insolvspravcekonto;
+define _insolvspravcebanka like EP_Insolvence_Mat.insolvspravcebanka;
+define _refosoba      like EP_Insolvence_Mat.refosoba;
+define _sernosledtran like EP_SledTran_Den.serno;
+define _kontoproti    like AO_Obrat_View.pr_konto;
+define _banka         like AO_Obrat_View.pr_banka;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00405606', 'RN00405606', 'Migrace: osoba insolventa');
+
+begin
+  on exception in (-206)
+  end exception;
+    
+  drop table ep_sledtrannova_temp;
+end;
+  
+create temp table ep_sledtrannova_temp (
+    sernoins  int,
+    hlavni   int
+) with no log;
+  
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  sernosledtran,  konto,  tko,  kontoproti,  banka
+   INTO  _ser, _sernosledtran, _konto, _tko, _kontoproti, _banka
+   FROM RN00405606
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00405606
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    delete from ep_sledtrannova_temp;
+    
+    let _smlouva, _tsml = EP_SmlouvaKon(_konto, _tko);
+    
+    foreach
+      execute function EP_InsolvProd_C(_smlouva, _tsml) into _sernoins, _aktivita
+
+      if _aktivita <> 0 then
+        insert into ep_sledtrannova_temp (sernoins) values (_sernoins);
+      end if;
+    end foreach;
+  
+    select count(*)
+    into _pocet
+    from ep_sledtrannova_temp;
+  
+    -- vyhodnotím, zda jsou osoby spojené
+    let _sernoins1 = null;
+    let _sernoins2 = null;
+    let _plnitOsobu = 0;
+    let _refosobains = null;
+  
+    -- Pokud existují právě 2 taková řízení a jedná se o spojená řízení, pak je navázáno k osobě „hlavního insolventa“, tedy dle „insolvence A“ (v kontextu spojení řízení). 
+    -- Pokud existují 2 taková nespojená řízení nebo existuje více vyhovujících řízení, pak automaticky na osobu navázáno nebude.
+    -- řešit jen reklamovaný stav
+    if _pocet = 2 then
+    
+      foreach
+        select  sernoins
+        into   _sernoins
+        from ep_sledtrannova_temp
+      
+        if _sernoins1 is null then
+          let _sernoins1 = _sernoins;
+        else
+          let _sernoins2 = _sernoins;
+        end if;
+      end foreach;
+    
+      if exists(select 1 
+              from ep_vztahinsolv_mat
+              where refinsolv1 = _sernoins1     
+                and refinsolv2 = _sernoins2
+                and platnost = 1) then
+              
+        update ep_sledtrannova_temp
+        set hlavni = 1
+        where sernoins = _sernoins1;
+      
+        let _plnitOsobu = 1;
+      else
+        if exists(select 1 
+                  from ep_vztahinsolv_mat
+                  where refinsolv1 = _sernoins2     
+                    and refinsolv2 = _sernoins1
+                    and platnost = 1) then
+              
+            update ep_sledtrannova_temp
+            set hlavni = 1
+            where sernoins = _sernoins2;
+      
+            let _plnitOsobu = 1;
+        end if;
+      end if;
+
+      foreach
+        select  sernoins,  hlavni
+        into   _sernoins, _hlavni
+        from ep_sledtrannova_temp 
+      
+        SELECT insolvspravcekonto,  insolvspravcebanka,  refosoba
+        INTO  _insolvspravcekonto, _insolvspravcebanka, _refosoba
+        FROM EP_Insolvence_Mat
+        WHERE serno = _sernoins;
+        
+        if _kontoproti = _insolvspravcekonto and NVL(_banka, TW_RegGetKey('CC', '*', '*', 'vlbanka')) = _insolvspravcebanka then
+          if _plnitOsobu = 1 and _hlavni = 1 then
+            let _refosobains = _refosoba;
+          end if;
+        end If;
+  
+      end foreach;
+    end if;
+    
+    if _refosobains is not null then
+      if not exists(select 1 from EP_ObjSledTran_Mat where refobjekt = _refosobains and objekttyp = 'OSOBA' and refsledtran = _sernosledtran) then
+        INSERT INTO EP_ObjSledTran_Mat(refobjekt, objekttyp, refsledtran, platnost) VALUES(_refosobains, 'OSOBA', _sernosledtran, 1);
+      end if;
+    end if;
+    
+    --nastaví příznak zpracováno na 1
+    UPDATE RN00405606 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

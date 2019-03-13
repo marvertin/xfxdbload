@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B133435_UID54298_4
+-- @TC:ONCE: DESCRIPTION = Do EU_ESIP_N plnit referenci na zajištění na které se váže dodatečný náklad {CUSTOMERREQUEST} {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update ep_splspormodee_den
+ set refzajisteni = (select poradi from eu_zajist_mat where serno = refzajisteni)
+ where refzajisteni is not NULL
+;
+
+ROLLBACK WORK;
+
+--End of B133435_UID54298_4

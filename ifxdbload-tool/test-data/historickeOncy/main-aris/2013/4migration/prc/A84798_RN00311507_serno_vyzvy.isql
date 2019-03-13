@@ -1,0 +1,17 @@
+create procedure A84798_RN00311507_serno_vyzvy()
+
+define _realn Int;
+define _poradi Int;
+define _faze Int;
+
+create sequence A84798_RN00311507_seq;
+
+foreach
+  SELECT realn, poradi, faze INTO _realn, _poradi, _faze FROM RU_Vyzva_Kart ORDER BY navtime, realn, poradi
+  
+  UPDATE RU_Vyzva_Kart SET serno = A84798_RN00311507_seq.nextval WHERE realn = _realn AND poradi = _poradi AND faze = _faze;
+end foreach;
+
+drop sequence A84798_RN00311507_seq;
+
+end procedure;

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B122702_RN00420633_nahledy3
+-- @TC:ONCE: DESCRIPTION = Informace o externích spolupracovnících OZ v CIBIS {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- sp_vchd_kart
+ALTER TABLE sp_vchd_kart DROP rok;
+ALTER TABLE sp_vchd_kart DROP obdobi;
+ALTER TABLE sp_vchd_kart DROP smlouva;
+
+ROLLBACK WORK;
+
+--End of B116251_B122702_RN00420633_nahledy3

@@ -1,0 +1,56 @@
+-- @TC:ONCE: ID = V2, B130670_RSTS-3447_3
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+
+-- Číselník Typ kontrol
+insert into eu_kontrolatyp_cis(typ, nazev, potlaceni, platnost) 
+values                        ('DTI', 'Poměr dluhu a ročních příjmů (DTI)', 0,1);
+
+insert into eu_kontrolatyp_cis(typ, nazev, potlaceni, platnost) 
+values                        ('DSTI', 'Poměr splátek a příjmů (DSTI)', 0,1);
+
+insert into eu_kontrolatyp_cis(typ, nazev, potlaceni, platnost) 
+values                        ('MINPRIJ', 'Minimální výše příjmu EJ', 0,1);
+
+insert into eu_kontrolatyp_cis(typ, nazev, potlaceni, platnost) 
+values                        ('VEK', 'Věk k datu splatnosti', 0,1);
+
+insert into eu_kontrolatyp_cis(typ, nazev, potlaceni, platnost) 
+values                        ('DELKA', 'Délka trvání úvěru', 0,1);
+
+
+-- Číselník Koeficienty kalkulačky příjmů
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (0,1,0,0.2,1); 
+
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (1,1,1,0.4,1);
+
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (2,2,0,0.3,1);
+
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (3,2,1,0.4,1);
+
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (4,2,2,0.6,1);
+
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (5,3,0,0.4,1);
+
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (6,3,1,0.4,1);
+
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (7,3,2,0.6,1);
+
+INSERT INTO eo_kalkkoefprijem_cis(koduid, x, y, koeficient, platnost) 
+VALUES                           (9,3,3,0.8,1);
+
+    
+ROLLBACK WORK;
+
+--End of B130670_RSTS-3447_3

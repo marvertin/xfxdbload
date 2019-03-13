@@ -1,0 +1,37 @@
+-- @TC:ONCE: ID = V2, B120899_RN00290686_5
+-- @TC:ONCE: DESCRIPTION = Zrevidovat db registry - pokračování RN00267320 {DEFECT}
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP PROCEDURE ES_JeEIR', -674);
+call TW_ExecSql('DROP PROCEDURE ES_GetTypEIR', -674);
+call TW_ExecSql('DROP PROCEDURE ES_TestEIR', -674);
+
+call TW_ExecSql('DROP PROCEDURE EU_SkutUrSazbaNav', -674);
+call TW_ExecSql('DROP PROCEDURE EU_SkutUrSazbaEIR', -674);
+
+call TW_ExecSql('DROP PROCEDURE EP_EIRCompute', -674);
+call TW_ExecSql('DROP PROCEDURE EP_getEIR_N', -674);
+call TW_ExecSql('DROP PROCEDURE EP_getEIR', -674);
+call TW_ExecSql('DROP PROCEDURE EP_getXIRR', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrCisInit_T', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrCisLoad_T', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrCisSave_T', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrInit_T', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrInit', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrLoad_T', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrLoad', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrSave_T', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrSave', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrSazba', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrSazbaAkce', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrSazbaEIR', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrSazbaNav', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrSazbaSave', -674);
+call TW_ExecSql('DROP PROCEDURE EP_SkutUrZnepl_T', -674);
+call TW_ExecSql('DROP PROCEDURE EP_XIRR1der', -674);
+call TW_ExecSql('DROP PROCEDURE EP_XNPV', -674);
+
+ROLLBACK WORK;
+
+--End of B120899_RN00290686_5

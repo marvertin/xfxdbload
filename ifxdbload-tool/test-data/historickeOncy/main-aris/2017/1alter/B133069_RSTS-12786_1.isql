@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B133069_RSTS-12786_1
+-- @TC:ONCE: DESCRIPTION = úpravy exportů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_expspecpodm_den
+  ADD rezim CHAR(10);
+
+ALTER TABLE eu_expucel_den
+  ADD rezim CHAR(10);
+
+ALTER TABLE eu_expzaj_den
+  ADD rezim CHAR(10);
+  
+ALTER TABLE eo_exprole_den
+  MODIFY trole CHAR(3);
+
+ROLLBACK WORK;
+
+--End of B133069_RSTS-12786_1

@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B130888_RSTS-3518_3
+-- @TC:ONCE: DESCRIPTION = RSTS-3518 Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+UPDATE eu_kontrolatyp_cis SET kind = 'K' WHERE typ = 'KO';
+UPDATE eu_kontrolatyp_cis SET kind = 'A' WHERE typ = 'REPE';
+UPDATE eu_kontrolatyp_cis SET kind = 'S' WHERE typ = 'SCO';
+UPDATE eu_kontrolatyp_cis SET kind = 'F' WHERE typ = 'SOL';
+UPDATE eu_kontrolatyp_cis SET kind = 'C' WHERE typ = 'CBSC';
+UPDATE eu_kontrolatyp_cis SET kind = 'P' WHERE typ = 'DOCU';
+UPDATE eu_kontrolatyp_cis SET kind = 'M' WHERE typ = 'FIRM';
+UPDATE eu_kontrolatyp_cis SET kind = 'E' WHERE typ = 'INCO';
+UPDATE eu_kontrolatyp_cis SET kind = 'H' WHERE typ = 'TELE';
+UPDATE eu_kontrolatyp_cis SET kind = 'R' WHERE typ = 'URE'; 
+UPDATE eu_kontrolatyp_cis SET kind = 'U' WHERE typ = 'CEE';
+
+
+ROLLBACK WORK;
+
+--End of B130888_RSTS-3518_3

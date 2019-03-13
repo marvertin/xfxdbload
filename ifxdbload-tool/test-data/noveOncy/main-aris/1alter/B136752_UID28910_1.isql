@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, B136752_UID28910_1
+-- @TC:ONCE: DESCRIPTION = RSTS-2754: Nabídka sazeb při refixu - poloautomatizace {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_kalendarfixaci_mat
+  ADD sazbabe   DECIMAL(6, 2) BEFORE poruser,
+  ADD periodabe   CHAR(1) BEFORE poruser,
+  ADD sazbasa   DECIMAL(6, 2) BEFORE poruser,
+  ADD periodasa   CHAR(1) BEFORE poruser,
+  ADD splatka   DECIMAL(16,2) BEFORE poruser,
+  ADD vznik   CHAR(1) BEFORE poruser;
+
+ALTER TABLE eu_kalendarfixaci_mat
+  DROP CONSTRAINT eu_kalendarfixaci_mat_d24r;
+
+ALTER TABLE eu_kalendarfixaci_mat
+  ADD CONSTRAINT (CHECK (stav in ('A', 'Z', 'U', 'B')) CONSTRAINT eu_kalendarfixaci_mat_c3),
+  ADD CONSTRAINT (CHECK (vznik in ('U', 'D', 'P', 'O', 'M', 'I')) CONSTRAINT eu_kalendarfixaci_mat_c4);
+
+ALTER TABLE eu_kalendarfixaci_arch
+  ADD sazbabe   DECIMAL(6, 2) BEFORE poruser,
+  ADD periodabe   CHAR(1) BEFORE poruser,
+  ADD sazbasa   DECIMAL(6, 2) BEFORE poruser,
+  ADD periodasa   CHAR(1) BEFORE poruser,
+  ADD splatka   DECIMAL(16,2) BEFORE poruser,
+  ADD vznik   CHAR(1) BEFORE poruser;
+
+ALTER TABLE eu_kalendarfixaci_arch
+  DROP CONSTRAINT eu_kalendarfixaci_arch_d255;
+
+ALTER TABLE eu_kalendarfixaci_arch
+  ADD CONSTRAINT (CHECK (stav in ('A', 'Z', 'U', 'B')) CONSTRAINT eu_kalendarfixaci_arch_c1),
+  ADD CONSTRAINT (CHECK (vznik in ('U', 'D', 'P', 'O', 'M', 'I')) CONSTRAINT eu_kalendarfixaci_arch_c2);
+  
+ROLLBACK WORK;
+
+--End of B136752_UID28910_1

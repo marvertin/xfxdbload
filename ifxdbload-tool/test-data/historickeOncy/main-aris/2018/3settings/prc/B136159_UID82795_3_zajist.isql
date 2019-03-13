@@ -1,0 +1,294 @@
+-- @TC:ONCE: ID = V2, B136159_UID82795_3_zajist
+-- @TC:ONCE: DESCRIPTION = RSTS-27145: Otázky, odpovědi a vazby {STORY}
+
+create procedure B136159_UID82795_3_zajist()
+
+define _platnostOd Date;
+define _otazka200, _otazka210, _otazka211, _otazka212, _otazka213, _otazka214, _otazka215, _otazka220, _otazka221, _otazka222, _otazka230, _otazka231 Int;
+define _odpoved1, _odpoved2, _odpoved200, _odpoved201, _odpoved202, _odpoved203 Int;
+define _sadaPFSU, _sadaSUFO Int;
+define _vazba Int;
+
+let _platnostOd = mdy(9,1,2018);
+
+-- otázky
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(200, 'Vyberte typ zajištění', _platnostOd, 1, 'DROPDOWN');
+let _otazka200 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(210, 'Vázne na nemovitosti aktuálně nějaké zástavní právo?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka210 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(211, 'Zastavujte samostatný pozemek', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka211 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(212, 'Je zástavní právo ve prospěch RSTS?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka212 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(213, 'Je zástavní právo ve prospěch finanční instutce ČR?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka213 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(214, 'Je nutné využít odloženíé zástavy (dražba, insolvence, družstevní bydlení,..)', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka214 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(215, 'Je zástavní právo ve prospěch právnícké nebo fyzické osoby?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka215 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(220, 'Má klient zájem o pojištění úvěru UNIQA (obligatirka)?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka220 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(221, 'Má klient zájem o pojištění nemovitosti od UNIQA?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka221 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(222, 'Má klient zájem o pojištění nemovitosti od Generali?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka222 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(230, 'Chce klient zajistit úvěr jinou smlovou v rámci RSTS?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka230 = TW_LastSer();
+
+INSERT INTO eu_otazkarozhod_cis(id, text, platnostod, platnost, typodpoved) VALUES(231, 'Chce klient zajistit úvěr smlouvou od jiné finanční instituce?', _platnostOd, 1, 'RADIOBUTTON');
+let _otazka231 = TW_LastSer();
+
+-- odpovědi
+SELECT serno INTO _odpoved1 FROM eu_odpovedrozhod_cis WHERE id = 1;
+SELECT serno INTO _odpoved2 FROM eu_odpovedrozhod_cis WHERE id = 2;
+
+INSERT INTO eu_odpovedrozhod_cis(id, platnostod, textodpoved, platnost) VALUES(200, _platnostOd, 'Bez zajištění', 1);
+let _odpoved200 = TW_LastSer();
+
+INSERT INTO eu_odpovedrozhod_cis(id, platnostod, textodpoved, platnost) VALUES(201, _platnostOd, 'Nemovitost', 1);
+let _odpoved201 = TW_LastSer();
+
+INSERT INTO eu_odpovedrozhod_cis(id, platnostod, textodpoved, platnost) VALUES(202, _platnostOd, 'Pojištění', 1);
+let _odpoved202 = TW_LastSer();
+
+INSERT INTO eu_odpovedrozhod_cis(id, platnostod, textodpoved, platnost) VALUES(203, _platnostOd, 'Vinkulace vkladu', 1);
+let _odpoved203 = TW_LastSer();
+
+-- sady zajištění
+INSERT INTO eu_sadavazebrozhod_cis(nazev, platnostod, tsml, prvniotazka, platnost, urceni) VALUES('PFSU zajištění', _platnostOd, 'PFSU', _otazka200, 1, 'ZAJISTENI');
+let _sadaPFSU = TW_LastSer();
+
+INSERT INTO eu_sadavazebrozhod_cis(nazev, platnostod, tsml, prvniotazka, platnost, urceni) VALUES('SUFO zajištění', _platnostOd, 'SUFO', _otazka200, 1, 'ZAJISTENI');
+let _sadaSUFO = TW_LastSer();
+
+-- vazby a zajištění pro PFSU
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka200, _odpoved200, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 401, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka200, _odpoved201, _otazka210, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka200, _odpoved202, _otazka220, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka200, _odpoved203, _otazka230, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka210, _odpoved1, _otazka211, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka210, _odpoved2, _otazka212, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka211, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 212, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka211, _odpoved2, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 221, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka212, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 224, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka212, _odpoved2, _otazka213, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka213, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 222, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka213, _odpoved2, _otazka214, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka214, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 225, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka214, _odpoved2, _otazka215, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka215, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 223, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka215, _odpoved2, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 401, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka220, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 10, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka220, _odpoved2, _otazka221, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka221, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 32, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka221, _odpoved2, _otazka222, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka222, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 33, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka222, _odpoved2, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 34, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka230, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 102, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka230, _odpoved2, _otazka231, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka231, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 103, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaPFSU, _otazka231, _odpoved2, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 401, 1);
+
+-- vazby a zajištění pro SUFO
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka200, _odpoved200, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 401, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka200, _odpoved201, _otazka210, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka200, _odpoved202, _otazka220, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka200, _odpoved203, _otazka230, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka210, _odpoved1, _otazka211, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka210, _odpoved2, _otazka212, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka211, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 212, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka211, _odpoved2, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 221, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka212, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 224, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka212, _odpoved2, _otazka213, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka213, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 222, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka213, _odpoved2, _otazka214, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka214, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 225, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka214, _odpoved2, _otazka215, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka215, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 223, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka215, _odpoved2, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 401, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka220, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 10, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka220, _odpoved2, _otazka221, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka221, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 32, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka221, _odpoved2, _otazka222, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka222, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 33, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka222, _odpoved2, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 34, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka230, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 102, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka230, _odpoved2, _otazka231, 0, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka231, _odpoved1, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 103, 1);
+
+INSERT INTO eu_vazbarozhod_cis(refsadavazebrozhod, refotazkarozhod, refodpovedrozhod, refotazkarozhodnasl, terminalnivazba, platnost)
+VALUES(_sadaSUFO, _otazka231, _odpoved2, null, 1, 1);
+let _vazba = TW_LastSer();
+INSERT INTO eu_zajistrozhod_cis(refvazbarozhod, refzajist, platnost) VALUES(_vazba, 401, 1);
+
+end procedure;
+
+--End of B136159_UID82795_3_zajist

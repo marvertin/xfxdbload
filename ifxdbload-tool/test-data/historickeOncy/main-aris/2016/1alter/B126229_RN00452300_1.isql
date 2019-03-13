@@ -1,0 +1,99 @@
+-- @TC:ONCE: ID = V2, B126229_RN00452300_1
+-- @TC:ONCE: DESCRIPTION = Úvěry: evidence specifických údajů {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+ALTER TABLE eu_sml_mat ADD zadavatspecudaj   Integer,
+                       ADD CONSTRAINT  (CHECK (zadavatspecudaj IN (0,1)) CONSTRAINT eu_sml_mat_d233);
+                       
+ALTER TABLE eu_sml_arch ADD zadavatspecudaj   Integer,
+                        ADD CONSTRAINT  (CHECK (zadavatspecudaj IN (0,1)) CONSTRAINT eu_sml_arch_d234);                       
+
+
+CREATE TABLE eu_typspecudaj_cis (
+  serno   SERIAL NOT NULL,
+  nazev   CHAR(35),
+  popis   CHAR(4000),
+  typosoby   CHAR(1),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_typspecudaj_cis_d220
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_typspecudaj_cis_pk ON eu_typspecudaj_cis(serno);
+ALTER TABLE eu_typspecudaj_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_typspecudaj_cis_pk;
+
+
+CREATE TABLE eu_typspecudaj_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  nazev   CHAR(35),
+  popis   CHAR(4000),
+  typosoby   CHAR(1),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_typspecudaj_acis_d220
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_typspecudaj_acis_pk ON eu_typspecudaj_acis(idarch);
+ALTER TABLE eu_typspecudaj_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_typspecudaj_acis_pk;
+
+
+CREATE TABLE eu_specudaj_mat (
+  serno   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  reftypspecudaj   INTEGER NOT NULL,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_specudaj_mat_d220
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_specudaj_mat_pk ON eu_specudaj_mat(serno);
+ALTER TABLE eu_specudaj_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_specudaj_mat_pk;
+
+--FK
+CREATE INDEX eu_specudaj_mat_i_f1 ON eu_specudaj_mat(reftypspecudaj);
+ALTER TABLE eu_specudaj_mat ADD CONSTRAINT FOREIGN KEY(reftypspecudaj) REFERENCES eu_typspecudaj_cis(serno) CONSTRAINT eu_specudaj_mat_f1;
+
+
+CREATE TABLE eu_specudaj_arch (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  reftypspecudaj   INTEGER NOT NULL,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_specudaj_arch_d220
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_specudaj_arch_pk ON eu_specudaj_arch(idarch);
+ALTER TABLE eu_specudaj_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_specudaj_arch_pk;
+
+
+
+ROLLBACK WORK;
+
+--End of B126229_RN00452300_1

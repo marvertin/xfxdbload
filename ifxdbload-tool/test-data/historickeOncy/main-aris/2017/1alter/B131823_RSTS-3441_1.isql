@@ -1,0 +1,186 @@
+-- @TC:ONCE: ID = V2, B131823_RSTS-3441_1
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_zajist_mat
+  ADD rezim char(10),
+  ADD datplatod date,
+  ADD CONSTRAINT CHECK (rezim in ('NOVE','UKONCOVANE','TRVAJICI')) CONSTRAINT eu_zajist_mat_c15;
+  
+
+ALTER TABLE eu_zajist_arch
+  ADD rezim char(10),
+  ADD datplatod date;
+  
+ALTER TABLE eu_ucel_mat
+  ADD rezim char(10),
+  ADD CONSTRAINT CHECK (rezim in ('NOVE','UKONCOVANE','TRVAJICI')) CONSTRAINT eu_ucel_mat_c6
+  ;
+  
+
+ALTER TABLE eu_ucel_arch
+  ADD rezim char(10);
+  
+ALTER TABLE eu_specpodm_mat
+  ADD rezim char(10),
+  ADD CONSTRAINT CHECK (rezim in ('NOVE','UKONCOVANE','TRVAJICI')) CONSTRAINT eu_specpodm_mat_c2;
+  
+
+ALTER TABLE eu_specpodm_arch
+  ADD rezim char(10);
+  
+ALTER TABLE eu_sml_mat
+  ADD vznikpodhs char(10) BEFORE zpusobpodpisuusd,
+  ADD CONSTRAINT CHECK (vznikpodhs in ('ODPOCATKU','FIXACI','DODATKEM')) CONSTRAINT eu_sml_mat_c49;
+
+ALTER TABLE eu_sml_arch
+  ADD vznikpodhs char(10) BEFORE zpusobpodpisuusd;
+
+DROP TABLE EU_ExpDodatek_den;
+
+CREATE TABLE EU_ExpDodatek_den (
+      id_index         Int not null,
+      id_poradi        Int not null,      
+      smlspor          Dec(16,0),
+      tsmlspor         Char(4),
+      smlouva          Dec(16,0)   not null,
+      tsml             Char(4)     not null,
+      dodatekcislo     Int,
+      stav             Char(10),
+      uhrvyse          Dec(16,2),
+      datplatnost      Date,      
+      druhucinnost     Char(10),
+      datucinnost      Date ,
+      datpodpis        Date,
+      datuzav          Date,
+      kategoriezm      Int,
+      duvodzrus        char(255),
+      propis           Int,
+      stavpodpis       Char(10),
+      ucinnosths       Int,
+      
+      puvsazbapu       Dec(5,2),
+      puvsazbasu       Dec(5,2),
+      puvsazbasuschval Dec(5,2),
+      novasazbapu      Dec(5,2),
+      novasazbasu      Dec(5,2),
+      puvsazbasapu     Dec(5,2),
+      puvsazbasasu     Dec(5,2), 
+      novasazbasapu    Dec(5,2),
+      novasazbasasu    Dec(5,2),
+      puvrefvariaurokfixacepu Int,
+      puvrefvariaurokfixacesu Int,
+      refvariaurokfixacepu Int,
+      refvariaurokfixacesu Int,
+      puvsplatkapu     Dec(16,2),
+      puvsplatkasu     Dec(16,2),
+      novasplatkapu    Dec(16,2),                         
+      novasplatkasu    Dec(16,2),
+      posunsplatkapuod Date,
+      posunsplatkapudo Date,
+      posunsplatkasuod Date,
+      posunsplatkasudo Date,
+      posunsplatkapu   Dec(16,2),
+      posunsplatkasu   Dec(16,2),      
+      puvvysedospor    Dec(16,2),
+      vysedospor       Dec(16,2),   
+      posundosporod    Date,
+      posundospordo    Date, 
+      posundospor      Dec(16,2),
+      puvklkome         int,      
+      puvidklkome       char(13),   
+      puvnazevklkome      char(100),
+      klkome              int, 
+      idklkome            char(13),
+      nazevklkome         char(100),
+      prist               int,
+      jmenoprist          Char(24),
+      prijmprist          char(35),
+      typidprist          Char(1),
+      idprist             Char(13),
+      partner             Int, 
+      jmenopristpartner   Char(24),
+      prijmpristpartner   Char(35), 
+      typidpristpartner   Char(1), 
+      idpristpartner       Char(13)
+    )LOCK MODE ROW
+;
+
+
+CREATE unique INDEX eu_expdodatek_den_pk ON eu_expdodatek_den (id_index, id_poradi) ;
+
+ALTER TABLE eu_expdodatek_den ADD CONSTRAINT PRIMARY KEY (id_index, id_poradi)  CONSTRAINT eu_expdodatek_den_pk;
+  
+CREATE TABLE EU_ExpDodatekZajist_Den (
+      id_index         Int not null,
+      id_poradi        Int not null,   
+      smlouva          Dec(16,0)   not null,
+      tsml             Char(4)     not null,
+      dodatek          Int,
+      poradi           Int,
+      rezim            Char(10)
+    )LOCK MODE ROW
+;
+
+CREATE unique INDEX eu_expdodatekzajist_den_pk ON eu_expdodatekzajist_den (id_index, id_poradi) ;
+
+ALTER TABLE eu_expdodatekzajist_den ADD CONSTRAINT PRIMARY KEY (id_index, id_poradi)  CONSTRAINT eu_expdodatekzajist_den_pk;
+  
+CREATE TABLE EU_ExpDodatekUcel_Den (
+      id_index         Int not null,
+      id_poradi        Int not null,   
+      smlouva          Dec(16,0)   not null,
+      tsml             Char(4)     not null,
+      dodatek          Int,
+      poradi           Int,
+      rezim            Char(10)
+    )LOCK MODE ROW
+;
+
+CREATE unique INDEX eu_expdodatekucel_den_pk ON eu_expdodatekucel_den (id_index, id_poradi) ;
+
+ALTER TABLE eu_expdodatekucel_den ADD CONSTRAINT PRIMARY KEY (id_index, id_poradi)  CONSTRAINT eu_expdodatekucel_den_pk;
+  
+CREATE TABLE EU_ExpDodatekSpecPodm_Den (
+      id_index         Int not null,
+      id_poradi        Int not null,   
+      smlouva          Dec(16,0)   not null,
+      tsml             Char(4)     not null,
+      dodatek          Int,
+      poradi           Int,
+      rezim            Char(10)
+    )LOCK MODE ROW
+;  
+
+CREATE unique INDEX eu_expdodatekspecpodm_den_pk ON eu_expdodatekspecpodm_den (id_index, id_poradi) ;
+
+ALTER TABLE eu_expdodatekspecpodm_den ADD CONSTRAINT PRIMARY KEY (id_index, id_poradi)  CONSTRAINT eu_expdodatekspecpodm_den_pk;
+
+ALTER TABLE eu_splatkin_mat ADD dodatekref BigInt;
+
+ALTER TABLE eu_splatkin_arch ADD dodatekref BigInt;
+
+CREATE INDEX eu_splatkin_mat_i_f3 ON eu_splatkin_mat (dodatekref) ;
+
+
+ALTER TABLE eu_splatkin_mat
+    ADD CONSTRAINT FOREIGN KEY (dodatekref) REFERENCES eu_dodatekhead_mat(serno)  CONSTRAINT eu_splatkin_mat_f3;
+
+
+ALTER TABLE es_vkladkin_mat ADD dodatekref BigInt;
+
+ALTER TABLE es_vkladkin_arch ADD dodatekref BigInt;
+
+CREATE INDEX es_vkladkin_mat_i_f2 ON es_vkladkin_mat (dodatekref) ;
+
+
+ALTER TABLE es_vkladkin_mat
+    ADD CONSTRAINT FOREIGN KEY (dodatekref) REFERENCES eu_dodatekhead_mat(serno)  CONSTRAINT es_vkladkin_mat_i_f2;
+
+
+ROLLBACK WORK;
+
+--End of B131823_RSTS-3441_1
+

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136664_UID77507_3
+-- @TC:ONCE: DESCRIPTION = RSTS-29523: Odstranění klasifikací
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', '*', 'cerp', 'kontrstadiumklient', 1, 0, 'Úvěr', 'Čerpání', 'Kontrola stadia IFSR 9', 'Kontrola stadia klienta', 1);   
+
+call TW_RegSetOrAddKey('RU', 'real', 'default', 'editStadiumIFRS', 0, 0, 'Úvěr', 'Realizace úvěru', 'Default', 'Povolit přímou změnu Stadia IFRS 9', 1);   
+
+ROLLBACK WORK;
+
+--End of B136664_UID77507_3

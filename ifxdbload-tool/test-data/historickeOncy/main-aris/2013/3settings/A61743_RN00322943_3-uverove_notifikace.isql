@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A61743_RN00322943_3-uverove_notifikace
+-- @TC:ONCE: DESCRIPTION = Dodateèné požadavky v rámci redesign CIBIS-sale {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_schv_klient','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi schválení úvìrového návrhu',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_schv_oz','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat obchodního zástupce pøi schválení úvìrového návrhu',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_pschv_klient','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi schválení úvìrového návrhu s podmínkou',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_pschv_oz','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat obchodního zástupce pøi schválení úvìrového návrhu s podmínkou',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_zamit_klient','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi zamítnutí úvìrového návrhu',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_zamit_oz','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat obchodního zástupce pøi zamítnutí úvìrového návrhu',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_storno_klient','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi storno úvìru',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_storno_oz','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat obchodního zástupce pøi storno úvìru',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_cerp_klient','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat klienta pøi èerpání úvìru',1);
+CALL TW_RegAktAnalytickyPopis('EO','notifikace','uver_cerp_oz','povoleno','Osoba','Notifikace','Obecné parametry','Notifikovat obchodního zástupce pøi èerpání úvìru',1);
+
+ROLLBACK WORK;
+--End of A61743_RN00322943_3-uverove_notifikace

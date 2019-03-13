@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B123721_RN00444307_1
+-- @TC:ONCE: DESCRIPTION = Úprava propočtu bonity - ČNB {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_finsit_mat ADD  (disksplatkasu Dec(16,2)  DEFAULT 0.00);
+
+ALTER TABLE eo_finsit_arch ADD  (disksplatkasu Dec(16,2)  DEFAULT 0.00);
+                           
+
+ROLLBACK WORK;
+
+--End of B123721_RN00444307_1

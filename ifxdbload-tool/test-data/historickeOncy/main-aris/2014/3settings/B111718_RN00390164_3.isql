@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B111718_RN00390164_3
+-- @TC:ONCE: DESCRIPTION = Report Insolvence {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM8-60', 1);
+
+call TW_RegDelKey('EP', 'insolvence', 'report', 'VYM9-41');
+
+call TW_RegSetOrAddKey('EP', 'insolvence', 'report', 'VYM9-47', 1);
+
+ROLLBACK WORK;
+
+--End of B111718_RN00390164_3

@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A59671_RN00345799_3
+-- @TC:ONCE: DESCRIPTION = Duplicitní registr - CRIF End Point {DEFECT}
+
+
+BEGIN WORK;
+
+-- vymazenie registru ktory ma crifEndPoint zly popis
+EXECUTE PROCEDURE TW_RegDelKey('EP', 'BRKI', 'query' , 'crifEndPoint');
+
+-- nahradenie registra za spravny crifendpoint
+--Original analytics: ////0
+CALL TW_RegAktAnalytickyPopis('EP','BRKI','query','crifendpoint','Podpora pro produkt','Úvìrový registr','Querry','crifEndPoint',1);
+
+ROLLBACK WORK;
+
+--End of A59671_RN00345799_3

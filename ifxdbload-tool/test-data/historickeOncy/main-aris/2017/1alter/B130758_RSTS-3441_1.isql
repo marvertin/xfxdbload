@@ -1,0 +1,494 @@
+-- @TC:ONCE: ID = V2, B130758_RSTS-3441_1
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eu_dodatekhead_arch
+
+-- 1  eu_dodatekhead_arch-1/3       [CREATE.TABLE]
+CREATE TABLE eu_dodatekhead_arch (
+    idarch          SERIAL   NOT NULL,
+    serno           BIGINT   NOT NULL,
+    smlspor         DECIMAL(16, 0)  ,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    treal           Char(4)  ,
+    jmeno           CHAR(24)  ,
+    prijmeni        CHAR(35)  ,
+    nazev           CHAR(100)  ,
+    id              CHAR(13)  ,
+    konto           DECIMAL(16, 0)  ,
+    zadostcislo     BIGINT  ,
+    regcissml       CHAR(15)  ,
+    poradi          Integer DEFAULT 1  NOT NULL,
+    stav            CHAR(10)  ,
+    dodatekcislo    BIGINT  ,
+    refduvodzrusdod INTEGER  ,
+    kategoriezm     CHAR(10)  ,
+    --vytvmodel       Integer  ,
+    ucinnosths      Integer  ,
+    propis          Integer  ,
+    uhrada          Integer  ,
+    datplatnost     DATE  ,
+    druhucinnost    CHAR(10)  ,
+    datucinnost     DATE  ,
+    stavpodpis      CHAR(10)  ,
+    datpodpis       DATE  ,
+    datuzav         DATE  ,
+    poznamka        CHAR(1024)  ,
+    refuhr          Integer  ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (ucinnosths IN (0,1)) CONSTRAINT eu_dodatekhead_arch_d8m9,
+    CHECK (propis IN (0,1)) CONSTRAINT eu_dodatekhead_arch_d8ma,
+    CHECK (uhrada IN (0,1)) CONSTRAINT eu_dodatekhead_arch_d8mb
+) LOCK MODE ROW
+;
+
+-- 2  eu_dodatekhead_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_dodatekhead_arch_pk ON eu_dodatekhead_arch (idarch) ;
+
+-- 3  eu_dodatekhead_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_dodatekhead_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_dodatekhead_arch_pk;
+
+-- ###############################################################
+--       eu_dodatekhead_mat
+
+-- 4  eu_dodatekhead_mat-1/5       [CREATE.TABLE]
+CREATE TABLE eu_dodatekhead_mat (
+    serno           BIGINT   NOT NULL,
+    smlspor         DECIMAL(16, 0)  ,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    treal           Char(4)  ,
+    jmeno           CHAR(24)  ,
+    prijmeni        CHAR(35)  ,
+    nazev           CHAR(100)  ,
+    id              CHAR(13)  ,
+    konto           DECIMAL(16, 0)  ,
+    zadostcislo     BIGINT  ,
+    regcissml       CHAR(15)  ,
+    poradi          Integer DEFAULT 1  NOT NULL,
+    stav            CHAR(10)  ,
+    dodatekcislo    BIGINT  ,
+    refduvodzrusdod INTEGER  ,
+    kategoriezm     CHAR(10)  ,
+    --vytvmodel       Integer  ,
+    ucinnosths      Integer  ,
+    propis          Integer  ,
+    uhrada          Integer  ,
+    datplatnost     DATE  ,
+    druhucinnost    CHAR(10)  ,
+    datucinnost     DATE  ,
+    stavpodpis      CHAR(10)  ,
+    datpodpis       DATE  ,
+    datuzav         DATE  ,
+    poznamka        CHAR(1024)  ,
+    refuhr          Integer  ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (ucinnosths IN (0,1)) CONSTRAINT eu_dodatekhead_mat_d8m9,
+    CHECK (propis IN (0,1)) CONSTRAINT eu_dodatekhead_mat_d8ma,
+    CHECK (uhrada IN (0,1)) CONSTRAINT eu_dodatekhead_mat_d8mb,
+    CHECK (stav in ('NAVRH','UZAVRENY','SCHVALENY','ZRUSENY','MIGRACE')) CONSTRAINT eu_dodatekhead_mat_c1,
+    CHECK (kategoriezm in ('ZMENASML','RESTRUKTUR','VYMENAKOME','OPRAVA')) CONSTRAINT eu_dodatekhead_mat_c2,
+    CHECK (druhucinnost in ('PREKLOPENI','PODPISDOD','DATUM')) CONSTRAINT eu_dodatekhead_mat_c3,
+    CHECK (stavpodpis in ('ANO','NE','ODMITNUTO')) CONSTRAINT eu_dodatekhead_mat_c4
+) LOCK MODE ROW
+;
+
+-- 5  eu_dodatekhead_mat-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_dodatekhead_mat_pk ON eu_dodatekhead_mat (serno) ;
+
+-- 6  eu_dodatekhead_mat-3/5       [CREATE.INDEX]
+CREATE INDEX eu_dodatekhead_mat_i_f1 ON eu_dodatekhead_mat (refduvodzrusdod) ;
+
+-- 7  eu_dodatekhead_mat-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_dodatekhead_mat
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_dodatekhead_mat_pk;
+
+-- ###############################################################
+--       eu_dodatekposun_kart
+
+-- 8  eu_dodatekposun_kart-1/5       [CREATE.TABLE]
+CREATE TABLE eu_dodatekposun_kart (
+    serno           BIGINT   NOT NULL,
+    refdodatekhead  BIGINT   NOT NULL,
+    podmposundospor Integer  ,
+    posundospor     DECIMAL(16, 2)  ,
+    puvposundospor  DECIMAL(16, 2)  ,
+    posundosporod   DATE  ,
+    posundospordo   DATE  ,
+    posundosporsnizenispl Integer  ,
+    propsanoposundospor Integer  ,
+    provtimedospor  datetime year to second  ,
+    provuserdospor  CHAR(20)  ,
+    podmposunsplatkapu Integer  ,
+    posunsplatkapu  DECIMAL(16, 2)  ,
+    puvposunsplatkapu  DECIMAL(16, 2)  ,
+    posunsplatkapuod DATE  ,
+    posunsplatkapudo DATE  ,
+    posunsplatkapusnizenispl Integer  ,
+    propsanopossplpu Integer  ,
+    provtimesplatkapu datetime year to second  ,
+    provusersplatkapu CHAR(20)  ,
+    podmposunsplatkasu Integer  ,
+    posunsplatkasu  DECIMAL(16, 2)  ,
+    puvposunsplatkasu  DECIMAL(16, 2)  ,
+    posunsplatkasuod DATE  ,
+    posunsplatkasudo DATE  ,
+    posunsplatkasusnizenispl Integer  ,
+    propsanopossplsu Integer  ,
+    provtimesplatkasu datetime year to second  ,
+    provusersplatkasu CHAR(20)  ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (posundosporsnizenispl IN (0,1)) CONSTRAINT eu_dodatekposun_kart_d4j8,
+    CHECK (propsanoposundospor IN (0,1)) CONSTRAINT eu_dodatekposun_kart_d8px,
+    CHECK (posunsplatkapusnizenispl IN (0,1)) CONSTRAINT eu_dodatekposun_kart_d4jb,
+    CHECK (propsanopossplpu IN (0,1)) CONSTRAINT eu_dodatekposun_kart_d8py,
+    CHECK (posunsplatkasusnizenispl IN (0,1)) CONSTRAINT eu_dodatekposun_kart_d4je,
+    CHECK (propsanopossplsu IN (0,1)) CONSTRAINT eu_dodatekposun_kart_d8pz
+) LOCK MODE ROW
+;
+
+-- 9  eu_dodatekposun_kart-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_dodatekposun_kart_pk ON eu_dodatekposun_kart (serno) ;
+
+-- 10  eu_dodatekposun_kart-3/5       [CREATE.INDEX]
+CREATE INDEX eu_dodatekposun_kart_i_f1 ON eu_dodatekposun_kart (refdodatekhead) ;
+
+-- 11  eu_dodatekposun_kart-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_dodatekposun_kart
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_dodatekposun_kart_pk;
+
+-- ###############################################################
+--       eu_dodatekspecpodm_kart
+
+-- 12  eu_dodatekspecpodm_kart-1/5       [CREATE.TABLE]
+CREATE TABLE eu_dodatekspecpodm_kart (
+    serno           BIGINT NOT NULL,
+    refdodatekhead  BIGINT NOT NULL,
+    refporadi       INT NOT NULL,
+    rezim           CHAR(10)  ,
+    propsano        Integer  ,
+    provtime        datetime year to second  ,
+    provuser        CHAR(20)  ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (propsano IN (0,1)) CONSTRAINT eu_dodatekspecpodm_kart_d8u1,
+    CHECK (rezim in ('NOVE','UKONCOVANE','TRVAJICI')) CONSTRAINT eu_dodatekspecpodm_kart_c1
+) LOCK MODE ROW
+;
+
+-- 13  eu_dodatekspecpodm_kart-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_dodatekspecpodm_kart_pk ON eu_dodatekspecpodm_kart (serno) ;
+
+-- 14  eu_dodatekspecpodm_kart-3/5       [CREATE.INDEX]
+CREATE INDEX eu_dodatekspecpodm_kart_i_f1 ON eu_dodatekspecpodm_kart (refdodatekhead) ;
+
+-- 15  eu_dodatekspecpodm_kart-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_dodatekspecpodm_kart
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_dodatekspecpodm_kart_pk;
+
+-- ###############################################################
+--       eu_dodatekucel_kart
+
+-- 16  eu_dodatekucel_kart-1/5       [CREATE.TABLE]
+CREATE TABLE eu_dodatekucel_kart (
+    serno           BIGINT   NOT NULL,
+    refdodatekhead  BIGINT   NOT NULL,
+    refucel         BIGINT   NOT NULL,
+    rezim           CHAR(10)  ,
+    propsano        Integer  ,
+    provtime        datetime year to second  ,
+    provuser        CHAR(20)  ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (propsano IN (0,1)) CONSTRAINT eu_dodatekucel_kart_d8qd,
+    CHECK (rezim in ('NOVE','UKONCOVANE','TRVAJICI')) CONSTRAINT eu_dodatekucel_kart_c1
+) LOCK MODE ROW
+;
+
+-- 17  eu_dodatekucel_kart-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_dodatekucel_kart_pk ON eu_dodatekucel_kart (serno) ;
+
+-- 18  eu_dodatekucel_kart-3/5       [CREATE.INDEX]
+CREATE INDEX eu_dodatekucel_kart_i_f1 ON eu_dodatekucel_kart (refdodatekhead) ;
+
+-- 19  eu_dodatekucel_kart-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_dodatekucel_kart
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_dodatekucel_kart_pk;
+
+-- ###############################################################
+--       eu_dodatekzajist_kart
+
+-- 20  eu_dodatekzajist_kart-1/5       [CREATE.TABLE]
+CREATE TABLE eu_dodatekzajist_kart (
+    serno           BIGINT   NOT NULL,
+    refdodatekhead  BIGINT   NOT NULL,
+    refzajist       BIGINT   NOT NULL,
+    rezim           CHAR(10)  ,
+    propsano        Integer  ,
+    provtime        datetime year to second  ,
+    provuser        CHAR(20)  ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (propsano IN (0,1)) CONSTRAINT eu_dodatekzajist_kart_d7rm,
+    CHECK (rezim in ('NOVE','UKONCOVANE','TRVAJICI')) CONSTRAINT eu_dodatekzajist_kart_c1
+) LOCK MODE ROW
+;
+
+-- 21  eu_dodatekzajist_kart-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_dodatekzajist_kart_pk ON eu_dodatekzajist_kart (serno) ;
+
+-- 22  eu_dodatekzajist_kart-3/5       [CREATE.INDEX]
+CREATE INDEX eu_dodatekzajist_kart_i_f1 ON eu_dodatekzajist_kart (refdodatekhead) ;
+
+-- 23  eu_dodatekzajist_kart-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_dodatekzajist_kart
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_dodatekzajist_kart_pk;
+
+-- ###############################################################
+--       eu_dodatekzaklad_kart
+
+-- 24  eu_dodatekzaklad_kart-1/5       [CREATE.TABLE]
+CREATE TABLE eu_dodatekzaklad_kart (
+    serno           BIGINT   NOT NULL,
+    refdodatekhead  BIGINT   NOT NULL,
+    novasazbapu     DECIMAL(5,2)  ,
+    novasazbasapu   DECIMAL(5,2)  ,
+    puvsazbapu      DECIMAL(5,2)  ,
+    puvsazbasapu    DECIMAL(5,2)  ,
+    propsanosazbapu Integer  ,
+    provtimesazbapu datetime year to second  ,
+    provusersazbapu CHAR(20)  ,
+    novasazbasu     DECIMAL(5,2)  ,
+    novasazbasasu   DECIMAL(5,2)  ,
+    puvsazbasu      DECIMAL(5,2)  ,
+    puvsazbasasu    DECIMAL(5,2)  ,
+    propsanosazbasu Integer  ,
+    provtimesazbasu datetime year to second  ,
+    provusersazbasu CHAR(20)  ,
+    novasplatkapu   DECIMAL(16, 2)  ,
+    puvsplatkapu    DECIMAL(16, 2)  ,
+    propsanosplatkapu Integer  ,
+    provtimesplatkapu datetime year to second  ,
+    provusersplatkapu CHAR(20)  ,
+    novasplatkasu   DECIMAL(16, 2)  ,
+    puvsplatkasu    DECIMAL(16, 2)  ,
+    propsanosplatkasu Integer  ,
+    provtimesplatkasu datetime year to second  ,
+    provusersplatkasu CHAR(20)  ,
+    refvariaurokfixacepu INTEGER  ,
+    puvrefvariaurokfixacepu INTEGER  ,
+    propsanofixacepu Integer  ,
+    provtimefixacepu datetime year to second  ,
+    provuserfixacepu CHAR(20)  ,
+    refvariaurokfixacesu INTEGER  ,
+    puvrefvariaurokfixacesu INTEGER  ,
+    propsanofixacesu Integer  ,
+    provtimefixacesu datetime year to second  ,
+    provuserfixacesu CHAR(20)  ,
+    vysedospor      DECIMAL(16, 2)  ,
+    puvvysedospor   DECIMAL(16, 2)  ,
+    propsanodospor  Integer  ,
+    provtimedospor  datetime year to second  ,
+    provuserdospor  CHAR(20)  ,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (propsanosazbapu IN (0,1)) CONSTRAINT eu_dodatekzaklad_kart_d4jn,
+    CHECK (propsanosazbasu IN (0,1)) CONSTRAINT eu_dodatekzaklad_kart_d4jq,
+    CHECK (propsanosplatkapu IN (0,1)) CONSTRAINT eu_dodatekzaklad_kart_d4jt,
+    CHECK (propsanosplatkasu IN (0,1)) CONSTRAINT eu_dodatekzaklad_kart_d7v5,
+    CHECK (propsanofixacepu IN (0,1)) CONSTRAINT eu_dodatekzaklad_kart_d7v6,
+    CHECK (propsanofixacesu IN (0,1)) CONSTRAINT eu_dodatekzaklad_kart_d7v8,
+    CHECK (propsanodospor IN (0,1)) CONSTRAINT eu_dodatekzaklad_kart_d7v9
+) LOCK MODE ROW
+;
+
+-- 25  eu_dodatekzaklad_kart-2/5       [CREATE.INDEX]
+CREATE unique INDEX eu_dodatekzaklad_kart_pk ON eu_dodatekzaklad_kart (serno) ;
+
+-- 26  eu_dodatekzaklad_kart-3/5       [CREATE.INDEX]
+CREATE INDEX eu_dodatekzaklad_kart_i_f1 ON eu_dodatekzaklad_kart (refdodatekhead) ;
+
+-- 27  eu_dodatekzaklad_kart-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_dodatekzaklad_kart
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_dodatekzaklad_kart_pk;
+
+-- ###############################################################
+--       eu_duvodzrusdod_acis
+
+-- 28  eu_duvodzrusdod_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_duvodzrusdod_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    duvodtext       VARCHAR(255)   NOT NULL,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_duvodzrusdod_acis_dkzc
+) LOCK MODE ROW
+;
+
+-- 29  eu_duvodzrusdod_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_duvodzrusdod_acis_pk ON eu_duvodzrusdod_acis (idarch) ;
+
+-- 30  eu_duvodzrusdod_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_duvodzrusdod_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_duvodzrusdod_acis_pk;
+
+-- ###############################################################
+--       eu_duvodzrusdod_cis
+
+-- 31  eu_duvodzrusdod_cis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_duvodzrusdod_cis (
+    serno           SERIAL   NOT NULL,
+    duvodtext       VARCHAR(255)   NOT NULL,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer   NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_duvodzrusdod_cis_dkzc
+) LOCK MODE ROW
+;
+
+-- 32  eu_duvodzrusdod_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_duvodzrusdod_cis_pk ON eu_duvodzrusdod_cis (serno) ;
+
+-- 33  eu_duvodzrusdod_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_duvodzrusdod_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_duvodzrusdod_cis_pk;
+
+
+
+--XXX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX--XX
+
+
+-- ###############################################################
+--       eu_dodatekhead_mat
+
+-- 34  eu_dodatekhead_mat-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_dodatekhead_mat
+    ADD CONSTRAINT FOREIGN KEY (refduvodzrusdod) REFERENCES eu_duvodzrusdod_cis(serno)  CONSTRAINT eu_dodatekhead_mat_f1;
+
+-- ###############################################################
+--       eu_dodatekposun_kart
+
+-- 35  eu_dodatekposun_kart-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_dodatekposun_kart
+    ADD CONSTRAINT FOREIGN KEY (refdodatekhead) REFERENCES eu_dodatekhead_mat(serno)  CONSTRAINT eu_dodatekposun_kart_f1;
+
+-- ###############################################################
+--       eu_dodatekspecpodm_kart
+
+-- 36  eu_dodatekspecpodm_kart-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_dodatekspecpodm_kart
+    ADD CONSTRAINT FOREIGN KEY (refdodatekhead) REFERENCES eu_dodatekhead_mat(serno)  CONSTRAINT eu_dodatekspecpodm_kart_f1;
+
+-- ###############################################################
+--       eu_dodatekucel_kart
+
+-- 37  eu_dodatekucel_kart-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_dodatekucel_kart
+    ADD CONSTRAINT FOREIGN KEY (refdodatekhead) REFERENCES eu_dodatekhead_mat(serno)  CONSTRAINT eu_dodatekucel_kart_f1;
+
+-- ###############################################################
+--       eu_dodatekzajist_kart
+
+-- 38  eu_dodatekzajist_kart-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_dodatekzajist_kart
+    ADD CONSTRAINT FOREIGN KEY (refdodatekhead) REFERENCES eu_dodatekhead_mat(serno)  CONSTRAINT eu_dodatekzajist_kart_f1;
+
+-- ###############################################################
+--       eu_dodatekzaklad_kart
+
+-- 39  eu_dodatekzaklad_kart-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_dodatekzaklad_kart
+    ADD CONSTRAINT FOREIGN KEY (refdodatekhead) REFERENCES eu_dodatekhead_mat(serno)  CONSTRAINT eu_dodatekzaklad_kart_f1;
+
+-- ###############################################################
+--       eu_akc_kart
+
+-- 2  eu_akc_kart-2/6       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_akc_kart
+    ADD dodatekref      BIGINT   BEFORE provtime,
+    MODIFY katzmen         Integer,
+    MODIFY dodatek         Integer,
+    MODIFY duvod           Integer;
+
+-- 5  eu_akc_kart-5/6       [CREATE.INDEX]
+CREATE INDEX eu_akc_kart_i_f2 ON eu_akc_kart (dodatekref) ;
+
+-- 80  eu_akc_kart-6/6       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eu_akc_kart
+    ADD CONSTRAINT FOREIGN KEY (dodatekref) REFERENCES eu_dodatekhead_mat(serno)  CONSTRAINT eu_akc_kart_f2;
+    
+-----------------------------------
+
+CREATE TABLE eu_dodatekklkome_kart (
+  serno             BIGINT NOT NULL,
+  refdodatekhead    BIGINT NOT NULL,
+  klkome            Integer,
+  puvklkome         Integer, 
+  rezim             CHAR(10),
+  propsano          Integer,
+  provtime          datetime year to second,
+  provuser          CHAR(20),
+  reftime           DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser           CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (propsano IN (0,1)) CONSTRAINT eu_dodatekklkome_kart_d8u1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_dodatekklkome_kart_pk ON eu_dodatekklkome_kart(serno);
+ALTER TABLE eu_dodatekklkome_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_dodatekklkome_kart_pk;
+
+--FK
+CREATE INDEX eu_dodatekklkome_kart_i_f1 ON eu_dodatekklkome_kart(refdodatekhead);
+ALTER TABLE eu_dodatekklkome_kart ADD CONSTRAINT FOREIGN KEY(refdodatekhead) REFERENCES eu_dodatekhead_mat(serno) CONSTRAINT eu_dodatekklkome_kart_f1;
+
+----------------------------------------------------------------
+CREATE TABLE eu_dodatekpristupitel_kart (
+  serno             BIGINT NOT NULL,
+  refdodatekhead    BIGINT NOT NULL,
+  pristupitel       Integer,
+  partner           Integer,
+  vztah             CHAR(10),
+  propsano          Integer,
+  provtime          datetime year to second,
+  provuser          CHAR(20),
+  reftime           DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser           CHAR(20)  DEFAULT USER NOT NULL,
+
+  CHECK (propsano IN (0,1)) CONSTRAINT eu_dodatekpristupitel_kart_d8u1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_dodatekpristupitel_kart_pk ON eu_dodatekpristupitel_kart(serno);
+ALTER TABLE eu_dodatekpristupitel_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_dodatekpristupitel_kart_pk;
+
+--FK
+CREATE INDEX eu_dodatekpristupitel_kart_i_f1 ON eu_dodatekpristupitel_kart(refdodatekhead);
+ALTER TABLE eu_dodatekpristupitel_kart ADD CONSTRAINT FOREIGN KEY(refdodatekhead) REFERENCES eu_dodatekhead_mat(serno) CONSTRAINT eu_dodatekpristupitel_kart_f1;
+--CHECKS
+ALTER TABLE eu_dodatekpristupitel_kart
+ADD CONSTRAINT (CHECK (vztah in ('MANZEL','DRUH')) CONSTRAINT eu_dodatekpristupitel_kart_c1);
+
+
+ROLLBACK WORK;
+
+--End of B130758_RSTS-3441_1

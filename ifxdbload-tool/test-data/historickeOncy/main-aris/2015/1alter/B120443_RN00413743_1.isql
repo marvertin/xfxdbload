@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B120443_RN00413743_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření kontroly rizikových subjektů {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE nocheckrule DROP CONSTRAINT nocheckrule_c3;
+
+ALTER TABLE nocheckrule
+    ADD CONSTRAINT CHECK (xkind IN ('S' ,'K' ,'R' ,'A' ,'E' ,'M' ,'P' ,'H' ,'C' ,'F', 'D', 'I')) CONSTRAINT nocheckrule_c5;
+
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eu_contractchecking_kart_c1;
+
+ALTER TABLE eu_contractchecking_kart
+  ADD CONSTRAINT CHECK (takce IN ('MANU' ,'DOCU' ,'FIRM' ,'INCO' ,'TELE' ,'URE2' ,'SCO2' ,'SETT' ,'CRTE' ,'INPR' ,'INDI' ,'WIRE' ,'REPL' ,'CANC' ,'CANP' ,'SOL2' ,'REPE' ,'KONS' ,'POZM' ,'SUPZ', 'OSDO', 'RISU')) CONSTRAINT eu_contractchecking_kart_c1;
+
+ROLLBACK WORK;
+
+--End of B120443_RN00413743_1

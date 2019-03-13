@@ -1,0 +1,37 @@
+-- @TC:ONCE: ID = V2, A41738_RN00275819_Sporeni3
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - Main / Spoøení
+
+BEGIN WORK;
+
+  ALTER TABLE es_vop_cis
+      ADD url VARCHAR(255) before refuser;
+
+  ALTER TABLE es_vop_acis
+      ADD url VARCHAR(255) before refuser;
+
+CREATE TABLE es_prilohadokument_cis (
+    priloha       Integer   NOT NULL,
+    poradi           Integer   NOT NULL,
+    nazev           Varchar(255) not null,
+    dokument    blob,
+    importtime    DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+   datplat          date  NOT NULL,
+   arch              integer default 0 not null, 
+   refuser         CHAR(20) DEFAULT USER  NOT NULL,
+   reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW;
+
+CREATE unique INDEX es_prilohadokument_cis_pk ON es_prilohadokument_cis (priloha,poradi) ;
+
+ALTER TABLE es_prilohadokument_cis
+    ADD CONSTRAINT PRIMARY KEY (priloha,poradi)  CONSTRAINT es_prilohadokument_cis_pk;
+
+ALTER TABLE EO_ExpRole_Den
+    ADD stavsis                       Integer,
+    ADD sisadresaemail    char(45),
+    ADD sisadresamobil    char(45),
+    ADD  sislogin               char(64),
+    ADD stavsms                       Integer,
+    ADD smsadresa          char(45);
+      
+ROLLBACK WORK;

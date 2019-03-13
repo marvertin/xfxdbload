@@ -1,0 +1,97 @@
+create PROCEDURE RN00380441_make_D (-- vstupni paramtery
+                                    ABezTransakci integer default 0,    -- slouzi k testovacim ucelum,
+                                                                        -- kdy si uzivatel sam ridi transakce
+                                                                        -- muze pouzivat i zakaznik
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser             int;
+define _vec             int;
+define _jezajisteni     int;
+define _jeucel          int;
+define _cislopopisne    CHAR(25); 
+define _cisloevidencni  CHAR(25);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+   BEGIN WORK;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+   BEGIN WORK;
+end if;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT distinct ser,  vec,  cislopopisne,  cisloevidencni
+    INTO          _ser, _vec, _cislopopisne, _cisloevidencni
+    FROM RN00380441
+    WHERE zprac < 0
+      ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00380441
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;      
+
+    -- vlastní "migrace"
+    insert into RN00380441_nemovitost( vec, idproblemu, cislopopisne,  cisloevidencni)
+    values                           (_vec, 10,        _cislopopisne, _cisloevidencni);
+    
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00380441 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+end if;
+
+
+-- ukončení trasování
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+  trace off;
+end if;
+
+--KONEC dokonceni migrace
+
+end procedure;--end of RN00380441_make_D

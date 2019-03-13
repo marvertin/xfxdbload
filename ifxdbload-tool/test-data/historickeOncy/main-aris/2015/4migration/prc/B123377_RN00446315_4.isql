@@ -1,0 +1,12 @@
+Create Procedure B123377_RN00446315_4()
+
+  IF EXISTS (SELECT 1 FROM eo_vztahos_cis WHERE typvztah = 'ZS') THEN
+    UPDATE eo_vztahos_cis SET (popis, typos1,typos2,platnost,symetricky) = 
+                       ('Zmocněný zástupce PO pro SIS','F','P',1,0) WHERE typvztah = 'ZS';
+  ELSE
+    INSERT INTO eo_vztahos_cis (typvztah,popis, typos1,typos2,platnost,symetricky)
+                VALUES ('ZS','Zmocněný zástupce PO pro SIS','F','P',1,0);
+  END IF
+ 
+  
+end Procedure;

@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, B137026_UID90468_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31529: IMPL (design,dat.model): RSTS-30719_Evidence indikátorů - datové struktury {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+CREATE TABLE eo_stadium_den (
+  serno   SERIAL NOT NULL,
+  osoba   INTEGER NOT NULL,
+  poradi   Integer NOT NULL,
+  datvyhodnoceni   DATE NOT NULL,
+  charakterdefault   Integer NOT NULL,
+  datdefault   DATE,
+  pocetvyleceni   Integer,
+  datvyleceni   DATE,
+  stadiumifrs   Integer NOT NULL,
+  varovani   Integer  DEFAULT 0,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (varovani IN (0,1)) CONSTRAINT eo_stadium_den_da34
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_stadium_den_pk ON eo_stadium_den(serno);
+ALTER TABLE eo_stadium_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eo_stadium_den_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX eo_stadium_den_i1 ON eo_stadium_den(osoba,poradi);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE eo_stadium_den
+ADD CONSTRAINT (CHECK (stadiumIFRS IN (1, 2, 3)) CONSTRAINT eo_stadium_den_c1),
+ADD CONSTRAINT (CHECK (charakterdefault IN (0, 1, 2, 3)) CONSTRAINT eo_stadium_den_c2);
+
+ROLLBACK WORK;
+
+--End of B137026_UID90468_1

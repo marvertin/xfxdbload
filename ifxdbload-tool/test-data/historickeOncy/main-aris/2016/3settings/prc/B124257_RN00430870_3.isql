@@ -1,0 +1,113 @@
+create procedure B124257_RN00430870_3()
+
+  define _doktyp1 int;
+  define _doktyp2 int;
+  define _doktyp3 int;
+  define _doktyp4 int;
+  define _doktypX int;
+  define _dokSkup int;
+  
+INSERT INTO do_typdokumentu_cis (text, poznamka, platnost, biztyp, obsah
+  , podobsah, garant, generovany, repcode, archivovat, podepisovany) VALUES (
+  'Pokyn k čerpání', null, 1, '41', '4101'
+  , null, 'OZU', 1, 'EU300', 1, 1)
+;
+let _doktyp1 = Tw_LastSer();
+
+--#Typ dokumentu pro pokyn k čerpání#
+--Typ generovaného dokumentu pro - Pokyn k čerpání
+CALL TW_RegSetKey('EU', 'withdrawal', 'generDok', 'pokyn', _doktyp1);
+
+INSERT INTO do_typdokumentu_cis (text, poznamka, platnost, biztyp, obsah
+  , podobsah, garant, generovany, repcode, archivovat, podepisovany) VALUES (
+  'Seznam dokumentů k pokynu k čerpání', null, 1, 41, 4103
+  , null, 'OZU', 1, 'EU301', 1, 0)
+;
+let _doktyp2 = Tw_LastSer();
+
+--#Typ dokumentu pro seznam dokladů pro pokyn k čerpání#
+--Typ generovaného dokumentu pro - Seznam dokladů k pokynu k čerpání
+CALL TW_RegSetKey('EU', 'withdrawal', 'generDok', 'doklady', _doktyp2);
+
+INSERT INTO do_typdokumentu_cis (text, poznamka, platnost, biztyp, obsah
+  , podobsah, garant, generovany, repcode, archivovat, podepisovany) VALUES (
+  'Balíček dokladů k zálohovému čerpání', null, 1, 41, 4103
+  , 410300, 'OZU', 1, 'EU302', 1, 0)
+;
+let _doktyp3 = Tw_LastSer();
+--#Typ dokumentu pro balíček dokladů k zálohovému čerpání#
+--Typ generovaného dokumentu pro - Balíček dokladů pro doložení zálohového čerpání
+CALL TW_RegSetKey('EU', 'packageofdoc', 'generDok', 'dokladyZCerp', _doktyp3);
+
+INSERT INTO do_typdokumentu_cis (text, poznamka, platnost, biztyp, obsah
+  , podobsah, garant, generovany, repcode, archivovat, podepisovany) VALUES (
+  'Balíček dokladů k účelovému použití UČ', null, 1, 41, 4103
+  , 410301, 'OZU', 1, 'EU303', 1, 0)
+;
+let _doktyp4 = Tw_LastSer();
+--#Typ dokumentu pro balíček dokladů k účelovému použití UČ#
+--Typ generovaného dokumentu pro - Balíček dokladů pro doložení ÚČ
+CALL TW_RegSetKey('EU', 'packageofdoc', 'generDok', 'dokladyUC', _doktyp4);
+
+INSERT INTO do_typdokumentu_cis (text, poznamka, platnost, biztyp, obsah
+  , podobsah, garant, generovany, repcode, archivovat, podepisovany) VALUES (
+  'SCAN čerpání', null, 1, null, null
+  , null, null, 0, null, 1, 0)
+;
+let _doktypX = Tw_LastSer();
+
+INSERT INTO tw_typobjserno_cis(tabulka, nazev, platnost) VALUES (
+  'seu_pokyncerp_mat', 'Pokyn k čerpání', 1
+);
+INSERT INTO tw_typobjserno_cis(tabulka, nazev, platnost) VALUES (
+  'seu_balicekdokladu_mat', 'Balíček dokladů', 1
+);
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, platnost, explicitgener, platnostod) VALUES (
+  _doktyp1, 'seu_pokyncerp_mat', 'NEPRISTUPNY', '1', 1, mdy(1, 1, 2016)
+);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, platnost, explicitgener, platnostod) VALUES (
+  _doktyp2, 'seu_pokyncerp_mat', 'NEPRISTUPNY', '1', 1, mdy(1, 1, 2016)
+);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, platnost, explicitgener, platnostod) VALUES (
+  _doktyp3, 'seu_balicekdokladu_mat', 'NEPRISTUPNY', 1, 1, mdy(1, 1, 2016)
+);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, platnost, explicitgener, platnostod) VALUES (
+  _doktyp4, 'seu_balicekdokladu_mat', 'NEPRISTUPNY', 1, 1, mdy(1, 1, 2016)
+);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, platnost, explicitgener, platnostod) VALUES (
+  _doktypX, 'seu_pokyncerp_mat', 'EDITACE', 1, 0, mdy(1, 1, 2016)
+);
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, platnost, explicitgener, platnostod) VALUES (
+  _doktypX, 'seu_balicekdokladu_mat', 'EDITACE', 1, 0, mdy(1, 1, 2016)
+);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, platnost, povinnostpodp, podminenostpodp) VALUES (
+  _doktyp1, 11, 1, 'P', 0
+);
+let _dokSkup = Tw_LastSer();
+INSERT INTO do_zpusobpodeptypdokskup_cis(reftypdokumentuskupina, zpusobpodep, platnost) VALUES (
+  _dokSkup, 1/*biometr*/, 1
+);
+INSERT INTO do_zpusobpodeptypdokskup_cis(reftypdokumentuskupina, zpusobpodep, platnost) VALUES (
+  _dokSkup, 3/*poštou*/, 1
+);  
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, platnost, povinnostpodp, podminenostpodp) VALUES (
+  _doktyp2, 11, 1, NULL, 0
+);
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, platnost, povinnostpodp, podminenostpodp) VALUES (
+  _doktyp3, 12, 1, NULL, 0
+);
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, platnost, povinnostpodp, podminenostpodp) VALUES (
+  _doktyp4, 12, 1, NULL, 0
+);
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, platnost, povinnostpodp, podminenostpodp) VALUES (
+  _doktypX, 11, 1, NULL, 0
+);
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, platnost, povinnostpodp, podminenostpodp) VALUES (
+  _doktypX, 12, 1, NULL, 0
+);
+
+  
+end procedure;--B124257_RN00430870_3

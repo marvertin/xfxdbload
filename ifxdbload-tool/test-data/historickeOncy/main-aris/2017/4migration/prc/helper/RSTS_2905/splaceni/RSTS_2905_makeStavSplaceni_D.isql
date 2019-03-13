@@ -1,0 +1,140 @@
+create PROCEDURE RSTS_2905_makeStavSplaceni_D(ADebugFile    Char(30) default null, -- priznak zda vytvaret debug file, pokud je vyplneny
+                                              ALogovat      INT DEFAULT 0
+)
+
+  define _ser         Int;
+  define _serDM       Int;
+  
+  define _konto       dec(16, 0);
+  define _tko         char(2);
+  define _realn       int;
+  define _datotev     date;
+  define _datuzav     date;  
+  define _prvni       integer;
+  define _posledni    integer;
+  define _curr        integer; 
+  define _AID         varchar(20);  
+  define _SID         integer;
+   
+  define _zprac       int;
+  
+  --povinne globalni promenne
+  define global TW_ErrSql   Int          default null;
+  define global TW_ErrIsam  Int          default null;
+  define global TW_ErrText  VarChar(255) default null;
+  
+  --osetreni chyby pri konstrukci kursoru
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  SET ISOLATION TO COMMITTED READ;
+  set lock mode to wait 30;
+  
+  if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+    trace on;
+  end if;
+  
+  let _zprac = 2;
+  
+  --ZACATEK vlastni migrace
+  BEGIN WORK;
+  
+  --záznam o spuštení migrace
+  let _serDM = TW_DM_Start('RSTS-2905', 'RSTS_2905_makeStavSplaceni_D', 'RN00458153-IFRS - Doplnění polí souvisejících s projektem IFRS9_IRBA');
+  IF(ALogovat <> 0) THEN
+    CALL TW_RegSetOrAddKey('TW', 'monitor', 'MigraceStavSplaceni', 'ON', 1);
+  END IF;
+  COMMIT WORK;
+  
+  let _zprac = 2;
+  if not exists(select 1 from rsts_2905_stavsplaceni where zprac = 2)
+    and exists(select 1 from rsts_2905_stavsplaceni where zprac = 20)  then
+    
+    -- provést pokud proběhl čístící běh
+    CALL tw_para_clean('RSTS_2905_makeStavSplaceni_D');
+  end if
+  
+  let _AID = 'RSTS_2905_makeStavSplaceni_D';
+  let _SID = DBINFO('sessionid');
+  
+  -- nejvetsi a nejmensi serial
+  let _prvni, _posledni = (select min(ser), max(ser) from rsts_2905_stavsplaceni where zprac IN (-1, -2));
+  
+    -- vnejsi cyklus pres ridici tabulku
+    while tw_para_find(_AID,_SID,_prvni,_posledni) = 1
+      -- vnitrni cyklus pres ridici tabulku
+      while tw_para_hasnext(_AID,_SID) = 1
+        -- zahajim transakci
+        BEGIN WORK;
+        -- vezmu záznam
+        let _curr = tw_para_next(_AID,_SID);
+        -- dohledam zpracovavany zaznam
+        let _realn = (SELECT realn FROM rsts_2905_stavsplaceni WHERE ser = _curr and zprac IN (-1, -2));
+        if _realn is null then
+          COMMIT WORK;
+          continue while; --pokud byl zaznam jiz zpracovan jdu dal
+        end if;
+  
+        begin
+          on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+            begin
+              on exception in (-255)
+              end exception;
+              rollback;
+            end;         
+            if (TW_ErrSql in (-213,-457, -721)) then
+              call TW_RaiseTechError ('130T201TCUI', 'RSTS_2905_makeStavSplaceni_D: Action has been cancelled by operator');
+            end if;            
+            
+            BEGIN WORK;
+            
+            UPDATE rsts_2905_stavsplaceni SET (NumErr, ISAMErr, TextErr, zprac, sid) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2, _SID) WHERE ser = _curr;
+    
+            COMMIT;
+  
+            BEGIN WORK;          
+            --znovu vezmu záznam - reknu, ze je chyba (1)
+            let _curr = tw_para_next(_AID,_SID,1);
+            call TW_ClearMessage();
+            COMMIT WORK;
+            continue while;
+          end exception with resume;
+          
+          
+          --vlastni algoritmus migrace
+          call RSTS_2905_zpracStavSplaceni(_realn);               
+          
+          -- aktualizuju zaznam v ridici tabulce
+          UPDATE rsts_2905_stavsplaceni SET zprac = _zprac, sid = _SID, numerr = NULL, isamerr = NULL, texterr = NULL 
+          WHERE ser = _curr;
+          
+          COMMIT WORK;
+          BEGIN WORK;
+        end;
+  
+        -- potvrdim transakci
+        COMMIT WORK;
+      end while;
+    end while;
+  
+  --KONEC vlastni migrace
+  
+  --ZACATEK dokonceni migrace (pokud dokonceni existuje)
+  BEGIN WORK;
+  
+  --zápis o ukončení migrace do provozního deníku a protokolu migraci
+  call TW_DM_End(_serDM);
+  
+  if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+     trace off;
+  end if;
+  
+  IF(ALogovat <> 0) THEN
+    CALL TW_RegDelKey('TW', 'monitor', 'MigraceStavSplaceni', 'ON');
+  END IF;  
+  
+  COMMIT WORK;
+  --KONEC dokonceni migrace
+
+end procedure;

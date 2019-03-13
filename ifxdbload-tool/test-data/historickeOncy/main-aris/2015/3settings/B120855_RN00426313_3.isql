@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B120855_RN00426313_3
+-- @TC:ONCE: DESCRIPTION = Anonymizace II (dokončení RN00421311) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('BA','AnonParams','Sale','MonthsWithoutChange', 60, 1, 'Osoba', 'Anonymizace osoby', 'Anonymizace osoby', 'Počet měsíců od poslední změny požadavku v Sale pro anonymizaci');
+
+call TW_RegDelKey('BA','AnonParams','PrePrimPD','MonthsInSystem');
+call TW_RegDelKey('BA','AnonParams','PrePrimPD','MonthsInCWSinceCRG');
+call TW_RegDelKey('BA','AnonParams','PrePrimPD','MonthsInCW_NoCRQTran');
+call TW_RegDelKey('BA','AnonParams','PrePrimPD','MonthsInCW_CRQTran');
+call TW_RegDelKey('BA','AnonParams','PrePrimPD','MonthsInCW_NoBSRQTran');
+call TW_RegDelKey('BA','AnonParams','PrePrimPD','MonthsInCW_BSRQTran');
+
+call TW_RegDelKey('ES','zmenasmlouvy','*','PocetMesOdPredani');
+call TW_RegDelKey('ES','zmenasmlouvy','*','PocetMesOdPredani');
+call TW_RegDelKey('ES','ukoncenismlouvy','*','PocetMesOdZalozeni');
+call TW_RegDelKey('ES','ukoncenismlouvy','*','PocetMesOdZalozeni');
+
+
+ROLLBACK WORK;
+
+--End of B12855_RN00426313_3

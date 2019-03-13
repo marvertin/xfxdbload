@@ -35,6 +35,8 @@ import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.once.exceptions.AlreadyLoad
 import cz.tconsult.CORE_REVIDOVAT.lib.ifxdbload.core.once.exceptions.OnceScriptException;
 import cz.tconsult.lib.exception.EExceptionSeverity;
 import cz.tconsult.lib.exception.FThrowable;
+import cz.tconsult.lib.ifxdbload.core.loaders.once.legacy.ChecksumComputer;
+import cz.tconsult.lib.ifxdbload.core.loaders.once.legacy.Kontrolnici;
 import cz.tconsult.lib.tuples.Tuple2;
 
 /*

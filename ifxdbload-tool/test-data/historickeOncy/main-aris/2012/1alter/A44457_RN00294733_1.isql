@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A44457_RN00294733_1
+-- @TC:ONCE: DESCRIPTION = Trvale prikazy - nezauctovane {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- ###############################################################
+--       at_prikaz_den
+
+-- 1  at_prikaz_den-1/1       [CREATE.COLUMN]
+ALTER TABLE at_prikaz_den
+    ADD msgnum          CHAR(15)   BEFORE portime,
+    ADD msgdetail       VARCHAR(255)   BEFORE portime,
+    ADD msgimpltext     VARCHAR(255)   BEFORE portime,
+    ADD msgpar1         VARCHAR(255)   BEFORE portime,
+    ADD msgpar2         VARCHAR(255)   BEFORE portime,
+    ADD msgpar3         VARCHAR(255)   BEFORE portime;
+
+
+ROLLBACK WORK;
+
+--End of A44457_RN00294733_1

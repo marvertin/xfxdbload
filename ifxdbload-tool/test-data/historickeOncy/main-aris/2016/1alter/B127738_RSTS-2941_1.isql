@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, B127738_RSTS-2941_1
+-- @TC:ONCE: DESCRIPTION = Úpravy RPSN + rozšíření exportu dat
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodh_den
+  ADD sumbudnaklmimo   DECIMAL(16,2), /* Suma budoucích nákladů spojených s úvěrem mimo RSTS */
+  ADD celkbudzapl   DECIMAL(16,2),     /* Celková budoucí částka, kterou má klient zaplatit*/
+  ADD celkbudnakluver   DECIMAL(16,2); /* Celkové budoucí náklady úvěru */
+
+ALTER  TABLE ep_splspormodhdilc_den
+  ADD sumbudnaklmimopu   DECIMAL(16,2), /* Suma budoucích nákladů spojených s úvěrem mimo RSTS pro PÚ */
+  ADD sumbudnaklmimosu   DECIMAL(16,2), /* Suma budoucích nákladů spojených s úvěrem mimo RSTS pro SÚ */
+  ADD celkbudzaplpu   DECIMAL(16,2),    /* Celková budoucí částka, kterou má klient zaplatit pro PÚ */
+  ADD celkbudzaplsu   DECIMAL(16,2),    /* Celková budoucí částka, kterou má klient zaplatit pro SÚ */
+  ADD celkbudnakluverpu   DECIMAL(16,2),/* Celkové budoucí náklady PÚ */
+  ADD celkbudnakluversu   DECIMAL(16,2);     /* Celkové budoucí náklady SÚ */
+
+ALTER TABLE EP_ExpSplSporModH_Den
+  ADD sumbudnaklmimoeir   DECIMAL(16,2), /* Suma budoucích nákladů spojených s úvěrem mimo RSTS */
+  ADD celkbudzapleir   DECIMAL(16,2),     /* Celková budoucí částka, kterou má klient zaplatit*/
+  ADD celkbudnakluvereir   DECIMAL(16,2), /* Celkové budoucí náklady úvěru */
+  ADD sumbudnaklmimorpsn   DECIMAL(16,2), /* Suma budoucích nákladů spojených s úvěrem mimo RSTS */
+  ADD celkbudzaplrpsn   DECIMAL(16,2),     /* Celková budoucí částka, kterou má klient zaplatit*/
+  ADD celkbudnakluverrpsn   DECIMAL(16,2); /* Celkové budoucí náklady úvěru */
+
+ALTER  TABLE ep_expsplspormodhdilc_den
+  ADD sumbudnaklmimopu   DECIMAL(16,2), /* Suma budoucích nákladů spojených s úvěrem mimo RSTS pro PÚ */
+  ADD sumbudnaklmimosu   DECIMAL(16,2), /* Suma budoucích nákladů spojených s úvěrem mimo RSTS pro SÚ */
+  ADD celkbudzaplpu   DECIMAL(16,2),    /* Celková budoucí částka, kterou má klient zaplatit pro PÚ */
+  ADD celkbudzaplsu   DECIMAL(16,2),    /* Celková budoucí částka, kterou má klient zaplatit pro SÚ */
+  ADD celkbudnakluverpu   DECIMAL(16,2),/* Celkové budoucí náklady PÚ */
+  ADD celkbudnakluversu   DECIMAL(16,2);     /* Celkové budoucí náklady SÚ */
+
+alter table EP_ExpSplSporModH_Den modify id_index int;
+
+DROP INDEX ep_expsplspormodh_den_pk;
+CREATE UNIQUE INDEX ep_expsplspormodh_den_pk ON EP_ExpSplSporModH_Den(id_index, headser);
+alter table EP_ExpSplSporModH_Den ADD CONSTRAINT PRIMARY KEY (id_index, headser) CONSTRAINT ep_expsplspormodh_den_pk;
+
+ROLLBACK WORK;
+
+--End of B129027_RSTS-2941_1

@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A48612_RN00314266_1
+-- @TC:ONCE: DESCRIPTION = Chybìjící vokativ a dalších polí v exportech
+
+
+BEGIN WORK;
+
+--       tv_head_den
+
+-- 9  tv_head_den-1/1       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE tv_head_den
+    ADD pohlavi         Integer  ,
+    ADD vokativ         CHAR(35)  ,
+    ADD titul1          CHAR(10)  ,
+    ADD titul2          CHAR(10)  ,
+    ADD jmeno           CHAR(24)  ,
+    ADD prijmeni        CHAR(35)  ;
+
+
+ROLLBACK WORK;
+
+--End of A48612__1

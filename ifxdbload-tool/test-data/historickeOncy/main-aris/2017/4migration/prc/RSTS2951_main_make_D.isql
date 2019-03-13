@@ -1,0 +1,52 @@
+CREATE PROCEDURE RSTS2951_main_make_D()
+
+-- Potlačení kontroly CEE pro úvěrové návrhy v Main
+
+define _smlouva   dec(16, 0);  
+define _tsml      char(4);
+define _ceenote   char(255);
+define _poradi    int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+let _ceenote = 'Iniciální nastavení migrací (při zavedení kontroly CEE)';
+
+BEGIN WORK;
+
+foreach cc2 with hold for
+   select smlouva,  tsml
+   into  _smlouva, _tsml
+   from eu_sml_mat
+   where tsml in ('KOME', 'PFSU', 'PPSU', 'PUPO', 'PUSU', 'SUFO', 'SUPO')
+      and stav in ('A', 'B', 'C', 'D')
+  
+  let _poradi = (select nvl(max(poradi), 0) from eu_contractchecking_kart where smlouva = _smlouva and tsml = _tsml);
+  
+  if _poradi <> 0 then
+    insert into eu_contractchecking_kart
+    (      smlouva, tsml,   poradi,    productid, takce,  stav, datakce, datprov, sc2status, sc2result, sc2annul, sc2note, ur2status, ur2result, ur2annul, ur2note, cb2status, cb2result, cb2annul, cb2note, telephonestatus, telephoneresult, telephoneannul, telephonenote, incomestatus, incomeresult, incomeannul, incomenote, firmstatus, firmresult, firmannul, firmnote, documentstatus, documentresult, documentannul, documentnote, purposedefined, insurancedefined, propertystatus, propertyresult, propertynote, rdrecommend, rdstatus, rdresult, rdnote, indivappstatus, indivappnote, indivappreason, creditrqreturnabilityreasonid, creditrqreturnreasonrefuser, creditrqreturnreasonreftime, subdebtorlegal, subdebtorlegalnote, sl2note, sl2status, sl2result, sl2annul, bonita2status, bonita2result, bonita2annul, bonita2note, dokladmvstatus, dokladmvresult, dokladmvannul, dokladmvnote, rizsubjektstatus, rizsubjektresult, rizsubjektannul, rizsubjektnote, ceestatus, ceeresult, ceeannul,  ceenote)
+    select smlouva, tsml, (_poradi+1), productid, 'SETT', stav, datakce, datprov, sc2status, sc2result, sc2annul, sc2note, ur2status, ur2result, ur2annul, ur2note, cb2status, cb2result, cb2annul, cb2note, telephonestatus, telephoneresult, telephoneannul, telephonenote, incomestatus, incomeresult, incomeannul, incomenote, firmstatus, firmresult, firmannul, firmnote, documentstatus, documentresult, documentannul, documentnote, purposedefined, insurancedefined, propertystatus, propertyresult, propertynote, rdrecommend, rdstatus, rdresult, rdnote, indivappstatus, indivappnote, indivappreason, creditrqreturnabilityreasonid, creditrqreturnreasonrefuser, creditrqreturnreasonreftime, subdebtorlegal, subdebtorlegalnote, sl2note, sl2status, sl2result, sl2annul, bonita2status, bonita2result, bonita2annul, bonita2note, dokladmvstatus, dokladmvresult, dokladmvannul, dokladmvnote, rizsubjektstatus, rizsubjektresult, rizsubjektannul, rizsubjektnote, 'S',       'N',       0,        _ceenote 
+    from eu_contractchecking_kart
+    where smlouva = _smlouva
+      and tsml = _tsml
+      and poradi = _poradi;
+  end if;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+--konec transakce pripravy
+COMMIT WORK;
+end procedure

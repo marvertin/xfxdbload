@@ -1,0 +1,98 @@
+-- @TC:ONCE: ID = V2, B121495_RN00420635_1
+-- @TC:ONCE: DESCRIPTION = Žádost o uvolnění SP zadržované MF {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       sp_zadmfdopln_arch
+
+-- 62  sp_zadmfdopln_arch-1/3       [CREATE.TABLE]
+CREATE TABLE sp_zadmfdopln_arch (
+    idarch          SERIAL   NOT NULL,
+    serno           Integer  ,
+    realn           Integer  ,
+    zmena           Integer  ,
+    rok             datetime year to year  ,
+    kolo            Integer  ,
+    obdobi          Integer  ,
+    roksp           datetime year to year  ,
+    ico             DECIMAL(8,0)  ,
+    smlouva         DECIMAL(16, 0)  ,
+    typsml          Integer  ,
+    typzm           Integer  ,
+    datzm           DATE  ,
+    datzal          DATE  ,
+    datum           DATE  ,
+    informace       Integer  ,
+    rc              CHAR(10)  ,
+    prijm           CHAR(35)  ,
+    jm              CHAR(24)  ,
+    psc             CHAR(5)  ,
+    pobyt           CHAR(1)  ,
+    kodzmucast      Integer  ,
+    stav            CHAR(1)  ,
+    odblokovano     DECIMAL(16, 2)  ,
+    sp              Integer  ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND
+) LOCK MODE ROW
+;
+
+-- 63  sp_zadmfdopln_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_zadmfdopln_arch_pk ON sp_zadmfdopln_arch (idarch) ;
+
+-- 64  sp_zadmfdopln_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_zadmfdopln_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT sp_zadmfdopln_arch_pk;
+
+-- ###############################################################
+--       sp_zadmfdopln_mat
+
+-- 65  sp_zadmfdopln_mat-1/3       [CREATE.TABLE]
+CREATE TABLE sp_zadmfdopln_mat (
+    serno           SERIAL   NOT NULL,
+    realn           Integer   NOT NULL,
+    zmena           Integer ,
+    rok             datetime year to year,
+    kolo            Integer ,
+    obdobi          Integer ,
+    roksp           datetime year to year  ,
+    ico             DECIMAL(8,0)  ,
+    smlouva         DECIMAL(16, 0)  ,
+    typsml          Integer  ,
+    typzm           Integer  ,
+    datzm           DATE  ,
+    datzal          DATE  ,
+    datum           CHAR(45)  ,
+    informace       Integer  ,
+    rc              CHAR(10)   NOT NULL,
+    prijm           CHAR(35)   NOT NULL,
+    jm              CHAR(24)   NOT NULL,
+    psc             CHAR(5)   NOT NULL,
+    pobyt           CHAR(1)  ,
+    kodzmucast      Integer  ,
+    stav            CHAR(1)   NOT NULL,
+    odblokovano     DECIMAL(16, 2)  ,
+    sp              Integer  ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND
+) LOCK MODE ROW
+;
+
+-- 66  sp_zadmfdopln_mat-2/3       [CREATE.INDEX]
+CREATE unique INDEX sp_zadmfdopln_mat_pk ON sp_zadmfdopln_mat (serno) ;
+
+-- 67  sp_zadmfdopln_mat-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE sp_zadmfdopln_mat
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT sp_zadmfdopln_mat_pk;
+
+
+
+ROLLBACK WORK;
+
+--End of B121495_RN00420635_1

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B116132_RN00409384_5
+-- @TC:ONCE: DESCRIPTION = Odstranit nepoužívanou tabulku cl_acqtypeprinttemplate {DEFECT}
+
+
+BEGIN WORK;
+
+DROP TABLE  cl_acqtypeprinttemplate;
+
+ROLLBACK WORK;
+
+--End of B116132_RN00409384_5

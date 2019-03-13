@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A44838_RN00296542_1
+-- @TC:ONCE: DESCRIPTION = Rozšíøení pole - migrace pozdního vymáhání (scisNabyvTit) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_snimekvympohl_den MODIFY cisnabyvtitul   Char(50);
+
+ALTER TABLE eu_vympohl_mat MODIFY cisnabyvtitul   Char(50);
+
+ALTER TABLE eu_vympohl_mat MODIFY cisnabyvtitul   Char(50);
+
+ALTER TABLE rn00269923_vym_pohl MODIFY scisnabyvtit   Char(50);
+
+ROLLBACK WORK;
+
+--End of A44838_RN00296542_1

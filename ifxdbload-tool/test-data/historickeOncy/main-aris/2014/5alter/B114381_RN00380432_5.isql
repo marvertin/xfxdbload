@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B114381_RN00380432_5
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Export úvěrové smlouvy {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table cen_zastavnisml_mat 
+  modify exportsml int default 0 not null ;
+
+ROLLBACK WORK;
+
+--End of B114381_RN00380432_5

@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, B125335_RN00449464_1
+-- @TC:ONCE: DESCRIPTION = HS - Data pro ESIP v případě dodatku {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE eu_expdodatek_den (
+  id_index   Integer,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  poradi   Integer NOT NULL,
+  dodatek   Integer,
+  datakc   DATE,
+  novasplatkapu   DECIMAL(16, 2),
+  novasplatkasu   DECIMAL(16, 2),
+  novasazbapu   DECIMAL(5,2),
+  novasazbasu   DECIMAL(5,2),
+  vysedospor   DECIMAL(16, 2),
+  refvariaurokfixacepu   INTEGER,
+  refvariaurokfixacesu   INTEGER,
+  podpisklient   Integer
+);
+
+
+ALTER TABLE ep_expsplspormodh_den
+  ADD dodatekuver   Integer;
+
+
+ROLLBACK WORK;
+
+--End of B125335_RN00449464_1

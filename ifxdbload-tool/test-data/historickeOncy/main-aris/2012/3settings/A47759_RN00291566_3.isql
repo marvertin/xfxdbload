@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A47759_RN00291566_3
+-- @TC:ONCE: DESCRIPTION = Automatizace promítnutí parametrù modelování do CIBIS-Web {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#Perioda promítnutí globálních parametrù modelování pro webové aplikace#
+--Vìcná oblast  Podpora pro produkt
+--Funkcionalita Modelovací pøípad SS
+--Skupina parametrù Technické parametry modelování
+--Význam parametru  Parametr urèuje minimální prodlevu mezi dvìma pokusy o promítnutí globálních parametrù modelování do doèasných optimalizovaných struktur webových aplikací. Hodnota je v minutách.
+--Analytický typ  Operational
+--Adresa parametru  MO/modelCore/globParWeb/prodleva
+--Uživatelská zmìna Ano
+--Nastavení 10
+--Defaultní hodnota 10
+--@since RN00291566, [polakm;2012-09-12 12:21:01]
+CALL TW_RegSetOrAddKey('MO', 'modelCore', 'globParWeb', 'prodleva', 10, 1);
+
+
+ROLLBACK WORK;
+
+--End of A47759_RN00291566_3

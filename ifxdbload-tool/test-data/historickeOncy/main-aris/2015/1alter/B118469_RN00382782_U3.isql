@@ -1,0 +1,159 @@
+-- @TC:ONCE: ID = V2, B118469_RN00382782_U3
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eu_ucel_acis
+
+-- 2  eu_ucel_acis-1/2       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_ucel_acis
+    ADD ekologprogr     Integer DEFAULT 0;
+
+-- 3  eu_ucel_acis-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eu_ucel_acis
+    ADD CONSTRAINT CHECK (ekologprogr IN (0,1)) CONSTRAINT eu_ucel_acis_dy1h;
+
+
+-- ###############################################################
+--       eu_ucel_cis
+
+-- 6  eu_ucel_cis-1/2       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_ucel_cis
+    ADD ekologprogr     Integer DEFAULT 0;
+
+-- 7  eu_ucel_cis-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eu_ucel_cis
+    ADD CONSTRAINT CHECK (ekologprogr IN (0,1)) CONSTRAINT eu_ucel_cis_dy1g;
+
+
+-- ###############################################################
+--       eo_druhdavkyos_acis
+
+-- 4  eo_druhdavkyos_acis-1/3       [CREATE.TABLE]
+CREATE TABLE eo_druhdavkyos_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    popis           CHAR(35)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    refdatprov      DATE   NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_druhdavkyos_acis_drdn
+) LOCK MODE ROW
+;
+
+-- 5  eo_druhdavkyos_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_druhdavkyos_acis_pk ON eo_druhdavkyos_acis (idarch) ;
+
+-- 6  eo_druhdavkyos_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_druhdavkyos_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eo_druhdavkyos_acis_pk;
+
+-- ###############################################################
+--       eo_druhdavkyos_cis
+
+-- 7  eo_druhdavkyos_cis-1/3       [CREATE.TABLE]
+CREATE TABLE eo_druhdavkyos_cis (
+    serno           SERIAL   NOT NULL,
+    popis           CHAR(35)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    refdatprov      DATE   NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_druhdavkyos_cis_drda
+) LOCK MODE ROW
+;
+
+-- 8  eo_druhdavkyos_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_druhdavkyos_cis_pk ON eo_druhdavkyos_cis (serno) ;
+
+-- 9  eo_druhdavkyos_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_druhdavkyos_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_druhdavkyos_cis_pk;
+
+
+
+-- ###############################################################
+--       eo_roledruhdavkyos_arch
+
+-- 7  eo_roledruhdavkyos_arch-1/3       [CREATE.TABLE]
+CREATE TABLE eo_roledruhdavkyos_arch (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    refdruhdavkyos  INTEGER   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    typ             CHAR(4)   NOT NULL,
+    typrole         CHAR(2)   NOT NULL,
+    os              Integer   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    pordatprov      DATE   NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    refdatprov      DATE   NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_roledruhdavkyos_arch_dy2v
+) LOCK MODE ROW
+;
+
+-- 8  eo_roledruhdavkyos_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX eo_roledruhdavkyos_arch_pk ON eo_roledruhdavkyos_arch (idarch) ;
+
+-- 9  eo_roledruhdavkyos_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_roledruhdavkyos_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eo_roledruhdavkyos_arch_pk;
+
+-- ###############################################################
+--       eo_roledruhdavkyos_mat
+
+-- 10  eo_roledruhdavkyos_mat-1/5       [CREATE.TABLE]
+CREATE TABLE eo_roledruhdavkyos_mat (
+    serno           SERIAL   NOT NULL,
+    refdruhdavkyos  INTEGER   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    typ             CHAR(4)   NOT NULL,
+    typrole         CHAR(2)   NOT NULL,
+    os              Integer   NOT NULL,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    pordatprov      DATE   NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    refdatprov      DATE   NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_roledruhdavkyos_mat_dy2t
+) LOCK MODE ROW
+;
+
+-- 11  eo_roledruhdavkyos_mat-2/5       [CREATE.INDEX]
+CREATE unique INDEX eo_roledruhdavkyos_mat_pk ON eo_roledruhdavkyos_mat (serno) ;
+
+-- 12  eo_roledruhdavkyos_mat-3/5       [CREATE.INDEX]
+CREATE INDEX eo_roledruhdavkyos_mat_i_f1 ON eo_roledruhdavkyos_mat (refdruhdavkyos) ;
+
+-- 13  eo_roledruhdavkyos_mat-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_roledruhdavkyos_mat
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_roledruhdavkyos_mat_pk;
+
+
+-- ###############################################################
+--       eu_expucel_den
+
+-- 1  eu_expucel_den-1/1       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_expucel_den
+    ADD ekologprogr     Integer;
+
+-- ###############################################################
+--       eo_roledruhdavkyos_mat
+
+-- 16  eo_roledruhdavkyos_mat-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eo_roledruhdavkyos_mat
+    ADD CONSTRAINT FOREIGN KEY (refdruhdavkyos) REFERENCES eo_druhdavkyos_cis(serno)  CONSTRAINT eo_roledruhdavkyos_mat_f1;
+
+ROLLBACK WORK;
+
+--End of B118469_RN00382782_U3

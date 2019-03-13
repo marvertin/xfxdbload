@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, A61380_RN00352727_1
+-- @TC:ONCE: DESCRIPTION = Sale - Neukládají se rozdíly v návrzích zmìn oproti centrální evidenci do žurnálu {DEFECT}
+
+
+BEGIN WORK;
+  
+  -- ###############################################################
+--       ses_pozadavekzmena_den
+
+-- 6  ses_pozadavekzmena_den-1/3       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ses_pozadavekzmena_den
+    ADD udaj_popis      VARCHAR(255)   BEFORE refuser,
+    ADD int_old         Integer   BEFORE refuser,
+    ADD int_new         Integer   BEFORE refuser,
+    ADD long_old        DECIMAL(16,0)   BEFORE refuser,
+    ADD long_new        DECIMAL(16,0)   BEFORE refuser,
+    ADD char_old        VARCHAR(255)   BEFORE refuser,
+    ADD char_new        VARCHAR(255)   BEFORE refuser,
+    ADD date_old        DATE   BEFORE refuser,
+    ADD date_new        DATE   BEFORE refuser,
+    ADD datetimemonth_old datetime year to month   BEFORE refuser,
+    ADD datetimemonth_new datetime year to month   BEFORE refuser,
+    ADD datetimeyear_old datetime year to year   BEFORE refuser,
+    ADD datetimeyear_new datetime year to year   BEFORE refuser,
+    ADD boolean_old     Integer   BEFORE refuser,
+    ADD boolean_new     Integer   BEFORE refuser,
+    ADD decimal_old     DECIMAL(16,2)   BEFORE refuser,
+    ADD decimal_new     DECIMAL(16,2)   BEFORE refuser,
+    MODIFY udaj            VARCHAR(255)                              /* previouse: char (45) : ... : ... */;
+
+-- 7  ses_pozadavekzmena_den-2/3       [DROP.COLUMN]
+ALTER TABLE ses_pozadavekzmena_den
+    DROP sekce,
+    DROP podsekce,
+    DROP hodnotaold,
+    DROP hodnotanew;
+
+-- 8  ses_pozadavekzmena_den-3/3       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE ses_pozadavekzmena_den
+    ADD CONSTRAINT CHECK (boolean_new IN (0,1)) CONSTRAINT ses_pozadavekzmena_den_dixb,
+    ADD CONSTRAINT CHECK (boolean_old IN (0,1)) CONSTRAINT ses_pozadavekzmena_den_dixa;
+
+  
+
+ROLLBACK WORK;
+
+--End of A61380_RN00352727_1

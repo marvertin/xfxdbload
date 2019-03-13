@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A60163_RN00326567
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Rozšíøení checklistu k ÚŽ
+BEGIN WORK;
+
+ALTER TABLE eu_navrdok_cis
+ADD CONSTRAINT (CHECK (umisteni in ('OSTATN', 'ZAJIST', 'NAVRAT')) CONSTRAINT eu_navrdok_cis_c4);
+
+
+ROLLBACK WORK;
+--End of A60163_RN00326567

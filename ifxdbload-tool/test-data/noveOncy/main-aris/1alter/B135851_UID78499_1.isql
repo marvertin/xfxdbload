@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B135851_UID78499_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24827: Import kurzovního lístku {STORY}
+
+
+BEGIN WORK;
+
+--CHECKS
+ALTER TABLE ws_metoda_cis
+  DROP CONSTRAINT ws_metoda_cis_c1
+;
+
+ALTER TABLE ws_metoda_cis
+  ADD CONSTRAINT (CHECK (skupinasluzeb IN (1,2,3,4,5,6,7,8,9,10)) CONSTRAINT ws_metoda_cis_c1)
+;
+
+
+ROLLBACK WORK;
+
+--End of B135851_UID78499_1

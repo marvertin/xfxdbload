@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135085_UID62916_6
+-- @TC:ONCE: DESCRIPTION = RSTS-17284: Zrušit starou kontrolu Firma (odstranit tabulky, UC, oprávnění atp.) {STORY}
+
+
+BEGIN WORK;
+
+drop procedure SEP_FirmaDokonci;
+drop procedure SEP_FirmaKontrVytv;
+drop procedure SEP_FirmaOsSeznamVytv;
+drop procedure SEP_FirmaSlucPozadVytv;
+drop procedure SEP_FirmaStorno;
+drop procedure SEP_FirmaStornoOsoba;
+drop procedure EU_StornoCCheckingFirmAK;
+
+ROLLBACK WORK;
+
+--End of B135085_UID62916_6

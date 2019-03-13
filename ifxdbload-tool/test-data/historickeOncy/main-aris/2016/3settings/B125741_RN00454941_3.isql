@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B125741_RN00454941_3
+-- @TC:ONCE: DESCRIPTION = Dvojí RPSN: Nezahrnovat pohyb  "Předčasná splátka úvěru ze spoření" [ {DEFECT}
+
+BEGIN WORK;
+
+update ep_zahrnutipohybucfmodel_cis
+  set include = 0
+  where typpohybumodel='['
+;
+
+ROLLBACK WORK;
+
+--End of B125741_RN00454941_3

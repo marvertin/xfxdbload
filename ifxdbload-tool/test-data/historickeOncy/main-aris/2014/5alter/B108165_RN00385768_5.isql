@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B108165_RN00385768_5
+-- @TC:ONCE: DESCRIPTION = Předělat výčet stavů insolvence na dropdown nad číselníkem {DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE EP_Insolvence_Mat DROP CONSTRAINT ep_insolvence_mat_c1;
+
+CREATE INDEX ep_insolvence_mat_i_f8 ON ep_insolvence_mat(stav);
+ALTER TABLE ep_insolvence_mat ADD CONSTRAINT FOREIGN KEY(stav) REFERENCES ep_stavinsolv_cis(stav) CONSTRAINT ep_insolvence_mat_f8;
+
+ALTER TABLE EP_SnimekInsolvence_Den DROP CONSTRAINT ep_snimekinsolvence_den_c1;
+
+CREATE INDEX ep_snimekinsolvence_den_i_f9 ON ep_snimekinsolvence_den(stav);
+ALTER TABLE ep_snimekinsolvence_den ADD CONSTRAINT FOREIGN KEY(stav) REFERENCES ep_stavinsolv_cis(stav) CONSTRAINT ep_snimekinsolvence_den_f9;
+
+ROLLBACK WORK;
+
+--End of B108165_RN00385768_5

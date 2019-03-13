@@ -1,0 +1,126 @@
+create procedure RN00311507_krok_4B_Make()
+-- vytvoření PO a insolvenčních správců
+
+define _os              Int;
+define _davka           Int;
+define _akce            Int;
+define _ser             Int;
+define _serno           Int;
+define _poc             Int;
+define _poznamka        VarChar(255);
+define _infotyp         Int;
+define _info            Int;
+define _datum           Date;
+define _refsoud         Int;
+define _po              Int;
+define _pocetspor       Int;
+define _pocetuver       Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_4B');
+let _infotyp = tw_reggetkey('EO','CREDIBILITY','informationtype','insolvence');
+call tw_baseinit();
+
+--set debug file to '/home/aris/RN00311507_krok_1C_PO.isql.dbg';
+--trace on;
+
+COMMIT WORK;
+BEGIN WORK;
+
+let _poc = 1; 
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, os, info, datum
+     INTO _ser,_os,_info,_datum
+     FROM RN00311507_krok_4B
+    WHERE zprac < 0
+    ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_4B
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    -- vlastni algoritmus migrace
+    SELECT MIN(id) INTO _refsoud FROM EO_Soud_Cis WHERE zkratkaspis = 'XXXX';
+    if _refsoud is null then
+      call EO_POInit(999);
+      call EO_POLoad(999);
+      
+      UPDATE EO_PO_Temp SET (ico, nazevmajitel, ad2, ad3, psc, cpopis, corient, formaprav) = (99, 'Migrační soud pro insolvenci', 'Koněvova', 'Praha 3', '13045', 2747, 99, 13) WHERE owner = 999;  
+      
+      call EO_POSave(999, 0, 1);
+      let _po = (SELECT int1 FROM tw_retval_temp);
+
+      SELECT NVL(MAX(id), 0) + 1 INTO _refsoud FROM EO_Soud_Cis;
+      
+      INSERT INTO EO_Soud_Cis(id, osoba, platnost, insolvence, zkratkasoud, zkratkaspis, poznamka)
+      VALUES(_refsoud, _po, 1, 1, 'XXXX', 'XXXX', 'Migrační soud pro insolvenci');
+    end if;
+    
+    -- vytvořím nový záznam do evidence o insolvenci
+    let _poznamka = (SELECT poznamka FROM eo_infoduvos_mat WHERE info = _info);
+    INSERT INTO ep_insolvence_mat
+         ( refosoba, datzahajeni, spisznsenat, spisznrejstrik, spisznbc, spisznrocnik,
+           stav, poznamka, refinfoduv, refsoud, refreferent)
+      VALUES
+         (_os, _datum, _poc, 'INS', _poc, Year(_datum),
+           'A',_poznamka,_info, _refsoud, 'eh');
+    let _serno = tw_lastser();     
+    let _poc = _poc+1;
+    
+    call EP_VytvProdInsolv(_serno);
+    
+    SELECT COUNT(*) INTO _pocetspor FROM EP_ProduktInsolv_Mat WHERE refinsolv = _serno AND refosoba = _os AND platnost = 1 AND tsml IN ('SSFO', 'SSPO');
+    SELECT COUNT(*) INTO _pocetuver FROM EP_ProduktInsolv_Mat WHERE refinsolv = _serno AND refosoba = _os AND platnost = 1 AND tsml NOT IN ('SSFO', 'SSPO');
+    
+    if _pocetuver > 0 then
+      UPDATE EP_Insolvence_Mat SET refreferent = 'XM' WHERE serno = _serno;
+    end if;
+    
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00311507_krok_4B SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+    INSERT INTO RN00311507_krok_4B_log(ser, text)
+        VALUES(_ser, 'Vytvořen záznam v evidenci insolnecí ' || _serno || '. Role spořící: ' || _pocetspor || ' Role úvěrové: ' || _pocetuver );
+  end;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_4B');
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

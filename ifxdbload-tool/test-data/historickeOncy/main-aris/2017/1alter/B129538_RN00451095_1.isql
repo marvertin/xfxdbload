@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B129538_RN00451095_1
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       ep_uhr_kart
+
+-- 3  ep_uhr_kart-1/1       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ep_uhr_kart
+    ADD poznamka        VARCHAR(255)   BEFORE reftime;
+
+
+ROLLBACK WORK;
+
+--End of B129538_RN00451095_1

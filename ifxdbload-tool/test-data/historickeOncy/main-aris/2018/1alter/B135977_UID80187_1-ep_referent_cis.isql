@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135977_UID80187_1-ep_referent_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-25799: IMPLEMENTACE (modrá): RSTS-13211_REAL: Integrace úvěrového procesu CIBIS – ECM (dokončení 2018S) {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+RENAME COLUMN ep_referent_cis.jmenoproarcis TO login;
+
+ROLLBACK WORK;
+
+--End of B135977_UID80187_1-ep_referent_cis

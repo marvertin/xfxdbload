@@ -1,0 +1,43 @@
+create PROCEDURE RN00423411_vartarifrozhod_make_D ()
+
+-- RN00423411
+-- nastaveni tabulky eu_vartarifrozhod_cis
+
+define _ser          Int;
+define _refvariapu   Char(10);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+foreach cc2 with hold for
+   SELECT serno, refvariapu
+   INTO  _ser, _refvariapu
+   FROM eu_kritvariapurozhod_cis
+   WHERE platnost = 1
+   ORDER BY serno
+   
+   --vlastni algoritmus migrace
+   INSERT INTO eu_vartarifrozhod_cis (refkritvariapurozhod,tarif,platnost)
+   SELECT _ser, tarif, 1 FROM eu_variaputarif_cis WHERE refvariapu = _refvariapu and platnost = 1;
+    
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

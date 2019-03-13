@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B133431_UID56152_1-insurEndDate
+-- @TC:ONCE: DESCRIPTION = UNIQA a modelování {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE PRO_ContractData
+  ADD  insurEndDate   DATE BEFORE newInsurVariantId;
+
+ROLLBACK WORK;
+
+--End of B133431_UID56152_1-insurEndDate

@@ -1,0 +1,152 @@
+create PROCEDURE RSTS_5206_vychoziEir_make_D (-- vstupni paramtery
+                                              ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser       Int;
+define _serDM     Int;
+define _serobjekt Int;
+
+define _smlouva dec(16, 0);
+define _tsml char(4);
+define _uver int;
+define _datprov date;
+define _bankeir Double precision;
+define _bazebe    int;
+define _sazbabe   dec(5, 2);
+define _bazebepu  int;
+define _sazbabepu dec(5, 2);
+define _datklop   date;
+define _odchylkaUrS   dec(5, 2);
+define _IndexBazeS    int;
+define _odchylkaUrSZ  dec(5, 2);
+define _IndexBazeSZ   int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS-5206', 'RSTS_5206_eir', 'Výchozí nastavení EIR');
+
+COMMIT WORK;
+
+let _datprov = ap_datprov();
+
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  smlouva,  tsml,  uver
+   INTO  _ser, _smlouva, _tsml, _uver
+   FROM RSTS_5206_eir
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS_5206_eir
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+   --vlastni algoritmus migrace
+   if _uver = 1 then
+    select bazebe,  sazbabe,  bazebepu,  sazbabepu,  datklop
+    into  _bazebe, _sazbabe, _bazebepu, _sazbabepu, _datklop
+    from eu_sml_mat  s
+    where smlouva = _smlouva
+      and tsml = _tsml;
+      
+    if _tsml in ('PUSU', 'PFSU', 'PPSU', 'PUPO') and _datklop is null then
+      let _bankeir = UR_BazeGet(_bazebepu) + nvl(_sazbabepu, 0);
+    else
+      let _bankeir = UR_BazeGet(_bazebe) + nvl(_sazbabe, 0);
+    end if;
+    
+    update eu_sml_mat 
+    set bankeir = _bankeir
+      , bankeirprep = _datprov
+    where smlouva = _smlouva
+      and tsml = _tsml;
+      
+    let _serObjekt = TW_DM_VlozObjekt(_serDM, 'T', 'eu_sml_mat', 'U', _smlouva);
+   else
+   
+    let _odchylkaUrS,_IndexBazeS,_odchylkaUrSZ,_IndexBazeSZ = null, null, null, null;
+    
+    select  odchylkaUrS,  IndexBazeS,  odchylkaUrSZ,  IndexBazeSZ
+    into   _odchylkaUrS, _IndexBazeS, _odchylkaUrSZ, _IndexBazeSZ
+    from es_sml_mat
+    where smlouva = _smlouva 
+      and typ = _tsml;
+ 
+    if _odchylkaUrSZ is not Null then
+     let _odchylkaUrS = nvl(_odchylkaUrS, 0) + _odchylkaUrSZ;
+    end if;
+ 
+    if _IndexBazeS is not Null then
+     let _odchylkaUrS = nvl(_odchylkaUrS, 0) + UR_BazeGet(_IndexBazeS);
+    end if;
+ 
+    if _IndexBazeSZ is not Null then
+      let _odchylkaUrS = nvl(_odchylkaUrS, 0) + UR_BazeGet(_IndexBazeSZ);
+    end if;
+   
+    let _bankEir = _odchylkaUrS;
+    
+    update rz_real_mat
+    set bankeir = _bankeir
+      , bankeirposlprepoc = _datprov
+    where smlouva = _smlouva
+      and tsml = _tsml;
+    
+    let _serObjekt = TW_DM_VlozObjekt(_serDM, 'T', 'rz_real_mat', 'U', _smlouva, _tsml);
+   end if
+   
+   UPDATE RSTS_5206_eir SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B133436_UID42520_3
+-- @TC:ONCE: DESCRIPTION = Nastavit vztahy k jiným osobám {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1005, 'Vytvořit vztah mezi osobami', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1006, 'Změnit vztah mezi osobami', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1007, 'Ukončit vztah mezi osobami', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1008, 'Zrušit vztah mezi osobami', null, 1);
+
+ROLLBACK WORK;
+
+--End of B133436_UID42520_3

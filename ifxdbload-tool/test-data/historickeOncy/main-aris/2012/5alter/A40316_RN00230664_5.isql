@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A40316_RN00230664_5
+-- @TC:ONCE: DESCRIPTION = úprava tiskového výstupu z CIBIS Sale - Žádost o poskytnutí úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE EO_DruhPrukaz_Cis MODIFY zkratka Char(2) NOT NULL;
+
+ROLLBACK WORK;
+
+--End of A40316_RN00230664_5

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B118566_RN00420288_3
+-- @TC:ONCE: DESCRIPTION = neexistuje záznam v rr_reptype_cis {DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO rr_reptype_cis(repcode, area, repkind, reptype, repvar, repname, exportdir, formatdir, formatfile, keepinterval) 
+    VALUES('SS041', 'SS', '04', '1', 0, 'Příloha k felixovu spoření', '', '', 'SS041.jrxml', 1);
+
+ROLLBACK WORK;
+
+--End of B118566_RN00420288_3

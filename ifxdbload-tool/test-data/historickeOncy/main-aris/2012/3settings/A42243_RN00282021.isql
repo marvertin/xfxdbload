@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A42243_RN00282021
+-- @TC:ONCE: DESCRIPTION = Odstranit d db registru parametry systému, které jsou doèasnì zaøazené do vìcné oblasti Zrušené
+
+BEGIN WORK;
+
+call TW_RegDelKey ('BD','preEOM','RZ','maxbatch');
+call TW_RegDelKey ('EU','potvr','OZsepsani','typcertifikatu');
+call TW_RegDelKey ('EU','creditrq','OZovereni','typcertifikatu');
+call TW_RegDelKey ('HY','rizeni','kontrola','poctyMigrovanych');
+call TW_RegDelKey ('RS','SPFO','upom','minstupZL');
+call TW_RegDelKey ('RU','*','*','prevodvym');
+call TW_RegDelKey ('OS','sestavy','*','nprovize');
+
+ROLLBACK WORK;                   	        

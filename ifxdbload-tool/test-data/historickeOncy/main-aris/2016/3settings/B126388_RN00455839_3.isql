@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B126388_RN00455839_3
+-- @TC:ONCE: DESCRIPTION = Chybně implementované názvy registrů v DB 
+
+
+BEGIN WORK;
+
+UPDATE tw_registr_cis set  nazev = 'Používat testovací procuduru pro ladění skórovací funkce' where oblast = 'EU' AND uloha = '*' AND funkce = '*' AND udaj = 'useTcImplScoringProc';
+
+UPDATE tw_registr_cis set  nazev = 'Zákaz výpočtu nároku na SP' where oblast = 'SP' AND uloha = 'NAROK_SP' AND funkce = 'VYPOCET' AND udaj = 'ZAKAZ';
+
+ROLLBACK WORK;
+
+--End of B126388_RN00455839_3

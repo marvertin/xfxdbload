@@ -1,0 +1,105 @@
+CREATE PROCEDURE RSTS_2905_finishDPD(ARealn     INT DEFAULT -1,
+                                     AOsoba     INT DEFAULT -1,      
+                                     ALogovat   INT DEFAULT 0,
+                                     AFaze      INT DEFAULT NULL)
+
+  DEFINE _realuv            int;
+  DEFINE _reals             int;
+  DEFINE _osoba             int;
+  DEFINE _poradi            int;
+  DEFINE _datvyhodnoceni    date;     
+  DEFINE _typvyhodnoceni    char(1);
+  DEFINE _currentdpd        int;
+  DEFINE _maxdpd            int;
+  DEFINE _maxdpdskupina     int;
+  DEFINE _totaldpd          int;
+  DEFINE _prevTotaldpd      INT; 
+  DEFINE _nesplaccastka     dec(16, 2);
+  DEFINE _datprvvyhodnoceni date;
+  DEFINE _id                INT; 
+  DEFINE _obdobiNum         INT;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'FinishDPD'); END IF; 
+  
+  LET _poradi = 0;
+  LET _obdobiNum    = TW_RegGetKey('EU', 'DPD', 'maxDPD', 'obdobi');
+  
+  IF(ARealn IS NOT NULL AND ARealn <> -1) THEN
+    LET _prevTotaldpd = -1;
+    FOREACH c1 WITH HOLD FOR
+      SELECT realuv, reals, datvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka, datprvvyhodnoceni
+      INTO
+        _realuv, _reals, _datvyhodnoceni, _typvyhodnoceni, _currentdpd, _maxdpd, _totaldpd, _nesplaccastka, _datprvvyhodnoceni
+      FROM rsts_2905_dpdevid
+      WHERE
+        realuv = ARealn OR
+        reals  = ARealn
+      ORDER BY datvyhodnoceni
+      
+      LET _poradi = _poradi + 1;
+      
+      IF(_currentdpd > _maxdpd) THEN
+        LET _maxdpd = _currentdpd;
+      END IF;      
+      
+      IF(_currentdpd > _totaldpd OR _maxdpd > _totaldpd OR _prevTotaldpd > _totaldpd) THEN
+        LET _totaldpd = TW_MaxInt(TW_MaxInt(TW_MaxInt(_currentdpd, _maxdpd), _totaldpd), _prevTotaldpd);
+      END IF;
+      
+      LET _prevTotaldpd = _totaldpd;
+      
+      INSERT INTO ep_dpdevid_den (realuv, reals, poradi, datvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka, datprvvyhodnoceni)
+      VALUES(_realuv, _reals, _poradi, _datvyhodnoceni, _typvyhodnoceni, _currentdpd, _maxdpd, _totaldpd, _nesplaccastka, _datprvvyhodnoceni);
+      
+    END FOREACH
+  END IF;
+  
+  LET _poradi = 0;
+  
+  IF(AOsoba IS NOT NULL AND AOsoba <> -1) THEN
+    LET _prevTotaldpd = -1;  
+    FOREACH c1 WITH HOLD FOR
+      SELECT datvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka, datprvvyhodnoceni
+      INTO
+        _datvyhodnoceni, _typvyhodnoceni, _currentdpd, _maxdpd, _totaldpd, _nesplaccastka, _datprvvyhodnoceni
+      FROM rsts_2905_dpdevid
+      WHERE
+        osoba = AOsoba
+      ORDER BY datvyhodnoceni
+      
+      LET _poradi = _poradi + 1;
+      
+      IF(_currentdpd > _maxdpd) THEN
+        LET _maxdpd = _currentdpd;
+      END IF;      
+      
+      IF(_currentdpd > _totaldpd OR _maxdpd > _totaldpd OR _prevTotaldpd > _totaldpd) THEN
+        LET _totaldpd = TW_MaxInt(TW_MaxInt(TW_MaxInt(_currentdpd, _maxdpd), _totaldpd), _prevTotaldpd);
+      END IF;
+      LET _prevTotaldpd = _totaldpd;
+      
+      INSERT INTO ep_dpdevid_den (osoba, poradi, datvyhodnoceni, typvyhodnoceni, currentdpd, maxdpd, totaldpd, nesplaccastka, datprvvyhodnoceni)
+      VALUES(AOsoba, _poradi, _datvyhodnoceni, _typvyhodnoceni, _currentdpd, _maxdpd, _totaldpd, _nesplaccastka, _datprvvyhodnoceni);
+      
+    END FOREACH
+  END IF;    
+  
+  LET _poradi = 0;
+  
+  IF(AFaze = 4) THEN    
+    FOREACH c2 WITH HOLD FOR
+      SELECT id
+        INTO
+          _id
+        FROM ep_dpdevid_den
+        WHERE
+          realuv = ARealn
+        ORDER BY datvyhodnoceni, typvyhodnoceni
+      
+      LET _poradi = _poradi + 1;  
+      UPDATE ep_dpdevid_den SET poradi = _poradi WHERE id = _id;  
+    END FOREACH;  
+  END IF;
+    
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;  
+END PROCEDURE;

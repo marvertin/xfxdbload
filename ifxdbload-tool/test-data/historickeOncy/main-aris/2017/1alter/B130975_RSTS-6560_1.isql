@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B130975_RSTS-6560_1
+-- @TC:ONCE: DESCRIPTION = Exporty nad vymáháním: exportují se místo čísla smlouvy SS čísla smlouvy účtu
+
+BEGIN WORK;
+
+alter table EU_ExpPlSplH_Den add (
+
+  smlSpor dec(16,0),
+  tsmlSpor char(4)
+)
+;
+
+alter table eu_expumorh_den add (
+
+  smlSpor dec(16,0),
+  tsmlSpor char(4)
+)
+;
+
+ROLLBACK WORK;
+
+--End of B130975_RSTS-6560_1

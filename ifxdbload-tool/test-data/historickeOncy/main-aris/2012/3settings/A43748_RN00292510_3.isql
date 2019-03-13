@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43748_RN00292510_3
+-- @TC:ONCE: DESCRIPTION = Není možné úètovat jednorázové pøíkazy na CA konta
+
+BEGIN WORK;
+
+update ac_druhtko_cis set crsko='PYMT' where tko='CA' and druh in ('OJ02', 'ZI03', 'OT02');
+
+ROLLBACK WORK;
+
+--End of A43748_RN00292510_3

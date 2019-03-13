@@ -1,0 +1,40 @@
+-- @TC:ONCE: ID = V2, B136295_UID84741_1
+-- @TC:ONCE: DESCRIPTION = RSTS-28423: Vrátit primární klíče, které informix zahodil v rámci RSTS-28007 {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE seu_sml_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seu_sml_mat_pk;
+
+ALTER TABLE seu_navot_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seu_navot_mat_pk;
+
+ALTER TABLE seo_komkanal_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seo_komkanal_mat_pk;
+
+ALTER TABLE sep_vyplmisto_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT sep_vyplmisto_mat_pk;
+
+ALTER TABLE ep_ceeodpovedh_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ep_ceeodpovedh_den_pk;
+
+ALTER TABLE seo_souhlas_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seo_souhlas_mat_pk;
+
+ALTER TABLE seo_bydleni_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seo_bydleni_mat_pk;
+
+ALTER TABLE seu_zajistdalnaklad_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seu_zajistdalnaklad_mat_pk;
+
+ALTER TABLE seo_adresa_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seo_adresa_mat_pk;
+
+ALTER TABLE eo_prukaz_mat ADD CONSTRAINT PRIMARY KEY(prukaz) CONSTRAINT eo_prukaz_mat_pk;
+
+ALTER TABLE pef_firma_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT pef_firma_cis_pk;
+
+ALTER TABLE ses_pozadavekproblem_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ses_pozadavekproblem_mat_pk;
+
+ALTER TABLE seo_sluzbasis_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seo_sluzbasis_mat_pk;
+
+ALTER TABLE tw_useraction_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT tw_useraction_den_pk;
+
+ALTER TABLE eo_blockingjournal ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eoblockingjournal_p;
+
+ALTER TABLE ses_transucet_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ses_transucet_mat_pk;
+
+ROLLBACK WORK;
+
+--End of B136295_UID84741_1

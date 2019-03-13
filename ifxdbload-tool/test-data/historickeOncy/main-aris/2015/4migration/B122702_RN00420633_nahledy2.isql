@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B122702_RN00420633_nahledy2
+-- @TC:ONCE: DESCRIPTION = Informace o externích spolupracovnících OZ v CIBIS {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+set triggers for sp_vchd_kart disabled;
+
+-- migrace sp_vchd_kart
+UPDATE sp_vchd_kart SET refvratmf = (SELECT ser FROM sp_vratmf_kart 
+  WHERE sp_vchd_kart.rok = sp_vratmf_kart.rok
+    AND sp_vchd_kart.obdobi = sp_vratmf_kart.obdobi
+    AND sp_vchd_kart.smlouva = sp_vratmf_kart.smlouva);
+
+set triggers for sp_vchd_kart enabled;
+
+-- migrace sp_vratky_kart
+set triggers for sp_vratky_kart disabled;
+UPDATE sp_vratky_kart 
+  SET (ico, datzal, rc, jm, prijm, kodzprac, psc) = ((
+    SELECT ico, datzal, rc, jm, prijm, kodzprac, psc
+        FROM sp_vratmf_kart WHERE sp_vratmf_kart.ser = RN00420633_refvratmfbysmlouva(sp_vratky_kart.smlouva, sp_vratky_kart.rok) 
+  ));
+set triggers for sp_vratky_kart enabled;
+
+-- Výmaz sp_vratmf_kart pro aktuální období 
+call RN00420633_deletevratmfbyaktrokobdobi();
+
+
+
+ROLLBACK WORK;
+
+--End of B116251_B122702_RN00420633_nahledy2

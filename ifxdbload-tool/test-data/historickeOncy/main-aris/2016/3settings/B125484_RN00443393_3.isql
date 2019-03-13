@@ -1,0 +1,125 @@
+-- @TC:ONCE: ID = V2, B125484_RN00443393_3
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update ep_zahrnutipohybucfmodel_cis set include = 0
+where typpohybumodel = '[' and definition = 'U' and tsml='PFSU'
+and rpsntype='PU' and konto = 'U'
+;
+
+update ep_zahrnutipohybucfmodel_cis set include = 0
+where typpohybumodel = '[' and definition = 'U' and tsml='PUSU'
+and rpsntype='SU' and konto = 'U'
+;
+
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('R', 'U', 'PFSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Q', 'U', 'PFSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('2', 'U', 'PFSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Z', 'U', 'PFSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('(', 'U', 'PFSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('[', 'U', 'PFSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('R', 'U', 'PPSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Q', 'U', 'PPSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('2', 'U', 'PPSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Z', 'U', 'PPSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('(', 'U', 'PPSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('[', 'U', 'PPSU', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+
+
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('C', 'U', 'PUSU', 'PU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('R', 'U', 'PUSU', 'PU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Q', 'U', 'PUSU', 'PU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('2', 'U', 'PUSU', 'PU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Z', 'U', 'PUSU', 'PU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('(', 'U', 'PUSU', 'PU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('[', 'U', 'PUSU', 'PU', NULL, 'U', 0, 'V',0,1)
+;
+
+
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('C', 'U', 'SUPO', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('R', 'U', 'SUPO', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Q', 'U', 'SUPO', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('2', 'U', 'SUPO', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Z', 'U', 'SUPO', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('(', 'U', 'SUPO', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('[', 'U', 'SUPO', 'SU', NULL, 'U', 1, 'V',0,1)
+;
+
+
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('C', 'U', 'KOME', 'SO', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('R', 'U', 'KOME', 'SO', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Q', 'U', 'KOME', 'SO', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('2', 'U', 'KOME', 'SO', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('Z', 'U', 'KOME', 'SO', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('(', 'U', 'KOME', 'SO', NULL, 'U', 1, 'V',0,1)
+;
+insert into ep_zahrnutipohybucfmodel_cis (typpohybumodel, definition, tsml, rpsntype, period, konto, include, cashflowday, inversesign, platnost) 
+ values ('[', 'U', 'KOME', 'SO', NULL, 'U', 1, 'V',0,1)
+;
+
+ROLLBACK WORK;
+
+--End of B125484_RN00443393_3

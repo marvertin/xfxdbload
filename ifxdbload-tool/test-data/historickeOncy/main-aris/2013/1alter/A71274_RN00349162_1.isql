@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, A71274_RN00349162_1
+-- @TC:ONCE: DESCRIPTION = Pásmové úroèení ZÚ
+
+
+BEGIN WORK;
+
+CREATE TABLE ur_pasmo_acis (
+  idarch   SERIAL NOT NULL,
+  indexbaze   smallint NOT NULL,
+  datplatnostod   DATE NOT NULL,
+  poradi   Integer NOT NULL,
+  hraniceod   DECIMAL(16, 2) NOT NULL,
+  sazba   DECIMAL(5,2) NOT NULL,
+  ser   Integer,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ur_pasmo_acis_pk ON ur_pasmo_acis(idarch);
+ALTER TABLE ur_pasmo_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ur_pasmo_acis_pk;
+
+CREATE TABLE ur_pasmo_cis (
+  indexbaze   smallint NOT NULL,
+  datplatnostod   DATE NOT NULL,
+  poradi   Integer NOT NULL,
+  hraniceod   DECIMAL(16, 2) NOT NULL,
+  sazba   DECIMAL(5,2) NOT NULL,
+  ser   SERIAL NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ur_pasmo_cis_pk ON ur_pasmo_cis(indexbaze,datplatnostod,poradi);
+ALTER TABLE ur_pasmo_cis ADD CONSTRAINT PRIMARY KEY(indexbaze,datplatnostod,poradi) CONSTRAINT ur_pasmo_cis_pk;
+
+--FK
+CREATE INDEX ur_pasmo_cis_i_f1 ON ur_pasmo_cis(indexbaze,datplatnostod);
+ALTER TABLE ur_pasmo_cis ADD CONSTRAINT FOREIGN KEY(indexbaze,datplatnostod) REFERENCES ur_global_cis(indexbaze,datplatnostod) CONSTRAINT ur_pasmo_cis_f1;
+
+ALTER TABLE ur_global_cis ADD pocetpasem Integer  DEFAULT 1 NOT NULL BEFORE popis;
+ALTER TABLE ur_global_acis ADD pocetpasem Integer BEFORE popis;
+
+ROLLBACK WORK;
+
+--End of A71274_RN00349162_1

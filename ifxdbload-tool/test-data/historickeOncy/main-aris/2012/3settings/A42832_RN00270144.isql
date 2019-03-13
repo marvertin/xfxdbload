@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A42832_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt {CUSTOMERREQUEST}
+BEGIN WORK;
+
+call tw_regsetoraddkey('EP', '*', '*', 'ZahrNepracDny', '1', 1,  'Podpora pro produkt', 'Bankovní produkt', 'Bank Product', 'Zahrnovat nepracovní dny - stanovování datumù');
+
+call TW_RegSetOrAddKey ('RS','PO','open','trealS', 'SPPO', 0, 'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Typ realizace spoøení pro charakter úètu - stavební spoøení PO#');
+     
+ROLLBACK WORK;
+
+--End of A42832_RN00270144

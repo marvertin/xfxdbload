@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A41955_RN00275819_1
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_contractstatus 
+
+  --Smluvní výše splátky PÚ
+  add contrRepaymentBridgeLoan   DECIMAL(16, 2),
+  
+  --Smluvní výše splátky øádného úvìru
+  add contrRepaymentCredit   DECIMAL(16, 2)
+;
+
+ROLLBACK WORK;
+
+--End of A41955_RN00275819_1

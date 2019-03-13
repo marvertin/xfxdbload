@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B119902_RN00426727_3-uhrada
+-- @TC:ONCE: DESCRIPTION = Main: Implementacia mapovacieho kodu 5 v ramci poziadavku Felixovho sporenia (RN00412463) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ah_uhrada_cis (
+  typuhrada, tko, mena, typdluznika, fincode, vztahpohl, typpohl, typdluhu, ucetvynos, 
+  uhrcoobjekt, faze, druhvynos, castkapopl, mimosplatky, skupina, popis, poznamka, platnost)
+SELECT
+  typuhrada, tko, mena, typdluznika, 5, vztahpohl, typpohl, typdluhu, ucetvynos,
+  uhrcoobjekt, faze, druhvynos, castkapopl, mimosplatky, skupina, popis, poznamka, platnost
+FROM ah_uhrada_cis AS ah_uhrada_cis2
+WHERE NOT EXISTS (
+  SELECT *
+  FROM ah_uhrada_cis
+  WHERE ah_uhrada_cis.fincode = 5
+    AND ah_uhrada_cis.tko = ah_uhrada_cis2.tko
+    AND ah_uhrada_cis.typdluznika = ah_uhrada_cis2.typdluznika
+    AND ah_uhrada_cis.typuhrada = ah_uhrada_cis2.typuhrada
+)
+AND fincode = 4;
+
+ROLLBACK WORK;
+
+--End of B119902_RN00426727_3-uhrada

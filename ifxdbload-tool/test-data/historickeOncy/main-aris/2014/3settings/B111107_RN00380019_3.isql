@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B111107_RN00380019_3
+-- @TC:ONCE: DESCRIPTION = Nový typ základu pro úhrady (var.sazebník) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EP', 'uhrzmtarif', 'seznam', 'ZMTYPSP', '', 1,
+'EP', 'Podpora pro produkt', 'Sazebník úhrad', 'Seznam typů úhrad za změnu tarifu');
+
+INSERT INTO ep_uhrzaklad_enum(zaklad, popis, dostupmodel, promenvcase) 
+  VALUES(25, 'Suma připsaných i nepřipsaných úroků na spořícím kontě ponížená o úhrady za změnu tarifu a vynásobená podílem z rozdílu sazeb vůči sazbě původní', 1, 0);
+
+ROLLBACK WORK;
+
+--End of B111107_RN00380019_3

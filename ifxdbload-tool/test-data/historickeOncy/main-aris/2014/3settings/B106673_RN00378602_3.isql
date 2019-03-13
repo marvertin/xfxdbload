@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B106673_RN00378602_3
+-- @TC:ONCE: DESCRIPTION = TC054: Nelze zobrazit informace o produktu. {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE ep_itfudaj_cis SET platnost = 0 WHERE udaj in (238,239,240,241);
+
+ROLLBACK WORK;
+
+--End of B106673_RN00378602_3

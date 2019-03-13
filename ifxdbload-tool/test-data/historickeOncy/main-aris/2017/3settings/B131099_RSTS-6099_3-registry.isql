@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B131099_RSTS-6099_3-registry
+-- @TC:ONCE: DESCRIPTION = Registry pro modelování splácení, spoření a obratu 
+
+
+BEGIN WORK;
+
+CALL tw_regSetOrAddKey('EP', 'modSplacASpor', 'modelovaniObratu', 'vklNaZaplVstUhr', 0 /*ne*/);
+CALL tw_regSetOrAddKey('EP', 'modSplacASpor', 'modelovaniObratu', 'vklNaZaplZapZust', 0 /*ne*/);
+
+ROLLBACK WORK;
+
+--End of B131099_RSTS-6099_3-registry

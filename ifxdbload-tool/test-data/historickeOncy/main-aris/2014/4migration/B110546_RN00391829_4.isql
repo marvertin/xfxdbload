@@ -1,0 +1,40 @@
+-- @TC:ONCE: ID = V2, B110546_RN00391829_4
+-- @TC:ONCE: DESCRIPTION = Insolvence - sečtené položky pohledávky {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+SET TRIGGERS FOR ep_pohlinsolv_mat DISABLED;
+SET TRIGGERS FOR ep_pohlinsolv_arch DISABLED;
+SET TRIGGERS FOR ep_snimpohlinsolv_den DISABLED;
+
+UPDATE ep_pohlinsolv_mat SET jistina = jistdospl + jistpospl,
+                             beurok = beurokdospl + beurokpospl,
+                             saurok = saurokdospl + saurokpospl,
+                             pohluhr = pohluhrdospl + pohluhrpospl,
+                             pokuta = pokutadospl + pokutapospl,
+                             poplpoj = poplpojdospl + poplpojpospl,
+                             poplsoud = poplsouddospl + poplsoudpospl;
+
+UPDATE ep_pohlinsolv_arch SET jistina = jistdospl + jistpospl,
+                              beurok = beurokdospl + beurokpospl,
+                              saurok = saurokdospl + saurokpospl,
+                              pohluhr = pohluhrdospl + pohluhrpospl,
+                              pokuta = pokutadospl + pokutapospl,
+                              poplpoj = poplpojdospl + poplpojpospl,
+                              poplsoud = poplsouddospl + poplsoudpospl;
+
+UPDATE ep_snimpohlinsolv_den SET jistina = jistdospl + jistpospl,
+                                 beurok = beurokdospl + beurokpospl,
+                                 saurok = saurokdospl + saurokpospl,
+                                 pohluhr = pohluhrdospl + pohluhrpospl,
+                                 pokuta = pokutadospl + pokutapospl,
+                                 poplpoj = poplpojdospl + poplpojpospl,
+                                 poplsoud = poplsouddospl + poplsoudpospl;
+
+SET TRIGGERS FOR ep_pohlinsolv_mat ENABLED;
+SET TRIGGERS FOR ep_pohlinsolv_arch ENABLED;
+SET TRIGGERS FOR ep_snimpohlinsolv_den ENABLED;
+
+ROLLBACK WORK;
+
+--End of B110546_RN00391829_4

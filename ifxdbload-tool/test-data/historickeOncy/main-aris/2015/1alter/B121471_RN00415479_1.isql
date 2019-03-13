@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B121471_RN00415479_1
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table PRO_SimulatedTurnover
+  add  operationText   VARCHAR(255) before xvalutaday
+;
+
+alter table pro_plannedfinancialflow 
+  add  operationText   VARCHAR(255) before xbegvalutaperiod
+;
+
+ROLLBACK WORK;
+
+--End of B121471_RN00415479_1

@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A43164_RN00270144
+-- @TC:ONCE: DESCRIPTION = Doplnìní tarifù a pøechodù
+
+create PROCEDURE A43028_RN00270144 ()
+
+  on exception 
+  end exception with resume;
+  
+end procedure;

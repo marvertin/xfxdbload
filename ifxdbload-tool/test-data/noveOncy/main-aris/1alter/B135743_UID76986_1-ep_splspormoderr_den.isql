@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135743_UID76986_1-ep_splspormoderr_den
+-- @TC:ONCE: DESCRIPTION = RSTS-23957: IMPLEMENTACE (BE): RSTS-14722_Údržba chybové evidence modelu splácení a spoření {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+call tw_execSql('drop trigger ep_splspormoderr_den_d;', -634);
+
+ROLLBACK WORK;
+
+--End of B135743_UID76986_1-ep_splspormoderr_den

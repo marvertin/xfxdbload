@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A57039_RN00341140_1
+-- @TC:ONCE: DESCRIPTION = Problémy opis. formuláøù - nezruší se podklad, kterému vyøešíme problém v SALE {DEFECT}
+
+BEGIN WORK;
+
+  ALTER TABLE es_pozpodklad_mat DROP CONSTRAINT es_pozpodklad_mat_c2;
+  ALTER TABLE es_pozpodklad_mat ADD CONSTRAINT (CHECK (typpozadavek IN ('N', 'Z', 'U')) CONSTRAINT es_pozpodklad_mat_c2);
+
+ROLLBACK WORK;
+
+--End of A57039_RN00341140_1

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A43533_RN00289261_1
+-- @TC:ONCE: DESCRIPTION = Nový typ soudu pro vymáhání {DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE EO_Soud_Cis DROP CONSTRAINT eo_soud_cis_c1;
+
+ALTER TABLE EO_Soud_Cis ADD CONSTRAINT (CHECK (typ in ('K', 'M', 'N', 'O', 'R', 'V')) CONSTRAINT eo_soud_cis_c1);
+
+ROLLBACK WORK;
+
+--End of A43533_RN00289261_1

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136875_UID89702_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31196: Chyba při slučování osob {DEFECT}
+
+BEGIN WORK;
+
+ALTER TABLE eo_prukazzmpl_kart
+  modify poradi Smallint,
+  modify fo Int;    
+
+
+ROLLBACK WORK;
+
+--End of B136875_UID89702_1

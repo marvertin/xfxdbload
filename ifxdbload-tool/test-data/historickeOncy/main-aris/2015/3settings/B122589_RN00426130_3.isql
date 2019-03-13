@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B122589_RN00426130_3
+-- @TC:ONCE: DESCRIPTION = Požadavek k SP - Komunikace s MF {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+delete from tw_registr_cis where oblast = 'SP' and uloha in ('ZADOST', 'ZMENA') and funkce = 'TYPVETY';
+
+ROLLBACK WORK;
+
+--End of B122589_RN00426130_3

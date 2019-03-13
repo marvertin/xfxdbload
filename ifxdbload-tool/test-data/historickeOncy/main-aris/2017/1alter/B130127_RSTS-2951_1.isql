@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B130127_RSTS-2951_1
+-- @TC:ONCE: DESCRIPTION = RN00457749-Centrální evidence exekucí
+
+
+BEGIN WORK;
+
+CREATE INDEX ep_ceedotaz_den_i1 ON ep_ceedotaz_den(rc);
+
+ROLLBACK WORK;
+
+--End of B130127_RSTS-2951_1

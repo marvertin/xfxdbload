@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B127876_RSTS-2794_5
+-- @TC:ONCE: DESCRIPTION = Odstranění procedury BD_PRPotUrPrep_n
+
+
+BEGIN WORK;
+
+drop procedure if exists BD_PRPotUrPrep_n;
+
+ROLLBACK WORK;
+
+--End of B127876_RSTS-2794_0

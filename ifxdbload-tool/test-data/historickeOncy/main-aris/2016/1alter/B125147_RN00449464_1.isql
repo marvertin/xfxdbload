@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, B125147_RN00449464_1
+-- @TC:ONCE: DESCRIPTION = HS - Data pro ESIP v případě dodatku {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+--dodatek
+ALTER TABLE eu_dodatek_den
+  ADD novasplatkapu   DECIMAL(16, 2) before refuser,
+  ADD novasplatkasu   DECIMAL(16, 2) before refuser,
+  ADD novasazbapu   DECIMAL(5,2)  before refuser,
+  ADD novasazbasu   DECIMAL(5,2) before refuser,
+  ADD vysedospor   DECIMAL(16, 2) before refuser,
+  ADD refvariaurokfixacepu   INTEGER before refuser,
+  ADD refvariaurokfixacesu   INTEGER before refuser,
+  ADD podpisklient   Integer before refuser;
+
+
+ALTER TABLE eu_dodatek_den ADD CONSTRAINT CHECK (podpisklient IN (0,1)) CONSTRAINT eu_dodatek_den_dw37;
+
+
+CREATE INDEX eu_dodatek_den_i_f1 ON eu_dodatek_den(refvariaurokfixacepu);
+
+ALTER TABLE eu_dodatek_den ADD CONSTRAINT FOREIGN KEY(refvariaurokfixacepu) REFERENCES eu_variaurokfixace_cis(ser) CONSTRAINT eu_dodatek_den_f1;
+
+CREATE INDEX eu_dodatek_den_i_f2 ON eu_dodatek_den(refvariaurokfixacesu);
+
+ALTER TABLE eu_dodatek_den ADD CONSTRAINT FOREIGN KEY(refvariaurokfixacesu) REFERENCES eu_variaurokfixace_cis(ser) CONSTRAINT eu_dodatek_den_f2;
+
+---model
+ALTER TABLE ep_splspormodsh_den
+  ADD dodatekuver   Integer before ukoncmodspor;
+
+ALTER TABLE ep_splspormodsh_den ADD CONSTRAINT CHECK (dodatekuver IN (0,1)) CONSTRAINT ep_splspormodsh_den_dw4w;
+
+ROLLBACK WORK;
+
+--End of B125147_RN00449464_1

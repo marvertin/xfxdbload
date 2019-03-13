@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B131899_UID36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ep_splspormodsh_den drop (vypEir, eir);
+
+alter table ep_splspormodsh_den add (
+  vypbankeir int/*boolean*/ before vyprpsn
+, bankEir double precision before rpsn
+);
+
+ROLLBACK WORK;
+
+--End of B131899_UID36779_1

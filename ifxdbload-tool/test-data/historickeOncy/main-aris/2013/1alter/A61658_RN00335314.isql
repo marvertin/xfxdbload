@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A61658_RN00335314
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table ru_vypor_kart drop constraint ru_vypor_kart_c10;
+
+alter table ru_vypor_kart 
+  add constraint  (check ( prippopl IN (-1 ,0 ,1 ,2 )) constraint ru_vypor_kart_c10);
+
+
+ROLLBACK WORK;
+
+--End of A61658_RN00335314

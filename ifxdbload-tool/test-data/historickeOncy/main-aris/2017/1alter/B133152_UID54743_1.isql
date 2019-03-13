@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B133152_UID54743_1
+-- @TC:ONCE: DESCRIPTION = Reakce pomocníku pro výběr produktu na sadu vazeb s typem smlouvy {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE eu_sadavazebrozhod_acis
+  ADD tsml   CHAR(4) BEFORE poznamka,
+  ADD prvniotazka   INTEGER BEFORE poznamka;
+
+
+ALTER TABLE eu_sadavazebrozhod_cis
+  ADD tsml   CHAR(4) BEFORE poznamka,
+  ADD prvniotazka   INTEGER BEFORE poznamka;
+
+--FK
+CREATE INDEX eu_sadavazebrozhod_cis_i_f1 ON eu_sadavazebrozhod_cis(prvniotazka);
+ALTER TABLE eu_sadavazebrozhod_cis ADD CONSTRAINT FOREIGN KEY(prvniotazka) REFERENCES eu_otazkarozhod_cis(serno) CONSTRAINT eu_sadavazebrozhod_cis_f1;
+
+--CHECKS
+ALTER TABLE eu_sadavazebrozhod_cis
+ADD CONSTRAINT (CHECK (tsml IN ('SUFO', 'PFSU')) CONSTRAINT eu_sadavazebrozhod_cis_c1);
+
+
+ROLLBACK WORK;
+
+--End of B133152_UID54743_1

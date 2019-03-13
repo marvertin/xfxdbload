@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B127056_RN00452528_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření modelování při tvorbě dodatků {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table pro_contractstatus ADD (
+
+  --Úroková sazba PÚ platná od data změny úrokové sazby
+  changedIntrsRateBridgeLoan   DECIMAL(5,2),
+  
+  --Datum, od kterého platí jiná úroková sazba dle položky Změněná úroková sazba PÚ
+  dateOfChangeIntrsRateBridgeLoan   DATE,
+  
+  --Úroková sazba SÚ platná od data změny úrokové sazby
+  changedIntrsRateRegularCredit   DECIMAL(5,2),
+  
+  --Datum, od kterého platí jiná úroková sazba dle položky Změněná úroková sazba SÚ
+  dateOfChangeIntrsRateRegularCredit   DATE
+);
+
+ROLLBACK WORK;
+
+--End of B127056_RN00452528_1

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136398_UID85904_5
+-- @TC:ONCE: DESCRIPTION = RSTS-29141: TF001993 - Číselníky - Číselník vazeb - problém s určením a vytvořením nové sady {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+ALTER TABLE eu_sadavazebrozhod_cis modify id   integer NOT NULL;
+
+ROLLBACK WORK;
+
+--End of B136398_UID85904_5

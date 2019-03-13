@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A46192_RN00300984_3
+-- @TC:ONCE: DESCRIPTION = Nelze vytisknout výpisy programem artvvypis - druh 480 (komerèní úvìry) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('TV', '*', '*', 'defkoresp', 0, 1, 'Klientské úèetnictví', 'Výpis z konta', 'Statements', 'Defaultní korespondence pro výpisy z kont');
+
+ROLLBACK WORK;
+
+--End of A46192_RN00300984_3

@@ -1,0 +1,22 @@
+create procedure RSTS_30719_stavSplac()
+
+define _realn Int;
+define _smlouva Dec(16,0);
+define _tsml Char(4);
+
+BEGIN WORK;
+
+foreach cc1 with hold for
+  SELECT DISTINCT realn INTO _realn FROM RU_StavSplaceni_Den
+  
+  SELECT smlouva, tsml INTO _smlouva, _tsml FROM RU_Real_Mat WHERE realn = _realn;
+  
+  UPDATE RU_StavSplaceni_Den SET (smlouva, tsml) = (_smlouva, _tsml) WHERE realn = _realn AND smlouva IS NULL;
+
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+
+end procedure;

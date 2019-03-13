@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A41970_RN00275819_1
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table EU_VariaPU_Cis
+
+  --Popis varianty použitelný pro klienta ve webové aplikaci. Pozn.: Aktuálnì pouze pro modelování.
+  add klientText   CHAR(50),
+  
+  --Pøíznak, zda je daná varianta PÚ nabízena klientovi (na této položce jsou závislé další evidence)
+  add klientNabizet   Integer,
+  add constraint CHECK (klientnabizet IN (0,1)) CONSTRAINT eu_variapu_cis_djap
+;
+
+alter table Pro_BridgeLoanVariant
+
+  --Popis varianty použitelný pro klienta ve webové aplikaci. Pozn.: Aktuálnì pouze pro modelování.
+  add klientText   CHAR(50),
+  
+  --Pøíznak, zda je daná varianta PÚ nabízena klientovi pro modelování v CIBIS-Web.
+  add klientNabizet   Integer  DEFAULT 0 NOT NULL,
+  add constraint CHECK (klientnabizet IN (0,1)) CONSTRAINT pro_bridgeloanvariant_djar
+;
+
+ROLLBACK WORK;
+
+--End of A41970_RN00275819_1

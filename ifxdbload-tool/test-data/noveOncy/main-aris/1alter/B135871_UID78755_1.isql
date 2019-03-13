@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135871_UID78755_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24996: Zavést číselník "Definice povolených interních druhů pobytu" {STORY}
+
+
+BEGIN WORK;
+
+CREATE UNIQUE INDEX eo_druhpobytinterdef_cis_u1 ON eo_druhpobytinterdef_cis(nazev);
+ALTER TABLE eo_druhpobytinterdef_cis ADD CONSTRAINT (UNIQUE (nazev) CONSTRAINT eo_druhpobytinterdef_cis_u1);
+
+ROLLBACK WORK;
+
+--End of B135871_UID78755_1

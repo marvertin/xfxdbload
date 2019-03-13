@@ -1,0 +1,229 @@
+-- @TC:ONCE: ID = V2, B130662_RSTS-3447_1
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+CREATE TABLE eu_kontrolavsth_cis (
+  serno   SERIAL NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  platnostod   DATE NOT NULL,
+  platnostdo   DATE,
+  popis   char(50) NOT NULL,
+  poznamka   VARCHAR(255),
+  rozlisitpohlavi   Integer  DEFAULT 0 NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (rozlisitpohlavi IN (0,1)) CONSTRAINT eu_kontrolavsth_cis_d1sw,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_kontrolavsth_cis_d1sr
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolavsth_cis_pk ON eu_kontrolavsth_cis(serno);
+ALTER TABLE eu_kontrolavsth_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_kontrolavsth_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE eu_kontrolavsth_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  platnost   Integer  DEFAULT 0 NOT NULL,
+  platnostod   DATE NOT NULL,
+  platnostdo   DATE,
+  popis   char(50) NOT NULL,
+  poznamka   VARCHAR(255),
+  rozlisitpohlavi   Integer  DEFAULT 0 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_kontrolavsth_acis_d1t8,
+  CHECK (rozlisitpohlavi IN (0,1)) CONSTRAINT eu_kontrolavsth_acis_d1t2
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolavsth_acis_pk ON eu_kontrolavsth_acis(idarch);
+ALTER TABLE eu_kontrolavsth_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_kontrolavsth_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE eu_kontrolavstb_cis (
+  serno   SERIAL NOT NULL,
+  parentserno   INTEGER NOT NULL,
+  delkauveruroky   Integer,
+  koefzivmin   DECIMAL(16,2),
+  minprijemej   DECIMAL(16,2),
+  pohlavi   Integer,
+  vekprisplatnosti   Integer,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_kontrolavstb_cis_d1ti
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolavstb_cis_pk ON eu_kontrolavstb_cis(serno);
+ALTER TABLE eu_kontrolavstb_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_kontrolavstb_cis_pk;
+
+--FK
+CREATE INDEX eu_kontrolavstb_cis_i_f1 ON eu_kontrolavstb_cis(parentserno);
+ALTER TABLE eu_kontrolavstb_cis ADD CONSTRAINT FOREIGN KEY(parentserno) REFERENCES eu_kontrolavsth_cis(serno) CONSTRAINT eu_kontrolavstb_cis_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE eu_kontrolavstb_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  parentserno   INTEGER NOT NULL,
+  delkauveruroky   Integer,
+  koefzivmin   DECIMAL(16,2),
+  minprijemej   DECIMAL(16,2),
+  pohlavi   Integer,
+  vekprisplatnosti   Integer,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_kontrolavstb_acis_d1ts
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolavstb_acis_pk ON eu_kontrolavstb_acis(idarch);
+ALTER TABLE eu_kontrolavstb_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_kontrolavstb_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE eu_prijemhranice_cis (
+  serno   SERIAL NOT NULL,
+  parentserno   INTEGER NOT NULL,
+  hranicebonity   DECIMAL(16,2),
+  hranicedsti   DECIMAL(6, 2),
+  hranicedti   DECIMAL(6, 2),
+  prijemod   DECIMAL(16,2),
+  prijemdo   DECIMAL(16,2),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_prijemhranice_cis_d1u3
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_prijemhranice_cis_pk ON eu_prijemhranice_cis(serno);
+ALTER TABLE eu_prijemhranice_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_prijemhranice_cis_pk;
+
+--FK
+CREATE INDEX eu_prijemhranice_cis_i_f1 ON eu_prijemhranice_cis(parentserno);
+ALTER TABLE eu_prijemhranice_cis ADD CONSTRAINT FOREIGN KEY(parentserno) REFERENCES eu_kontrolavstb_cis(serno) CONSTRAINT eu_prijemhranice_cis_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE eu_prijemhranice_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  parentserno   INTEGER NOT NULL,
+  hranicebonity   DECIMAL(16,2),
+  hranicedsti   DECIMAL(6, 2),
+  hranicedti   DECIMAL(6, 2),
+  prijemod   DECIMAL(16,2),
+  prijemdo   DECIMAL(16,2),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_prijemhranice_acis_d1ud
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_prijemhranice_acis_pk ON eu_prijemhranice_acis(idarch);
+ALTER TABLE eu_prijemhranice_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_prijemhranice_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE eu_kontrolavsthv_cis (
+  serno   SERIAL NOT NULL,
+  refheader   INTEGER,
+  refvariapu   CHAR(10),
+  platnost   Integer  DEFAULT 1 NOT NULL,   
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolavsthv_cis_pk ON eu_kontrolavsthv_cis(serno);
+ALTER TABLE eu_kontrolavsthv_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_kontrolavsthv_cis_pk;
+
+--FK
+CREATE INDEX eu_kontrolavsthv_cis_i_f1 ON eu_kontrolavsthv_cis(refheader);
+ALTER TABLE eu_kontrolavsthv_cis ADD CONSTRAINT FOREIGN KEY(refheader) REFERENCES eu_kontrolavsth_cis(serno) CONSTRAINT eu_kontrolavsthv_cis_f1;
+CREATE INDEX eu_kontrolavsthv_cis_i_f2 ON eu_kontrolavsthv_cis(refvariapu);
+ALTER TABLE eu_kontrolavsthv_cis ADD CONSTRAINT FOREIGN KEY(refvariapu) REFERENCES eu_variapu_cis(varid) CONSTRAINT eu_kontrolavsthv_cis_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE eu_kontrolavsthv_acis (
+  idarch   SERIAL NOT NULL,
+  serno   Integer,
+  refheader   INTEGER,
+  refvariapu   CHAR(10),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_kontrolavsthv_acis_pk ON eu_kontrolavsthv_acis(idarch);
+ALTER TABLE eu_kontrolavsthv_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_kontrolavsthv_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+ROLLBACK WORK;
+
+--End of B130662_RSTS-3447_1

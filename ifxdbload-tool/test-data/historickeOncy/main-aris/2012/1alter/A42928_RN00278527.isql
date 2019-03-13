@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A42928_RN00278527
+-- @TC:ONCE: DESCRIPTION = ad RN00278306 - deadlocky..EOM x Uživatelé -2
+
+BEGIN WORK;
+
+CREATE INDEX creditregaction_i2 ON creditregaction(xcreditcontract, xcreditcontracttype);
+
+ROLLBACK WORK;

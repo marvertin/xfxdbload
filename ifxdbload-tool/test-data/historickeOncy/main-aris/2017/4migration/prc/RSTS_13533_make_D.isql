@@ -1,0 +1,112 @@
+CREATE PROCEDURE RSTS_13533_make_D (ABezTransakci integer default 0, ADebugFile    Char(30) default null)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _sernodod     BigInt;
+define o_datplatnost Date;
+define o_datuzav     Date;
+define _datplatnost  Date;
+define _datuzav      Date;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+   BEGIN WORK;
+end if;
+
+let _serDM = TW_DM_Start('RSTS_13533', 'RSTS_13533'
+  , 'RSTS_13533 - Chyba v migraci dodatků'
+);
+
+if ABezTransakci = 0 then
+   COMMIT WORK;
+   BEGIN WORK;
+end if;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, sernodod, datplatnost, datuzav
+     INTO _ser,_sernodod,_datplatnost,_datuzav
+     FROM RSTS_13533
+    WHERE zprac < 0
+    ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulky
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE RSTS_13533
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+
+    --vlastni algoritmus migrace
+    UPDATE eu_dodatekhead_mat SET (datplatnost, datuzav) = (_datplatnost,_datuzav) WHERE serno = _sernodod;
+    
+    -- zaznam o zmenenem objektu
+    let _serObjekt = TW_DM_VlozObjekt(_serDM, 'T', 'eu_dodatekhead_mat', 'U', _sernodod);
+    --konec algoritmu migrace
+
+    --nastavit priznak na zpracovano +1
+    UPDATE RSTS_13533 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+
+call TW_DM_End(_serDM);
+INSERT INTO  db_info (kdo, co) VALUES (USER, 'RSTS_13533'); 
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+  trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+end procedure;--end of RSTS_13533_make_D

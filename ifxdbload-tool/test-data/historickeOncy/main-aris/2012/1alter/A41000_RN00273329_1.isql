@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A41000_RN00273329_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní pole Daòová úspora do výsledkù pøi modelování úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_simulatedturnover
+
+  --Zaplacený úrok
+  --Význam: Zaplacený bìžný úrok úvìru v rámci daného pohybu.
+  --Doména hodnot: Èástka (Kè).
+ add settledInterest   DECIMAL(16, 2)
+;
+
+alter table pro_client
+
+  --Typ osoby klienta
+  --Význam: Typ osoby klienta 
+  --Doména hodnot: Pevný výèet (Fyzická / Právnická zisková / Právnická nezisková).
+  add  clienttype   CHAR(2)
+;
+
+ROLLBACK WORK;
+
+--End of A41000_RN00273329_1

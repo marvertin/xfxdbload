@@ -1,0 +1,85 @@
+-- @TC:ONCE: ID = V2, B121743_RN00415479_3
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 73;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 74;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 75;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 76;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 77;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 78;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 79;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 80;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 81;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 82;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 83;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 84;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 85;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 86;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 87;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 88;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 89;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 90;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 91;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 92;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 93;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 94;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 95;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 96;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 97;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 98;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 99;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 100;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 101;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 102;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 103;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 104;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 105;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 106;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 107;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 108;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 109;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 110;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 111;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 112;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 113;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 114;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 115;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 116;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 117;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 118;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 119;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 120;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 121;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 122;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 123;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 124;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 125;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 126;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 127;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 128;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 129;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 130;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 131;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 132;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 133;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 134;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 135;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 136;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 137;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 138;
+update ep_zahrnutipohybucfmodel_cis set period = 'B' where id = 139;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 140;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 141;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 142;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 143;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 144;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 145;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 146;
+update ep_zahrnutipohybucfmodel_cis set period = 'A' where id = 147;
+
+
+ROLLBACK WORK;
+
+--End of B121743_RN00415479_3

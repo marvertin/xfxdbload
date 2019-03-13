@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135413_UID72826_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22298: Doplnit index na účet {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CREATE INDEX ah_posplatdluh_kart_i2 ON ah_posplatdluh_kart(ucet);
+
+CREATE INDEX ah_predsplatdluh_kart_i2 ON ah_predsplatdluh_kart(ucet);
+
+ROLLBACK WORK;
+
+--End of B135413_UID72826_1

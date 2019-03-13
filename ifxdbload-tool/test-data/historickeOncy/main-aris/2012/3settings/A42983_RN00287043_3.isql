@@ -1,0 +1,42 @@
+-- @TC:ONCE: ID = V2, A42983_RN00287043_3
+-- @TC:ONCE: DESCRIPTION = [mp] oprava velikosti klíèù Db registrù pro Scoring
+
+BEGIN WORK;
+
+--Pryè s velkým Scoringem
+delete from tw_registr_cis
+  where oblast = 'EU' and uloha = 'Scoring'
+;
+
+--Pryè s velkým RevizeUN
+delete from tw_registr_cis
+  where oblast = 'EU' and uloha = 'RevizeUN'
+;
+
+call TW_RegSetOrAddKey('EU', 'scoring', 'sc1', 'nepovinOsoby', 1, 1)
+;
+
+call TW_RegSetOrAddKey('EU', 'scoring', 'sc1', 'autoScPredani', 1, 1)
+;
+
+call TW_RegSetOrAddKey('EU', 'scoring', 'sc1', 'autoScStorno', 1, 1)
+;
+
+call TW_RegSetOrAddKey('EU', 'scoring', 'sc1', 'autoScOdmit', 1, 1)
+;
+
+
+call TW_RegSetOrAddKey('EU', 'scoring', 'sc2', 'nepovinOsoby', 1, 1)
+;
+call TW_RegSetOrAddKey('EU', 'scoring', 'sc2', 'autoScStorno', 1, 1)
+;
+call TW_RegSetOrAddKey('EU', 'scoring', 'sc2', 'autoScZamit', 1, 1)
+;
+
+
+call tw_regsetoraddkey('EU', 'revizeUN', 'kontrolyZmenaSm', '*', 1, 1)
+;
+
+ROLLBACK WORK;
+
+--End of A42983_RN00287043_3

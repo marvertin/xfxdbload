@@ -1,0 +1,108 @@
+-- @TC:ONCE: ID = V2, A40965_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál - zprávy {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE ep_zpravadavka_prot (
+  davkaid   INTEGER NOT NULL,
+  zdroj   CHAR(10),
+  nacuser   CHAR(20),
+  nactime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  zrususer   CHAR(20),
+  zrustime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  datumdavky   DATE,
+  stav   CHAR(10)
+)lock mode row;
+
+--PK
+ALTER TABLE ep_zpravadavka_prot ADD CONSTRAINT PRIMARY KEY(davkaid) CONSTRAINT ep_zpravadavka_prot_pk;
+
+
+
+CREATE TABLE ep_zpravatyp_cis (
+  id   SERIAL NOT NULL,
+  nazev   CHAR(100),
+  popis   VARCHAR(255),
+  platnost   Integer,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_zpravatyp_cis_dwsu
+)lock mode row;
+
+--PK
+ALTER TABLE ep_zpravatyp_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ep_zpravatyp_cis_pk;
+
+--FK
+
+--INDEXES
+
+CREATE TABLE ep_zprava_kart (
+  zpravaid   SERIAL NOT NULL,
+  davkaid   INTEGER,
+  predmet   CHAR(200),
+  predmetdotazdef   CHAR(200),
+  predmetakcepdef   CHAR(200),
+  text   CHAR(2000),
+  textdotazdef   CHAR(2000),
+  textakcepdef   CHAR(2000),
+  prijemcereakce   CHAR(10),
+  emailprijemcereakce   VARCHAR(255),
+  druh   CHAR(10),
+  typ   INTEGER,
+  stav   CHAR(10),
+  nepersonifikovana   Integer,
+  reakce   Integer,
+  platnostod   DATE,
+  platnostdo   DATE,
+  odestime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  odesuser   CHAR(20),
+  zrustime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  zrususer   CHAR(20)
+)lock mode row;
+
+--PK
+ALTER TABLE ep_zprava_kart ADD CONSTRAINT PRIMARY KEY(zpravaid) CONSTRAINT ep_zprava_kart_pk;
+
+--FK
+CREATE INDEX ep_zprava_kart_i_fk ON ep_zprava_kart(davkaid);
+ALTER TABLE ep_zprava_kart ADD CONSTRAINT FOREIGN KEY(davkaid) REFERENCES ep_zpravadavka_prot(davkaid) CONSTRAINT ep_zprava_kart_fk;
+
+CREATE TABLE ep_zpravaprijemce_kart (
+  zpravaid   INTEGER NOT NULL,
+  os   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+ALTER TABLE ep_zpravaprijemce_kart ADD CONSTRAINT PRIMARY KEY(zpravaid,os) CONSTRAINT ep_zpravaprijemce_kart_pk;
+
+--FK
+CREATE INDEX ep_zpravaprijemce_kart_i_fk1 ON ep_zpravaprijemce_kart(zpravaid);
+ALTER TABLE ep_zpravaprijemce_kart ADD CONSTRAINT FOREIGN KEY(zpravaid) REFERENCES ep_zprava_kart(zpravaid) CONSTRAINT ep_zpravaprijemce_kart_fk1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+CREATE TABLE ep_zpravareakce_den (
+  reakceid   SERIAL NOT NULL,
+  zpravaid   INTEGER,
+  prijemceid   INTEGER,
+  reagujiciid   INTEGER,
+  typ   CHAR(10),
+  datumreakce   DATE
+)lock mode row;
+
+--PK
+ALTER TABLE ep_zpravareakce_den ADD CONSTRAINT PRIMARY KEY(reakceid) CONSTRAINT ep_zpravareakce_den_pk;
+
+--FK
+CREATE INDEX ep_zpravareakce_den_i_fk1 ON ep_zpravareakce_den(zpravaid,prijemceid);
+ALTER TABLE ep_zpravareakce_den ADD CONSTRAINT FOREIGN KEY(zpravaid,prijemceid) REFERENCES ep_zpravaprijemce_kart(zpravaid,os) CONSTRAINT ep_zpravareakce_den_fk1;
+
+ROLLBACK;
+

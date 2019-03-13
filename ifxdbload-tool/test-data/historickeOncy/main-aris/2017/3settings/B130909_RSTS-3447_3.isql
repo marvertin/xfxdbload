@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B130909_RSTS-3447_3
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+-- Číselník Typ kontrol
+UPDATE eu_kontrolatyp_cis SET KIND='I' WHERE TYP = 'DTI';
+UPDATE eu_kontrolatyp_cis SET KIND='T' WHERE TYP = 'DSTI';
+UPDATE eu_kontrolatyp_cis SET KIND='J' WHERE TYP = 'MINPRI';
+UPDATE eu_kontrolatyp_cis SET KIND='V' WHERE TYP = 'VEK';
+UPDATE eu_kontrolatyp_cis SET KIND='D' WHERE TYP = 'DELKA';
+    
+ROLLBACK WORK;
+
+--End of B130909_RSTS-3447_3

@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A42677_RN00269923_U07
+-- @TC:ONCE: DESCRIPTION = Customizace U07 RN00239923
+BEGIN WORK;
+
+Call TW_RegSetOrAddKey ('RU','sprVym','rezimy','distribucniRezim','',1,
+                        'Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Distribuèního zvláštního režim úvìru v pozdním vymáhání.');
+
+Call TW_RegSetOrAddKey ('RU','sprVym','zarazeni','stupUpom','',1,
+                        'Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Jedna z možných podmínek pro zaøazení smlouvy do distribuèního zvláštního režimu v pozdním vymáhání. Podmínka na stupeò upomínky. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');           
+                        
+Call TW_RegSetOrAddKey ('RU','sprVym','zarazeni','dluhSpl','',1,
+                        'Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Jedna z možných podmínek pro zaøazení smlouvy do distribuèního zvláštního režimu v pozdním vymáhání. Podmínka na poèet dlužných splátek. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.');  
+                        
+Call TW_RegSetOrAddKey ('RU','sprVym','zarazeni','prodleni','',1,
+                        'Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Jedna z možných podmínek pro zaøazení smlouvy do distribuèního zvláštního režimu v pozdním vymáhání. Podmínka na poèet dní po splatnosti. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.'); 
+                        
+Call TW_RegSetOrAddKey ('RU','sprVym','zarazeni','dluzVkl','',1,
+                        'Úvìr','Vymáhání úvìru','Správa vymáhané pohledávky','Jedna z možných podmínek pro zaøazení smlouvy do distribuèního zvláštního režimu v pozdním vymáhání. Podmínka na poèet dlužných vkladù. Pokud nenastaveno nebo prázdné, podmínka se nezohledòuje.'); 
+                        
+  
+ROLLBACK;  

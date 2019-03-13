@@ -1,0 +1,61 @@
+CREATE PROCEDURE RSTS2951_sale_make_D()
+
+-- Potlačení kontroly CEE pro rozpracované žádosti v Sale
+
+define _serno           BigInt;
+define _serZadostKontr  Int;
+define _datprov         date;
+define _refosoba        BigInt;
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+let _datprov = ap_datprov();
+
+BEGIN WORK;
+
+foreach cc2 with hold for
+   select serno
+   into  _serno
+   from seu_zadost_mat 
+   where stav in ('ZAREGIS', 'VYTVORE', 'ZKONTRO', 'OSCOROV', 'OVERENA', 'SPLNAVR', 'ZKOMPLE', 'CEKPRED', 'DOPLNOV')
+   
+   --vlastni algoritmus migrace
+    insert into seu_dispeckontrzad_mat ( refseuzadost, typ,   pocetkol, pozadovano, vysledek, stav, datvytvoreni,  datzmeny)
+    values                             (_serno,        'CEE', 0,        0,          'N',      'V', _datprov,      _datprov);
+    
+    let _serZadostKontr = TW_LastSer();
+    
+    CALL SEU_CeeOsSeznamVytv(112233, _serno, _datprov, 0);
+    
+    foreach 
+      select  osoba
+      into   _refosoba
+      from SEU_CeeOsSeznam_Tmp
+      where owner = 112233
+        and pozadovano = 1 
+        and predano = 0
+      
+       insert into seu_dispeckontros_mat ( refdispeckontrzad,  refosoba,  pocetkol, pozadovano, vysledek, stav, datvytvoreni,  datzmeny)
+       values                            (_serZadostKontr,    _refosoba,  0,        0,          'N',      'V', _datprov,      _datprov);
+    end foreach;
+    
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+
+--konec transakce pripravy
+COMMIT WORK;
+end procedure

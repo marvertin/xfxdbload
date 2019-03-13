@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B133640_UID56892_1
+-- @TC:ONCE: DESCRIPTION = Rozšířit zpracovávaná data z CRIBIS o další osoby ve vztahu k dotazované firmě
+
+BEGIN WORK;
+
+ALTER TABLE pef_firmaodpovedo_den 
+  ADD skupina VARCHAR(25) BEFORE ico;
+
+
+ALTER TABLE pef_firmaosoba_cis 
+  ADD skupina  VARCHAR(25) BEFORE nazev;
+
+ROLLBACK WORK;
+
+--End of B133640_UID56892_1

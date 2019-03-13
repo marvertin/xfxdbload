@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A40358_RN00246306
+-- @TC:ONCE: DESCRIPTION = Výpoèet sumárních hodnot stavebního spoøení a úvìrù k datu/úmrtí (tzv. dìdictví)
+
+BEGIN WORK;
+
+UPDATE  ES_Problem_Cis set evidence = 'N';
+
+ROLLBACK WORK;

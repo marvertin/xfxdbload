@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135720_UID65089_1
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+drop index ru_opparametry_cis_i1;
+create index ru_opparametry_cis_i1 on ru_opparametry_cis(stadiumifrs, treal, indikzajistnemo, urg, dobadefaultu, mesic);
+
+ROLLBACK WORK;
+
+--End of B135720_UID65089_1

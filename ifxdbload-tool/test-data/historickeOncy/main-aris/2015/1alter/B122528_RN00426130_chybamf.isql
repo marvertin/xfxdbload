@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B122528_RN00426130_chybamf
+-- @TC:ONCE: DESCRIPTION = Požadavek k SP - Komunikace s MF{CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE sp_chybamf_cis
+    ADD dozadsp3kolo smallint DEFAULT 1 BEFORE platnost;
+
+ALTER TABLE sp_chybamf_acis
+    ADD dozadsp3kolo smallint BEFORE platnost;
+
+ROLLBACK WORK;
+
+--End of B122528_RN00426130_chybamf
+
+

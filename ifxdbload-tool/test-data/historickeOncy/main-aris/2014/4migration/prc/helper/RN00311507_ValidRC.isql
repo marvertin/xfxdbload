@@ -1,0 +1,18 @@
+-- funkce, která vyhodnotí validitu RC standardní funkcí a zároveň zkontroluje, zda není RC duplicitní s existujícím nebo již vygenerovaným
+-- návratové hodnoty:
+-- 0 - validní RC
+-- 1 - nevalidní RČ
+CREATE FUNCTION RN00311507_ValidRC (ARC Char(13))
+RETURNING integer;
+
+if tw_validrc(ARC) <> 0 then 
+  return 1;
+elif EXISTS(SELECT 1 FROM eo_fo_mat WHERE rc = ARC) then
+  return 1;
+elif EXISTS(SELECT 1 FROM RN00311507_krok_1_FO WHERE rc = ARC) then
+  return 1;
+end if
+
+return 0;
+
+END FUNCTION;

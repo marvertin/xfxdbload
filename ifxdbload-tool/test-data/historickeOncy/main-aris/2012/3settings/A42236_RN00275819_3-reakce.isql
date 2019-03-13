@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, A42236_RN00275819_3-reakce
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE TW_EMAILTYP_CIS SET (predmet, obsah) = ('DOT_NAB: <<PREDMET>>','<<JMENO_KLIENTA>>, <<SMLOUVY>>\n============================================================\n<<TEXT>>') WHERE zkratka='K_DOTAZ_NAB'; 
+UPDATE TW_EMAILTYP_CIS SET (predmet, obsah) = ('AKC_NAB: <<PREDMET>>','<<JMENO_KLIENTA>>, <<SMLOUVY>>\n============================================================\n<<TEXT>>') WHERE zkratka='K_AKCTP_NAB';
+UPDATE TW_EMAILTYP_CIS SET (predmet, obsah) = ('ODM_NAB: <<PREDMET>>','<<JMENO_KLIENTA>>, <<SMLOUVY>>\n============================================================\n<<TEXT>>') WHERE zkratka='K_ODMN_NAB';
+UPDATE TW_EMAILTYP_CIS SET (predmet, obsah) = ('<<PREDMET>>','<<JMENO_KLIENTA>>, <<SMLOUVY>>\n============================================================\n<<TEXT>>') WHERE zkratka='K_OBECNY_DOT';
+
+call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'dotaz_sdeleni', 'K_DOTAZ_SDE', 0);
+
+INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, 
+   maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost)
+  VALUES('K_DOTAZ_SDE', 'Dotaz ke sdìlení', null, null, 'DOT_SDE: <<PREDMET>>','<<JMENO_KLIENTA>>, <<SMLOUVY>>\n============================================================\n<<TEXT>>', null, 0,
+  5, 24, 0, 'A', 1, 1);
+
+-- oprava staršího once skriptu: #Typ e-mailu pro obecný dotaz klienta#
+call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'obecny_dotaz', 'K_OBECNY_DOT', 0); 
+  
+ROLLBACK WORK;
+
+--End of A42236_RN00275819_3-reakce

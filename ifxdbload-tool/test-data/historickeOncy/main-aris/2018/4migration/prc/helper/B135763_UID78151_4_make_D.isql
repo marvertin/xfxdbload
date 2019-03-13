@@ -1,0 +1,89 @@
+CREATE PROCEDURE B135763_UID78151_4_make_D (-- vstupni parametry
+  ADebugFile  CHAR(30) DEFAULT NULL -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+DEFINE _ser             INT;
+DEFINE _serDM           INT;
+DEFINE _serobjekt       INT;
+
+DEFINE _serno           BIGINT;
+DEFINE _budoucinhz      DEC(16,2);
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+
+--osetreni chyby pri konstrukci kursoru
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+IF(PD_TraceRequestedBegin(ADebugFile) = 1) THEN
+  trace ON;
+END IF;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_24649', 'UID78151_4', 'NHZ - migrace');
+
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+FOREACH c1 WITH hold FOR
+  SELECT ser, serno,  budoucinhz
+  INTO  _ser,_serno, _budoucinhz
+  FROM B135763_UID78151_4
+  WHERE zprac < 0
+  ORDER BY ser
+  
+  BEGIN
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulky
+    ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE B135763_UID78151_4
+      SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+      WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    END EXCEPTION;
+
+    -- Vlastní nastavení
+    UPDATE EU_Zajist_mat SET budoucinhz = NULL, optimNhz =  _budoucinhz WHERE serno = _serno;
+
+    --nastaví příznak zpracováno na 1
+    UPDATE B135763_UID78151_4 SET zprac = 1, NumErr = NULL, ISAMErr = NULL, TextErr = NULL WHERE ser = _ser;
+  END;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+END FOREACH;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+CALL TW_DM_End(_serDM);
+
+IF(PD_TraceRequestedEnd(ADebugFile) = 1) THEN
+   trace OFF;
+END IF;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+END PROCEDURE;

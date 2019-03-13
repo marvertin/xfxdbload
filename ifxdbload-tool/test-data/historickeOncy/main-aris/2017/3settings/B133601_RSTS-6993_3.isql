@@ -1,0 +1,48 @@
+-- @TC:ONCE: ID = V2, B133601_RSTS-6993_3
+-- @TC:ONCE: DESCRIPTION = Změny v evidencích Main a provizích {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call tw_regDelKey('FS', '*', 'K1', 'K');
+call tw_regDelKey('FS', '*', 'K1', 'od');
+call tw_regDelKey('FS', '*', 'K2', 'K');
+call tw_regDelKey('FS', '*', 'K2', 'od');
+call tw_regDelKey('FS', '*', 'K3', 'K');
+call tw_regDelKey('FS', '*', 'K3', 'od');
+call tw_regDelKey('FS', '*', 'K4', 'K');
+call tw_regDelKey('FS', '*', 'K4', 'od');
+
+call tw_regDelKey('FS', 'PUSU', 'K1', 'K');
+call tw_regDelKey('FS', 'PUSU', 'K1', 'od');
+call tw_regDelKey('FS', 'PUSU', 'K2', 'K');
+call tw_regDelKey('FS', 'PUSU', 'K2', 'od');
+call tw_regDelKey('FS', 'PUSU', 'K3', 'K');
+call tw_regDelKey('FS', 'PUSU', 'K3', 'od');
+call tw_regDelKey('FS', 'PUSU', 'K4', 'K');
+call tw_regDelKey('FS', 'PUSU', 'K4', 'od');
+
+call tw_regDelKey('FS', 'SSFO', 'K1', 'K');
+call tw_regDelKey('FS', 'SSFO', 'K1', 'od');
+call tw_regDelKey('FS', 'SSFO', 'K2', 'K');
+call tw_regDelKey('FS', 'SSFO', 'K2', 'od');
+call tw_regDelKey('FS', 'SSFO', 'K3', 'K');
+call tw_regDelKey('FS', 'SSFO', 'K3', 'od');
+call tw_regDelKey('FS', 'SSFO', 'K4', 'K');
+call tw_regDelKey('FS', 'SSFO', 'K4', 'od');
+
+call tw_regDelKey('FS', 'SUFO', 'K1', 'K');
+call tw_regDelKey('FS', 'SUFO', 'K1', 'od');
+call tw_regDelKey('FS', 'SUFO', 'K2', 'K');
+call tw_regDelKey('FS', 'SUFO', 'K2', 'od');
+call tw_regDelKey('FS', 'SUFO', 'K3', 'K');
+call tw_regDelKey('FS', 'SUFO', 'K3', 'od');
+call tw_regDelKey('FS', 'SUFO', 'K4', 'K');
+call tw_regDelKey('FS', 'SUFO', 'K4', 'od');
+
+call tw_regDelKey('EO', 'FINSIT', '*', 'TYPROLE');
+call tw_regDelKey('EO', 'FINSIT', '*', 'VARIANTA');
+
+ROLLBACK WORK;
+
+--End of B133601_RSTS-6993_3

@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, B126265_RN00426005_1
+-- @TC:ONCE: DESCRIPTION = Změny pravidel v přeúčtování BU -> BUZA {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE sp_ginfo4_kart (
+    ser             SERIAL,
+    zprac           Integer  ,
+    sqlcodenum      INTEGER  ,
+    isamcode        INTEGER  ,
+    errtext         VARCHAR(255)
+) LOCK MODE ROW
+;
+CREATE unique INDEX sp_ginfo4_kart_pk ON sp_ginfo4_kart (ser) ;
+CREATE INDEX sp_ginfo4_kart_i1 ON sp_ginfo4_kart (zprac) ;
+ALTER TABLE sp_ginfo4_kart ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT sp_ginfo4_kart_pk;
+
+CREATE TABLE sp_kick_kart (
+    ser             SERIAL,
+    zprac           Integer  ,
+    sqlcodenum      INTEGER  ,
+    isamcode        INTEGER  ,
+    errtext         VARCHAR(255)
+) LOCK MODE ROW
+;
+
+CREATE unique INDEX sp_kick_kart_pk ON sp_kick_kart (ser) ;
+CREATE INDEX sp_kick_kart_i1 ON sp_kick_kart (zprac) ;
+ALTER TABLE sp_kick_kart ADD CONSTRAINT PRIMARY KEY (ser)  CONSTRAINT sp_kick_kart_pk;
+
+
+ALTER TABLE  sp_zadmf_kart ADD zaklsp DEC(16,2) before refuser;
+ALTER TABLE  sp_zadmf_kart ADD zaklspused DEC(16,2) before refuser;
+ALTER TABLE  sp_zadmf_kart ADD serbubuza INTEGER before refuser;
+
+ROLLBACK WORK;
+
+--End of B126265_RN00426005_1

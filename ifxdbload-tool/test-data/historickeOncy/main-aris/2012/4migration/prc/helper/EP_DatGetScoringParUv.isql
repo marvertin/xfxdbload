@@ -1,0 +1,520 @@
+-- vrací údaje úvìru
+create function EP_DatGetScoringParUv(ADatAkce Date,
+                                      ATypSC Char(3), 
+                                      AIdOS Int, 
+                                      ASmlouva Dec(16,0), 
+                                      ATsml Char(4))
+returning
+  Char(2),     --creditType
+  Dec(16,2),   --bcAmount
+  Dec(16,2),   --creditAmount
+  Dec(16,2),   --bcRepayment
+  Dec(16,2),   --creditRepayment
+  Int,         --creditDuration
+  Char(1),     --withdrawalWay
+  Int,         --purposeBuy
+  Int,         --purposeModernFlat
+  Int,         --purposeModernHouse
+  Int,         --purposeConstruct
+  Int,         --purposeOther
+  Char(5),     --ccAgentRegion
+  Int,         --insurNone
+  Int,         --insurRealty
+  Int,         --insurGuarantor
+  Int,         --insurOther
+  Char(10),    --variant
+  Int,         --repaymentWay
+  Int,         --BCDuration
+  Int;         --subdebtorNo 
+
+define _creditType            Char(2);
+define _bcAmount              Dec(16,2);
+define _creditAmount          Dec(16,2);
+define _bcRepayment           Dec(16,2);
+define _creditRepayment       Dec(16,2);
+define _creditDuration        Int;
+define _withdrawalWay         Char(1);
+define _purposeBuy            Int;
+define _purposeModernFlat     Int;
+define _purposeModernHouse    Int;
+define _purposeConstruct      Int;
+define _purposeOther          Int;
+define _ccAgentRegion         Char(5);
+define _insurNone             Int;
+define _insurRealty           Int;
+define _insurGuarantor        Int;
+define _insurOther            Int;
+define _variant               Char(10);
+define _repaymentWay          Int;
+define _bcDuration            Int;
+define _subdebtorNo           Int;
+
+define _creditrqcontrolreg_id Int;
+define _xcontractnumber       Dec(16,0);
+define _xcontracttype         Char(4);
+define _xcreditrqstatus       Int;
+define _xcramount             Dec(16,2);
+define _xrequestdate          Date;
+define _xcreditmaturitydate   Date;
+define _pocet                 Int;
+define _xpurposemodern        Int;
+define _purposemoderntypeid   Int;
+define _xagentCompose         Dec(16,0);
+define _xbcmaturitydate       Date;
+define _xpaywaytype           Char(1);
+define _datnav                Date;
+define _datsplatpu            Date;
+define _idSub                 Int;
+
+define _idGet                 Int;
+define _typroleGet            char(2);
+define _reftimeGet            date;
+define _reftimeGet2           date;
+define _prCount               int;
+define _zaCount               int;
+define _subCount              int;
+define _zaExists              int;
+define _osGet                 int;
+define _smlGet                dec(16,0);
+define _stavGet               char(1);
+define _stavGet2              char(1);
+define _stavGet3              char(1);
+define _stavGet4              char(1);
+define _typzadost             Char(1);
+define _zajistbezzaj          Int;
+define _zajistvinkar          Int;
+define _zajist                Int;
+define _tvec                  Char(1);
+define _druh                  Char(1);
+define _reftime              DATETIME YEAR TO SECOND;
+
+
+let _purposeModernFlat = 0;
+let _purposeModernHouse = 0;
+
+if ATypSC in ('SC1', 'SCA') THEN
+
+  SELECT creditrqcontrolreg_id INTO _creditrqcontrolreg_id FROM CreditRqPersonReg
+  WHERE id = AIdOS; --and date(reftime) <= ADatAkce; 
+
+  SELECT id, xcontractnumber INTO _idGet, _xcontractnumber FROM CreditRqBSContractReg 
+    WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id;-- and date(reftime) <= ADatAkce;      
+  
+  SELECT xcreditrqnumber, xcreditrqstatus INTO _idGet, _xcreditrqstatus FROM CreditRqControlReg WHERE id = _creditrqcontrolreg_id and date(reftime) <= ADatAkce;
+  
+  if _idGet is null then
+    foreach 
+    SELECT  xcreditrqstatus INTO _xcreditrqstatus FROM creditrqcontrolarch 
+      WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id and date(xrefmodifytimestamp) <= ADatAkce 
+      ORDER BY xrefmodifytimestamp DESC
+      exit foreach;
+    end foreach;
+  end if;
+  
+  SELECT id, xcredittype, xcramount, xcontracttype, xbcrepayment, xcreditrepayment, xrequestdate, xcreditmaturitydate, xwithdrawalway,
+         xpurposebuy, xpurposemodern, purposemoderntypeid, xpurposeconstruct, xpurposeother,
+         xinsurnone, xinsurrealty, xinsurguarantor, xinsurother,
+         variantbcid, xpaywaytype, xbcmaturitydate, reftime
+    INTO _idGet, _credittype, _xcramount, _xcontracttype, _bcrepayment, _creditrepayment, _xrequestdate, _xcreditmaturitydate, _withdrawalway,
+         _purposebuy, _xpurposemodern, _purposemoderntypeid, _purposeconstruct, _purposeother,
+         _insurnone, _insurrealty, _insurguarantor, _insurother,
+         _variant, _xpaywaytype, _xbcmaturitydate, _reftime
+    FROM CreditRqCContractReg WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id; --and date(reftime) <= ADatAkce;
+  
+ if date(_reftime) > ADatAkce then 
+    foreach 
+    SELECT xcredittype, xcramount, xcontracttype, xbcrepayment, xcreditrepayment, xrequestdate, xcreditmaturitydate, xwithdrawalway,
+           xpurposebuy, xpurposemodern, purposemoderntypeid, xpurposeconstruct, xpurposeother,
+           xinsurnone, xinsurrealty, xinsurguarantor, xinsurother,
+           variantbcid, xpaywaytype, xbcmaturitydate
+      INTO _credittype, _xcramount, _xcontracttype, _bcrepayment, _creditrepayment, _xrequestdate, _xcreditmaturitydate, _withdrawalway,
+           _purposebuy, _xpurposemodern, _purposemoderntypeid, _purposeconstruct, _purposeother,
+           _insurnone, _insurrealty, _insurguarantor, _insurother,
+           _variant, _xpaywaytype, _xbcmaturitydate
+      FROM creditrqccontractarch 
+      WHERE creditrqccontractreg_id = _idGet and date(xrefmodifytimestamp) <= ADatAkce 
+      ORDER BY xrefmodifytimestamp DESC
+      exit foreach;
+    end foreach;
+  end if;
+
+  SELECT id, xagentCompose, reftime INTO _idGet, _xagentCompose, _reftime FROM CreditRqAgentsReg WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id; --and date(reftime) <= ADatAkce;
+
+   if _reftime > ADatAkce then 
+    foreach 
+    SELECT  xagentCompose INTO _xagentCompose FROM creditrqagentsarch 
+      WHERE creditrqagentsreg_id = _creditrqcontrolreg_id and date(xrefmodifytimestamp) <= ADatAkce 
+      ORDER BY xrefmodifytimestamp DESC
+      exit foreach;
+    end foreach;
+  end if;
+
+  if _credittype = 'PU' then
+    let _bcamount = _xcramount;
+    let _creditamount = null;
+  else
+    let _bcamount = null;
+    let _creditamount = _xcramount;
+  end if;
+
+  if _xpurposemodern = 1 then
+    if _purposemoderntypeid = 2 then
+      let _purposeModernFlat  = 1;
+    elif _purposemoderntypeid = 1 then
+      let _purposeModernHouse = 1;
+    end if;
+  end if;
+
+  let _bcDuration = TW_MaxInt(TW_MonthBetw(_xrequestdate, _xbcmaturitydate), 0);
+
+  --_subdebtorNo = poèet pøistupitelù - pro všechny role nad kterýma to bude zavoláno (v rámci jedné smlouvy) to vrátí stejné èíslo
+  -- mùže se to zjišovat v J2EE, ale muselo by to být na 2 místech a není k tomu podpora (role jsou filtrovány) tj. není zaruèeno že bude zavoláno pro všechny role
+  --zjistím jestli vyhodnocovaná osoba v creditrqrelcontrpersreg s id UZ je vedena jako PR, ale není jako PV
+  let _subdebtorNo = 0;
+  foreach
+    SELECT id INTO _idSub FROM creditrqpersonreg WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id
+    let _prCount = 0;
+    let _zaCount = 0;
+    foreach
+      select id, date(reftime), xrelcontrperstype into _idGet, _reftimeGet, _typroleGet from creditrqrelcontrpersreg where creditrqpersonreg_id = _idSub
+      
+      if _idGet is not null then
+        --nalezeny zaznamy v creditrqrelcontrpersreg pro datum akce
+        if _reftimeGet <= ADatAkce then
+          if _typroleGet = 'PR' then
+            let _prCount = _prCount + 1;
+          elif _typroleGet = 'ZA' then
+            let _zaCount = _zaCount + 1;
+          end if;
+        --prohledam archiv
+        else
+          let _typroleGet = null;
+          foreach
+            select xrelcontrperstype into _typroleGet from creditrqrelcontrpersarch where creditrqrelcontrpersreg_id = _idGet and date(xrefmodifytime) <= ADatAkce order by xrefmodifytime desc
+            exit foreach;
+          end foreach;
+          if _typroleGet is not null and _typroleGet = 'PR' then
+            let _prCount = _prCount + 1;
+          elif _typroleGet is not null and _typroleGet = 'ZA' then
+            let _zaCount = _zaCount + 1;
+          end if;
+        end if;
+      end if;
+    end foreach;
+  end foreach;
+
+  -- doplòovaná žádost
+  if _xcreditrqstatus = 6 then
+  
+    SELECT smlouva, vysepu, vyse, splatkapu, splatka, datzad, datsplat, obchZast, variantaPU, datnav, datsplatpu
+    INTO _smlGet, _bcamount, _creditamount, _bcrepayment, _creditrepayment, _xrequestdate, _xcreditmaturitydate, _xagentCompose, _variant, _datnav, _datsplatpu
+    FROM EU_Sml_Mat
+    WHERE smlouva = _xcontractnumber AND tsml = _xcontracttype AND date(reftime) <= ADatAkce;
+
+    if _smlGet is null then
+      foreach
+        SELECT smlouva, vysepu, vyse, splatkapu, splatka, datzad, datsplat, obchZast, variantaPU, datnav, datsplatpu
+        INTO _smlGet, _bcamount, _creditamount, _bcrepayment, _creditrepayment, _xrequestdate, _xcreditmaturitydate, _xagentCompose, _variant, _datnav, _datsplatpu
+        FROM EU_Sml_Arch
+        WHERE smlouva = _xcontractnumber AND tsml = _xcontracttype AND date(reftime) <= ADatAkce
+        ORDER BY reftime DESC
+        exit foreach;
+      end foreach;
+    end if;
+
+    let _bcDuration = TW_MaxInt(TW_MonthBetw(_datnav, _datsplatpu), 0);
+
+    let _subCount = 0;
+    foreach 
+      select os, date(reftime), stav into _osGet, _reftimeGet, _stavGet FROM EO_Role_Mat WHERE smlouva = _xcontractnumber AND typ = _xcontracttype AND typrole = 'PR'
+      let _zaExists = 0;
+      if _reftimeGet <= ADatAkce and _stavGet = 'A' then
+        select date(reftime), stav into _reftimeGet2, _stavGet2 FROM EO_Role_Mat WHERE smlouva = _xcontractnumber AND typ = _xcontracttype and typrole = 'ZA' AND os = _osGet; 
+        if _reftimeGet2 is not null and _reftimeGet2 <= ADatakce and _stavGet2 = 'A' then
+          let _zaExists = 1;
+        elif _reftimeGet2 is not null and _reftimeGet2 > ADatAkce then
+          let _stavGet3 = null;
+          foreach
+            select stav into _stavGet3 FROM EO_Role_Arch WHERE smlouva = _xcontractnumber AND typ = _xcontracttype and typrole = 'ZA' AND os = _osGet AND date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavGet3 is not null and _stavGet3 = 'A' then
+            let _zaExists = 1;
+          end if;        
+        end if;
+      else
+        let _stavGet2 = null;
+        foreach
+          select stav into _stavGet2 FROM EO_Role_Arch WHERE smlouva = _xcontractnumber AND typ = _xcontracttype and typrole = 'PR' AND os = _osGet AND date(reftime) <= ADatAkce order by reftime desc
+          exit foreach;
+        end foreach;
+        if _stavGet2 is not null and _stavGet2 = 'A' then
+          select date(reftime), stav into _reftimeGet2, _stavGet3 FROM EO_Role_Mat WHERE smlouva = _xcontractnumber AND typ = _xcontracttype and typrole = 'ZA' AND os = _osGet; 
+          if _reftimeGet2 is not null and _reftimeGet2 <= ADatakce and _stavGet3 = 'A' then
+            let _zaExists = 1;
+          elif _reftimeGet2 is not null and _reftimeGet2 > ADatAkce then
+            let _stavGet4 = null;
+            foreach
+              select stav into _stavGet4 FROM EO_Role_Arch WHERE smlouva = _xcontractnumber AND typ = _xcontracttype and typrole = 'ZA' AND os = _osGet AND date(reftime) <= ADatAkce order by reftime desc
+              exit foreach;
+            end foreach;
+            if _stavGet4 is not null and _stavGet4 = 'A' then
+              let _zaExists = 1;
+            end if;        
+          end if;  
+        end if;
+      end if;
+      if _zaExists = 1 then
+        let _subCount = _subCount + 1;
+      end if;
+      
+    end foreach;
+    let _subdebtorNo = _subCount;
+  end if;
+
+elif ATypSC in ('SC2', 'SCB') then
+  if ATsml in ('PFSU','PUSU') then
+    let _credittype = 'PU';
+  elif ATsml = 'SUFO' then 
+    let _credittype = 'SU';
+  else
+    let _credittype = '';
+  end if;
+
+  SELECT smlouva, vysepu, vyse, splatkapu, splatka, datzad, datsplat, obchZast, variantaPU, datnav, datsplatpu
+    INTO _smlGet, _bcamount, _creditamount, _bcrepayment, _creditrepayment, _xrequestdate, _xcreditmaturitydate, _xagentCompose, _variant, _datnav, _datsplatpu
+    FROM EU_Sml_Mat
+    WHERE smlouva = ASmlouva AND tsml = ATsml AND date(reftime) <= ADatAkce;
+
+    if _smlGet is null then
+      foreach
+        SELECT smlouva, vysepu, vyse, splatkapu, splatka, datzad, datsplat, obchZast, variantaPU, datnav, datsplatpu
+        INTO _smlGet, _bcamount, _creditamount, _bcrepayment, _creditrepayment, _xrequestdate, _xcreditmaturitydate, _xagentCompose, _variant, _datnav, _datsplatpu
+        FROM EU_Sml_Arch
+        WHERE smlouva = ASmlouva AND tsml = ATsml AND date(reftime) <= ADatAkce
+        ORDER BY reftime DESC
+        exit foreach;
+      end foreach;
+    end if;
+
+  let _withdrawalWay = null;
+  
+  let _subCount = 0;
+  foreach
+    select poradi, stav, date(reftime) into _idGet, _stavGet, _reftimeGet from EU_CerpKIn_Mat where smlouva = ASmlouva AND tsml = ATsml
+    if _reftimeGet <= ADatAkce and _stavGet = 'A' then
+      let _subCount = _subCount + 1;
+    elif _reftimeGet > ADatAkce then
+      let _stavGet2 = null;
+      foreach 
+        select stav into _stavGet2 from EU_CerpKIn_Arch where smlouva = ASmlouva AND tsml = ATsml and poradi = _idGet and date(reftime) <= ADatAkce order by reftime desc
+        exit foreach;
+      end foreach;
+      if _stavGet2 is not null and _stavGet2 = 'A' then
+        let _subCount = _subCount + 1;
+      end if;  
+    end if;
+  end foreach;
+  let _pocet = _subCount;
+  
+  if _pocet = 1 then
+    let _withdrawalWay = 'J';
+  elif _pocet > 1 then
+    let _withdrawalWay = 'P';
+  end if;
+
+  -- indikátory úèelu
+  let _purposeBuy, _purposeModernFlat, _purposeModernHouse, _purposeConstruct, _purposeOther = 0, 0, 0, 0, 0;
+
+  foreach
+    SELECT cis.typzadost,mat.reftime,mat.stav,mat.poradi INTO _typzadost,_reftimeGet,_stavGet,_idGet 
+    FROM EU_Ucel_Mat mat JOIN EU_Ucel_Cis cis ON mat.ucel = cis.ucel 
+    WHERE mat.smlouva = ASmlouva AND mat.tsml = ATsml
+    if _reftimeGet <= ADatAkce and _stavGet IN ('A', 'B') then
+      if _typzadost = 'K' then
+        let _purposeBuy = 1;
+      elif _typzadost = 'B' then
+        let _purposeModernFlat = 1;
+      elif _typzadost = 'D' then
+        let _purposeModernHouse = 1;
+      elif _typzadost = 'V' then
+        let _purposeConstruct = 1;
+      elif _typzadost = 'O' then
+        let _purposeOther = 1;
+      end if;
+    elif _reftimeGet > ADatAkce then
+      let _stavGet2 = null;
+      foreach
+        SELECT cis.typzadost,mat.stav INTO _typzadost,_stavGet2 
+        FROM EU_Ucel_Arch mat JOIN EU_Ucel_Cis cis ON mat.ucel = cis.ucel 
+        WHERE mat.smlouva = ASmlouva AND mat.tsml = ATsml AND poradi = _idGet AND date(mat.reftime) <= ADatAkce
+        ORDER BY mat.reftime DESC
+        exit foreach;
+      end foreach;
+      if _stavGet2 is not null and _stavGet2 IN ('A', 'B') then
+        if _typzadost = 'K' then
+          let _purposeBuy = 1;
+        elif _typzadost = 'B' then
+          let _purposeModernFlat = 1;
+        elif _typzadost = 'D' then
+          let _purposeModernHouse = 1;
+        elif _typzadost = 'V' then
+          let _purposeConstruct = 1;
+        elif _typzadost = 'O' then
+          let _purposeOther = 1;
+        end if;
+      end if;
+    end if;
+  end foreach;
+  
+  -- indikátory zajištìní
+  let _zajistbezzaj = TW_RegGetKey('EU', '*', 'zajist', 'bezZajisteni');
+  let _zajistvinkar = TW_RegGetKey('EU', '*', 'zajist', 'vinkar');
+  
+  let _insurRealty, _insurguarantor, _insurnone, _insurother = 0, 0, 1, 0;
+  
+  foreach
+    SELECT mat.zajist,cis.tvec,cis.druh,mat.reftime,mat.stav,mat.poradi INTO _zajist,_tvec,_druh,_reftimeGet,_stavGet,_idGet 
+    FROM EU_Zajist_Mat mat JOIN EU_Zajist_Cis cis ON mat.zajist = cis.zajist
+    WHERE mat.smlouva = ASmlouva AND mat.tsml = ATsml
+    
+    if _reftimeGet <= ADatAkce and _stavGet IN ('A', 'B', 'C') then
+    
+      if _druh = 'Z' and _tvec = 'N' then
+        let _insurRealty = 1;
+      elif _druh = 'R' then
+        let _insurguarantor = 1;
+      end if;
+      if _zajist not in (_zajistbezzaj, _zajistvinkar) and nvl(_tvec, '') <> 'P' then
+        let _insurnone = 0;
+      end if;
+      
+    elif _reftimeGet > ADatAkce then
+      let _stavGet2 = null;
+      foreach
+        SELECT mat.zajist,cis.tvec,cis.druh,mat.stav INTO _zajist,_tvec,_druh,_stavGet 
+        FROM EU_Zajist_Arch mat JOIN EU_Zajist_Cis cis ON mat.zajist = cis.zajist
+        WHERE mat.smlouva = ASmlouva AND mat.tsml = ATsml AND poradi = _idGet AND date(mat.reftime) <= ADatAkce
+        ORDER BY mat.reftime DESC
+        exit foreach;
+      end foreach;
+      if _stavGet2 is not null and _stavGet2 IN ('A', 'B', 'C') then
+      
+        if _druh = 'Z' and _tvec = 'N' then
+          let _insurRealty = 1;
+        elif _druh = 'R' then
+          let _insurguarantor = 1;
+        end if;
+        if _zajist not in (_zajistbezzaj, _zajistvinkar) and nvl(_tvec, '') <> 'P' then
+          let _insurnone = 0;
+        end if;
+        
+      end if;
+    end if;  
+  end foreach;
+  
+  if _insurRealty = 0 and _insurguarantor = 0 and _insurnone = 0 then
+    let _insurother = 1;
+  end if;
+  
+  SELECT typ INTO _xpaywaytype FROM EP_Platba_Mat WHERE smlouva = ASmlouva AND tsml = ATsml and date(reftime) <= ADatAkce;
+  
+  if _xpaywaytype is null then
+    foreach 
+      SELECT typ INTO _xpaywaytype FROM EP_Platba_Arch WHERE smlouva = ASmlouva AND tsml = ATsml and date(reftime) <= ADatAkce order by reftime desc
+      exit foreach;
+    end foreach;
+  end if;
+
+  let _bcDuration = TW_MaxInt(TW_MonthBetw(_datnav, _datsplatpu), 0);
+
+  let _subCount = 0;
+  foreach 
+    select os, date(reftime), stav into _osGet, _reftimeGet, _stavGet FROM EO_Role_Mat WHERE smlouva = ASmlouva AND typ = ATsml AND typrole = 'PR'
+    let _zaExists = 0;
+    if _reftimeGet <= ADatAkce and _stavGet = 'A' then
+      select date(reftime), stav into _reftimeGet2, _stavGet2 FROM EO_Role_Mat WHERE smlouva = ASmlouva AND typ = ATsml and typrole = 'ZA' AND os = _osGet; 
+      if _reftimeGet2 is not null and _reftimeGet2 <= ADatakce and _stavGet2 = 'A' then
+        let _zaExists = 1;
+      elif _reftimeGet2 is not null and _reftimeGet2 > ADatAkce then
+        let _stavGet3 = null;
+        foreach
+          select stav into _stavGet3 FROM EO_Role_Arch WHERE smlouva = ASmlouva AND typ = ATsml and typrole = 'ZA' AND os = _osGet AND date(reftime) <= ADatAkce order by reftime desc
+          exit foreach;
+        end foreach;
+        if _stavGet3 is not null and _stavGet3 = 'A' then
+          let _zaExists = 1;
+        end if;        
+      end if;
+    else
+      let _stavGet2 = null;
+      foreach
+        select stav into _stavGet2 FROM EO_Role_Arch WHERE smlouva = ASmlouva AND typ = ATsml and typrole = 'PR' AND os = _osGet AND date(reftime) <= ADatAkce order by reftime desc
+        exit foreach;
+      end foreach;
+      if _stavGet2 is not null and _stavGet2 = 'A' then
+        select date(reftime), stav into _reftimeGet2, _stavGet3 FROM EO_Role_Mat WHERE smlouva = ASmlouva AND typ = ATsml and typrole = 'ZA' AND os = _osGet; 
+        if _reftimeGet2 is not null and _reftimeGet2 <= ADatakce and _stavGet3 = 'A' then
+          let _zaExists = 1;
+        elif _reftimeGet2 is not null and _reftimeGet2 > ADatAkce then
+          let _stavGet4 = null;
+          foreach
+            select stav into _stavGet4 FROM EO_Role_Arch WHERE smlouva = ASmlouva AND typ = ATsml and typrole = 'ZA' AND os = _osGet AND date(reftime) <= ADatAkce order by reftime desc
+            exit foreach;
+          end foreach;
+          if _stavGet4 is not null and _stavGet4 = 'A' then
+            let _zaExists = 1;
+          end if;        
+        end if;  
+      end if;
+    end if;
+    if _zaExists = 1 then
+      let _subCount = _subCount + 1;
+    end if;
+    
+  end foreach;
+  let _subdebtorNo = _subCount;
+end if;
+
+let _creditDuration = TW_MaxInt(TW_MonthBetw(_xrequestdate, _xcreditmaturitydate), 0);
+
+let _ccAgentRegion = IMain_GetNadTer('Z', _xagentCompose, _xrequestdate,3);
+
+if _xpaywaytype = 'P' then
+  let _repaymentway = 3;
+elif _xpaywaytype = 'T' then
+  let _repaymentway = 2;
+elif _xpaywaytype = 'B' then
+  let _repaymentway = 1;
+elif _xpaywaytype = 'J' then
+  let _repaymentway = 4;
+elif _xpaywaytype = 'S' then
+  let _repaymentway = 5;
+else
+  let _repaymentway = null;
+end if;
+
+return
+_creditType, --Char(2)
+_bcAmount, --Dec(16,2)
+_creditAmount, --Dec(16,2)
+_bcRepayment, --Dec(16,2)
+_creditRepayment, --Dec(16,2)
+_creditDuration, --Int
+_withdrawalWay, --Char(1)
+_purposeBuy, --Int
+_purposeModernFlat, --Int
+_purposeModernHouse, --Int
+_purposeConstruct, --Int
+_purposeOther, --Int
+_ccAgentRegion, --Char(5)
+_insurNone, --Int
+_insurRealty, --Int
+_insurGuarantor, --Int
+_insurOther, --Int
+_variant, --Char(10)
+_repaymentWay, --Int
+_bcDuration, --Int
+_subdebtorNo; --Int
+
+end function;

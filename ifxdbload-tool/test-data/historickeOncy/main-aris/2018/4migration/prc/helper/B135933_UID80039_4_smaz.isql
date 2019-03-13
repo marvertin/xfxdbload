@@ -1,0 +1,17 @@
+CREATE PROCEDURE B135933_UID80039_4_smaz ()
+
+
+rename column eo_fozmpl_kart.persondocnumber to xold_persondocnumber;
+
+rename column eo_fozmpl_kart.druhprukaz to xold_druhprukaz;
+
+rename column eo_fozmpl_kart.vydal to xold_vydal;
+
+rename column eo_fozmpl_kart.neomezplat to xold_neomezplat;
+
+rename column eo_fozmpl_kart.platnostdo to xold_platnostdo;
+
+rename column eo_fozmpl_kart.kontrznak to xold_kontrznak;
+
+
+END PROCEDURE;

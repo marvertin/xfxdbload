@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, A42987_RN00269923_1
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání {CUSTOMERREQUEST}
+
+BEGIN WORK;
+-- ###############################################################
+--       eo_soud_cis
+
+-- 44  eo_soud_cis-1/2       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (typ IN ('K' ,'N' ,'O' ,'V' )) CONSTRAINT "aris".eo_soud_cis_c1 */
+ALTER TABLE eo_soud_cis DROP CONSTRAINT eo_soud_cis_c1;
+
+-- 45  eo_soud_cis-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eo_soud_cis
+ADD CONSTRAINT CHECK (typ in ('K', 'M','N', 'O', 'V')) CONSTRAINT eo_soud_cis_c1;
+
+ROLLBACK WORK;
+
+--End of A42987_RN00269923_1

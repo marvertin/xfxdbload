@@ -1,0 +1,48 @@
+-- @TC:ONCE: ID = V2, B117980_RN00404916_4
+-- @TC:ONCE: DESCRIPTION = Nové tiskové výstupy v CIBIS-Sale {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+--serno pro eo_osoba_mat
+set triggers for eo_osoba_mat disabled;
+
+update eo_osoba_mat set serno = tw_nextserno() where serno is null;
+
+set triggers for eo_osoba_mat enabled;
+
+insert into tw_serno (serno, tabulka)
+  select serno, 'eo_osoba_mat' from eo_osoba_mat where serno not in (select serno from tw_serno where tabulka = 'eo_osoba_mat');
+
+set triggers for eo_osoba_arch disabled;
+
+update eo_osoba_arch
+  set serno = (select serno from eo_osoba_mat mat where mat.os = eo_osoba_arch.os)
+  where serno is null;
+
+set triggers for eo_osoba_arch enabled;
+
+--serno pro ep_sml_mat
+set triggers for ep_sml_mat disabled;
+
+update ep_sml_mat set serno = tw_nextserno() where serno is null;
+
+set triggers for ep_sml_mat enabled;
+
+insert into tw_serno (serno, tabulka)
+  select serno, 'ep_sml_mat' from ep_sml_mat where serno not in (select serno from tw_serno where tabulka = 'ep_sml_mat');
+
+set triggers for ep_sml_arch disabled;
+
+update ep_sml_arch
+  set serno = (select serno from ep_sml_mat mat where mat.smlouva = ep_sml_arch.smlouva and mat.tsml= ep_sml_arch.tsml)
+  where serno is null;
+
+set triggers for ep_sml_arch enabled;
+
+
+
+ROLLBACK WORK;
+
+--End of B117980_RN00404916_4

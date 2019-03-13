@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A56210_RN00317080_5
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP FUNCTION EP_CreatePhone', -674);
+call TW_ExecSql('DROP FUNCTION EP_CreateEarn', -674);
+call TW_ExecSql('DROP FUNCTION EP_CreateEmploy', -674);
+call TW_ExecSql('DROP FUNCTION EP_CreatePaper', -674);
+call TW_ExecSql('DROP FUNCTION EU_GetDebts', -674);
+call TW_ExecSql('DROP PROCEDURE EU_CreateControl', -674);
+
+ROLLBACK WORK;
+
+--End of A56210_RN00317080_5

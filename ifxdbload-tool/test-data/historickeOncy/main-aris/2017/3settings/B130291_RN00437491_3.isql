@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B130291_RN00437491_3
+-- @TC:ONCE: DESCRIPTION = Elektronický návrh na vklad {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--#PSČ pro RÚIAN (RUIAN)#
+Call tw_regSetOrAddKey('AP', 'banka', '*', 'pscToRuian', '13000', 1/*Lze editovat*/);
+
+ROLLBACK WORK;
+
+--End of B130291_RN00437491_3

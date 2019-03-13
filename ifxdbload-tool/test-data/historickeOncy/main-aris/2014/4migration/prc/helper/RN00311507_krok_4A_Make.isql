@@ -1,0 +1,115 @@
+create procedure RN00311507_krok_4A_Make()
+-- vytvoření PO a insolvenčních správců
+
+define _os              Int;
+define _sernoinsolv     Int;
+define _datzahajeni     Date;
+define _infotyp         Int;
+define _info            Int;
+define _urovnano        Int;
+define _urovnanoold     Int;
+define _poznamka        Varchar(255);
+define _davka           Int;
+define _akce            Int;
+define _ser             Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+BEGIN WORK;
+
+--záznam o spuštení migrace/datové manipulace do provozního deníku (typ zápisu OB / 1).
+let _Davka = AP_NovaDavka('OB');
+let _Akce = TW_Provden('OB',1,_Davka,'Zahájení migrace/datové manipulace RN00311507_krok_4A_');
+let _infotyp = tw_reggetkey('EO','CREDIBILITY','informationtype','insolvence');
+
+--set debug file to '/home/aris/RN00311507_krok_1C_PO.isql.dbg';
+--trace on;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT  ser, os, sernoinsolv, info, datzahajeni
+     INTO _ser,_os,_sernoinsolv,_info,_datzahajeni
+     FROM RN00311507_krok_4A
+    WHERE zprac < 0
+    ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00311507_krok_4A
+        SET(NumErr,ISAMErr,TextErr)= (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    -- algoritmus migrace
+    if EP_AktivitaInsolv(_sernoinsolv) = 'A' then
+      let _urovnano = 0;
+    else
+      let _urovnano = 1;
+    end if 
+    
+    if _info = -1 then
+      -- musím informaci vytvořit
+      let _poznamka = 'ISIR: ' || EP_CisJednaciISIR(_sernoinsolv); 
+      INSERT INTO EO_InfoDuvOs_Mat
+          ( infotyp, os, datum,       poznamka, urovnano, platnost)
+        VALUES
+          (_infotyp,_os,_datzahajeni,_poznamka,_urovnano,1);
+       let _info = TW_LastSer();
+       
+       INSERT INTO RN00311507_krok_4A_log(ser, text)
+        VALUES(_ser, 'Vytvořena informace o důvěryhodnosti ' || _info || ' pro insolvenci ' || _sernoinsolv);
+    else
+      -- nastavim pouze poznamku a urovnano
+      let _poznamka = tw_nullempty((SELECT poznamka FROM eo_infoduvos_mat WHERE info = _info));
+      let _poznamka = _poznamka || ' ISIR: ' || EP_CisJednaciISIR(_sernoinsolv); 
+      let _urovnanoold = (SELECT urovnano FROM eo_infoduvos_mat WHERE info = _info);
+      UPDATE eo_infoduvos_mat SET (poznamka, urovnano) = (_poznamka,_urovnano)  WHERE info = _info;
+      if _urovnano <> _urovnanoold then
+        INSERT INTO RN00311507_krok_4A_log(ser, text)
+         VALUES(_ser, 'U informaci o důvěryhodnosti ' || _info || ' změna příznaku urovnáno z ' || _urovnanoold || ' na ' || _urovnano);
+      end if
+    end if    
+    
+    UPDATE EP_Insolvence_Mat SET refinfoduv = _info WHERE serno = _sernoinsolv;
+    
+    --nastaví příznak na zpracováno +1
+    UPDATE RN00311507_krok_4A SET zprac = 1, info = _info, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku
+let _Akce = TW_Provden('OB',2,_Davka,'Ukončení migrace/datové manipulace RN00311507_krok_4A');
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+end procedure;

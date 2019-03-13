@@ -1,0 +1,195 @@
+create PROCEDURE RSTS_2905_findDPD_D()
+  
+  --povinne globalni promenne
+  DEFINE GLOBAL TW_ErrSql   Int          default null;
+  DEFINE GLOBAL TW_ErrIsam  Int          default null;
+  DEFINE GLOBAL TW_ErrText  VarChar(255) default null;
+    
+  DEFINE _konto         dec(16, 0);
+  DEFINE _tko           char(2);
+  DEFINE _realn         int;  
+  DEFINE _realss        int;
+  DEFINE _stav          char(1);  
+  DEFINE _datotev       date;
+  DEFINE _datuzav       date;
+  DEFINE _smlouva       dec(16, 0);
+  DEFINE _tsml          char(4); 
+  DEFINE _treal         char(4);
+  DEFINE _mdy2008       DATE;
+  DEFINE _datprov       DATE;
+  DEFINE _faze          INT;
+  DEFINE _osoba         INT;
+  
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  
+  --izolacni uroven bude dirty read
+  SET ISOLATION TO DIRTY READ;
+  
+  BEGIN WORK;
+  
+  --zruseni tabulky pokud jiz existuje
+  begin
+     on exception IN(-206)
+     end exception;
+    DROP TABLE rsts_2905_dpd;
+  end;
+  
+  --zalozime ridici tabulku
+  CREATE TABLE rsts_2905_dpd(
+    Ser     Serial NOT NULL,  --číslo řádku
+    sid     int,              -- SID paralelního běhu
+    zprac   int,              -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                              -- -1- prošlo fázi find - výběr kont
+                              -- -2- chyba ve fázi make
+                              --  2- prošlo fází make
+    faze      int,            -- faze zpracovani - 1 - sporeni, 2 - preklenovak, 3 - stavebak, 4 - vymahani                              
+    smlouva   dec(16, 0),
+    tsml      char(4),    
+    realn     int,  
+    treal     char(4),
+    konto     dec(16,0),
+    tko       char(2),
+    stav      char(1),
+    datotev   date,
+    datuzav   date,
+    osoba     INT,
+    starttime   DATETIME YEAR to FRACTION(5),
+    finishtime  DATETIME YEAR to FRACTION(5),
+
+    NumErr  Int,              --číslo chyby, jež na řádku nastala
+    ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+    TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  
+    PRIMARY KEY(Ser)
+  )LOCK MODE ROW;
+  
+  CREATE INDEX rsts_2905_dpd_i1 ON rsts_2905_dpd(realn);
+  CREATE INDEX rsts_2905_dpd_i2 ON rsts_2905_dpd(osoba);
+  
+  COMMIT WORK;
+  
+  BEGIN WORK;
+  
+  -- plnime ridici tabulku - sporeni  
+  LET _mdy2008 = MDY(1, 1, 2008);
+  LET _datprov = AP_DatProv();
+  FOREACH c2 WITH HOLD FOR
+    SELECT rs.realn, rs.treal, rs.smlouva, rs.tsml, rs.konto, rs.tko, MIN(TW_MaxDate(vkl.datod, _mdy2008)), 
+        MAX(TW_MinDate(NVL(vyp.datprov, _datprov), TW_MinDate(NVL(vkl.datdo, _datprov), _datprov))), rs.stav
+    INTO _realn, _treal, _smlouva, _tsml, _konto, _tko,_datotev, _datuzav, _stav
+    FROM rs_real_mat rs
+    JOIN rz_real_mat rz ON rz.reals = rs.realn
+    JOIN es_vkladkin_mat vkl ON vkl.smlouva = rs.smlouva AND vkl.tsml = rs.tsml
+    LEFT JOIN rs_vypor_kart vyp ON vyp.realn = rs.realn AND vyp.stav = 'C'  
+    WHERE
+      (datdo > MDY(1,1,2008) OR datdo IS NULL) AND
+      datod <= _datprov AND
+      vkl.stav = 'A' AND
+      rz.realpu IS NOT NULL
+    GROUP BY
+      rs.realn, rs.treal, rs.smlouva, rs.tsml, rs.konto, rs.tko, rs.stav            
+      
+    INSERT INTO rsts_2905_dpd (realn, konto, tko, stav, zprac, datotev, datuzav, smlouva, tsml, treal, faze)
+    VALUES (_realn, _konto, _tko, _stav, -1, _datotev, _datuzav, _smlouva, _tsml, _treal, 1);       
+  END FOREACH;    
+  
+  COMMIT WORK; 
+  
+  BEGIN WORK; 
+  
+  LET _datprov = AP_DatProv();
+  -- plnime ridici tabulku - uvery
+  FOREACH c1 WITH HOLD FOR
+    SELECT ru.realss, ru.realn, ru.konto, ru.tko, ru.stav, ru.datotev, ru.datuzav, ru.smlouva, ru.tsml, ru.treal,
+    CASE 
+      WHEN treal LIKE 'PU%' OR treal = 'KOME' THEN 1
+      WHEN treal LIKE 'SU%' THEN 2
+      WHEN treal LIKE 'VU%' THEN 3
+      ELSE NULL
+    END faze 
+    INTO _realss, _realn, _konto, _tko, _stav, _datotev, _datuzav, _smlouva, _tsml, _treal, _faze 
+    FROM ru_real_mat ru
+    JOIN ac_konto_mat m ON ru.konto = m.konto AND ru.tko = m.tko
+    WHERE
+      ru.konto IS NOT NULL AND
+      ru.tko = 'CA'
+    ORDER BY 
+      faze
+      
+    IF(_datuzav IS NOT NULL AND _realss IS NOT NULL) THEN
+      IF(EXISTS(SELECT 1 FROM ru_real_mat WHERE realss = _realss AND realn > _realn)) THEN
+        LET _datuzav = _datuzav -1;
+      END IF;
+    END IF;
+    
+    IF(_datuzav IS NOT NULL AND _treal = 'KOME') THEN
+      IF(EXISTS(SELECT 1 FROM ru_real_mat WHERE smlouva = _smlouva AND realn > _realn)) THEN
+        LET _datuzav = _datuzav -1;
+      END IF;
+    END IF;    
+    
+    IF(_datuzav IS NULL) THEN
+      LET _datuzav = _datprov;
+    END IF;   
+    
+    IF _faze IS NULL THEN
+      CALL TW_RaiseError ('130H475TCUI', 'RSTS_2905_findDPD_D:', 'Nelze určit fázi zpracování realizace %1 úvěru.', _realn);      
+    END IF;
+      
+    INSERT INTO rsts_2905_dpd (realn, konto, tko, stav, zprac, datotev, datuzav, smlouva, tsml, treal, faze, osoba)
+    VALUES (_realn, _konto, _tko, _stav, -1, _datotev, _datuzav, _smlouva, _tsml, _treal, _faze, EP_KlientReal(_realn));          
+          
+  END FOREACH;       
+  
+  COMMIT WORK; 
+  
+  BEGIN WORK; 
+  
+  -- plnime ridici tabulku - sdruzene
+  FOREACH c1 WITH HOLD FOR
+    SELECT ru.realn, ru.konto, ru.tko, ru.stav, 
+      TW_MinDate(TW_MaxDate(ru.datotev, NVL(rs.datotev, ru.datotev)), _datprov), 
+      TW_MinDate(TW_MinDate(NVL(ru.datuzav, _datprov), NVL(rs.datuzav, _datprov)), _datprov), 
+      ru.smlouva, ru.tsml, ru.treal
+    INTO _realn, _konto, _tko, _stav, _datotev, _datuzav, _smlouva, _tsml, _treal
+    FROM 
+      rsts_2905_dpd ru 
+    JOIN rz_real_mat rz ON rz.realpu = ru.realn
+    JOIN rsts_2905_dpd rs ON rz.reals  = rs.realn AND rs.faze = 1      
+    WHERE
+      ru.treal LIKE 'PU%' AND
+      ru.faze = 1 AND
+      (rs.datuzav BETWEEN ru.datotev AND ru.datuzav OR 
+       ru.datuzav BETWEEN rs.datotev AND rs.datuzav)      
+    ORDER BY 
+      ru.realn         
+      
+    INSERT INTO rsts_2905_dpd (realn, konto, tko, stav, zprac, datotev, datuzav, smlouva, tsml, treal, faze, osoba)
+    VALUES (_realn, _konto, _tko, _stav, -1, _datotev, _datuzav, _smlouva, _tsml, _treal, 4, EP_KlientReal(_realn));          
+          
+  END FOREACH;       
+  
+  COMMIT WORK;   
+  
+  BEGIN WORK; 
+  
+  -- plnime ridici tabulku - osoby
+  FOREACH c1 WITH HOLD FOR
+    SELECT DISTINCT(EP_KlientReal(realn)) INTO _osoba FROM rsts_2905_dpd WHERE tko = 'CA'
+           
+    INSERT INTO rsts_2905_dpd (zprac, osoba, faze)
+    VALUES (-1, _osoba, 5);          
+          
+  END FOREACH;       
+  
+  COMMIT WORK;      
+  
+  BEGIN WORK;
+  UPDATE STATISTICS HIGH FOR TABLE rsts_2905_dpd;
+  CALL tw_para_clean('RSTS_2905_makeDPD_D');
+  COMMIT WORK;
+
+end procedure;

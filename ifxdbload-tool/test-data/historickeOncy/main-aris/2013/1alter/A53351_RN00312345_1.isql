@@ -1,0 +1,133 @@
+-- @TC:ONCE: ID = V2, A53351_RN00312345_1
+-- @TC:ONCE: DESCRIPTION = Nìkolik úprav aplikace CIBIS-web, notifikace {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CREATE TABLE eo_notifikacezpusob_cis (
+  id   SERIAL NOT NULL,
+  zpusob   CHAR(10) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  popis   CHAR(35),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_notifikacezpusob_cis_dsia
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_notifikacezpusob_cis_pk ON eo_notifikacezpusob_cis(id);
+ALTER TABLE eo_notifikacezpusob_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_notifikacezpusob_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX eo_notifikacezpusob_cis_u1 ON eo_notifikacezpusob_cis(zpusob);
+ALTER TABLE eo_notifikacezpusob_cis ADD CONSTRAINT (UNIQUE (zpusob) CONSTRAINT eo_notifikacezpusob_cis_u1);
+
+CREATE TABLE eo_notifikacezpusob_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  zpusob   CHAR(10) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  popis   CHAR(35),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_notifikacezpusob_acis_dsjk
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_notifikacezpusob_acis_pk ON eo_notifikacezpusob_acis(idarch);
+ALTER TABLE eo_notifikacezpusob_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_notifikacezpusob_acis_pk;
+
+CREATE TABLE eo_notifikaceudalost_cis (
+  id   SERIAL NOT NULL,
+  udalost   CHAR(35) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  popis   CHAR(35),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_notifikaceudalost_cis_dsij
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_notifikaceudalost_cis_pk ON eo_notifikaceudalost_cis(id);
+ALTER TABLE eo_notifikaceudalost_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_notifikaceudalost_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX eo_notifikaceudalost_cis_u1 ON eo_notifikaceudalost_cis(udalost);
+ALTER TABLE eo_notifikaceudalost_cis ADD CONSTRAINT (UNIQUE (udalost) CONSTRAINT eo_notifikaceudalost_cis_u1);
+
+CREATE TABLE eo_notifikaceudalost_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  udalost   CHAR(35) NOT NULL,
+  nazev   CHAR(35) NOT NULL,
+  popis   CHAR(35),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_notifikaceudalost_acis_dsja
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_notifikaceudalost_acis_pk ON eo_notifikaceudalost_acis(idarch);
+ALTER TABLE eo_notifikaceudalost_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_notifikaceudalost_acis_pk;
+
+CREATE TABLE eo_notifikace_cis (
+  id   SERIAL NOT NULL,
+  idudalost   INTEGER NOT NULL,
+  idzpusob   INTEGER NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_notifikace_cis_dsis
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_notifikace_cis_pk ON eo_notifikace_cis(id);
+ALTER TABLE eo_notifikace_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT eo_notifikace_cis_pk;
+
+--FK
+CREATE INDEX eo_notifikace_cis_i_f1 ON eo_notifikace_cis(idudalost);
+ALTER TABLE eo_notifikace_cis ADD CONSTRAINT FOREIGN KEY(idudalost) REFERENCES eo_notifikaceudalost_cis(id) CONSTRAINT eo_notifikace_cis_f1;
+CREATE INDEX eo_notifikace_cis_i_f2 ON eo_notifikace_cis(idzpusob);
+ALTER TABLE eo_notifikace_cis ADD CONSTRAINT FOREIGN KEY(idzpusob) REFERENCES eo_notifikacezpusob_cis(id) CONSTRAINT eo_notifikace_cis_f2;
+
+CREATE TABLE eo_notifikace_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER NOT NULL,
+  idudalost   INTEGER NOT NULL,
+  idzpusob   INTEGER NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (platnost IN (0,1)) CONSTRAINT eo_notifikace_acis_dsj1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_notifikace_acis_pk ON eo_notifikace_acis(idarch);
+ALTER TABLE eo_notifikace_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_notifikace_acis_pk;
+
+ROLLBACK WORK;
+

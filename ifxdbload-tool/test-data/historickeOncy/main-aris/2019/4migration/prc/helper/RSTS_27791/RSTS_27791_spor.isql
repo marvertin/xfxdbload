@@ -1,0 +1,174 @@
+create procedure RSTS_27791_spor(ARealS Int, AKlient Int, AUrAplDef Char(1), AAbsPrah Dec(16,2), ARelPrah Dec(16,2), ALogovat Int default 0)
+
+define _id BigInt;
+define _poradi Int;
+define _datvyhodnoceni Date;
+define _typvyhodnoceni Char(1);
+define _dpdeba Int;
+define _nesplaccastka Dec(16,2);
+define _datprvvyhodnoceni Date;
+define _datvyhodnoceniPrev Date;
+
+define _realPU Int;
+define _smlouvaSS Dec(16,0);
+define _smlouvaUv Dec(16,0);
+define _kontoUv Dec(16,0);
+define _tkoUv Char(2);
+define _celkdluhpohl Dec(16,2);
+define _nesplaccastkaSkup Dec(16,2);
+define _celkdluhpohlSkup Dec(16,2);
+
+define _celkdluhpohlPrev Dec(16,2);
+define _celkdluhpohlDatPrev Date;
+define _nesplaccastkaSkupPrev Dec(16,2);
+define _celkdluhpohlSkupPrev Dec(16,2);
+define _datSkupPrev Date;
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_start(ARealS, 'Sporeni');
+  call tw_monitor2_block_start(110, 'Sporeni-ins');
+end if;
+
+DELETE FROM RSTS_27791_eba_Tmp;
+
+-- vložení záznamů DPD do pomocné evidence
+INSERT INTO RSTS_27791_eba_Tmp(reals, datvyhodnoceni, typvyhodnoceni, dpdeba, nesplaccastka, datprvvyhodnoceni, vlozit)
+SELECT reals, datvyhodnoceni, typvyhodnoceni, -1, nesplaccastka, datprvvyhodnoceni, 1
+FROM EP_DPDEvid_Den
+WHERE reals = ARealS
+ORDER BY datvyhodnoceni;
+
+UPDATE STATISTICS HIGH FOR TABLE RSTS_27791_eba_Tmp;
+
+-- údaje spoření a úvěru
+SELECT realpu, smlouva INTO _realPU, _smlouvaSS FROM RZ_Real_Mat WHERE reals = ARealS;
+SELECT smlouva, konto, tko INTO _smlouvaUv, _kontoUv, _tkoUv FROM RU_Real_Mat WHERE realn = _realPU;
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(110);
+end if;
+
+-- příprava rolí pro vyhodnocení skupin
+if AUrAplDef = 'D' then
+  if ALogovat <> 0 then
+    call tw_monitor2_block_start(113, 'Sporeni-role');
+  end if;
+
+  call RSTS_27791_role(AKlient, _smlouvaSS, _smlouvaUv, 'D');
+
+  if ALogovat <> 0 then
+    call tw_monitor2_block_finish(113);
+  end if;
+end if;
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_start(116, 'Sporeni-memo');
+end if;
+
+-- vložení obratů konta do pomocné evidence
+call RSTS_27791_memo(_kontoUv, _tkoUv);
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(116);
+  call tw_monitor2_block_finish(110);
+  call tw_monitor2_block_start(120, 'Sporeni-prahy');
+end if;
+
+-- vyhodnocení prahů a EBA DPD
+let _datvyhodnoceniPrev = null;
+let _dpdeba = 0;
+let _nesplaccastkaSkup, _celkdluhpohlSkup = 0, 0;
+
+let _celkdluhpohlPrev, _celkdluhpohlDatPrev = 0, null;
+let _nesplaccastkaSkupPrev, _celkdluhpohlSkupPrev, _datSkupPrev = 0, 0, null;
+foreach
+  SELECT id, nesplaccastka, datvyhodnoceni, typvyhodnoceni, datprvvyhodnoceni
+  INTO _id, _nesplaccastka, _datvyhodnoceni, _typvyhodnoceni, _datprvvyhodnoceni
+  FROM RSTS_27791_eba_Tmp
+  ORDER BY id
+  
+  -- zjištění nesplacené částky a celkové pohledávky z ostatních smluv skupiny
+  if AUrAplDef = 'D' then
+    if ALogovat <> 0 then
+      call tw_monitor2_block_start(123, 'Sporeni-prahy-skup');
+    end if;
+
+    let _nesplaccastkaSkup, _celkdluhpohlSkup = RSTS_27791_skup(_datSkupPrev, _datprvvyhodnoceni, _typvyhodnoceni, ALogovat);
+
+    let _nesplaccastkaSkup = _nesplaccastkaSkupPrev + _nesplaccastkaSkup;
+    let _nesplaccastkaSkupPrev = _nesplaccastkaSkup;
+    let _celkdluhpohlSkup = _celkdluhpohlSkupPrev + _celkdluhpohlSkup;
+    let _celkdluhpohlSkupPrev = _celkdluhpohlSkup;
+    let _datSkupPrev = _datprvvyhodnoceni;
+
+    if ALogovat <> 0 then
+      call tw_monitor2_block_finish(123);
+    end if;
+  end if;
+
+  -- absolutní práh
+  if _nesplaccastka > 0 and (_nesplaccastka + _nesplaccastkaSkup) >= AAbsPrah then
+    if ALogovat <> 0 then
+      call tw_monitor2_block_start(127, 'Sporeni-prahy-pohl');
+    end if;
+
+    -- zjištění celkové pohledávky k datu prvního vyhodnocení
+    SELECT -1 * NVL(SUM(dluhdospl + dluhpospl), 0)
+    INTO _celkdluhpohl
+    FROM RSTS_27791_memoGrp_Tmp
+    WHERE konto = _kontoUv AND tko = _tkoUv AND datuct <= _datprvvyhodnoceni AND (_celkdluhpohlDatPrev IS NULL OR datuct > _celkdluhpohlDatPrev);
+
+    let _celkdluhpohl = _celkdluhpohlPrev + _celkdluhpohl;
+    let _celkdluhpohlPrev = _celkdluhpohl;
+    let _celkdluhpohlDatPrev = _datprvvyhodnoceni;
+
+    if ALogovat <> 0 then
+      call tw_monitor2_block_finish(127);
+    end if;
+
+    -- relativní práh
+    if (_nesplaccastka + _nesplaccastkaSkup) >= ARelPrah / 100 * (_celkdluhpohl + _celkdluhpohlSkup) then
+      -- pokud předchozí hodnota byla nenulová, přičtu počet dní mezi daty vyhodnocení záznamů; jinak nastavím na 1
+      if _dpdeba > 0 and _datvyhodnoceniPrev is not null then
+        let _dpdeba = _dpdeba + (_datvyhodnoceni - _datvyhodnoceniPrev);
+      else
+        let _dpdeba = (_datvyhodnoceni - _datprvvyhodnoceni) + 1;
+      end if;
+    else
+      let _dpdeba = 0;
+    end if;
+  else
+    let _dpdeba = 0;
+  end if;
+  
+  UPDATE RSTS_27791_eba_Tmp SET dpdeba = _dpdeba WHERE id = _id;
+  
+  let _datvyhodnoceniPrev = _datvyhodnoceni;
+end foreach;
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(120);
+  call tw_monitor2_block_start(130, 'Sporeni-slouceni');
+end if;
+
+-- sloučení záznamů s nulovým EBA DPD a nastavení pořadí
+call RSTS_27791_sluc();
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(130);
+  call tw_monitor2_block_start(140, 'Sporeni-presyp');
+end if;
+
+-- vložení záznamů do evidence EBA DPD
+INSERT INTO EP_DPDEBA_Den(reals, poradi, datvyhodnoceni, typvyhodnoceni, dpdeba, nesplaccastka, datprvvyhodnoceni)
+SELECT reals, poradi, datvyhodnoceni, typvyhodnoceni, dpdeba, nesplaccastka, datprvvyhodnoceni
+FROM RSTS_27791_eba_Tmp
+WHERE vlozit = 1
+ORDER BY id;
+
+if ALogovat <> 0 then
+  call tw_monitor2_block_finish(140);
+  call tw_monitor2_block_finish(ARealS);
+end if;
+
+end procedure;

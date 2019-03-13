@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A41845_RN00282453
+-- @TC:ONCE: DESCRIPTION = zmena registrù
+BEGIN WORK;
+
+  --#Typ SMS pro autorizaci#
+  call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'autorizace', 'AUTORIZACE',1);
+  
+  --#Typ SMS pro obnovu hesla#
+  call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'obnova', 'OBNOVA_HESLA',1);
+  
+  --#Typ SMS pro registraci#
+  call tw_regsetoraddkey('TW', 'SMS', 'typSMS', 'obnova', 'REGISTRACNI', 1);
+  
+ROLLBACK;  

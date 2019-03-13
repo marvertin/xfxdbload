@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A41715_RN00273383_1
+-- @TC:ONCE: DESCRIPTION = Zavedení nové varianty modelování pro vyèíslení pøedèasného splacení úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE pro_settlementfeesavcontr
+ DROP CONSTRAINT pro_settlementfeesavcontr_u1
+;
+
+DROP INDEX pro_settlementfeesavcontr_u1
+;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX pro_settlementfeesavcontr_u1 ON pro_settlementfeesavcontr(gbcid,tariffid,settlementtype,minmonthcount,globalbaseparameters_id);
+ALTER TABLE pro_settlementfeesavcontr ADD CONSTRAINT (UNIQUE (gbcid,tariffid,settlementtype,minmonthcount,globalbaseparameters_id) CONSTRAINT pro_settlementfeesavcontr_u1);
+
+ROLLBACK WORK;
+
+--End of A41715_RN00273383_1

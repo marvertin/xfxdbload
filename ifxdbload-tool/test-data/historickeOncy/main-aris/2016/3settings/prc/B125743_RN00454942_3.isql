@@ -1,0 +1,18 @@
+create procedure B125743_RN00454942_3()
+
+SELECT id FROM ep_zahrnutipohybucfmodel_cis o where id in (
+      select max(id) from ep_zahrnutipohybucfmodel_cis i 
+        where i.tsml = 'KOME' and i.tsml=o.tsml and i.typpohybumodel=o.typpohybumodel
+    )
+into temp B125743_temp;
+     
+update ep_zahrnutipohybucfmodel_cis
+  set rpsntype = 'SU'
+  where id in (
+    select id from B125743_temp
+  )
+;
+  
+drop table B125743_temp;
+
+End procedure; --B125743_RN00454942_3

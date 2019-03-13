@@ -1,0 +1,136 @@
+--Vytvoreni kontrolniho zaznamu uverove smlouvy
+CREATE FUNCTION EP_DatCheckNeeded (ADatumZadosti  Date,
+                               APhase          Int,
+                               AKind             Char(1),
+                               ACrAmount    Dec(16,2),
+                               AProdType     Char(4),
+                               AVariant         Char(10),
+                               AprocNaspor  Dec(5,2),
+                               AAge              Int,
+                               ARole             Char(2),
+                               AInsurRealty Int, 
+                               AInsurGuarantor Int, 
+                               AInsurOther     Int, 
+                               AInsurNone      Int,
+                               ADatRefTime    Date
+                                )
+returning Char(1); -- N - kontrola má být provádìna
+                               -- S - kontrola nemá být provádìna
+
+define _xagefrom            integer;
+define _xageto              integer;
+define _xcreditunder        decimal(16,2);
+define _xcreditabove        decimal(16,2);
+define _xproductkind        char(4);
+define _xproductvariant     char(10);
+define _xrole               char(2);
+define _xsavepartabove      integer;
+define _xphase              integer;
+define _xassurance       Char(1);
+define _reftime              DateTime YEAR TO SECOND;
+define _existsRuleInArchive         Int;
+define _idNoCheckRule  Integer;
+define _xvalidity Integer;
+
+foreach
+ SELECT  id, xagefrom, xageto, xcreditunder, xcreditabove, xproductkind,
+         xproductvariant, xrole, xsavepartabove, xphase, xassurance, reftime, xvalidity
+   INTO _idNoCheckRule, _xagefrom,_xageto,_xcreditunder,_xcreditabove,_xproductkind, 
+        _xproductvariant,_xrole,_xsavepartabove,_xphase,_xassurance, _reftime, _xvalidity
+   FROM NoCheckRule
+  WHERE xkind = AKind 
+        AND (xDateValidFrom <= ADatumZadosti OR xDateValidFrom IS NULL) AND (xDateValidTo >= ADatumZadosti OR xDateValidTo IS NULL)
+        
+  if (date(_reftime) > ADatRefTime) then
+    let _existsRuleInArchive = 0;
+    foreach                       
+      SELECT  xagefrom, xageto, xcreditunder, xcreditabove, xproductkind,
+                    xproductvariant, xrole, xsavepartabove, xphase, xassurance, xvalidity   
+        INTO _xagefrom,_xageto,_xcreditunder,_xcreditabove,_xproductkind,
+        _xproductvariant,_xrole,_xsavepartabove,_xphase,_xassurance, _xvalidity
+          FROM NoCheckRule_Acis
+                WHERE xkind = AKind AND xvalidity = 1 AND id = _idNoCheckRule 
+                    AND (xDateValidFrom <= ADatumZadosti OR xDateValidFrom IS NULL) AND (xDateValidTo >= ADatumZadosti OR xDateValidTo IS NULL)
+                    AND date(reftime) <=  ADatRefTime ORDER BY reftime DESC
+          let _existsRuleInArchive = 1;          
+          exit foreach;                    
+    end foreach;
+    
+    -- Ovìø, že se nìco naèetlo, pokud ne, pravidlo nás nezajímá a jdeme na další.
+    if (_existsRuleInArchive = 0) then
+        continue foreach;
+    end if;
+  end if;
+  
+  -- pokud je pravidlo vypnuté, nezajímá nás.
+  if (_xvalidity = 0) then
+    continue foreach;
+  end if;                                                   
+
+   IF APhase IS NOT NULL AND _xphase IS NOT NULL AND APhase <> _xphase THEN
+     continue foreach;
+   END IF;
+   IF AProdType IS NOT NULL AND _xproductkind IS NOT NULL AND AProdType <> _xproductkind THEN
+     continue foreach;
+   END IF;
+   IF AVariant IS NOT NULL AND _xproductvariant IS NOT NULL AND AVariant <> _xproductvariant THEN
+     continue foreach;
+   END IF;
+   IF ARole IS NOT NULL AND _xrole IS NOT NULL AND ARole <> _xrole THEN
+     continue foreach;
+   END IF;
+   --pokud ma zaznam nastaven pouze nekterou roli, ale nezjistuji kontrolu pro roli (Arole je NULL),
+   --nebudu brat v tuto chvili zaznam v potaz (musi byt reseno dalsimi kontrolami pro konkretni osoby)
+   IF ARole IS NULL AND _xrole IS NOT NULL THEN
+     continue foreach;
+   END IF;
+   IF ACrAmount IS NOT NULL THEN
+      IF _xcreditabove IS NOT NULL AND  _xcreditabove > ACrAMount THEN
+          continue foreach;
+      END IF;
+      IF _xcreditunder IS NOT NULL AND  _xcreditunder < ACrAMount THEN
+          continue foreach;
+      END IF;
+   END IF;
+   IF AAge IS NOT NULL THEN
+      IF _xagefrom IS NOT NULL AND  _xagefrom > AAge THEN
+          continue foreach;
+      END IF;
+      IF _xageto IS NOT NULL AND  _xageto < AAge THEN
+          continue foreach;
+      END IF;
+   ELSE
+      IF _xagefrom IS NOT NULL OR _xageto IS NOT NULL THEN
+         continue foreach;
+      END IF;
+   END IF;
+   IF AprocNaspor IS NOT NULL AND _xsavepartabove IS NOT NULL AND
+      AprocNaspor < _xsavepartabove THEN
+          continue foreach;
+   END IF;
+   IF _xassurance IS NOT NULL THEN
+      IF _xassurance = 'B' AND AInsurRealty IS NOT NULL AND AInsurGuarantor IS NOT NULL AND 
+         (AInsurRealty <> 1 OR AInsurGuarantor <> 1) THEN
+          continue foreach;
+      END IF;
+      IF _xassurance = 'N' AND AInsurRealty IS NOT NULL AND AInsurRealty <> 1 THEN
+          continue foreach;
+      END IF;
+      IF _xassurance = 'R' AND AInsurGuarantor IS NOT NULL AND AInsurGuarantor <> 1 THEN
+          continue foreach;
+      END IF;
+      IF _xassurance = 'J' AND AInsurOther IS NOT NULL AND AInsurOther <> 1 THEN
+          continue foreach;
+      END IF;
+      IF _xassurance = 'P' AND AInsurNone IS NOT NULL AND AInsurNone <> 1 THEN
+          continue foreach;
+      END IF;
+   END IF;
+   
+   return 'S';
+
+end foreach;
+
+return 'N';
+
+end function;

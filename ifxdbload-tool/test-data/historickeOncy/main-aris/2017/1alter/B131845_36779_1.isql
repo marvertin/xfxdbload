@@ -1,0 +1,73 @@
+-- @TC:ONCE: ID = V2, B131845_36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE ru_oppodklexp_den (
+  serno   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  datexp   DATE NOT NULL,
+  stadiumifrs   Integer,
+  stariuver   Integer,
+  dobadefaultu   Integer,
+  zbytksplat   Integer,
+  expozicerozvaha   DECIMAL(16,2),
+  expozicepodrozvaha   DECIMAL(16,2),
+  zajistuveru   DECIMAL(16,2),
+  indikzajistnemo   Integer  DEFAULT 0,
+  urg   DECIMAL(16,2),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (indikzajistnemo IN (0,1)) CONSTRAINT ru_oppodklexp_den_dxct
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_oppodklexp_den_pk ON ru_oppodklexp_den(serno);
+ALTER TABLE ru_oppodklexp_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_oppodklexp_den_pk;
+
+--FK
+CREATE INDEX ru_oppodklexp_den_i_f1 ON ru_oppodklexp_den(smlouva,tsml);
+ALTER TABLE ru_oppodklexp_den ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT ru_oppodklexp_den_f1;
+
+--CHECKS
+ALTER TABLE ru_oppodklexp_den
+ADD CONSTRAINT (CHECK (stadiumifrs in (1,2,3)) CONSTRAINT ru_oppodklexp_den_c1),
+ADD CONSTRAINT (CHECK (urg in(0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5)) CONSTRAINT ru_oppodklexp_den_c2);
+
+
+CREATE TABLE ru_oppodklzauct_kart (
+  serno   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  platnost   datetime year to month,
+  stadiumifrs   Integer,
+  pd12mes   DECIMAL(7,4),
+  pdcelozivotni   DECIMAL(7,4),
+  lgd   DECIMAL(7,4),
+  beel   DECIMAL(7,4),
+  urg   DECIMAL(16,2),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_oppodklzauct_kart_pk ON ru_oppodklzauct_kart(serno);
+ALTER TABLE ru_oppodklzauct_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_oppodklzauct_kart_pk;
+
+--FK
+CREATE INDEX ru_oppodklzauct_kart_i_f1 ON ru_oppodklzauct_kart(smlouva,tsml);
+ALTER TABLE ru_oppodklzauct_kart ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT ru_oppodklzauct_kart_f1;
+
+--CHECKS
+ALTER TABLE ru_oppodklzauct_kart
+ADD CONSTRAINT (CHECK (stadiumifrs in (1,2,3)) CONSTRAINT ru_oppodklzauct_kart_c1),
+ADD CONSTRAINT (CHECK (urg in(0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5)) CONSTRAINT ru_oppodklzauct_kart_c2);
+
+
+ROLLBACK WORK;
+
+--End of B131845_36779_1

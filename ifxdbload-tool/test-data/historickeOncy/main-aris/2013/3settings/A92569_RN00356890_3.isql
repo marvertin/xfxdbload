@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A92569_RN00356890_3
+-- @TC:ONCE: DESCRIPTION = Vytvoøení varovného hlášení v Cibisu pøi novém návrhu vypoøádání úvìru a pøi nastavení nového návrhu splácení
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RU', 'splat', 'mimosplat', 'tuhr', null, 1, 'Úvìr', 'Splátka úvìru', 'Úhrady', 'Typ úhrady za mimoøádnou splátku úvìru', 1);
+
+ROLLBACK WORK;
+
+--End of A92569_RN00356890_3

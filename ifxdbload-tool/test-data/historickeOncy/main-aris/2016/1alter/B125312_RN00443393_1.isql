@@ -1,0 +1,53 @@
+-- @TC:ONCE: ID = V2, B125312_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE ep_splspormodhdilc_den (
+  ser   SERIAL NOT NULL,
+  headser   INTEGER,
+  
+  -- RPSN PÚ
+  rpsnpu   DECIMAL(6, 2),
+  
+  -- RPSN SÚ
+  rpsnsu   DECIMAL(6, 2),
+  
+  -- Celkové náklady PÚ (dle CF)
+  celknaklpudlecf   DECIMAL(16, 2),
+  
+  -- Celkové náklady SÚ (dle CF)
+  celknaklsudlecf   DECIMAL(16, 2),
+  
+  -- Celková zaplacená částka PÚ (dle CF)
+  celkzaplpudlecf   DECIMAL(16, 2),
+  
+  -- Celková zaplacená částka SÚ (dle CF)
+  celkzaplsudlecf   DECIMAL(16, 2),
+  
+  -- Celková výše PÚ (pro ESIP)
+  celkvysepuesip   DECIMAL(16, 2),
+  
+  -- Celková výše SÚ (pro ESIP)
+  celkvysesuesip   DECIMAL(16, 2),
+  
+  -- Suma nákladů spojených s úvěrem mimo RSTS pro PÚ (dle CF)
+  sumanakluvermimopudlecf   DECIMAL(16, 2),
+  
+  -- Suma nákladů spojených s úvěrem mimo RSTS pro SÚ (dle CF)
+  sumanakluvermimosudlecf   DECIMAL(16, 2)
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_splspormodhdilc_den_pk ON ep_splspormodhdilc_den(ser);
+ALTER TABLE ep_splspormodhdilc_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_splspormodhdilc_den_pk;
+
+--FK
+CREATE INDEX ep_splspormodhdilc_den_i_f1 ON ep_splspormodhdilc_den(headser);
+ALTER TABLE ep_splspormodhdilc_den ADD CONSTRAINT FOREIGN KEY(headser) REFERENCES ep_splspormodsh_den(ser) CONSTRAINT ep_splspormodhdilc_den_f1;
+
+
+ROLLBACK WORK;
+
+--End of B125312_RN00443393_1

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B109218_RN00388961_1-risubjekt_poznamka_255
+-- @TC:ONCE: DESCRIPTION = Rozsahy poznámek v ep_rizsubjekt_mat, ep_rizsubjekt_arch {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE ep_rizsubjekt_mat MODIFY poznamka1 VARCHAR(255);
+ALTER TABLE ep_rizsubjekt_mat MODIFY poznamka2 VARCHAR(255);
+
+ALTER TABLE ep_rizsubjekt_arch MODIFY poznamka1 VARCHAR(255);
+ALTER TABLE ep_rizsubjekt_arch MODIFY poznamka2 VARCHAR(255);
+
+ROLLBACK WORK;
+--End of B109218_RN00388961_1-risubjekt_poznamka_255

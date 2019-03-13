@@ -1,0 +1,88 @@
+-- @TC:ONCE: ID = V2, B118685_RN00382782_dbreg
+-- @TC:ONCE: DESCRIPTION = Nové dokumenty v úvěrové žádosti {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CALL tw_regsetoraddkey('EC', 'Uniqa', 'skupinaPoj', 'limitUverAngaz', 6000000, 1, 
+'Externí produkt',
+'Správa externího pojištění úvěru - Smlouva UNIQA',
+'Vyhodnocení skupiny pro pojištění',
+'Limitní úvěrová angažovanost pro Uniqa');
+
+CALL tw_regsetoraddkey('EC', 'Uniqa', 'skupinaPoj', 'hraniceVekPasma', 51, 1, 
+'Externí produkt',
+'Správa externího pojištění úvěru - Smlouva UNIQA',
+'Vyhodnocení skupiny pro pojištění',
+'Hranice věkového pásma pro vstupní dluh');
+
+CALL tw_regsetoraddkey('EC', 'Uniqa', 'skupinaPoj', 'limitVstDluh1', 3000000, 1, 
+'Externí produkt',
+'Správa externího pojištění úvěru - Smlouva UNIQA',
+'Vyhodnocení skupiny pro pojištění',
+'Limitní vstupní dluh pro věkové pásmo 1 pro Uniqa');
+
+CALL tw_regsetoraddkey('EC', 'Uniqa', 'skupinaPoj', 'limitVstDluh2', 1500000, 1, 
+'Externí produkt',
+'Správa externího pojištění úvěru - Smlouva UNIQA',
+'Vyhodnocení skupiny pro pojištění',
+'Limitní vstupní dluh pro věkové pásmo 2 pro Uniqa');
+
+CALL tw_regsetoraddkey('EO', 'creditrq', 'pracZarazeni', 'zamestnanecBezBon', 10, 1, 
+'Osoba',
+'Osoby pro úvěrovou žádost',
+'Pracovní zařazení',
+'Pracovní zařazení osoby – zaměstnanec bez bonity');
+
+CALL tw_regsetoraddkey('EO', 'creditrq', 'pracZarazeni', 'podnikatelBezBon', 11, 1, 
+'Osoba',
+'Osoby pro úvěrovou žádost',
+'Pracovní zařazení',
+'Pracovní zařazení osoby – podnikatel bez bonity');
+
+CALL tw_regsetoraddkey('EO', 'creditrq', 'infoOPrijmu', 'zpusobBezProkaz', 'E', 1, 
+'Osoba',
+'Osoby pro úvěrovou žádost',
+'Informace o příjmu',
+'Způsob získání informací o příjmu bez prokazování');
+   
+CALL tw_regsetoraddkey('EU', 'creditrq', 'ucel', 'hraniceEKO', 75, 1, 
+'Úvěr',
+'Úvěr pro úvěrovou žádost',
+'Účel',
+'Procentuelní hranice využití úvěru na ekologický program');
+
+CALL tw_regsetoraddkey('EU', 'creditrq', 'generDok', 'priloha1', 25, 1, 
+'Úvěr',
+'Úvěrová žádost - dokumenty',
+'Generované dokumenty k žádosti a scany',
+'Typ dokumentu - příloha č.1 k ÚŽ');
+
+CALL tw_regsetoraddkey('EU', 'creditrq', 'generDok', 'priloha2', 64, 1, 
+'Úvěr',
+'Úvěrová žádost - dokumenty',
+'Generované dokumenty k žádosti a scany',
+'Typ dokumentu - příloha č.2 k ÚŽ');
+
+
+CALL tw_regsetoraddkey('EU', 'creditrq', 'generDok', 'pristoupeniPoj', 48, 1, 
+'Úvěr',
+'Úvěrová žádost - dokumenty',
+'Generované dokumenty k žádosti a scany',
+'Typ dokumentu - žádost o přistoupení do pojištění Uniqa k ÚŽ');
+
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND uloha = 'creditrq-zaklad' AND funkce = 'podpisZad-zpusob';
+
+call TW_RegDelKey('EU','creditrq','generDok','zadost-scan');
+
+call TW_RegDelKey('EU','creditrq','generDok','prohlPrist-scan');
+
+call TW_RegDelKey('EU','creditrq','generDok','prohlRuc-scan');
+
+call TW_RegDelKey('ES','bsavingreq','generDok','novaSS-scan');
+
+call TW_RegDelKey('ES','bsavingreq','generDok','zmenaSS-scan');
+
+ROLLBACK WORK;
+
+--End of B118685_RN00382782_dbreg

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136308_UID84620_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28328: Schválení úvěru s vyšší angažovaností než práva {ACCEPTATION_DEFECT}
+
+BEGIN WORK;
+
+DELETE FROM tw_registr_cis WHERE oblast = 'EU' AND uloha = 'schval' AND udaj = 'nezajlimit';
+
+ROLLBACK WORK;
+
+--End of B136308_UID84620_3

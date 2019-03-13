@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B135415_UID73558_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22637: Výkonnost: Procedure: aris.cpd_naplnfcetmp {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+CREATE INDEX ev_hromvkladb_mat_i1 ON ev_hromvkladb_mat(smlouva,tsml);
+
+CREATE INDEX creditregadditionaldata_i1 ON creditregadditionaldata(operationcode);
+
+CREATE INDEX requestdata_i2 ON requestdata(xcreditregnumber);
+
+CREATE INDEX pef_firmadotaz_den_i1 ON pef_firmadotaz_den(ico);
+
+CREATE INDEX do_dokument_mat_i1 ON do_dokument_mat(archivace);
+
+ROLLBACK WORK;
+
+--End of B135415_UID73558_1

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A43056_RN00238704
+-- @TC:ONCE: DESCRIPTION = Migrace 2, doplnìní indexù.
+
+BEGIN WORK;
+
+create index rz_storno_arch_i1 on rz_storno_arch(realn);
+create index eo_bydleni_arch_i1 on eo_bydleni_arch(bydleni);
+create index rz_vy_kart_i1 on rz_vy_kart(realss, datvy, stav);
+
+ROLLBACK WORK;

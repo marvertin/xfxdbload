@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A44240_RN00294285_1
+-- @TC:ONCE: DESCRIPTION = Zprava pro prijemce a zprava pro klienta {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  ALTER TABLE ab_doklad_kart ADD zprkli VARCHAR(144);
+
+ROLLBACK WORK;
+
+--End of A44240_RN00294285_1

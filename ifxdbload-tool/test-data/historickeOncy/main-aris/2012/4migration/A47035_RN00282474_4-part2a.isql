@@ -1,0 +1,62 @@
+-- @TC:ONCE: ID = V2, A47035_RN00282474_4-part2a
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù {CUSTOMERREQUEST}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = A47035_RN00282474_4-part2
+
+BEGIN WORK;
+
+--1.  Vynucená korekce údajù o pojištìní
+--Je „naposledy“ volán rušenı pøípad uití „Zkorigovat údaje o pojištìní UNIQA“, kterı
+--provádìl pravidelné korekèní datové manipulace nad evidencí pojištìní UNIQA.
+CALL RN00282474_migrace_poslKorekce()
+;
+
+--2.  Inicializace matriky pojištìní
+--Nové údaje jsou nastaveny pro všechny záznamy s druhem “C – pojištìní UNIQA“ následovnì:
+--Varianta pojištìní      #Defaultní varianta pojištìní UNIQA# (EV/*/pojistUNIQA/DefVar)
+--Pojišovna      #IÈO pojišovny UNIQA# (EV/*/pojistUNIQA/ICO)
+update ev_pojist_mat set
+    varianta = tw_reggetKey('EV','*','pojistUNIQA','DefVar')
+  , pojistovna = tw_reggetKey('EV','*','pojistUNIQA','ICO')
+where druh=EV_GetDruhPojUNIQA()
+;
+
+--3.  Inicializace matriky pojištìní UNIQA
+--Nové údaje jsou nastaveny do všech záznamù následovnì:
+--Èíslo pojištìné úvìrové smlouvy Èíslo úvìrové smlouvy
+--Typ pojištìné úvìrové smlouvy Typ úvìrové smlouvy
+--Datum zrušení     <Prázdné>   --nebude se migrovat
+--Rozhodné datum pro pojistné Datum návrhu (v matrice pojištìní UNIQA)
+--Zpùsob zadání       <N – Nové>    –nebude se migrovat, v pøípadì            ¨   potøeby si RSTS pøenastaví manuálnì
+--Reference uivatele a èasu vytvoøení záznamu (plní se automaticky)  <Prázdné>
+
+--jedna vìc je nìkdy pouita pro rùzné úvìrové smlouvy, tak bereme tu s vyšším productid
+SELECT u.vec, max(s.productid) productid
+ FROM ev_pojistcrp_mat u
+ join ev_pojist_mat p on p.vec=u.vec
+ join eu_sml_mat s on s.smlouva=TRIM(p.cislopojist)
+ group by 1
+ into temp RN00282474_vec2smlouva
+;
+
+CREATE INDEX RN00282474_vec2smlouva_i1 ON RN00282474_vec2smlouva(productid);
+CREATE INDEX RN00282474_vec2smlouva_i2 ON RN00282474_vec2smlouva(vec);
+
+update ev_pojistcrp_mat set
+  (smlouva,tsml) = ((
+        select s.smlouva,s.tsml 
+          from eu_sml_mat s
+          join  RN00282474_vec2smlouva t on t.productid=s.productid
+          where t.vec=ev_pojistcrp_mat.vec
+   ))
+;
+drop table RN00282474_vec2smlouva
+;
+
+update ev_pojistcrp_mat set
+    rozhdatumpoj = datnav
+  , zpusobzadani = 'N'
+;
+
+ROLLBACK WORK;
+
+--End of A47035_RN00282474_4-part2

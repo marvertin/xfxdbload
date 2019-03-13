@@ -1,0 +1,41 @@
+-- @TC:ONCE: ID = V2, B134004_UID57264_1
+-- @TC:ONCE: DESCRIPTION = Číselník Příloha - nove sloupce {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- es_priloha_cis
+
+ALTER TABLE es_priloha_cis ADD (
+  nabizetvsale Integer DEFAULT 0 NOT NULL BEFORE poznamka,
+  pozadovatpotvrzeni Integer  DEFAULT 0 NOT NULL BEFORE poznamka
+)
+;
+
+ALTER TABLE es_priloha_cis ADD CONSTRAINT (CHECK (nabizetvsale IN (0, 1)) CONSTRAINT es_priloha_cis_c3);
+ALTER TABLE es_priloha_cis ADD CONSTRAINT (CHECK (pozadovatpotvrzeni IN (0, 1)) CONSTRAINT es_priloha_cis_c4);
+
+
+-- ###############################################################
+-- es_priloha_acis
+
+-- defaultni hodnoty jsou u archivu je docasne aby se zmigrovaly na tuto hodnotu uz existujici zaznami
+ALTER TABLE es_priloha_acis ADD (
+  nabizetvsale Integer  DEFAULT 0 NOT NULL BEFORE poznamka,
+  pozadovatpotvrzeni Integer  DEFAULT 0 NOT NULL BEFORE poznamka
+)
+;
+
+-- odstraneni defaultnich hodnot - v archivu byt nemaji
+ALTER TABLE es_priloha_acis MODIFY (
+  nabizetvsale Integer NOT NULL,
+  pozadovatpotvrzeni Integer NOT NULL
+)
+;
+
+-- ###############################################################
+
+ROLLBACK WORK;
+
+--End of B134004_UID57264_1

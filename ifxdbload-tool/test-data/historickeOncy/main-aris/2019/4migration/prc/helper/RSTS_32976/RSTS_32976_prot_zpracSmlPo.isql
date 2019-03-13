@@ -1,0 +1,134 @@
+CREATE PROCEDURE RSTS_32976_prot_zpracSmlPo(ASer INT, ASmlouva DEC(16,0), ATsml CHAR(4))
+
+-- hlavní proměnné
+DEFINE _mapKodPo          CHAR(20);
+DEFINE _stadiumifrsPo     INTEGER;
+DEFINE _indikDefaultPo    INTEGER;
+DEFINE _datDefaultPo      DATE;
+DEFINE _ebaDPDUver        INTEGER;
+DEFINE _ebaDPDSouhrn      INTEGER;
+DEFINE _ebaDPDSporeni     INTEGER;
+DEFINE _RDT00uHodnota INTEGER;
+DEFINE _RDT00uStav    CHAR(1);
+DEFINE _RD010Hodnota  INTEGER;
+DEFINE _RD010Stav     CHAR(1);
+DEFINE _RD020Hodnota  INTEGER;
+DEFINE _RD020Stav     CHAR(1);
+DEFINE _RD030uHodnota INTEGER;
+DEFINE _RD030uStav    CHAR(1);
+DEFINE _RD040Hodnota  INTEGER;
+DEFINE _RD040Stav     CHAR(1);
+DEFINE _RD050Hodnota  INTEGER;
+DEFINE _RD050Stav     CHAR(1);
+DEFINE _RD130Hodnota  INTEGER;
+DEFINE _RD130Stav     CHAR(1);
+DEFINE _RD140Hodnota  INTEGER;
+DEFINE _RD140Stav     CHAR(1);
+DEFINE _RD150Hodnota  INTEGER;
+DEFINE _RD150Stav     CHAR(1);
+DEFINE _RD160Hodnota  INTEGER;
+DEFINE _RD160Stav     CHAR(1);
+DEFINE _RD210Hodnota  INTEGER;
+DEFINE _RD210Stav     CHAR(1);
+DEFINE _RD220Hodnota  INTEGER;
+DEFINE _RD220Stav     CHAR(1);
+DEFINE _RD230Hodnota  INTEGER;
+DEFINE _RD230Stav     CHAR(1);
+DEFINE _S01Hodnota    INTEGER;
+DEFINE _S01Stav       CHAR(1);
+DEFINE _S02Hodnota    INTEGER;
+DEFINE _S02Stav       CHAR(1);
+DEFINE _S03Hodnota    INTEGER;
+DEFINE _S03Stav       CHAR(1);
+DEFINE _S06uHodnota   INTEGER;
+DEFINE _S06uStav      CHAR(1);
+DEFINE _SQHodnota     INTEGER;
+DEFINE _SQStav        CHAR(1);
+DEFINE _SXHodnota     INTEGER;
+DEFINE _SXStav        CHAR(1);
+DEFINE _SDuHodnota    INTEGER;
+DEFINE _SDuStav       CHAR(1);
+
+-- pomocné proměnné
+DEFINE _realn           INTEGER;
+DEFINE _konto           DEC(16,0);
+DEFINE _tko             CHAR(4);
+DEFINE _id              INTEGER;
+DEFINE _maxdpd          INTEGER;
+DEFINE _totaldpd        INTEGER;
+DEFINE _nesplaccastka   DEC(16,2);
+DEFINE _datprvvyhodnoceni DATE;
+DEFINE _datvyhodnoceni    DATE;
+
+
+let _realn = EP_RealSml(ASmlouva, ATsml);
+SELECT stadiumifrs, konto, tko   
+INTO _stadiumifrsPo, _konto, _tko
+FROM RU_Real_Mat
+WHERE realn = _realn;
+
+SELECT mapkod INTO _mapKodPo FROM AC_Konto_Mat WHERE konto = _konto AND tko = _tko;
+
+let _indikDefaultPo, _datDefaultPo = null, null;
+FOREACH
+  SELECT charakterdefault, datdefault INTO _indikDefaultPo, _datDefaultPo FROM RU_Stavsplaceni_den WHERE realn = _realn ORDER BY poradi DESC
+  EXIT FOREACH;
+END FOREACH;
+
+LET _id, _ebaDPDUver,  _nesplaccastka, _datprvvyhodnoceni, _datvyhodnoceni    = EP_GetLastAllDPDEBA(_realn, 'L');
+LET _id, _ebaDPDSouhrn,  _nesplaccastka, _datprvvyhodnoceni, _datvyhodnoceni  = EP_GetLastAllDPDEBA(_realn, 'S');
+LET _id, _ebaDPDSporeni,  _nesplaccastka, _datprvvyhodnoceni, _datvyhodnoceni = EP_GetLastAllDPDEBA(_realn, 'D');
+
+-- indikátory START
+LET _RDT00uHodnota, _RDT00uStav = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RDT00u');
+LET _RD010Hodnota, _RD010Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD010');
+LET _RD020Hodnota, _RD020Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD020');
+LET _RD030uHodnota, _RD030uStav = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD030u');
+LET _RD040Hodnota, _RD040Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD040');
+LET _RD050Hodnota, _RD050Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD050');
+LET _RD130Hodnota, _RD130Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD130');
+LET _RD140Hodnota, _RD140Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD140');
+LET _RD150Hodnota, _RD150Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD150');
+LET _RD160Hodnota, _RD160Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD160');
+LET _RD210Hodnota, _RD210Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD210');
+LET _RD220Hodnota, _RD220Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD220');
+LET _RD230Hodnota, _RD230Stav   = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'RD230');
+LET _S01Hodnota, _S01Stav       = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'S01');
+LET _S02Hodnota, _S02Stav       = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'S02');
+LET _S03Hodnota, _S03Stav       = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'S03');
+LET _S06uHodnota, _S06uStav     = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'S06u');
+LET _SQHodnota, _SQStav         = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'SQ');
+LET _SXHodnota, _SXStav         = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'SX');
+LET _SDuHodnota, _SDuStav       = CEP_AktHodnotaIndikator(NULL, ASmlouva, ATsml, 'SDu');
+-- indikátory END
+
+UPDATE RSTS_32976_Protokol_SML SET 
+  mapKodPo = _mapKodPo
+, stadiumifrsPo = _stadiumifrsPo
+, indikDefaultPo = _indikDefaultPo
+, datDefaultPo = _datDefaultPo
+, ebaDPDUver = _ebaDPDUver
+, ebaDPDSouhrn = _ebaDPDSouhrn
+, ebaDPDSporeni = _ebaDPDSporeni
+, RDT00u = _RDT00uHodnota
+, RD010 = _RD010Hodnota
+, RD020 = _RD020Hodnota
+, RD030u = _RD030uHodnota
+, RD040 = _RD040Hodnota
+, RD050 = _RD050Hodnota
+, RD130 = _RD130Hodnota
+, RD140 = _RD140Hodnota
+, RD150 = _RD150Hodnota
+, RD160 = _RD160Hodnota
+, RD210 = _RD210Hodnota
+, RD220 = _RD220Hodnota
+, RD230 = _RD230Hodnota
+, S01 = _S01Hodnota
+, S02 = _S02Hodnota
+, S03 = _S03Hodnota
+, S06u = _S06uHodnota
+, SQ = _SQHodnota
+, SX = _SXHodnota
+WHERE ser = ASer;
+
+END PROCEDURE;

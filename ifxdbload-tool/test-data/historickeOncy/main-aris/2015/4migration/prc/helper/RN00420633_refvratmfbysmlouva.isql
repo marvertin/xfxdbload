@@ -1,0 +1,24 @@
+--RN00420633_refvratmfbysmlouva(smlouva)
+CREATE     FUNCTION RN00420633_refvratmfbysmlouva(asmlouva         Dec(16,0), arok datetime year to year)
+returning Integer;          -- ser z sp_vratmf_kart
+
+define _ser Integer;
+
+let _ser = null;
+
+foreach
+ 
+  SELECT ser
+    into _ser 
+    FROM sp_vratmf_kart
+    WHERE smlouva = asmlouva
+      and rok = arok
+    ORDER by obdobi desc
+    
+    exit foreach;
+    
+end foreach;
+    
+return _ser;
+
+end function;

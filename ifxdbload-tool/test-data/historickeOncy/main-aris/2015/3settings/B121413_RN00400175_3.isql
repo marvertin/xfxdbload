@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B121413_RN00400175_3
+-- @TC:ONCE: DESCRIPTION = Main: Hromadná změna úrokové sazby ve fázi spoření nad vybraným portfoliem smluv {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ep_uhrzaklad_enum(zaklad, popis, dostupmodel, promenvcase)
+  VALUES(26, 'Suma připsaných i nepřipsaných úroků na spořícím kontě ponížená o úhrady za změnu tarifu a potenciální úhrady za snížení úrokové sazby (stejné jako za změnu tarifu) vynásobená podílem z rozdílu sazeb vůči sazbě původní', 1, 0);
+
+ROLLBACK WORK;
+
+--End of B121413_RN00400175_3

@@ -1,0 +1,120 @@
+create PROCEDURE B135234_UID70902_4_make_D (-- vstupni paramtery
+                                    ABezTransakci integer default 0,    -- slouzi k testovacim ucelum,
+                                                                        -- kdy si uzivatel sam ridi transakce
+                                                                        -- muze pouzivat i zakaznik
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _smlouva Dec(16,0);
+define _tsml Char(4);
+define _sazbabepu Dec(5,2);
+define _sazbabe Dec(5,2);
+define _poradi Int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+if(ABezTransakci = 0) then
+   BEGIN WORK;
+end if;
+
+if ABezTransakci = 0 then
+   COMMIT WORK;
+   BEGIN WORK;
+end if;
+
+--pres ridici tabulku
+foreach cc2 with hold for
+  SELECT ser, smlouva, tsml, sazbabepu, sazbabe
+  INTO _ser, _smlouva, _tsml, _sazbabepu, _sazbabe
+  FROM B135234_UID70902
+  WHERE zprac < 0
+  ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      if(ABezTransakci = 0) then
+         ROLLBACK WORK;
+      end if;
+      --ulozime chybu do ridici tabulky
+      UPDATE B135234_UID70902
+        SET(NumErr,ISAMErr,TextErr) = (TW_ErrSql, TW_ErrIsam, TW_ErrText)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      if(ABezTransakci = 0) then
+         BEGIN WORK;
+      end if;
+    end exception;
+    
+    --vlastni algoritmus migrace
+    let _poradi = 0;
+    
+    if _tsml in ('PUSU', 'PFSU', 'PPSU', 'PUPO') and _sazbabepu is not null then
+      let _poradi = _poradi + 1;
+      
+      INSERT INTO eu_sazbauprav_mat(serno, smlouva, tsml, poradi, faze, typ, hodnota, platnost, uzivatelska, poznamka, pravidlo)
+      VALUES(TW_NextSerno(), _smlouva, _tsml, _poradi, 'PU', 'Z', _sazbabepu, 1, 0, 'Úvodní migrace 2018', null);
+    end if;
+    
+    if _tsml in ('PUSU', 'PFSU', 'PPSU', 'SUFO', 'SUPO', 'KOME') and _sazbabe is not null then
+      let _poradi = _poradi + 1;
+      
+      INSERT INTO eu_sazbauprav_mat(serno, smlouva, tsml, poradi, faze, typ, hodnota, platnost, uzivatelska, poznamka, pravidlo)
+      VALUES(TW_NextSerno(), _smlouva, _tsml, _poradi, 'SU', 'Z', _sazbabe, 1, 0, 'Úvodní migrace 2018', null);
+    end if;
+
+    --konec algoritmu migrace
+    
+    UPDATE B135234_UID70902 SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  if(ABezTransakci = 0) then
+    COMMIT WORK;
+    BEGIN WORK;
+  end if;
+end foreach;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+   BEGIN WORK;
+end if;
+
+--algoritmus dokonceni migrace
+--...
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+  trace off;
+end if;
+
+if(ABezTransakci = 0) then
+   COMMIT WORK;
+end if;
+--KONEC dokonceni migrace
+
+if exists(SELECT * FROM B135234_UID70902 WHERE zprac < 0) then
+  call TW_RaiseError('134R671TCUI', 'B135234_UID70902_4_make_D', 'Během migrace evidence úprav úrokových sazeb došlo k chybě.'); 
+end if;
+
+end procedure;

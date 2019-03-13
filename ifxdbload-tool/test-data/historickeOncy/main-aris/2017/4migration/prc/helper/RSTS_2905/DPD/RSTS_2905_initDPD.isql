@@ -1,0 +1,273 @@
+CREATE PROCEDURE RSTS_2905_initDPD(AKonto     DEC(16, 0),
+                                   ATko       CHAR(2),
+                                   ARealn     INT,
+                                   AOsoba     INT,
+                                   ALogovat   INT DEFAULT 0,
+                                   AFaze      INT DEFAULT -1,
+                                   ADatUzav   DATE DEFAULT NULL) 
+
+  DEFINE _memorialNaplnen     INT;
+  DEFINE _id                  INT;
+  DEFINE _datum               DATE;
+  DEFINE _datumOld            DATE; 
+  DEFINE _preplatek           DEC(16, 2); 
+  DEFINE _jeArchivovano       INT;        
+  DEFINE _reals               INT;             
+  DEFINE _realn               INT; 
+  DEFINE _datvyhodnoceni      DATE;       
+  DEFINE _currentDPD          INT;           
+  DEFINE _datUzavNaplnen      INT;
+  DEFINE _saldo               DEC(16, 2);
+  DEFINE _ocsaldo             DEC(16, 2);  
+                          
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'Init'); END IF;                           
+                                   
+  BEGIN
+    ON EXCEPTION IN(-206)
+    END EXCEPTION;
+    
+    DROP TABLE rsts_2905_dpdevid;
+  END;
+  
+  --zalozime temp tabulku pro evidenci DPD
+  CREATE TEMP TABLE rsts_2905_dpdevid(
+    id                serial,
+    realuv            int,
+    reals             int,
+    osoba             int,    
+    poradi            int,
+    datvyhodnoceni    date,     
+    typvyhodnoceni    char(1),
+    currentdpd        int,
+    maxdpd            int,
+    totaldpd          int,
+    nesplaccastka     dec(16, 2),
+    datprvvyhodnoceni date,
+    ocsaldoevid       int DEFAULT 0
+  ) WITH NO LOG;  
+  
+  CREATE INDEX rsts_2905_dpdevid_i1 ON rsts_2905_dpdevid(id);
+  CREATE INDEX rsts_2905_dpdevid_i2 ON rsts_2905_dpdevid(realuv); 
+  CREATE INDEX rsts_2905_dpdevid_i3 ON rsts_2905_dpdevid(reals);
+  CREATE INDEX rsts_2905_dpdevid_i4 ON rsts_2905_dpdevid(osoba);
+  CREATE INDEX rsts_2905_dpdevid_i5 ON rsts_2905_dpdevid(datvyhodnoceni);      
+  
+  IF(AFaze IN (1, 2, 3)) THEN  
+  
+    LET _memorialNaplnen = 0;
+    
+    BEGIN
+      ON EXCEPTION IN(-206)
+      END EXCEPTION WITH RESUME;
+        
+      IF(EXISTS(SELECT 1 FROM rsts_2905_memorial WHERE konto = AKonto AND tko = ATko)) THEN
+        LET _memorialNaplnen = 1;
+      ELSE
+        DROP TABLE rsts_2905_memorial;
+        DROP TABLE rsts_2905_pair;  
+      END IF;
+    END;
+    
+    IF(_memorialNaplnen = 0) THEN
+      --zalozime temp tabulku pro memorial
+      CREATE TEMP TABLE rsts_2905_memorial(
+        ser        INT,
+        zdrojser   INT, 
+        konto      DEC(16, 0),
+        tko        CHAR(2),
+        sko        CHAR(4), 
+        dbcr       INT, 
+        castka     DEC(16, 2),
+        valuta     DATE
+      ) WITH NO LOG;
+      
+      SELECT jearchivovano INTO _jeArchivovano FROM ac_konto_mat WHERE konto = AKonto AND tko = ATko;
+      
+      INSERT INTO rsts_2905_memorial (ser, zdrojser, konto, tko, sko, castka, valuta, dbcr)
+        SELECT ser, 0, konto, tko, sko, castka, valuta, dbcr FROM ac_memobody_den 
+        WHERE 
+          konto = AKonto AND
+          tko   = ATko;
+          
+      IF(_jeArchivovano = 1) THEN
+        INSERT INTO rsts_2905_memorial (ser, zdrojser, konto, tko, sko, castka, valuta, dbcr)
+          SELECT ser, 0, konto, tko, sko, castka, valuta, dbcr FROM ac_memobody_den_a memo 
+          WHERE 
+            konto = AKonto AND
+            tko   = ATko AND
+            NOT EXISTS(SELECT 1 FROM rsts_2905_memorial rsts 
+                       WHERE 
+                         rsts.ser       = memo.ser AND
+                         rsts.zdrojser  = 0);
+      END IF;    
+          
+      INSERT INTO rsts_2905_memorial (ser, zdrojser, konto, tko, sko, castka, valuta, dbcr)
+        SELECT ser, 1, konto, tko, sko, castka, valuta, dbcr FROM ac_memobodypredmigr_den 
+        WHERE 
+          konto = AKonto AND
+          tko   = ATko;
+
+      IF(_jeArchivovano = 1) THEN
+        INSERT INTO rsts_2905_memorial (ser, zdrojser, konto, tko, sko, castka, valuta, dbcr)
+          SELECT ser, 1, konto, tko, sko, castka, valuta, dbcr FROM ac_memobodypredmigr_view_a memo
+          WHERE 
+            konto = AKonto AND
+            tko   = ATko AND
+            NOT EXISTS(SELECT 1 FROM rsts_2905_memorial rsts 
+                       WHERE 
+                         rsts.ser       = memo.ser AND
+                         rsts.zdrojser  = 1);              
+      END IF;             
+          
+      CREATE INDEX rsts_2905_memorial_i1 ON rsts_2905_memorial(ser, zdrojser);
+      
+      UPDATE STATISTICS HIGH FOR TABLE rsts_2905_memorial;
+    END IF;
+                   
+    IF(ATko = 'CA') THEN 
+      IF(_memorialNaplnen = 0) THEN             
+        --zalozime temp tabulku pro ucetni pary
+        CREATE TEMP TABLE rsts_2905_pair(
+          ser1          INT,
+          ser1_zdrojser INT,
+          ser2          INT,
+          ser2_zdrojser INT,
+          typparu       CHAR(4)
+        ) WITH NO LOG;       
+        
+        INSERT INTO rsts_2905_pair (ser1, ser1_zdrojser, ser2, ser2_zdrojser, typparu)
+        SELECT * FROM 
+          (SELECT ser1, ser1_zdrojser, ser2, ser2_zdrojser, typparu 
+          FROM ac_pair_den pair
+          INNER JOIN rsts_2905_memorial tmp ON tmp.ser = pair.ser1 AND tmp.zdrojser = pair.ser1_zdrojser
+          WHERE pair.typparu NOT IN ('PS', 'MDRS')        
+          UNION
+          SELECT ser1, ser1_zdrojser, ser2, ser2_zdrojser, typparu 
+          FROM ac_pair_den pair
+          INNER JOIN rsts_2905_memorial tmp ON tmp.ser = pair.ser2 AND tmp.zdrojser = pair.ser2_zdrojser
+          WHERE pair.typparu NOT IN ('PS', 'MDRS')); 
+          
+        UPDATE STATISTICS HIGH FOR TABLE rsts_2905_pair;                       
+      END IF;    
+    ELSE  
+      BEGIN
+        ON EXCEPTION IN(-206)
+        END EXCEPTION;
+        
+        DROP TABLE rsts_2905_saldo;
+      END;
+      
+      --zalozime temp tabulku pro evidenci DPD
+      CREATE TEMP TABLE rsts_2905_saldo(
+        id        INT,
+        konto     DEC(16, 0),
+        tko       CHAR(2),
+        datum     DATE,
+        preplatek DEC(16, 2)
+      ) WITH NO LOG;
+      
+      BEGIN
+        ON EXCEPTION IN(-206)
+        END EXCEPTION;
+        
+        DROP TABLE rsts_2905_vklad;
+      END;
+      
+      --zalozime temp tabulku pro evidenci DPD
+      CREATE TEMP TABLE rsts_2905_vklad(
+        realn     INT,
+        poradi    INT,
+        datprov   DATE,
+        vklad     DEC(16, 2)
+      ) WITH NO LOG;             
+      
+      LET _datumOld  = MDY(1,1,2999);
+      LET _preplatek = NULL;
+      IF(EXISTS(SELECT 1 FROM ac_ocsaldo_den WHERE konto = AKonto AND tko = ATko AND preplatek < 0)) THEN
+        LET _datUzavNaplnen = 0;
+        FOREACH c1 WITH HOLD FOR
+          SELECT id, NVL(datuzav, (SELECT DISTINCT valuta FROM rsts_2905_memorial WHERE ser = oc.ser)), preplatek
+          INTO _id, _datum, _preplatek 
+          FROM ac_ocsaldo_den oc 
+          WHERE
+            oc.konto = AKonto AND
+            oc.tko   = ATko
+          ORDER BY  
+            NVL(datuzav, (SELECT DISTINCT valuta FROM rsts_2905_memorial WHERE ser = oc.ser)) DESC,
+            id DESC 
+            
+          IF(_datumOld != _datum) THEN
+            -- zacinam vyhodnocovat nove datum
+            IF(_preplatek < 0) THEN
+              INSERT INTO rsts_2905_saldo (id, konto, tko, datum, preplatek)
+              VALUES (_id, AKonto, ATko, _datum, _preplatek);
+              
+              IF(_datum = ADatUzav) THEN
+                LET _datUzavNaplnen = 1;
+              END IF;
+            END IF;
+            LET _datumOld = _datum;
+          END IF;  
+        END FOREACH;
+        
+        IF(_datUzavNaplnen = 0) THEN
+          -- musim overit jeste posledni interval
+          SELECT SUM(dbcr*castka) INTO _saldo FROM rsts_2905_memorial WHERE valuta <= ADatUzav;
+          SELECT ocsaldo INTO _ocsaldo FROM ac_ocsaldo_den WHERE 
+            id = (SELECT MAX(id) FROM ac_ocsaldo_den oc 
+                  WHERE 
+                    oc.konto = AKonto AND 
+                    oc.tko = ATko AND
+                    NVL(oc.datuzav, (SELECT DISTINCT valuta FROM rsts_2905_memorial WHERE ser = oc.ser)) <= ADatUzav);
+          IF(_ocsaldo > _saldo) THEN
+            INSERT INTO rsts_2905_saldo (id, konto, tko, datum, preplatek)
+            VALUES (-1, AKonto, ATko, ADatUzav, _saldo - _ocsaldo);          
+          END IF;  
+        END IF;
+        
+        UPDATE STATISTICS HIGH FOR TABLE rsts_2905_saldo;
+      END IF;
+      
+      INSERT INTO rsts_2905_vklad
+        SELECT realn, poradi, datprov, vklad FROM rs_vklad_kart WHERE realn = ARealn AND stav = 'C' AND datprov <= ADatUzav;
+      
+      --CREATE INDEX rsts_2905_vklad_i1 ON rsts_2905_vklad(datprov);  
+      UPDATE STATISTICS HIGH FOR TABLE rsts_2905_vklad;     
+    END IF;            
+    
+  ELIF(AFaze = 4) THEN
+    SELECT reals INTO _reals FROM rz_real_mat rz
+    JOIN ru_real_mat ru ON ru.realss = rz.realn
+    WHERE
+      ru.realn = ARealn;        
+    
+    INSERT INTO rsts_2905_dpdevid (realuv, datprvvyhodnoceni, currentDPD, typvyhodnoceni)  
+      SELECT ARealn, datprvvyhodnoceni, MAX(currentdpd), 'S' FROM ep_dpdevid_den 
+      WHERE 
+        (realuv = ARealn OR reals = _reals) AND
+        (datvyhodnoceni <= ADatUzav OR datprvvyhodnoceni <= ADatUzav)
+      GROUP BY datprvvyhodnoceni
+      ORDER BY datprvvyhodnoceni;
+  ELIF(AFaze = 5) THEN
+    INSERT INTO rsts_2905_dpdevid (osoba, datprvvyhodnoceni, currentDPD, typvyhodnoceni)  
+      SELECT AOsoba, datprvvyhodnoceni, MAX(currentdpd), 'P' FROM ep_dpdevid_den 
+      WHERE 
+        realuv IN (SELECT realn FROM rsts_2905_dpd WHERE osoba = AOsoba AND faze IN (1, 2, 3, 4))
+      GROUP BY datprvvyhodnoceni
+      ORDER BY datprvvyhodnoceni; 
+      
+    SELECT MAX(datvyhodnoceni) INTO _datvyhodnoceni FROM ep_dpdevid_den
+    WHERE 
+      realuv IN (SELECT realn FROM rsts_2905_dpd WHERE osoba = AOsoba AND faze IN (1, 2, 3, 4));
+      
+    UPDATE rsts_2905_dpdevid SET datvyhodnoceni = _datvyhodnoceni 
+    WHERE                    
+      id = (SELECT MAX(id) FROM rsts_2905_dpdevid);
+  END IF;
+  
+  UPDATE STATISTICS HIGH FOR TABLE rsts_2905_dpdevid;
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF; 
+    
+END PROCEDURE;
+

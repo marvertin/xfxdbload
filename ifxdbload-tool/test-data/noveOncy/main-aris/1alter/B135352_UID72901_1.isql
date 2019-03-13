@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135352_UID72901_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22326: Výkonnost: přidat index eu_xvariapu_cis (refvarid) {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+--INDEXES
+CREATE INDEX eu_xvariapu_cis_i1 ON eu_xvariapu_cis(refvarid);
+
+ROLLBACK WORK;
+
+--End of B135352_UID72901_1

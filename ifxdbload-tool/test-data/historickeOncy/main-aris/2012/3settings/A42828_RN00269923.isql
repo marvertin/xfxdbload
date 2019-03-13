@@ -1,0 +1,198 @@
+-- @TC:ONCE: ID = V2, A42828_RN00269923
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání
+
+BEGIN WORK;
+
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  1 , 'hl.dlužník',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  2 , 'spoludlužník-manžel/ka',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  3 , 'pøistupitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  4 , 'ruèitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  5 , 'zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  6 , 'hl.dlužník + spoludlužník',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  7 , 'hl.dlužník + pøistupitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  8 , 'hl.dlužník + ruèitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  9 , 'hl.dlužník + zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  10  , 'hl.dlužník + spoludlužník + pøistupitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  11  , 'hl.dlužník + spoludludlužník+ pøistupitel + ruèitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  12  , 'hl.dlužník + spoludludlužník+ pøistupitel + ruèitel + zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  13  , 'hl.dlužník + pøistupitel + ruèitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  14  , 'hl.dlužník + pøistupitel + ruèitel + zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  15  , 'hl.dlužník + ruèitel + zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  16  , 'spoludlužník + pøistupitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  17  , 'spoludlužník + ruèitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  18  , 'spoludlužník + zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  19  , 'spoludlužník + pøistupitel + ruèitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  20  , 'spoludlužník + pøistupitel + ruèitel + zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  21  , 'spoludlužník + ruèitel + zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  22  , 'pøistupitel + ruèitel',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  23  , 'pøistupitel + ruèitel + zástavce',  1 );
+  INSERT INTO eo_insolvence_cis (id, nazev, platnost) VALUES (  24  , 'ruèitel + zástavce',  1 );
+
+  INSERT INTO ru_skupzvlrezim_cis (id, nazev, platnost) VALUES (1, 'OVP - pozdní vymáhání', 1);
+  INSERT INTO ru_skupzvlrezim_cis (id, nazev, platnost) VALUES (2, 'PRAV - pozdní vymáhání', 1);
+  INSERT INTO ru_skupzvlrezim_cis (id, nazev, platnost) VALUES (3, 'INS – pozdní vymáhání', 1);
+  INSERT INTO ru_skupzvlrezim_cis (id, nazev, platnost) VALUES (4, 'Souhrnné - pozdní vymáhání', 1);
+  
+  --SKUPINA 1
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1,38,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1,9,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1,4,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1,5,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1,2,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1,26 ,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 28,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 29,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 3,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 1,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 17,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 19,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 6,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 35,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 39,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(1, 8,1);
+  
+  --SKUPINA 2
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 7,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2,10 ,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 12,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 18,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 23,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2,24,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 31,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 32,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 33,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 34,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(2, 37,1);
+    
+  --SKUPINA 3
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 40,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 41,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 42,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 43,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 44,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 45,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 46,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 47,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 48,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 49,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(3, 50,1);
+      
+  --SKUPINA 4    
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4,38,1);  
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 9,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 4,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4,5 ,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 2,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 26,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 28,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 29,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 3,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 1,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 17,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 19,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 6,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 35,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 39,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 8,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 7,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 10,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 12,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 18,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 23,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 24,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 31,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 32,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 33,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 34,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 37,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 40,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 41,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 42,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 43,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 44,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 45,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 46,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 47,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 48,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 49,1);
+  INSERT INTO ru_vazbazvlrezim_cis(skupina, rezim, platnost)
+    VALUES(4, 50,1);  
+
+ROLLBACK WORK;
+
+--End of A42828_RN00269923

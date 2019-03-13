@@ -1,0 +1,28 @@
+CREATE PROCEDURE RSTS_2905_osobyDPD(AOsoba    INT)
+                                    
+  DEFINE GLOBAL G_MONITOR_ON INTEGER DEFAULT 0;                                    
+  DEFINE _logovat   INT; 
+   
+  CALL tw_monitor_init(AOsoba,'MigraceDPD');
+  LET _logovat = 0;
+                                 
+  -- inicializace temp tabulek  
+  IF(G_MONITOR_ON = 1 ) THEN LET _logovat = _logovat + 100; END IF;                                     
+  CALL RSTS_2905_initDPD(NULL, NULL, NULL, AOsoba, _logovat, 5);       
+  
+  -- doplneni uverovych intervalu
+  IF(G_MONITOR_ON = 1 ) THEN LET _logovat = _logovat + 100; END IF;
+  CALL RSTS_2905_osobyUverDPD(AOsoba, _logovat);  
+         
+  -- zpracovani odvozenych zaznamu maxDPD, totalDPD
+  IF(G_MONITOR_ON = 1 ) THEN LET _logovat = _logovat + 100; END IF;
+  CALL RSTS_2905_odvozeneDPD(NULL, NULL, NULL, NULL, AOsoba, _logovat);            
+          
+  -- presun dat z temp tabulek do pevnych evidenci
+  IF(G_MONITOR_ON = 1 ) THEN LET _logovat = _logovat + 100; END IF;
+  CALL RSTS_2905_finishDPD(-1, AOsoba, _logovat);
+  
+  
+  CALL tw_monitor_finish();  
+  
+END PROCEDURE;

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B132095_UID49117_1
+-- @TC:ONCE: DESCRIPTION = Propis údajů modelu do úvěrové smlouvy {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--  Datum předpokládaného 1. čerpání
+--  Jde o datum (vypočtené modelem), ve kterém je odhad, kdy klient bude čerpat úvěr
+
+alter table eu_sml_mat add datprvcerpodhad DATE;
+
+alter table eu_sml_arch add datprvcerpodhad DATE;
+
+
+ROLLBACK WORK;
+
+--End of B132095_UID49117_1

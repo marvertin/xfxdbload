@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B119903_RN00426727_3-pohl
+-- @TC:ONCE: DESCRIPTION = Main: Implementacia mapovacieho kodu 5 v ramci poziadavku Felixovho sporenia (RN00412463) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ah_pohl_cis (
+  typ, tko, typdluznika, fincode, priorita, ucetvynos, superprior, druhpredpis, ucetpohl, druhsplatka, 
+  ucetvynosbudouci, druhvynosbudouci, ucetpodrozpohl, ucetpodrozvynos, ucetpodrozpohlnep, ucetpodrozvynosnep, 
+  ucetvynosop, ucetklaspohl, druhpodrozstorno, druhpodrozprevod, faze, fpi, popis, poznamka, platnost)
+SELECT
+  typ, tko, typdluznika, 5, priorita, ucetvynos, superprior, druhpredpis, ucetpohl, druhsplatka, 
+  ucetvynosbudouci, druhvynosbudouci, ucetpodrozpohl, ucetpodrozvynos, ucetpodrozpohlnep, ucetpodrozvynosnep, 
+  ucetvynosop, ucetklaspohl, druhpodrozstorno, druhpodrozprevod, faze, fpi, popis, poznamka, platnost
+FROM ah_pohl_cis AS ah_pohl_cis2
+WHERE NOT EXISTS (
+  SELECT *
+  FROM ah_pohl_cis
+  WHERE ah_pohl_cis.fincode = 5
+    AND ah_pohl_cis.tko = ah_pohl_cis2.tko
+    AND ah_pohl_cis.typdluznika = ah_pohl_cis2.typdluznika
+    AND ah_pohl_cis.typ = ah_pohl_cis2.typ
+)
+AND fincode = 4;
+
+ROLLBACK WORK;
+
+--End of B119903_RN00426727_3-pohl

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B121763_RN00440253_3
+-- @TC:ONCE: DESCRIPTION = RPSN: Do CF pro RPSN není zahrnuta SP mezi hranicí nákladů a prvním čerpáním {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO EP_ZahrnutiPohybuCFModel_Cis(typpohybumodel, definition, tsml, period, konto, include, cashflowday, platnost) VALUES('S', 'U', 'PFSU', 'A', 'S', 1, 'V', 1);
+INSERT INTO EP_ZahrnutiPohybuCFModel_Cis(typpohybumodel, definition, tsml, period, konto, include, cashflowday, platnost) VALUES('S', 'U', 'PPSU', 'A', 'S', 1, 'V', 1);
+INSERT INTO EP_ZahrnutiPohybuCFModel_Cis(typpohybumodel, definition, tsml, period, konto, include, cashflowday, platnost) VALUES('S', 'U', 'PUPO', 'A', 'S', 1, 'V', 1);
+INSERT INTO EP_ZahrnutiPohybuCFModel_Cis(typpohybumodel, definition, tsml, period, konto, include, cashflowday, platnost) VALUES('S', 'U', 'PUSU', 'A', 'S', 1, 'V', 1);
+INSERT INTO EP_ZahrnutiPohybuCFModel_Cis(typpohybumodel, definition, tsml, period, konto, include, cashflowday, platnost) VALUES('S', 'U', 'PUSU', 'B', 'S', 1, 'C', 1);
+
+ROLLBACK WORK;
+
+--End of B121763_RN00440253_3

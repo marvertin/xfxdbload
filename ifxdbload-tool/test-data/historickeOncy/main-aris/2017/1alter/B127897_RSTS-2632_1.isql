@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B127897_RSTS-2632_1
+-- @TC:ONCE: DESCRIPTION = Změna volání scoringu
+
+BEGIN WORK;
+
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eu_contractchecking_kart_c1;
+
+ALTER TABLE eu_contractchecking_kart
+ADD CONSTRAINT CHECK (takce IN ('MANU' ,'DOCU' ,'FIRM' ,'INCO' ,'TELE' ,'URE2' ,'SCO2' ,'SETT' ,'CRTE' ,'INPR' ,'INDI' ,'WIRE' ,'REPL' ,'CANC' ,'CANP' ,'SOL2' ,'REPE' ,'KONS' ,'POZM' ,'SUPZ', 'OSDO', 'RISU', 'SC2S')) CONSTRAINT eu_contractchecking_kart_c1;
+
+ROLLBACK WORK;
+
+--End of B127897_RSTS-2632_1

@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, A49112_RN00308221_3
+-- @TC:ONCE: DESCRIPTION = Automatizace stahování/odesílání a zpracování souborù/dávek z/do CC ÈNB {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+INSERT INTO tw_smstyp_cis (zkratka,popis,textsms,ignorovatcas) 
+VALUES ('CHYBA_CC_IMP','Chyba importu CC','Chyba importu dávky <<id_davky>> CC. <<text_chyby>>',1); 
+
+INSERT INTO tw_smstyp_cis (zkratka,popis,textsms,ignorovatcas) 
+VALUES ('CHYBA_CC_EXP','Chyba exportu CC','Chyba exportu dávky <<id_davky>> CC. <<text_chyby>>',1); 
+
+INSERT INTO tw_emailtyp_cis (zkratka,popis,predmet,obsah,maxpokusu,maxinterval,priorita,zpusob) 
+VALUES ('CHYBA_CC_IMP','Chyba importu CC','Chyba importu dávky <<id_davky>> CC',
+        'Pøi importu dávky <<id_davky>> CC došlo k chybì. \n============================================================\n <<text_chyby>>',
+        1,24,2,'A'); 
+
+INSERT INTO tw_emailtyp_cis (zkratka,popis,predmet, obsah, maxpokusu,maxinterval,priorita,zpusob) 
+VALUES ('CHYBA_CC_EXP','Chyba exportu CC','Chyba exportu dávky <<id_davky>> CC',
+        'Pøi exportu dávky <<id_davky>> CC došlo k chybì. \n============================================================\n <<text_chyby>>',
+        1,24,2,'A');
+
+INSERT INTO tw_runningapp (appname,appstatus) VALUES ('CC_IMPORT',0);
+
+INSERT INTO tw_runningapp (appname,appstatus) VALUES ('CC_EXPORT',0);
+
+
+ROLLBACK WORK;
+
+--End of A49112_RN00308221_3

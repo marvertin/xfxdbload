@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A48022_RN00312182_1
+-- @TC:ONCE: DESCRIPTION = neexistující indexy na tabulkách - migrace nelze nasadit na full db! {DEFECT}
+
+
+BEGIN WORK;
+
+CREATE INDEX ec_komcrp_kart_i2 ON ec_komcrp_kart(smlouva,tsml);
+CREATE INDEX ev_pojistcrp_mat_i1 ON ev_pojistcrp_mat(smlouva,tsml);
+
+ROLLBACK WORK;
+
+--End of A48022_RN00312182_1

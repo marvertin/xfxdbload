@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B136513_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+ALTER TABLE eo_osoba_mat MODIFY klasifikace smallint default null;
+
+ALTER TABLE eo_osoba_mat MODIFY klasklient smallint default null;
+
+ALTER TABLE eo_osoba_arch MODIFY klasifikace smallint;
+
+ALTER TABLE eo_osoba_arch MODIFY klasklient smallint;
+
+ALTER TABLE eo_fozmpl_kart MODIFY klasifikace smallint default null;
+
+ALTER TABLE eo_fozmpl_kart MODIFY klasklient smallint default null;
+
+ROLLBACK WORK;
+
+--End of B136513_UID77507_1

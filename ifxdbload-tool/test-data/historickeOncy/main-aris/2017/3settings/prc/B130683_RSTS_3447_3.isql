@@ -1,0 +1,47 @@
+create procedure B130683_RSTS_3447_3()
+
+define _sernoH int;
+define _sernoB int;
+define _index int;
+define _varPu char(10);
+define _koefzivmin   DECIMAL(16,2);
+
+--for _index IN (1,2,3,4)
+for _index = 1 to 3
+
+  insert into eu_kontrolavsth_cis (popis, tsml, platnost, platnostod, rozlisitpohlavi)
+    VALUES('Sada parametrů ' || _index, 'PFSU', 1, MDY(1,1,2000), 0);
+  let _sernoH = TW_LastSer();
+  
+  if _index == 1 then
+    let _koefzivmin = 1.14;
+    for _varPu IN ('GPB','GP','FPU','ZO','ZOR','GPP','GPUE','FPUE','GPBE','FPRBU'
+        ,'FPPU','FPRRBU','FPRU','FPRRU','GPRB','GPR','GPVB','GPVBE')
+      insert into eu_kontrolavsthv_cis(refheader, refvariapu) VALUES (_sernoH, _varPu);
+    end for;
+  elif _index == 2 then
+    let _koefzivmin = 1.5;
+    for _varPu IN ('G','FU','FP90','FPUE90','FPP90')
+      insert into eu_kontrolavsthv_cis(refheader, refvariapu) VALUES (_sernoH, _varPu);
+    end for;
+  elif _index == 3 then
+    let _koefzivmin = 1.8;
+    insert into eu_kontrolavsthv_cis(refheader, refvariapu) VALUES (_sernoH, 'F90');
+  end if;
+  
+  insert into eu_kontrolavstb_cis(parentserno, pohlavi, koefzivmin, vekprisplatnosti, delkauveruroky, minprijemej, platnost)
+    VALUES(_sernoH, 0/*muž*/, _koefzivmin, 76, 30, 9640, 1);
+  let _sernoB = TW_LastSer();
+  
+  insert into eu_prijemhranice_cis (parentserno, prijemod, prijemdo, hranicebonity, hranicedti, hranicedsti, platnost)
+    VALUES (_sernoB, 9640, 14999, 1.0, 5, 40, 1);
+  insert into eu_prijemhranice_cis (parentserno, prijemod, prijemdo, hranicebonity, hranicedti, hranicedsti, platnost)
+    VALUES (_sernoB, 15000, 24999, 1.0, 5, 40, 1);
+  insert into eu_prijemhranice_cis (parentserno, prijemod, prijemdo, hranicebonity, hranicedti, hranicedsti, platnost)
+    VALUES (_sernoB, 25000, 39999, 1.0, 5.5, 50, 1);
+  insert into eu_prijemhranice_cis (parentserno, prijemod, prijemdo, hranicebonity, hranicedti, hranicedsti, platnost)
+    VALUES (_sernoB, 40000, NULL, 1.0, 5.5, 50, 1);
+    
+end for;
+
+end procedure; --B130683_RSTS_3447_3

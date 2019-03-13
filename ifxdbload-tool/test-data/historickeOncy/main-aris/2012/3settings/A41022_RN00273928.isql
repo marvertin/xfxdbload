@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A41022_RN00273928
+-- @TC:ONCE: DESCRIPTION = parametry povolující monitoring C/S aplikací
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('TW', 'appmonitoring', '*', 'CIBIS-FinAcc', '0', 1);
+call TW_RegSetOrAddKey('TW', 'appmonitoring', '*', 'CIBIS-FinFlow', '0', 1);
+call TW_RegSetOrAddKey('TW', 'appmonitoring', '*', 'CIBIS-Main', '0', 1);
+call TW_RegSetOrAddKey('TW', 'appmonitoring', '*', 'CIBIS-OS', '0', 1);
+
+ROLLBACK WORK;

@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B126242_RN00442031_3
+-- @TC:ONCE: DESCRIPTION = Úvěry: Evidence a provázanost příloh (marketingových akcí) k úvěrům {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(48,'Přílohy na smlouvě o úvěru','INTEGER',1,null,1,1);
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(49,'Výše běžné úrokové sazby úvěru','DECIMAL(5,2)',0,null,1,1);
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(50,'Výše sankční úrokové sazby úvěru','DECIMAL(5,2)',0,null,1,1);
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(51,'Nesplacená jistina úvěru ','DECIMAL(16,2)',0,null,1,1);
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(52,'Datum posledního čerpání úvěru','DATE',0,null,1,1);
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(53,'Existence smlouvy o stavebním spoření pro úvěr KOME','BOOLEAN',0,null,1,0);
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(54,'Datum účinnosti úvěru','DATE',0,null,1,1);
+
+ROLLBACK WORK;
+
+--End of B126242_RN00442031_3

@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B125229_RN00443393_1
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodsh_den ADD (
+  
+  -- Vyhodnocení dílčích RPSN
+  -- Určuje, zda při spuštění modelu bylo požadováno vyhodnotit dílčí RPSN úvěru (RPSN PÚ a RPSN SÚ)
+  vypdilcirpsn   Integer BEFORE eir,
+  
+  -- Pro CF k doplňkovému RPSN použit typ sazby
+  -- Určuje, zda při sestavení pro CF k výpočtu doplňkové RPSN systém vycházel z definic číselníku (a dalších pravidel) určených primárně pro souhrnné RPSN nebo RPSNpu nebo RPSNsu
+  doplnrpsncfsazba   char(2)
+  ),
+  ADD CONSTRAINT (
+    CHECK (vypdilcirpsn IN (0,1)) CONSTRAINT ep_splspormodsh_den_dwny
+  )
+;
+
+
+ALTER TABLE ep_splspormodsh_den
+  ADD CONSTRAINT (CHECK (doplnRpsnCFsazba in ('SO', 'PU', 'SU')) CONSTRAINT ep_splspormodsh_den_c4);
+  
+ROLLBACK WORK;
+
+--End of B125229_RN00443393_1

@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, A48295_RN00308360_1
+-- @TC:ONCE: DESCRIPTION = Doplnìní nového pole do tabulky tv_head_den {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--       tv_headparams_den
+
+-- 10  tv_headparams_den-1/4       [CREATE.TABLE]
+CREATE TABLE tv_headparams_den (
+    idvypis         SERIAL   NOT NULL,
+    parametry      VARCHAR(30)  ,
+    refuser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND
+) LOCK MODE ROW
+;
+
+-- 11  tv_headparams_den-2/4       [CREATE.INDEX]
+CREATE unique INDEX tv_headparams_den_pk ON tv_headparams_den (idvypis) ;
+
+-- 12  tv_headparams_den-3/4       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE tv_headparams_den
+    ADD CONSTRAINT PRIMARY KEY (idvypis)  CONSTRAINT tv_headparams_den_pk;
+
+-- 20  tv_headparams_den-4/4       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE tv_headparams_den
+    ADD CONSTRAINT FOREIGN KEY (idvypis) REFERENCES tv_head_den(idvypis)  CONSTRAINT tv_headparams_den_f1;
+
+ROLLBACK WORK;
+
+--End of A48295_RN00308360_1

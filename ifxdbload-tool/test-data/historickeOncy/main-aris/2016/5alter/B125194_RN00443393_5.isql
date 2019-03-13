@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B125194_RN00443393_5
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE pro_bssimulationcase
+  drop (calculateSavingEffectiveRate, calculateCreditEffectiveRate)
+;
+
+ROLLBACK WORK;
+
+--End of B125194_RN00443393_5

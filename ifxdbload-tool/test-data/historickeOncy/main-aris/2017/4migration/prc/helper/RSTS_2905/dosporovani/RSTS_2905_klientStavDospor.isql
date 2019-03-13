@@ -1,0 +1,66 @@
+CREATE FUNCTION RSTS_2905_klientStavDospor(ARealn   INT,
+                                           ADatum   DATETIME YEAR TO SECOND)
+  RETURNING INT;
+
+  DEFINE _os          INT;
+  DEFINE _stav        CHAR(1);
+  DEFINE _smlSpor     DEC(16, 0);
+  DEFINE _tsmlSpor    CHAR(4);
+  DEFINE _smlouva     DEC(16,0);
+  DEFINE _tsml        CHAR(4);  
+  DEFINE _klasklient  INT;
+  DEFINE _reftime     DATETIME YEAR TO SECOND;
+
+
+  LET _os = NULL;
+
+  CALL EP_SmlouvaReal(ARealn) RETURNING _smlouva, _tsml;
+
+  FOREACH
+    SELECT aa.os, bb.stav 
+    INTO _os, _stav 
+    FROM EO_Role_Mat aa, EO_osoba_mat bb
+    WHERE 
+      aa.smlouva = _smlouva AND 
+      aa.typ = _tsml AND 
+      aa.typRole = 'KL' AND 
+      aa.stav in ('A', 'U') AND
+      aa.os = bb.os AND 
+      aa.portime <= ADatum
+    ORDER BY aa.portime DESC
+
+    EXIT FOREACH;
+  END FOREACH; 
+
+  IF _os IS NULL THEN
+    SELECT smlspor, tsmlspor INTO _smlSpor, _tsmlSpor FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _tsml;
+    FOREACH
+      SELECT os, stav 
+      INTO _os, _stav 
+      FROM EO_Role_Mat
+      WHERE 
+        smlouva = _smlSpor AND 
+        typ = _tsmlSpor AND 
+        typRole = 'KL' AND 
+        stav in ('A', 'U') AND
+        portime <= ADatum
+      ORDER BY portime DESC
+
+      EXIT FOREACH;
+    END FOREACH;
+  END IF;
+
+  LET _klasklient = 0;
+  FOREACH
+    SELECT reftime, klasifikace INTO _reftime, _klasklient FROM eo_osoba_mat WHERE os = _os AND reftime <= ADatum
+    UNION
+    SELECT reftime, klasifikace FROM eo_osoba_arch WHERE os = _os AND reftime <= ADatum    
+    ORDER BY 
+      reftime DESC 
+
+    EXIT FOREACH;
+  END FOREACH;  
+
+  RETURN _klasklient;
+
+END FUNCTION

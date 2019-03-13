@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B127430_RN00457972_3
+-- @TC:ONCE: DESCRIPTION = Aktualizace OP - překlep {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE ru_takcedluh_cis SET popis = 'Aktualizace opravné položky' WHERE akce = 'ADJU';
+
+ROLLBACK WORK;
+
+--End of B127430_RN00457972_3

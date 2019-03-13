@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136144_UID81661_1-ltv2_4
+-- @TC:ONCE: DESCRIPTION = RSTS-26507: Výpočet LTV2-4 {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_vypocetltv_den ADD typLtv Char(4) DEFAULT 'LTV1' BEFORE datvypocet;
+ALTER TABLE eu_vypocetltv_den ADD CONSTRAINT (CHECK (typLtv in ('LTV1', 'LTV2', 'LTV3', 'LTV4')) CONSTRAINT eu_vypocetltv_den_c1);
+
+ROLLBACK WORK;
+
+--End of B136144_UID81661_1-ltv2_4

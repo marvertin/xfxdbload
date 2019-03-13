@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B131846_RSTS-3441_3
+-- @TC:ONCE: DESCRIPTION = Vymazání obecných podmínek pro číslo nové úlohy (asi pozůstatky staré úlohy se stejným číslem)
+
+BEGIN WORK;
+
+DELETE FROM tw_defcondpar
+    WHERE condid in (
+      SELECT condid FROM tw_defcond WHERE culohy = 2022
+    )
+;
+
+DELETE FROM tw_defcond WHERE culohy = 2022;
+
+ROLLBACK WORK;

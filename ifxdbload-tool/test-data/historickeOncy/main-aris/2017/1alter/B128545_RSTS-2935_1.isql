@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B128545_RSTS-2935_1
+-- @TC:ONCE: DESCRIPTION = Elektronický návrh na vklad
+
+
+BEGIN WORK;
+
+alter table eo_stat_cis
+  add kodwsnv Integer before popis;
+  
+alter table eo_stat_acis
+  add kodwsnv Integer before popis;
+  
+alter table ep_referent_cis 
+  add funkce CHAR(45);
+
+alter table ep_referent_acis
+  add funkce CHAR(45);
+   
+ROLLBACK WORK;
+
+--End of B128545_RSTS-2935_1

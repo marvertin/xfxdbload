@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B112599_RN00385429_3
+-- @TC:ONCE: DESCRIPTION = Odstranění aplikace CIBIS-Rm {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CALL TW_RegDelKey('AR','Basel','*','BaselExportUser');
+CALL TW_RegDelKey('AR','Basel','*','BaselExportPassword');
+CALL TW_RegDelKey('AR','Basel','*','BaselExportDB');
+CALL TW_RegDelKey('BL','*','extrakce','EOM');
+
+ROLLBACK WORK;
+
+--End of B112599_RN00385429_3

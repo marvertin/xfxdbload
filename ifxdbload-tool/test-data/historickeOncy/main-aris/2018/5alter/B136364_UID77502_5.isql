@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B136364_UID77502_5
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_fincodemap_cis DROP tarif;
+ALTER TABLE ep_fincodemap_cis DROP typos;
+ALTER TABLE ep_fincodemap_cis DROP klasifikace;
+
+ALTER TABLE ep_fincodemap_acis DROP tarif;
+ALTER TABLE ep_fincodemap_acis DROP typos;
+ALTER TABLE ep_fincodemap_acis DROP klasifikace;
+
+ROLLBACK WORK;
+
+--End of B136364_UID77502_5

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B133858_UID57832_1
+-- @TC:ONCE: DESCRIPTION = ID zahraniční firmy {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE pef_firma_cis MODIFY ICO CHAR(10);  -- Odstranění NOT NULL
+ALTER TABLE pef_firma_cis ADD zahrfirmaid CHAR(15) BEFORE whitelist;
+
+ALTER TABLE pef_firma_acis MODIFY ICO CHAR(10);
+ALTER TABLE pef_firma_acis ADD zahrfirmaid CHAR(15) BEFORE whitelist;
+
+ROLLBACK WORK;
+
+--End of B133858_UID57832_1

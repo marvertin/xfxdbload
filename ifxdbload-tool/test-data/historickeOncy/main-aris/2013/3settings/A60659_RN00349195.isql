@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A60659_RN00349195
+-- @TC:ONCE: DESCRIPTION = Chyba editoru DB registru
+BEGIN WORK;
+
+update tw_funkcionalita_cis set funkcionalita = replace (funkcionalita, '(', '[') where funkcionalita matches '*(*';
+
+update tw_funkcionalita_cis set funkcionalita = replace (funkcionalita, ')', ']') where funkcionalita matches '*)*';
+
+ROLLBACK WORK;
+
+--End of A60659_RN00349195

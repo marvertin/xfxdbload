@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, A42453_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt - sporeni
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey ('RS','FO','open','trealS', 'SPFO', 0, 'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Typ realizace spoøení pro charakter úètu - stavební spoøení FO');
+
+call TW_RegSetOrAddKey ('RS','FO','open','trealP', 'PLFO', 0, 'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Typ realizace spoøení pro charakter úètu – platební stavební spoøení FO');
+
+call TW_RegSetOrAddKey ('RS','PO','open','trealS', 'SSPO', 0, 'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Typ realizace spoøení pro charakter úètu - stavební spoøení PO#');
+
+call TW_RegSetOrAddKey ('RS','PO','open','trealP', 'PLPO', 0, 'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Typ realizace spoøení pro charakter úètu – platební stavební spoøení PO');
+
+call TW_RegSetOrAddKey ('ES','*','platspor','jinasmlouva', 1, 1,'Spoøení', 'Vytváøení smlouvy SS', 'Creating of BS contract', 'Podmínit platební stavební spoøení existujícím stavebním spoøením');
+
+call TW_RegSetOrAddKey ('ES','*','platspor','maxpocet', 1, 1,'Spoøení', 'Vytváøení smlouvy SS', 'Creating of BS contract', 'Maximální poèet platebních stavebních spoøení pro klienta');
+
+call TW_RegSetOrAddKey ('ES','*','zmena','typuhrzmcharu', 'ZMCHARU', 1,'Spoøení', 'Zmìna smlouvy SS', 'Change of BS contract', 'Typ úhrady za zmìnu charakteru úètu');
+
+call TW_RegSetOrAddKey ('RZ','zuct','PLFO','druhvyp', 12, 1,'Spoøení', 'Zúètování spoøení úvìr', 'Transfer from saving to credit', 'Druh výpisu PLFO');
+
+call TW_RegSetOrAddKey ('RZ','zuct','PLPO','druhvyp', 62, 1,'Spoøení', 'Zúètování spoøení úvìr', 'Transfer from saving to credit', 'Druh výpisu PLPO');
+
+call TW_RegSetOrAddKey ('RS','PLFO','*','dotaceucet', 612005, 1,'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Èíslo nákladového úètu pro dotaci spoøicího konta PLFO');
+
+call TW_RegSetOrAddKey ('RS','PLPO','*','dotaceucet', null, 1,'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Èíslo nákladového úètu pro dotaci spoøicího konta PLPO');
+
+call TW_RegSetOrAddKey ('RS','PLFO','*','maxdotace', 1001, 1,'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Maximální výše dotace spoøicího konta PLFO');
+
+call TW_RegSetOrAddKey ('RS','PLPO','*','maxdotace', null, 1,'Spoøení', 'Realizace spoøení', 'Parameters of saving realization', 'Maximální výše dotace spoøicího konta PLPO');
+
+call TW_RegSetOrAddKey ('ES','bsavingrq','S','koefuhr', 0, 1,'Spoøení', 'Žádost o novou smlouvu', 'Uzavøení smlouvy SS prostøednictvím CIBIS-Web', 'Koeficient vstupní úhrady pro obchodní kanál CIBIS- Web - Stavební spoøení');
+
+call TW_RegSetOrAddKey ('ES','bsavingrq','P','koefuhr', 0, 1,'Spoøení', 'Žádost o novou smlouvu', 'Uzavøení smlouvy SS prostøednictvím CIBIS-Web', 'Koeficient vstupní úhrady pro obchodní kanál CIBIS- Web - Platební stavební spoøení');
+
+ROLLBACK WORK;

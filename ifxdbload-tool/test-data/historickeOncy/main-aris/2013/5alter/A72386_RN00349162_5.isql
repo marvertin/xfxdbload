@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A72386_RN00349162_5
+-- @TC:ONCE: DESCRIPTION = Pásmové úroèení ZÚ
+
+
+BEGIN WORK;
+
+ALTER TABLE ur_global_cis DROP sazba;
+ALTER TABLE ur_global_acis DROP sazba;
+
+ROLLBACK WORK;
+
+--End of A72386_RN00349162_5

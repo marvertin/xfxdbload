@@ -1,0 +1,130 @@
+-- @TC:ONCE: ID = V2, B132879_UID50224_1
+-- @TC:ONCE: DESCRIPTION = Rozdělení číselníku variant PÚ na základ a časové rozlišení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eu_variapu_acis
+
+-- 78  eu_variapu_acis-1/3       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (kontrsaldosscerp IN (0 ,1 )) CONSTRAINT "aris".eu_variapu_acis_dtz2 */
+ALTER TABLE eu_variapu_acis DROP CONSTRAINT eu_variapu_acis_dtz2;
+
+-- 79  eu_variapu_acis-2/3       [ALTER.COLUMN]
+ALTER TABLE eu_variapu_acis
+    MODIFY poznamka        VARCHAR(255)                              ;/* previouse: char (70) : ... : ... */
+
+-- ###############################################################
+--       eu_variapu_cis
+
+-- 81  eu_variapu_cis-1/6       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (kontrsaldosscerp IN (0 ,1 )) CONSTRAINT "aris".eu_variapu_cis_dtz0 */
+ALTER TABLE eu_variapu_cis DROP CONSTRAINT eu_variapu_cis_dtz0;
+
+-- 82  eu_variapu_cis-2/6       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (podepsatbiom IN (0 ,1 )) CONSTRAINT "aris".eu_variapu_cis_dnz0 */
+ALTER TABLE eu_variapu_cis DROP CONSTRAINT eu_variapu_cis_dnz0;
+
+-- 83  eu_variapu_cis-3/6       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (nabizprouz IN (0 ,1 )) CONSTRAINT "aris".eu_variapu_cis_diwm */
+ALTER TABLE eu_variapu_cis DROP CONSTRAINT eu_variapu_cis_diwm;
+
+-- 84  eu_variapu_cis-4/6       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (klientnabizet IN (0 ,1 )) CONSTRAINT "aris".eu_variapu_cis_djap */
+ALTER TABLE eu_variapu_cis DROP CONSTRAINT eu_variapu_cis_djap;
+
+ALTER TABLE eu_variapu_cis
+    MODIFY poznamka        VARCHAR(255)                              ;/* previouse: char (70) : ... : ... */
+   
+    
+    
+-- ###############################################################
+--       eu_xvariapu_acis
+
+-- 94  eu_xvariapu_acis-1/1       [CREATE.TABLE]
+CREATE TABLE eu_xvariapu_acis (
+    idarch          SERIAL  ,
+    serno           INTEGER  ,
+    refvarid        CHAR(10)  ,
+    platnostod      DATE  ,
+    platnostdo      DATE  ,
+    nabizprouz      Integer DEFAULT 0 ,
+    nabizod         DATE  ,
+    nabizdo         DATE  ,
+    zaklursazba     DECIMAL(6, 2)  ,
+    sankursazba     DECIMAL(6, 2)  ,
+    referminursazba DECIMAL(6, 2)  ,
+    koefzivmin      DECIMAL(6, 2)  ,
+    kontrsaldosscerp Integer  ,
+    minsaldosscerp  DECIMAL(16, 2)  ,
+    podepsatbiom    Integer DEFAULT 0 ,
+    vysepubiom      DECIMAL(16,2)  ,
+    naklnadomos   DECIMAL(16, 2),
+    klientnabizet   Integer DEFAULT 0 ,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer DEFAULT 1 ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    poruser         CHAR(20) DEFAULT USER ,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND ,
+    refuser         CHAR(20) DEFAULT USER ,
+    CHECK (nabizprouz IN (0,1)) CONSTRAINT eu_xvariapu_acis_diwm,
+    CHECK (kontrsaldosscerp IN (0,1)) CONSTRAINT eu_xvariapu_acis_dtz0,
+    CHECK (podepsatbiom IN (0,1)) CONSTRAINT eu_xvariapu_acis_dnz0,
+    CHECK (klientnabizet IN (0,1)) CONSTRAINT eu_xvariapu_acis_djap,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_xvariapu_acis_dt0p
+) LOCK MODE ROW
+;
+
+-- ###############################################################
+--       eu_xvariapu_cis
+
+-- 95  eu_xvariapu_cis-1/3       [CREATE.TABLE]
+CREATE TABLE eu_xvariapu_cis (
+    serno           SERIAL   NOT NULL,
+    refvarid        CHAR(10)   NOT NULL,
+    platnostod      DATE  ,
+    platnostdo      DATE  ,
+    nabizprouz      Integer DEFAULT 0 NOT NULL,
+    nabizod         DATE  ,
+    nabizdo         DATE  ,
+    zaklursazba     DECIMAL(6, 2)  ,
+    sankursazba     DECIMAL(6, 2)  ,
+    referminursazba DECIMAL(6, 2)  ,    
+    koefzivmin      DECIMAL(6, 2)  ,
+    kontrsaldosscerp Integer DEFAULT 0 NOT NULL,
+    minsaldosscerp  DECIMAL(16, 2)  ,
+    podepsatbiom    Integer DEFAULT 0 NOT NULL,
+    vysepubiom      DECIMAL(16,2)  ,
+    naklnadomos   DECIMAL(16, 2),
+    klientnabizet   Integer DEFAULT 0 NOT NULL,
+    poznamka        VARCHAR(255)  ,
+    platnost        Integer DEFAULT 1 ,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (nabizprouz IN (0,1)) CONSTRAINT eu_xvariapu_cis_diwm,
+    CHECK (kontrsaldosscerp IN (0,1)) CONSTRAINT eu_xvariapu_cis_dtz0,
+    CHECK (podepsatbiom IN (0,1)) CONSTRAINT eu_xvariapu_cis_dnz0,
+    CHECK (klientnabizet IN (0,1)) CONSTRAINT eu_xvariapu_cis_djap,
+    CHECK (platnost IN (0,1)) CONSTRAINT eu_xvariapu_cis_dt0p
+) LOCK MODE ROW
+;
+
+-- 96  eu_xvariapu_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX eu_xvariapu_cis_pk ON eu_xvariapu_cis (serno) ;
+
+-- 97  eu_xvariapu_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eu_xvariapu_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eu_xvariapu_cis_pk;
+
+
+RENAME TABLE eu_variaputarif_acis TO old_eu_variaputarif_acis;
+
+RENAME TABLE eu_variaputarif_cis TO old_eu_variaputarif_cis;
+
+
+ROLLBACK WORK;
+
+--End of B132879_UID50224_1

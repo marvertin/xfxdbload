@@ -1,0 +1,56 @@
+-- @TC:ONCE: ID = V2, A41367_RN00273383_1
+-- @TC:ONCE: DESCRIPTION = Zavedení nové varianty modelování pro vyèíslení pøedèasného splacení úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table pro_BsSimulationCase
+
+  --Okamžik, ke kterému má být ukonèeno modelování (Význam: Režim vynuceného ukonèení modelování.)
+  add forcedStopSimulationMode   Integer,
+  
+  --Datum pøedèasného splacení (Význam: Datum, ke kterému má být nasimulováno pøedèasné 
+  --splacení a pøípadná výpovìï (je-li realizováno použití uspoøené èástky ve prospìch PÚ))
+  add prematureRepaymentDate   DATE,
+  
+  --Datum podání výpovìdi (Datum, ke kterému byla/bude podána výpovìï smlouvy SS. 
+  --Pozn.: Má vliv na úhradu za vypoøádání SS.)
+  add cancellationDate   DATE,
+  
+  --Použít uspoøenou èástku (Význam: Urèuje, zda k datu výpovìdi použít namodelované 
+  --saldo spoøení jako splátku (èásti) pøeklenovacího úvìru (tj. pøevod uspoøené èástky na PÚ).)
+  add useSavedAmount   Integer  DEFAULT 0,
+  
+  --Modelovat vklad v aktuálním mìsíci (Význam: Urèuje, zda v aktuálním kalendáøním 
+  --mìsíci (ve kterém je provádìno modelování) modelovat vklady.)
+  add simulateDepositForCurrMonth   Integer  DEFAULT 0,
+  
+  --Modelovat splátku v aktuálním mìsíci (Význam: Urèuje, zda v aktuálním kalendáøním 
+  --mìsíci (ve kterém je provádìno modelování) modelovat splátky)
+  add simulateRepaymentForCurrMonth   Integer  DEFAULT 0
+;
+
+alter table pro_BsSimulationCase
+
+  add constraint CHECK (usesavedamount IN (0,1)) CONSTRAINT pro_bssimulationcase_d6wj,
+  add constraint CHECK (simulatedepositforcurrmonth IN (0,1)) CONSTRAINT pro_bssimulationcase_d6wk,
+  add constraint CHECK (simulaterepaymentforcurrmonth IN (0,1)) CONSTRAINT pro_bssimulationcase_d6wv
+;
+
+alter table pro_fee
+
+    --Zahrnout úhradu za vypoøádání SS (Význam: Urèuje, zda pøi modelování 
+    --Do pøedèasného splacení úvìru k datu má systém vyhodnocovat a (pøi splnìní 
+    --podmínek) modelovat úhradu za vypoøádání SS.)
+    add simulateSavingContrSettlementFee   Integer
+    
+    --Výše úhrady za vypoøádání SS
+  , add savingContrSettlementFee   DECIMAL(16, 2)
+;
+
+alter table pro_fee
+  add constraint CHECK (simulatesavingcontrsettlementfee IN (0,1)) CONSTRAINT pro_fee_d6zm
+;
+
+ROLLBACK WORK;
+
+--End of A41367_RN00273383_1

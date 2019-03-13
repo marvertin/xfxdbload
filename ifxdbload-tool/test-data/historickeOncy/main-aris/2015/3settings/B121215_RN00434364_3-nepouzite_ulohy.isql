@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B121215_RN00434364_3-nepouzite_ulohy
+-- @TC:ONCE: DESCRIPTION = Insolvence - úkolovník {CUSTOMERREQUEST}
+BEGIN WORK;
+
+Set Triggers For EP_UkolReakce_Cis Disabled;
+Set Triggers For EP_UlohaFunkce_Cis Disabled;
+
+Delete From EP_UkolReakce_Cis Where reffunkce in (Select serno From EP_UlohaFunkce_Cis Where id in ('ZADUPKON', 'PRIPOHKON', 'POPRPOHKON', 'UZNPOHKON'));
+Delete From EP_UlohaFunkce_Cis Where id in ('ZADUPKON', 'PRIPOHKON', 'POPRPOHKON', 'UZNPOHKON');
+
+Set Triggers For EP_UkolReakce_Cis Enabled;
+Set Triggers For EP_UlohaFunkce_Cis Enabled;
+
+ROLLBACK WORK;
+--End of B121215_RN00434364_3-nepouzite_ulohy

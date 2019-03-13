@@ -1,0 +1,101 @@
+create PROCEDURE RSTS_24221_find_D()
+  
+  --povinne globalni promenne
+  DEFINE GLOBAL TW_ErrSql   Int          default null;
+  DEFINE GLOBAL TW_ErrIsam  Int          default null;
+  DEFINE GLOBAL TW_ErrText  VarChar(255) default null;
+    
+  DEFINE _konto         dec(16, 0);
+  DEFINE _tko           char(2);
+  DEFINE _smlouva       dec(16, 0);
+  DEFINE _tsml          char(4);
+  DEFINE _mapkodOld     char(20);
+  DEFINE _mapkodPreuc   char(20);
+  DEFINE _mapkodNew     char(20);
+  
+  on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+     call TW_ErrorTran();
+  end exception;
+  
+  
+  --izolacni uroven bude dirty read
+  SET ISOLATION TO DIRTY READ;
+  
+  BEGIN WORK;
+  
+  --zruseni tabulky pokud jiz existuje
+  begin
+     on exception IN(-206)
+     end exception;
+    DROP TABLE rsts_24221;
+  end;
+  
+  --zalozime ridici tabulku
+  CREATE TABLE rsts_24221(
+    Ser     Serial NOT NULL,  --číslo řádku
+    sid     int,              -- SID paralelního běhu
+    zprac   int,              -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                              -- -1- prošlo fázi find - výběr kont
+                              -- -2- chyba ve fázi make
+                              --  2- prošlo fází make                              
+    konto       dec(16,0),
+    tko         char(2),
+    smlouva     dec(16,0),
+    tsml        char(4),
+    mapkodOld   char(20),
+    mapkodPreuc char(20),
+    mapkodNew   char(20),
+    starttime   DATETIME YEAR to FRACTION(5),
+    finishtime  DATETIME YEAR to FRACTION(5),
+
+    NumErr  Int,              --číslo chyby, jež na řádku nastala
+    ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+    TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  
+    PRIMARY KEY(Ser)
+  )LOCK MODE ROW;  
+  
+  COMMIT WORK;
+  
+  BEGIN WORK;
+  
+  -- plnime ridici tabulku  
+  FOREACH c1 WITH HOLD FOR
+    SELECT konto, tko, mapkod INTO _konto, _tko, _mapkodOld FROM ac_konto_mat WHERE tko = 'CA' AND stav <> 2 
+    
+    IF(_mapkodOld LIKE 'X_X%') THEN
+      LET _mapkodPreuc = 'PREUC_ODEPS';
+    ELSE
+      LET _mapkodPreuc = 'PREUC';
+    END IF;
+    
+    LET _mapkodNew = EP_GetFincodeMap(_konto, _tko);
+    
+    INSERT INTO rsts_24221 (zprac, konto, tko, mapkodOld, mapkodPreuc, mapkodNew)
+    VALUES (-1, _konto, _tko, _mapkodOld, _mapkodPreuc, _mapkodNew);
+  END FOREACH;
+
+  -- smlouvy s prislibem
+  FOREACH c1 WITH HOLD FOR
+    SELECT smlouva, tsml INTO _smlouva, _tsml FROM eu_sml_mat WHERE prislib <> 0 AND stav NOT IN ('S', 'V', 'Z') 
+    
+    LET _mapkodPreuc = 'PREUC';
+    
+    LET _mapkodNew = EP_GetFincodeMapSmlouva(_smlouva, _tsml);
+    
+    INSERT INTO rsts_24221 (zprac, smlouva, tsml, mapkodOld, mapkodPreuc, mapkodNew)
+    VALUES (-1, _smlouva, _tsml, NULL, _mapkodPreuc, _mapkodNew);
+  END FOREACH;
+  
+  COMMIT WORK;   
+  
+  IF(EXISTS(SELECT 1 FROM rsts_24221 WHERE mapkodNew = '0' OR mapkodNew IS NULL)) THEN
+    CALL TW_RaiseError ('137G234TCUI', 'RSTS_24221_find: Neexistuje mapovací kód. Nelze pokračovat.', 'Existuje konto/smlouva, ke které nebyl nalezen nový mapovací kód. Nelze pokračovat v migraci.');
+  END IF;  
+  
+  BEGIN WORK;
+  UPDATE STATISTICS HIGH FOR TABLE rsts_24221;
+  CALL tw_para_clean('RSTS_24221_make_D');
+  COMMIT WORK;
+
+end procedure;

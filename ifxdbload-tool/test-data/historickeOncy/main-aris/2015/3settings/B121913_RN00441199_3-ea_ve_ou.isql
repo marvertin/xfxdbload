@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B121913_RN00441199_3-ea_ve_ou
+-- @TC:ONCE: DESCRIPTION = Doplnit parametrizace přenosu souborů {DEFECT}
+BEGIN WORK;
+
+Insert into nt_xferattr_cis (id, is_test_mode, xfer, src_host, src_user, src_pass, src_dir, src_mask, dst_host, dst_user, dst_pass, dst_dir, xlation, is_move, notification_email, notification_email_level, title)
+  Select 'EA_VE_OU', is_test_mode, xfer, src_host, src_user, src_pass, src_dir, src_mask, dst_host, dst_user, dst_pass, dst_dir, xlation, is_move, notification_email, notification_email_level, title
+    From nt_xferattr_cis where id = 'EA_VE_AR' and not Exists(Select*From nt_xferattr_cis Where id = 'EA_VE_OU');
+
+ROLLBACK WORK;
+--End of B121913_RN00441199_3-ea_ve_ou

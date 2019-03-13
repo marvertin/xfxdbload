@@ -1,0 +1,62 @@
+-- @TC:ONCE: ID = V2, B123197_RN00643364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_zajistdalnaklad_mat (
+  serno   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  poradizajist   smallint NOT NULL,
+  reftypdalsinakl   INTEGER NOT NULL,
+  neznamavyse   Integer  DEFAULT 0,
+  perioda   CHAR(1),
+  uhrada   DECIMAL(16, 2),
+  platnost   Integer  DEFAULT 1,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (neznamavyse IN (0,1)) CONSTRAINT eu_zajistdalnaklad_mat_daiw,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_zajistdalnaklad_mat_deva
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_zajistdalnaklad_mat_pk ON eu_zajistdalnaklad_mat(serno);
+ALTER TABLE eu_zajistdalnaklad_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_zajistdalnaklad_mat_pk;
+
+--FK
+CREATE INDEX eu_zajistdalnaklad_mat_i_f1 ON eu_zajistdalnaklad_mat(reftypdalsinakl);
+ALTER TABLE eu_zajistdalnaklad_mat ADD CONSTRAINT FOREIGN KEY(reftypdalsinakl) REFERENCES eu_typdalsinakl_cis(serno) CONSTRAINT eu_zajistdalnaklad_mat_f1;
+CREATE INDEX eu_zajistdalnaklad_mat_i_f2 ON eu_zajistdalnaklad_mat(smlouva,tsml,poradizajist);
+ALTER TABLE eu_zajistdalnaklad_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml,poradizajist) REFERENCES eu_zajist_mat(smlouva,tsml,poradi) CONSTRAINT eu_zajistdalnaklad_mat_f2;
+
+
+CREATE TABLE eu_zajistdalnaklad_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  poradizajist   Integer NOT NULL,
+  reftypdalsinakl   INTEGER NOT NULL,
+  neznamavyse   Integer  DEFAULT 0,
+  perioda   CHAR(1),
+  uhrada   DECIMAL(16, 2),
+  platnost   Integer,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (neznamavyse IN (0,1)) CONSTRAINT eu_zajistdalnaklad_arch_daiw,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_zajistdalnaklad_arch_devb
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_zajistdalnaklad_arch_pk ON eu_zajistdalnaklad_arch(idarch);
+ALTER TABLE eu_zajistdalnaklad_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_zajistdalnaklad_arch_pk;
+
+
+ROLLBACK WORK;
+
+--End of B123197_RN00643364_1

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B120000_RN00120000_5
+-- @TC:ONCE: DESCRIPTION = Dropnuti temp indexu
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+
+DROP INDEX aris.cl_contract_arch_TEMP1; 
+
+
+
+ROLLBACK WORK;
+
+--End of B120000_RN00120000_5

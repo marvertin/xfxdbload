@@ -1,0 +1,110 @@
+CREATE PROCEDURE RN00380441_find_D ()
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+define _vec             int;
+define _cislopopisne    CHAR(25); 
+define _cisloevidencni  CHAR(25);
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+begin
+  on exception IN(-310)
+  end exception;
+   
+  create table RN00380441_nemovitost(
+    vec int, --   Business identifikátor nemovitosti
+    idproblemu int, -- id problému z excelu (pouze jedno: 10)
+    cislopopisne    CHAR(25), -- číslo popisné 
+    cisloevidencni  CHAR(25) -- číslo evidenční
+  );
+end;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00380441;
+end;
+
+
+--zalozime ridici tabulku
+CREATE TABLE RN00380441(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  vec             int, 
+  cislopopisne    CHAR(25), 
+  cisloevidencni  CHAR(25),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--plnime ridici tabulku 
+--dulezite je poradi vybiranych radku - v tomto poradi se budou
+--ukladat do ridici tabulky a v tomto poradi se bude i migrovat
+
+  -- zajištění  
+  foreach cc1 with hold for
+    select distinct  n.vec, n.cislopopisne, n.cisloevidencni
+    into              _vec,  _cislopopisne,  _cisloevidencni
+    from ev_vec_mat m
+    join eu_zajist_mat z on z.vec = m.vec
+    join ev_nemov_mat n on n.vec = m.vec
+    where m.stav = 'A'
+      and z.stav in ('A', 'B', 'C')
+      and (n.cislopopisne matches '*[0-9][0-9][0-9][0-9][0-9]*' or n.cisloevidencni matches '*[0-9][0-9][0-9][0-9][0-9]*')
+
+    INSERT INTO RN00380441( vec,  cislopopisne,  cisloevidencni, zprac)
+    VALUES                (_vec, _cislopopisne, _cisloevidencni, -1);
+
+   COMMIT WORK;
+   BEGIN WORK;
+
+  end foreach;
+
+  -- účel
+  foreach cc1 with hold for
+    select distinct n.vec, n.cislopopisne, n.cisloevidencni
+    into             _vec,  _cislopopisne,  _cisloevidencni
+    from ev_vec_mat m
+    join eu_ucel_mat z on z.vec = m.vec
+    join ev_nemov_mat n on n.vec = m.vec
+    where m.stav = 'A'
+      and z.stav in ('A', 'B', 'C')
+      and (n.cislopopisne matches '*[0-9][0-9][0-9][0-9][0-9]*' or n.cisloevidencni matches '*[0-9][0-9][0-9][0-9][0-9]*')
+
+    if not exists(select 1 from RN00380441 where vec = _vec) then
+      INSERT INTO RN00380441( vec,  cislopopisne,  cisloevidencni, zprac)
+      VALUES                (_vec, _cislopopisne, _cisloevidencni, -1);
+    end if;
+   COMMIT WORK;
+   BEGIN WORK;
+
+  end foreach;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00380441;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

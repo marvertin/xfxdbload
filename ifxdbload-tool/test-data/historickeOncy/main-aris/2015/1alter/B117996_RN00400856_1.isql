@@ -1,0 +1,45 @@
+-- @TC:ONCE: ID = V2, B117996_RN00400856_1
+-- @TC:ONCE: DESCRIPTION = Změna evidence dat v úloze Smlouvy - Creditreview {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+ALTER TABLE eo_ratingpo DROP CONSTRAINT eoratingpo_c_c1;
+
+ALTER TABLE eo_ratingpo
+  ADD poradi          Integer   BEFORE rating;
+
+ALTER TABLE eo_ratingpo
+  ADD CONSTRAINT CHECK (ratingtyp in ('E','I', 'C', 'M')) CONSTRAINT eo_ratingpo_c1;
+
+
+CREATE TABLE eo_ratingpo_arch (
+    idarch          SERIAL   NOT NULL,
+    ratingid        INTEGER   NOT NULL,
+    po              Integer   NOT NULL,
+    poradi          Integer  ,
+    rating          Integer   NOT NULL,
+    ratingtyp       CHAR(1)   NOT NULL,
+    provider        Integer   NOT NULL,
+    obdobirozhod    datetime year to year   NOT NULL,
+    obdobiposuzod   datetime year to year   NOT NULL,
+    obdobiposuzdo   datetime year to year   NOT NULL,
+    poznamka        CHAR(70)  ,
+    datvytvor       DATE  ,
+    platnost        Integer DEFAULT 1 ,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_ratingpo_arch_dj23
+) LOCK MODE ROW
+;
+
+CREATE unique INDEX eo_ratingpo_arch_pk ON eo_ratingpo_arch (idarch) ;
+
+ALTER TABLE eo_ratingpo_arch
+  ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eo_ratingpo_arch_pk;
+
+ROLLBACK WORK;
+
+--End of B117996_RN00400856_1

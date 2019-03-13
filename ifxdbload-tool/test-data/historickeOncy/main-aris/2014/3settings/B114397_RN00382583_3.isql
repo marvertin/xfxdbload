@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B114397_RN00382583_3
+-- @TC:ONCE: DESCRIPTION = Pravidelný přepočet aktuálního data splatnosti i pro úvěry PO {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call Tw_RegSetKey('RU', 'real', 'aktDatSpl', 'aktualizovat-KOME', 1);
+call Tw_RegSetKey('RU', 'real', 'aktDatSpl', 'aktualizovat-PUFO', 1);
+call Tw_RegSetKey('RU', 'real', 'aktDatSpl', 'aktualizovat-PUPO', 1);
+call Tw_RegSetKey('RU', 'real', 'aktDatSpl', 'aktualizovat-SUFO', 1);
+call Tw_RegSetKey('RU', 'real', 'aktDatSpl', 'aktualizovat-SUPO', 1);
+
+ROLLBACK WORK;
+
+--End of B114397_RN00382583_3

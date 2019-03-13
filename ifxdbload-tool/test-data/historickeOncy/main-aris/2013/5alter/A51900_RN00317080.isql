@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A51900_RN00317080
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost 
+
+-- Tabulka je nahrazena eu_duvodPredBezNavr_cis,
+-- která obsahuje stejná data
+BEGIN WORK;
+
+rename table creditrqreturnabltyreason to creditrqreturnabltyreason_delete;
+
+ROLLBACK WORK;
+
+--End of  A51900_RN00317080

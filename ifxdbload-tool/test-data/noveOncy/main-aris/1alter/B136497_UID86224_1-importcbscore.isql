@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B136497_UID86224_1-importcbscore
+-- @TC:ONCE: DESCRIPTION = RSTS-29309: IMPLEMENTACE (dat.model): RSTS-29081_Import CB skóre {INTERNAL_WORK}
+
+BEGIN WORK;
+----------------------------------------------------------------
+CREATE TABLE eo_cbscore_den (
+  serno            BIGINT NOT NULL,
+  bic              CHAR(16),
+  datvyhodnoceni   DATE,
+  cbscore          DECIMAL(16,2),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_cbscore_den_pk ON eo_cbscore_den(serno);
+ALTER TABLE eo_cbscore_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eo_cbscore_den_pk;
+
+ROLLBACK WORK;
+
+--End of B136497_UID86224_1-importcbscore

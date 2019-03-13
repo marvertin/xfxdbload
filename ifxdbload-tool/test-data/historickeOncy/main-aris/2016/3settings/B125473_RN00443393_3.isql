@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B125473_RN00443393_3
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#Počítat a zobrazovat EIR úvěru pro OZ#
+--Parametr určuje, zda (počítat a) zobrazovat EIR úvěru do výsledků modelování v úloze pro OZ
+CALL tw_regSetKey('MO','modelCore','zobrazVysl','EIRuv-proOZ', 0)
+;
+
+--#Počítat a zobrazovat EIR spoření pro OZ#
+--Parametr určuje, zda (počítat a) zobrazovat EIR spoření do výsledků modelování v úloze pro OZ
+CALL tw_regSetKey('MO','modelCore','zobrazVysl','EIRspor-proOZ', 0)
+;
+ROLLBACK WORK;
+
+--End of B125473_RN00443393_3

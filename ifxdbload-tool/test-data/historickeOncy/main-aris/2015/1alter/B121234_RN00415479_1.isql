@@ -1,0 +1,63 @@
+-- @TC:ONCE: ID = V2, B121234_RN00415479_1
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE ep_zahrnutipohybucfmodel_acis (
+  idarch   SERIAL NOT NULL,
+  id   Integer NOT NULL,
+  typpohybumodel   CHAR(1),
+  definition   CHAR(1),
+  tsml   Char(4),
+  period   char(1),
+  konto   CHAR(1),
+  include   Integer,
+  cashflowday   CHAR(1),
+  note   CHAR(160),
+  platnost   Integer  DEFAULT 1,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (include IN (0,1)) CONSTRAINT ep_zahrnutipohybucfmodel_acis_drez,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_zahrnutipohybucfmodel_acis_dre1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_zahrnutipohybucfmodel_acis_pk ON ep_zahrnutipohybucfmodel_acis(idarch);
+ALTER TABLE ep_zahrnutipohybucfmodel_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_zahrnutipohybucfmodel_acis_pk;
+
+CREATE TABLE ep_zahrnutipohybucfmodel_cis (
+  id   SERIAL NOT NULL,
+  typpohybumodel   CHAR(1),
+  definition   CHAR(1),
+  tsml   Char(4),
+  period   char(1),
+  konto   CHAR(1),
+  include   Integer,
+  cashflowday   CHAR(1),
+  note   CHAR(160),
+  platnost   Integer  DEFAULT 1,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (include IN (0,1)) CONSTRAINT ep_zahrnutipohybucfmodel_cis_dres,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_zahrnutipohybucfmodel_cis_dre1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_zahrnutipohybucfmodel_cis_pk ON ep_zahrnutipohybucfmodel_cis(id);
+ALTER TABLE ep_zahrnutipohybucfmodel_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ep_zahrnutipohybucfmodel_cis_pk;
+
+--FK
+CREATE INDEX ep_zahrnutipohybucfmodel_cis_i_f1 ON ep_zahrnutipohybucfmodel_cis(typpohybumodel);
+ALTER TABLE ep_zahrnutipohybucfmodel_cis ADD CONSTRAINT FOREIGN KEY(typpohybumodel) REFERENCES ep_typpohybumodel_cis(typpohybumodel) CONSTRAINT ep_zahrnutipohybucfmodel_cis_f1;
+
+--CHECKS
+ALTER TABLE ep_zahrnutipohybucfmodel_cis
+ADD CONSTRAINT (CHECK (period in ('A', 'B')) CONSTRAINT ep_zahrnutipohybucfmodel_cis_c1),
+ADD CONSTRAINT (CHECK (cashflowday in ('C', 'V', 'P')) CONSTRAINT ep_zahrnutipohybucfmodel_cis_c2),
+ADD CONSTRAINT (CHECK (konto in ('S', 'U')) CONSTRAINT ep_zahrnutipohybucfmodel_cis_c3),
+ADD CONSTRAINT (CHECK (definition in ('S', 'U')) CONSTRAINT ep_zahrnutipohybucfmodel_cis_c4);
+
+ROLLBACK WORK;
+
+--End of B121234_RN00415479_1

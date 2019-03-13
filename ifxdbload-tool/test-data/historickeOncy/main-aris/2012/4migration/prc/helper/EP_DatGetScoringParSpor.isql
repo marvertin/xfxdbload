@@ -1,0 +1,312 @@
+-- vrací údaje spoøení
+create function EP_DatGetScoringParSpor(ADatAkce DATE,
+                                        ATypSC Char(3), 
+                                        AIdOS Int, 
+                                        ASmlouva Dec(16,0), 
+                                        ATsml Char(4))
+returning
+  Dec(16,2),   --targetAmount
+  Int,         --taIncreasing
+  Int,         --taDecreasing
+  Int,         --tariffChange
+  Dec(16,2),   --regPayment
+  Char(1),     --paymentPeriod
+  Char(1),     --expUsage
+  Char(5),     --bsAgentRegion
+  Int,         --ssInd
+  Int,         --savingDuration
+  Dec(16,2),   --savedAmount
+  Dec(8,4),    --allotmentNumber
+  Dec(16,2),   --savingShare
+  Dec(16,0),   --bsContract          //ASmlouva
+  Int,         --SMSInd              //xsmsactivation
+  Int,         --Tariff              //_xtariffcode
+  Int,         --magazineInd         //_xmagazine
+  Char(1);     --AllotmentType      //U nebo H
+
+define _targetAmount          Dec(16,2);
+define _taIncreasing          Int;
+define _taDecreasing          Int;
+define _tariffChange          Int;
+define _regPayment            Dec(16,2);
+define _paymentPeriod         Char(1);
+define _expUsage              Char(1);
+define _bsAgentRegion         Char(5);
+define _ssInd                 Int;
+define _savingDuration        Int;
+define _savedAmount           Dec(16,2);
+define _allotmentNumber       Dec(8,4);
+define _savingShare           Dec(16,2);
+define _bsContract            Dec(16,0);
+define _xsmsactivation        Int;
+define _xtariffcode           Int;
+define _xmagazine             Int;
+define _allotmenttype         Char(1);
+
+define _datprov               Date;
+define _creditrqcontrolreg_id Int;
+define _xcontracttype         Char(4);
+define _xcreditrqstatus       Int;
+define _XCreated              Int;
+define _cc                    Dec(16,2);
+define _tarif                 Int;
+define _xdateconclusion       Date;
+define _ozss                  Dec(16,0);
+define _ozext                 Char(8);
+define _xagentCompose         Dec(16,0);
+define _reals                 Int;
+define _realn                Int;
+define _UspCast               Dec(16,2);
+define _SPPrip                Dec(16,2);
+define _datk                  Date;
+
+define _idGet                  Int;
+define _idGet2                 Int;
+define _smlGet                 Dec(16, 0);
+define _stavGet                Char(1);
+define _reftimeGet             date;
+define _typroleGet             char(2);
+define _konto                  Dec(16,0);
+define _tko                    Char(2);
+define _reftime              DATETIME YEAR TO SECOND;
+define _orgsepsani2   char(16);
+define _ozakvizice    dec(16,0);
+define _orgakvizice   char(16);
+define _orgakvizice2  char(16);
+define _ozzadani      dec(16,0);
+define _orgzadani     char(16);
+define _orgzadani2    char(16);
+
+define global AC_Archiv integer default 0;
+
+let _datprov = ADatAkce;
+
+if ATypSC in ('SC1', 'SCA') THEN
+
+  SELECT creditrqcontrolreg_id INTO _creditrqcontrolreg_id FROM CreditRqPersonReg
+  WHERE id = AIdOS; --and date(reftime) <= ADatAkce;
+
+  SELECT id, xcontractnumber, xtargetamount, xcreated, xtariffcode, xdepositamount, xdepositperiod, xassumeduse, xdateconclusion,
+         xstatesupportrequest, xsmsactivation, xmagazine, reftime 
+    INTO _idGet, _bsContract, _targetamount, _xcreated, _xtariffcode, _regpayment, _paymentperiod, _expusage, _xdateconclusion,
+         _ssind, _xsmsactivation, _xmagazine, _reftime
+    FROM CreditRqBSContractReg WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id;-- and date(reftime) <= ADatAkce;
+  
+ if _reftime > ADatAkce then 
+    foreach 
+    SELECT creditrqcontrolid, xcontractnumber, xtargetamount, xcreated, xtariffcode, xdepositamount, xdepositperiod, xassumeduse, xdateconclusion,
+         xstatesupportrequest, xsmsactivation, xmagazine
+      INTO _idGet, _bsContract, _targetamount, _xcreated, _xtariffcode, _regpayment, _paymentperiod, _expusage, _xdateconclusion,
+         _ssind, _xsmsactivation, _xmagazine
+      FROM creditrqbscontractarch  
+      WHERE creditrqbscontractreg_id = _idGet and date(xrefmodifytime) <= ADatAkce 
+      ORDER BY xrefmodifytime DESC
+      exit foreach;
+    end foreach;
+  end if;
+
+  SELECT id, xcontracttype, reftime INTO _idGet, _xcontracttype, _reftime FROM CreditRqCContractReg WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id; --and date(reftime) <= ADatAkce;
+  
+  if _reftime > ADatAkce then
+    foreach 
+    SELECT  xcontracttype INTO _xcontracttype FROM creditrqccontractarch 
+      WHERE creditrqccontractreg_id = _idGet and date(xrefmodifytimestamp) <= ADatAkce 
+      ORDER BY xrefmodifytimestamp DESC
+      exit foreach;
+    end foreach;
+  end if;
+  
+  SELECT xcreditrqnumber, xcreditrqstatus INTO _idGet, _xcreditrqstatus FROM CreditRqControlReg WHERE id = _creditrqcontrolreg_id and date(reftime) <= ADatAkce;
+  
+  if _idGet is null then
+    foreach 
+    SELECT  xcreditrqstatus INTO _xcreditrqstatus FROM creditrqcontrolarch 
+      WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id and date(xrefmodifytimestamp) <= ADatAkce 
+      ORDER BY xrefmodifytimestamp DESC
+      exit foreach;
+    end foreach;
+  end if;
+
+  SELECT id, xagentCompose INTO _idGet, _xagentCompose FROM CreditRqAgentsReg WHERE creditrqcontrolreg_id = _creditrqcontrolreg_id;-- and date(reftime) <= ADatAkce;
+
+    if _reftime > ADatAkce then
+    foreach 
+    SELECT  xagentCompose INTO _xagentCompose FROM creditrqagentsarch 
+      WHERE creditrqagentsreg_id = _idGet and date(xrefmodifytimestamp) <= ADatAkce 
+      ORDER BY xrefmodifytimestamp DESC
+      exit foreach;
+    end foreach;
+  end if;
+
+  -- doplòovaná žádost
+  if _xcreditrqstatus = 6 then 
+  
+    SELECT smlouva, cc, 0, tarif, vklad, periodavkl, predpvyuz, datuz, sp, smsactivation, casopis
+    INTO _smlGet, _targetamount, _xcreated, _xtariffcode, _regpayment, _paymentperiod, _expUsage, _xdateconclusion, _ssind, _xsmsactivation, _xmagazine
+    FROM ES_Sml_Mat
+    WHERE smlouva = _bsContract AND typ = 'SSFO' AND date(reftime) <= ADatAkce;
+    
+    if _smlGet is null then
+      foreach
+        SELECT cc, 0, tarif, vklad, periodavkl, predpvyuz, datuz, sp, smsactivation, casopis
+        INTO _targetamount, _xcreated, _xtariffcode, _regpayment, _paymentperiod, _expUsage, _xdateconclusion, _ssind, _xsmsactivation, _xmagazine
+        FROM ES_Sml_Arch
+        WHERE smlouva = _bsContract AND typ = 'SSFO' AND date(reftime) <= ADatAkce
+        ORDER BY reftime DESC
+        exit foreach;
+      end foreach;
+    end if;
+    
+    SELECT smlouva, obchZast INTO _smlGet, _xagentCompose FROM EU_Sml_Mat WHERE smlouva = _bsContract AND tsml = _xcontracttype AND date(reftime) <= ADatAkce;
+    
+    if _smlGet is null then
+      foreach
+        SELECT obchZast INTO _xagentCompose FROM EU_Sml_Arch WHERE smlouva = _bsContract AND tsml = _xcontracttype AND date(reftime) <= ADatAkce order by reftime desc
+        exit foreach;
+      end foreach;
+    end if;
+    
+  end if;
+  
+elif ATypSC in ('SC2', 'SCB') then
+  let _bsContract = ASmlouva;    
+  
+  SELECT smlouva, cc, 0, tarif, vklad, periodavkl, predpvyuz, datuz, sp, smsactivation, casopis
+  INTO _smlGet, _targetamount, _xcreated, _xtariffcode, _regpayment, _paymentperiod, _expusage, _xdateconclusion, _ssind, _xsmsactivation, _xmagazine
+  FROM ES_Sml_Mat
+  WHERE smlouva = ASmlouva AND typ = 'SSFO' AND date(reftime) <= ADatAkce;
+  
+  if _smlGet is null then      
+      foreach
+        SELECT smlouva, cc, 0, tarif, vklad, periodavkl, predpvyuz, datuz, sp, smsactivation, casopis
+        INTO _smlGet, _targetamount, _xcreated, _xtariffcode, _regpayment, _paymentperiod, _expusage, _xdateconclusion, _ssind, _xsmsactivation, _xmagazine
+        FROM ES_Sml_Arch
+        WHERE smlouva = ASmlouva AND typ = 'SSFO' AND date(reftime) <= ADatAkce
+        ORDER BY reftime DESC
+        exit foreach;
+      end foreach;
+    end if;    
+
+  SELECT smlouva, obchZast INTO _smlGet, _xagentCompose FROM EU_Sml_Mat WHERE smlouva = ASmlouva AND tsml = ATsml AND date(reftime) <= ADatAkce;
+  
+  if _smlGet is null then 
+    foreach
+      SELECT obchZast INTO _xagentCompose FROM EU_Sml_Arch WHERE smlouva = ASmlouva AND tsml = ATsml AND date(reftime) <= ADatAkce order by reftime desc
+      exit foreach;
+    end foreach;
+  end if;
+
+end if;
+
+let _taincreasing = 0;
+let _taDecreasing = 0;
+let _tariffChange = 0;
+let _savingDuration = 0;
+let _savedAmount = 0;
+let _allotmentnumber = 0;
+let _allotmenttype = 'U';
+let _savingShare  = 0;
+let _ozss = null;
+
+if _XCreated = 0 then
+  --jde o existujici smlouvu SS
+  let _taincreasing, _taDecreasing, _cc, _tariffChange, _tarif = ES_DatGetDataScoring(ADatAkce, _bsContract);
+  if _cc < _targetAmount then
+    let _taincreasing = 1;
+  end if;
+  if _cc > _targetAmount then
+    let _taDecreasing = 1;
+  end if;
+  if _tarif <> _xtariffcode then
+    let _tariffChange = 1;
+  end if;
+  let _taincreasing = TW_Null0(_taincreasing);
+  let _taDecreasing = TW_Null0(_taDecreasing);
+  let _tariffChange = TW_Null0(_tariffChange);
+  let _savingDuration = TW_MaxInt(TW_MonthBetw(_xdateconclusion, _datprov), 0);
+
+  let _realn = null;
+  SELECT realn, reals 
+    INTO _realn, _reals FROM RZ_Real_Mat 
+    WHERE smlouva = _bsContract AND tsml = 'SSFO' and date(reftime) <= ADatAkce;
+  if _realn is null then
+    foreach 
+      SELECT realn, reals
+        INTO _realn, _reals FROM RZ_Real_Arch 
+        WHERE smlouva = _bsContract AND tsml = 'SSFO' and date(reftime) <= ADatAkce 
+        ORDER BY reftime desc
+      exit foreach;
+    end foreach;
+  end if;
+    
+  if (_reals is not null) then
+    SELECT konto, tko INTO _konto, _tko FROM RS_Real_Mat WHERE (realn = _reals) and date(reftime) <= ADatAkce;
+    if _konto is null then
+      foreach 
+        SELECT konto, tko INTO _konto, _tko FROM RS_Real_Arch 
+          WHERE (realn = _reals) and date(reftime) <= ADatAkce 
+          ORDER BY reftime desc
+        exit foreach;
+      end foreach;  
+    end if;
+  else
+    let _konto, _tko = null, null;
+  end if;
+
+  if _reals is not null then
+    let AC_Archiv  = AO_IsOperArchived_N(_konto, _tko);
+    let _UspCast = RS_GetUspCast(_reals, 1, ADatAkce);
+    -- @RN00290755: Pokud AO_GetSaldoSkoDat vyletí na 746, že nemá v archivu k datu operace, migrace smlouvy nesmí spadnout!
+    -- Dohoda se ZG je taková, že daný parametr je prostì nula.
+    let _SPPrip = 0; 
+    begin
+    on exception IN(-746)            
+    end exception;
+    let _SPPrip  = AO_GetSaldoSkoDat(_konto, _tko, 'PRMF', ADatAkce) + AO_GetSaldoSkoDat(_konto, _tko, 'PRAR', ADatAkce);
+    end;      
+    let _savedAmount = _UspCast + _SPPrip;
+  END IF;
+
+  --pozor, vrací vypoèítané èíslo za poslední mìsíc, pokud bylo naposledy vypoèítáno
+  --døíve, vrací NULL
+  let _allotmentnumber, _datk, _allotmenttype = RZ_UZGet(_realn, ADatAkce, 1);
+  let _allotmentnumber = TW_NUll0Dec(_allotmentnumber);
+  let _allotmenttype = TW_NUllEmpty(_allotmenttype);
+
+  if _allotmenttype = '' then
+    let _allotmenttype = ES_DatExtParam('Hodnoceni', _bsContract, ATsml, null, null, null, null, null, null, null, null, null, null, ADatAkce);
+  end if;
+
+  if _targetamount <> 0 then
+    let _savingShare = _savedAmount / _targetamount;
+  end if;
+
+  --OZ, ktery uzavrel smlouvu SS
+  let _ozss, _ozext, _orgsepsani2, _ozakvizice, _orgakvizice, _orgakvizice2, _ozzadani, _orgzadani, _orgzadani2 = IMain_GetOZSml(ASmlouva, ATsml);
+else
+  let _ozss = _xagentCompose ;
+end if;
+
+let _bsAgentRegion = IMain_GetNadTer('Z', _ozss, _xdateconclusion,3);
+
+return
+_targetAmount, --Dec(16,2)
+_taIncreasing, --Int
+_taDecreasing, --Int
+_tariffChange, --Int
+_regPayment, --Dec(16,2)
+_paymentPeriod, --Char(1)
+_expUsage, --Char(1)
+_bsAgentRegion, --Char(5)
+_ssInd, --Int
+_savingDuration, --Int
+_savedAmount, --Dec(16,2)
+_allotmentNumber, --Dec(8,4)
+_savingShare, --Dec(16,2)
+_bsContract,  --Dec(16,0)
+_xsmsactivation, --Int //SMSInd
+_xtariffcode, --Int //Tariff
+_xmagazine, --Int //magazineInd
+_allotmenttype; --Char(1)
+
+end function;

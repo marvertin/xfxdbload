@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B124972_RN00436865_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - 3. část - ESIP, rozšíření exportů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table EP_ExpSplSporModH_Den
+  add pocvklsspueir   Integer;
+  
+ROLLBACK WORK;
+
+--End of B124972_RN00436865_1

@@ -1,0 +1,195 @@
+create PROCEDURE RN00415479_typpohybu_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser          Int;
+define _davka        Int;
+define _akce         Int;
+define _serDM        Int;
+define _serObjekt    Int;
+
+define _serbody       int;
+define _headser       int;
+define _specifikace   char(70);
+define _typpoh        char(1);
+define _typpohnew     char(1);
+define _typpohpred    char(1);
+define _portyppoh     int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RN00415479', 'RN00415479_typpohybu', 'Migrace: typ pohybu v modelování');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+begin
+  on exception
+  end exception
+  drop table RN00415479_typpohybu_body;
+end;
+
+CREATE RAW TABLE RN00415479_typpohybu_body (
+  ser         SERIAL NOT NULL,
+  specifikace CHAR(70),
+  typpoh      CHAR(1),
+  poradipoh   int
+);
+
+COMMIT WORK;
+
+BEGIN WORK;
+--pres ridici tabulku
+foreach cc2 with hold for
+   SELECT ser,  headser
+   INTO  _ser, _headser
+   FROM RN00415479_typpohybu
+   WHERE zprac < 0
+   ORDER BY ser
+
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE RN00415479_typpohybu
+        SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+        WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+
+    --vlastni algoritmus migrace
+    delete from RN00415479_typpohybu_body;
+    
+    insert into RN00415479_typpohybu_body
+    (ser,  specifikace,  typpoh)
+    SELECT ser,  specifikace,  typpoh
+    FROM ep_splspormodb_den
+    WHERE headser = _headser;
+    
+    foreach
+      select ser,      specifikace,   typpoh
+      into  _serbody, _specifikace,  _typpoh
+      from RN00415479_typpohybu_body
+      
+      let _typpohnew = null;
+  
+      if _typpoh = 'U' and _specifikace = 'Sankční úrok' then let _typpohnew = 'a'; end if;
+      if _typpoh = 'U' and _typpohnew is null then let _typpohnew = 'U'; end if;
+      
+      if _typpoh = 'S' and _specifikace = 'Řádná splátka' then let _typpohnew = 'R'; end if;
+      if _typpoh = 'S' and _specifikace = 'SP po ZV' then let _typpohnew = '2'; end if;
+      if _typpoh = 'S' and _specifikace = 'Splátka při překlopení úvěru' then let _typpohnew = '4'; end if;
+      if _typpoh = 'S' and _typpohnew is null then let _typpohnew = 'R'; end if;
+      
+      if _typpoh = 'P' and _specifikace = 'Poplatek za uzavření úvěrové smlouvy' then let _typpohnew = 'E'; end if;
+      if _typpoh = 'P' and _specifikace = 'Poplatek za výpis z účtu' then let _typpohnew = 'F'; end if;
+      if _typpoh = 'P' and _specifikace = 'Poplatek za vedení účtu' then let _typpohnew = 'N'; end if;
+      if _typpoh = 'P' and _specifikace = 'Pojištění Uniqa' then let _typpohnew = '5'; end if;
+      if _typpoh = 'P' and _specifikace = 'Poplatek za změnu tarifu' then let _typpohnew = '6'; end if;
+      if _typpoh = 'P' and _specifikace = 'Vstupní úhrada' then let _typpohnew = 'A'; end if;
+      if _typpoh = 'P' and _specifikace = 'Poplatek za zvýšení cílové částky' then let _typpohnew = 'X'; end if;
+      if _typpoh = 'P' and _specifikace = 'Korekční operace pro výpočet EIR' then let _typpohnew = '8'; end if;
+      if _typpoh = 'P' and _typpohnew is null then let _typpohnew = 'P'; end if;
+      
+      if _typpoh = 'D' and _specifikace = 'Zaplacení vstupní úhrady' then let _typpohnew = '9'; end if;
+      if _typpoh = 'D' and _specifikace = 'Zaplacení záporného zůstatku' then let _typpohnew = '!'; end if;
+      if _typpoh = 'D' and _specifikace = 'Příspěvek' then let _typpohnew = '{'; end if;
+      if _typpoh = 'D' and _typpohnew is null then let _typpohnew = 'V'; end if;
+      
+      if _typpoh = 'T' and _specifikace = 'Vratka' then let _typpohnew = 'T'; end if;
+      if _typpoh = 'T' and _typpohnew is null then let _typpohnew = 'S'; end if;
+      
+      if _typpoh = 'C' then let _typpohnew = 'C'; end if;
+      if _typpoh = 'V' then let _typpohnew = 'Z'; end if;
+      if _typpoh = 'B' then let _typpohnew = 'W'; end if;
+      if _typpoh = 'O' then let _typpohnew = '#'; end if;
+      if _typpoh = 'N' then let _typpohnew = 'D'; end if;
+      if _typpoh = 'Z' then let _typpohnew = '7'; end if;
+      
+      if _typpohnew is null then
+        call TW_RaiseError ('121H297TCUI', '', 'Nepodařilo se najít typ pohybu pro kombinaci %1/%2', _typpoh, _specifikace);
+      end if
+      
+      update ep_splspormodb_den
+      set typpoh = _typpohnew
+      where ser = _serbody;
+    end foreach;
+    
+    -- přečíslování pořadí
+    delete from RN00415479_typpohybu_body;
+    
+    insert into RN00415479_typpohybu_body
+    (ser,  typpoh, poradipoh)
+    SELECT ser,  typpoh, poradipoh
+    FROM ep_splspormodb_den
+    WHERE headser = _headser;
+    
+    let _portyppoh = null;
+    let _typpohpred = null;
+    
+    foreach
+      select ser,      typpoh
+      into  _serbody, _typpoh
+      from RN00415479_typpohybu_body
+      order by typpoh, poradipoh
+      
+      if _typpohpred is null or _typpohpred <> _typpoh then
+        let _portyppoh = 1;
+      end if;
+      
+      update ep_splspormodb_den
+      set portyppoh = _portyppoh
+      where ser = _serbody;
+      
+      let _portyppoh = _portyppoh + 1;
+      let _typpohpred = _typpoh;
+    end foreach;
+    
+    UPDATE RN00415479_typpohybu SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null  WHERE ser=_ser;
+  end;
+
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

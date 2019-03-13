@@ -1,0 +1,110 @@
+-- @TC:ONCE: ID = V2, B125431_RN00437502_1-InfoDuvOsZivCykl
+-- @TC:ONCE: DESCRIPTION = Rozšíření zpráv SSZ {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+
+-- ###############################################################
+-- eo_infoduvoszivcykl_mat
+
+CREATE TABLE eo_infoduvoszivcykl_mat (
+  serno   BIGINT NOT NULL
+  , refinfoduvos   INTEGER NOT NULL
+  , vyrizeni   INTEGER  DEFAULT 0 NOT NULL
+  , evidid   BIGINT NOT NULL
+  , eviduid   BIGINT
+  , porizeniid   BIGINT NOT NULL
+  , porizeniuid   BIGINT
+  , otevreniid   BIGINT
+  , otevreniuid   BIGINT
+  , vyrizeniid   BIGINT
+  , vyrizeniuid   BIGINT
+  , datauid   BIGINT
+  , datatypid   CHAR(4)
+  , dataid   CHAR(25)
+  , datatext   VARCHAR(255)
+  , vyrizdatauid   BIGINT
+  , vyrizdatatypid   CHAR(4)
+  , vyrizdataid   CHAR(25)
+  , vyrizdatatext   VARCHAR(255)
+  , vyrizuser   CHAR(20)
+  , vyriztime   DATETIME YEAR TO SECOND
+  , vyrizdatprov   DATE
+  , refvytvoreni   BIGINT
+  , poruser   CHAR(20)  DEFAULT USER NOT NULL
+  , portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+  , pordatprov   DATE NOT NULL
+  , refuser   CHAR(20)  DEFAULT USER NOT NULL
+  , reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+  , refdatprov   DATE NOT NULL
+  , CHECK (vyrizeni IN (0,1)) CONSTRAINT eo_infoduvoszivcykl_mat_dxve
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_infoduvoszivcykl_mat_pk ON eo_infoduvoszivcykl_mat(serno);
+ALTER TABLE eo_infoduvoszivcykl_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eo_infoduvoszivcykl_mat_pk;
+
+--FK
+CREATE INDEX eo_infoduvoszivcykl_mat_i_f1 ON eo_infoduvoszivcykl_mat(refinfoduvos);
+ALTER TABLE eo_infoduvoszivcykl_mat ADD CONSTRAINT FOREIGN KEY(refinfoduvos) REFERENCES eo_infoduvos_mat(info) CONSTRAINT eo_infoduvoszivcykl_mat_f1;
+
+--INDEXES
+CREATE INDEX eo_infoduvoszivcykl_mat_i1 ON eo_infoduvoszivcykl_mat(evidid);
+CREATE INDEX eo_infoduvoszivcykl_mat_i2 ON eo_infoduvoszivcykl_mat(eviduid);
+CREATE INDEX eo_infoduvoszivcykl_mat_i3 ON eo_infoduvoszivcykl_mat(dataid);
+CREATE INDEX eo_infoduvoszivcykl_mat_i4 ON eo_infoduvoszivcykl_mat(datauid);
+CREATE INDEX eo_infoduvoszivcykl_mat_i5 ON eo_infoduvoszivcykl_mat(vyrizdataid);
+CREATE INDEX eo_infoduvoszivcykl_mat_i6 ON eo_infoduvoszivcykl_mat(vyrizdatauid);
+CREATE INDEX eo_infoduvoszivcykl_mat_i7 ON eo_infoduvoszivcykl_mat(refvytvoreni);
+
+
+-- ###############################################################
+-- eo_infoduvoszivcykl_arch
+
+CREATE TABLE eo_infoduvoszivcykl_arch (
+  idarch   SERIAL NOT NULL
+  , serno   BIGINT NOT NULL
+  , refinfoduvos   INTEGER NOT NULL
+  , vyrizeni   INTEGER  DEFAULT 0 NOT NULL
+  , evidid   BIGINT NOT NULL
+  , eviduid   BIGINT
+  , porizeniid   BIGINT NOT NULL
+  , porizeniuid   BIGINT
+  , otevreniid   BIGINT
+  , otevreniuid   BIGINT
+  , vyrizeniid   BIGINT
+  , vyrizeniuid   BIGINT
+  , datauid   BIGINT
+  , datatypid   CHAR(4)
+  , dataid   CHAR(25)
+  , datatext   VARCHAR(255)
+  , vyrizdatauid   BIGINT
+  , vyrizdatatypid   CHAR(4)
+  , vyrizdataid   CHAR(25)
+  , vyrizdatatext   VARCHAR(255)
+  , vyrizuser   CHAR(20)
+  , vyriztime   DATETIME YEAR TO SECOND
+  , vyrizdatprov   DATE
+  , refvytvoreni   BIGINT
+  , poruser   CHAR(20)  DEFAULT USER NOT NULL
+  , portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+  , pordatprov   DATE NOT NULL
+  , refuser   CHAR(20)  DEFAULT USER NOT NULL
+  , reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+  , refdatprov   DATE NOT NULL
+  , CHECK (vyrizeni IN (0,1)) CONSTRAINT eo_infoduvoszivcykl_arch_dxvf
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eo_infoduvoszivcykl_arch_pk ON eo_infoduvoszivcykl_arch(idarch);
+ALTER TABLE eo_infoduvoszivcykl_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eo_infoduvoszivcykl_arch_pk;
+
+--INDEXES
+CREATE INDEX eo_infoduvoszivcykl_arch_i1 ON eo_infoduvoszivcykl_arch(serno);
+
+
+
+ROLLBACK WORK;
+
+--End of B125431_RN00437502_1-InfoDuvOsZivCykl

@@ -1,0 +1,78 @@
+-- @TC:ONCE: ID = V2, A61790_RN00335314_1-cisteni
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- 176  tv_druh_acis-2/2       [DROP.COLUMN]
+ALTER TABLE tv_druh_acis
+    DROP uhrada,
+    DROP uhradahyst;
+
+-- 178  tv_druh_cis-2/2       [DROP.COLUMN]
+ALTER TABLE tv_druh_cis
+    DROP uhrada,
+    DROP uhradahyst;
+    
+-- FIXME Martin Švejda
+    
+-- 124  ah_uhrada_acis-2/2       [DROP.COLUMN]
+--ALTER TABLE ah_uhrada_acis
+--    DROP castkapopl;
+
+-- 127  ah_uhrada_cis-4/6       [DROP.COLUMN]
+--ALTER TABLE ah_uhrada_cis
+--    DROP castkapopl;
+
+-- 73  es_vop_acis-2/2       [DROP.COLUMN]
+ALTER TABLE es_vop_acis
+    DROP koefuhrpredcvyp;
+
+
+-- 75  es_vop_cis-2/2       [DROP.COLUMN]
+ALTER TABLE es_vop_cis
+    DROP koefuhrpredcvyp;
+
+
+-- 82  es_voptarprech_acis-2/2       [DROP.COLUMN]
+ALTER TABLE es_voptarprech_acis
+    DROP uhrzmtarvek,
+    DROP koefuhrzmtar,
+    DROP typzaklad;
+
+ALTER TABLE es_voptarprech_cis
+    DROP uhrzmtarvek,
+    DROP koefuhrzmtar,
+    DROP typzaklad,
+    DROP podil;
+
+-- 36  es_paramcastar_acis-1/2       [DROP.COLUMN, CREATE.COLUMN]
+ALTER TABLE es_paramcastar_acis
+    DROP vstuhrvek,
+    DROP koefuhr,
+    DROP vyseuhrmin,
+    DROP vyseuhrmax,
+    DROP uhrzvysccvek,
+    DROP koefuhrzvyscc,
+    DROP veductussfo,
+    DROP veductusspo;
+
+
+-- 38  es_paramcastar_cis-1/4       [DROP.COLUMN]
+ALTER TABLE es_paramcastar_cis
+    DROP koefuhr,
+    DROP vstuhrvek,
+    DROP vyseuhrmin,
+    DROP vyseuhrmax,
+    DROP uhrzvysccvek,
+    DROP koefuhrzvyscc,
+    DROP veductussfo,
+    DROP veductusspo;    
+
+-- FIXME Martin Švejda
+--DROP TABLE es_koefuhrtarif_acis;
+--DROP TABLE es_koefuhrtarif_cis;
+
+ROLLBACK WORK;
+
+--End of A61790_RN00335314_1-cisteni

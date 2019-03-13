@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B120888_RN00431256_4
+-- @TC:ONCE: DESCRIPTION = Main: kontextova napoveda u osoby s blokaciou {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE eo_blockingjournal 
+   SET actiontype = (SELECT blockingtype FROM eo_blockingreason_cis  WHERE reason = eo_blockingjournal.reason and validity = 1)
+ WHERE actiontype not in ('A','P') and reason is not null;
+ 
+ROLLBACK WORK;
+
+--End of B120888_RN00431256_4

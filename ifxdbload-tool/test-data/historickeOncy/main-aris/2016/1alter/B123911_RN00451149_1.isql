@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B123911_RN00451149_1
+-- @TC:ONCE: DESCRIPTION = SQL Error -268 : Unique constraint (aris.ep_expsplspormodb_den_pk) violated {DEFECT}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+ALTER TABLE ep_expsplspormodb_den DROP CONSTRAINT ep_expsplspormodb_den_pk
+;
+
+DROP INDEX ep_expsplspormodb_den_pk
+;
+
+--INDEXES
+CREATE INDEX ep_expsplspormodb_den_i1 ON ep_expsplspormodb_den(id_index)
+;
+
+ROLLBACK WORK;
+
+--End of B123911_RN00451149_1

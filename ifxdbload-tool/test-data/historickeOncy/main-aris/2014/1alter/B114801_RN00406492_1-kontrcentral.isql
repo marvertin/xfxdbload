@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B114801_RN00406492_1-kontrcentral
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Nevhodně řešené příznaky "Zkontrolováno v Central" {DEFECT}
+BEGIN WORK;
+
+alter table eu_zajist_mat drop kontrcentral;
+alter table eu_zajist_arch drop kontrcentral;
+alter table eu_ucel_mat drop kontrcentral;
+alter table eu_ucel_arch drop kontrcentral;
+
+ROLLBACK WORK;
+--End of B114801_RN00406492_1-kontrcentral

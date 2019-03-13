@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A41212_RN00275819_1
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE tv_head_den
+  ADD formavypisnazev   CHAR(35) DEFAULT 'Papírovì',
+  ADD formavypis        INTEGER  DEFAULT 1,
+  ADD loginname         CHAR(64),
+  ADD mobil_sis         CHAR(45),
+  ADD email_sis         CHAR(45);
+
+ROLLBACK WORK;
+
+--End of A41212_RN00275819_1

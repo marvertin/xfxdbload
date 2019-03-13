@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A42299_RN00238704
+-- @TC:ONCE: DESCRIPTION = Zmìny v CBS a skóringu. (Optimalizace migrace, fáze jedna)
+
+BEGIN WORK;
+
+CREATE INDEX creditrqcontrolarch_i1 ON creditrqcontrolarch(creditrqcontrolreg_id);
+CREATE INDEX creditrqccontractarch_i1 ON creditrqccontractarch(creditrqccontractreg_id);
+CREATE INDEX creditrqbscontractarch_i1 ON creditrqbscontractarch(creditrqbscontractreg_id);
+
+ROLLBACK WORK;

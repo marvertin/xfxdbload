@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A42088_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eo_komkanal_arch
+    ADD vztahpo            Integer   BEFORE refuser,
+    MODIFY priorita        Integer   NOT NULL;
+
+ALTER TABLE eo_komkanal_mat
+    ADD vztahpo            Integer   BEFORE refuser,
+    MODIFY priorita        Integer   NOT NULL;
+
+ALTER TABLE eo_komkanal_mat
+    ADD CONSTRAINT FOREIGN KEY (vztahpo) REFERENCES eo_osoba_mat(os)  CONSTRAINT eo_komkanal_mat_f3;
+
+ROLLBACK WORK;
+
+--End of A41970_RN00275819_1

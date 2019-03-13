@@ -1,0 +1,62 @@
+-- @TC:ONCE: ID = V2, B121273_RN00415479_3
+-- @TC:ONCE: DESCRIPTION = RPSN {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('V', 'Vklad',0, 50, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('C', 'Čerpání',0, 70, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('R', 'Splátka',0, 50, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('S', 'Státní podpora',0, 50, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('Z', 'Výplata',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('A', 'Vstupní úhrada',0, 50, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('B', 'Standardní vklad spoření',0, 50, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('Q', 'Standardní splátka',0, 90, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('U', 'Připsaný úrok',0, 10, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('W', 'Úrokový bonus',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('#', 'Daň z úrokového zvýhodnění',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('D', 'Daň z úroku',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('T', 'Vratka státní podpory',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('E', 'Úhrada za smlouvu o úvěru',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('F', 'Úhrada za výpis',0, 80, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('I', 'Úrokové zvýhodnění (% z úroků)',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('J', 'Úrokové zvýhodnění (% z úroků) před fixací',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('G', 'Úrokové zvýhodnění (% z úroků) po fixaci',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('K', 'Dodatečné úrokové zvýhodnění (% z CČ)',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('L', 'Dodatečné úrokové zvýhodnění (% z CČ) před fixací',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('O', 'Dodatečné úrokové zvýhodnění (% z CČ) po fixaci',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('$', 'Daň z úrokového zvýhodnění',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('%', 'Daň z úrokového zvýhodnění před fixací',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('^', 'Daň z úrokového zvýhodnění po fixaci',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('&', 'Daň z dodatečného úrokového zvýhodnění',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('*', 'Daň z dodatečného úrokového zvýhodnění před fixací',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('@', 'Daň z dodatečného úrokového zvýhodnění po fixaci',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('N', 'Úhrada za vedení konta',0, 80, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('X', 'Úhrada za zvýšení CČ',0, 80, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('Y', 'Vypořádání',1, null, 'Využíváno pouze pro načítané minulé obraty', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('1', 'Převod splátky SP po ZV',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('2', 'Splátka SP po ZV',0, 50, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('3', 'Výplata spoření ve prospěch PU při překlopení',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('4', 'Splátka úvěru při překlopení',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('5', 'Úhrada za pojištění (UNIQA)',0, 1, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('6', 'Úhrada za změnu tarifu',0, 80, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('7', 'Zesplatnění',1, null, 'Ve webových aplikacích nezobrazováno', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('8', 'Korekční operace',1, null, 'Korekční operace pro výpočet EIR', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('P', 'Úhrada',0, 80, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('9', 'Vklad na zaplacení vstupní úhrady',0, 43, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('!', 'Vklad na zaplacení záporného zůstatku',0, 45, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('(', 'Doplatek klienta',1, null, 'Využíváno pouze pro variantu modelování předčasného splacení (L)', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values(')', 'Úhrada za vypořádání SS',1, null, 'Využíváno pouze pro variantu modelování předčasného splacení (L)', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('[', 'Předčasná splátka úvěru ze spoření',1, null, 'Využíváno pouze pro variantu modelování předčasného splacení (L)', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values(']', 'Výplata spoření ve prospěch předčasného splacení PÚ',1, null, 'Využíváno pouze pro variantu modelování předčasného splacení (L)', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('{', 'Prémie',0, 93, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('}', 'Daň z prémie',1, null, null, 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('H', 'Mimořádný vklad po maximální SP',0, 95, 'Pouze pro specifickou variantu rozšířeného modelování', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('M', 'Značka pro výpočet koeficientu zhodnocení',1, null, 'Technický pohyb, který slouží pro výpočetní účely a není zobrazován', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('\', 'Konec měsíce ve spořicí fázi',1, null, 'Technický pohyb, který slouží pro výpočetní účely a není zobrazován', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('?', 'Výchozí stav',1, null, 'Technický pohyb, zobrazuje se však při náhledu na obraty v CIBIS-Web', 1);
+insert into ep_typpohybumodel_cis(typpohybumodel, text, priorityalg, priority, note, platnost) values('a', 'Sankční úrok',0, null, null, 1);
+
+ROLLBACK WORK;
+
+--End of B121273_RN00415479_3

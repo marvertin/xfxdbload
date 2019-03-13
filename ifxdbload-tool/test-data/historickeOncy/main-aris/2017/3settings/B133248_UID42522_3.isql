@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B133248_UID42522_3
+-- @TC:ONCE: DESCRIPTION = Nastavit blokace osoby {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EO', 1003, 'Vytvořit blokaci osoby', null, 1);
+
+ROLLBACK WORK;
+
+--End of B133248_UID42522_3

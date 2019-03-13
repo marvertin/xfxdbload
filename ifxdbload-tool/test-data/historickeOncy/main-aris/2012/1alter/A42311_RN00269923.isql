@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A42311_RN00269923
+-- @TC:ONCE: DESCRIPTION = Nové úlohy/funkce pro oblast pozdního vymáhání
+
+BEGIN WORK;
+
+ALTER TABLE eo_soud_cis ADD CONSTRAINT FOREIGN KEY(osoba) REFERENCES eo_po_mat(po) CONSTRAINT eo_soud_cis_f1;
+
+ROLLBACK WORK;

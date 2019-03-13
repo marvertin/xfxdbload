@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A55475_RN00317080_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table EP_SplSporModSH_Den
+  modify stavZadost varchar(7)
+;
+
+alter table EP_ExpSplSporModH_Den
+  modify stavZadost varchar(7)
+;
+
+ROLLBACK WORK;
+
+--End of A55475_RN00317080_5

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A41200_RN00279789_3
+-- @TC:ONCE: DESCRIPTION = PPSU-pøímý odpis - mapování dluhu
+
+BEGIN WORK;
+
+insert into ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+values (324, 'X_X_PN_VO', 0, '996750', '999341', '762001', 1, 1);
+insert into ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+values (324, 'X_X_PN_VO', 1, '996750', '999341', '762001', 1, 1);
+insert into ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+values (324, 'X_X_PZ_VO', 0, '996650', '999341', '762001', 1, 1);
+insert into ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) 
+values (324, 'X_X_PZ_VO', 1, '996650', '999341', '762001', 1, 1);
+
+ROLLBACK WORK;
+
+--End of A41173_RN00280727_3

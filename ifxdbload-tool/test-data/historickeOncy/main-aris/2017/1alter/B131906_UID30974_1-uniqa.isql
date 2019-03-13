@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B131906_UID30974_1-uniqa
+-- @TC:ONCE: DESCRIPTION = Dodatky - zrobustnění řešení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE PRO_ContractData
+  ADD newinsuramendeffdate   DATE BEFORE zajistChangedByInsur,
+  ADD newinsuramendconcdate   DATE BEFORE zajistChangedByInsur;
+
+ROLLBACK WORK;
+
+--End of B131906_UID30974_1-uniqa

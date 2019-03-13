@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B105906_RN00350293_6
+-- @TC:ONCE: DESCRIPTION = CIBIS-OS: Nové provizní konto {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+  CALL tw_execSql('drop procedure AH_PohlLikvidaceOS ', -111); 
+  CALL tw_execSql('drop procedure AH_PohlLikvidOS_T  ', -111); 
+  CALL tw_execSql('drop procedure AH_setPohlOS       ', -111); 
+  CALL tw_execSql('drop procedure AH_SplPohlOS       ', -111); 
+  CALL tw_execSql('drop procedure AH_StornoPohlOS_T  ', -111); 
+  CALL tw_execSql('drop procedure AH_StornopohlOS    ', -111); 
+  CALL tw_execSql('drop procedure AH_StornoSplOS_T   ', -111); 
+  CALL tw_execSql('drop procedure AH_StornoSplOS     ', -111); 
+  CALL tw_execSql('drop procedure AH_ObnovPohlOS_T   ', -111); 
+  CALL tw_execSql('drop procedure AH_ObnovPohlOS     ', -111); 
+  CALL tw_execSql('drop procedure AH_MemoPohlOS_C    ', -111); 
+  CALL tw_execSql('drop procedure AH_MserverPohlOS_c ', -111); 
+  CALL tw_execSql('drop procedure AC_CB_E_7b         ', -111); 
+  CALL tw_execSql('drop procedure AC_E_7b            ', -111); 
+  CALL tw_execSql('drop procedure AC_B_TRDF          ', -111); 
+
+ROLLBACK WORK;
+
+--End of B105906_RN00350293_6

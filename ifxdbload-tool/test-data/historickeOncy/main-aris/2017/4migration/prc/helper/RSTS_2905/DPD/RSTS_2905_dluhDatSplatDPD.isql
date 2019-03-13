@@ -1,0 +1,53 @@
+CREATE FUNCTION RSTS_2905_dluhDatSplatDPD(AKonto            DEC(16, 0),
+                                          ATko              CHAR(2),
+                                          ASerPredpis       INT,
+                                          AZdrojSerPredpis  INT,
+                                          AStav             CHAR(1),
+                                          ADatUkon          DATE DEFAULT NULL) 
+  RETURNING DATE;
+                                          
+  DEFINE _serpredpis      INT;
+  DEFINE _datsplat1       DATE;
+  DEFINE _datsplat2       DATE;
+  DEFINE _sko             CHAR(4);
+
+  LET _datsplat1 = NULL;
+  LET _datsplat2 = NULL;
+  
+  IF(AStav = 'C') THEN
+    SELECT sko INTO _sko FROM rsts_2905_memorial WHERE ser = ASerPredpis AND zdrojser = AZdrojSerPredpis AND dbcr = -1;
+    
+    SELECT MAX(valuta) INTO _datsplat1 FROM rsts_2905_memorial memo
+    JOIN rsts_2905_pair pair ON pair.ser2 = memo.ser AND pair.ser2_zdrojSer = memo.zdrojser
+    WHERE
+      pair.ser1          = ASerPredpis AND
+      pair.ser1_zdrojSer = AZdrojSerPredpis AND
+      memo.sko           = _sko AND
+      memo.dbcr          = 1;
+      
+    SELECT MAX(valuta) INTO _datsplat2 FROM rsts_2905_memorial memo
+    JOIN rsts_2905_pair pair ON pair.ser2 = memo.ser AND pair.ser2_zdrojSer = memo.zdrojser
+    WHERE
+      pair.ser1          = ASerPredpis AND
+      pair.ser1_zdrojSer = AZdrojSerPredpis AND
+      memo.sko           = 'PYMT' AND
+      memo.dbcr          = -1 AND
+      pair.typparu       = 'MDRE';          
+    
+  END IF;
+  
+  IF(_datsplat1 IS NULL AND _datsplat2 IS NULL) THEN
+    IF(ADatUkon IS NOT NULL) THEN
+      RETURN ADatUkon;
+    ELSE
+      RETURN NULL;
+    END IF;  
+  ELIF(_datsplat1 IS NOT NULL AND _datsplat2 IS NOT NULL) THEN
+    RETURN TW_MaxDate(_datsplat1, _datsplat2);
+  ELIF(_datsplat1 IS NOT NULL) THEN
+    RETURN _datsplat1;
+  ELSE
+    RETURN _datsplat2;    
+  END IF;
+  
+END FUNCTION;

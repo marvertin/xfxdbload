@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B133358_UID44540_1-vazbyAkce
+-- @TC:ONCE: DESCRIPTION = Při konkrétní odpovědi z dotazníku inicalizovat konkrétní typ zajištění {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_vazbarozhod_cis
+ADD akce CHAR(10) BEFORE odpovedod;
+
+ALTER TABLE eu_vazbarozhod_cis
+ADD CONSTRAINT (CHECK (akce IS NULL OR akce IN ('NEMOVITOST', 'POJISTENI')) CONSTRAINT eu_vazbarozhod_cis_c1);
+
+ROLLBACK WORK;
+
+--End of B133358_UID44540_1-vazbyAkce

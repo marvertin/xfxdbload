@@ -1,0 +1,48 @@
+-- @TC:ONCE: ID = V2, A97968_RN00359353_1
+-- @TC:ONCE: DESCRIPTION = Změna vyhodnocování závazků osob pro ÚŽ {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eo_finsit_mat ADD castkazavext DECIMAL(16, 2);
+
+ALTER TABLE eo_finsit_arch ADD castkazavext DECIMAL(16, 2);
+
+ALTER TABLE eo_vztahos_mat ADD CONSTRAINT (CHECK (stav in ('A','D','Z')) CONSTRAINT eo_vztahos_mat_c1);
+
+ALTER TABLE eo_vztahos_cis ADD (
+  symetricky   Integer,
+  maxpocetb   Integer,
+  maxpoceta   Integer
+);
+
+ALTER TABLE eo_vztahos_cis ADD CONSTRAINT (CHECK (symetricky IN (0,1)) CONSTRAINT eo_vztahos_cis_du3e);
+
+ALTER TABLE eo_vztahos_acis ADD (
+  symetricky   Integer,
+  maxpocetb   Integer,
+  maxpoceta   Integer
+);
+
+ALTER TABLE eo_vztahos_acis ADD CONSTRAINT (CHECK (symetricky IN (0,1)) CONSTRAINT eo_vztahos_acis_du3h);
+
+ALTER TABLE eo_vztahrod_cis ADD (
+  symetricky   Integer,
+  maxpocetb   Integer,
+  maxpoceta   Integer
+);
+
+ALTER TABLE eo_vztahrod_cis ADD CONSTRAINT (CHECK (symetricky IN (0,1)) CONSTRAINT eo_vztahrod_cis_du3k);
+
+ALTER TABLE eo_vztahrod_acis ADD (
+  symetricky   Integer,
+  maxpocetb   Integer,
+  maxpoceta   Integer
+);
+
+ALTER TABLE eo_vztahrod_acis ADD CONSTRAINT (CHECK (symetricky IN (0,1)) CONSTRAINT eo_vztahrod_acis_du3n);
+
+ALTER TABLE eo_exprole_den ADD castkazavext DECIMAL(16, 2);
+
+ROLLBACK WORK;
+
+--End of A97968_RN00359353_1

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B111398_RN00380426_5
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CREATE INDEX eu_zajist_mat_i_f3 ON eu_zajist_mat(refzastavnisml);
+ALTER TABLE eu_zajist_mat ADD CONSTRAINT FOREIGN KEY(refzastavnisml) REFERENCES cen_zastavnisml_mat(serno) CONSTRAINT eu_zajist_mat_f3;
+
+ROLLBACK WORK;
+
+--End of B111398_RN00380426_5

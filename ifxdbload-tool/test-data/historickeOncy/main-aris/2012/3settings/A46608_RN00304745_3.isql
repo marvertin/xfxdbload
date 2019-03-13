@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A46608_RN00304745_3
+-- @TC:ONCE: DESCRIPTION = ošetøit pøípad, kdy pro PLFO neexistuje záznam v èíselníku. {DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO rp_real_cis (treal, text) VALUES ('PLFO', 'Platební spoøení FO');
+
+ROLLBACK WORK;
+
+--End of A46608_RN00304745_3

@@ -1,0 +1,412 @@
+CREATE FUNCTION EP_GetOldSCSentenceParameters(ALastScoringActionId Integer,
+                                                                                        ATypSC Char(3), 
+                                                                                        ABIC char(16),                                                                                          
+                                                                                        ASmlouva Dec(16, 0), 
+                                                                                        ATsml Char(4), 
+                                                                                        AZadost Integer)
+returning
+  Char(5),     --region
+  Int,         --titulInd
+  Int,         --familyStatus
+  Int,         --occupationCodeS
+  Int,         --homeTelephoneInd
+  Int,         --workTelephoneInd
+  Int,         --mobilAllowInd
+  Int,         --mailInd
+  Int,         --mobilCardInd
+  Int,         --sex
+  Char(4),     --bankCode
+  Dec(16,2),   --repayAbility
+  Int,         --age
+  Dec(16,2),   --roleIncome
+  Dec(16,2),   --homeIncome
+  Dec(16,2),   --otherIncomeShare
+  Int,         --numbPers
+  Int,         --numbChildren
+  Int,         --highestClassification
+  Char(5),     --addrCurrRegion
+  Int,         --addrCurrDurationMonth
+  Int,         --habitationType
+  Int,         --education
+  Int,         --workPosition
+  Int,         --branch
+  Char(5),     --emplRegion
+  Int,         --emplDurationCurrMonth
+  Int,         --emplDurationLastMonth
+  Int,         --emplContractLimited
+  Date,        --emplFinish
+  Int,         --lifeInsur
+  Int,         --injuryInsur
+  Int,         --pensionInsur
+  Int,         --otherInsur
+  Int,         --AdressUnityInd      //    1 nebo 0
+  Char(1),     --residenceType      //RESIDENCEID
+  Char(2),     --Citizenship        //NATIONALITYID
+  Char(5),     --xaddrresidzipcode
+  Char(5),     --xaddrcurrzipcode
+  Char(5),     --xaddremployzipcode   
+  Dec(16,2),   --targetAmount
+  Int,         --taIncreasing
+  Int,         --taDecreasing
+  Int,         --tariffChange
+  Dec(16,2),   --regPayment
+  Char(1),     --paymentPeriod
+  Char(1),     --expUsage
+  Char(5),     --bsAgentRegion
+  Int,         --ssInd
+  Int,         --savingDuration
+  Dec(16,2),   --savedAmount
+  Dec(8,4),    --allotmentNumber
+  Dec(16,2),   --savingShare
+  Dec(16,0),   --bsContract          //ASmlouva
+  Int,         --SMSInd              //xsmsactivation
+  Int,         --Tariff              //_xtariffcode
+  Int,         --magazineInd         //_xmagazine
+  Char(1),     --AllotmentType      //U nebo H
+  Char(2),     --creditType
+  Dec(16,2),   --bcAmount
+  Dec(16,2),   --creditAmount
+  Dec(16,2),   --bcRepayment
+  Dec(16,2),   --creditRepayment
+  Int,         --creditDuration
+  Char(1),     --withdrawalWay
+  Int,         --purposeBuy
+  Int,         --purposeModernFlat
+  Int,         --purposeModernHouse
+  Int,         --purposeConstruct
+  Int,         --purposeOther
+  Char(5),     --ccAgentRegion
+  Int,         --insurNone
+  Int,         --insurRealty
+  Int,         --insurGuarantor
+  Int,         --insurOther
+  Char(10),    --variant
+  Int,         --repaymentWay
+  Int,         --BCDuration
+  Int;         --subdebtorNo 
+      
+define _region                Char(5);
+define _titulInd              Int;
+define _familyStatus          Int;
+define _occupationCodeS       Int;
+define _homeTelephoneInd      Int;
+define _workTelephoneInd      Int;
+define _mobilAllowInd         Int;
+define _mailInd               Int;
+define _mobilCardInd          Int;
+define _sex                   Int;
+define _bankCode              Char(4);
+define _repayAbility          Dec(16,2);
+define _age                   Int;
+define _roleIncome            Dec(16,2);
+define _homeIncome            Dec(16,2);
+define _otherIncomeShare      Dec(16,2);
+define _numbPers              Int;
+define _numbChildren          Int;
+define _highestClassification Int;
+define _addrCurrRegion        Char(5);
+define _addrCurrDurationMonth Int;
+define _habitationType        Int;
+define _education             Int;
+define _workPosition          Int;
+define _branch                Int;
+define _emplRegion            Char(5);
+define _emplDurationCurrMonth Int;
+define _emplDurationLastMonth Int;
+define _emplContractLimited   Int;
+define _emplFinish            Date;
+define _lifeInsur             Int;
+define _injuryInsur           Int;
+define _pensionInsur          Int;
+define _otherInsur            Int;
+define _adressUnityInd        Int;
+define _residenceid           Char(1);
+define _nationalityid         Char(2);
+define _xaddrresidzipcode     Char(5);
+define _xaddrcurrzipcode      Char(5);
+define _xaddremployzipcode    Char(5);
+
+define _targetAmount          Dec(16,2);
+define _taIncreasing          Int;
+define _taDecreasing          Int;
+define _tariffChange          Int;
+define _regPayment            Dec(16,2);
+define _paymentPeriod         Char(1);
+define _expUsage              Char(1);
+define _bsAgentRegion         Char(5);
+define _ssInd                 Int;
+define _savingDuration        Int;
+define _savedAmount           Dec(16,2);
+define _allotmentNumber       Dec(8,4);
+define _savingShare           Dec(16,2);
+define _bsContract            Dec(16,0);
+define _xsmsactivation        Int;
+define _xtariffcode           Int;
+define _xmagazine             Int;
+define _allotmenttype         Char(1);
+
+define _creditType            Char(2);
+define _bcAmount              Dec(16,2);
+define _creditAmount          Dec(16,2);
+define _bcRepayment           Dec(16,2);
+define _creditRepayment       Dec(16,2);
+define _creditDuration        Int;
+define _withdrawalWay         Char(1);
+define _purposeBuy            Int;
+define _purposeModernFlat     Int;
+define _purposeModernHouse    Int;
+define _purposeConstruct      Int;
+define _purposeOther          Int;
+define _ccAgentRegion         Char(5);
+define _insurNone             Int;
+define _insurRealty           Int;
+define _insurGuarantor        Int;
+define _insurOther            Int;
+define _variant               Char(10);
+define _repaymentWay          Int;
+define _bcDuration            Int;
+define _subdebtorNo           Int;
+-- ScoringCheckID.
+define _scoringCheckId   Integer;
+define _scoringActionId  Integer;
+
+let  _scoringCheckId = 0;
+
+select max(scoringcheck_id) into _scoringCheckId from scoringperson where scoringaction_id = ALastScoringActionId and xbankpersnumber = ABIC; 
+
+SELECT 
+ xregion, xtitulind, xfamilyStatus, xoccupationCodeS,       
+ xhomeTelephoneInd, xworkTelephoneInd, xmobilAllowInd,         
+ xmailInd, xmobilCardInd, xsex, xbankCode,              
+ xrepayAbility,          
+ xage,                   
+ xroleIncome,            
+ xhomeIncome,            
+ xotherIncomeShare,      
+ xnumbPers,              
+ xnumbChildren,          
+ xhighestClassification, 
+ xaddrCurrRegion,        
+ xaddrCurrDurationMonth, 
+ xhabitationType,        
+ xeducation,             
+ xworkPosition,          
+ xbranch,                
+ xemplRegion,            
+ xemplDurationCurrMonth, 
+ xemplDurationLastMonth, 
+ xemplContractLimited,  
+ xemplFinish,            
+ xlifeInsur,             
+ xinjuryInsur,           
+ xpensionInsur,          
+ xotherInsur,                   
+ xadressUnityInd,        
+ xresidencetype,           
+ xcitizenship,         
+ xpermanentaddrzip,     
+ xcorrespzip,      
+ xemplzip,    
+ xtargetAmount,          
+ xtaIncreasing,          
+ xtaDecreasing,                    
+ xtariffChange,                    
+ xregPayment,                      
+ xpaymentPeriod,                   
+ xexpUsage,                        
+ xbsAgentRegion,                   
+ xssInd,                        
+ xsavingDuration,               
+ xsavedAmount,                  
+ xallotmentNumber,   
+ xsavingShare,                    
+ xbsContract,                     
+ xsmsind,               
+ xtariff,                     
+ xmagazineind,                       
+ xallotmenttype,
+ xcreditType,
+ xbcAmount,  
+ xcreditAmount,
+ xbcRepayment, 
+ xcreditRepayment,    
+ xcreditDuration,       
+ xwithdrawalWay,        
+ xpurposeBuy,           
+ xpurposeModernFlat,    
+ xpurposeModernHouse,   
+ xpurposeConstruct,     
+ xpurposeOther,         
+ xccAgentRegion,        
+ xinsurNone,            
+ xinsurRealty,          
+ xinsurGuarantor,       
+ xinsurOther,           
+ xvariant,              
+ xrepaymentWay,         
+ xbcDuration,           
+ xsubdebtorNo 
+ INTO
+  _region,
+ _titulInd,
+ _familyStatus,          
+ _occupationCodeS,       
+ _homeTelephoneInd,      
+ _workTelephoneInd,      
+ _mobilAllowInd,         
+ _mailInd,               
+ _mobilCardInd,          
+ _sex,                    
+ _bankCode,              
+ _repayAbility,          
+ _age,                   
+ _roleIncome,            
+ _homeIncome,            
+ _otherIncomeShare,      
+ _numbPers,              
+ _numbChildren,          
+ _highestClassification, 
+ _addrCurrRegion,  
+ _addrCurrDurationMonth, 
+ _habitationType,        
+ _education,             
+ _workPosition,          
+ _branch,                
+ _emplRegion,         
+ _emplDurationCurrMonth, 
+ _emplDurationLastMonth, 
+ _emplContractLimited,   
+ _emplFinish,           
+ _lifeInsur,             
+ _injuryInsur,           
+ _pensionInsur,          
+ _otherInsur,             
+ _adressUnityInd,        
+ _residenceid,          
+ _nationalityid,
+ _xaddrresidzipcode,    
+ _xaddrcurrzipcode,     
+ _xaddremployzipcode,
+ _targetAmount,          
+ _taIncreasing,          
+ _taDecreasing,
+ _tariffChange,          
+ _regPayment,            
+ _paymentPeriod,     
+ _expUsage,             
+ _bsAgentRegion,     
+ _ssInd,                 
+ _savingDuration,      
+ _savedAmount,        
+ _allotmentNumber,  
+ _savingShare,          
+ _bsContract,           
+ _xsmsactivation,      
+ _xtariffcode,            
+ _xmagazine,             
+_allotmenttype,        
+ _creditType,
+_bcAmount,
+_creditAmount,
+_bcRepayment,
+_creditRepayment,
+_creditDuration,
+_withdrawalWay,
+_purposeBuy,
+_purposeModernFlat,
+_purposeModernHouse,
+_purposeConstruct,
+_purposeOther,
+_ccAgentRegion,
+_insurNone,
+_insurRealty,
+_insurGuarantor,
+_insurOther,
+_variant,
+_repaymentWay,
+_bcDuration,
+_subdebtorNo
+from scoringcheck where ID = _scoringCheckId;
+
+return
+  _region,
+ _titulInd,
+ _familyStatus,          
+ _occupationCodeS,       
+ _homeTelephoneInd,      
+ _workTelephoneInd,      
+ _mobilAllowInd,         
+ _mailInd,               
+ _mobilCardInd,          
+ _sex,                   
+ _bankCode,              
+ _repayAbility,          
+ _age,                   
+ _roleIncome,            
+ _homeIncome,            
+ _otherIncomeShare,      
+ _numbPers,              
+ _numbChildren,          
+ _highestClassification, 
+ _addrCurrRegion,  
+ _addrCurrDurationMonth, 
+ _habitationType,        
+ _education,             
+ _workPosition,          
+ _branch,                
+ _emplRegion,         
+ _emplDurationCurrMonth, 
+ _emplDurationLastMonth, 
+ _emplContractLimited,   
+ _emplFinish,           
+ _lifeInsur,             
+ _injuryInsur,           
+ _pensionInsur,          
+ _otherInsur,                
+ _adressUnityInd,        
+ _residenceid,          
+ _nationalityid,
+ _xaddrresidzipcode,    
+ _xaddrcurrzipcode,     
+ _xaddremployzipcode,
+ _targetAmount,          
+ _taIncreasing,          
+ _taDecreasing,
+ _tariffChange,          
+ _regPayment,            
+ _paymentPeriod,     
+ _expUsage,             
+ _bsAgentRegion,     
+ _ssInd,                 
+ _savingDuration,      
+ _savedAmount,        
+ _allotmentNumber,  
+ _savingShare,          
+ _bsContract,           
+ _xsmsactivation,      
+ _xtariffcode,            
+ _xmagazine,             
+_allotmenttype,        
+ _creditType,
+_bcAmount,
+_creditAmount,
+_bcRepayment,
+_creditRepayment,
+_creditDuration,
+_withdrawalWay,
+_purposeBuy,
+_purposeModernFlat,
+_purposeModernHouse,
+_purposeConstruct,
+_purposeOther,
+_ccAgentRegion,
+_insurNone,
+_insurRealty,
+_insurGuarantor,
+_insurOther,
+_variant,
+_repaymentWay,
+_bcDuration,
+_subdebtorNo;
+
+END FUNCTION;

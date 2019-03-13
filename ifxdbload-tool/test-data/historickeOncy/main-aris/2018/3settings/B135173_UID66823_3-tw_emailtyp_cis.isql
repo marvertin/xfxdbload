@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135173_UID66823_3-tw_emailtyp_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-19216: Vyhodnocení údajů z CRIBIS pro požadované dokumenty {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, platnost, portime, poruser, reftime, refuser, maxpocetpriloh)
+ VALUES ('CRIBIS_VARKOD_NOTIF', 'Neexistující varovný kód firmy v číselníku', null, null, 'Neexistující varovný kód firmy v číselníku', 'Při aktualizaci údajů o firmě IČ: <IČO firmy> (zahraniční ID: <ID zahraniční firmy>) byly vyhodnoceny varovné kódy: <<Seznam varovných kódů neexistujících v číselníku>>, které nejsou v číselníku.', null, 0, 1, 24, null, null, null, 0, 'A', 0, 2, 1, null, null, null, null, 0)
+;
+
+ROLLBACK WORK;
+
+--End of B135173_UID66823_3-tw_emailtyp_cis

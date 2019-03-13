@@ -1,0 +1,331 @@
+
+create procedure EU_RN00269923_SnimekVymPohl(AAkce Char(1), ASmlouva Dec(16,0), ATsml Char(4), 
+                                             Akonto Dec(16,0) default null, ATko Char(2) default null, 
+                                             ASerOp Int default null, ATypOp Char(1) default null,
+                                             ASmlouvaUver Dec(16,0) default null)
+  
+  define _smlouva         Dec(16,0);
+  define _tsml            Char(4);
+  define _ser             int;
+  define _lastser         int;
+  define _lastser2        int;
+  
+  define _realn           Int;
+  define _realnPom        Int;
+  define _maxporadi       int;
+  define _prizinsolv      int;
+  define _prizsoud        int;
+  define _prizexekuce     int;
+  define _prizextvym      int;
+  define _datdelikvence   date;
+  define _datmaxdluhpospl date;
+  
+  define _saldovyzvakl    DEC(16,2);
+  define _datsplvyzvakl   DATE;
+  define _saldovyzvaru    DEC(16,2);
+  define _datsplvyzvaru   DATE;
+  define _saldoprvym      DEC(16,2);
+  define _datprovprvym    DATE;
+
+  define _treal         like RU_Real_Mat.treal;
+  define _zvlrezim      like RU_Real_Mat.zvlrezim;
+  define _datzvlrezim   like RU_Real_Mat.datzvlrezim;
+  define _klasif        like RU_Real_Mat.klasif;
+  define _klasifreal    like RU_Real_Mat.klasifreal;
+  define _klasifmin     like RU_Real_Mat.klasifmin;
+  define _konto         like RU_Real_Mat.konto;
+  define _tko           like RU_Real_Mat.tko;
+  
+  define _stav        like EU_Sml_Mat.stav;
+  define _datukonc    like EU_Sml_Mat.datukonc;
+  define _ref3        like EU_Sml_Mat.ref3;
+  define _ref4        like EU_Sml_Mat.ref4;
+  
+  define _saldo               DEC(16,2);
+  define _dluhpospl           DEC(16,2);
+  define _datprovodppohl      date;
+  define _odppohltyp          char(1);
+  define _odppohlsaldo        dec(16,2);
+  define _dluhjist            DEC(16,2);
+  define _dluhprislus         DEC(16,2);
+  define _ocsaldo             Dec(16,2);
+  define _nedoplatekspor      DEC(16,2);
+  define _stavreal            CHAR(1); 
+  define _smlspor             DEC(16,0);
+  define _tsmlspor            CHAR(4);
+  define _kontospor           DEC(16,0);
+  define _tkospor             CHAR(2);
+  
+  define _summesuver          DEC(16,2);
+  define _datuctposluver      DATE;
+  define _textposluver        CHAR(20);
+  define _splatka             DEC(16,2);
+  define _summesspor          DEC(16,2);
+  define _datuctposlspor      DATE;
+  define _textposlspor        CHAR(20);
+  define _vklad               DEC(16,2);
+  
+  define _typspl_temp     CHAR(1);
+  define _rozhden_temp    DATE;
+  define _predplaceni_temp INTEGER;
+  define _mena            Char(3);
+  define _typVklad        Char(1);         
+  define _datVklad        Date;
+  define _i               Integer;
+  define _poradi          Integer;
+  
+  define _rezim        like EU_Insolvence_Mat.rezim;
+  define _datnastaveni like EU_Insolvence_Mat.datnastaveni;
+  define _datzastaveni like EU_Insolvence_Mat.datzastaveni;
+  define _poznamka     like EU_Insolvence_Mat.poznamka;
+  
+  define _exekuceser      int;
+  define _datuct          Date;
+  define _reftime Datetime Year to Second;
+
+  define _typidkl Char(1);
+  define _identkl Char(13);
+  define _nazevkl Char(100); 
+  define _datzanikkl Date; 
+  define _roleprsd Int;
+  define _zajruceni Int;
+  define _zajnemov Int;
+  
+  if AAkce = 'S' and (Akonto is null or Atko is null or ASerOp is null or ATypOp is null) then
+    call TW_RaiseError('423A28TCUI','EU_SnimekVymPohlNovy','Chybnì zadaný jeden ze vstupních parametrù (Akonto, Atko, ASerOp, ATypOp).');
+  end if;
+  
+  if AAkce in ('M', 'Z') and (ASmlouva is null or ATsml is null) then
+    call TW_RaiseError('423W50TCUI','EU_SnimekVymPohlNovy','Chybnì zadaný jeden ze vstupních parametrù (ASmlouva, ATsml).');
+  end if;
+  
+  let _smlouva, _tsml = ASmlouva, ATsml;
+  
+  select ser into _ser from EU_VymPohl_Mat where smlouva = _smlouva and tsml = _tsml;
+  
+  if AAkce = 'S' then
+    if ATypOp in ('P', 'T') then
+      insert into EU_SledTranVym_Den(vympohlser, serop, druh, konto, tko, kontoproti, banka, ucet,
+        typ, castka, datuct, valuta, text, varsym, specsym)
+      select _ser, ASerOp, druh, AKonto, ATko, nvl(pr_konto, pr_ckonto), pr_banka, pr_ucet, ATypOp,
+        castka, datuct, valuta, text, varsym, specsym 
+        from AO_Obrat_View where ser = ASerOp and konto = AKonto and tko = ATko and dbcr = 1 and (konto <> pr_konto or pr_konto is null);
+        
+    elif ATypOp in ('O', 'S') then
+      insert into EU_SledTranVym_Den(vympohlser, serop, druh, konto, tko, kontoproti, banka, ucet,
+        typ, castka, datuct, valuta, text, varsym, specsym)
+      select _ser, ASerOp, druh, AKonto, ATko, nvl(pr_konto, pr_ckonto), pr_banka, pr_ucet, ATypOp,
+        castka, datuct, valuta, text, varsym, specsym 
+        from AO_Obrat_View where ser = ASerOp and konto = AKonto and tko = ATko and dbcr = -1 and (konto <> pr_konto or pr_konto is null);
+    end if;
+    
+    select datuct, reftime into _datuct, _reftime from ac_uchead_den where ser = ASerOp;
+  end if;
+  
+  let _typidkl = EP_TypIdKlSml(_smlouva, _tsml, _reftime);
+  let _identkl = EP_IdentKlSml(_smlouva, _tsml, _reftime);
+  let _nazevkl = EP_NazevKlSml(_smlouva, _tsml, _reftime);
+  let _datzanikkl = EP_DatZanikKlSml(_smlouva, _tsml, _reftime);
+
+  let _roleprsd = EP_JeRolePrSd(_smlouva, _tsml, _reftime);
+  let _zajruceni = EU_JeZajRuceni(_smlouva, _tsml, _reftime);
+  let _zajnemov = EU_JeZajNemov(_smlouva, _tsml, _reftime);
+  
+  select nvl(max(poradi), 0) + 1 into _maxporadi 
+  from EU_SnimekVymPohl_Den where smlouva = _smlouva and tsml = _tsml;
+  
+  select stav, datukonc, ref3, ref4, smlspor, tsmlspor
+   into _stav,_datukonc,_ref3,_ref4,_smlspor,_tsmlspor
+   from EU_Sml_Mat where smlouva = _smlouva and tsml = _tsml and reftime <= _reftime;
+
+  if _stav is null then
+    select stav, datukonc, ref3, ref4, smlspor, tsmlspor
+     into _stav,_datukonc,_ref3,_ref4,_smlspor,_tsmlspor
+     from EU_Sml_Arch where smlouva = _smlouva and tsml = _tsml and ser = (select max(ser) FROM EU_Sml_Arch where smlouva = _smlouva and tsml = _tsml and reftime <= _reftime);
+  end if;
+   
+  let _realn = null;
+  let _realnPom = null;
+  foreach
+    select realn
+    into _realnPom
+    from RU_Real_Mat
+    where smlouva = _smlouva and tsml = _tsml
+    order by realn desc
+  
+    select realn, treal, zvlrezim, datzvlrezim, klasif, klasifreal, klasifmin, konto, tko, stav 
+     into _realn,_treal,_zvlrezim,_datzvlrezim,_klasif,_klasifreal,_klasifmin,_konto,_tko, _stavreal
+     from RU_Real_Mat
+     where smlouva = _smlouva and tsml = _tsml and realn = _realnPom and reftime <= _reftime;
+ 
+    if _realn is null then
+      select realn, treal, zvlrezim, datzvlrezim, klasif, klasifreal, klasifmin, konto, tko, stav 
+       into _realn,_treal,_zvlrezim,_datzvlrezim,_klasif,_klasifreal,_klasifmin,_konto,_tko, _stavreal
+       from RU_Real_Arch
+       where smlouva = _smlouva and tsml = _tsml and realn = _realnPom 
+         and ser = (select max(ser) from RU_Real_Arch where smlouva = _smlouva and tsml = _tsml and realn = _realnPom and reftime <= _reftime); 
+    end if;    
+
+    if _realn is not null then 
+      exit foreach;
+    end if;
+  end foreach;
+   
+  let _prizinsolv = EO_IsInsolvOsobaSml(_smlouva, _tsml);
+  
+  if _prizinsolv = 2 then
+    let _prizinsolv = 0;
+  end if;
+  
+  if exists (select * from EU_VymPohl_Mat where datzaloba is not null and datzastrizeni is null and smlouva = _smlouva and tsml = _tsml) then
+    let _prizsoud = 1;
+  else    
+    let _prizsoud = 0;
+  end if;
+  
+  if exists (select * from EU_Exekuce_Mat exe JOIN EU_ExekPrikaz_Mat pri on exe.ser = pri.exekuceser where exe.vympohlser = _ser and datzastav is null and stav = 'A') then
+    let _prizexekuce = 1;
+  else
+    let _prizexekuce = 0;
+  end if
+  
+  if exists (select * from EU_VymPohl_Mat where datpredext is not null and datukonext is null and smlouva = _smlouva and tsml = _tsml) then
+    let _prizextvym = 1;
+  else    
+    let _prizextvym = 0;
+  end if;
+  
+  let _datdelikvence = RU_GetDatDelikvence(_smlouva, _tsml);
+  
+  let _datmaxdluhpospl = AO_GetDatMaxDluhPoSpl(_konto, _tko, _datuct);
+  
+  let _saldovyzvakl = RU_GetSaldoVyzvaKl(_smlouva, _tsml);
+  let _datsplvyzvakl = RU_GetDatSplVyzvaKl(_smlouva,_tsml);
+  let _saldovyzvaru = RU_GetSaldoVyzvaRu(_smlouva, _tsml);
+  let _datsplvyzvaru = RU_GetDatSplVyzvaRu(_smlouva, _tsml);
+  let _saldoprvym = RU_GetSaldoPrVym(_smlouva, _tsml);
+  let _datprovprvym = RU_GetDatProvPrVym(_smlouva, _tsml);
+  
+  let _odppohltyp = RU_GetOdpPohlTyp(_smlouva, _tsml);
+  let _datprovodppohl = RU_GetDatProvOdpPohl(_smlouva, _tsml);
+  let _odppohlsaldo = RU_GetOdpPohlSaldo(_smlouva, _tsml);
+  
+  let _saldo = AO_GetSaldoSkoDat(_konto, _tko, null, _datuct);
+
+  let _dluhpospl = AO_GetSaldoSkoDat(_konto, _tko, 'MPRI', _datuct) +
+                   AO_GetSaldoSkoDat(_konto, _tko, 'MINT', _datuct) +
+                   AO_GetSaldoSkoDat(_konto, _tko, 'MPIN', _datuct) +
+                   AO_GetSaldoSkoDat(_konto, _tko, 'MFES', _datuct) +
+                   AO_GetSaldoSkoDat(_konto, _tko, 'MPFS', _datuct);
+  let _dluhpospl = - (_dluhpospl);
+                 
+  let _dluhjist = AO_GetSaldoSkoDat(_konto, _tko, 'PRIN', _datuct) +
+                  AO_GetSaldoSkoDat(_konto, _tko, 'MPRI', _datuct);
+  let _dluhjist = - (_dluhjist);
+                                  
+  let _dluhprislus = AO_GetSaldoSkoDat(_konto, _tko, 'INTS', _datuct) +
+                     AO_GetSaldoSkoDat(_konto, _tko, 'MINT', _datuct) +
+                     AO_GetSaldoSkoDat(_konto, _tko, 'PINT', _datuct) +
+                     AO_GetSaldoSkoDat(_konto, _tko, 'MPIN', _datuct) +
+                     AO_GetSaldoSkoDat(_konto, _tko, 'FEES', _datuct) +
+                     AO_GetSaldoSkoDat(_konto, _tko, 'MFES', _datuct) +
+                     AO_GetSaldoSkoDat(_konto, _tko, 'PFES', _datuct) +
+                     AO_GetSaldoSkoDat(_konto, _tko, 'MPFS', _datuct);
+  let _dluhprislus = - (_dluhprislus);
+
+  let _nedoplatekspor = 0;
+  IF _treal IN ('PUFO','PUPO') AND _stavreal IN ('E', 'A', 'B', 'C') THEN
+    let _kontospor, _tkospor = EP_KontoTkoSml(_smlspor, _tsmlspor);
+    SELECT ocsaldo INTO _ocsaldo FROM AC_OcSaldo_Den WHERE konto = _kontospor AND tko = _tkospor AND
+      id = (SELECT max(ID) FROM AC_OcSaldo_Den WHERE konto = _kontospor AND tko = _tkospor AND reftime <= _reftime);
+  
+    let _nedoplatekspor = _ocsaldo - AO_GetSaldoSkoDat(_kontospor, _tkospor, null, _datuct);
+    IF _nedoplatekspor < 0 THEN
+      let _nedoplatekspor = 0;
+    END IF;            
+  END IF;
+  
+  SELECT SUM(case when typ IN ('P','T') then castka else -1*castka end) 
+   INTO _summesuver 
+   FROM EU_SledTranVym_Den
+  WHERE vympohlser = _ser AND tko = 'CA' AND datuct BETWEEN TW_FirstDayOf(_datuct,'M') AND TW_LastDayOf(_datuct,'M');
+  
+  SELECT datuct, text 
+   INTO _datuctposluver, _textposluver
+   FROM EU_SledTranVym_Den
+  WHERE vympohlser = _ser AND tko = 'CA' AND serop = (SELECT MAX(serop) FROM EU_SledTranVym_Den WHERE vympohlser = _ser AND tko = 'CA');
+          
+  let _splatka, _typspl_temp, _rozhden_temp, _predplaceni_temp = EU_SSplatka(_smlouva, _tsml, TW_LastDayOf(_datuct, 'M'));
+  
+  SELECT SUM(case when typ IN ('P','T') then castka else -1*castka end) 
+   INTO _summesspor  
+   FROM EU_SledTranVym_Den
+  WHERE vympohlser = _ser AND tko <> 'CA' AND datuct BETWEEN TW_FirstDayOf(_datuct,'M') AND TW_LastDayOf(_datuct,'M');
+  
+  SELECT datuct, text 
+   INTO _datuctposlspor, _textposlspor
+   FROM EU_SledTranVym_Den
+  WHERE vympohlser = _ser AND tko <> 'CA' AND serop = (SELECT MAX(serop) FROM EU_SledTranVym_Den WHERE vympohlser = _ser AND tko <> 'CA');
+  
+  let _vklad, _mena, _typVklad, _datVklad, _i, _poradi  = ES_SVklad(_smlspor, _tsmlspor, TW_LastDayMonth(_datuct));
+  
+  select rezim, datnastaveni, datzastaveni, poznamka 
+   into _rezim,_datnastaveni,_datzastaveni,_poznamka
+   from EU_Insolvence_Mat where smlouva = _smlouva and tsml = _tsml;
+   
+  insert into EU_SnimekVymPohl_Den(akce, datvytv, poradi, portimevympohl, poruservympohl, treal, 
+    typidkl, identkl, nazevkl, datzanikkl, stavsml, datukoncsml, fazevym, ref3, ref4, zvlrezim, 
+    datzvlrezim, prizinsolv, prizsoud, prizexekuce, prizextvym, datdelikvence, datmaxdluhpospl, 
+    pocetdnipospl, klasif, klasifreal, klasifmin, saldovyzvakl, datsplvyzvakl, saldovyzvaru, 
+    datsplvyzvaru, saldoprvym, datprovprvym, odppohlsaldo, datprovodppohl, odppohltyp, saldo, dluhpospl, 
+    dluhjist, dluhprislus, nedoplatekspor, summesuver, datuctposluver, textposluver, splatka, 
+    summesspor, datuctposplspor, textposplspor, vklad, roleprsd, zajruceni, zajnemov, reziminsolv, 
+    datnastaveniinsolv, datzastaveniinsolv, poznamkainsolv,    
+    smlouva, tsml, stav, datsledod, datsleddo, zarazeni, vyrazeni, datprechodovp, datdopis, poznpozdni,
+    datuzndluh, cisjednaci, uzndluhmimosoud, datpromlceni, datpredsoud, refprav, poznsoud, datzaloba,
+    datpredvolani, caspredvolani, datrozhodsoud, cisnabyvtitul, datpravmoci, datvykon,
+    datsplatpm, datpocsplacpm, uzndluhsoud, poplsoud, priznnaklsoud, datzastrizeni, datpredext, datukonext,
+    poznext, soud, zaradtime, zaraduser, vyradtime, vyraduser, pozdvymtime, pozdvymuser, soudvymtime,
+    soudvymuser, reftimevympohl, refuservympohl)
+  select AAkce, _datuct, _maxporadi, portime, poruser, _treal,
+    _typidkl, _identkl, _nazevkl, _datzanikkl, _stav, _datukonc, RU_FazeVym(_realn), _ref3, _ref4, _zvlrezim, 
+    _datzvlrezim, _prizinsolv, _prizsoud, _prizexekuce, _prizextvym, _datdelikvence, _datmaxdluhpospl,
+    _datuct - _datmaxdluhpospl, _klasif, _klasifreal, _klasifmin, _saldovyzvakl, _datsplvyzvakl, _saldovyzvaru,
+    _datsplvyzvaru, _saldoprvym, _datprovprvym, _odppohlsaldo, _datprovodppohl, _odppohltyp, _saldo, _dluhpospl,
+    _dluhjist, _dluhprislus, _nedoplatekspor, _summesuver, _datuctposluver, _textposluver, _splatka,
+    _summesspor, _datuctposlspor, _textposlspor, _vklad, _roleprsd, _zajruceni,
+    _zajnemov, _rezim, _datnastaveni, _datzastaveni, _poznamka,
+    smlouva, tsml, stav, datsledod, datsleddo, zarazeni, vyrazeni, datprechodovp, datdopis, poznpozdni,
+    datuzndluh, cisjednaci, uzndluhmimosoud, datpromlceni, datpredsoud, refprav, poznsoud, datzaloba,
+    datpredvolani, caspredvolani, datrozhodsoud, cisnabyvtitul, datpravmoci, datvykon,
+    datsplatpm, datpocsplacpm, uzndluhsoud, poplsoud, priznnaklsoud, datzastrizeni, datpredext, datukonext,
+    poznext, soud, zaradtime, zaraduser, vyradtime, vyraduser, pozdvymtime, pozdvymuser, soudvymtime,
+    soudvymuser, reftime, refuser
+  from EU_VymPohl_Mat where smlouva = _smlouva and tsml = _tsml;
+  
+  let _lastser = tw_lastser(); 
+  
+  insert into EU_SnimekExekuce_Den(snimekvympohlser, cisjednaciexek, datzapis, uzndluh, datzastav,
+    portimeexek, poruserexek, reftimeexek, refuserexek)
+  select _lastser, cisjednaciexek, datzapis, uzndluh, datzastav,
+    portime, poruser, reftime, refuser
+  from EU_Exekuce_Mat
+  where vympohlser = _ser;
+    
+  let _lastser2 = tw_lastser();
+  
+  select ser into _exekuceser from EU_Exekuce_Mat where vympohlser = _ser;
+  
+  if _exekuceser is not null then
+    insert into EU_SnimekExekPrikaz_Den(snimekexekuceser, poradi, stav, cisprikaz, datnavrh, datnarizeni, poznamka, exekutor,
+      portimeprikaz, poruserprikaz, reftimeprikaz, refuserprikaz)
+    select _lastser2, poradi, stav, cisprikaz, datnavrh, datnarizeni, poznamka, exekutor,
+      portime, poruser, reftime, refuser
+    from EU_ExekPrikaz_Mat where exekuceser = _exekuceser;
+  end if
+  
+  insert into EU_SnimekSledTranVym_Den(snimekvympohlser, sledtranvymser)
+  select _lastser, ser from EU_SledTranVym_Den
+    where vympohlser = _ser;
+  
+end procedure;

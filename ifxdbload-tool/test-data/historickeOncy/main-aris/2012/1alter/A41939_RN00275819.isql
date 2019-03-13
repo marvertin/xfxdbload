@@ -1,0 +1,18 @@
+ -- @TC:ONCE: ID = V2, A41939_RN00275819
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - Main / Spoøení
+
+BEGIN WORK;
+  CREATE   TABLE ES_Prilohadokument_perm
+          (   
+               poradi              integer, 
+               nazev               varchar(255),
+               dokument         blob,
+               importtime       datetime year to second,
+               datplat            date,               
+               arch                int default 0,
+               Owner              integer,
+               odebrat        integer default 0,
+               aktuser                char(20)  ,
+               reftime            DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  ) ;
+      
+ROLLBACK WORK;

@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, A47149_RN00282474_1
+-- @TC:ONCE: DESCRIPTION = Varianty pojištìní UNIQA a èasové rozlišení parametrù, davky
+
+BEGIN WORK;
+
+  ALTER TABLE ec_vystdav_rozp ADD cislopojist CHAR(16) BEFORE smlouva;
+  ALTER TABLE ec_vystdav_rozp ADD tsml CHAR(4)  BEFORE konto;
+  ALTER TABLE ec_vystdav_rozp ADD variantaid INT BEFORE konto;
+  ALTER TABLE ec_vystdav_rozp ADD extident CHAR(10) BEFORE konto;
+  ALTER TABLE ec_vystdav_rozp ADD rozhdatumpoj DATE BEFORE konto;
+  ALTER TABLE ec_vystdav_rozp ADD zpusobzadani CHAR(1) BEFORE konto;
+  
+  ALTER TABLE ec_vstdav_rozp ADD cislopojist CHAR(16) BEFORE smlouva;
+  ALTER TABLE ec_vstdav_rozp ADD tsml CHAR(4)  BEFORE konto;
+  ALTER TABLE ec_vstdav_rozp ADD variantaid INT BEFORE konto;
+  ALTER TABLE ec_vstdav_rozp ADD extident CHAR(10) BEFORE konto;
+  ALTER TABLE ec_vstdav_rozp ADD variantazmena INT BEFORE konto;  
+  ALTER TABLE ec_vstdav_rozp ADD CONSTRAINT CHECK (variantazmena IN (0,1)) CONSTRAINT ec_vstdav_rozp_dquw;
+  
+  ALTER TABLE ec_davchyba_den ADD cislopojist CHAR(16) BEFORE smlouva;
+  ALTER TABLE ec_davchyba_den ADD tsml CHAR(4)  BEFORE sqlcodenum;
+
+ROLLBACK WORK;
+
+--End of A47149_RN00282474_1

@@ -1,0 +1,48 @@
+-- @TC:ONCE: ID = V2, B130665_RSTS-3447_1
+-- @TC:ONCE: DESCRIPTION = RN00458303-Úprava bonity a vyhodnocení závazků
+
+
+BEGIN WORK;
+
+CREATE TABLE eo_kalkkoefprijem_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           Integer   NOT NULL,
+    koeficient      DECIMAL(16,2)  ,
+    koduid          Integer  ,
+    x               Integer  ,
+    y               Integer  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_kalkkoefprijem_acis_d1wx
+) LOCK MODE ROW
+;
+
+CREATE unique INDEX eo_kalkkoefprijem_acis_pk ON eo_kalkkoefprijem_acis (idarch) ;
+
+ALTER TABLE eo_kalkkoefprijem_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eo_kalkkoefprijem_acis_pk;
+
+
+CREATE TABLE eo_kalkkoefprijem_cis (
+    serno           SERIAL   NOT NULL,
+    koeficient      DECIMAL(16,2)  ,
+    koduid          Integer  ,
+    x               Integer  ,
+    y               Integer  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT eo_kalkkoefprijem_cis_d1wp
+) LOCK MODE ROW
+;
+
+CREATE unique INDEX eo_kalkkoefprijem_cis_pk ON eo_kalkkoefprijem_cis (serno) ;
+
+ALTER TABLE eo_kalkkoefprijem_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT eo_kalkkoefprijem_cis_pk;
+
+
+ROLLBACK WORK;
+
+--End of B130665_RSTS-3447_1

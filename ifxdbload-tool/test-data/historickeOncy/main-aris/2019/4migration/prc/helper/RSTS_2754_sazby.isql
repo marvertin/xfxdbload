@@ -1,0 +1,61 @@
+CREATE PROCEDURE RSTS_2754_sazby()
+
+-- Sazba a splátka:
+--  Pro všechny fixace, která jsou ve stavu „Aktivní“
+--  Pro všechny fixace, která jsou ve stavu „Budoucí“, systém naplní pole
+--   Sazba BE – dle aktuální sazby BE na úvěru pro konkrétní danou fázi, ve které se úvěr nachází 
+--   Perioda BE – dle aktuální periody BE na úvěru pro konkrétní danou fázi, ve které se úvěr nachází 
+--   Sazba SA – dle aktuální sazby SA na úvěru pro konkrétní danou fázi, ve které se úvěr nachází 
+--   Perioda SA – dle aktuální periody SA na úvěru pro konkrétní danou fázi, ve které se úvěr nachází 
+--   Splátka – dle aktuální splátky na úvěru pro konkrétní danou fázi, ve které se úvěr nachází 
+
+
+define _smlouva   dec(16, 0);
+define _tsml      char(4);
+define _cisloint  int;
+define _sazbabe   dec(6, 2);
+define _periodabe char(1);
+define _sazbasa   dec(6, 2);
+define _periodasa char(1);
+define _splatka   dec(16, 2);
+define _indivsazba  int;
+
+begin
+  on exception in (-206)
+  end exception;
+  DROP TABLE eu_kalendarfixaci_mat_tmp;
+end;
+    
+select * 
+from eu_kalendarfixaci_mat
+where stav in ('A', 'B')
+into temp  eu_kalendarfixaci_mat_tmp;
+
+create index eu_kalendarfixaci_mat_tmp_i1 on eu_kalendarfixaci_mat_tmp(smlouva);
+
+foreach
+  select t.smlouva, t.tsml, t.cisloint,
+    case when (sml.tsml in ('PUSU', 'PFSU', 'PPSU') and sml.datklop is null) then sml.sazbabepu  else sml.sazbabe end, 
+    case when (sml.tsml in ('PUSU', 'PFSU', 'PPSU') and sml.datklop is null) then sml.periodabepu  else sml.periodabe end,
+    case when (sml.tsml in ('PUSU', 'PFSU', 'PPSU') and sml.datklop is null) then sml.sazbasapu  else sml.sazbasa end,
+    case when (sml.tsml in ('PUSU', 'PFSU', 'PPSU') and sml.datklop is null) then sml.periodasapu  else sml.periodasa end ,
+    case when (sml.tsml in ('PUSU', 'PFSU', 'PPSU') and sml.datklop is null) then sml.splatkapu  else sml.splatka end,
+    case when (sml.tsml in ('PUSU', 'PFSU', 'PPSU') and sml.datklop is null) then sml.indivsazbapu  else sml.indivsazba end
+  into  _smlouva, _tsml, _cisloint, _sazbabe, _periodabe, _sazbasa, _periodasa, _splatka, _indivsazba
+  from eu_kalendarfixaci_mat_tmp t
+  join eu_sml_mat sml on sml.smlouva = t.smlouva
+  
+  update eu_kalendarfixaci_mat
+  set  sazbabe = _sazbabe
+    , periodabe = _periodabe
+    , sazbasa = _sazbasa
+    , periodasa = _periodasa
+    , splatka = _splatka
+    , indivsazba = nvl(_indivsazba, 0)
+  where smlouva = _smlouva
+    and tsml = _tsml
+    and cisloint = _cisloint;
+end foreach;  
+
+
+end procedure

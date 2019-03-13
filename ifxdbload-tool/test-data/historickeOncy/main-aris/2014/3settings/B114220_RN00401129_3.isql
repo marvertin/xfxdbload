@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B114220_RN00401129_3
+-- @TC:ONCE: DESCRIPTION = Duplicitní parametr pro produkční prostředí {DEFECT}
+
+
+BEGIN WORK;
+
+call TW_RegDelKey('AP','*','*','MainServer');
+
+ROLLBACK WORK;
+
+--End of B114220_RN00401129_3

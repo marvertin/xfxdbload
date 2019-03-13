@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B119284_RN00425844_4
+-- @TC:ONCE: DESCRIPTION = NASAZENI 1 kolo v RSTS - pad alteru 1 {CUSTOMERREQUEST}
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+call RN00400856_creviewden_find_D();
+call RN00400856_creviewden_make_D();
+
+call RN00400856_ratingden_find_D();
+call RN00400856_ratingden_make_D();
+
+
+--End of B119284_RN00425844_4

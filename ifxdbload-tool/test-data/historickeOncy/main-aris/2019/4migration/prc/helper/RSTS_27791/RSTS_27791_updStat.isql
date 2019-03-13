@@ -1,0 +1,5 @@
+create procedure RSTS_27791_updStat()
+
+UPDATE STATISTICS HIGH FOR TABLE EP_DPDEBA_Den;
+
+end procedure;

@@ -1,0 +1,70 @@
+-- @TC:ONCE: ID = V2, B126386_RN00442031_prilohycis
+-- @TC:ONCE: DESCRIPTION = Úvěry: Evidence a provázanost příloh (marketingových akcí) k úvěrům {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       es_prilohatsml_acis
+
+-- 47  es_prilohatsml_acis-1/3       [CREATE.TABLE]
+CREATE TABLE es_prilohatsml_acis (
+    idarch          SERIAL   NOT NULL,
+    serno           INTEGER   NOT NULL,
+    priloha         Integer   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    platnost        Integer,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 48  es_prilohatsml_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX es_prilohatsml_acis_pk ON es_prilohatsml_acis (idarch) ;
+
+-- 49  es_prilohatsml_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE es_prilohatsml_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT es_prilohatsml_acis_pk;
+
+-- ###############################################################
+--       es_prilohatsml_cis
+
+-- 50  es_prilohatsml_cis-1/7       [CREATE.TABLE]
+CREATE TABLE es_prilohatsml_cis (
+    serno           SERIAL   NOT NULL,
+    priloha         Integer   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    platnost        Integer  DEFAULT 1,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 51  es_prilohatsml_cis-2/7       [CREATE.INDEX]
+CREATE unique INDEX es_prilohatsml_cis_pk ON es_prilohatsml_cis (serno) ;
+
+-- 52  es_prilohatsml_cis-3/7       [CREATE.INDEX]
+CREATE INDEX es_prilohatsml_cis_i_f1 ON es_prilohatsml_cis (priloha) ;
+
+-- 53  es_prilohatsml_cis-4/7       [CREATE.INDEX]
+CREATE INDEX es_prilohatsml_cis_i_f2 ON es_prilohatsml_cis (tsml) ;
+
+-- 54  es_prilohatsml_cis-5/7       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE es_prilohatsml_cis
+    ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT es_prilohatsml_cis_pk;
+
+-- ###############################################################
+--FOREIGN KEYS
+--       es_prilohatsml_cis
+
+-- 112  es_prilohatsml_cis-6/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE es_prilohatsml_cis
+    ADD CONSTRAINT FOREIGN KEY (priloha) REFERENCES es_priloha_cis(priloha)  CONSTRAINT es_prilohatsml_cis_f1;
+
+-- 113  es_prilohatsml_cis-7/7       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE es_prilohatsml_cis
+    ADD CONSTRAINT FOREIGN KEY (tsml) REFERENCES ep_sml_cis(tsml)  CONSTRAINT es_prilohatsml_cis_f2;
+
+ROLLBACK WORK;
+
+--End of B126386_RN00442031_prilohycis

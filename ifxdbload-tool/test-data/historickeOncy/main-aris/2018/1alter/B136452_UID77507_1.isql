@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B136452_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+CREATE TABLE ru_oppodklzauct_wrk (
+  serno     SERIAL NOT NULL,
+  radek     INT,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  tsml      CHAR(4) NOT NULL,
+  platnost  datetime year to month,
+  stadiumifrs   Integer,
+  pd12mes   DECIMAL(7,4),
+  pdcelozivotni   DECIMAL(7,4),
+  lgd       DECIMAL(7,4),
+  beel      DECIMAL(7,4),
+  rating    CHAR(20),
+  owner     INT NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_oppodklzauct_wrk_pk ON ru_oppodklzauct_wrk(serno);
+ALTER TABLE ru_oppodklzauct_wrk ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ru_oppodklzauct_wrk_pk;
+
+CREATE INDEX ru_oppodklzauct_wrk_i1 ON ru_oppodklzauct_wrk(smlouva);
+
+ROLLBACK WORK;
+
+--End of B136452_UID77507_1

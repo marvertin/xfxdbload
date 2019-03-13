@@ -1,0 +1,32 @@
+-- @TC:ONCE: ID = V2, B137079_UID91621_3-EU_DodatekHead
+-- @TC:ONCE: DESCRIPTION = RSTS-32081: IMPL (dat.model): RSTS-31408_Indikátory k úvěrovým dodatkům {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_dodatekhead_arch 
+  ADD datzahajrestr   date before poruser,
+  ADD zahajrestrzprac Integer before poruser,
+  ADD datukonrestr    date before poruser,
+  ADD ukonrestrzprac  Integer before poruser
+;
+ALTER TABLE eu_dodatekhead_arch
+ADD CONSTRAINT (CHECK (zahajrestrzprac IN (0,1)) CONSTRAINT eu_dodatekhead_arch_da5g);
+ALTER TABLE eu_dodatekhead_arch
+ADD CONSTRAINT (CHECK (ukonrestrzprac IN (0,1)) CONSTRAINT eu_dodatekhead_arch_da5i);
+
+
+ALTER TABLE eu_dodatekhead_mat 
+  ADD datzahajrestr   date before poruser,
+  ADD zahajrestrzprac Integer before poruser,
+  ADD datukonrestr    date before poruser,
+  ADD ukonrestrzprac  Integer before poruser
+;
+ALTER TABLE eu_dodatekhead_mat
+ADD CONSTRAINT (CHECK (zahajrestrzprac IN (0,1)) CONSTRAINT eu_dodatekhead_mat_da5a);
+ALTER TABLE eu_dodatekhead_mat
+ADD CONSTRAINT (CHECK (ukonrestrzprac IN (0,1)) CONSTRAINT eu_dodatekhead_mat_da5c);
+
+ROLLBACK WORK;
+
+--End of B137079_UID91621_3-EU_DodatekHead

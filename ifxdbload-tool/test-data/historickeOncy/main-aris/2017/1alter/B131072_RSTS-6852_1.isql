@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B131072_RSTS-6852_1
+-- @TC:ONCE: DESCRIPTION = TF001456 - Pole v převodníkové tabulce mou_find_02
+
+BEGIN WORK;
+
+CREATE TABLE eu_prevodopak_den (
+  serno   SERIAL NOT NULL,
+  smlouvapuvodni   DECIMAL(16, 0),
+  smlouvanova   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  kontopu   DECIMAL(16, 0),
+  opakovani   Integer,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_prevodopak_den_pk ON eu_prevodopak_den(serno);
+ALTER TABLE eu_prevodopak_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_prevodopak_den_pk;
+
+ROLLBACK WORK;
+
+--End of B131072_RSTS-6852_1

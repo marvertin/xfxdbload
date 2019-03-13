@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A61814_RN00355251_1
+-- @TC:ONCE: DESCRIPTION = '' je chybnì zadaná hodnota položky. {DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_variapu_cis
+  MODIFY nabizprouz Integer DEFAULT 0;
+  
+ALTER TABLE eu_variapu_cis
+  ADD CONSTRAINT CHECK (nabizprouz IN (0,1)) CONSTRAINT eu_variapu_cis_diwm; 
+
+ROLLBACK WORK;
+
+--End of A61814_RN00355251_1

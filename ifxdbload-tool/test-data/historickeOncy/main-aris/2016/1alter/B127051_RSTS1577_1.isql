@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B127051_RSTS1577_1
+-- @TC:ONCE: DESCRIPTION = v uloženém modelování se kupí staré namodelované obraty {Bug}
+
+
+BEGIN WORK;
+
+ALTER TABLE pro_simulatedturnover
+ DROP CONSTRAINT prosimulatedturnover_c_c1
+;
+
+ALTER TABLE pro_simulatedturnover
+ ADD CONSTRAINT (CHECK (xorigin IN ('M','S','L')) CONSTRAINT prosimulatedturnover_c_c1)
+;
+
+ROLLBACK WORK;
+
+--End of B127051_RSTS1577_1

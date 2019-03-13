@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B110569_RN00380435_3
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Číselníky {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- Možno spustit před nebo po spuštěním MCodeListUpdateru
+-- Typy věcí
+Update ev_vec_cis Set text = 'Nemovitost - stará', platnost = 0 Where tvec = 'N';
+Update ev_vec_cis Set spravadruhu = 1 Where tvec in ('V', 'C', 'P', 'H');
+Insert into ev_vec_cis (tvec, text) Values ('F', 'Funkční celek');
+Insert into ev_vec_cis (tvec, text) Values ('S', 'Skupina nemovitostí');
+Insert into ev_vec_cis (tvec, text) Values ('R', 'Nemovitost');
+
+-- Vztah mezi smlouvou a věcí
+Update ev_vzsmlvec_cis Set povolzajist = 0, povolucel = 1 Where vztah = 'U';
+Update ev_vzsmlvec_cis Set povolzajist = 1, povolucel = 0 Where vztah in ('V', 'Z', 'A', 'B');
+
+ROLLBACK WORK;
+--End of B110569_RN00380435_3

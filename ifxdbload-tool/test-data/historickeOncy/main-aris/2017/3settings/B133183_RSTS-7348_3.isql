@@ -1,0 +1,51 @@
+-- @TC:ONCE: ID = V2, B133183_RSTS-7348_3
+-- @TC:ONCE: DESCRIPTION = Získat data o firmě z CRIBIS {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#Časový limit pro obdržení odpovědi CRIBIS#
+call tw_regSetOrAddKey('WS', 'napojeniCRIBIS', 'napojeni', 'CasovyLimit', tw_reggetkey('EP', 'CEE', 'WS', 'CasovyLimit',null), 1, 
+                       'WS', 'Napojení na CRIBIS', 'Napojení', 'Časový limit pro obdržení odpovědi CRIBIS')
+;
+
+--#Koncový bod pro připojení služby CEE#
+call tw_regSetOrAddKey('WS', 'napojeniCRIBIS', 'napojeni', 'KoncovyBod', tw_reggetkey('EP', 'CEE', 'WS', 'KoncovyBod',null), 1, 
+                       'WS', 'Napojení na CRIBIS', 'Napojení', 'Koncový bod pro připojení služby CRIBIS')
+;
+--#Jméno pro CRIBIS#
+call tw_regSetOrAddKey('WS', 'napojeniCRIBIS', 'autentizace', 'Jmeno', tw_reggetkey('EP', 'CEE', 'WS', 'Jmeno',null) , 1, 
+                       'WS', 'Napojení na CRIBIS', 'Autentizace', 'Jméno pro CRIBIS')
+;
+
+update TW_Registr_Cis set sifrovano = 0
+where oblast = 'EP' AND uloha = 'CEE' AND funkce = 'WS' AND udaj = 'Heslo'
+;
+
+--#Heslo pro CRIBIS#
+call tw_regSetOrAddKey('WS', 'napojeniCRIBIS', 'autentizace', 'Heslo', tw_reggetkey('EP', 'CEE', 'WS', 'Heslo',null), 1, 
+                       'WS', 'Napojení na CRIBIS', 'Autentizace', 'Heslo pro CRIBIS')
+;
+
+update TW_Registr_Cis set sifrovano = 1
+where oblast = 'WS' AND uloha = 'napojeniCRIBIS' AND funkce = 'autentizace' AND udaj = 'Heslo'
+;
+
+
+--#Počet zbývajících žádostí na úplná data o firmě k notifikaci#
+call tw_regSetOrAddKey('EO', 'EvidenceFirem', 'CRIBIS', 'LimitDotazuNotif', '' , 1, 
+                       'Osoba', 'Evidence firem', 'Dotazy do CRIBIS', 'Počet zbývajících žádostí na CEE k notifikaci');
+
+
+
+--#Příjemci notifikace zbývajících žádostí na úplná data o firmě#
+call tw_regSetOrAddKey('EO', 'EvidenceFirem', 'CRIBIS', 'LimitDotazuPrijemce', '' , 1, 
+                       'Osoba', 'Evidence firem', 'Dotazy do CRIBIS', 'Příjemci notifikace zbývajících žádostí na úplná data o firmě');
+
+--#Typ notifikačního e-mailu zbývajících dotazů na úplná data o firmě#
+call tw_regSetOrAddKey('EO', 'EvidenceFirem', 'CRIBIS', 'LimitDotazuTypEmail', 'CRIBIS_GETGLOBREP_RRQ_NOTIF' , 1, 
+                       'Osoba', 'Evidence firem', 'Dotazy do CRIBIS', 'Typ notifikačního e-mailu zbývajících dotazů na úplná data o firmě');
+
+ROLLBACK WORK;
+
+--End of B133183_RSTS-7348_3

@@ -1,0 +1,170 @@
+-- @TC:ONCE: ID = V2, A42483_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+BEGIN WORK;
+
+DROP TABLE at_prikaz_den;
+DROP TABLE at_prikaz_mat;
+DROP TABLE at_prikaz_arch;
+
+CREATE TABLE at_prikaz_mat (
+  prikazid   SERIAL NOT NULL,
+  typ   CHAR(1)  DEFAULT 'P' NOT NULL,
+  datplatnostod   DATE NOT NULL,
+  stav   CHAR(1),
+  definicevyse   Integer  DEFAULT 1 NOT NULL,
+  poradi   Integer  DEFAULT 1 NOT NULL,
+  datplatnostdo   DATE,
+  perioda   CHAR(1)  DEFAULT 'M' NOT NULL,
+  datpristiplatby   DATE,
+  datpristiplatbyref   DATE,
+  druh   CHAR(4) NOT NULL,
+  marketakce   CHAR(4) NOT NULL,
+  uziv1   Integer  DEFAULT 0 NOT NULL,
+  uziv2   Integer  DEFAULT 0 NOT NULL,
+  uziv3   Integer  DEFAULT 0 NOT NULL,
+  konstsym   DECIMAL(10,0),
+  castka   DECIMAL(16, 2),
+  dbkonto   DECIMAL(16, 0),
+  dbbanka   DECIMAL(7, 0),
+  dbucet   CHAR(9),
+  dbcoobjekt   CHAR(10),
+  dbvarsym   DECIMAL(10,0)  DEFAULT 9,
+  dbspecsym   DECIMAL(10,0),
+  dbtext   CHAR(20),
+  crkonto   DECIMAL(16, 0),
+  crbanka   DECIMAL(7, 0),
+  crucet   CHAR(9),
+  crcoobjekt   CHAR(10)  DEFAULT '999999',
+  crvarsym   DECIMAL(10,0)  DEFAULT 9,
+  crspecsym   DECIMAL(10,0),
+  crtext   CHAR(20),
+  mena   CHAR(3),
+  poznamka   CHAR(70),
+  zpravaprijemce   VARCHAR(144),
+  zpracovani   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  potvrdtime   datetime year to second,
+  potvrduser   CHAR(20),
+  zrustime   datetime year to second,
+  zrususer   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX at_prikaz_mat_pk ON at_prikaz_mat(prikazid);
+ALTER TABLE at_prikaz_mat ADD CONSTRAINT PRIMARY KEY(prikazid) CONSTRAINT at_prikaz_mat_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX at_prikaz_mat_i1 ON at_prikaz_mat(dbkonto);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE at_prikaz_mat
+ADD CONSTRAINT (CHECK (definicevyse  IN(0,1,2)) CONSTRAINT at_prikaz_mat_c1),
+ADD CONSTRAINT (CHECK (typ IN ('P', 'C')) CONSTRAINT at_prikaz_mat_c2),
+ADD CONSTRAINT (CHECK (TRIM (BOTH ' ' FROM perioda) IN ('D','W','M','Q','H','Y','1','2','3','4','5','6','7','8','9','10','11','12')) CONSTRAINT at_prikaz_mat_c3),
+ADD CONSTRAINT (CHECK (stav  IN('A', 'B', 'Z')) CONSTRAINT at_prikaz_mat_c4);
+
+CREATE TABLE at_prikaz_arch (
+  idarch   SERIAL NOT NULL,
+  prikazid   INTEGER NOT NULL,
+  typ   CHAR(1)  DEFAULT 'P' NOT NULL,
+  datplatnostod   DATE NOT NULL,
+  stav   CHAR(1),
+  definicevyse   Integer  DEFAULT 1 NOT NULL,
+  poradi   Integer  DEFAULT 1 NOT NULL,
+  datplatnostdo   DATE,
+  perioda   CHAR(1)  DEFAULT 'M' NOT NULL,
+  datpristiplatby   DATE,
+  datpristiplatbyref   DATE,
+  druh   CHAR(4) NOT NULL,
+  marketakce   CHAR(4) NOT NULL,
+  uziv1   Integer  DEFAULT 0 NOT NULL,
+  uziv2   Integer  DEFAULT 0 NOT NULL,
+  uziv3   Integer  DEFAULT 0 NOT NULL,
+  konstsym   DECIMAL(10,0),
+  castka   DECIMAL(16, 2),
+  dbkonto   DECIMAL(16, 0),
+  dbbanka   DECIMAL(7, 0),
+  dbucet   CHAR(9),
+  dbcoobjekt   CHAR(10),
+  dbvarsym   DECIMAL(10,0)  DEFAULT 9,
+  dbspecsym   DECIMAL(10,0),
+  dbtext   CHAR(20),
+  crkonto   DECIMAL(16, 0),
+  crbanka   DECIMAL(7, 0),
+  crucet   CHAR(9),
+  crcoobjekt   CHAR(10)  DEFAULT '999999',
+  crvarsym   DECIMAL(10,0)  DEFAULT 9,
+  crspecsym   DECIMAL(10,0),
+  crtext   CHAR(20),
+  mena   CHAR(3),
+  poznamka   CHAR(70),
+  zpravaprijemce   VARCHAR(144),
+  zpracovani   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  potvrdtime   datetime year to second,
+  potvrduser   CHAR(20),
+  zrustime   datetime year to second,
+  zrususer   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX at_prikaz_arch_pk ON at_prikaz_arch(idarch);
+ALTER TABLE at_prikaz_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT at_prikaz_arch_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX at_prikaz_arch_i1 ON at_prikaz_arch(dbkonto);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE at_prikaz_arch
+ADD CONSTRAINT (CHECK (definicevyse  IN(0,1,2)) CONSTRAINT at_prikaz_arch_c1),
+ADD CONSTRAINT (CHECK (typ IN ('P', 'C')) CONSTRAINT at_prikaz_arch_c2),
+ADD CONSTRAINT (CHECK (TRIM (BOTH ' ' FROM perioda) IN ('D','W','M','Q','H','Y','1','2','3','4','5','6','7','8','9','10','11','12')) CONSTRAINT at_prikaz_arch_c3),
+ADD CONSTRAINT (CHECK (stav  IN('A', 'B', 'Z')) CONSTRAINT at_prikaz_arch_c4);
+
+CREATE TABLE at_prikaz_den (
+  ser   SERIAL NOT NULL,
+  prikazid   INTEGER NOT NULL,
+  dokladbds   Integer,
+  poradi   Integer  DEFAULT 1 NOT NULL,
+  davka   Integer NOT NULL,
+  arch   Integer  DEFAULT 0 NOT NULL,
+  chyba   VARCHAR(255),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  zauctuser   CHAR(20),
+  zaucttime   datetime year to second,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (arch IN (0,1)) CONSTRAINT at_prikaz_den_d0yk
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX at_prikaz_den_pk ON at_prikaz_den(ser);
+ALTER TABLE at_prikaz_den ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT at_prikaz_den_pk;
+
+--FK
+ALTER TABLE at_prikaz_den ADD CONSTRAINT FOREIGN KEY(prikazid) REFERENCES at_prikaz_mat(prikazid) CONSTRAINT at_prikaz_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE at_prikaz_den
+ADD CONSTRAINT (CHECK (arch  IN(0,1)) CONSTRAINT at_prikaz_den_c1);
+
+ROLLBACK WORK;

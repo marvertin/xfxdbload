@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135248_UID71376_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21603: Kontrola na globální hranici LTV při čerpání {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+call TW_RegSetKey('RU', 'zajist', 'kontrolaGlobLTVPrior', 'B', 1);
+
+call TW_RegSetKey('RU', 'zajist', 'kontrolaGlobLTVPrior', 'C', 1);
+
+ROLLBACK WORK;
+
+--End of B135248_UID71376_3

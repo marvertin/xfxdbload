@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, A43524_RN00289575_3
+-- @TC:ONCE: DESCRIPTION = EOM - chyba pøi zpracování realizací PSS {DEFECT}
+
+BEGIN WORK;
+
+-- ur_ucetpredpis_cis
+INSERT INTO ur_ucetpredpis_cis (tko, typurok, typmajitele, dobost, klasifikace, fincode, uctext, protiucet,   ucetcr, druhpripis, druhoprava, druhcr,  skourok, typdan, popis)
+VALUES                         ('SS',   'BE',    'FO',      'K',       0,          4,       0,    '612001', '226121',    'UR04',     'UR05',  'UR93', 'BU',    1,  'Zvýh. úrok');
+INSERT INTO ur_ucetpredpis_cis (tko, typurok, typmajitele, dobost, klasifikace, fincode, uctext, protiucet,   ucetcr, druhpripis, druhoprava, druhcr,  skourok, typdan, popis)
+VALUES                         ('PS',   'BE',    'PZ',      'K',       0,          4,       0,    '612002', '226221',    'UR04',     'UR05',  'UR93', 'BU',    1,  'Zvýh. úrok');
+INSERT INTO ur_ucetpredpis_cis (tko, typurok, typmajitele, dobost, klasifikace, fincode, uctext, protiucet,   ucetcr, druhpripis, druhoprava, druhcr,  skourok, typdan, popis)
+VALUES                         ('PS',   'BE',    'PN',      'K',       0,          4,       0,    '612002', '226321',    'UR04',     'UR05',  'UR93', 'BU',    1,  'Zvýh. úrok');
+
+ROLLBACK WORK;
+
+--End of A43524_RN00289575_3

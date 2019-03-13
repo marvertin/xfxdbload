@@ -1,0 +1,102 @@
+CREATE PROCEDURE B135933_UID80039_4_make_D (-- vstupni parametry
+  ADebugFile  CHAR(30) DEFAULT NULL -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+DEFINE _ser             INT;
+DEFINE _serDM           INT;
+DEFINE _serobjekt       INT;
+
+DEFINE _fo              INT;
+DEFINE _poradi          SMALLINT;
+
+--povinne globalni promenne
+DEFINE GLOBAL TW_ErrSql   INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrIsam  INT          DEFAULT NULL;
+DEFINE GLOBAL TW_ErrText  VARCHAR(255) DEFAULT NULL;
+
+
+--osetreni chyby pri konstrukci kursoru
+ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+   CALL TW_ErrorTran();
+END EXCEPTION;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+IF(PD_TraceRequestedBegin(ADebugFile) = 1) THEN
+  trace ON;
+END IF;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_25978', 'UID80039', 'Migrace kartotéky změn osob - doklady');
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+set triggers for EO_PrukazZmPl_Kart disabled;
+
+FOREACH c1 WITH hold FOR
+  SELECT ser, fo, poradi
+  INTO  _ser,_fo,_poradi
+  FROM B135933_UID80039_4
+  WHERE zprac < 0
+  ORDER BY ser
+  
+  BEGIN
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulky
+    ON EXCEPTION SET TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE B135933_UID80039_4
+      SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+      WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    END EXCEPTION;
+
+    -- Vlastní nastavení
+    INSERT INTO EO_PrukazZmPl_Kart (fo, poradi, cisprukaz, druhprukaz, vydal, neomezplat, platnostdo, kontrznak, 
+                                    priorita, platnost, portime, poruser, reftime, refuser)
+         SELECT fo, poradi, persondocnumber, druhprukaz, vydal, neomezplat, platnostdo, kontrznak, 
+                1, 1, NVL(navtime,reftime), NVL(navuser,'NULL'), reftime, refuser
+           FROM EO_FOZmPl_Kart
+          WHERE fo = _fo AND poradi = _poradi;   
+
+    --nastaví příznak zpracováno na 1
+    UPDATE B135933_UID80039_4 SET zprac = 1, NumErr = NULL, ISAMErr = NULL, TextErr = NULL WHERE ser = _ser;
+  END;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+END FOREACH;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+set triggers for EO_PrukazZmPl_Kart enabled;
+
+--pokud migrace dopadla bez chyby, smažeme původní atributy
+IF (SELECT COUNT(*) FROM B135933_UID80039_4 WHERE zprac <> 1) = 0 THEN
+  CALL B135933_UID80039_4_smaz ();
+END IF;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+CALL TW_DM_End(_serDM);
+
+IF(PD_TraceRequestedEnd(ADebugFile) = 1) THEN
+   trace OFF;
+END IF;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+END PROCEDURE;

@@ -1,0 +1,43 @@
+-- @TC:ONCE: ID = V2, B130513_RSTS-2905_1
+-- @TC:ONCE: DESCRIPTION = IFRS - Doplnění polí souvisejících s projektem IFRS9_IRBA
+
+BEGIN WORK;
+
+call tw_execSql('DROP TABLE ru_stavsplaceni_den;', -206);
+
+CREATE TABLE ru_stavsplaceni_den (
+  id   BIGSERIAL NOT NULL,
+  realn   Integer NOT NULL,
+  poradi   Integer NOT NULL,
+  datvyhodnoceni   DATE NOT NULL,
+  indikdefault   Integer NOT NULL,
+  datdefault   DATE,
+  datvyleceni   DATE,
+  pocetvyleceni   Integer,
+  stadiumifrs   Integer NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)
+EXTENT SIZE 40960
+NEXT SIZE 81920
+lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ru_stavsplaceni_den_pk ON ru_stavsplaceni_den(id);
+ALTER TABLE ru_stavsplaceni_den ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT ru_stavsplaceni_den_pk;
+
+--FK
+CREATE INDEX ru_stavsplaceni_den_i_f1 ON ru_stavsplaceni_den(realn);
+ALTER TABLE ru_stavsplaceni_den ADD CONSTRAINT FOREIGN KEY(realn) REFERENCES ru_real_mat(realn) CONSTRAINT ru_stavsplaceni_den_f1;
+
+--INDEXES
+CREATE INDEX ru_stavsplaceni_den_i1 ON ru_stavsplaceni_den(realn,poradi);
+
+--CHECKS
+ALTER TABLE ru_stavsplaceni_den
+ADD CONSTRAINT (CHECK (indikdefault IN (0,1,2,3)) CONSTRAINT ru_stavsplaceni_den_c1),
+ADD CONSTRAINT (CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT ru_stavsplaceni_den_c2);
+
+ROLLBACK WORK;
+
+--End of B130513_RSTS-2905_1

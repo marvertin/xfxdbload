@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, A41732_RN00269080_3
+-- @TC:ONCE: DESCRIPTION = Doplnìní finanèních tokù o položku klientská prémie {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+--#Typ srážkové danì pro modelování prémií#
+--Vìcná oblast  Klientské úèetnictví
+--Funkcionalita Zdanìní
+--Skupina parametrù Tax kinds
+--Význam parametru  Typ srážkové danì používaný pro modelování prémií.
+--Analytický typ  Business
+--Adresa parametru  AX / typDane / modelovani / danZPremii
+--Uživatelská zmìna Ano
+--Nastavení PRISPEVEK
+--Defaultní hodnota PRISPEVEK
+--
+call TW_RegSetOrAddKey('AX','typDane','modelovani','danZPremii', 'PRISPEVEK', 1)
+;
+
+ROLLBACK WORK;
+
+--End of A41732_RN00269080_3

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B113710_RN00375550_1-osoby
+-- @TC:ONCE: DESCRIPTION = Danění úroků vybraných PO {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_po_mat ADD vypsrazdan CHAR(1) before ad2;
+
+ALTER TABLE eo_po_arch ADD vypsrazdan CHAR(1) before ad2;
+
+ROLLBACK WORK;
+
+--End of B113710_RN00375550_1-osoby

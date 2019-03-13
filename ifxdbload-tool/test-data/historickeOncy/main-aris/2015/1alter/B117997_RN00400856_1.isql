@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, B117997_RN00400856_1
+-- @TC:ONCE: DESCRIPTION = Změna evidence dat v úloze Smlouvy - Creditreview {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+ALTER TABLE eu_creditreview
+    ADD poradi          Integer   BEFORE platebmor;
+    
+CREATE TABLE eu_creditreview_arch (
+    idarch          SERIAL   NOT NULL,
+    id              INTEGER   NOT NULL,
+    smlouva         DECIMAL(16, 0)   NOT NULL,
+    tsml            CHAR(4)   NOT NULL,
+    poradi          Integer  ,
+    platebmor       Integer  ,
+    hodnzaj         Integer  ,
+    dluhsluz        DECIMAL(5,2)  ,
+    hodnoceni       Integer  ,
+    opatreni        VARCHAR(70)  ,
+    poznamka        VARCHAR(30)  ,
+    platnost        Integer DEFAULT 1  NOT NULL,
+    ratingid        INTEGER   NOT NULL,
+    navuser         CHAR(20) DEFAULT USER  NOT NULL,
+    navtime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+CREATE unique INDEX eu_creditreview_arch_pk ON eu_creditreview_arch (idarch) ;
+
+ALTER TABLE eu_creditreview_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT eu_creditreview_arch_pk;
+
+ROLLBACK WORK;
+
+--End of B117997_RN00400856_1

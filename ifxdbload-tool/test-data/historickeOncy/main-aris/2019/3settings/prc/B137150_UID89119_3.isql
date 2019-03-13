@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137150_UID89119_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28871: Ověření registrovaného mobilního telefonu OZ {REQUEST}
+
+CREATE PROCEDURE B137150_UID89119_3()
+
+IF NOT EXISTS (SELECT 1 FROM eo_komkanal_cis WHERE kanal = 19) THEN
+  INSERT INTO eo_komkanal_cis (kanal, popis, typkontrola, zobrazitwww, zobrazitos, akceptuz, kontruz) VALUES (19,'Registrovaný mobil OZ', 'MOBIL',0,1,0,0);
+END IF
+
+END PROCEDURE
+
+--End of B137150_UID89119_3

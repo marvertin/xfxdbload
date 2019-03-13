@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, B122535_RN00426130_vyslsp
+-- @TC:ONCE: DESCRIPTION = Požadavek k SP - Komunikace s MF{CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- 4.4.1  Funkcionalita „Komunikace s MF (CZ)“
+-- Název třídy: Řídící tabulka pro zpracování duplicit RČ  (sp_chrcinfo_kart)
+ALTER TABLE sp_chrcinfo_kart
+  DROP CONSTRAINT sp_chrcinfo_p;
+
+ALTER TABLE sp_chrcinfo_kart
+    MODIFY ico_sh        CHAR(8),                    
+    MODIFY smlouva_sh    CHAR(10);  
+    
+-- 4.4.1  Funkcionalita „Komunikace s MF (CZ)“
+-- Název třídy: Kartotéka chyb duplicit RČ (sp_zchrc_kart)
+ALTER TABLE sp_zchrc_kart     
+    MODIFY ico_sh        CHAR(8);
+
+-- 6.4.1 Funkcionalita „Státní podpora - Vratka“
+-- Název třídy:  Informace o vracení SP na MF (sp_vratmf_kart)
+ALTER TABLE sp_vratmf_kart
+    MODIFY rok                     DATETIME Year to Year,                             
+    MODIFY obdobi                  INTEGER,                              
+    MODIFY ico                     DECIMAL(8, 0),              
+    MODIFY duvuk                   INTEGER,                             
+    MODIFY rc                      CHAR(10),                              
+    MODIFY prijm                   CHAR(35),                              
+    MODIFY jm                      CHAR(24),                              
+    MODIFY psc                     CHAR(5);                              
+ROLLBACK WORK;
+
+--End of B122535_RN00426130_vyslsp

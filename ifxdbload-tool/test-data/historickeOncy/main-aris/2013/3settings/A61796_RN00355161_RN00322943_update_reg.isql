@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, A61796_RN00355161_RN00322943_update_reg
+-- @TC:ONCE: DESCRIPTION = RN00355161 Pøedpis pro celé RN customizace má podivnou podobu {DEFECT}
+
+BEGIN WORK;
+
+
+--INSERT INTO tw_skupina_cis(skupina) VALUES('Mapování komunikaèních kanálù');
+
+--INSERT INTO tw_skupina_cis(skupina) VALUES('Texty hlášení');
+
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','email','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro E-mail',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','email-SIS','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro email-SIS',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','email-SIS_chyba','Osoba','Komunikaèní kanál k osobì','Texty hlášení','Text chyby pøi nenastavení email-SIS',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','fax','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Fax',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','mobil','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Mobilní telefon',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','mobil-SIS','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro mobil-SIS',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','mobil-SIS_chyba','Osoba','Komunikaèní kanál k osobì','Texty hlášení','Text chyby pøi nenastavení mobil-SIS',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','sluzbaSIS','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro službu SIS',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','sluzbaSMS','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro službu SMS',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','teldom','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Telefon domù',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','telsouc','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál Telefon souèasné bydlištì',1);
+CALL TW_RegAktAnalytickyPopis('EO','osoba','komkanal','telzam','Osoba','Komunikaèní kanál k osobì','Mapování komunikaèních kanálù','Komunikaèní kanál pro Telefon zamìstnání',1);
+
+CALL TW_RegAktAnalytickyPopis('TW','login','AutorizSMSLimit','CIBIS-Sale','Správa systému','Správa uživatelského prostøedí [WWW]','Pøihlášení','Limit pro zaslání autorizaèní SMS pøi pøihlášení do aplikace <aplikace>',1);      
+
+ROLLBACK WORK;
+
+--End of A61796_RN00355161_RN00322943_update_reg

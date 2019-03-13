@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A41949_RN00270144_1
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+alter table ur_baze_cis add pripis integer default 0 not null before popis;
+alter table ur_baze_acis add pripis integer default 0 not null before popis;
+
+ROLLBACK WORK;
+

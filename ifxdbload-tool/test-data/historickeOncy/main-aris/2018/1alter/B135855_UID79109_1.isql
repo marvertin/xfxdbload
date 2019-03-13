@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135855_UID79109_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25231: Doplnit algoritmus přepočtu zajištění včetně zobrazení na FE v Main {STORY}
+
+BEGIN WORK;
+
+call TW_ExecSQL('DROP TRIGGER eu_zajistvyph_den_u', -634);
+
+ROLLBACK WORK;
+
+--End of B135855_UID79109_1

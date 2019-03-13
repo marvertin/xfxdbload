@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B133600_RSTS-6993_5
+-- @TC:ONCE: DESCRIPTION = Změny v evidencích Main a provizích {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+call tw_execSql('RENAME TABLE eo_bydlenivelikost_cis TO old_eo_bydlenivelikost_cis;               ', -206);                                                                                                                                                                                                            
+call tw_execSql('RENAME TABLE eo_bydlenistavtyp_cis TO old_eo_bydlenistavtyp_cis;   ', -206);                                                                                                                                                                                                            
+call tw_execSql('RENAME TABLE eo_bydlenistavhodnota_cis TO old_eo_bydlenistavhodnota_cis; ', -206);                                                                                                                                                                                                            
+call tw_execSql('RENAME TABLE eo_bydleni_mat TO old_eo_bydleni_mat;           ', -206);                   
+call tw_execSql('RENAME TABLE eo_bydlenivelikost_acis TO old_eo_bydlenivelikost_acis;               ', -206);                                                                                                                                                                                                            
+call tw_execSql('RENAME TABLE eo_bydlenistavtyp_acis TO old_eo_bydlenistavtyp_acis;   ', -206);                                                                                                                                                                                                            
+call tw_execSql('RENAME TABLE eo_bydlenistavhodnota_acis TO old_eo_bydlenistavhodnota_acis; ', -206);                                                                                                                                                                                                            
+call tw_execSql('RENAME TABLE eo_bydleni_arch TO old_eo_bydleni_arch;           ', -206);                                                                                                                                                                                                 
+
+
+ROLLBACK WORK;
+
+--End of B133600_RSTS-6993_5

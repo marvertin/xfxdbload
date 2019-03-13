@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A41779_RN00275819_Zadosti
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - db registry
+
+BEGIN WORK;
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'email-SIS', 'A', 1);
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'mobil-SIS', 'B', 1);
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'zpus_koresp', 'C', 1);
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'mimor_vypis', 'D', 1);
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'zmsmlSS', 'E', 1);
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'novasmlSS', 'F', 1);
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'zmosobniudaj', 'G', 1);
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'zmkontakt', 'H', 1);
+  call tw_regsetoraddkey('EP', 'zadost', 'typy', 'zmkoresp', 'I', 1);
+ROLLBACK WORK;
+

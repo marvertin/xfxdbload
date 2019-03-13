@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B133188_UID53794_3
+-- @TC:ONCE: DESCRIPTION = Odstranit stávající parametrizaci z CIBIS (proxyMain, proxy, ….) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call Tw_RegSetOrAddKey('WS','napojeniNaMV','komunikace','webaddress'
+, 'http://aplikace.mvcr.cz/neplatne-doklady/doklady.aspx', 1);
+
+call Tw_RegSetOrAddKey('WS','napojeniNaMV','komunikace','timeout', 20, 1);
+
+call Tw_RegSetOrAddKey('WS','napojeniNaMV','request','1', '0', 1);
+
+call Tw_RegSetOrAddKey('WS','napojeniNaMV','request','2', '4', 1);
+
+call TW_RegDelKey('EP', 'rizsubjekt', 'kontrolaprukazu', 'webaddressMain');
+call TW_RegDelKey('EP', 'rizsubjekt', 'kontrolaprukazu', 'proxyMain');
+
+call TW_RegDelKey('EP', 'rizsubjekt', 'kontrolaprukazu', 'online');
+call TW_RegDelKey('EP', 'rizsubjekt', 'kontrolaprukazu', 'webaddress');
+call TW_RegDelKey('EP', 'rizsubjekt', 'kontrolaprukazu', 'proxy');
+call TW_RegDelKey('EP', 'rizsubjekt', 'kontrolaprukazu', 'timeout');
+call TW_RegDelKey('EP', 'rizsubjekt', 'kontrolaprukazu', '1');
+call TW_RegDelKey('EP', 'rizsubjekt', 'kontrolaprukazu', '2');
+
+call TW_RegDelKey('EP', 'rizsubjekt', 'typ', 'nezadouciodhadce');
+
+ROLLBACK WORK;
+
+--End of B133188_UID53794_3

@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B124833_RN00436865_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - 3. část - ESIP, rozšíření exportů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table ep_splspormodh_den
+  add   pocvklsspu   Integer;
+  
+alter table Ep_SplSporModStFee_den
+  add savingaccmaintenanceperiod   CHAR(1),
+  add bridgeloanaccmaintenanceperiod   CHAR(1),
+  add creditaccmaintenanceperiod   CHAR(1),
+  add CONSTRAINT (CHECK (savingaccmaintenanceperiod IN ('D','M','Q','R','P','J')) CONSTRAINT ep_splspormodstfee_den_dqfs),
+  add CONSTRAINT (CHECK (bridgeloanaccmaintenanceperiod IN ('D','M','Q','R','P','J')) CONSTRAINT ep_splspormodstfee_den_dqft),
+  add CONSTRAINT (CHECK (creditaccmaintenanceperiod IN ('D','M','Q','R','P','J')) CONSTRAINT ep_splspormodstfee_den_dqfu);
+
+ROLLBACK WORK;
+
+--End of B124833_RN00436865_1

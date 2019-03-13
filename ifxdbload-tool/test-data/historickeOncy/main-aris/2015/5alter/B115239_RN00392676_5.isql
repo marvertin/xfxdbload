@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B115239_RN00392676_5
+-- @TC:ONCE: DESCRIPTION = Nemovitosti 2. fáze: odhadci a black list {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eo_znalec_cis DROP (naseznamuod, naseznamudo, naseznamuvyj, nezadouci);
+ALTER TABLE eo_znalec_acis DROP (naseznamuod, naseznamudo, naseznamuvyj, nezadouci);
+
+DROP PROCEDURE EO_ZnalecZmenNezad_T;
+DROP PROCEDURE EO_ZnalecZmenNezad;
+
+ROLLBACK WORK;
+
+--End of B115239_RN00392676_5

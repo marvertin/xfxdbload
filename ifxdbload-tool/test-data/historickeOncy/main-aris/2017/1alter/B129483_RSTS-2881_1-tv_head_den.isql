@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B129483_RSTS-2881_1-tv_head_den
+-- @TC:ONCE: DESCRIPTION = Přidat do úvěrových výpisů číslo úvěrové žádosti
+
+
+BEGIN WORK;
+
+ALTER TABLE tv_head_den ADD requestnumber   DECIMAL(16,0);
+
+ROLLBACK WORK;
+
+--End of B129483_RSTS-2881_1-tv_head_den

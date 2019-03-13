@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, A43494_RN00287607_3
+-- @TC:ONCE: DESCRIPTION = Úprava SMS aparátu pro požadavek RN00270144 – (žluté konto) {DEFECT}
+
+BEGIN WORK;
+
+  INSERT INTO tw_smstyp_cis (zkratka, popis, textsms, platnost)
+  VALUES('NEPRPRIKAZU', 'Typ SMS používaný pøí neprovedení platebního pøíkazu', 
+  'Nebyl proveden <<typ pøíkazu>> na èástku <<èástka>><<mìna>>  se splatností <<datum>>. RSTS.', 
+  1);
+
+
+  call TW_RegSetKey('TW','SMS','typSMS','chyba_zpracovani', 'NEPRPRIKAZU');
+ROLLBACK WORK;
+
+--End of A43494_RN00287607_3

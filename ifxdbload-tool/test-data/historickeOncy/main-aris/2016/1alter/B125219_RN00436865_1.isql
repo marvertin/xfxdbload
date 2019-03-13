@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B125219_RN00436865_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - 3. část - ESIP, rozšíření exportů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table eu_expesipo_den
+  modify provizekoef float;
+  
+ROLLBACK WORK;
+
+--End of B125219_RN00436865_1

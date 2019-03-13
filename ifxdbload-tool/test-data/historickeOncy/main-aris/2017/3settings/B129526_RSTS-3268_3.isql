@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B129526_RSTS-3268_3
+-- @TC:ONCE: DESCRIPTION = Při konsolidaci kont vkládat záznam do provozního deníku {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, poznamka, platnost)
+VALUES ('AH', 4, 'Konsolidace konta <konto>/<tko> od data <datum> s příznakem obnovy splátek <příznak>', null, 1);
+
+ROLLBACK WORK;
+
+--End of B129526_RSTS-3268_3

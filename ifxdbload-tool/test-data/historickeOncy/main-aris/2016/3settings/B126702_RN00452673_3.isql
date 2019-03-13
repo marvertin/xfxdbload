@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B126702_RN00452673_3
+-- @TC:ONCE: DESCRIPTION = Změna evidence zadržené SP, resp. převodů zadržené SP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO AC_Druh_Cis (druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost) 
+VALUES ('SP33', 'I', 'U', 0, 0, 558, null, null, null, 'převod vrácení zadržené SP', 'BU  ', null, null, 'převod vrácení zadržené SP', 'BU  ', null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Převod vrácení nespárované zadržené SP', null, 1, 1, 0, 1);
+
+
+
+ROLLBACK WORK;
+
+--End of B126702_RN00452673_3

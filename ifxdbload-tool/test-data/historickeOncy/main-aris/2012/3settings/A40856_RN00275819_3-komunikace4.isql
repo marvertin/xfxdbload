@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, A40856_RN00275819_3-komunikace4
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+
+  --#SMTP server pro e-mailovou komunikaci#
+  call tw_regsetoraddkey('TW', 'e-mail', 'SMTP', 'server', null, 1);
+
+  --#Adresa call centra pro e-mailovou komunikaci#
+  call tw_regsetoraddkey('TW', 'e-mail', 'prijemce', 'callcentrum', 'rsts@rsts.cz', 1);
+
+  --#Typ e-mailu pøi vygenerování e-výpisu#
+  call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'e-vypis', 'EVYPIS_VYTVVYP', 0);
+  
+  --#Typ e-mailu pøi dotazu k nabídce#
+  call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'dotaz_nabidka', 'K_DOTAZ_NAB', 0);
+  
+  --#Typ e-mailu pøi akceptaci nabídky#
+  call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'akceptace_nabidka', 'K_AKCTP_NAB', 0);
+  
+  --#Typ e-mailu pøi odmítnutí nabídky#
+  call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'odmitnuti_nabidka', 'K_ODMN_NAB', 0); 
+  
+  --#Typ e-mailu pro obecný dotaz klienta#
+  call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'e-vypis', 'K_OBECNY_DOT', 0); 
+  
+  
+
+ROLLBACK WORK;
+

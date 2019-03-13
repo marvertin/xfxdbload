@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A43074_RN00270144
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+INSERT INTO am_kontospmap_cis (tko,     sko, typmajitele,   ucet, obdobi, obdobijednotka, splvstuhr, mapkod,  popis, platnost, tarif)
+VALUES                        ('SS', 'BUZA',     'FO',    '226111',    0,      'M',           0,         4,   'Map. ŽK', 1, null);
+INSERT INTO am_kontospmap_cis (tko,     sko, typmajitele,   ucet, obdobi, obdobijednotka, splvstuhr, mapkod,  popis, platnost, tarif)
+VALUES                        ('SS', 'POHL',     'FO',    null,    0,      'M',           0,         4,   'Map. ŽK', 1, null);
+INSERT INTO am_kontospmap_cis (tko,     sko, typmajitele,   ucet, obdobi, obdobijednotka, splvstuhr, mapkod,  popis, platnost, tarif)
+VALUES                        ('PS', 'POHL',     'PZ',    null,    0,      'M',           0,         4,   'Map. ŽK', 1, null);
+INSERT INTO am_kontospmap_cis (tko,    sko, typmajitele,   ucet, obdobi, obdobijednotka, splvstuhr, mapkod,  popis, platnost, tarif)
+VALUES                        ('PS', 'POHL',     'PN',    null,    0,      'M',           0,         4,   'Map. ŽK', 1, null);
+
+UPDATE am_kontospmap_cis SET tarif = null WHERE mapkod=4 and tko in ('SS', 'PS');
+
+ROLLBACK WORK;

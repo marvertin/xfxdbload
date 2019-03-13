@@ -1,0 +1,106 @@
+-- @TC:ONCE: ID = V2, A60698_RN00335314_1
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ep_uhrdefpar_cis
+CREATE TABLE ep_uhrdefpar_cis (
+  defpar   SERIAL NOT NULL,
+  nazev   CHAR(70) NOT NULL,
+  tuhr   CHAR(8) NOT NULL,
+  charakter   CHAR(1) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  zaklad   Integer,
+  datod   DATE NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrdefpar_cis_d69n
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrdefpar_cis_pk ON ep_uhrdefpar_cis(defpar);
+ALTER TABLE ep_uhrdefpar_cis ADD CONSTRAINT PRIMARY KEY(defpar) CONSTRAINT ep_uhrdefpar_cis_pk;
+
+--FK
+CREATE INDEX ep_uhrdefpar_cis_i2 ON ep_uhrdefpar_cis(zaklad);
+ALTER TABLE ep_uhrdefpar_cis ADD CONSTRAINT FOREIGN KEY(zaklad) REFERENCES ep_uhrzaklad_enum(zaklad) CONSTRAINT ep_uhrdefpar_cis_f3;
+CREATE INDEX ep_uhrdefpar_cis_i1 ON ep_uhrdefpar_cis(tuhr);
+ALTER TABLE ep_uhrdefpar_cis ADD CONSTRAINT FOREIGN KEY(tuhr) REFERENCES ep_uhrada_cis(tuhr) CONSTRAINT ep_uhrdefpar_cis_f1;
+CREATE INDEX ep_uhrdefpar_cis_i3 ON ep_uhrdefpar_cis(tsml);
+ALTER TABLE ep_uhrdefpar_cis ADD CONSTRAINT FOREIGN KEY(tsml) REFERENCES ep_sml_cis(tsml) CONSTRAINT ep_uhrdefpar_cis_f2;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX ep_uhrdefpar_cis_u1 ON ep_uhrdefpar_cis(tuhr,tsml,charakter,datod);
+ALTER TABLE ep_uhrdefpar_cis ADD CONSTRAINT (UNIQUE (tuhr,tsml,charakter,datod) CONSTRAINT ep_uhrdefpar_cis_u1);
+
+--CHECKS
+ALTER TABLE ep_uhrdefpar_cis
+ADD CONSTRAINT (CHECK (charakter in ('U','S')) CONSTRAINT ep_uhrdefpar_cis_c1);
+
+-- ep_uhrdefpar_acis
+CREATE TABLE ep_uhrdefpar_acis (
+  idarch   SERIAL NOT NULL,
+  defpar   INTEGER NOT NULL,
+  nazev   CHAR(70) NOT NULL,
+  tuhr   CHAR(8) NOT NULL,
+  charakter   CHAR(1) NOT NULL,
+  tsml   CHAR(4) NOT NULL,
+  zaklad   Integer,
+  datod   DATE NOT NULL,
+  poznamka   CHAR(160),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrdefpar_acis_d69n
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrdefpar_acis_pk ON ep_uhrdefpar_acis(idarch);
+ALTER TABLE ep_uhrdefpar_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT ep_uhrdefpar_acis_pk;
+
+-- ep_uhrdefparvlast_bnd
+CREATE TABLE ep_uhrdefparvlast_bnd (
+  ser   SERIAL NOT NULL,
+  defpar   Integer NOT NULL,
+  vlastnost   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrdefparvlast_bnd_d69y
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ep_uhrdefparvlast_bnd_pk ON ep_uhrdefparvlast_bnd(ser);
+ALTER TABLE ep_uhrdefparvlast_bnd ADD CONSTRAINT PRIMARY KEY(ser) CONSTRAINT ep_uhrdefparvlast_bnd_pk;
+
+--FK
+CREATE INDEX ep_uhrdefparvlast_bnd_i1 ON ep_uhrdefparvlast_bnd(defpar);
+ALTER TABLE ep_uhrdefparvlast_bnd ADD CONSTRAINT FOREIGN KEY(defpar) REFERENCES ep_uhrdefpar_cis(defpar) CONSTRAINT ep_uhrdefparvlast_bnd_f2;
+CREATE INDEX ep_uhrdefparvlast_bnd_i_f1 ON ep_uhrdefparvlast_bnd(vlastnost);
+ALTER TABLE ep_uhrdefparvlast_bnd ADD CONSTRAINT FOREIGN KEY(vlastnost) REFERENCES ep_uhrvlastnost_enum(vlastnost) CONSTRAINT ep_uhrdefparvlast_bnd_f1;
+
+-- ep_uhrdefparvlast_arch
+CREATE TABLE ep_uhrdefparvlast_arch (
+  idarch   SERIAL,
+  ser   INTEGER NOT NULL,
+  defpar   Integer NOT NULL,
+  vlastnost   Integer NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT ep_uhrdefparvlast_arch_d69y
+)lock mode row;
+
+--INDEXES
+CREATE INDEX ep_uhrdefparvlast_arch_i1 ON ep_uhrdefparvlast_arch(defpar);
+
+ROLLBACK WORK;
+
+--End of A60698_RN00335314_1

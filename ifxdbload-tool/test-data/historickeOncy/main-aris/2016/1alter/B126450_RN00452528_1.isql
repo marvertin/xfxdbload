@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, B126450_RN00452528_1
+-- @TC:ONCE: DESCRIPTION = Rozšíření modelování při tvorbě dodatků {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE eu_dodatek_den ADD (
+  datucinnost   DATE,
+  posundospor   Integer  DEFAULT 0 NOT NULL,
+  posundosporod   DATE,
+  posundospordo   DATE,
+  posunsplatkapu   Integer  DEFAULT 0 NOT NULL,
+  posunsplatkapuod   DATE,
+  posunsplatkapudo   DATE,
+  posunsplatkasu   Integer  DEFAULT 0 NOT NULL,
+  posunsplatkasuod   DATE,
+  posunsplatkasudo   DATE
+);
+
+ALTER TABLE eu_dodatek_den ADD CONSTRAINT (
+  CHECK (posundospor IN (0,1)) CONSTRAINT eu_dodatek_den_d4j8,
+  CHECK (posunsplatkapu IN (0,1)) CONSTRAINT eu_dodatek_den_d4jb,
+  CHECK (posunsplatkasu IN (0,1)) CONSTRAINT eu_dodatek_den_d4je
+);
+
+ALTER TABLE eu_expdodatek_den ADD (
+  datucinnost   DATE,
+  posundospor   Integer,
+  posundosporod   DATE,
+  posundospordo   DATE,
+  posunsplatkapu   Integer,
+  posunsplatkapuod   DATE,
+  posunsplatkapudo   DATE,
+  posunsplatkasu   Integer,
+  posunsplatkasuod   DATE,
+  posunsplatkasudo   DATE
+);
+
+ALTER TABLE eu_expdodatek_den ADD CONSTRAINT (
+  CHECK (posundospor IN (0,1)) CONSTRAINT eu_expdodatek_den_d4jn,
+  CHECK (posunsplatkapu IN (0,1)) CONSTRAINT eu_expdodatek_den_d4jq,
+  CHECK (posunsplatkasu IN (0,1)) CONSTRAINT eu_expdodatek_den_d4jt
+);
+
+ROLLBACK WORK;
+
+--End of B126450_RN00452528_1

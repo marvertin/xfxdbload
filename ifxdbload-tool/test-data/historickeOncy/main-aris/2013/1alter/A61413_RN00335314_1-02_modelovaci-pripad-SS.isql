@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, A61413_RN00335314_1-02_modelovaci-pripad-SS
+-- @TC:ONCE: DESCRIPTION = Variabilní produktové úhrady {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+-- podle RN00335314 "Solution Description Kap8 Modelování.doc"
+--   kde ø. 201 je v CR v "Request Capacities Calculation Form.xml"
+-- podle RN00335314_Proposal_03_funkcionalita.doc
+--   kapitola 8.4.1 Funkcionalita "Modelovací pøípad SS"
+
+ALTER TABLE pro_bssimulationcase 
+  ADD savContrReqByClient   Integer  DEFAULT 0 NOT NULL, -- Pøíznak, zda modelovaná smlouva SS vznikla dle žádosti klienta pøes CIBIS-Web. 
+  ADD changeSavContrReqByClient   Integer  DEFAULT 0 NOT NULL; -- Pøíznak, zda modelovaná zmìna smlouvy je z dùvodu žádosti pøes CIBIS-Web. 
+  
+ALTER TABLE pro_bssimulationcase 
+  ADD CONSTRAINT (CHECK (savContrReqByClient   IN (0,1)) CONSTRAINT pro_bssimulationcase_diws),
+  ADD CONSTRAINT (CHECK (changeSavContrReqByClient   IN (0,1)) CONSTRAINT pro_bssimulationcase_diwt);
+  
+ALTER TABLE pro_contractstatus
+  ADD creditProposalApprovalDate   DATE, -- Datum schválení návrhu úvìrové smlouvy
+  ADD taToConclusionDate   DECIMAL(16, 2); -- Cílová èástka k datu uzavøení smlouvy
+  
+ALTER TABLE pro_contractdata
+  DROP xuhradsporkonto2009, -- Úètovat úhradu za vedení spoøícího konta za rok 2009
+  DROP xuhraduverkonto2009; -- Úètovat úhradu za vedení úvìrového konta za rok 2009
+    
+ROLLBACK WORK;
+
+--End of A61413_RN00335314_1-02_modelovaci-pripad-SS

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135543_UID74640_3
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale - ÚŽ - Další požadované údaje - není přednastaven Stát {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE aris.pef_firma_cis SET stat = 'CZ' WHERE stat = 'Česká republika';
+
+ROLLBACK WORK;
+
+--End of B135543_UID74640_3

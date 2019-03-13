@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B123757_RN00436364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table EP_ExpSplSporModH_Den
+
+  ADD supplRpsn   Double precision,
+  ADD datSplatSupplRpsn   DATE,
+  ADD extraExpenses   DECIMAL(16,2)
+;
+
+alter table EP_ExpSplSporModB_Den
+
+  ADD onlytosupplrpsn   Integer  DEFAULT 0
+;
+
+alter table EP_expSplSporModCf_den
+
+  ADD onlytosupplrpsn   Integer  DEFAULT 0
+;
+
+ROLLBACK WORK;
+
+--End of B123757_RN00436364_1

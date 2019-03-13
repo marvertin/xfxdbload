@@ -1,0 +1,95 @@
+-- @TC:ONCE: ID = V2, B126394_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_umorh_den (
+  serno   SERIAL NOT NULL,
+  refsplspormodsh   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  poradi   Integer,
+  datvytvor   DATE,
+  typtabulky   CHAR(1),
+  rezimtabulky   CHAR(1),
+  stav   CHAR(1),
+  predanarchiv   Integer  DEFAULT 0,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second,
+  CHECK (predanarchiv IN (0,1)) CONSTRAINT eu_umorh_den_d49w
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_umorh_den_pk ON eu_umorh_den(serno);
+ALTER TABLE eu_umorh_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_umorh_den_pk;
+
+--FK
+CREATE INDEX eu_umorh_den_i_f1 ON eu_umorh_den(smlouva,tsml);
+ALTER TABLE eu_umorh_den ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT eu_umorh_den_f1;
+CREATE INDEX eu_umorh_den_i_f2 ON eu_umorh_den(refsplspormodsh);
+ALTER TABLE eu_umorh_den ADD CONSTRAINT FOREIGN KEY(refsplspormodsh) REFERENCES ep_splspormodsh_den(ser) CONSTRAINT eu_umorh_den_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE eu_umorh_den
+ADD CONSTRAINT (CHECK (typtabulky in ('S', 'D')) CONSTRAINT eu_umorh_den_c1),
+ADD CONSTRAINT (CHECK (rezimtabulky in ('T', 'I')) CONSTRAINT eu_umorh_den_c2),
+ADD CONSTRAINT (CHECK (stav in ('A', 'Z')) CONSTRAINT eu_umorh_den_c3);
+
+
+
+CREATE TABLE eu_umorb_den (
+  serno   SERIAL NOT NULL,
+  refumorh   INTEGER NOT NULL,
+  reftypumor   INTEGER,
+  poradi   Integer,
+  cisloobd   Integer,
+  datumpohybu   DATE,
+  faze   CHAR(1),
+  vysecerp   DECIMAL(16,2),
+  ursazba   DECIMAL(6, 2),
+  platby   DECIMAL(16,2),
+  nakladybanka   DECIMAL(16,2),
+  urok   DECIMAL(16,2),
+  jistina   DECIMAL(16,2),
+  nakladymimobanka   DECIMAL(16,2),
+  vynos   DECIMAL(16,2),
+  zustnespljist   DECIMAL(16,2),
+  zustnesplurnakl   DECIMAL(16,2),
+  usporsp   DECIMAL(16,2),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_umorb_den_pk ON eu_umorb_den(serno);
+ALTER TABLE eu_umorb_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_umorb_den_pk;
+
+--FK
+CREATE INDEX eu_umorb_den_i_f1 ON eu_umorb_den(refumorh);
+ALTER TABLE eu_umorb_den ADD CONSTRAINT FOREIGN KEY(refumorh) REFERENCES eu_umorh_den(serno) CONSTRAINT eu_umorb_den_f1;
+CREATE INDEX eu_umorb_den_i_f2 ON eu_umorb_den(reftypumor);
+ALTER TABLE eu_umorb_den ADD CONSTRAINT FOREIGN KEY(reftypumor) REFERENCES eu_typumor_cis(serno) CONSTRAINT eu_umorb_den_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE eu_umorb_den
+ADD CONSTRAINT (CHECK (faze in ('P', 'S')) CONSTRAINT eu_umorb_den_c1);
+
+
+ROLLBACK WORK;
+
+--End of B126394_RN00451080_1

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B111993_RN00370154_1
+-- @TC:ONCE: DESCRIPTION = Úpravy modelování - CIBIS-Sale a CIBIS-Web {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CALL tw_execSql('drop procedure EP_NormalizujTsmlModelovani', -111, -674)
+;
+CALL tw_execSql('drop procedure EP_GetUhrIdModelovani', -111, -674)
+;
+CALL tw_execSql('drop procedure EP_GetUhrSeznamModelovani', -111, -674)
+;
+CALL tw_execSql('drop procedure ISal_ParamModUhrPopl', -111, -674)
+;
+
+ROLLBACK WORK;
+
+--End of B111993_RN00370154_1

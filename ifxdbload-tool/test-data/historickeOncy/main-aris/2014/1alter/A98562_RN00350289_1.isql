@@ -1,0 +1,58 @@
+-- @TC:ONCE: ID = V2, A98562_RN00350289_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-OS: Struktury prodejních sítí - Ostatní dopady {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- 33  eu_sml_mat-2/4       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_sml_mat
+    ADD obchzastext2    CHAR(16)   BEFORE rozhoddatum,
+    ADD agenttipext2    CHAR(16)   BEFORE agentput,
+    ADD agentputext2    CHAR(16)   BEFORE delkasplacenipu,
+    ADD ozorgover2      CHAR(16)   BEFORE variafixace,
+    MODIFY obchzastext     CHAR(16),
+    MODIFY agenttipext     CHAR(16),
+    MODIFY agentputext     CHAR(16),
+    MODIFY ozorgover       CHAR(16);
+    
+-- 29  eu_sml_arch-3/5       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE eu_sml_arch
+    ADD obchzastext2    CHAR(16)   BEFORE vyplprov,
+    ADD agenttipext2    CHAR(16)   BEFORE agentput,
+    ADD agentputext2    CHAR(16)   BEFORE delkasplacenipu,
+    ADD ozorgover2      CHAR(16)   BEFORE variafixace,
+    MODIFY obchzastext     CHAR(16),
+    MODIFY agenttipext     CHAR(16),
+    MODIFY agentputext     CHAR(16),
+    MODIFY ozorgover       CHAR(16);
+    
+ALTER TABLE es_ozast_kart
+    ADD orgoz2          CHAR(16)   BEFORE ozastakviz,
+    ADD orgozakviz2     CHAR(16)   BEFORE refuser,
+    ADD ozastzad        DECIMAL(16, 0)   BEFORE refuser,
+    ADD orgozzad        CHAR(16)   BEFORE refuser,
+    ADD orgozzad2       CHAR(16)   BEFORE refuser,
+    MODIFY orgoz        CHAR(16),
+    MODIFY orgozakviz   CHAR(16);
+
+ALTER TABLE es_zmplan_kart
+    ADD orgoz2          CHAR(16)   BEFORE ozastakviz,
+    ADD orgozakviz2     CHAR(16)   BEFORE priloha4,
+    ADD ozastzad        DECIMAL(16, 0)   BEFORE priloha4,
+    ADD orgozzad        CHAR(16)   BEFORE priloha4,
+    ADD orgozzad2       CHAR(16)   BEFORE priloha4,
+    MODIFY orgoz        CHAR(16),
+    MODIFY orgozakviz   CHAR(16);
+
+ALTER TABLE es_sml_arch
+    DROP porm;
+    
+ALTER TABLE es_sml_mat
+    DROP porm;
+    
+ALTER TABLE es_zmplan_kart
+    DROP porm;
+
+ROLLBACK WORK;
+
+--End of A98562_RN00350289_1

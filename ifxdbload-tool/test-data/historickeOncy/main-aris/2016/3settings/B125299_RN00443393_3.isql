@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, B125299_RN00443393_3
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- #Algoritmus pro výpočet doplňkového RPSN#
+-- Parametr určuje, zda se doplňkové RPSN počítá podle pravidel pro souhrnné RPSN nebo podle pravidle pro dílčí RPSN (RPSNpu resp. RPSNsu). 
+-- Možnosti nastavení:
+-- S („jako souhrnné RPSN“), 
+-- D („jako dílčí RPSN“),
+CALL tw_regSetKey('MO','modelCore','doplnkRPSN','algoritmusVypoctu', 'S')
+;
+
+-- #Počítat dílčí RPSN i pro smlouvy s jednou fází#
+-- Parametr určuje, zda i pro smlouvy s jednou fází (např. SUFO nebo PUPO) počítat dílčí RPSN (RPSNpu resp. RPSNsu) nebo ne
+CALL tw_regSetKey('MO','modelCore','RPSNcalculation','dilciRPSNpro1fazi', 0)
+;
+
+-- #Počítat a zobrazovat souhrnné RPSN úvěru pro OZ#
+-- Parametr určuje, zda (počítat a) zobrazovat souhrrné RPSN do výsledků modelování v úloze pro OZ
+CALL tw_regSetKey('MO','modelCore','zobrazVysl','souhrnRPSN-proOZ', 1)
+;
+
+-- #Počítat a zobrazovat RPSN PÚ pro OZ# 
+-- Parametr určuje, zda (počítat a) zobrazovat RPSN PÚ do výsledků modelování v úloze pro OZ
+CALL tw_regSetKey('MO','modelCore','zobrazVysl','RPSNpu-proOZ', 1)
+;
+
+-- #Počítat a zobrazovat RPSN SÚ pro OZ#
+-- Parametr určuje, zda (počítat a) zobrazovat RPSN SÚ do výsledků modelování v úloze pro OZ
+CALL tw_regSetKey('MO','modelCore','zobrazVysl','RPSNsu-proOZ', 1)
+;
+
+
+ROLLBACK WORK;
+
+--End of B125299_RN00443393_3

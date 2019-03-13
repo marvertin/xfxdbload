@@ -1,0 +1,31 @@
+-- @TC:ONCE: ID = V2, B134756_UID57764_1-ProcesPosouz
+-- @TC:ONCE: DESCRIPTION = Spustit funkci pro rozhodnutí procesu při předání ÚŽ {STORY}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE eu_sml_mat ADD (
+    procesposouz   CHAR(10) BEFORE variantaprocesu
+  , procesverfce   CHAR(10) BEFORE variantaprocesu
+  , pozadposozu   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+  , pozadposana   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+  , pozadpostec   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+  , pozadposfra   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+  , pozadveriftel   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+);
+
+ALTER TABLE eu_sml_arch ADD (
+    procesposouz   CHAR(10) BEFORE variantaprocesu
+  , procesverfce   CHAR(10) BEFORE variantaprocesu
+  , pozadposozu   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+  , pozadposana   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+  , pozadpostec   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+  , pozadposfra   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+  , pozadveriftel   Integer  DEFAULT 0 NOT NULL BEFORE variantaprocesu
+);
+
+
+ROLLBACK WORK;
+
+--End of B134756_UID57764_1-ProcesPosouz

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B126401_RN00451080_1
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+-- dle proposalu není realizován cizí klíč
+ALTER TABLE ep_splspormodcashflow_den 
+
+  -- Podkladový obrat
+  -- Vazba na obrat modelu splácení a spoření
+  ADD refsplspormodb   INTEGER BEFORE typpoh;
+  
+CREATE INDEX ep_splspormodcashflow_den_i3 ON ep_splspormodcashflow_den(refsplspormodb);
+
+ROLLBACK WORK;
+
+--End of B126401_RN00451080_1

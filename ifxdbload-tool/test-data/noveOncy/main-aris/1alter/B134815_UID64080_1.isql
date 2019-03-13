@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B134815_UID64080_1
+-- @TC:ONCE: DESCRIPTION = RSTS-17803: Přepočet LTV v EOM {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE eu_vypocetltv_den MODIFY (
+  ltvaktualni   DECIMAL(16,2),
+  vyseuveru   DECIMAL(16, 2)
+);
+
+ROLLBACK WORK;
+
+--End of B134815_UID64080_1

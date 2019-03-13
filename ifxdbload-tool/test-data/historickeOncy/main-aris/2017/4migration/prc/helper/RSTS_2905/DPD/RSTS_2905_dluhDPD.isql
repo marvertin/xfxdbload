@@ -1,0 +1,114 @@
+CREATE PROCEDURE RSTS_2905_dluhDPD(AKonto    DEC(16, 0),
+                                   ATko      CHAR(2),
+                                   ARealn    INT,
+                                   ADatOtev  DATE,
+                                   ADatUzav  DATE,
+                                   ALogovat  INT DEFAULT 0) 
+  DEFINE _serpredpis      INT;
+  DEFINE _zdrojserpredpis INT;
+  DEFINE _stav            CHAR(1);
+  DEFINE _datsplat        DATE;
+  DEFINE _valuta          DATE;
+  DEFINE _startDatum      DATE;
+  DEFINE _endDatum        DATE;
+  DEFINE _datprov         DATE;
+  DEFINE _zpracovavaneDatum     DATE;
+  DEFINE _minDatVyhodnoceni     DATE;
+  DEFINE _idNovyZaznam          INT;
+  DEFINE _currentDPDNovyZaznam  INT;
+  DEFINE _id                    INT;   
+  DEFINE _currentDPD            INT;
+  DEFINE _datPrvVyhodnoceni     DATE;
+  DEFINE _currentDPDEnd         INT;
+  DEFINE _datukon               DATE;
+   
+  IF(ALogovat <> 0) THEN call tw_monitor_block_start(ALogovat, 'DluhDPD'); END IF;  
+  
+  LET _datprov = AP_DatProv();
+  LET ADatUzav = NVL(ADatUzav, _datprov);
+  LET _datukon = (SELECT datukonceni FROM ac_konto_mat WHERE konto = AKonto AND tko = ATko);
+
+  FOREACH c1 WITH HOLD FOR
+    SELECT serpredpis, zdrojserpredp, stav, valuta
+    INTO _serpredpis, _zdrojserpredpis, _stav, _valuta 
+    FROM ah_posplatdluh_kart 
+    WHERE
+      konto = AKonto AND
+      tko   = ATko AND
+      stav  != 'S' 
+    ORDER BY 
+      valuta, serpredpis  
+      
+    LET _datsplat   = RSTS_2905_dluhDatSplatDPD(AKonto, ATko, _serpredpis, _zdrojserpredpis, _stav, _datukon);
+    LET _startDatum = TW_MaxDate(_valuta + 1, ADatOtev);
+    IF(_datsplat IS NULL) THEN
+      LET _endDatum = _datprov; 
+    ELSE
+      LET _endDatum = _datsplat - 1;
+    END IF;
+    
+    LET _endDatum = TW_MinDate(_endDatum, ADatUzav);
+    
+    LET _zpracovavaneDatum = _startDatum;
+    SELECT currentDPD INTO _currentDPDEnd FROM rsts_2905_dpdevid WHERE realuv = ARealn AND datvyhodnoceni = _endDatum;
+    IF(_currentDPDEnd >= _endDatum - _valuta + 1) THEN
+      CONTINUE FOREACH;
+    END IF;
+    
+    WHILE(_zpracovavaneDatum <= _endDatum) 
+      LET _minDatVyhodnoceni = NULL;
+      
+      IF(EXISTS(SELECT 1 FROM rsts_2905_dpdevid WHERE realuv = ARealn AND datvyhodnoceni = _zpracovavaneDatum AND datprvvyhodnoceni = _zpracovavaneDatum)) 
+      THEN
+        UPDATE rsts_2905_dpdevid 
+        SET
+          currentDPD = TW_MaxInt(NVL(currentDPD, 0), datvyhodnoceni - _valuta),
+          nesplaccastka = NULL 
+        WHERE realuv = ARealn AND datvyhodnoceni = _zpracovavaneDatum AND datprvvyhodnoceni = _zpracovavaneDatum;
+        
+      ELSE
+        SELECT id, datvyhodnoceni, NVL(currentDPD, 0), datprvvyhodnoceni 
+        INTO _id, _minDatVyhodnoceni, _currentDPD, _datPrvVyhodnoceni 
+        FROM rsts_2905_dpdevid
+        WHERE
+          realuv          = ARealn AND
+          datvyhodnoceni  = (SELECT MIN(datvyhodnoceni) FROM rsts_2905_dpdevid 
+                             WHERE realuv = ARealn AND datvyhodnoceni >= _zpracovavaneDatum);
+      
+        LET _currentDPDNovyZaznam = TW_MaxInt(NVL(_currentDPD, 0), _zpracovavaneDatum - _valuta);
+        INSERT INTO rsts_2905_dpdevid (realuv, datvyhodnoceni, datprvvyhodnoceni, typvyhodnoceni, currentDPD)
+        VALUES (ARealn, _zpracovavaneDatum, _zpracovavaneDatum, 'L', _currentDPDNovyZaznam);
+        LET _idNovyZaznam = TW_LastSer();
+        
+        IF(_minDatVyhodnoceni IS NOT NULL) THEN
+          IF(_minDatVyhodnoceni <= _datprov AND _zpracovavaneDatum + 1 <= _minDatVyhodnoceni) THEN
+            UPDATE rsts_2905_dpdevid SET datprvvyhodnoceni = _zpracovavaneDatum + 1
+            WHERE id = _id;
+            
+          ELSE
+            IF(_minDatVyhodnoceni > _datprov OR _zpracovavaneDatum + 1 > _minDatVyhodnoceni) THEN
+              DELETE FROM rsts_2905_dpdevid WHERE id = _id;
+            END IF;
+          END IF;
+        END IF; 
+        
+        IF(_datPrvVyhodnoceni < _zpracovavaneDatum) THEN
+          INSERT INTO rsts_2905_dpdevid (realuv, datvyhodnoceni, datprvvyhodnoceni, typvyhodnoceni, currentDPD)
+          VALUES (ARealn, _zpracovavaneDatum - 1, _datPrvVyhodnoceni, 'L', _currentDPD);
+                  
+        END IF;
+               
+      END IF;
+          
+      LET _zpracovavaneDatum = _zpracovavaneDatum + 1;
+    END WHILE;
+    
+    IF(_endDatum = ADatUzav) THEN
+      EXIT FOREACH;
+    END IF;
+     
+  END FOREACH;  
+  
+  IF(ALogovat <> 0) THEN call tw_monitor_block_finish(ALogovat); END IF;  
+     
+END PROCEDURE;

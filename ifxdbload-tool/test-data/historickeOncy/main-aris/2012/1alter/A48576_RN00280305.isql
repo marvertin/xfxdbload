@@ -1,0 +1,73 @@
+-- @TC:ONCE: ID = V2, A48576_RN00280305
+-- @TC:ONCE: DESCRIPTION = Zmìna DM: Pasivní náhled pro osoby v insolvenci, exekuci a vymáhání v CIBIS-Web
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eo_negatplatmoral
+
+-- 22  eo_negatplatmoral-1/5       [CREATE.TABLE]
+CREATE TABLE eo_negatplatmoral (
+    login           CHAR(10)   NOT NULL,
+    os              Integer   NOT NULL,
+    rc              CHAR(13)  ,
+    ico             CHAR(10)  ,
+    datkontr        DATE   NOT NULL,
+    insolvence      Integer   NOT NULL,
+    exekuce         Integer   NOT NULL,
+    vymahani        CHAR(45)   NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    CHECK (insolvence in (0,1)) CONSTRAINT eo_negatplatmoral_c1,
+    CHECK (exekuce in (0,1)) CONSTRAINT eo_negatplatmoral_c2,
+    CHECK (vymahani in (0,1)) CONSTRAINT eo_negatplatmoral_c3
+) LOCK MODE ROW
+;
+
+-- 23  eo_negatplatmoral-2/5       [CREATE.INDEX]
+CREATE unique INDEX eo_negatplatmoral_pk ON eo_negatplatmoral (login) ;
+
+-- 24  eo_negatplatmoral-3/5       [CREATE.INDEX]
+CREATE INDEX eo_negatplatmoral_i_fk_eo_negatplatmoral_eo_osoba_mat ON eo_negatplatmoral (os) ;
+
+-- 25  eo_negatplatmoral-4/5       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE eo_negatplatmoral
+    ADD CONSTRAINT PRIMARY KEY (login)  CONSTRAINT eo_negatplatmoral_pk;
+
+-- ###############################################################
+--       eo_negatplatmoralarch
+
+-- 26  eo_negatplatmoralarch-1/1       [CREATE.TABLE]
+CREATE TABLE eo_negatplatmoralarch (
+    idarch          SERIAL   NOT NULL,
+    login           CHAR(10),
+    os              Integer  ,
+    rc              CHAR(13)  ,
+    ico             CHAR(10)  ,
+    datkontr        DATE  ,
+    insolvence      Integer  ,
+    exekuce         Integer  ,
+    vymahani        CHAR(45)  ,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+
+-- ###############################################################
+--       eo_negatplatmoral
+
+-- 71  eo_negatplatmoral-5/5       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE eo_negatplatmoral
+    ADD CONSTRAINT FOREIGN KEY (os) REFERENCES eo_osoba_mat(os)  CONSTRAINT eo_negatplatmoral_fk_eo_negatplatmoral_eo_osoba_mat;
+    
+-- 22  eo_negatplatmoral-1/2       [CREATE.INDEX]
+CREATE INDEX eo_negatplatmoral_i2 ON eo_negatplatmoral (ico) ;
+
+-- 23  eo_negatplatmoral-2/2       [CREATE.INDEX]
+CREATE INDEX eo_negatplatmoral_i1 ON eo_negatplatmoral (rc) ;
+
+
+ROLLBACK WORK;
+
+--End of A48576_RN00312403

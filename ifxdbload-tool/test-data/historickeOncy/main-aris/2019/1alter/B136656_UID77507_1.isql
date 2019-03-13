@@ -1,0 +1,94 @@
+-- @TC:ONCE: ID = V2, B136656_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-29523: Odstranění klasifikací
+
+BEGIN WORK;
+
+ALTER TABLE ru_real_mat ADD (
+  stadiumifrs  Integer,
+  stadiumifrspozn char(255)
+);
+
+ALTER TABLE ru_real_mat ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT ru_real_mat_c18
+);
+
+ALTER TABLE ru_real_arch ADD (
+  stadiumifrs  Integer,
+  stadiumifrspozn char(255)
+);
+
+ALTER TABLE EU_ExpSml_Den ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE ru_vyzva_kart ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE ru_vyzva_kart ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT  ru_vyzva_kart_c4
+);
+
+ALTER TABLE RU_PrVym_Kart ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE RU_PrVym_Kart  ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT  ru_prvym_kart_c4
+);
+
+ALTER TABLE ru_odppohl_kart ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE ru_odppohl_kart  ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT  ru_odppohl_kart_c4
+);
+
+ALTER TABLE EU_SnimekVymPohl_Den ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE EU_SnimekVymPohl_Den  ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT  eu_snimekvympohl_den_c5
+);
+
+ALTER TABLE ru_zvlrezim_cis ADD (
+  dopstadiumpozn char(255) before portime
+);
+
+ALTER TABLE ru_zvlrezim_acis ADD (
+  dopstadiumpozn char(255) before portime
+);
+
+ALTER TABLE EO_Osoba_Mat  ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE EO_Osoba_Mat ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT eo_osoba_mat_c2
+);
+
+ALTER TABLE EO_Osoba_Arch  ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE EP_SnimekInsolvence_Den  ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE EP_SnimekInsolvence_Den ADD CONSTRAINT (
+   CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT ep_snimekinsolvence_den_c4
+);
+
+ALTER TABLE ep_snimproduktinsolv_den  ADD (
+  stadiumifrs  Integer
+);
+
+ALTER TABLE ep_snimproduktinsolv_den ADD CONSTRAINT (
+  CHECK (stadiumifrs IN (1,2,3)) CONSTRAINT ep_snimproduktinsolv_den_c1
+);
+
+ROLLBACK WORK;
+
+--End of B136656_UID77507_1

@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B124703_RN00430870_1
+-- @TC:ONCE: DESCRIPTION = Biometrický podpis úvěrové smlouvy a pokynu k čerpání {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_expdokumentusd_den (
+  id_index   Integer,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  typecm   CHAR(35),
+  obsahecm   CHAR(35),
+  podobsahecm   CHAR(35),
+  vazanynaosobu   Integer  DEFAULT 0,
+  osobaid   CHAR(10),
+  poznamka   VARCHAR(255),
+  CHECK (vazanynaosobu IN (0,1)) CONSTRAINT eu_expdokumentusd_den_dnph
+)lock mode row;
+
+--INDEXES
+CREATE INDEX eu_expdokumentusd_den_i1 ON eu_expdokumentusd_den(id_index);
+
+ROLLBACK WORK;
+
+--End of B124703_RN00430870_1

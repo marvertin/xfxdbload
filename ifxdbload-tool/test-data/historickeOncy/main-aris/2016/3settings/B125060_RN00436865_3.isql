@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B125060_RN00436865_3
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - 3. část - ESIP, rozšíření exportů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update rr_reptype_cis set repname = 'Informační formulář modelování' where repcode = 'SS002';
+
+ROLLBACK WORK;
+
+--End of B125060_RN00436865_3

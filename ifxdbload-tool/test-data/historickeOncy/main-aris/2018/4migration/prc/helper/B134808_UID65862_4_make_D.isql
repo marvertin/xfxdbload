@@ -1,0 +1,119 @@
+create PROCEDURE B134808_UID65862_4_make_D (-- vstupni paramtery
+                                    ADebugFile    Char(30) default null -- priznak zda vytvaret debug file, pokud je vyplneny
+)
+
+define _ser             Int;
+define _serDM           Int;
+define _serobjekt       Int;
+define _smlouva         Dec(16,0);
+define _tsml            Char(4);
+define _poradi          SMALLINT;
+define _procsniz        DEC(3,0);
+define _maxprocsniz     DEC(3,0);
+define _ltvhranice      DEC(16,2);
+define _tvec            Char(1);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+
+--osetreni chyby pri konstrukci kursoru
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude commited read
+SET ISOLATION TO COMMITTED READ;
+
+if(PD_TraceRequestedBegin(ADebugFile) = 1) then
+  trace on;
+end if;
+
+--ZACATEK vlastni migrace
+BEGIN WORK;
+
+--záznam o spuštení migrace
+let _serDM = TW_DM_Start('RSTS_17806', 'UID65862_ltvkoefzajist', 'Migrace hraničního LTV a koeficientů zajištění');
+
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+foreach c1 with hold for
+  SELECT ser, smlouva, tsml
+  INTO  _ser,_smlouva,_tsml
+  FROM UID65862_ltvkoefzajist
+  WHERE zprac < 0
+  ORDER BY ser
+  
+  begin
+    --osetreni chyby - pokracovat se bude na dalsim radku ridici tabulkz
+    on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+      --rollback transakce
+      ROLLBACK WORK;
+      --ulozime chybu do ridici tabulky
+      UPDATE UID65862_ltvkoefzajist
+      SET(NumErr,ISAMErr,TextErr, zprac) = (TW_ErrSql, TW_ErrIsam, TW_ErrText, -2)
+      WHERE ser=_ser;
+      --zahajeni transakce migrace
+      BEGIN WORK;
+    end exception;
+      
+    -- RSTS-17809 Migrace LTV při schválení START
+    SELECT max(zaj.procsniz)
+    INTO _ltvhranice
+    FROM eu_zajist_mat zaj JOIN eu_zajist_cis cis ON cis.zajist = zaj.zajist
+    WHERE zaj.smlouva = _smlouva AND zaj.tsml = _tsml AND cis.tvec = 'F';
+      
+    IF _ltvhranice IS NOT NULL THEN
+      UPDATE eu_sml_mat SET ltvhranice = _ltvhranice / 100 WHERE smlouva = _smlouva AND tsml = _tsml;
+    END IF;
+    -- RSTS-17809 Migrace LTV při schválení END
+    
+    -- RSTS-17806 Migrace koeficientů zajištění START
+    FOREACH
+      SELECT zaj.procsniz, cis.maxprocsniz, zaj.poradi, cis.tvec
+      INTO _procsniz, _maxprocsniz, _poradi, _tvec
+      FROM eu_zajist_mat zaj JOIN eu_zajist_cis cis ON cis.zajist = zaj.zajist
+      WHERE zaj.smlouva = _smlouva AND zaj.tsml = _tsml AND zaj.stav NOT IN ('Z', 'U')
+      
+      -- pro nemovitosti vezmeme koeficent z číselníku, pro ostatní jen pokud je menší než na zajištění
+      if _tvec = 'F' then
+        let _procsniz = _maxprocsniz;
+      else
+        let _procsniz = LEAST(_procsniz, _maxprocsniz);
+      end if;
+        
+      UPDATE eu_zajist_mat SET procsniz = _procsniz WHERE smlouva = _smlouva AND tsml = _tsml AND poradi = _poradi;
+    END FOREACH;
+    -- RSTS-17806 Migrace koeficientů zajištění END
+      
+    --nastaví příznak zpracováno na 1
+    UPDATE UID65862_ltvkoefzajist SET zprac = 1, NumErr = null, ISAMErr = null, TextErr = null WHERE ser=_ser;
+  end;
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+--KONEC vlastni migrace
+
+--ZACATEK dokonceni migrace (pokud dokonceni existuje)
+BEGIN WORK;
+
+--zápis o ukončení migrace do provozního deníku a protokolu migraci
+call TW_DM_End(_serDM);
+
+if(PD_TraceRequestedEnd(ADebugFile) = 1) then
+   trace off;
+end if;
+
+COMMIT WORK;
+--KONEC dokonceni migrace
+
+end procedure;

@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A46417_RN00249565_3
+-- @TC:ONCE: DESCRIPTION = Zmìna kontroly telefonních a mobilních èísel v komunikaèních kanálech. {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+UPDATE eo_komkanal_cis SET typkontrola = 'TELEFON', zobrazitwww = 1 WHERE kanal = 1; -- telefon do prace
+UPDATE eo_komkanal_cis SET typkontrola = 'TELEFON', zobrazitwww = 1 WHERE kanal = 2; -- telefon domu
+UPDATE eo_komkanal_cis SET typkontrola = 'TELEFON', zobrazitwww = 1 WHERE kanal = 3; -- fax
+UPDATE eo_komkanal_cis SET typkontrola = 'MOBIL', zobrazitwww = 1 WHERE kanal = 4; -- mobilni telefon
+UPDATE eo_komkanal_cis SET typkontrola = 'EMAIL', zobrazitwww = 1 WHERE kanal = 5; -- email
+UPDATE eo_komkanal_cis SET typkontrola = 'SMS', zobrazitwww = 1 WHERE kanal = 6; -- sms 
+UPDATE eo_komkanal_cis SET typkontrola = 'MOBIL', zobrazitwww = 0 WHERE kanal = 7; -- mobil karta
+UPDATE eo_komkanal_cis SET typkontrola = 'NEKONTROLOVAT', zobrazitwww = 0 WHERE kanal = 8; -- Adresa zjištìná telefonicky 
+UPDATE eo_komkanal_cis SET typkontrola = 'EMAIL', zobrazitwww = 1 WHERE kanal = 9; -- registrovany email
+UPDATE eo_komkanal_cis SET typkontrola = 'MOBIL', zobrazitwww = 1 WHERE kanal = 10; -- registrovany mobilni telefon
+UPDATE eo_komkanal_cis SET typkontrola = 'NEKONTROLOVAT', zobrazitwww = 0 WHERE kanal = 11; -- Neúspìšná aktualizace V/2011 
+UPDATE eo_komkanal_cis SET typkontrola = 'TELEFON', zobrazitwww = 0 WHERE kanal = 12; -- Telefon z CC
+UPDATE eo_komkanal_cis SET typkontrola = 'EMAIL', zobrazitwww = 0 WHERE kanal = 13; -- Email z CC    
+
+ROLLBACK WORK;
+
+--End of A46417_RN00249565_3
+

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B131164_UID41977_3
+-- @TC:ONCE: DESCRIPTION = CRIBIS
+
+
+BEGIN WORK;
+
+INSERT INTO ws_metoda_cis (id, nazev, specifikace, metoda, poznamka, platnost, smersluzby, skupinasluzeb) 
+VALUES (51, 'Globální report o osobě', 'https://ws.multicribis.net/CribisCZWS.asmx?wsdl', 'GetGlobalReport', NULL, 1, 1, 9);
+
+ROLLBACK WORK;
+
+--End of B131164_UID41977_3

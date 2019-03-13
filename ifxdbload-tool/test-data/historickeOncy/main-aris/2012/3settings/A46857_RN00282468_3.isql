@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, A46857_RN00282468_3
+-- @TC:ONCE: DESCRIPTION = Úroková fixace {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+insert into EU_VariaUrokFixace_Cis(fixaceid, nazev, delka, poznamka, nabidkaod, nabidkado, platnost)
+  values (1, 'Individuální délka',null, null, mdy(1, 1, 1994), null, 1);
+
+insert into EU_VariaUrokFixace_Cis(fixaceid, nazev, delka, poznamka, nabidkaod, nabidkado, platnost)
+  values (2, '5-letá fixace 2004',60, null, mdy(2, 4, 2004), mdy(11, 28, 2010), 0);
+  
+insert into EU_VariaUrokFixace_Cis(fixaceid, nazev, delka, poznamka, nabidkaod, nabidkado, platnost)
+  values (3, '5-letá fixace 2010',60, 'úrokový swap', mdy(11, 29, 2010), mdy(6, 24, 2012), 0);
+  
+insert into EU_VariaUrokFixace_Cis(fixaceid, nazev, delka, poznamka, nabidkaod, nabidkado, platnost)
+  values (4, '5-letá fixace 6/2012',60, 'PRIBOR', mdy(6, 25, 2012), null, 1);
+  
+insert into EU_VariaUrokFixace_Cis(fixaceid, nazev, delka, poznamka, nabidkaod, nabidkado, platnost)
+  values (5, '3-letá Hyst',36, 'Fixace poskytované v Hypo SS', mdy(1, 1, 1994), mdy(9, 1, 2009), 0);
+  
+insert into EU_VariaUrokFixace_Cis(fixaceid, nazev, delka, poznamka, nabidkaod, nabidkado, platnost)
+  values (6, '6-letá Hyst',72, 'Fixace poskytované v Hypo SS', mdy(1, 1, 1994), mdy(9, 1, 2009), 0);
+
+ROLLBACK WORK;
+
+
+--End of A46857_RN00282468_3

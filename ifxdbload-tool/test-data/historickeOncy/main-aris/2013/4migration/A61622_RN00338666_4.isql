@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, A61622_RN00338666_4
+-- @TC:ONCE: DESCRIPTION = Zmìna dávky UNIQA - nové vlastnosti pro urèení provizí 
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+--prvni cast migrace, ktera vytvori ridici tabulku s navrhovanymi hodnotami
+--make musi byt spusten rucne po kontrole a pripadne oprave ridici tabulky
+
+call A61620_RN00338666_find_D ();
+

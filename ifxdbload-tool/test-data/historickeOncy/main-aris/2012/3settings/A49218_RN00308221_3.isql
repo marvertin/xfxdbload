@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, A49218_RN00308221_3
+-- @TC:ONCE: DESCRIPTION = Automatizace stahování/odesílání a zpracování souborù/dávek z/do CC ÈNB {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#email adresa pro notifikaci CC import <id>#        
+--call TW_RegSetOrAddKey('CC','CCProcess','emailIMP','*','',1,
+--                       'Platební styk','Mezibankovní platba','CC Process','Email adresa pro notifikaci CC import <id>',1);
+
+--#sms pro notifikaci CC import <id>#         
+--call TW_RegSetOrAddKey('CC','CCProcess','smsIMP','*','',1,
+--                       'Platební styk','Mezibankovní platba','CC Process','Sms pro notifikaci CC import <id>',1);
+
+--#rozúètovat dávku CC automaticky#
+call TW_RegSetOrAddKey('CC','CCProcess','*','rozuctovatAuto',1,1,
+                       'Platební styk','Mezibankovní platba','CC Process','Rozúètovat dávku CC automaticky',1);
+
+--#email adresa pro notifikaci CC export <id>#
+--call TW_RegSetOrAddKey('CC','CCProcess','emailEXP','*','',1,
+--                       'Platební styk','Mezibankovní platba','CC Process','Email adresa pro notifikaci CC export <id>',1);
+
+--#sms pro notifikaci CC export <id>#
+--call TW_RegSetOrAddKey('CC','CCProcess','smsEXP','*','',1,
+--                       'Platební styk','Mezibankovní platba','CC Process','Sms pro notifikaci CC export <id>',1);
+
+--#maximální poèet položek v prioritní dávce#
+call TW_RegSetOrAddKey('CC','CCProcess','*','maxPocPolozekPrior',NULL,1,
+                       'Platební styk','Mezibankovní platba','CC Process','Maximální poèet položek v prioritní dávce',1);
+
+--#maximální poèet položek v neprioritní dávce#
+call TW_RegSetOrAddKey('CC','CCProcess','*','maxPocPolozekNeprior',NULL,1,
+                       'Platební styk','Mezibankovní platba','CC Process','Maximální poèet položek v neprioritní dávce',1);
+
+
+
+ROLLBACK WORK;
+
+--End of A49218_RN00308221_3

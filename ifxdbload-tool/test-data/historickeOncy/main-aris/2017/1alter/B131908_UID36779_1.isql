@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, B131908_UID36779_1
+-- @TC:ONCE: DESCRIPTION = IFRS - OŘR {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+alter table EP_ExpSplSporModH_Den drop (
+
+ vypEir, eir
+,eirser,dobatrvrokyeir,dobatrvmesiceeir,celkpocsplvkleir,pocprovsplpueir,poczbyvsplpueir
+,vyseprovsplpueir,vysezbyvsplpueir,vyseprovsplklopeir,vysebudsplklopeir
+,pocprovsplsueir,poczbyvsplsueir,vyseprovsplsueir,vysezbyvsplsueir,vyseprovsplsppozveir,vysezbyvsplsppozveir
+,pocprovsplsppozveir,poczbyvsplsppozveir,zapljisteir,nespljistpospleir,zbyvjisteir,zaplurokbeeir,nesplurokbepospleir,zbyvurokbeeir
+,zaplpopleir,nesplpoplpospleir,zbyvpopleir,zapluroksaeir,nespluroksapospleir,zbyvuroksaeir
+,zaplsankpopleir,nesplsankpoplpospleir,zbyvsankpopleir,datsplatpueir,datsplateir,splacenuveir,celkpocspleir,celksplacvyseeir
+,pocprovvkleir,poczbyvvkleir,vyseprovvkleir,vysezbyvvkleir,pripspeir,budspeir,urokvklpripeir,urokvklbudeir
+,poplsporpripeir,poplsporbudeir,bonuspripeir,bonusbudeir,celkpocvkleir,celksporvyseeir,vysesueir
+
+,danurokpripeir,danurokbudeir,danbonuspripeir,danbonusbudeir
+
+/*,budSPRokCerpanieir,budSPNaslRokCerpanieir*/,manvymaztokyeir,manvymazcashfloweir,pocvklsspueir
+,celkZaplDleCfEir,celknakldlecfeir,celkvyseuveruesipeir,sumanakluvermimoeir
+
+,cashranicenakleir,sumbudnaklmimoeir, celkbudzapleir, celkbudnakluvereir
+
+,sprokcerpanieir,spnaslrokcerpanieir
+);
+
+alter table EP_ExpSplSporModH_Den add (
+  vypbankeir int/*boolean*/ before vyprpsn
+, bankEir double precision before rpsn
+);
+
+ROLLBACK WORK;
+
+--End of B131908_UID36779_1

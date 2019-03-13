@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B111307_RN00373646_3
+-- @TC:ONCE: DESCRIPTION = Sale-Main: Kontroly pre nezletilych ucastnikov (vek, saldo) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('RZ','storno','*','nezllimitvypl', 300000, 1, 'Spoření', 'Vypořádání stavebního spoření', 'Building saving settlement', 'limit vyplácené částky pro varování při vypořádání u nezletilce');
+call TW_RegSetOrAddKey('RZ','storno','*','nezlvekhranvarovani', 17, 1, 'Spoření', 'Vypořádání stavebního spoření', 'Building saving settlement', 'limitní věk klienta pro varování při vypořádání');
+
+ROLLBACK WORK;
+
+--End of B111307_RN00373646_3

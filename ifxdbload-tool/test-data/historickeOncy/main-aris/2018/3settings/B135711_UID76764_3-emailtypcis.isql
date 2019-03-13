@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135711_UID76764_3-emailtypcis
+-- @TC:ONCE: DESCRIPTION = RSTS-23836: Zamítnutí nevytvoří SMS ani email {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+update TW_EmailTyp_Cis 
+set predmet = 'Vaše žádost o úvěr <<CISLO_SS>> byla zamítnuta'
+  , obsah = 'Vaše žádost o úvěr <<CISLO_SS>> byla zamítnuta. Raiffeisen stavební spořitelna'
+where zkratka = 'UVER_ZAMIT_KLIENT';
+
+ROLLBACK WORK;
+
+--End of B135711_UID76764_3-emailtypcis

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B114429_RN00401749_1
+-- @TC:ONCE: DESCRIPTION = Main: generovanie podkladov problemovych zmluv {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table es_pozpodklad_mat modify oz_cislopcp char(16);
+
+ROLLBACK WORK;
+
+--End of B114429_RN00401749_1

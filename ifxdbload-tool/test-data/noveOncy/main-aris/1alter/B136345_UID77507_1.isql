@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136345_UID77507_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+ALTER TABLE eo_tigertyp_acis ADD obec Integer;
+
+ALTER TABLE eo_tigertyp_cis ADD obec Integer  DEFAULT 0 NOT NULL;
+
+ALTER TABLE eo_tigertyp_cis ADD CONSTRAINT CHECK (obec IN (0,1)) CONSTRAINT eo_tigertyp_cis_d8n2; 
+
+ROLLBACK WORK;
+
+--End of B136345_UID77507_1

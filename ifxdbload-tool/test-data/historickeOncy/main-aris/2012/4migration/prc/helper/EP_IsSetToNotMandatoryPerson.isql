@@ -1,0 +1,32 @@
+CREATE FUNCTION EP_IsSetToNotMandatoryPerson(ARole char(2), AScoringVariant char(3), AVek integer, AVekNezl integer, AVekLimit integer)
+returning integer;
+
+define _mandatoryClients integer;
+
+-- Nezletilý klient: 
+-- Pokud je provádìn scoring nepovinných osob, pak je takový klient zaøazen do nepovinných osob 
+-- a scoring je pro nìj proveden, jinak se scoring neprovádí.
+-- Klient vysokého vìku:
+-- Scoring se pro klienta vysokého vìku provádí, ale nemá vliv na vyhodnocení smlouvy – 
+-- klient vysokého vìku není zahrnován výsledku pro smlouvu (žádost).
+IF (ARole = 'KL' AND ((AVek < AVekNezl) OR (AVek > AVekLimit))) THEN 
+    RETURN 1;
+END IF;
+
+-- Pøistupitel (tzv. dobrovolný)
+-- Je to pøistupitel, který je v seznamu povinných osob a souèasnì platí, že klient je v seznamu 
+-- povinných osob a je u nìj výsledek osoby „Ano“
+-- Takový pøistupitel se sice skoruje, ale nemá vliv na výsledek pro smlouvu. 
+-- Systém u nìj do záznamu o vyhodnocení osoby nastaví:
+-- Zahrnutá osoba      Ne     
+IF (ARole = 'PR' AND AScoringVariant in ('SC1', 'SC2')) THEN
+  let _mandatoryClients = (select count(*) from RN00238704_OSOBY_TMP WHERE ARole = 'KL' AND PersonMandatory = 'Y' AND PersonResult = 1);
+  IF (_mandatoryClients > 0) then
+      RETURN 1;
+  END IF;    
+END IF;
+
+END FUNCTION;
+
+  
+    

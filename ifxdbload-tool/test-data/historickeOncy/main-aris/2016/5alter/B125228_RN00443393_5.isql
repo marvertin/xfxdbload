@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B125228_RN00443393_5
+-- @TC:ONCE: DESCRIPTION = RPSN samostatně pro fázi PU a SU, včetně příp. rozdělení ESIP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_splspormodsh_den
+
+  -- Suma nákladů spojených s úvěrem mimo RSTS
+  -- Celková výše dalších nákladů placených mimo RSTS spojených s úvěrem
+  drop extraExpenses
+;
+
+ROLLBACK WORK;
+
+--End of B125228_RN00443393_5

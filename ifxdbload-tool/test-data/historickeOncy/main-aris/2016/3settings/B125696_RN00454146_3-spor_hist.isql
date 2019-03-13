@@ -1,0 +1,84 @@
+-- @TC:ONCE: ID = V2, B125696_RN00454146_3-spor_hist
+-- @TC:ONCE: DESCRIPTION = Doplnění rozhodovacího nástroje pro variantu PÚ o vyhodnocení spořící historie {CUSTOMERREQUEST}
+BEGIN WORK;
+
+-- Přepsání idček
+Update eu_otazkarozhod_cis Set id = id + 1 Where id in (6,7,8);
+Update eu_otazkarozhod_cis Set id = 6 Where id = 51;
+Update eu_otazkarozhod_cis Set id = 10 Where id = 81;
+
+-- Vypnutí triggerů na tabulky, ze kterých se bude mazat
+Set Triggers For eu_vartarifrozhod_cis Disabled;
+Set Triggers For eu_kritvariapurozhod_cis Disabled;
+Set Triggers For eu_vazbarozhod_cis Disabled;
+Set Triggers For eu_odpovedrozhod_cis Disabled;
+Set Triggers For eu_procedurarozhod_cis Disabled;
+
+-- Odmazání záznamů, které souvisí s procedurami
+Delete From eu_vartarifrozhod_cis Where refkritvariapurozhod in (Select serno From eu_kritvariapurozhod_cis Where refvazbarozhod in (Select serno From eu_vazbarozhod_cis Where refodpovedrozhod in (Select serno From eu_odpovedrozhod_cis Where typodpoved = 'VYSLPROC')));
+Delete From eu_kritvariapurozhod_cis Where refvazbarozhod in (Select serno From eu_vazbarozhod_cis Where refodpovedrozhod in (Select serno From eu_odpovedrozhod_cis Where typodpoved = 'VYSLPROC'));
+Delete From eu_vazbarozhod_cis Where refodpovedrozhod in (Select serno From eu_odpovedrozhod_cis Where typodpoved = 'VYSLPROC');
+Delete From eu_odpovedrozhod_cis Where refprocedurarozhod = 2;
+Delete From eu_procedurarozhod_cis Where serno = 2;
+
+-- Zapnutí triggerů
+Set Triggers For eu_procedurarozhod_cis Enabled;
+Set Triggers For eu_odpovedrozhod_cis Enabled;
+Set Triggers For eu_vazbarozhod_cis Enabled;
+Set Triggers For eu_kritvariapurozhod_cis Enabled;
+Set Triggers For eu_vartarifrozhod_cis Enabled;
+
+-- Změna názvu procedury
+Update eu_procedurarozhod_cis Set nazev = 'Historie klienta';
+
+-- Vložení nových vazeb s historií klienta - HYPO větev
+Insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3),'2',null,null,1);
+Insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3),'1',null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6),1);
+Insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3),'0',null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 6),1);
+
+-- Vložení nových vazeb s historií klienta - REKO větev
+Insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 9),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3),'2',null,null,1);
+Insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 9),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3),'1',null,null,1);
+Insert into eu_vazbarozhod_cis (refsadavazebrozhod,refotazkarozhod,refodpovedrozhod,odpovedod,odpoveddo,refotazkarozhodnasl,platnost)
+                        VALUES ((SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1'),(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 9),(SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3),'0',null,(SELECT serno FROM eu_otazkarozhod_cis WHERE id = 10),1);
+
+-- Ještě přesměrování případných již existujících vyplněných dotazníků.
+update seu_dotaznikpuodpoved_mat set refvazba =
+    (select serno from eu_vazbarozhod_cis
+        where refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+        and refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5)
+        and refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3)
+        and odpovedod = '2')
+    where refvazba = 9;
+
+update seu_dotaznikpuodpoved_mat set refvazba =
+    (select serno from eu_vazbarozhod_cis
+        where refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+        and refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 5)
+        and refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3)
+        and odpovedod = '0')
+    where refvazba = 10;
+
+update seu_dotaznikpuodpoved_mat set refvazba =
+    (select serno from eu_vazbarozhod_cis
+        where refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+        and refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 9)
+        and refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3)
+        and odpovedod = '1')
+    where refvazba = 17;
+
+update seu_dotaznikpuodpoved_mat set refvazba =
+    (select serno from eu_vazbarozhod_cis
+        where refsadavazebrozhod = (SELECT serno FROM eu_sadavazebrozhod_cis WHERE nazev = 'Sada 1')
+        and refotazkarozhod = (SELECT serno FROM eu_otazkarozhod_cis WHERE id = 9)
+        and refodpovedrozhod = (SELECT serno FROM eu_odpovedrozhod_cis WHERE id = 3)
+        and odpovedod = '0')
+    where refvazba = 18;
+
+ROLLBACK WORK;
+--End of B125696_RN00454146_3-spor_hist

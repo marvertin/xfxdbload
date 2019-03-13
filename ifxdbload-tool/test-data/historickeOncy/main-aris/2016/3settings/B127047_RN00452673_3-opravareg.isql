@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B127047_RN00452673_3-opravareg
+-- @TC:ONCE: DESCRIPTION = Změna evidence zadržené SP, resp. převodů zadržené SP {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+-- Odstranění db registrů s nesprávně uvedenou adresou
+call TW_RegDelKey('RP', 'kontosp', '*', 'druhuctprevodvraceni');
+call TW_RegDelKey('RP', 'kontosp', '*', 'pkprevodvraceni');
+
+-- #Druh přeúčtování vrácení zadržené SP#
+Call TW_RegSetOrAddKey('RP', 'kontoSP', '*', 'druhuctprevodvraceni', 'SP33', 1, 'Spoření', 'Zadržená SP', 'Vrácení', 'Druh přeúčtování vrácení zadržené SP');
+
+-- #Provozní konto vrácení zadržené SP#
+Call TW_RegSetOrAddKey('RP', 'kontoSP', '*', 'pkprevodvraceni', null, 1, 'Spoření', 'Zadržená SP', 'Vrácení', 'Provozní konto vrácení zadržené SP');
+
+ROLLBACK WORK;
+
+--End of B127047_RN00452673_3-opravareg

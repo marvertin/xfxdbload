@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, A43061_RN00285349_3
+-- @TC:ONCE: DESCRIPTION = Doplnìní migrace pøístupových dat {DEFECT}
+
+BEGIN WORK;
+
+
+set triggers for tw_registr_acis disabled;
+
+update tw_registr_acis
+set hodnota=null 
+where 0<(select count(*) 
+          from 
+          tw_registr_cis where tw_registr_cis.sifrovano=1 and 
+                               tw_registr_acis.oblast=tw_registr_cis.oblast and
+                               tw_registr_acis.uloha=tw_registr_cis.uloha and
+                               tw_registr_acis.funkce=tw_registr_cis.funkce and
+                               tw_registr_acis.udaj=tw_registr_cis.udaj );
+
+set triggers for tw_registr_acis enabled;
+
+set triggers for nt_xferattr_acis disabled;
+
+update nt_xferattr_acis set (src_pass,dst_pass)=(null,null);
+
+set triggers for nt_xferattr_acis enabled;
+
+ROLLBACK WORK;
+
+--End of A43061_RN00285349_3

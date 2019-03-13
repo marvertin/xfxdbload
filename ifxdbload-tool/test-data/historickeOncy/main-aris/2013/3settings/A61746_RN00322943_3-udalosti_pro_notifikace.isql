@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, A61746_RN00322943_3-udalosti_pro_notifikace
+-- @TC:ONCE: DESCRIPTION = Dodateèné požadavky v rámci redesign CIBIS-sale {CUSTOMERREQUEST}
+BEGIN WORK;
+
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverSchvalKlient', 'Schválení úvìrového návrhu (klient)');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverSchvalPodmKlient', 'Schválení úvìrového návrhu s podm. (klient)');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverZamitKlient', 'Zamítnutí úvìru (klient)');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverStornoKlient', 'Storno úvìru (klient)');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverCerpaniKlient', 'Èerpání úvìru (klient)');
+
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverSchvalOZ', 'Schválení úvìrového návrhu (OZ)');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverSchvalPodmOZ', 'Schválení úvìrového návrhu s podm. (OZ)');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverZamitOZ', 'Zamítnutí úvìru (OZ)');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverStornoOZ', 'Storno úvìru (OZ)');
+INSERT INTO eo_notifikaceudalost_cis (udalost, nazev) VALUES ('UverCerpaniOZ', 'Èerpání úvìru (OZ)');
+
+INSERT INTO eo_notifikace_cis (idudalost, idzpusob) 
+Select id, 2 From eo_notifikaceudalost_cis Where Udalost in ('UverSchvalKlient', 'UverSchvalPodmKlient', 'UverZamitKlient', 'UverStornoKlient', 'UverCerpaniKlient', 'UverSchvalOZ', 'UverSchvalPodmOZ', 'UverZamitOZ', 'UverStornoOZ', 'UverCerpaniOZ');
+
+ROLLBACK WORK;
+--End of A61746_RN00322943_3-udalosti_pro_notifikace

@@ -1,0 +1,52 @@
+-- @TC:ONCE: ID = V2, B136387_UID77502_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+DROP TABLE am_uvprislib_acis;
+
+CREATE TABLE am_uvprislib_acis (
+  idarch   SERIAL NOT NULL,
+  mapkod   Char(20),
+  ucet   CHAR(9) NOT NULL,
+  protiucet   CHAR(9) NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,  
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT am_uvprislib_acis_ddm8
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX am_uvprislib_acis_pk ON am_uvprislib_acis(idarch);
+ALTER TABLE am_uvprislib_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT am_uvprislib_acis_pk;
+
+DROP TABLE am_uvprislib_cis;
+
+CREATE TABLE am_uvprislib_cis (
+  mapkod   Char(20) NOT NULL,
+  ucet   CHAR(9) NOT NULL,
+  protiucet   CHAR(9) NOT NULL,
+  popis   CHAR(35) NOT NULL,
+  poznamka   CHAR(70),
+  platnost   Integer  DEFAULT 1 NOT NULL,  
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT am_uvprislib_cis_ddm8
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX am_uvprislib_cis_pk ON am_uvprislib_cis(mapkod);
+ALTER TABLE am_uvprislib_cis ADD CONSTRAINT PRIMARY KEY(mapkod) CONSTRAINT am_uvprislib_cis_pk;
+
+--FK
+CREATE INDEX am_uvprislib_cis_i_f1 ON am_uvprislib_cis(ucet);
+ALTER TABLE am_uvprislib_cis ADD CONSTRAINT FOREIGN KEY(ucet) REFERENCES ac_ucet_mat(ucet) CONSTRAINT am_uvprislib_cis_f1;
+CREATE INDEX am_uvprislib_cis_i_f2 ON am_uvprislib_cis(protiucet);
+ALTER TABLE am_uvprislib_cis ADD CONSTRAINT FOREIGN KEY(protiucet) REFERENCES ac_ucet_mat(ucet) CONSTRAINT am_uvprislib_cis_f2;
+
+ROLLBACK WORK;
+
+--End of B136387_UID77502_1

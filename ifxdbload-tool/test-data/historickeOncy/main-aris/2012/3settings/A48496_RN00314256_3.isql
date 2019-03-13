@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A48496_RN00314256_3
+-- @TC:ONCE: DESCRIPTION = Neodoslané registraèné sms {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_runningapp (appname, appstatus) VALUES ('SMS_SENDER', 0);
+
+ROLLBACK WORK;
+
+--End of A48496_RN00314256_3

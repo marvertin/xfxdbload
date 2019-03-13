@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, A40188_RN00229280
+-- @TC:ONCE: DESCRIPTION = Zefektivnìní tøídìní klientské korespondence
+CREATE PROCEDURE A40188_RN00229280 ()    
+ 
+INSERT INTO es_zpusobkor_cis(zpusobkor, nazev,    tisk, poznamka, platnost) 
+VALUES                      (0,         'Poštou', 1,    null,     1);
+
+INSERT INTO es_zpusobkor_cis(zpusobkor, nazev,            tisk, poznamka,             platnost) 
+VALUES                      (1,         'Nechat v bance', 1,    'Rozhodnutí klienta', 1);
+
+INSERT INTO es_zpusobkor_cis(zpusobkor, nazev,              tisk, poznamka, platnost) 
+VALUES                      (2,         'Poradenské místo', 0,    null,     0);
+
+INSERT INTO es_zpusobkor_cis(zpusobkor, nazev,                   tisk, poznamka, platnost) 
+VALUES                      (3,         'Neodesílat - vymáhání', 0,    null,     1);
+
+INSERT INTO es_zpusobkor_cis(zpusobkor, nazev,                                tisk, poznamka, platnost) 
+VALUES                      (4,         'Neodesílat - vrácená korespondence', 1,    null,     1);
+ 
+END PROCEDURE

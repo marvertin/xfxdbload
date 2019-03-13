@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B125476_RN00449464_3
+-- @TC:ONCE: DESCRIPTION = HS - Data pro ESIP v případě dodatku {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+delete from ep_splspormodakce_cis where akce = 'USESIP';
+
+ROLLBACK WORK;
+
+--End of B125476_RN00449464_3

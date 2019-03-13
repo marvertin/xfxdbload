@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, A40964_RN00273329_3
+-- @TC:ONCE: DESCRIPTION = Doplnìní pole Daòová úspora do výsledkù pøi modelování úvìru {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+insert into ax_dantyp_cis(popis, druhdan, platnost)
+ values ('Daò z pøíjmu', 'D', 1)
+;
+
+insert into ax_sazba_cis(sertyp
+  , typos, datplatnostod, sazba, mindan
+  , zaokzakl, zaokzakltyp, zaok, zaoktyp
+  , maxzaklad) 
+  select ser
+  , 'FO', MDY(1, 1, 1998), 20, 0
+  , -2, 'D', -2, 'D'
+  , 300000
+  from ax_dantyp_cis where druhdan = 'D'
+;
+
+insert into ax_sazba_cis(sertyp
+  , typos, datplatnostod, sazba, mindan
+  , zaokzakl, zaokzakltyp, zaok, zaoktyp
+  , maxzaklad
+  ) select ser
+  , 'FO', MDY(1, 1, 2008), 15, 0
+  , -2, 'D', -2, 'D'
+  , 300000
+  from ax_dantyp_cis where druhdan = 'D'
+;
+
+--#Druh danì pro daò z pøíjmu#
+--Vìcná oblast  Klientské úèetnictví
+--Funkcionalita Zdanìní
+--Skupina parametrù Tax kinds
+--Význam parametru  Druh danì dle èíselníku daní pro daò z pøíjmu.
+--Analytický typ  Business
+--Adresa parametru  AX / druhDane / danZPrijmu / *
+--Uživatelská zmìna Ano
+--Nastavení D
+--Defaultní hodnota D
+call TW_RegSetOrAddKey('AX','druhDane','danZPrijmu','*', 'D', 1)
+;
+
+ROLLBACK WORK;
+
+--End of A40964_RN00273329_3

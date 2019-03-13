@@ -1,0 +1,18 @@
+ -- @TC:ONCE: ID = V2, A43516_RN00289655
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+insert into ep_sazebnik_cis(tuhr,       tsml,   treal,  datod,           text,                  uhr, uhrhyst, uvedeno, limitd, limith, perioda, stoppopl, typzaklad, poznamka,  mena) 
+values                     ('PLATPRIK', 'SSFO', 'PLFO', mdy(1, 1, 2012), 'Platební pøíkazy FO', 5,   0,       'C',     null,   null,   'R',     1,        null,      null,      'CZK');
+
+insert into ep_sazebnik_cis(tuhr,       tsml,   treal,  datod,           text,                  uhr, uhrhyst, uvedeno, limitd, limith, perioda, stoppopl, typzaklad, poznamka,  mena) 
+values                     ('PLATPRIK', 'SSPO', 'PLPO', mdy(1, 1, 2012), 'Platební pøíkazy PO', 5,   0,       'C',     null,   null,   'R',     1,        null,      null,      'CZK');
+
+insert into ep_sazebnik_cis(tuhr,      tsml,   treal,  datod,           text,                 uhr, uhrhyst, uvedeno, limitd, limith, perioda, stoppopl, typzaklad, poznamka,  mena) 
+values                     ('ZMCHARU', 'SSFO', 'PLFO', mdy(1, 1, 2012), 'Zmìna char.úètu FO', 5,   0,       'C',     null,   null,   'R',     1,        null,      null,      'CZK');
+
+insert into ep_sazebnik_cis(tuhr,      tsml,   treal,  datod,           text,                 uhr, uhrhyst, uvedeno, limitd, limith, perioda, stoppopl, typzaklad, poznamka,  mena) 
+values                     ('ZMCHARU', 'SSPO', 'PLPO', mdy(1, 1, 2012), 'Zmìna char.úètu PO', 5,   0,       'C',     null,   null,   'R',     1,        null,      null,      'CZK');
+    
+ROLLBACK WORK;

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B121152_RN00400175_1
+-- @TC:ONCE: DESCRIPTION = Main: Hromadná změna úrokové sazby ve fázi spoření nad vybraným portfoliem smluv {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE es_zmplan_kart ADD (potlacdodatek Integer  DEFAULT 0),
+                           ADD CONSTRAINT (CHECK (potlacdodatek IN (0,1)) CONSTRAINT es_zmplan_kart_dqfz);
+
+ROLLBACK WORK;
+
+--End of B121152_RN00400175_1

@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, A60592_RN00337417_pomala-historie-ss
+-- @TC:ONCE: DESCRIPTION = Index  es_zmena_kart, sloupec zmenaarch {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CREATE INDEX eszmenakart_i_i2 ON es_zmena_kart(zmenaarch);
+
+ROLLBACK WORK;
+

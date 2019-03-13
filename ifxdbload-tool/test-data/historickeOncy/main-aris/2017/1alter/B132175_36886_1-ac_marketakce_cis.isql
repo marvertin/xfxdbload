@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B132175_36886_1-ac_marketakce_cis
+-- @TC:ONCE: DESCRIPTION = IFRS - FIN (Změna účtování stávajících provizí a vstupních úhrad smluv SS a úvěrů) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ac_marketakce_cis ADD  casoverozliseni   Integer  DEFAULT 0 NOT NULL BEFORE smerstorno;
+
+ROLLBACK WORK;
+
+--End of B132175_36886_1-ac_marketakce_cis

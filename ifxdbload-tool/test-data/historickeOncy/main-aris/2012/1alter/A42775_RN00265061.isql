@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, A42775_RN00265061
+-- @TC:ONCE: DESCRIPTION = Sladit zaokrouhlování bonity v CM a CW, zajisti kontrolu na bonitu v CM a zobrazit zmìny ve výpoètu bonity v CM
+
+BEGIN WORK;
+
+-- ###############################################################
+--       eu_contractchecking_kart
+
+-- 6  eu_contractchecking_kart-1/3       [DROP.CONSTRAINT_CHECK]
+/* Rusen constraint: CHECK (takce IN ('MANU' ,'DOCU' ,'FIRM' ,'INCO' ,'TELE' ,'URE2' ,'SCO2' ,'SETT' ,'CRTE' ,'INPR' ,'INDI' ,'WIRE' ,'REPL' ,'CANC' ,'CANP' ,'SOL2' )) CONSTRAINT "aris".eu_contractchecking_kart_c1 */
+ALTER TABLE eu_contractchecking_kart DROP CONSTRAINT eu_contractchecking_kart_c1;
+
+
+-- 8  eu_contractchecking_kart-3/3       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE eu_contractchecking_kart
+    ADD CONSTRAINT CHECK (takce IN ('MANU','DOCU','FIRM','INCO','TELE', 'URE2', 'SCO2', 'SETT','CRTE','INPR','INDI', 'WIRE','REPL','CANC','CANP','SOL2','REPE')) CONSTRAINT eu_contractchecking_kart_c1;
+
+
+ROLLBACK WORK;

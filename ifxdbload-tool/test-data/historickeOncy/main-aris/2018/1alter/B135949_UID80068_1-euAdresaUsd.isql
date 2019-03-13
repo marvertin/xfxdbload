@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135949_UID80068_1-euAdresaUsd
+-- @TC:ONCE: DESCRIPTION = RSTS-25737: Předat nové údaje do centrální evidence. {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_typobjserno_cis (tabulka,nazev) VALUES ('eu_adresausd_mat','Adresa pro ÚSD');
+
+ROLLBACK WORK;
+
+--End of B135949_UID80068_1

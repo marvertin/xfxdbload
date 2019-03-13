@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A41199_RN00238704_3
+-- @TC:ONCE: DESCRIPTION = Zmìny v CBS a skóringu {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', '*', 'zajist', 'bezZajisteni', 401, 1, 'Úvìr', 'Zajištìní', 'Dbregistry', 'Èíslo typu zajištìní, které je v èíselníku zajištìní použito jako Bez zajištìní');
+
+INSERT INTO EO_TypAdr_Cis(typ, popis, platnost) VALUES (1, 'Adresa trvalého pobytu', 1);
+
+ROLLBACK WORK;
+
+--End of A41199_RN00238704_3

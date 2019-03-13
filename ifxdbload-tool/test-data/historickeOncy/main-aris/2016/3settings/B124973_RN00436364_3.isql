@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B124973_RN00436364_3
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, platnostod,nabizetsale,platnost, refvariaurokfixace) values ('KOME', 'K', mdy(1,1,1994), 0, 1, 1);
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, platnostod,nabizetsale,platnost, refvariaurokfixace) values ('SUFO', 'S', mdy(1,1,1994), 1, 1, (select ser from eu_variaurokfixace_cis WHERE nazev = 'Fixace až do splacení'));
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, platnostod,nabizetsale,platnost, refvariaurokfixace) values ('PPSU', 'P', mdy(1,1,1994), 0, 1, (select ser from eu_variaurokfixace_cis WHERE nazev = 'Fixace až do splacení'));
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, platnostod,nabizetsale,platnost, refvariaurokfixace) values ('PPSU', 'S', mdy(1,1,1994), 0, 1, (select ser from eu_variaurokfixace_cis WHERE nazev = 'Fixace až do splacení'));
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, platnostod,nabizetsale,platnost, refvariaurokfixace) values ('SUPO', 'S', mdy(1,1,1994), 0, 1, (select ser from eu_variaurokfixace_cis WHERE nazev = 'Fixace až do splacení'));
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, platnostod,nabizetsale,platnost, refvariaurokfixace) values ('PUPO', 'P', mdy(1,1,1994), 0, 1, (select ser from eu_variaurokfixace_cis WHERE nazev = 'Fixace až do splacení'));
+insert into eu_varurokfixprirad_cis(tsml, fazeuveru, platnostod,nabizetsale,platnost, refvariaurokfixace) values ('PFSU', 'S', mdy(1,1,1994), 0, 1, (select ser from eu_variaurokfixace_cis WHERE nazev = 'Fixace až do splacení'));
+
+ROLLBACK WORK;
+
+--End of B124973_RN00436364_3

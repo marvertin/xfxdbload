@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B130735_RSTS-3446
+-- @TC:ONCE: DESCRIPTION = RN00452756-Modelování optimálního vkladu pro maximální státní podporu {DEFECT}
+
+BEGIN WORK;
+
+Call tw_regSetOrAddKey('SP', 'konsolidace', 'odhadVklMaxSP', 'zaokrZpusob', 'N', 1/*Lze editovat*/, 'Státní podpora', 'Státní podpora - Konsolidace', 'Odhad vkladu pro maximální SP', '#Odhad vkladu pro maximální SP - způsob zaokrouhlení#');
+Call tw_regSetOrAddKey('SP', 'konsolidace', 'odhadVklMaxSP', 'zaokrRad', 2, 1/*Lze editovat*/, 'Státní podpora', 'Státní podpora - Konsolidace', 'Odhad vkladu pro maximální SP', '#Odhad vkladu pro maximální SP - řád zaokrouhlení#');
+
+ROLLBACK WORK;
+
+--End of B130735_RSTS-3446

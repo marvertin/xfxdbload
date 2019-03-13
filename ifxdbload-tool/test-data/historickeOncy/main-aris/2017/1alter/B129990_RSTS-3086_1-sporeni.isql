@@ -1,0 +1,64 @@
+-- @TC:ONCE: ID = V2, B129990_RSTS-3086_1-sporeni
+-- @TC:ONCE: DESCRIPTION = CRM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       rz_procnaspor_arch
+
+-- 40  rz_procnaspor_arch-1/3       [CREATE.TABLE]
+CREATE TABLE rz_procnaspor_arch (
+    idarch          SERIAL   NOT NULL,
+    realss          Integer  ,
+    datk            DATE  ,
+    saldo           DECIMAL(16, 2)  ,
+    uroknepr        DECIMAL(16, 2)  ,
+    dan             DECIMAL(16, 2)  ,
+    naspor          DECIMAL(16, 2)  ,
+    cc              DECIMAL(16, 2)  ,
+    procnaspor      DECIMAL(6,2)  ,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 41  rz_procnaspor_arch-2/3       [CREATE.INDEX]
+CREATE unique INDEX rz_procnaspor_arch_pk ON rz_procnaspor_arch (idarch) ;
+
+-- 42  rz_procnaspor_arch-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE rz_procnaspor_arch
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT rz_procnaspor_arch_pk;
+
+-- ###############################################################
+--       rz_procnaspor_mat
+
+-- 43  rz_procnaspor_mat-1/4       [CREATE.TABLE]
+CREATE TABLE rz_procnaspor_mat (
+    realss          INTEGER   NOT NULL,
+    datk            DATE  ,
+    saldo           DECIMAL(16, 2)  ,
+    uroknepr        DECIMAL(16, 2)  ,
+    dan             DECIMAL(16, 2)  ,
+    naspor          DECIMAL(16, 2)  ,
+    cc              DECIMAL(16, 2)  ,
+    procnaspor      DECIMAL(6,2)  ,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL
+) LOCK MODE ROW
+;
+
+-- 44  rz_procnaspor_mat-2/4       [CREATE.INDEX]
+CREATE unique INDEX rz_procnaspor_mat_pk ON rz_procnaspor_mat (realss) ;
+
+-- 45  rz_procnaspor_mat-3/4       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE rz_procnaspor_mat
+    ADD CONSTRAINT PRIMARY KEY (realss)  CONSTRAINT rz_procnaspor_mat_pk;
+
+-- 83  rz_procnaspor_mat-4/4       [CREATE.CONSTRAINT_FOREIGN_KEY]
+ALTER TABLE rz_procnaspor_mat
+   ADD CONSTRAINT FOREIGN KEY (realss) REFERENCES rz_real_mat(realn)  CONSTRAINT rz_procnaspor_mat_f1;
+
+ROLLBACK WORK;
+
+--End of B129990_RSTS-3086_1-sporeni

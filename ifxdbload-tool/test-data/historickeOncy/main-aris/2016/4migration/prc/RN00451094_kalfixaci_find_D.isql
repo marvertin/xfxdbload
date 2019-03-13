@@ -1,0 +1,56 @@
+create PROCEDURE RN00451094_kalfixaci_find_D ()
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00451094_kalfixaci;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00451094_kalfixaci(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  smlouva   dec(16,0),
+  tsml      char(4),
+  fixaceod  date,
+  fixacedo  date,
+  variafixace int,
+  datklop   date,
+  datsml    date,
+  stav      char(1),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--plnime ridici tabulku
+INSERT INTO RN00451094_kalfixaci (smlouva, tsml, fixaceod, fixacedo, variafixace, datklop, datsml, stav, zprac)
+select                            smlouva, tsml, fixaceod, fixacedo, variafixace, datklop, datsml, stav, -1
+from eu_sml_mat
+where variafixace is not null;
+  
+UPDATE STATISTICS HIGH FOR TABLE RN00451094_kalfixaci;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

@@ -1,0 +1,77 @@
+create PROCEDURE RN00430870_specpodm_find_D ()
+
+define _ser          Int;
+define _smlouva dec(16,0);
+define _tsml char(4);
+define _realn int;
+define _poradicerp int;
+define _poradi int;
+define _pocet int;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00430870_specpodm;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00430870_specpodm(
+  Ser     Serial NOT NULL,  --číslo řádku
+  NumErr  Int,              --číslo chyby, jež na řádku nastala
+  ISAMErr Int,              --číslo ISAM chyby, jež na řádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na řádku nastala
+  zprac   SmallInt,         -- příznak zda je záznam zpracován  (kladné číslo   - zpracováno   (defaultně  1)
+                            -- záporné číslo  - nezpracováno (defaultně -1))
+  smlouva dec(16,0),
+  tsml char(4),
+  poradi int,
+  realn int,
+  poradicerp int,
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+--plnime ridici tabulku
+foreach
+  SELECT s.smlouva, s.tsml, MIN(r.realn), MIN(k.poradi)
+  INTO _smlouva, _tsml, _realn, _poradicerp
+  FROM EU_Sml_Mat s
+    JOIN RU_Real_Mat r ON s.smlouva = r.smlouva AND s.tsml = r.tsml
+    JOIN RU_Cerp_Kart k ON r.realn = k.realn
+  WHERE s.stav = 'L' AND k.kategoriecerp = 'B' AND k.stav = 'A'
+  GROUP BY s.smlouva, s.tsml HAVING COUNT(*) = 1
+  
+  SELECT COUNT(*), MIN(s.poradi)
+  INTO _pocet, _poradi
+  FROM EU_SpecPodm_Mat s
+    JOIN EU_SpecPodm_Cis p ON s.specpodm = p.ser
+  WHERE s.smlouva = _smlouva AND s.tsml = _tsml AND s.platnost <> 0 AND p.nedzaloha <> 0;
+  
+  if _pocet = 1 then
+    INSERT INTO RN00430870_specpodm (smlouva, tsml, poradi, realn, poradicerp, zprac)
+    VALUES(_smlouva, _tsml, _poradi, _realn, _poradicerp, -1);
+  end if;
+end foreach;
+  
+UPDATE STATISTICS HIGH FOR TABLE RN00430870_specpodm;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

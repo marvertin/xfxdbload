@@ -1,0 +1,62 @@
+-- @TC:ONCE: ID = V2, A42367_RN00270144_platebnistyk
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt
+
+BEGIN WORK;
+
+-- jednorazove prikazy
+call tw_regsetoraddkey('AN', '*', '*', 'druhuhr', 'OJ01', 0, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Druh operace pro jednorázové pøíkazy mezibankovní');
+call tw_regsetoraddkey('AN', '*', '*', 'druhuhr_v', 'OJ02', 0, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Druh operace pro jednorázové pøíkazy ve vlastní bance');
+call tw_regsetoraddkey('AN', '*', 'povolit', 'editaci', 1, 0, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Povolit editaci a zadávání jednorázových pøíkazù');  
+call tw_regsetoraddkey('AN', '*', '*', 'povolitinkaso', 0, 0, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Povolit tvorbu inkas u jednorázových pøíkazù'); 
+call tw_regsetoraddkey('AN', '*', 'dispzustatek', 'editace', 2, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Zpùsob výpoètu disponibilního zùstatku pøi editaci');    
+call tw_regsetoraddkey('AN', '*', 'dispzustatek', 'zauctovani', 1, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Zpùsob výpoètu disponibilního zùstatku pøi provedení');
+call tw_regsetoraddkey('AN', '*', '*', 'zpetneZpracovani', 1, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Zpracovávat pøíkazy se zpìtnou splatností');
+call tw_regsetoraddkey('AN', '*', '*', 'chybaPriZpracovani', 1, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Mìnit stav pøíkazu na chyba pøi zpracování');
+call tw_regsetoraddkey('AN', '*', '*', 'predcasneZpracovani', 1, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Zpracovávat pøíkazy se splatností do budoucnosti');
+call tw_regsetoraddkey('AN', '*', '*', 'druhink', 'ZI02', 0, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Druh operace pro inkasa');
+call tw_regsetoraddkey('AN', '*', '*', 'OnlineZprac', 1, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Zpracovávat online pøíkazy k úhradì uvnitø organizace');  
+call tw_regsetoraddkey('AN', '*', 'dispzustatek', 'Web', 2, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Zpùsob výpoètu disponibilního zùstatku CIBIS-Web');
+call tw_regsetoraddkey('AN', '*', 'povolit', 'prioritniPlatby', 1, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Jednorázové pøíkazy – povolit prior. platby');
+call tw_regsetoraddkey('AN', '*', '*', 'notifikaceChyb', 1, 1, 
+  'Platební styk', 'Jednorázový pøíkaz', 'Single payment', 'Notifikovat klienta pøi chybì zpracování jedn. pøíkazu');
+    
+-- trvale prikazy    
+call tw_regsetoraddkey('AT', '*', '*', 'druhtp_m', 'OT01', 0, 
+  'Platební styk', 'Trvalý pøíkaz', 'Standing Order', 'Druh operace mezibankovního trvalého pøíkazu');    
+call tw_regsetoraddkey('AT', '*', '*', 'druhtp_v', 'OT02', 0, 
+  'Platební styk', 'Trvalý pøíkaz', 'Standing Order', 'Druh operace vnitrobankovního trvalého pøíkazu'); 
+call tw_regsetoraddkey('AT', '*', 'dispzustatek', 'zpracovani', 1, 1, 
+  'Platební styk', 'Trvalý pøíkaz', 'Standing Order', 'Zpùsob výpoètu disp. zùstatku pøi zpracování trv. pøíkazù'); 
+call tw_regsetoraddkey('AT', '*', '*', 'zpusobPosunu', 1, 1, 
+  'Platební styk', 'Trvalý pøíkaz', 'Standing Order', 'Defaultní nastavení posunu data zpracování');
+call tw_regsetoraddkey('AT', '*', '*', 'povolitInkaso', 0, 0, 
+  'Platební styk', 'Trvalý pøíkaz', 'Standing Order', 'Povolit tvorbu inkas u trvalých pøíkazù');
+call tw_regsetoraddkey('AT', '*', '*', 'notifikaceChyb', 1, 1, 
+  'Platební styk', 'Trvalý pøíkaz', 'Standing Order', 'Notifikovat klienta pøi chybì zpracování trv. pøíkazu');  
+
+-- zadosti
+call tw_regsetoraddkey('CZ', '*', '*', 'druhuin_v', 'ZI03', 0, 
+  'Platební styk', 'Mezibankovní žádost', 'Accounting', 'Druh operace úhrady vnitrobankovní žádosti o inkaso');
+call tw_regsetoraddkey('CZ', '*', '*', 'druhuin_m', 'ZI04', 0, 
+  'Platební styk', 'Mezibankovní žádost', 'Accounting', 'Druh operace úhrady mezibankovní žádosti o inkaso');    
+call tw_regsetoraddkey('CZ', '*', 'dispzustatek', 'zpracovani', 1, 1, 
+  'Platební styk', 'Mezibankovní žádost', 'Accounting', 'Zpùsob výpoètu disponibilního zùstatku pøi úètování inkasa'); 
+call tw_regsetoraddkey('CZ', '*', '*', 'notifikaceChyb', 1, 1, 
+  'Platební styk', 'Mezibankovní žádost', 'Accounting', 'Notifikovat klienta pøi chybì zpracování inkasa'); 
+  
+ROLLBACK WORK;
+
+--End of A42367_RN00270144_platebnistyk

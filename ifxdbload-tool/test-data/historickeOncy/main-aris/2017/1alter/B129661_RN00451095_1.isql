@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B129661_RN00451095_1
+-- @TC:ONCE: DESCRIPTION = HS - úhrada za předčasné splacení {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ru_vypor_kart
+    ADD  pripucelnakl   Integer,
+    ADD  ucelnakl         DECIMAL(16, 2);
+    
+ALTER TABLE ru_vypor_kart
+    ADD CONSTRAINT (CHECK (pripucelnakl IN (-1, 0, 1, 2, 3)) CONSTRAINT ru_vypor_kart_c11);
+
+ROLLBACK WORK;
+
+--End of B129661_RN00451095_1

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B122882_RN00446245_6
+-- @TC:ONCE: DESCRIPTION = TR3: Migrace účtů klientů do CIBIS, integrace správy oprávnění do MC {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+call TW_ExecSql('DROP FUNCTION IWeb_ZpravyDatumPosledniSdeleni', -674);
+
+call TW_ExecSql('DROP FUNCTION CEV_IndNemovitostJinyPravniVztah', -674);
+
+call TW_ExecSql('DROP FUNCTION EU_GetAmortizationTableSummaryInfo', -674);
+
+call TW_ExecSql('DROP PROCEDURE IWEB_TESTKOMUNIKACNIKANALYNOVAZADOSTSSFO', -674);
+
+ROLLBACK WORK;
+
+--End of B122882_RN00446245_6

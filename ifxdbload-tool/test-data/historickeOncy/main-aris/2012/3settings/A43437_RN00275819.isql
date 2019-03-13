@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, A43437_RN00275819
+-- @TC:ONCE: DESCRIPTION = Oprava nastaveni editovatelnosti registru
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('TW', 'e-mail', 'typ', 'kopie_uziv', 'KOPIE_UZIV', 0, 
+  'Správa systému', 'E-mailová komunikace', 'Vazby na typy e-mailù', 'Definuje typ e-mailu, který bude odeslán v pøípadì nastavení pøeposílání kopie nových nabídek na e-mail uživatele.');  
+
+INSERT INTO TW_EMAILTYP_CIS 
+  (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, 
+   maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost)
+  VALUES('KOPIE_UZIV', 'Kopie na e-mail uživatele', null, null, null, null, null, 0,
+  5, 24, 0, 'A', 1, 1);
+    
+ROLLBACK WORK;
+
+ 

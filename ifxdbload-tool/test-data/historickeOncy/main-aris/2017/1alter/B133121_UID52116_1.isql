@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B133121_UID52116_1
+-- @TC:ONCE: DESCRIPTION = Zajištění úvěru  - Doplnění položky Budoucí NHZ pro optimalizaci {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE eu_zajist_mat ADD (
+    budoucinhz DECIMAL(16, 2) BEFORE poznamka
+);
+
+ALTER TABLE eu_zajist_arch ADD (
+    budoucinhz DECIMAL(16, 2) BEFORE poznamka
+);
+
+
+ROLLBACK WORK;
+
+--End of B133121_UID52116_1

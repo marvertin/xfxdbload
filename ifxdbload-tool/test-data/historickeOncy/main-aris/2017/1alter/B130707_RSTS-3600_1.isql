@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B130707_RSTS-3600_1
+-- @TC:ONCE: DESCRIPTION = CRM {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE RS_Upom_Kart 
+   ADD splaceniporadi   int,
+   ADD pristivklad      dec(16,2);
+
+ROLLBACK WORK;
+
+--End of B130707_RSTS-3600_1

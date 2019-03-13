@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B126566_RN00455839_3
+-- @TC:ONCE: DESCRIPTION = Chybně implementované názvy registrů v DB
+BEGIN WORK;
+
+Call TW_RegDelKey('SL', 'trusted-links', 'trustees', 'file');
+
+Call TW_RegDelKey('SL', 'trusted-links', 'keystore', 'location');
+
+Call TW_RegDelKey('SL', 'trusted-links', 'keystore', 'password');
+
+Call TW_RegDelKey('SL', 'trusted-links', 'keystore', 'type');
+
+ROLLBACK WORK;
+--End of B126566_RN00455839_3

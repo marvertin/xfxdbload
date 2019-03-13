@@ -1,0 +1,131 @@
+-- @TC:ONCE: ID = V2, A61550_RN00338666_1
+-- @TC:ONCE: DESCRIPTION = Zmìna dávky UNIQA - nové vlastnosti pro urèení provizí
+
+
+BEGIN WORK;
+
+-- ###############################################################
+--       ec_komcrp_kart
+
+-- 2  ec_komcrp_kart-1/3       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ec_komcrp_kart
+    ADD ramsmlpoj       Char(20)   BEFORE navrtime,
+    ADD prvnipojist     Integer   BEFORE navrtime,
+    ADD pojistpolhute   Integer   BEFORE navrtime,
+    ADD prepojistpolhute Integer   BEFORE navrtime,
+    ADD pojposjednani   Integer   BEFORE navrtime;
+
+
+-- 4  ec_komcrp_kart-3/3       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE ec_komcrp_kart
+    ADD CONSTRAINT CHECK (pojistpolhute IN (0,1)) CONSTRAINT ec_komcrp_kart_dnar,
+    ADD CONSTRAINT CHECK (pojposjednani IN (0,1)) CONSTRAINT ec_komcrp_kart_dnak,
+    ADD CONSTRAINT CHECK (prepojistpolhute IN (0,1)) CONSTRAINT ec_komcrp_kart_dnas,
+    ADD CONSTRAINT CHECK (prvnipojist IN (0,1)) CONSTRAINT ec_komcrp_kart_dnaq;
+
+-- ###############################################################
+--       ec_vystdav_rozp
+
+-- 9  ec_vystdav_rozp-1/3       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ec_vystdav_rozp
+    ADD ramsmlpoj       Char(20)   BEFORE refuser,
+    ADD prvnipojist     Integer   BEFORE refuser,
+    ADD pojistpolhute   Integer   BEFORE refuser,
+    ADD prepojistpolhute Integer   BEFORE refuser,
+    ADD pojposjednani   Integer   BEFORE refuser;
+
+-- 11  ec_vystdav_rozp-3/3       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE ec_vystdav_rozp
+    ADD CONSTRAINT CHECK (pojistpolhute IN (0,1)) CONSTRAINT ec_vystdav_rozp_dnar,
+    ADD CONSTRAINT CHECK (pojposjednani IN (0,1)) CONSTRAINT ec_vystdav_rozp_dnak,
+    ADD CONSTRAINT CHECK (prepojistpolhute IN (0,1)) CONSTRAINT ec_vystdav_rozp_dnas,
+    ADD CONSTRAINT CHECK (prvnipojist IN (0,1)) CONSTRAINT ec_vystdav_rozp_dnaq;
+
+-- ###############################################################
+--       ev_pojistcrp_arch
+
+-- 31  ev_pojistcrp_arch-1/3       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ev_pojistcrp_arch
+    ADD ramsmlpoj       Char(20)   BEFORE portime,
+    ADD prvnipojist     Integer   BEFORE portime,
+    ADD pojistpolhute   Integer   BEFORE portime,
+    ADD prepojistpolhute Integer   BEFORE portime,
+    ADD pojposjednani   Integer   BEFORE portime;
+
+
+-- 33  ev_pojistcrp_arch-3/3       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE ev_pojistcrp_arch
+    ADD CONSTRAINT CHECK (pojistpolhute IN (0,1)) CONSTRAINT ev_pojistcrp_arch_dnar,
+    ADD CONSTRAINT CHECK (pojposjednani IN (0,1)) CONSTRAINT ev_pojistcrp_arch_dnak,
+    ADD CONSTRAINT CHECK (prepojistpolhute IN (0,1)) CONSTRAINT ev_pojistcrp_arch_dnas,
+    ADD CONSTRAINT CHECK (prvnipojist IN (0,1)) CONSTRAINT ev_pojistcrp_arch_dnaq;
+
+-- ###############################################################
+--       ev_pojistcrp_mat
+
+-- 34  ev_pojistcrp_mat-1/3       [ALTER.COLUMN, CREATE.COLUMN]
+ALTER TABLE ev_pojistcrp_mat
+    ADD ramsmlpoj       Char(20)   BEFORE portime,
+    ADD prvnipojist     Integer   BEFORE portime,
+    ADD pojistpolhute   Integer   BEFORE portime,
+    ADD prepojistpolhute Integer   BEFORE portime,
+    ADD pojposjednani   Integer   BEFORE portime;
+
+
+-- 36  ev_pojistcrp_mat-3/3       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE ev_pojistcrp_mat
+    ADD CONSTRAINT CHECK (pojistpolhute IN (0,1)) CONSTRAINT ev_pojistcrp_mat_dnar,
+    ADD CONSTRAINT CHECK (pojposjednani IN (0,1)) CONSTRAINT ev_pojistcrp_mat_dnak,
+    ADD CONSTRAINT CHECK (prepojistpolhute IN (0,1)) CONSTRAINT ev_pojistcrp_mat_dnas,
+    ADD CONSTRAINT CHECK (prvnipojist IN (0,1)) CONSTRAINT ev_pojistcrp_mat_dnaq;
+
+-- ###############################################################
+--       ec_ramsmlpoj_acis
+
+-- 4  ec_ramsmlpoj_acis-1/3       [CREATE.TABLE]
+CREATE TABLE ec_ramsmlpoj_acis (
+    idarch          SERIAL   NOT NULL,
+    ramsmlpoj       CHAR(20)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    platnostod      DATE   NOT NULL,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ec_ramsmlpoj_acis_dqme
+) LOCK MODE ROW
+;
+
+-- 5  ec_ramsmlpoj_acis-2/3       [CREATE.INDEX]
+CREATE unique INDEX ec_ramsmlpoj_acis_pk ON ec_ramsmlpoj_acis (idarch) ;
+
+-- 6  ec_ramsmlpoj_acis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ec_ramsmlpoj_acis
+    ADD CONSTRAINT PRIMARY KEY (idarch)  CONSTRAINT ec_ramsmlpoj_acis_pk;
+
+-- ###############################################################
+--       ec_ramsmlpoj_cis
+
+-- 7  ec_ramsmlpoj_cis-1/3       [CREATE.TABLE]
+CREATE TABLE ec_ramsmlpoj_cis (
+    ramsmlpoj       CHAR(20)   NOT NULL,
+    poznamka        CHAR(70)  ,
+    platnostod      DATE   NOT NULL,
+    platnost        Integer   NOT NULL,
+    portime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    poruser         CHAR(20) DEFAULT USER  NOT NULL,
+    reftime         DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND  NOT NULL,
+    refuser         CHAR(20) DEFAULT USER  NOT NULL,
+    CHECK (platnost IN (0,1)) CONSTRAINT ec_ramsmlpoj_cis_dqme
+) LOCK MODE ROW
+;
+
+-- 8  ec_ramsmlpoj_cis-2/3       [CREATE.INDEX]
+CREATE unique INDEX ec_ramsmlpoj_cis_pk ON ec_ramsmlpoj_cis (ramsmlpoj) ;
+
+-- 9  ec_ramsmlpoj_cis-3/3       [CREATE.CONSTRAINT_PRIMARY_KEY]
+ALTER TABLE ec_ramsmlpoj_cis
+    ADD CONSTRAINT PRIMARY KEY (ramsmlpoj)  CONSTRAINT ec_ramsmlpoj_cis_pk;
+    
+ROLLBACK WORK;

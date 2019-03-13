@@ -1,0 +1,80 @@
+CREATE PROCEDURE B136090_UID78509_4_find_D()
+--U všech úvěrových smluv bude nastaven údaj:
+--  Cizoměnový úvěr – bude nastavena hodnota Ano, pokud existuje ke smlouvě specifický údaj typu 
+--  z množiny hodnot parametru #Specifický údaj pro příjem v cizí <měně>#, jinak bude nastavena hodnota Ne.
+
+define _ser          Int;
+
+DEFINE _smlouva       DEC(16, 0);
+DEFINE _tsml          CHAR(4);
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE B136090_UID78509;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE B136090_UID78509(
+  Ser     Serial NOT NULL,  
+  NumErr  Int,              
+  ISAMErr Int,              
+  TextErr VarChar(255),     
+  zprac   SmallInt,
+
+  smlouva DEC(16, 0),
+  tsml    CHAR(4),
+  
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+
+foreach cc2 with hold for
+  select distinct smlouva,  tsml
+  into           _smlouva, _tsml
+  from eu_specudaj_mat
+  where reftypspecudaj in(
+    select hodnota
+    from tw_registr_view
+    where oblast = 'EU'
+    and uloha = 'specUdaj'
+    and funkce = 'prijemMena'
+  )
+  and platnost = 1
+
+  -- naplnění řídící tabulky
+  INSERT INTO B136090_UID78509(smlouva, tsml, zprac)
+  VALUES(_smlouva, _tsml, -1);
+  
+  --nova transakce
+  COMMIT WORK;
+  BEGIN WORK;
+end foreach;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE B136090_UID78509;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+
+END PROCEDURE;

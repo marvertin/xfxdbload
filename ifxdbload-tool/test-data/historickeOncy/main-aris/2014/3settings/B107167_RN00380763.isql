@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B107167_RN00380763
+-- @TC:ONCE: DESCRIPTION = Nesedi popisek v informaci o produktu {DEFECT}
+BEGIN WORK;
+
+UPDATE ep_itfudaj_cis SET nazev = 'OZ sepsání - číslo' WHERE udaj = 242;
+UPDATE ep_itfudaj_cis SET nazev = 'OZ sepsání - jméno a příjmení' WHERE udaj = 243;
+
+ROLLBACK WORK;
+--End of B107167_RN00380763
+

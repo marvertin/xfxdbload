@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B130261_RSTS-2935_1
+-- @TC:ONCE: DESCRIPTION = Elektronický návrh na vklad
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_referent_cis ADD povolenvkladkn Integer DEFAULT 0 NOT NULL;
+ALTER TABLE ep_referent_cis ADD CONSTRAINT (CHECK (povolenvkladkn in (0, 1)) CONSTRAINT ep_referent_cis_ddwc);  
+
+ALTER TABLE ep_referent_acis ADD povolenvkladkn Integer;
+   
+ROLLBACK WORK;
+
+--End of B130261_RSTS-2935_1

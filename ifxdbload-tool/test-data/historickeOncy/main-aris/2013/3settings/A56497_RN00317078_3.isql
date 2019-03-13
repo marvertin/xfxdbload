@@ -1,0 +1,66 @@
+-- @TC:ONCE: ID = V2, A56497_RN00317078_3
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Problémy opisovaných formuláøù {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+  call TW_RegDelKey('ES', 'PROBLOPISU' , '*', 'TYPEMAIL');
+  
+  call TW_RegSetAnalytickyPopis('ES', 'PROBLOPISU' , '*', 'URGENCE', 
+  'Spoøení', 'Problémy opisovaných formuláøù', 'Lhùty',
+  'Definuje lhùtu ve dnech od data zpracování podkladu (export, odeslání mailu) pro automatické vytvoøení podkladu pro urgenci.', 1);
+
+  call TW_RegSetAnalytickyPopis('ES', 'PROBLOPISU' , '*', 'ZPRACDO', 
+  'Spoøení', 'Problémy opisovaných formuláøù', 'Lhùty',
+  'Definuje poèet dnù od data vytvoøení podkladu, který je použit pro výpoèet data „zpracovatDo“', 1);
+
+  call TW_RegSetAnalytickyPopis('ES', 'PROBLOPISU' , '*', 'EXPORTDIR', 
+  'Spoøení', 'Problémy opisovaných formuláøù', 'Cesty',
+  'Definuje defaultní nastavení cesty, v rámci adresáøové struktury filesystému, k adresáøi pro výstupní export podkladù.', 1);
+
+  call TW_RegSetAnalytickyPopis('ES', 'PROBLOPISU' , '*', 'EMAILODESILATELE', 
+  'Spoøení', 'Problémy opisovaných formuláøù', 'Emaily',
+  'Definuje e-mailovou adresu, ze které je automaticky odesílán e-mail. ', 1);
+
+  call TW_RegSetAnalytickyPopis('ES', 'PROBLOPISU' , '*', 'EMAILSKRYTA', 
+  'Spoøení', 'Problémy opisovaných formuláøù', 'Emaily',
+  'Definuje skrytá e-mailovou adresu, na kterou ze které je automaticky odesílán e-mail.', 1);
+  
+  call TW_RegSetAnalytickyPopis('ES', 'PROBLOPISU' , '*', 'GENHROMSESSIONID', 
+  'Spoøení', 'Problémy opisovaných formuláøù', 'Generování',
+  'Èíslo spuštìné dávky, pro hromadné generování podkladù pro komunikaci o problémech v požadavku', 1);
+  
+  --#Typ e-mailu pro problémy pøi opisu nové smlouvy SS#
+  call TW_RegSetOrAddKey('ES','PROBLOPISU','*','TYPEMAIL_NS', 'SS_OPIS_PROBL_NS', 1,
+                         'Spoøení','Problémy opisovaných formuláøù','Emaily','Definuje typ e-mailu,z èíselníku typù  e-mailù.');
+  
+  --#Typ e-mailu pro problémy pøi opisu nové smlouvy SS - urgence#
+  call TW_RegSetOrAddKey('ES','PROBLOPISU','*','TYPEMAIL_NSU', 'SS_OPIS_PROBL_NSU', 1,
+                         'Spoøení','Problémy opisovaných formuláøù','Emaily','Definuje typ e-mailu,z èíselníku typù  e-mailù.');
+  
+  --#Typ e-mailu pro problémy pøi opisu zmìny smlouvy SS#
+  call TW_RegSetOrAddKey('ES','PROBLOPISU','*','TYPEMAIL_ZS', 'SS_OPIS_PROBL_ZS', 1,
+                         'Spoøení','Problémy opisovaných formuláøù','Emaily','Definuje typ e-mailu,z èíselníku typù  e-mailù.');
+  
+  --#Typ e-mailu pro problémy pøi opisu zmìny smlouvy SS - urgence#
+  call TW_RegSetOrAddKey('ES','PROBLOPISU','*','TYPEMAIL_ZSU', 'SS_OPIS_PROBL_ZSU', 1,
+                         'Spoøení','Problémy opisovaných formuláøù','Emaily','Definuje typ e-mailu,z èíselníku typù  e-mailù.');
+  
+  --#Typ e-mailu pro problémy pøi opisu ukonèení smlouvy SS – výpovìï#
+  call TW_RegSetOrAddKey('ES','PROBLOPISU','*','TYPEMAIL_US_V', 'SS_OPIS_PROBL_US_V', 1,
+                         'Spoøení','Problémy opisovaných formuláøù','Emaily','Definuje typ e-mailu,z èíselníku typù  e-mailù.');
+                         
+  --#Typ e-mailu pro problémy pøi opisu ukonèení smlouvy SS – dohoda#
+  call TW_RegSetOrAddKey('ES','PROBLOPISU','*','TYPEMAIL_US_D', 'SS_OPIS_PROBL_US_D', 1,
+                         'Spoøení','Problémy opisovaných formuláøù','Emaily','Definuje typ e-mailu,z èíselníku typù  e-mailù.');
+  
+  --#Typ e-mailu pro problémy pøi opisu ukonèení smlouvy SS – urgence – výpovìï#
+  call TW_RegSetOrAddKey('ES','PROBLOPISU','*','TYPEMAIL_USU_V', 'SS_OPIS_PROBL_USU_V', 1,
+                         'Spoøení','Problémy opisovaných formuláøù','Emaily','Definuje typ e-mailu,z èíselníku typù  e-mailù.');
+ 
+  --#Typ e-mailu pro problémy pøi opisu ukonèení smlouvy SS – urgence – dohoda#
+  call TW_RegSetOrAddKey('ES','PROBLOPISU','*','TYPEMAIL_USU_D', 'SS_OPIS_PROBL_USU_D', 1,
+                         'Spoøení','Problémy opisovaných formuláøù','Emaily','Definuje typ e-mailu,z èíselníku typù  e-mailù.');
+   
+ROLLBACK WORK;
+
+--End of A56497_RN00317078_3

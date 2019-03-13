@@ -1,0 +1,133 @@
+-----------------------------------------------------------------------------
+--
+--  Template migracni pripravne procedury pro featuru RN00338666
+--
+-----------------------------------------------------------------------------
+create PROCEDURE A61620_RN00338666_find_D ()
+
+define _smlouva           Dec(16,0);
+define _tsml              Char(4);
+define _stav              Char(1);
+define _vec               INT;        
+define _zpusobzadani      Char(1);                  
+define _ramsmlpoj         Char(20);
+define _prvnipojist       INT;
+define _pojistpolhute     INT;
+define _prepojistpolhute  INT;
+define _pojposjednani     INT;      
+define _datschval         Date;
+define _rozhdatumpoj      Date;
+define _poradi            INT;
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00338666;
+end;
+
+--zalozime ridici tabulku
+CREATE TABLE RN00338666(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+
+                            --vlastni data - napø. cislo osoby
+  smlouva           Dec(16,0),
+  tsml              Char(4),
+  stav              Char(1),
+  poradi            INT,
+  vec               INT,      
+  rozhdatumpoj      Date,
+  zpusobzadani      Char(1),                  
+  ramsmlpoj         Char(20),
+  prvnipojist       INT,
+  pojistpolhute     INT,
+  prepojistpolhute  INT,
+  pojposjednani     INT,      
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+create trigger RN00338666_u update of ser,smlouva,tsml,stav,vec,rozhdatumpoj,zpusobzadani on RN00338666 
+for each row
+ (execute procedure TW_RaiseTechError ('616N59TCUI', 'RN00338666: tento údaj nelze mìnit!')
+ );
+
+--plnime ridici tabulku - napr. z osob
+--dulezite je poradi vybiranych radku - v tomto poradi se budou
+--ukladat do ridici tabulky a v tomto poradi se bude i migrovat
+foreach cc1 with hold for
+   SELECT smlouva, tsml, stav, vec, zpusobzadani, rozhdatumpoj
+     INTO  _smlouva,_tsml,_stav,_vec,_zpusobzadani,_rozhdatumpoj
+     FROM EV_PojistCrp_Mat
+    WHERE stav NOT IN ('Z','V','O')
+    
+   LET _poradi = ( SELECT poradi FROM eu_zajist_mat
+    WHERE smlouva = _smlouva and tsml = _tsml and vec = _vec ); 
+    
+   LET _ramsmlpoj = EV_GetRamSmlPoj(_rozhdatumpoj);
+        
+   LET _prvnipojist, _pojistpolhute,_prepojistpolhute,_pojposjednani =
+        EV_GetPojPriznaky(_smlouva, _tsml, _rozhdatumpoj, _vec);
+        
+   --pojisteni po sjednani vychazi z aktualniho stavu smlouvy, takze musime prepocitat
+   IF _zpusobzadani IS NOT NULL THEN
+     --bud podle puvodniho zpusobu zadani
+     IF _zpusobzadani = 'N' THEN
+       LET _pojposjednani = 0;
+     ELSE
+       LET _pojposjednani = 1;
+     END IF;
+   ELSE
+     --nebo podle nastaveneho data schvaleni
+     SELECT datschval INTO _datschval FROM EU_Sml_Mat WHERE smlouva = _smlouva AND tsml = _tsml;
+     IF _datschval IS NOT NULL THEN
+       IF _datschval  >=  _rozhdatumpoj THEN
+         LET _pojposjednani = 0;
+       ELSE
+         LET _pojposjednani = 1;
+       END IF;
+     ELSE
+       LET _pojposjednani = 0;
+     END IF;  
+   END IF;
+
+   INSERT INTO RN00338666(smlouva, tsml, stav, vec, poradi, rozhdatumpoj, zpusobzadani, 
+                          ramsmlpoj, prvnipojist, pojistpolhute, prepojistpolhute, pojposjednani, zprac)
+   VALUES(_smlouva,_tsml,_stav,_vec,_poradi,_rozhdatumpoj,_zpusobzadani, 
+          _ramsmlpoj,_prvnipojist,_pojistpolhute,_prepojistpolhute,_pojposjednani, -1);
+
+   --nova transakce
+   COMMIT WORK;
+   BEGIN WORK;
+
+end foreach;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00338666;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

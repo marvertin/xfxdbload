@@ -1,0 +1,173 @@
+CREATE PROCEDURE RN00380442_find_D ()
+
+
+--povinne globalni promenne
+define global TW_ErrSql   Int          default null;
+define global TW_ErrIsam  Int          default null;
+define global TW_ErrText  VarChar(255) default null;
+
+define _vec             int;
+define _katastruzemi    CHAR(50);
+define _parcela         CHAR(25);
+define _cislopopisne    CHAR(25); 
+define _cisloevidencni  CHAR(25);
+define _cislobytu       CHAR(25);
+define _druh            CHAR(1);
+
+on exception set TW_ErrSql, TW_ErrIsam, TW_ErrText
+   call TW_ErrorTran();
+end exception;
+
+
+--izolacni uroven bude dirty read
+SET ISOLATION TO DIRTY READ;
+
+BEGIN WORK;
+
+begin
+  on exception IN(-310)
+  end exception;
+   
+  create table RN00380442_nemovitost(
+    vec int, --   Business identifikátor nemovitosti
+    
+    jezajisteni     int,
+    jeucel          int,
+    
+    katastruzemi    CHAR(50), -- katastrální území
+    parcela         CHAR(25), -- èíslo parcely
+    cislopopisne    CHAR(25), -- èíslo popisné 
+    cisloevidencni  CHAR(25), -- èíslo evidenèní
+    cislobytu       CHAR(25), -- èíslo bytové jednotky
+    druh            CHAR(1),  -- Druh nemovitosti
+    smlouva         char(1024), -- Èísla všech aktivních úvìrových smluv, u kterých je nemovitost vedena jako zástava
+    stav            char(1024), -- Stavy všech úvìrových smluv, kde nemovitost figuruje oddìlené èárkami (stavy B, C, D a L).
+    reffo           char(1024), -- Referent I
+    refbo           CHAR(1024), -- Referent II
+
+    p1 int,
+    p2 int,
+    p3 int,
+    p4 int,
+    p5 int,
+    p6 int,
+    p7 int,
+    p8 int,
+    p9 int,
+    p10 int,
+    p11 int,
+    p12 int,
+    p13 int,
+    p14 int,
+    p15 int,
+    p16 int,
+    p17 int,
+    p18 int,
+    p19 int,
+    p20 int,
+    p21 int,
+    p22 int,
+    p23 int,
+    p24 int,
+    p25 int,
+    p26 int,
+    p27 int,
+    p28 int,
+    p29 int,
+    p30 int,
+    p31 int,
+    p32 int,
+    p33 int,
+    p34 int,
+    p35 int,
+    p36 int
+  );
+end;
+
+--zruseni tabulky pokud jiz existuje
+begin
+   on exception IN(-206)
+   end exception;
+  DROP TABLE RN00380442;
+end;
+
+
+--zalozime ridici tabulku
+CREATE TABLE RN00380442(
+  Ser     Serial NOT NULL,  --èíslo øádku
+  NumErr  Int,              --èíslo chyby, jež na øádku nastala
+  ISAMErr Int,              --èíslo ISAM chyby, jež na øádku nastala
+  TextErr VarChar(255),     --textový popis chyby, jež na øádku nastala
+  zprac   SmallInt,         -- pøíznak zda je záznam zpracován  (kladné èíslo   - zpracováno   (defaultnì  1)
+                            -- záporné èíslo  - nezpracováno (defaultnì -1))
+
+  vec             int, 
+  jezajisteni     int,
+  jeucel          int,
+  
+  katastruzemi    CHAR(50),
+  parcela         CHAR(25),
+  cislopopisne    CHAR(25), 
+  cisloevidencni  CHAR(25),
+  cislobytu       CHAR(25),
+  druh            CHAR(1),
+
+  PRIMARY KEY(Ser)
+)LOCK MODE ROW;
+
+COMMIT WORK;
+BEGIN WORK;
+
+--plnime ridici tabulku 
+--dulezite je poradi vybiranych radku - v tomto poradi se budou
+--ukladat do ridici tabulky a v tomto poradi se bude i migrovat
+
+  -- plnìní bodu 1 dle proposal
+  
+  -- zajištìní  
+  foreach cc1 with hold for
+    select distinct  n.vec, n.katastruzemi, n.parcela, n.cislopopisne, n.cisloevidencni, n.cislobytu, n.druh 
+    into              _vec,  _katastruzemi,  _parcela,  _cislopopisne,  _cisloevidencni,  _cislobytu,  _druh
+    from ev_nemov_mat n 
+    join eu_zajist_mat z on z.vec = n.vec
+    join eu_sml_mat s on s.smlouva = z.smlouva and s.tsml = z.tsml
+    where s.stav in ('B', 'C', 'D', 'L')
+    
+    INSERT INTO RN00380442( vec,  jezajisteni, katastruzemi,  parcela,  cislopopisne,  cisloevidencni,  cislobytu,  druh, zprac)
+    VALUES                (_vec,  1,          _katastruzemi, _parcela, _cislopopisne, _cisloevidencni, _cislobytu, _druh, -1);
+
+   COMMIT WORK;
+   BEGIN WORK;
+   
+  end foreach;
+  
+  -- úèel
+  foreach cc1 with hold for
+    select distinct n.vec, n.parcela, n.cislopopisne, n.cisloevidencni, n.cislobytu, n.druh, n.katastruzemi
+    into             _vec,  _parcela,  _cislopopisne,  _cisloevidencni,  _cislobytu,  _druh,  _katastruzemi
+    from ev_nemov_mat n 
+    join eu_ucel_mat z on z.vec = n.vec
+    join eu_sml_mat s on s.smlouva = z.smlouva and s.tsml = z.tsml
+    where s.stav in ('B', 'C', 'D', 'L')
+    
+    if exists(select 1 from RN00380442 where vec = _vec) then
+      update RN00380442
+      set jeucel = 1
+      where vec = _vec;
+    else
+      INSERT INTO RN00380442( vec,  jeucel, katastruzemi,  parcela,  cislopopisne,  cisloevidencni,  cislobytu,  druh, zprac)
+      VALUES                (_vec,  1,     _katastruzemi, _parcela, _cislopopisne, _cisloevidencni, _cislobytu, _druh, -1);
+    end if; 
+   COMMIT WORK;
+   BEGIN WORK;
+   
+  end foreach;
+
+--UPDATE STATISTICS
+
+UPDATE STATISTICS HIGH FOR TABLE RN00380442;
+
+--konec transakce pripravy
+COMMIT WORK;
+
+end procedure;

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, A57728_RN00343621_5
+-- @TC:ONCE: DESCRIPTION = Deadlocky bìhem výkonnostních testù aplikace Sale2 {DEFECT}
+
+
+BEGIN WORK;
+
+-- contraint (cizí klíè) dropnut z dùvodu optimalizace - RN00343621
+-- pøi paralelním zpracování, docházelo k èekání na zámek na indexu, který je kvùli tomuto constraintu vytvoøen
+-- selektivita hodnot v totomto indexu je velmi nízká (slopuec obsahuje velmi málo rùzných hodnot - cca 2)
+ALTER TABLE aris.ep_splspormodsh_den DROP CONSTRAINT ep_splspormodsh_den_f1;
+
+ROLLBACK WORK;
+
+--End of A57728_RN00343621_5

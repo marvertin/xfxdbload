@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B115240_RN00392676_3
+-- @TC:ONCE: DESCRIPTION = Nemovitosti 2. fáze: odhadci a black list {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO EP_RizSubjektTyp_Cis(nazev, poznamka, udajpocet, platnost, nazev1, nazev2) 
+  VALUES('Nežádoucí odhadce', 'ID odhadce je "vazba" na číselník odhadců.', 2, 1, 'ID odhadce', 'Jméno odhadce');
+  
+CALL TW_RegSetKey('EP', 'rizsubjekt', 'typ', 'nezadouciodhadce', TW_LastSer());
+
+ROLLBACK WORK;
+
+--End of B115240_RN00392676_3

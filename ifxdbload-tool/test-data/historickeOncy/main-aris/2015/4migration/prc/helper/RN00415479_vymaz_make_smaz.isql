@@ -1,0 +1,29 @@
+create procedure RN00415479_vymaz_make_smaz(AHeadSer Int
+                                            , AAkce int) -- 1- celý model 2- EIR 3- RPSN
+
+if AAkce = 1 then
+  delete from ep_splspormodb_den
+  where headser in (select ser from ep_splspormodh_den where headser = AHeadSer);
+  
+  delete from ep_splspormodcashflow_den
+  where headser in (select ser from ep_splspormodh_den where headser = AHeadSer);
+  
+  delete from EP_SplSporModStFee_Den
+  where headser in (select ser from ep_splspormodh_den where headser = AHeadSer);
+  
+  delete from ep_splspormodh_den
+  where headser = AHeadSer;
+  
+  delete from ep_splspormodsh_den
+  where ser = AHeadSer;
+  
+elif AAkce = 2 then
+  delete from ep_splspormodb_den
+  where headser in (select ser from ep_splspormodh_den where headser = AHeadSer and typvyp = 'E');
+  
+elif AAkce = 3 then
+  delete from ep_splspormodb_den
+  where headser in (select ser from ep_splspormodh_den where headser = AHeadSer and typvyp = 'R');
+end if;
+                                             
+end procedure;

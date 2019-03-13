@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, A57839_RN00343490_3
+-- @TC:ONCE: DESCRIPTION = ÚŽ: Nevhodnì požadované kontroly pøi pøedání zrychlené žádosti {DEFECT}
+
+BEGIN WORK;
+
+INSERT INTO nocheckrule(id,xproductkind,xproductvariant,xrole,xagefrom,xageto,xcreditabove,xcreditunder,xsavepartabove,xassurance,xkind,xphase,xdescription,xdatevalidfrom,xdatevalidto,xnote,xprocessvariant,xvalidity,xcurrency) 
+VALUES ((SELECT NVL(MAX(id), 0) + 1 FROM nocheckrule),null,null,null,null,null,null,null,null,null,null,2,null,AP_DatProv(),null,null,'Z','1','CZK');
+
+ROLLBACK WORK;
+
+--End of A57839_RN00343490_3

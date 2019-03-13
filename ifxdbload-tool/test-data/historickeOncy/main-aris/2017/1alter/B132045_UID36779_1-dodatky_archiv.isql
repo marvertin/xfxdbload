@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B132045_UID36779_1-dodatky_archiv
+-- @TC:ONCE: DESCRIPTION =  {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_dodatekhead_arch MODIFY idarch   SERIAL NOT NULL;
+
+ROLLBACK WORK;
+
+--End of B132045_UID36779_1-dodatky_archiv

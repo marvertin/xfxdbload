@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B120996_RN00421730_1
+-- @TC:ONCE: DESCRIPTION = Main: Úprava úlohy Exekučních příkazů {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+alter table rs_exekprikaz_arch 
+  add cisdzdoruceni CHAR(16) before poruser,
+  add cisdzdorucpravmoc CHAR(16) before poruser,
+  add cisdzukonceni CHAR(16) before poruser,
+  add cisdzdorucstorno CHAR(16) before poruser,
+  modify poznamka LVARCHAR(2000)
+;
+
+alter table rs_exekprikaz_mat 
+  add cisdzdoruceni CHAR(16) before poruser,
+  add cisdzdorucpravmoc CHAR(16) before poruser,
+  add cisdzukonceni CHAR(16) before poruser,
+  add cisdzdorucstorno CHAR(16) before poruser,
+  modify poznamka LVARCHAR(2000)
+;
+
+ROLLBACK WORK;
+
+--End of B120996_RN00421730_1

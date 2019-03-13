@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B111179_RN00380426_3-zajisteni
+-- @TC:ONCE: DESCRIPTION = Nemovitosti: Hlavní evidence {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update eu_zajist_cis 
+set tvec = 'F'
+  , druhvec = null 
+where tvec = 'N'
+  and platnost = 1;
+
+ROLLBACK WORK;
+
+--End of B111179_RN00380426_3

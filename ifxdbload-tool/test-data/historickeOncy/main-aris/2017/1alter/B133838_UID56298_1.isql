@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B133838_UID56298_1
+-- @TC:ONCE: DESCRIPTION = Zákonný požadavek vyžadující změnu ve vykazování pohledávek do ČNB_CRÚ po 1.1.2018
+
+BEGIN WORK;
+
+ALTER TABLE ep_davkacruvetau_kart ADD stavpohl9 CHAR(2);
+
+ROLLBACK WORK;
+
+--End of B133838_UID56298_1

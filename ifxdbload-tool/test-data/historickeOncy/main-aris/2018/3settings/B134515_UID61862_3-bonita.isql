@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B134515_UID61862_3-bonita
+-- @TC:ONCE: DESCRIPTION = RSTS-16596: Bonita {STORY}
+
+
+BEGIN WORK;
+
+-- #Zohlednit PPV při výpočtu minimálního příjmu v modelování# 
+-- Parametr určuje, zda systém bude vypočítávat minimální měsíční příjem tak, aby zajišťoval splnění kontroly PPV.
+CALL tw_regSetKey('MO','modelCore','vypMiniPrijmu','zohlednit-PPV', 1)
+;
+
+-- #Zohlednit DSTI při výpočtu minimálního příjmu v modelování# 
+-- Parametr určuje, zda systém bude vypočítávat minimální měsíční příjem tak, aby zajišťoval splnění kontroly DSTI.
+CALL tw_regSetKey('MO','modelCore','vypMiniPrijmu','zohlednit-DSTI', 1)
+;
+
+-- #Zohlednit DTI při výpočtu minimálního příjmu v modelování# 
+-- Parametr určuje, zda systém bude vypočítávat minimální měsíční příjem tak, aby zajišťoval splnění kontroly DTI.
+CALL tw_regSetKey('MO','modelCore','vypMiniPrijmu','zohlednit-DTI', 1)
+;
+
+
+ROLLBACK WORK;
+
+--End of B134515_UID61862_3-bonita

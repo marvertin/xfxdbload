@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A42813_RN00270144_zmenySS
+-- @TC:ONCE: DESCRIPTION = Novy sporici produkt {CUSTOMERREQUEST}
+BEGIN WORK;
+
+ALTER TABLE es_zmplan_kart
+    ADD indexbazesz     Integer   BEFORE odchylkauru,
+    ADD odchylkaursz    DECIMAL(5,2)   BEFORE odchylkauru,
+    ADD periodaursz     CHAR(1)   BEFORE odchylkauru;
+     
+ROLLBACK WORK;
+
+--End of A42799_RN00270144

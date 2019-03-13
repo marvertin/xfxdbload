@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, A41874_RN00270159
+-- @TC:ONCE: DESCRIPTION = CMZRB {CUSTOMERREQUEST}
+BEGIN WORK;
+
+CREATE TABLE eu_pobockycmzrb_acis (
+  ser   SERIAL,
+  kod   INTEGER,
+  nazev   CHAR(40),
+  ulice   CHAR(45),
+  cpopis   Integer,
+  corient   Integer,
+  mesto   CHAR(45),
+  psc   CHAR(5),
+  telefon   CHAR(20),
+  fax   CHAR(20),
+  email   VARCHAR(255),
+  poznamka   CHAR(70),
+  platnost   Integer,
+  refuser   CHAR(20) ,
+  reftime   DATETIME YEAR TO SECOND 
+)lock mode row;
+
+
+
+CREATE TABLE eu_zarukycmzrb_arch (
+  ser     SERIAL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  smlouvadotace   CHAR(20),
+  pobockacmzrb   INTEGER,
+  platnost   Integer,
+  poruser   CHAR(20),
+  portime   DATETIME YEAR TO SECOND,
+  refuser   CHAR(20)  ,
+  reftime   DATETIME YEAR TO SECOND
+)lock mode row;
+
+ROLLBACK;

@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, A42478_RN00275819_3
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS (1.etapa øešení) {CUSTOMERREQUEST}
+
+BEGIN WORK;
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'vstupParam', 'maxSazbaPU', '4.9', 1, 
+'Podpora pro produkt', 'Modelování', 'Modelování', 'Maximální úroková sazba PÚ pro modelování klientem');
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'vstupParam', 'maxSazbaSU', '4.9', 1, 
+'Podpora pro produkt', 'Modelování', 'Modelování', 'Maximální úroková sazba SÚ pro modelování klientem');
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'modelParam', 'podminkyPU', 1, 1, 
+'Podpora pro produkt', 'Modelování', 'Modelování', 'Zohlednit podmínky pro poskytnutí PÚ pøi modelování klientem');
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'problemy', 'lokalita', null, 1, 
+'Podpora pro produkt', 'Modelování', 'Modelování', 'Lokalita pro uložení souboru s problémy z modelování');
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'grafy', 'zobraz', 1, 1, 
+'Podpora pro produkt', 'Modelování', 'Grafy', 'Zobrazovat grafy v modelování');
+
+call tw_regsetoraddkey('MO', 'modelKlient', 'modelParam', 'potlacVstUhr', 0, 1, 
+'Podpora pro produkt', 'Modelování', 'Modelování', 'Potlaèit modelování vstupní úhrady pro klienta');
+
+
+ROLLBACK WORK;
+
+--End of A42478_RN00275819_3

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B108142_RN00384852_5
+-- @TC:ONCE: DESCRIPTION = Nemožná identifikace "nové" osoby z úvěrové žádosti do logu chyb (ep_rizsubjektkontr_den) pomocí id osoby {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE ep_rizsubjektkontr_den
+  DROP refosoba;
+
+ROLLBACK WORK;
+
+--End of B108142_RN00384852_5

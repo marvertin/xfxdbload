@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, A56421_RN00317080
+-- @TC:ONCE: DESCRIPTION = Nastavení èíselníkù
+
+
+BEGIN WORK;
+
+update eu_zajist_cis set nabizetprouz = 1, nabizetod = mdy(1,1,2013) , verejnynazev = 'Pojištìní úvìru Uniqua' where zajist = TW_RegGetKey('EU','*','zajist','pojistUQ');
+
+update eu_zajist_cis set verejnynazev = 'Ruèitel' where zajist = TW_RegGetKey('EU','*','zajist','rucitel') ;
+
+ROLLBACK WORK;
+
+--End of A56421_RN00317080

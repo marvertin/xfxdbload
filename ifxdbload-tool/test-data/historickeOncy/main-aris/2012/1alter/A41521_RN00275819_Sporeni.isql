@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A41521_RN00275819_Sporeni
+-- @TC:ONCE: DESCRIPTION = Nový webový kanál pro klienty RSTS - Main / Spoøení
+
+BEGIN WORK;
+
+  ALTER TABLE es_sml_mat
+      ADD siskontaktmobil CHAR(45);
+      
+  ALTER TABLE es_sml_arch
+      ADD siskontaktmobil CHAR(45);
+      
+ROLLBACK WORK;

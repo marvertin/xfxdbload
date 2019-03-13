@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B126848_RN00452716_1
+-- @TC:ONCE: DESCRIPTION = Úvěrová smluvní dokumentace (2. fáze) - čerpání Web {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE RU_Cerp_Kart ADD zadostpresweb   Integer  DEFAULT 0,
+                         ADD CONSTRAINT CHECK (zadostpresweb IN (0,1)) CONSTRAINT ru_cerp_kart_d6hs;
+
+ALTER TABLE RU_ExpCerp_Den ADD zadostpresweb   Integer,
+                           ADD CONSTRAINT CHECK (zadostpresweb IN (0,1)) CONSTRAINT ru_expcerp_den_d6ht;
+
+ROLLBACK WORK;
+
+--End of B126848_RN00452716_1

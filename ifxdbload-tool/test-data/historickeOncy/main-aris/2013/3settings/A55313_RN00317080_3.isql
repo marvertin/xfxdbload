@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A55313_RN00317080_3
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Úvìrová žádost {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+--#úvìrový registr – aktuálnost zprávy#
+call TW_RegSetKey('EP','BRKI','query','messagetopicality',1);
+
+ROLLBACK WORK;
+
+--End of A55313_RN00317080_3

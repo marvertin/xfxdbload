@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B114057_RN00375550_4-srazdan
+-- @TC:ONCE: DESCRIPTION = Danění úroků vybraných PO {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+UPDATE eo_po_mat SET vypsrazdan = 'F' WHERE po in (SELECT os FROM eo_osoba_mat WHERE typos = 'P' and stav = 'A');
+
+ROLLBACK WORK;
+
+--End of B114057_RN00375550_4-srazdan

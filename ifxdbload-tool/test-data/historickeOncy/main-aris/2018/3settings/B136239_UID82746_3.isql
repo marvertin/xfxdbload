@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136239_UID82746_3
+-- @TC:ONCE: DESCRIPTION = Doplnění vztahů mezi osbami
+
+BEGIN WORK;
+
+INSERT INTO eo_vztahos_cis (typvztah, popis, typos1, typos2, vlivklasif, poznamka, platnost, symetricky, maxpocetb, maxpoceta) 
+VALUES ('MA', 'Skutečný majitel', 'F', 'P', 0, null, 1, 0, null, null);
+
+ROLLBACK WORK;
+
+--End of B136239_UID82746_3

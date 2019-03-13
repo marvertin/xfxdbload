@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B126436_RN00451080_3
+-- @TC:ONCE: DESCRIPTION = HS - tabulka umoření (TUMO) + ilustr.spl.kal. (ISK) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+insert into do_typdokumentu_cis (text,              poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany) 
+values                          ('Tabulka umoření', null,     1,        38,     3805,  null,     'OZU',  1,          'EU010', 1,          0);
+                         
+insert into do_typdokumentutypobjektu_cis (tabulka,      uzivatelskypristup, platnost, explicitgener, platnostod,      doktyp) 
+values                                    ('ep_sml_mat', 'ZOBRAZENI',        1,        1,             mdy(1, 1, 2016), (select doktyp from DO_TypDokumentu_CIS where repcode = 'EU010'));
+
+
+ROLLBACK WORK;
+
+--End of B126436_RN00451080_3

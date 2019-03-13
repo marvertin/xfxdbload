@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, A54965_RN00317080
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: úvìr - základ 
+
+BEGIN WORK;
+
+ALTER TABLE eu_ucel_acis
+    MODIFY verejnynazev    char(70)                                  /* previouse: char (35) : ... : ... */;
+
+ALTER TABLE eu_ucel_cis
+    MODIFY verejnynazev    char(70)                                  /* previouse: char (35) : ... : ... */;
+  
+ROLLBACK WORK;

@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, B133028_UID50230_4-ImplVarFixSale
+-- @TC:ONCE: DESCRIPTION = Rozšíření číselníku Přiřazení varianty úrokové fixace + migrace {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+
+-- ###############################################################
+-- EU_VarUrokFixPrirad_Cis
+
+SET TRIGGERS FOR EU_VarUrokFixPrirad_Cis DISABLED;
+
+UPDATE EU_VarUrokFixPrirad_Cis
+  SET implVarFixaceSale = 1
+  WHERE nabizetSale = 1
+;
+
+SET TRIGGERS FOR EU_VarUrokFixPrirad_Cis ENABLED;
+
+
+-- ###############################################################
+-- EU_VarUrokFixPrirad_ACis
+
+SET TRIGGERS FOR EU_VarUrokFixPrirad_ACis DISABLED;
+
+UPDATE EU_VarUrokFixPrirad_ACis
+  SET implVarFixaceSale = 1
+  WHERE serno IN (SELECT serno FROM EU_VarUrokFixPrirad_Cis WHERE nabizetSale = 1)
+;
+
+SET TRIGGERS FOR EU_VarUrokFixPrirad_ACis ENABLED;
+
+
+ROLLBACK WORK;
+
+--End of B133028_UID50230_4-ImplVarFixSale

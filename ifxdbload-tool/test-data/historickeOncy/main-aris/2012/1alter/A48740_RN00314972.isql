@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, A48740_RN00314972
+-- @TC:ONCE: DESCRIPTION = chyby v UNIQa I
+BEGIN WORK;
+
+ALTER TABLE ec_vystdav_rozp
+    ADD splatkauveru    DECIMAL(16, 2)   BEFORE rc;
+
+ROLLBACK WORK;
+
+--End of A48740_RN00314972

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134864_UID64228_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17898: Úvěrové přílohy - parametrizace {STORY}
+
+BEGIN WORK;
+
+INSERT INTO do_typdokumentu_cis (text, poznamka, platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany, typproecm, obsahproecm, podobsahproecm)
+VALUES ('0195 Úvěr pro zaměstnance, OZ a jejich rodinné příslušníky', null, 1, 98, '04', '01', 'OZU', 1, 'PR195', 1, 1, null, null, null);
+
+ROLLBACK WORK;
+
+--End of B134864_UID64228_3

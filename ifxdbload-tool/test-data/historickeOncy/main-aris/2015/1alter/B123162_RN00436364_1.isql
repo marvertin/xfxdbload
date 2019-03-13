@@ -1,0 +1,69 @@
+-- @TC:ONCE: ID = V2, B123162_RN00436364_1
+-- @TC:ONCE: DESCRIPTION = Hypoteční směrnice (HS) - rozlišení SUB, náklady a RPSN {CUSTOMERREQUEST}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+CREATE TABLE eu_typdalsinakl_cis (
+  serno   SERIAL NOT NULL,
+  zajist   SMALLINT,
+  algoritmus   CHAR(10),
+  typ   VARCHAR(255),
+  popis   VARCHAR(255),
+  periodicita   Integer  DEFAULT 0,
+  uhrada   DECIMAL(16,2),
+  editacesale   Integer  DEFAULT 0,
+  nabizetmodsale   Integer  DEFAULT 0,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  retfime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (periodicita IN (0,1)) CONSTRAINT eu_typdalsinakl_cis_da9e,
+  CHECK (editacesale IN (0,1)) CONSTRAINT eu_typdalsinakl_cis_da9g,
+  CHECK (nabizetmodsale IN (0,1)) CONSTRAINT eu_typdalsinakl_cis_da9h,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_typdalsinakl_cis_da9j
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_typdalsinakl_cis_pk ON eu_typdalsinakl_cis(serno);
+ALTER TABLE eu_typdalsinakl_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT eu_typdalsinakl_cis_pk;
+
+--FK
+CREATE INDEX eu_typdalsinakl_cis_i_f1 ON eu_typdalsinakl_cis(zajist);
+ALTER TABLE eu_typdalsinakl_cis ADD CONSTRAINT FOREIGN KEY(zajist) REFERENCES eu_zajist_cis(zajist) CONSTRAINT eu_typdalsinakl_cis_f1;
+
+CREATE TABLE eu_typdalsinakl_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  zajist   Integer,
+  algoritmus   CHAR(10),
+  typ   VARCHAR(255),
+  popis   VARCHAR(255),
+  periodicita   Integer  DEFAULT 0,
+  uhrada   DECIMAL(16,2),
+  editacesale   Integer  DEFAULT 0,
+  nabizetmodsale   Integer  DEFAULT 0,
+  poznamka   VARCHAR(255),
+  platnost   Integer  DEFAULT 1,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  retfime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (periodicita IN (0,1)) CONSTRAINT eu_typdalsinakl_acis_da9t,
+  CHECK (editacesale IN (0,1)) CONSTRAINT eu_typdalsinakl_acis_da9v,
+  CHECK (nabizetmodsale IN (0,1)) CONSTRAINT eu_typdalsinakl_acis_da9w,
+  CHECK (platnost IN (0,1)) CONSTRAINT eu_typdalsinakl_acis_da9y
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX eu_typdalsinakl_acis_pk ON eu_typdalsinakl_acis(idarch);
+ALTER TABLE eu_typdalsinakl_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT eu_typdalsinakl_acis_pk;
+
+ALTER TABLE eu_typdalsinakl_cis
+ADD CONSTRAINT (CHECK (algoritmus in ('VYPOCNASLV', 'VYPOCOVPOD')) CONSTRAINT eu_typdalsinakl_cis_c1);
+
+ROLLBACK WORK;
+
+--End of B123162_RN00436364_1

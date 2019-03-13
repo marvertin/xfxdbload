@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B114617_RN00384928_4-blokace
+-- @TC:ONCE: DESCRIPTION = Main/Sale: Souhlas s údaji pro partnery (Doplnění a rozšíření) {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+LOCK TABLE eo_blockingjournal IN EXCLUSIVE MODE;
+
+UPDATE eo_blockingjournal SET platnost = 0;
+
+SELECT a.id FROM eo_blockingjournal a
+  WHERE exists(SELECT 1 FROM eo_fo_mat b WHERE b.fo = a.fo and b.blockingreason = 1) and a.id = (SELECT max(c.id)  FROM eo_blockingjournal c WHERE c.fo = a.fo) 
+  INTO TEMP blockid_temp;
+
+UPDATE eo_blockingjournal SET platnost = 1 WHERE id in (SELECT id FROM blockid_temp);
+
+ROLLBACK WORK;
+
+--End of B114617_RN00384928_4-blokace

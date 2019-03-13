@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, A59902_RN00326567_1
+-- @TC:ONCE: DESCRIPTION = CIBIS-Sale: Rozšíøení checklistu k ÚŽ {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE eu_navrdok_cis
+  ADD     umisteni          CHAR(10) 
+;
+ALTER TABLE eu_navrdok_cis
+ADD CONSTRAINT (CHECK (umisteni in ('ZAJISTENI', 'OSTATNI', 'NAVRATNOST')) CONSTRAINT eu_navrdok_cis_c4);
+
+
+ALTER TABLE eu_navrdok_acis
+  ADD     umisteni          CHAR(10)  
+;
+
+ALTER TABLE eu_navrdok_acis
+ADD CONSTRAINT (CHECK (umisteni in ('ZAJISTENI', 'OSTATNI', 'NAVRATNOST')) CONSTRAINT eu_navrdok_acis_c1);
+
+ROLLBACK WORK;
+
+--End of A59902_RN00326567_1
