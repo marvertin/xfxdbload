@@ -23,14 +23,13 @@ public class FazeExecutorFactoryImpl implements FazeExecutorFactory {
     case f210tmp: return new ____________DummyExecutor_____________();
     case f230prc: return new F230prcExecutor();
     case f240vue: return new F240vueExecutor();
-    case f250trg: return new F250trgExecutor();
-    case f255trgxml: return new ____________DummyExecutor_____________();
+    case f255trgxml: return new F255trgxmlExecutor();
     case f260afterobj: return new ____________DummyExecutor_____________();
     case f270reg: return new ____________DummyExecutor_____________();
     case f300settings: return new F300settingsExecutor();
     case f400migration: return new F400migrationExecutor();
     case f500alter: return new F500alterExecutor();
-    case f555trgxml: return new ____________DummyExecutor_____________();
+    case f555trgxml: return new F555trgxmlExecutor();
     case f600tidy:  return new F600tidyExecutor();
     case f700finish: return new ____________DummyExecutor_____________();
 
