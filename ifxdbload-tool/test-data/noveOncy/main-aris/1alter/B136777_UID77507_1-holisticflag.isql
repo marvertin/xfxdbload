@@ -1,0 +1,94 @@
+-- @TC:ONCE: ID = V2, B136777_UID77507_1-holisticflag
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+CREATE TABLE cep_holisticflag_mat (
+  serno   SERIAL NOT NULL,
+  os   Integer,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  duvod   INTEGER,
+  kodindikatoru   CHAR(10),
+  datvznik   DATE,
+  stav   CHAR(1),
+  poznamka   CHAR(70),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  hodnotazapnuti   CHAR(10),
+  provuser   CHAR(20),
+  provtime   DATETIME YEAR TO SECOND,
+  provdatprov   DATE,
+  ukoncuser   CHAR(20),
+  ukonctime   DATETIME YEAR TO SECOND,
+  ukoncdatprov   DATE,
+  datocekavukonc   DATE,
+  zrususer   CHAR(20),
+  zrustime   DATETIME YEAR TO SECOND,
+  zrusdatprov   DATE,
+  duvodukonc   INTEGER,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_holisticflag_mat_pk ON cep_holisticflag_mat(serno);
+ALTER TABLE cep_holisticflag_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_holisticflag_mat_pk;
+
+--FK
+CREATE INDEX cep_holisticflag_mat_i_fk1 ON cep_holisticflag_mat(duvod);
+ALTER TABLE cep_holisticflag_mat ADD CONSTRAINT FOREIGN KEY(duvod) REFERENCES cep_holisticflagduv_cis(serno) CONSTRAINT cep_holisticflag_mat_fk1;
+CREATE INDEX cep_holisticflag_mat_i_fk2 ON cep_holisticflag_mat(duvodukonc);
+ALTER TABLE cep_holisticflag_mat ADD CONSTRAINT FOREIGN KEY(duvodukonc) REFERENCES cep_holisticflagukon_cis(serno) CONSTRAINT cep_holisticflag_mat_fk2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cep_holisticflag_mat
+ADD CONSTRAINT (CHECK (stav in ('A', 'C', 'Z', 'U')) CONSTRAINT cep_holisticflag_mat_c1);
+
+----------------------------------------------------------------
+CREATE TABLE cep_holisticflag_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  os   Integer,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  duvod   INTEGER,
+  kodindikatoru   CHAR(10),
+  datvznik   DATE,
+  stav   CHAR(1),
+  poznamka   CHAR(70),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  hodnotazapnuti   CHAR(10),
+  provuser   CHAR(20),
+  provtime   DATETIME YEAR TO SECOND,
+  provdatprov   DATE,
+  ukoncuser   CHAR(20),
+  ukonctime   DATETIME YEAR TO SECOND,
+  ukoncdatprov   DATE,
+  datocekavukonc   DATE,
+  zrususer   CHAR(20),
+  zrustime   DATETIME YEAR TO SECOND,
+  zrusdatprov   DATE,
+  duvodukonc   INTEGER,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_holisticflag_arch_pk ON cep_holisticflag_arch(idarch);
+ALTER TABLE cep_holisticflag_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cep_holisticflag_arch_pk;
+
+
+ROLLBACK WORK;
+
+--End of B136777_UID77507_1-holisticflag

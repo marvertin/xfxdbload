@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, B135818_UID78644_3-kritvyhuvproc
+-- @TC:ONCE: DESCRIPTION = RSTS-24923: Parametrizovat číselník kritérií vyhodnocneí úvěrového procesu {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (1, 'Existuje kontrola OZU ve stavu měkké KO nebo Neověřeno nebo individuálně přehodnoceno v Sale');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (2, 'Existuje kontrola ORR analytik ve stavu měkké KO nebo Neověřeno nebo individuálně přehodnoceno v Sale');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (3, 'Existuje kontrola ORR technik ve stavu měkké KO nebo Neověřeno nebo individuálně přehodnoceno v Sale');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (4, 'Existuje kontrola ORR fraud ve stavu měkké KO nebo Neověřeno nebo individuálně přehodnoceno v Sale');
+
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (5, 'Maximální úvěrová angažovanost > X % hranice');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (6, 'Maximální nezajištěná angažovanost > X % hranice');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (7, 'Kontrolní URG žádosti >= X');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (8, 'DSTI > X % hranice');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (9, 'DTI > X % hranice');
+
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (10, 'Je odhad starší 12 M & LTV > 60 %');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (11, 'Suma účelů modernizace >= X');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (12, 'Existence účelů pro výstavby');
+
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (13, 'LTV > X %');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (14, 'výše úvěru/LTV >= X');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (15, 'Stáří nejmladšího odhadu >= X měsíců');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (16, 'Odhadce není na seznamu odhadců RSTS');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (17, 'Nežádoucí odhadce');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (18, 'Odložená zástava');
+
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (19, 'Požadováno PVP');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (20, 'Verifikace příjmu dle číselníku typů příjmů');
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (21, 'Podíl na splácení >= X %');
+
+ROLLBACK WORK;
+
+--End of B135818_UID78643_3-kritvyhuvproc

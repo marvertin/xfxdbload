@@ -1,0 +1,60 @@
+-- @TC:ONCE: ID = V2, B136028_UID74272_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22981: Souběh HYPO - REKO {EPIC}
+
+BEGIN WORK;
+
+alter table crk_kontrolapodklady_den add (
+
+  --LTV – zajištění nemovitostí posuzovaného úvěru
+  ltvZajNemovUveru   DECIMAL(16, 2),
+  
+  ----LTV – výše ostatních úvěrů
+  ltvOstVyseUveru   DECIMAL(16, 2),
+  
+  --LTV – odpočtené spoření ostatních úvěrů
+  ltvOstOdpocitanaHodnota   DECIMAL(16, 2),
+  
+  --LTV – zajištění nemovitostí ostatních úvěrů
+  ltvOstZajNemovUveru   DECIMAL(16, 2)
+);
+
+----------------------------------------------------------------
+CREATE TABLE crk_kontrolasmlouvyagltv_den (
+  serno   BIGSERIAL NOT NULL,
+  refcrkpodklady   BIGINT,
+  cisloextkontrakt   char(9),
+  cislouversmlouva   DECIMAL(16, 0),
+  cislouz   Integer,
+  zdroj   CHAR(1) NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  refdatprov   DATE
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX crk_kontrolasmlouvyagltv_den_pk ON crk_kontrolasmlouvyagltv_den(serno);
+ALTER TABLE crk_kontrolasmlouvyagltv_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT crk_kontrolasmlouvyagltv_den_pk;
+
+--FK
+CREATE INDEX crk_kontrolasmlouvyagltv_den_i_f1 ON crk_kontrolasmlouvyagltv_den(refcrkpodklady);
+ALTER TABLE crk_kontrolasmlouvyagltv_den ADD CONSTRAINT FOREIGN KEY(refcrkpodklady) REFERENCES crk_kontrolapodklady_den(serno) CONSTRAINT crk_kontrolasmlouvyagltv_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE crk_kontrolasmlouvyagltv_den
+ADD CONSTRAINT (CHECK (
+
+zdroj = 'E' and cisloExtKontrakt is not NULL and cisloUverSmlouva is NULL and cisloUz is NULL
+or
+zdroj = 'S' and cisloExtKontrakt is NULL and cisloUverSmlouva is not NULL and cisloUz is NULL
+or
+zdroj = 'Z' and cisloExtKontrakt is NULL and cisloUverSmlouva is NULL and cisloUz is not NULL
+
+) CONSTRAINT crk_kontrolasmlouvyagltv_den_c1);
+
+ROLLBACK WORK;
+
+--End of B136028_UID74272_1

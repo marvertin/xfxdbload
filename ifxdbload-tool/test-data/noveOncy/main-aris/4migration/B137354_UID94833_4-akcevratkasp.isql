@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137354_UID94833_4-akcevratkasp
+-- @TC:ONCE: DESCRIPTION = RSTS-33723: IMPLEMENTACE (Datovy model): RSTS-32034_Nová úloha - Kartotéka akce vratka SP {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+UPDATE sp_vratky_kart SET serno = tw_nextserno() WHERE serno is null;
+
+ROLLBACK WORK;
+
+--End of B137354_UID94833_4-akcevratkasp

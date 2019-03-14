@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B134607_UID61230_1
+-- @TC:ONCE: DESCRIPTION = RSTS-16285: Reakce na stav "chyba" při zpracování RK {STORY}
+
+BEGIN WORK;
+
+alter table crk_kontrolatyp_cis
+
+  --Příznak udávající, zda při nedostupnosti výsledku kontroly vyhodit chybové hlášení v ÚŽ v CIBIS-Sale
+  add nedostupSaleChyba   Integer  DEFAULT 0,
+  add constraint CHECK (nedostupsalechyba IN (0,1)) CONSTRAINT crk_kontrolatyp_cis_d4qs
+;
+
+alter table crk_kontrolatyp_acis
+
+  add nedostupSaleChyba   Integer  DEFAULT 0
+;
+
+ROLLBACK WORK;
+
+--End of B134607_UID61230_1

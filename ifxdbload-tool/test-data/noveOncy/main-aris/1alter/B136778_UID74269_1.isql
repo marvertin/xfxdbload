@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136778_UID74269_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22978: RK - UR a Bonita kontrola {EPIC}
+
+
+BEGIN WORK;
+
+ALTER TABLE creditregadditionaldata 
+  -- Datum žádosti
+  ADD financingrequestdate   DATE BEFORE reftime;
+
+ROLLBACK WORK;
+
+--End of B136778_UID74269_1

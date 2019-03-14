@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135159_UID67846_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19706: Špatné pořadí spouštění RK {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+update crk_kontrolatyp_cis set prioritavolani = 168  where kod = 'SOLUS';
+
+ROLLBACK WORK;
+
+--End of B135159_UID67846_3

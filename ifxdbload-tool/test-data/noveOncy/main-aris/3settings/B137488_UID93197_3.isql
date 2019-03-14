@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B137488_UID93197_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32875: Vygenerování dokumentu k podpisu (po sekci 6) {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO rr_podpisovepole_cis (refxreptype
+ , poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+  VALUES ( (SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'SS060' AND platnost = 1 )
+ , 1, 0, 0, 129, 50, 'Podpis klienta (resp. zákonného zástupce)', 1);
+;
+INSERT INTO rr_podpisovepole_cis (refxreptype
+ , poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+  VALUES ( (SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'SS060' AND platnost = 1 )
+ , 2, 0, 0, 129, 50, 'Podpis zákonného zástupce 2', 1);
+;
+INSERT INTO rr_podpisovepole_cis (refxreptype
+ , poradi, xpos, ypos, sirka, vyska, poznamka, platnost) 
+  VALUES ( (SELECT serno FROM rr_xreptype_cis WHERE refrepcode = 'SS060' AND platnost = 1 )
+ , 3, 0, 0, 129, 50, 'Podpis OZ', 1);
+;
+
+ROLLBACK WORK;
+
+--End of B137488_UID93197_3

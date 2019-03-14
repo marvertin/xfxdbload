@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135563_UID65089_3-akce
+-- @TC:ONCE: DESCRIPTION = RSTS-18266: IFRS - OP - vektorový výpočet {REQUEST}
+
+
+BEGIN WORK;
+
+update ep_splspormodakce_cis
+set genvyvojexpozice = 1
+where akce in ('USODSP', 'USPOTV', 'USPUSU', 'USSCHV', 'USVYMA');
+
+ROLLBACK WORK;
+
+--End of B135563_UID65089_3

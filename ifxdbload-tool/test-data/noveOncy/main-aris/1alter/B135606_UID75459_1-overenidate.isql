@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B135606_UID75459_1-overenidate
+-- @TC:ONCE: DESCRIPTION = Chyby při pokusu o předání ÚŽ - zavedeni overeniDate
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- DO_Dokument_Mat
+
+ALTER TABLE do_dokument_mat ADD (
+    overenidate   DATE BEFORE overeniuser
+  , overenidatprov   DATE BEFORE stavpodpisu
+);
+
+
+-- ###############################################################
+-- DO_Dokument_Arch
+
+ALTER TABLE do_dokument_arch ADD (
+    overenidate   DATE BEFORE overeniuser
+  , overenidatprov   DATE BEFORE stavpodpisu
+);
+
+
+ROLLBACK WORK;
+
+--End of B135606_UID75459_1-overenidate

@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B135609_UID75459_4-movedoktyp
+-- @TC:ONCE: DESCRIPTION = Chyby při pokusu o předání ÚŽ - presun doktyp v archivu evidence dokumentu
+
+
+BEGIN WORK;
+
+
+-- ###############################################################
+-- DO_Dokument_Arch
+
+SET TRIGGERS FOR do_dokument_arch DISABLED;
+
+UPDATE do_dokument_arch SET doktyp = xold_doktyp WHERE doktyp IS NULL;
+
+SET TRIGGERS FOR do_dokument_arch ENABLED;
+
+
+ROLLBACK WORK;
+
+--End of B135609_UID75459_4-movedoktyp

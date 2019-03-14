@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B137448_UID94257_1
+-- @TC:ONCE: DESCRIPTION = RSTS-33429: Sale: Zapojení kalkulačky ZAM {STORY}
+
+
+BEGIN WORK;
+
+
+-- Jedná se o procento uložené ve tvaru 100 (%). Vypočtená hodnota může teoreticky dosahovat i několika milionů procent (proto dec(16,2)).
+ALTER TABLE cfs_kalkulackazam_mat  MODIFY (rozdil12ma3mproc DECIMAL(16,2),
+                                           rozdil3maprumvypisproc DECIMAL(16,2)
+                                           );
+                                           
+ALTER TABLE cfs_kalkulackazam_arch  MODIFY (rozdil12ma3mproc DECIMAL(16,2),
+                                           rozdil3maprumvypisproc DECIMAL(16,2)
+                                           );
+
+ROLLBACK WORK;
+
+--End of B137448_UID94257_1

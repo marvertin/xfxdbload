@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B137019_rsts_27504_eu_variaurokfixace_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-27504: TF001922 - CIBIS-Main - Číselníky - Varianty úrokových fixací - doplnění externího názvu varianty{REQUEST}
+
+BEGIN WORK;
+
+UPDATE eu_variaurokfixace_cis SET extNazev = nazev WHERE extNazev is null;
+
+ROLLBACK WORK;
+
+--End of B137019_rsts_27504_eu_variaurokfixace_cis

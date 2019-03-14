@@ -1,0 +1,42 @@
+-- @TC:ONCE: ID = V2, B137204_UID92332_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+--cfs_duvodnezapoct_cis
+UPDATE cfs_duvodnezapoct_cis SET  nabizetvsale=1, generovatdokument=1 WHERE kod=1;
+UPDATE cfs_duvodnezapoct_cis SET  nazev='splacen - neaktualizován v UR', nabizetvsale=1, generovatdokument=1 WHERE kod=2;
+UPDATE cfs_duvodnezapoct_cis SET  nazev='bude ukončen před čerpáním', nabizetvsale=1, generovatdokument=0 WHERE kod=3;
+UPDATE cfs_duvodnezapoct_cis SET  nabizetvsale=1, generovatdokument=0 WHERE kod=4;
+UPDATE cfs_duvodnezapoct_cis SET  nabizetvsale=1, generovatdokument=1 WHERE kod>=5 AND kod<=6;
+UPDATE cfs_duvodnezapoct_cis SET  nabizetvsale=0, generovatdokument=0 WHERE kod>=7 AND kod<=12;
+UPDATE cfs_duvodnezapoct_cis SET  nazev='stop vyplácených dávek', nabizetvsale=0, generovatdokument=0 WHERE kod=13;
+UPDATE cfs_duvodnezapoct_cis SET  nabizetvsale=0, generovatdokument=0 WHERE kod=14;
+
+INSERT INTO cfs_duvodnezapoct_cis (nazev, platnost, poznamka, pouzitelnyproprijem, pouzitelnyprozavazek, nabizetvsale, generovatdokument) 
+  VALUES ('klesající obraty DAP', 1, null, 1, 0, 0, 0);
+
+INSERT INTO cfs_duvodnezapoct_cis (nazev, platnost, poznamka, pouzitelnyproprijem, pouzitelnyprozavazek, nabizetvsale, generovatdokument) 
+  VALUES ('alimenty - staré děti', 1, null, 1, 0, 0, 0);
+
+INSERT INTO cfs_duvodnezapoct_cis (nazev, platnost, poznamka, pouzitelnyproprijem, pouzitelnyprozavazek, nabizetvsale, generovatdokument) 
+  VALUES ('př. PVP z vl. firmy neodpovídá výkazům', 1, null, 1, 0, 0, 0);
+
+INSERT INTO cfs_duvodnezapoct_cis (nazev, platnost, poznamka, pouzitelnyproprijem, pouzitelnyprozavazek, nabizetvsale, generovatdokument) 
+  VALUES ('posouzení OŘR', 1, null, 1, 0, 0, 0);
+
+INSERT INTO cfs_duvodnezapoct_cis (nazev, platnost, poznamka, pouzitelnyproprijem, pouzitelnyprozavazek, nabizetvsale, generovatdokument) 
+  VALUES ('jiný důvod', 1, null, 1, 0, 0, 0);
+ 
+INSERT INTO cfs_duvodnezapoct_cis (nazev, platnost, poznamka, pouzitelnyproprijem, pouzitelnyprozavazek, nabizetvsale, generovatdokument) 
+  VALUES ('jiný důvod', 1, null, 0, 1, 1, 1);
+
+
+--cpd_pozdokumenty_cis
+INSERT INTO cpd_pozdokumenty_cis (typobjektu, typdokumentu, typprijmu, typrole, typucelu, typzajisteni, podil, majitel, virtualniadresa, nepldph, urad, checklist, funkce, platnost)
+  VALUES ('ZAVAZEK', 2132, null, null, null, null, null, null, null, null, null, 1, 1, 1);
+
+ROLLBACK WORK;
+
+--End of B137204_UID92332_3

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136885_UID90633_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31624: Textové hodnoty se ve Vyhodnocení procesu zapisují jako číslo {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE cps_kritvyhuvproc_den
+DROP CONSTRAINT cps_kritvyhuvproc_den_c1;
+
+ALTER TABLE cps_kritvyhuvproc_den
+ADD CONSTRAINT (CHECK (typHodnoty IN ('I','M','D', 'T')) CONSTRAINT cps_kritvyhuvproc_den_c1);
+
+ROLLBACK WORK;
+
+--End of B136885_UID90633_1

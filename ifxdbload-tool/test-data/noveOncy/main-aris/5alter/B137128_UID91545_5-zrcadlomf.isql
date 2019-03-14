@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B137128_UID91545_5-zrcadlomf
+-- @TC:ONCE: DESCRIPTION = RSTS-32033: Nová úloha - Zrcadlo MF
+
+BEGIN WORK;
+
+-- teprve po naplnění sloupce serno povolit PK
+-- PK
+CREATE UNIQUE INDEX sp_zrcmf_mat_pk ON sp_zrcmf_mat(serno);
+ALTER TABLE sp_zrcmf_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT sp_zrcmf_mat_pk;
+
+-- FK - odloženo z 1alter až za vytvoření PK na sp_zrcmf_mat
+ALTER TABLE csp_zrcmfmanvst_kart ADD CONSTRAINT FOREIGN KEY(refzrcadlo) REFERENCES sp_zrcmf_mat(serno) CONSTRAINT csp_zrcmfmanvst_kart_f1;
+
+ROLLBACK WORK;
+
+--End of B137128_UID91545_5-zrcadlomf

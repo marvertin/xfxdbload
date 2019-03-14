@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B134952_UID67444_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19506: Výsledek odpovědi ze SOLUS vždy KOM {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+INSERT INTO sol_podmdotazu_cis(variantaproduktu, mena, platnostod,platnost,typdotazu) 
+                        VALUES('RE', 'CZK', mdy(1,1,2018),1,14);
+
+INSERT INTO sol_podmdotazu_cis(variantaproduktu, mena, platnostod,platnost,typdotazu) 
+                        VALUES('HY', 'CZK', mdy(1,1,2018),1,8);
+
+
+ROLLBACK WORK;
+
+--End of B134952_UID67444_3

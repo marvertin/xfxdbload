@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B135198_UID70434_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21043: Nastavit e-mailové adresy pro proces schvalování a přerušení {STORY}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-vyz-souc', 'mail-souc-ref-TEC', 'techniciORR@rsts.cz', 1);
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-vyz-souc', 'mail-souc-ref-ANA', 'analyticiORR@rsts.cz', 1);
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-vyz-souc', 'mail-souc-ref-FRA', 'fraud@rsts.cz', 1);
+
+call TW_RegDeclare('EU', 'posouzeniUveru', 'e-maily-od-OZ', 'e-mail-TEC', 'techniciORR@rsts.cz', 1);
+call TW_RegDeclare('EU', 'posouzeniUveru', 'e-maily-od-OZ', 'e-mail-ANA', 'analyticiORR@rsts.cz', 1);
+call TW_RegDeclare('EU', 'posouzeniUveru', 'e-maily-od-OZ', 'e-mail-FRA', 'fraud@rsts.cz', 1);
+
+
+ROLLBACK WORK;
+
+--End of B135198_UID70434_3

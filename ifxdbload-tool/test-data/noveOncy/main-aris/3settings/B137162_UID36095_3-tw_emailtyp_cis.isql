@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B137162_UID36095_3-tw_emailtyp_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-5046: TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, odkaz, maxpriloh, maxpokusu, maxinterval, bezdiakritiky, zpusob, priorita, platnost, maxpocetpriloh, maxpocetznaku) 
+VALUES ('DAVKA_NEBEZI_BC', 'Notifikace nebězícího procesu BC', 'EOD@rsts.cz', 'CIBIS', '<<DATABAZE>>@<<SERVER>> Proces řízení dávkových akcí neběží', 
+'Neběží servisní proces BatchControlleru pro řízení zpracování dávkových akcí.', null, 0, 5, 1, 0, 'S', 1, 1, 0, null);
+
+-- #Typ e-mailu pro neběžící proces BC#
+Call TW_RegSetOrAddKey('BP', 'batch', 'e-mailType', 'nebeziBC', 'DAVKA_NEBEZI_BC', 1);
+
+ROLLBACK WORK;
+
+--End of B137162_UID36095_3-tw_emailtyp_cis

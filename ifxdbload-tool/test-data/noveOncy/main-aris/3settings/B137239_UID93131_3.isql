@@ -1,0 +1,42 @@
+-- @TC:ONCE: ID = V2, B137239_UID93131_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32835: Main: Rozšíření číselníku bank a vznik nových číselníků
+
+
+BEGIN WORK;
+
+--cfs_delkavzam_cis
+INSERT INTO cfs_delkavzam_cis (nazev, kod, platnost, vetsineborovno, mensinez) 
+  VALUES ('0-2', 'D0_2', 0, 0, 24);
+  
+INSERT INTO cfs_delkavzam_cis (nazev, kod, platnost, vetsineborovno, mensinez) 
+  VALUES ('2-5', 'D2_5', 0, 24, 60);  
+  
+INSERT INTO cfs_delkavzam_cis (nazev, kod, platnost, vetsineborovno, mensinez) 
+  VALUES ('6+ let', 'D5_N', 0, 60, null);    
+  
+INSERT INTO cfs_delkavzam_cis (nazev, kod, platnost, vetsineborovno, mensinez) 
+  VALUES ('menší než 1 rok', null, 1, 0, 12);   
+  
+INSERT INTO cfs_delkavzam_cis (nazev, kod, platnost, vetsineborovno, mensinez) 
+  VALUES ('1-2 roky', null, 1, 12, 24);     
+
+INSERT INTO cfs_delkavzam_cis (nazev, kod, platnost, vetsineborovno, mensinez) 
+  VALUES ('2-5 let', null, 1, 24, 60);   
+  
+INSERT INTO cfs_delkavzam_cis (nazev, kod, platnost, vetsineborovno, mensinez) 
+  VALUES ('5 a více let', null, 1, 60, null);     
+
+
+--cfs_typpracpomer_cis
+INSERT INTO cfs_typpracpomer_cis (nazev, akceptpomer, platnost) 
+  VALUES ('Zaměstnanecý poměr', 1, 1);
+
+INSERT INTO cfs_typpracpomer_cis (nazev, akceptpomer, platnost) 
+  VALUES ('Dohoda o pracovní činnosti', 1, 1);
+  
+INSERT INTO cfs_typpracpomer_cis (nazev, akceptpomer, platnost) 
+  VALUES ('Dohoda o provedení práce', 0, 1);
+    
+ROLLBACK WORK;
+
+--End of B137239_UID93131_3

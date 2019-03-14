@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B137204_UID92332_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+-- Pokud ještě neexistuje typ dokumentu 2132, tak bude vložen
+INSERT INTO do_typdokumentu_cis (doktyp, text, zkratka, poznamka,
+                                 platnost, biztyp, obsah, podobsah, garant, generovany, repcode, archivovat, podepisovany,
+                                 typproecm, obsahproecm, podobsahproecm, slucovatproecm)
+SELECT FIRST 1  2132, 'Vysvětlení odebrání závazků podepsané klientem', CAST(null AS char(6)), CAST(null AS CHAR(160)),
+                1, 39, 3905, 390577, 'OZU', 0, CAST(null as CHAR(10)), 1, 0,
+                CAST(null as CHAR(35)), CAST(null as CHAR(35)), CAST(null as CHAR(35)), 1
+FROM do_typdokumentu_cis
+WHERE NOT EXISTS (SELECT 1 FROM do_typdokumentu_cis WHERE doktyp = 2132)
+;
+
+
+-- Pokud záznam ještě neexistuje, tak bude vloženo
+INSERT INTO  do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, poznamka, platnost, kvalitadok,
+                                            poradi, explicitgener, platnostod, platnostdo, nekontrolovatkvalitu)
+SELECT FIRST 1   2132, 'seu_checklistitem_mat', 'ZOBRAZENI', CAST(null as char(70)), 1, 'KOPIE',
+                 0, 1, mdy(1,1,2018), CAST(null as date), 0
+FROM do_typdokumentutypobjektu_cis
+WHERE NOT EXISTS (SELECT 1 FROM do_typdokumentutypobjektu_cis WHERE doktyp = 2132 AND tabulka = 'seu_checklistitem_mat')
+;
+
+ROLLBACK WORK;
+
+--End of B137204_UID92332_1

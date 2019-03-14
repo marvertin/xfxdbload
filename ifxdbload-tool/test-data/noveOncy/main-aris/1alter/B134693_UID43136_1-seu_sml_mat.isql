@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B134693_UID43136_1-seu_sml_mat
+-- @TC:ONCE: DESCRIPTION = RSTS-7581: Integrace úvěrového procesu CIBIS – ECM {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE seu_sml_mat 
+  ADD typ_procesu CHAR(1),
+  ADD CONSTRAINT CHECK (typ_procesu IN ('A', 'B', 'C')) CONSTRAINT seu_sml_mat_typ_procesu
+;
+
+ROLLBACK WORK;
+
+--End of B134693_UID43136_1-seu_sml_mat

@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B137217_UID93246_4-obdobi
+-- @TC:ONCE: DESCRIPTION = RSTS-32908: IMPL (dat.model+část BE): RSTS-32037_Nová úloha - Vratky SP na MF {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+SELECT distinct Rok, Obdobi, 'Z' as stav FROM SP_VRatMF_Kart where kodzprac IN ('F', 'C') INTO TEMP obdobi_temp;
+INSERT INTO csp_vratobdobi_mat ( serno, rok, obdobi, stav)
+  SELECT tw_nextserno(), rok, obdobi, stav FROM obdobi_temp;
+
+  
+DROP TABLE obdobi_temp;
+SELECT distinct Rok, Obdobi, 'U' as stav FROM SP_VRatMF_Kart where kodzprac ='B' INTO TEMP obdobi_temp;
+INSERT INTO csp_vratobdobi_mat ( serno, rok, obdobi, stav)
+  SELECT tw_nextserno(), rok, obdobi, stav FROM obdobi_temp;
+
+  
+INSERT INTO csp_vratobdobi_mat( serno, rok, obdobi, stav)
+  VALUES(tw_nextserno(), (SELECT MAX(rok) FROM sp_vratmf_kart),(SELECT MAX(obdobi)+1 FROM sp_vratmf_kart WHERE rok = (SELECT MAX(rok) FROM sp_vratmf_kart)), 'O');
+
+ROLLBACK WORK;
+
+--End of B137217_UID93246_4-obdobi

@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, B137449_UID31787_3-SP
+-- @TC:ONCE: DESCRIPTION = RSTS-3704: REAL: Automatické zpracování SP (1.etapa) {REALIZACE}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 50, 'Export seznamu období vracení SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 51, 'Otevření nového období vracení SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 52, 'Sumace období vracení SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 53, 'Uzavření období vracení SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 54, 'Vrácení sumace období vracení SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 55, 'Vytvoření exportního souboru za období vracení SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 56, 'Vytvoření průvodky za období vracení SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 57, 'Zahození importu výsledků z MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 58, 'Zpracování výsledků z MF za období vracení SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 59, 'Export seznamu vratek SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 60, 'Zastavení vratky SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 61, 'Nastartování vratky SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 62, 'Manuální oprava vratky SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 63, 'Export seznamu chyb struktury vratek SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 64, 'Export seznamu chyb v hlavní kontrole vratek SP na MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 65, 'Export seznamu smluv ze Zrcadla MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 66, 'Manuální oprava v Zrcadle MF', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 67, 'Export seznamu Akcí vratka SP', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 68, 'Zpracování souboru K', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 69, 'Zpracování souboru L', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 70, 'Zpracování souboru N pro doplněnou žádost', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 71, 'Zpracování souboru S pro doplněnou žádost', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 72, 'Zpracování souboru F pro vratky', 1);
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('SP', 73, 'Zpracování souboru D pro vratky', 1);
+
+
+
+
+
+ROLLBACK WORK;
+
+--End of B137449_UID31787_3-SP

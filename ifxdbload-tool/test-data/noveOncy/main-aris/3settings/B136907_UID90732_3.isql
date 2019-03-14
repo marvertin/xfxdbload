@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136907_UID90732_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31679: Migrace přemapování účtů - logování {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE ep_fincodemap_cis SET dobost = NULL WHERE dobost = 'X';
+
+ROLLBACK WORK;
+
+--End of B136907_UID90732_3

@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135382_UID73042_3-pracpozice
+-- @TC:ONCE: DESCRIPTION = Pracovní pozice pro specifické příjmy
+
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('EO', 'osoba', 'pracpozice', 'nespecif', 22, 1,
+  'Osoba', 'Evidence osoby', 'Persons', 'Pracovní pozice pro specifické příjmy', 1);
+
+ROLLBACK WORK;
+
+--End of B135382_UID73042_3-pracpozice

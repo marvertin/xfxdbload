@@ -1,0 +1,71 @@
+-- @TC:ONCE: ID = V2, B135295_UID69422_3
+-- @TC:ONCE: DESCRIPTION = Parametrizace typů sms a e-mailů pro ECM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'K_AKCTP_NAB', 2101, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'K_ODMN_NAB', 2102, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'CHYBA_ZP_PL', 2103, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'ZMEN_HESLO', 2104, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'ZMEN_TRNU', 2105, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'ZMEN_REGMOB', 2106, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'ZMEN_REGEML', 2107, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL', 2108, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL_NS', 2109, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL_NSU', 2110, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL_ZS', 2111, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL_ZSU', 2112, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL_US_V', 2113, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL_USU_V', 2114, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL_US_D', 2115, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SS_OPIS_PROBL_USU_D', 2116, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'UVER_ZAMIT_KLIENT', 2117, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'UVER_STORNO_KLIENT', 2118, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'UVER_CERP_KLIENT', 2119, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'USD_REKLAMACE', 2120, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'USD_ODMITNUTI', 2121, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'ZMEN_LOGIN', 2122, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SCH_UV_DOK_ORR', 2123, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SCH_UV_ODPOVED_OZ_INFO_OZU_OZU', 2124, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SCH_UV_ODPOVED_OZ_INFO_TEC_TEC', 2125, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SCH_UV_ODPOVED_OZ_INFO_TEC_OZU', 2126, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SCH_UV_ODPOVED_OZ_INFO_ANA_ANA', 2127, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SCH_UV_ODPOVED_OZ_INFO_ANA_OZU', 2128, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SCH_UV_ODPOVED_OZ_INFO_FRA_FRA', 2129, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'SCH_UV_ODPOVED_OZ_INFO_FRA_OZU', 2130, 1);
+
+INSERT INTO do_typemailtypdok_bnd (serno, zkratka, doktyp, platnost) VALUES (tw_nextserno(), 'UVER_ZAMITREG_KLIENT', 2131, 1);
+
+ROLLBACK WORK;
+
+--End of B135295_UID69422_3

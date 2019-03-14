@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135865_UID79110_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25232: Změnit hraniční LTV v Main {STORY}
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis(okruh, typ, popis, platnost)
+VALUES('EU', 3019, 'Změnit hraniční LTV na smlouvě v aplikaci Main', 1);
+
+ROLLBACK WORK;
+
+--End of B135865_UID79110_3

@@ -1,0 +1,85 @@
+-- @TC:ONCE: ID = V2, B135293_UID69422_3
+-- @TC:ONCE: DESCRIPTION = Parametrizace typů sms a e-mailů pro ECM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO do_typdokumentuskupina_cis ( doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES ( 2001, 21, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis ( doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES ( 2002, 21, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis ( doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES ( 2003, 21, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES ( 2004, 21, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2005, 21, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2006, 21, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2007, 21, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2101, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2102, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2103, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2104, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2105, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2106, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2107, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2108, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2109, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2110, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2111, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2112, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2113, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2114, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2115, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis ( doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2116, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2117, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2118, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2119, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2120, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2121, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2122, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES ( 2123, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2124, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2125, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2126, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2127, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2128, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2129, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2130, 22, null, null, 1, null, null, null, null, null, null);
+
+INSERT INTO do_typdokumentuskupina_cis (doktyp, skupina, popis, poznamka, platnost, povinnostpodp, podminenostpodp, podminenytypdokument, prenosdatapodpis, refuser, reftime) VALUES (2131, 22, null, null, 1, null, null, null, null, null, null);
+
+ROLLBACK WORK;
+
+--End of B135293_UID69422_3

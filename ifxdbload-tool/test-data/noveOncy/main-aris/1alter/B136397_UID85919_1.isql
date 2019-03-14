@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B136397_UID85919_1
+-- @TC:ONCE: DESCRIPTION = RSTS-29152: OPRAVA: RSTS-28996_REAL: Záporné serno {INTERNAL_WORK}
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+BEGIN WORK;
+
+ALTER TABLE cpd_pozdokumenty_cis MODIFY (serno SERIAL (2147483647) NOT NULL);
+
+COMMIT WORK;
+
+BEGIN WORK;
+
+call TW_ExecSQL('INSERT INTO cpd_pozdokumenty_cis(typobjektu, typdokumentu) VALUES (''OSOBA'', 4)', -268, -691);
+
+ROLLBACK WORK;
+
+BEGIN WORK;
+
+ALTER TABLE cpd_pozdokumenty_cis MODIFY (serno SERIAL (1557000000) NOT NULL);
+
+ALTER TABLE cpd_pozdokumenty_cis  ADD CONSTRAINT PRIMARY KEY (serno)  CONSTRAINT cpd_pozdokumenty_cis_pk;
+
+COMMIT WORK;
+
+--End of B136397_UID85919_1

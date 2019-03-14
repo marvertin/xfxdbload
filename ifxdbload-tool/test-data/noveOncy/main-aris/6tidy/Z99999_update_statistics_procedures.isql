@@ -1,0 +1,9 @@
+-- @TC:ONCE: ID = V2, Z99999_update_statistics_procedures
+-- @TC:ONCE: DESCRIPTION = Update statistics for procedures
+-- @TC:ONCE: RELOAD_ALWAYS
+
+BEGIN WORK;
+
+update statistics for procedure;
+
+ROLLBACK WORK;

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136142_UID82684_5
+-- @TC:ONCE: DESCRIPTION = Vyplněný dotazník
+
+
+BEGIN WORK;
+
+RENAME TABLE PRO_DotaznikVarPU TO old_PRO_DotaznikVarPU;  
+
+ROLLBACK WORK;
+
+--End of B136142_UID82684_5

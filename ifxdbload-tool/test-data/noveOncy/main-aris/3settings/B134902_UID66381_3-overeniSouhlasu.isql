@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134902_UID66381_3-overeniSouhlasu
+-- @TC:ONCE: DESCRIPTION = RSTS-18938: Úloha pro Call Centrum - Zaznamenání výsledku kola telefonického ověření souhlasu (včetně editace osobních údajů) {STORY}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey ('PC','AgreementCheck','*','maxRounds', 4, 1, 'Podpora pro produkt', 'Telefonické a internetové kontroly', 'Telephone and Internet Control (WWW)', 'maxRounds');
+
+ROLLBACK WORK;
+
+--End of B134902_UID66381_3-overeniSouhlasu

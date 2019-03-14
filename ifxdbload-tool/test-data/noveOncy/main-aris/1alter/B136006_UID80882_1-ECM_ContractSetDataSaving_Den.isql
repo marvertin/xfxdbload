@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136006_UID80882_1-ECM_ContractSetDataSaving_Den
+-- @TC:ONCE: DESCRIPTION = RSTS-26149: IMPLEMENTACE (DM, BE): RSTS-23918_REAL: Uprava WS: ecmContractSetDataSaving - OZ, mail {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE ECM_ContractSetDataSaving_Den ADD(
+  cislo_oz   DECIMAL(16,0) BEFORE refuser,
+  email_oz   VARCHAR(255) BEFORE refuser
+);
+
+ROLLBACK WORK;
+
+--End of B136006_UID80882_1-ECM_ContractSetDataSaving_Den

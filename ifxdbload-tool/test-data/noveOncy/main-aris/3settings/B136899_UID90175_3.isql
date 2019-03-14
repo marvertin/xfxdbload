@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136899_UID90175_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31396: Rozšíření parametrů procesní funkce {REQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (28, 'Částka účelu Modernizace nájemního bydlení > X');
+
+ROLLBACK WORK;
+
+--End of B136899_UID90175_3

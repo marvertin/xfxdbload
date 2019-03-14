@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137438_UID94204_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33384: Sale: Úprava příjmů ve skupině údajů Příjmy 1 {STORY}
+
+
+BEGIN WORK;
+
+-- žádný jiný jednoznačný identifikátor v číselníku není, proto je použit název (pořadí použít nelze)
+UPDATE cfs_prijemtyp_cis SET druhprijmu = 'CESTOVNE' WHERE nazev = 'Cestovní náhrady';
+
+ROLLBACK WORK;
+
+--End of B137438_UID94204_3

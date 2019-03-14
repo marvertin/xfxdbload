@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B136320_UID84174_5-cee
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+alter table ep_ceeodpovedd_den   modify refceeodpovedh BIGINT NOT NULL;
+alter table ep_ceeodpovederr_den modify refceeodpovedh BIGINT NOT NULL;
+
+alter table ep_ceeodpovedh_den modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table ep_ceeodpovedh_den add constraint primary key (serno) constraint ep_ceeodpovedh_den_pk;
+
+ALTER TABLE ep_ceeodpovedd_den   ADD CONSTRAINT (FOREIGN KEY(refceeodpovedh) REFERENCES ep_ceeodpovedh_den(serno) CONSTRAINT ep_ceeodpovedd_den_f1);
+ALTER TABLE ep_ceeodpovederr_den ADD CONSTRAINT (FOREIGN KEY(refceeodpovedh) REFERENCES ep_ceeodpovedh_den(serno) CONSTRAINT ep_ceeodpovederr_den_f1);
+    
+ROLLBACK WORK;
+
+--End of B136320_UID84174_5
+
+ 

@@ -1,0 +1,40 @@
+-- @TC:ONCE: ID = V2, B137265_UID94281_1-CEP_ExpFraud_Den
+-- @TC:ONCE: DESCRIPTION = RSTS-33445: IMPL (design,dat.model): RSTS-33186_Exporty v evidenci fraudů {INTERNAL_WORK}
+
+BEGIN WORK;
+
+CREATE TABLE cep_expfraud_den (
+  serno   SERIAL NOT NULL,
+  reffraud   INTEGER NOT NULL,
+  typ   CHAR(5),
+  typpopis   VARCHAR(255),
+  idafery   CHAR(40),
+  idorca   CHAR(40),
+  datvzniku   DATE,
+  kodindikatoru   CHAR(10),
+  poznamka   VARCHAR(255),
+  stav   CHAR(1) NOT NULL,
+  stopcerp   Integer,
+  prenosrs   Integer,
+  datnavrh   DATE,
+  hodnotazapnuti   CHAR(10),
+  provdatprov   DATE,
+  zrusdatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (stopcerp IN (0,1)) CONSTRAINT cep_expfraud_den_dcf4,
+  CHECK (prenosrs IN (0,1)) CONSTRAINT cep_expfraud_den_dcf5
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_expfraud_den_pk ON cep_expfraud_den(serno);
+ALTER TABLE cep_expfraud_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_expfraud_den_pk;
+
+--FK
+CREATE INDEX cep_expfraud_den_i1 ON cep_expfraud_den(reffraud);
+ALTER TABLE cep_expfraud_den ADD CONSTRAINT FOREIGN KEY(reffraud) REFERENCES cep_fraud_mat(serno) CONSTRAINT cep_expfraud_den_f1;
+
+
+ROLLBACK WORK;
+
+--End of B137265_UID94281_1-CEP_ExpFraud_Den

@@ -40,5 +40,7 @@ dependencies {
 		// vyrábění hashů zdrojáků pro kontrolu zmeny
 	implementation group: 'commons-codec', name: 'commons-codec'
 
+	// https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+	testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
 	
 }

@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, B137291_UID94276_1-CEP_ExpHolisticFlag_Den
+-- @TC:ONCE: DESCRIPTION = RSTS-33441: IMPL (design, dat.model): RSTS-33185_Exporty v evidenci hoslistic flag {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+CREATE TABLE cep_expholisticflag_den (
+  serno   SERIAL NOT NULL,
+  refholisticflag   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  refduvod   INTEGER,
+  duvodnazev   CHAR(40),
+  kodindikatoru   CHAR(10),
+  datvznik   DATE,
+  poznamka   varchar(70),
+  stav   CHAR(1),
+  datnavrh   DATE,
+  hodnotazapnuti   CHAR(10),
+  provdatprov   DATE,
+  datocekavukonc   DATE,
+  ukoncdatprov   DATE,
+  refduvodukonc   INTEGER,
+  duvodukoncnazev   CHAR(40),
+  zrusdatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_expholisticflag_den_pk ON cep_expholisticflag_den(serno);
+ALTER TABLE cep_expholisticflag_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_expholisticflag_den_pk;
+
+--FK
+CREATE INDEX cep_expholisticflag_den_i1 ON cep_expholisticflag_den(refholisticflag);
+ALTER TABLE cep_expholisticflag_den ADD CONSTRAINT FOREIGN KEY(refholisticflag) REFERENCES cep_holisticflag_mat(serno) CONSTRAINT cep_expholisticflag_den_f1;
+CREATE INDEX cep_expholisticflag_den_i2 ON cep_expholisticflag_den(refduvod);
+ALTER TABLE cep_expholisticflag_den ADD CONSTRAINT FOREIGN KEY(refduvod) REFERENCES cep_holisticflagukon_cis(serno) CONSTRAINT cep_expholisticflag_den_f2;
+CREATE INDEX cep_expholisticflag_den_i3 ON cep_expholisticflag_den(refduvodukonc);
+ALTER TABLE cep_expholisticflag_den ADD CONSTRAINT FOREIGN KEY(refduvodukonc) REFERENCES cep_holisticflagduv_cis(serno) CONSTRAINT cep_expholisticflag_den_f3;
+
+ROLLBACK WORK;
+
+--End of B137291_UID94276_1-CEP_ExpHolisticFlag_Den

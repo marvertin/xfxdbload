@@ -66,9 +66,6 @@ public class F555trgxmlExecutor implements FazeExecutor {
 
   @Override
   public void skip() {
-    //TODO [veverka] implementuj - vygenerovana metoda [veverka 10:47:26]
-
-    System.err.println("XML TRIGRY SE NEZAVADI");
   }
 
 }

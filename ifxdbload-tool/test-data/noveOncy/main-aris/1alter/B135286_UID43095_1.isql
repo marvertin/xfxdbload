@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B135286_UID43095_1
+-- @TC:ONCE: DESCRIPTION = Nastavit odeslání typu SMS/e-mailu do ECM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- tw_emailtyp_cis  
+
+-- DROP INDEX
+DROP INDEX tw_emailtyp_cis_u1;
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX tw_emailtyp_cis_u1 ON tw_emailtyp_cis(zkratka);
+ALTER TABLE tw_emailtyp_cis ADD CONSTRAINT (UNIQUE (zkratka) CONSTRAINT tw_emailtyp_cis_u1);
+
+-- ###############################################################
+-- tw_smstyp_cis  
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX tw_smstyp_cis_u1 ON tw_smstyp_cis(zkratka);
+ALTER TABLE tw_smstyp_cis ADD CONSTRAINT (UNIQUE (zkratka) CONSTRAINT tw_smstyp_cis_u1);
+
+ROLLBACK WORK;
+
+--End of B135286_UID43095_1

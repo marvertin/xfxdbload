@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B137507_UID97082_3
+-- @TC:ONCE: DESCRIPTION = RSTS-34817: Chybí parametrizace zadávání ZZ2 pro číselník doplňkových požadavku {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE sep_doplnpozadtyp_cis SET zadanizz2 = 'OZ' 
+  WHERE nazev IN (
+    'Reakce na  intervenci - nová smlouva',
+    'Reakce na intervenci - změna',
+    'Reakce na intervenci - ukončení dohoda',
+    'Reakcena intervenci - ukončení výpověď',
+    'Doplňující informace - nová smlouva',
+    'Doplňující informace - změna',
+    'Doplňující informace- ukončení dohoda',
+    'Doplňující informace - ukončení výpověď',
+    'Reklamace spoření',
+    'Korespondence spoření');
+
+UPDATE sep_doplnpozadtyp_cis SET zadanizz2 = 'NE' 
+  WHERE nazev IN (
+    'Žádost o dodatek k úvěru',
+    'Reklamace úvěr',
+    'Korespondence úvěr');
+
+ROLLBACK WORK;
+
+--End of B137507_UID97082_3

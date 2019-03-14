@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B136288_UID84565_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28287: UŽ - účely úvěru - překlepy {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+update eu_odpovedrozhod_cis
+set textodpoved = 'Koupě nemovitosti'
+where id = 301;
+
+update eu_otazkarozhod_cis
+set text = 'Splacení členského vkladu v družstvu nebo v právnické osobě?'
+where id = 342;
+
+update eu_otazkarozhod_cis
+set text = 'Koupě podílu v právnické osobě (řeší bytovou potřebu)?'
+where id = 345;
+
+update eu_otazkarozhod_cis
+set text = 'Refinancujete úvěr od právnické osoby, které není bankou?'
+where id = 354;
+
+update eu_odpovedrozhod_cis
+set textodpoved = 'Odložený účel'
+where id = 305;
+
+ROLLBACK WORK;
+
+--End of B136288_UID84565_3

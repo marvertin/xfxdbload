@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B137440_UID96039_1
+-- @TC:ONCE: DESCRIPTION = RSTS-34301: IMPLEMENTACE (Design): RSTS-34028_Zavedení stavu chyba v podkladech indikátorů {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE cep_indikatorpodklad_kart DROP CONSTRAINT cep_indikatorpodklad_kart_c2;
+
+ALTER TABLE cep_indikatorpodklad_kart
+ADD CONSTRAINT (CHECK (stav IN ('ZPRACOVANO', 'NEZPRACOVANO', 'STORNO', 'CHYBA')) CONSTRAINT cep_indikatorpodklad_kart_c2); 
+
+ROLLBACK WORK;
+
+--End of B137440_UID96039_1

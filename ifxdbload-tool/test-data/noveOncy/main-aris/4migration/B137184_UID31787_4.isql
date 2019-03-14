@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B137184_UID31787_4
+-- @TC:ONCE: DESCRIPTION = RSTS-32033: Nová úloha - Zrcadlo MF
+
+
+BEGIN WORK;
+
+-- serno pro sp_zrcmf_mat
+SET TRIGGERS FOR sp_zrcmf_mat DISABLED;
+
+UPDATE sp_zrcmf_mat SET serno = TW_NextSerno() WHERE serno IS NULL;
+
+SET TRIGGERS FOR sp_zrcmf_mat ENABLED;
+
+INSERT INTO tw_serno (serno, tabulka)
+  SELECT serno, 'sp_zrcmf_mat' FROM sp_zrcmf_mat;
+  
+ROLLBACK WORK;
+
+--End of B137184_UID31787_4

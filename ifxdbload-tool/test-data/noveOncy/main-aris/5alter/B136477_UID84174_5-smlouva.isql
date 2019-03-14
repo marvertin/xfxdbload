@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, B136477_UID84174_5-smlouva
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+
+
+BEGIN WORK;
+
+alter table seu_parametry_arch modify refsml BIGINT NOT NULL;
+alter table seu_parametry_mat  modify refsml BIGINT NOT NULL;
+
+alter table seu_poplatky_arch modify refsml BIGINT NOT NULL;
+alter table seu_poplatky_mat  modify refsml BIGINT NOT NULL;
+
+alter table seu_ucel_arch modify refsml BIGINT NOT NULL;
+alter table seu_ucel_mat  modify refsml BIGINT NOT NULL;
+
+alter table seu_zajist_arch modify refsml BIGINT NOT NULL;
+alter table seu_zajist_mat  modify refsml BIGINT NOT NULL;
+
+alter table seu_sml_arch modify serno BIGINT    NOT NULL;
+alter table seu_sml_arch modify idarch BIGSERIAL (2147483648) NOT NULL;
+alter table seu_sml_arch add constraint primary key (idarch)  constraint seu_sml_arch_pk;
+
+alter table seu_sml_mat  modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table seu_sml_mat  add constraint primary key (serno)  constraint seu_sml_mat_pk;
+
+ALTER TABLE seu_parametry_mat
+    ADD CONSTRAINT ( FOREIGN KEY(refsml)
+  REFERENCES seu_sml_mat(serno) CONSTRAINT seu_parametry_mat_f1 );
+
+ALTER TABLE seu_poplatky_mat
+    ADD CONSTRAINT ( FOREIGN KEY(refsml)
+  REFERENCES seu_sml_mat(serno) CONSTRAINT seu_poplatky_mat_f1 );
+
+ALTER TABLE seu_ucel_mat
+    ADD CONSTRAINT ( FOREIGN KEY(refsml)
+  REFERENCES seu_sml_mat(serno) CONSTRAINT seu_ucel_mat_f1 );
+
+ALTER TABLE seu_zajist_mat
+    ADD CONSTRAINT ( FOREIGN KEY(refsml)
+  REFERENCES seu_sml_mat(serno) CONSTRAINT seu_zajist_mat_f1 ); 
+  
+ROLLBACK WORK;
+
+--End of B136477_UID84174_5

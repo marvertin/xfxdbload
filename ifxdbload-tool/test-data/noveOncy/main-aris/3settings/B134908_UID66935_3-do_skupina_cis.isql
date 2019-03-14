@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B134908_UID66935_3-do_skupina_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-19276: Nastavit skupinu dokumentů závislých na typu příjmu {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO do_skupina_cis (skupina, nazev) VALUES (15, 'Dokumenty závislé na typu příjmu - klient');
+INSERT INTO do_skupina_cis (skupina, nazev) VALUES (16, 'Dokumenty závislé na typu příjmu - manžel/ka klienta');
+INSERT INTO do_skupina_cis (skupina, nazev) VALUES (17, 'Dokumenty závislé na typu příjmu - přistupitel');
+INSERT INTO do_skupina_cis (skupina, nazev) VALUES (18, 'Dokumenty závislé na typu příjmu - manžel/ka přistupitele');
+
+ROLLBACK WORK;
+
+--End of B134908_UID66935_3-do_skupina_cis

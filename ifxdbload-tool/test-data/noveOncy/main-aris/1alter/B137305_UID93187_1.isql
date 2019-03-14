@@ -1,0 +1,185 @@
+-- @TC:ONCE: ID = V2, B137305_UID93187_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32865: Číselník typů doplňkových požadavků {STORY}
+
+BEGIN WORK;
+
+CREATE TABLE sep_doplnpozadtyp_acis (
+  idarch   SERIAL NOT NULL,
+  kod   INTEGER NOT NULL,
+  nazev   CHAR(100),
+  platnost   Integer  DEFAULT 0,
+  poznamka   VARCHAR(255),
+  refpodepdoktyp   INTEGER,
+  refprilohadoktyp   INTEGER,
+  vazbanasml   CHAR(8),
+  zadanizz2   CHAR(3),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT sep_doplnpozadtyp_acis_dcnf
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX sep_doplnpozadtyp_acis_pk ON sep_doplnpozadtyp_acis(idarch);
+ALTER TABLE sep_doplnpozadtyp_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT sep_doplnpozadtyp_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE sep_doplnpozadtyp_cis (
+  kod   SERIAL NOT NULL,
+  nazev   VARCHAR(70),
+  platnost   Integer  DEFAULT 0,
+  poznamka   VARCHAR(255),
+  refpodepdoktyp   INTEGER,
+  refprilohadoktyp   INTEGER,
+  vazbanasml   CHAR(8),
+  zadanizz2   CHAR(3),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT sep_doplnpozadtyp_cis_dcmy
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX sep_doplnpozadtyp_cis_pk ON sep_doplnpozadtyp_cis(kod);
+ALTER TABLE sep_doplnpozadtyp_cis ADD CONSTRAINT PRIMARY KEY(kod) CONSTRAINT sep_doplnpozadtyp_cis_pk;
+
+--FK
+CREATE INDEX sep_doplnpozadtyp_cis_i_f1 ON sep_doplnpozadtyp_cis(refpodepdoktyp);
+ALTER TABLE sep_doplnpozadtyp_cis ADD CONSTRAINT FOREIGN KEY(refpodepdoktyp) REFERENCES do_typdokumentu_cis(doktyp) CONSTRAINT sep_doplnpozadtyp_cis_f1;
+CREATE INDEX sep_doplnpozadtyp_cis_i_f2 ON sep_doplnpozadtyp_cis(refprilohadoktyp);
+ALTER TABLE sep_doplnpozadtyp_cis ADD CONSTRAINT FOREIGN KEY(refprilohadoktyp) REFERENCES do_typdokumentu_cis(doktyp) CONSTRAINT sep_doplnpozadtyp_cis_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE sep_doplnpozadtyp_cis
+ADD CONSTRAINT (CHECK (vazbanasml IN ('VOL_SPOR', 'POV_SPOR', 'VOL_UVER', 'POV_UVER')) CONSTRAINT sep_doplnpozadtyp_cis_c1),
+ADD CONSTRAINT (CHECK (zadaniZZ2 IN ('NE', 'ANO', 'OZ')) CONSTRAINT sep_doplnpozadtyp_cis_c2);
+
+------------------------------------------------------
+
+CREATE TABLE sep_doplnpozadavek_arch (
+  idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  smlouva   DECIMAL(16,0),
+  tsml   CHAR(4),
+  stav   CHAR(1),
+  reftyppozadavku   INTEGER,
+  primarniosoba   BIGINT,
+  zakonnyzastupce1   BIGINT,
+  zakonnyzastupce2   BIGINT,
+  vyzadpodpklienta   Integer  DEFAULT 0,
+  refzpusobpodep   INTEGER,
+  chyba   Integer,
+  verzedokumentu   Integer,
+  popis   LVARCHAR(5000),
+  refozzadal   INTEGER,
+  refozsepsal   INTEGER,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE,
+  predaniuser   CHAR(20),
+  predanitime   datetime year to second,
+  predanidatprov   DATE,
+  prijeticentraluser   CHAR(20),
+  prijeticentraltime   datetime year to second,
+  prijeticentraldatprov   DATE,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second,
+  zrusdatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE,
+  CHECK (vyzadpodpklienta IN (0,1)) CONSTRAINT sep_doplnpozadavek_arch_dcoi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX sep_doplnpozadavek_arch_pk ON sep_doplnpozadavek_arch(idarch);
+ALTER TABLE sep_doplnpozadavek_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT sep_doplnpozadavek_arch_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+CREATE TABLE sep_doplnpozadavek_mat (
+  serno   BIGINT NOT NULL,
+  smlouva   DECIMAL(16,0),
+  tsml   CHAR(4),
+  stav   CHAR(1),
+  reftyppozadavku   INTEGER,
+  primarniosoba   BIGINT,
+  zakonnyzastupce1   BIGINT,
+  zakonnyzastupce2   BIGINT,
+  vyzadpodpklienta   Integer  DEFAULT 0,
+  refzpusobpodep   INTEGER,
+  chyba   Integer,
+  verzedokumentu   Integer,
+  popis   LVARCHAR(5000),
+  refozzadal   INTEGER,
+  refozsepsal   INTEGER,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE,
+  predaniuser   CHAR(20),
+  predanitime   datetime year to second,
+  predanidatprov   DATE,
+  prijeticentraluser   CHAR(20),
+  prijeticentraltime   datetime year to second,
+  prijeticentraldatprov   DATE,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second,
+  zrusdatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE,
+  CHECK (vyzadpodpklienta IN (0,1)) CONSTRAINT sep_doplnpozadavek_mat_dcoi
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX sep_doplnpozadavek_mat_pk ON sep_doplnpozadavek_mat(serno);
+ALTER TABLE sep_doplnpozadavek_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT sep_doplnpozadavek_mat_pk;
+
+--FK
+CREATE INDEX sep_doplnpozadavek_mat_i_f1 ON sep_doplnpozadavek_mat(reftyppozadavku);
+ALTER TABLE sep_doplnpozadavek_mat ADD CONSTRAINT FOREIGN KEY(reftyppozadavku) REFERENCES sep_doplnpozadtyp_cis(kod) CONSTRAINT sep_doplnpozadavek_mat_f1;
+CREATE INDEX sep_doplnpozadavek_mat_i_f2 ON sep_doplnpozadavek_mat(refzpusobpodep);
+ALTER TABLE sep_doplnpozadavek_mat ADD CONSTRAINT FOREIGN KEY(refzpusobpodep) REFERENCES do_zpusobpodepisovani_cis(zpusobpodep) CONSTRAINT sep_doplnpozadavek_mat_f2;
+CREATE INDEX sep_doplnpozadavek_mat_i_f3 ON sep_doplnpozadavek_mat(primarniosoba);
+ALTER TABLE sep_doplnpozadavek_mat ADD CONSTRAINT FOREIGN KEY(primarniosoba) REFERENCES seo_osoba_mat(serno) CONSTRAINT sep_doplnpozadavek_mat_f3;
+CREATE INDEX sep_doplnpozadavek_mat_i_f4 ON sep_doplnpozadavek_mat(zakonnyzastupce1);
+ALTER TABLE sep_doplnpozadavek_mat ADD CONSTRAINT FOREIGN KEY(zakonnyzastupce1) REFERENCES seo_osoba_mat(serno) CONSTRAINT sep_doplnpozadavek_mat_f4;
+CREATE INDEX sep_doplnpozadavek_mat_i_f5 ON sep_doplnpozadavek_mat(zakonnyzastupce2);
+ALTER TABLE sep_doplnpozadavek_mat ADD CONSTRAINT FOREIGN KEY(zakonnyzastupce2) REFERENCES seo_osoba_mat(serno) CONSTRAINT sep_doplnpozadavek_mat_f5;
+CREATE INDEX sep_doplnpozadavek_mat_i_f7 ON sep_doplnpozadavek_mat(refozzadal);
+ALTER TABLE sep_doplnpozadavek_mat ADD CONSTRAINT FOREIGN KEY(refozzadal) REFERENCES sep_pozadavekoz_mat(serno) CONSTRAINT sep_doplnpozadavek_mat_f7;
+CREATE INDEX sep_doplnpozadavek_mat_i_f8 ON sep_doplnpozadavek_mat(refozsepsal);
+ALTER TABLE sep_doplnpozadavek_mat ADD CONSTRAINT FOREIGN KEY(refozsepsal) REFERENCES sep_pozadavekoz_mat(serno) CONSTRAINT sep_doplnpozadavek_mat_f8;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE sep_doplnpozadavek_mat
+ADD CONSTRAINT (CHECK (stav in ('V','A','B','C','D','E','F','Z')) CONSTRAINT sep_doplnpozadavek_mat_c1);
+ROLLBACK WORK;
+
+
+--End of B137305_UID93187_1

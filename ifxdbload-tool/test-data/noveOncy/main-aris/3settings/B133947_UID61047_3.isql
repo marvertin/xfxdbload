@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B133947_UID61047_3
+-- @TC:ONCE: DESCRIPTION = Pravidla pro příznaky "požadováno posouzení" rolí referenta
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EP', 'rizsubjekt', 'typ', 'nezadouciodhadce', 18, 1, 'Podpora pro produkt', 'Rizikový subjekt', 'Typ rizikového subjektu', 'Typ rizikového subjektu - nežádoucí odhadce');
+
+ROLLBACK WORK;
+
+--End of B133947_UID61047_3

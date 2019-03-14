@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137072_UIDRSTS-28871_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28871: Ověření registrovaného mobilního telefonu OZ {REQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EO','osoba','komkanal','mobilOZ', 19, 1, 'Osoba', 'Objekt odbytové sítě (WWW) - základ', 'Mapování komunikačních kanálů', 'Komunikační kanál pro registrovaný mobil OZ');
+
+ROLLBACK WORK;
+
+--End of B137072_UIDRSTS-28871_3

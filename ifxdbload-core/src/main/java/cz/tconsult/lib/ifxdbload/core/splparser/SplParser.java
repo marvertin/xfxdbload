@@ -9,14 +9,19 @@ import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_DBA;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_DELETE;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_DROP;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_END;
+import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_EXECUTE;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_FUNCTION;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_INDEX;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_INSERT;
+import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_INTO;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_PROCEDURE;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_RENAME;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_ROLLBACK;
+import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_SELECT;
+import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_SET;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_SYNONYM;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_TABLE;
+import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_TEMP;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_TRIGGER;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_UNIQUE;
 import static cz.tconsult.lib.spllexer.ESplTokenKeyword.KEYWORD_UPDATE;
@@ -184,6 +189,7 @@ public class SplParser {
         tok.startCollecting();
         tok.expect(KEYWORD_CREATE);
         tok.optional(KEYWORD_UNIQUE); // kvůli indexům
+        tok.optional(KEYWORD_TEMP); // kvůli temporárním tabulkám
         final LexerToken keyword = tok.expect(
             KEYWORD_VIEW,
             KEYWORD_TRIGGER,
@@ -224,14 +230,16 @@ public class SplParser {
 
       // DDL
       tok -> {
+        final List<LexerToken> directives = tok.shiftWhile(ESplTokenNoKeyword.TCDIRECTIVE);
         tok.startCollecting();
         tok.expect(
             KEYWORD_ALTER,
             KEYWORD_DROP,
-            KEYWORD_RENAME);
+            KEYWORD_RENAME,
+            KEYWORD_SET);
 
         tok.shiftUntil(ESplTokenNoKeyword.SYMBOL_SEMICOLON, KONECNIK.KONECNIK, ESplTokenNoKeyword.TCDIRECTIVE);
-        return Optional.of(tok.createStatement(null, EStmType.DDL, null));
+        return Optional.of(tok.createStatement(directives, EStmType.DDL, null));
       },
 
       // DML
@@ -248,15 +256,27 @@ public class SplParser {
         return Optional.of(tok.createStatement(null, EStmType.DML, null));
       },
 
-      // CALL
+      // DML
       tok -> {
         tok.startCollecting();
+        tok.expect(KEYWORD_SELECT);
+        tok.shiftUntil(KEYWORD_INTO);
+        tok.shiftUntil(ESplTokenNoKeyword.SYMBOL_SEMICOLON, KONECNIK.KONECNIK, ESplTokenNoKeyword.TCDIRECTIVE);
+        return Optional.of(tok.createStatement(null, EStmType.DML, null));
+      },
+
+      // CALL
+      tok -> {
+        final List<LexerToken> directives = tok.shiftWhile(ESplTokenNoKeyword.TCDIRECTIVE);
+        tok.startCollecting();
         tok.expect(
+            KEYWORD_EXECUTE,
             KEYWORD_CALL
+
             );
 
         tok.shiftUntil(ESplTokenNoKeyword.SYMBOL_SEMICOLON, KONECNIK.KONECNIK, ESplTokenNoKeyword.TCDIRECTIVE);
-        return Optional.of(tok.createStatement(null, EStmType.CALL, null));
+        return Optional.of(tok.createStatement(directives, EStmType.CALL, null));
       },
 
 

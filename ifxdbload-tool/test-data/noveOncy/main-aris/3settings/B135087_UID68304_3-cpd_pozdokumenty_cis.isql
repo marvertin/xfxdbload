@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, B135087_UID68304_3-cpd_pozdokumenty_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-19935: Úpravy funkce vyhodnocující požadované dokumenty {STORY}
+
+BEGIN WORK;
+
+update cpd_pozdokumenty_cis set typzajisteni = null
+where typobjektu = 'UCEL'
+and typdokumentu = 1179
+and typucelu = 1206
+;
+update cpd_pozdokumenty_cis set typzajisteni = null
+where typobjektu = 'UCEL'
+and typdokumentu = 1180
+and typucelu = 1204
+;
+update cpd_pozdokumenty_cis set typzajisteni = null
+where typobjektu = 'UCEL'
+and typdokumentu = 84
+and typucelu = 1204
+;
+update cpd_pozdokumenty_cis set typzajisteni = null
+where typobjektu = 'UCEL'
+and typdokumentu = 1182
+and typucelu = 1205
+;
+update cpd_pozdokumenty_cis set typzajisteni = null
+where typobjektu = 'UCEL'
+and typdokumentu = 1183
+and typucelu = 1401
+;
+
+ROLLBACK WORK;
+
+--End of B135087_UID68304_3-cpd_pozdokumenty_cis

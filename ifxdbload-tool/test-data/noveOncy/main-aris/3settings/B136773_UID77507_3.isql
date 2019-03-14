@@ -1,0 +1,78 @@
+-- @TC:ONCE: ID = V2, B136773_UID77507_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+UPDATE ac_ucet_mat SET typ = 'A' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  (ucet in (select ucet from ac_skomap_cis where platnost = 1 AND sko NOT IN ('PYMT', 'OVRP')) OR
+   ucet in (select protiucet from ac_skomap_cis where platnost = 1 AND sko NOT IN ('PYMT', 'OVRP')));
+
+
+UPDATE ac_ucet_mat SET typ = 'P' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  (ucet in (select ucet from ac_skomap_cis where platnost = 1 AND sko IN ('PYMT', 'OVRP')) OR
+   ucet in (select protiucet from ac_skomap_cis where platnost = 1 AND sko IN ('PYMT', 'OVRP')));
+
+
+UPDATE ac_ucet_mat SET typ = 'V' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  ucet in (select vynosucet from ac_skomap_cis where platnost = 1 AND sko NOT IN ('PYMT', 'OVRP'));
+
+
+UPDATE ac_ucet_mat SET typ = 'A' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  (ucet in (select ucet from ac_mapdluhu_cis where platnost = 1) OR
+   ucet in (select protiucet from ac_mapdluhu_cis where platnost = 1)); 
+
+
+UPDATE ac_ucet_mat SET typ = 'V' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  ucet in (select vynosucet from ac_mapdluhu_cis where platnost = 1);
+
+
+UPDATE ac_ucet_mat SET typ = 'A' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  ucet in (select ucet from acr_ucet_cis where platnost = 1 and typobj IN ('P', 'A'));
+
+
+UPDATE ac_ucet_mat SET typ = 'P' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  ucet in (select ucet from acr_ucet_cis where platnost = 1 and typobj IN ('U'));
+
+
+UPDATE ac_ucet_mat SET typ = 'A' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  ucet in (select ucet from am_uvprislib_cis where platnost = 1);
+
+
+UPDATE ac_ucet_mat SET typ = 'P' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  ucet in (select ucetop from ru_opifrs9uct_cis);
+
+
+UPDATE ac_ucet_mat SET typ = 'N' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  ucet in (select naklucetop from ru_opifrs9uct_cis);
+
+
+UPDATE ac_ucet_mat SET typ = 'V' 
+WHERE 
+  ucet in (select ucet from ac_ucet_mat where reftime >= (select reftime from xonce_scripts where scriptid = 'B136374_UID77502_3-ac_ucet_mat')) AND
+  (ucet in (select vynucetrozpop from ru_opifrs9uct_cis) OR
+   ucet in (select vynucetpouzop from ru_opifrs9uct_cis));
+
+ROLLBACK WORK;
+
+--End of B136773_UID77507_3

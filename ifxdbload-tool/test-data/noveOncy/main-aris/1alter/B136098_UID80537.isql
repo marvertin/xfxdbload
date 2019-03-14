@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136098_UID80537
+-- @TC:ONCE: DESCRIPTION = RSTS-25973: TF001860 - Externí kontroly - Kontrola příjmů, Kontrola telefonů - dlouhé načítání seznamu požadavků
+
+BEGIN WORK;
+
+CREATE INDEX ctk_overprijem_mat_i1 ON ctk_overprijem_mat(stav);
+
+CREATE INDEX ctk_overtelefon_mat_i1 ON ctk_overtelefon_mat(stav);
+
+ROLLBACK WORK;
+
+--End of B136098_UID80537

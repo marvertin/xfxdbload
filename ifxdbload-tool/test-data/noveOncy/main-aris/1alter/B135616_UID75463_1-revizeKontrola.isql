@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135616_UID75463_1-revizeKontrola
+-- @TC:ONCE: DESCRIPTION = RSTS-23410: Zápis do revize schvalování při AN snížení výše úvěru. {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE seu_uz_mat
+ADD refstavkotkontrola BIGINT 
+BEFORE opisovanazadost;
+
+ALTER TABLE seu_uz_arch
+ADD refstavkotkontrola BIGINT
+BEFORE opisovanazadost;
+
+ROLLBACK WORK;
+
+--End of B135616_UID75463_1

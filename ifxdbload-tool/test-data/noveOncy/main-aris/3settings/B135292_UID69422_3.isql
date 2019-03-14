@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135292_UID69422_3
+-- @TC:ONCE: DESCRIPTION = Parametrizace typů sms a e-mailů pro ECM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO do_skupina_cis (skupina, nazev, popis, poznamka, platnost, refuser, reftime) VALUES (21, 'Dokumenty pro SMS do ECM', null, null, 1, null, null);
+
+INSERT INTO do_skupina_cis (skupina, nazev, popis, poznamka, platnost, refuser, reftime) VALUES (22, 'Dokumenty pro e-maily do ECM', null, null, 1, null, null);
+
+ROLLBACK WORK;
+
+--End of B135292_UID69422_3

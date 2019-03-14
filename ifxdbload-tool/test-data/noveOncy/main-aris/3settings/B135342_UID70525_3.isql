@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135342_UID70525_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21100: Provést verifikaci typů přikládaných dokumentů (chyba se projeví v ECM) {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CALL tw_regsetkey('DO', 'docmng', 'velikost_souboru', '*', 
+  10000000);
+
+ROLLBACK WORK;
+
+--End of B135342_UID70525_3

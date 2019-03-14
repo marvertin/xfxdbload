@@ -1,0 +1,92 @@
+-- @TC:ONCE: ID = V2, B137117_UID77502_3-ac_ucet_mat
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+UPDATE ac_ucet_mat SET poznamka = 'Použití OP_2_FO-R_jistina', popis = 'Po.OP_2_FO-R_JIST' WHERE ucet = '754711';
+UPDATE ac_ucet_mat SET poznamka = 'Použití OP_1_FO-R_jistina', popis = 'Po.OP_1_FO-R_JIST' WHERE ucet = '754611';
+
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751613', TRIM(' Použití OP_1_FO-R_poplatek  '), TRIM('  Po.OP_1_FO-R_POPL '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751614', TRIM(' Použití OP_1_FO-R_pojištění '), TRIM('  Po.OP_1_FO-R_POJIS  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751615', TRIM(' Použití OP_1_FO-R_jistina - promlč. '), TRIM('  Po.OP_1_FO-R_JISTPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751616', TRIM(' Použití OP_1_FO-R_úrok - promlč.  '), TRIM('  Po.OP_1_FO-R_ÚROKPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751617', TRIM(' Použití OP_1_FO-R_poplatek - promlč.  '), TRIM('  Po.OP_1_FO-R_POPLPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751618', TRIM(' Použití OP_1_FO-R_pojištění - promlč. '), TRIM('  Po.OP_1_FO-R_POJ-PR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751643', TRIM(' Použití OP_1_FO-NR_poplatek '), TRIM('  Po.OP_1_FO-NR_POPL  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751644', TRIM(' Použití OP_1_FO-NR_pojištění  '), TRIM('  Po.OP_1_FO-NR_POJIS '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751645', TRIM(' Použití OP_1_FO-NR_jistina - promlč.  '), TRIM('  Po.OP_1_FO-NR_JISTPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751646', TRIM(' Použití OP_1_FO-NR_úrok - promlč. '), TRIM('  Po.OP_1_FO-NR_ÚROKPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751647', TRIM(' Použití OP_1_FO-NR_poplatek - promlč. '), TRIM('  Po.OP_1_FO-NR_POPLPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751648', TRIM(' Použití OP_1_FO-NR_pojištění - promlč.  '), TRIM('  Po.OP_1_FO-NR_POJ-PR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751663', TRIM(' Použití OP_1_PO-NR_poplatek '), TRIM('  Po.OP_1_PO-NR_POPL  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751664', TRIM(' Použití OP_1_PO-NR_pojištění  '), TRIM('  Po.OP_1_PO-NR_POJIS '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751665', TRIM(' Použití OP_1_PO-NR_jistina - promlč.  '), TRIM('  Po.OP_1_PO-NR_JISTPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751666', TRIM(' Použití OP_1_PO-NR_úrok - promlč. '), TRIM('  Po.OP_1_PO-NR_ÚROKPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751667', TRIM(' Použití OP_1_PO-NR_poplatek - promlč. '), TRIM('  Po.OP_1_PO-NR_POPLPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751668', TRIM(' Použití OP_1_PO-NR_pojištění - promlč.  '), TRIM('  Po.OP_1_PO-NR_POJ-PR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751673', TRIM(' Použití OP_1_PO-RG_poplatek '), TRIM('  Po.OP_1_PO-RG_POPL  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751674', TRIM(' Použití OP_1_PO-RG_pojištění  '), TRIM('  Po.OP_1_PO-RG_POJIS '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751675', TRIM(' Použití OP_1_PO-RG_jistina - promlč.  '), TRIM('  Po.OP_1_PO-RG_JISTPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751676', TRIM(' Použití OP_1_PO-RG_úrok - promlč. '), TRIM('  Po.OP_1_PO-RG_ÚROKPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751677', TRIM(' Použití OP_1_PO-RG_poplatek - promlč. '), TRIM('  Po.OP_1_PO-RG_POPLPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751678', TRIM(' Použití OP_1_PO-RG_pojištění - promlč.  '), TRIM('  Po.OP_1_PO-RG_POJ-PR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751683', TRIM(' Použití OP_1_PO-R_poplatek  '), TRIM('  Po.OP_1_PO-R_POPL '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751684', TRIM(' Použití OP_1_PO-R_pojištění '), TRIM('  Po.OP_1_PO-R_POJIS  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751685', TRIM(' Použití OP_1_PO-R_jistina - promlč. '), TRIM('  Po.OP_1_PO-R_JISTPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751686', TRIM(' Použití OP_1_PO-R_úrok - promlč.  '), TRIM('  Po.OP_1_PO-R_ÚROKPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751687', TRIM(' Použití OP_1_PO-R_poplatek - promlč.  '), TRIM('  Po.OP_1_PO-R_POPLPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751688', TRIM(' Použití OP_1_PO-R_pojištění - promlč. '), TRIM('  Po.OP_1_PO-R_POJ-PR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751713', TRIM(' Použití OP_2_FO-R_poplatek  '), TRIM('  Po.OP_2_FO-R_POPL '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751714', TRIM(' Použití OP_2_FO-R_pojištění '), TRIM('  Po.OP_2_FO-R_POJIS  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751715', TRIM(' Použití OP_2_FO-R_jistina - promlč. '), TRIM('  Po.OP_2_FO-R_JISTPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751716', TRIM(' Použití OP_2_FO-R_úrok - promlč.  '), TRIM('  Po.OP_2_FO-R_ÚROKPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751717', TRIM(' Použití OP_2_FO-R_poplatek - promlč.  '), TRIM('  Po.OP_2_FO-R_POPLPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751718', TRIM(' Použití OP_2_FO-R_pojištění - promlč. '), TRIM('  Po.OP_2_FO-R_POJ-PR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751743', TRIM(' Použití OP_2_FO-NR_poplatek '), TRIM('  Po.OP_2_FO-NR_POPL  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751744', TRIM(' Použití OP_2_FO-NR_pojištění  '), TRIM('  Po.OP_2_FO-NR_POJIS '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751745', TRIM(' Použití OP_2_FO-NR_jistina - promlč.  '), TRIM('  Po.OP_2_FO-NR_JISTPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751746', TRIM(' Použití OP_2_FO-NR_úrok - promlč. '), TRIM('  Po.OP_2_FO-NR_ÚROKPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751747', TRIM(' Použití OP_2_FO-NR_poplatek - promlč. '), TRIM('  Po.OP_2_FO-NR_POPLPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751748', TRIM(' Použití OP_2_FO-NR_pojištění - promlč.  '), TRIM('  Po.OP_2_FO-NR_POJ-PR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751763', TRIM(' Použití OP_2_PO-NR_poplatek '), TRIM('  Po.OP_2_PO-NR_POPL  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751764', TRIM(' Použití OP_2_PO-NR_pojištění  '), TRIM('  Po.OP_2_PO-NR_POJIS '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751765', TRIM(' Použití OP_2_PO-NR_jistina - promlč.  '), TRIM('  Po.OP_2_PO-NR_JISTPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751766', TRIM(' Použití OP_2_PO-NR_úrok - promlč. '), TRIM('  Po.OP_2_PO-NR_ÚROKPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751767', TRIM(' Použití OP_2_PO-NR_poplatek - promlč. '), TRIM('  Po.OP_2_PO-NR_POPLPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751768', TRIM(' Použití OP_2_PO-NR_pojištění - promlč.  '), TRIM('  Po.OP_2_PO-NR_POJ-PR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751773', TRIM(' Použití OP_2_PO-RG_poplatek '), TRIM('  Po.OP_2_PO-RG_POPL  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751774', TRIM(' Použití OP_2_PO-RG_pojištění  '), TRIM('  Po.OP_2_PO-RG_POJIS '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751775', TRIM(' Použití OP_2_PO-RG_jistina - promlč.  '), TRIM('  Po.OP_2_PO-RG_JISTPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751776', TRIM(' Použití OP_2_PO-RG_úrok - promlč. '), TRIM('  Po.OP_2_PO-RG_ÚROKPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751777', TRIM(' Použití OP_2_PO-RG_poplatek - promlč. '), TRIM('  Po.OP_2_PO-RG_POPLPR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751778', TRIM(' Použití OP_2_PO-RG_pojištění - promlč.  '), TRIM('  Po.OP_2_PO-RG_POJ-PR  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751783', TRIM(' Použití OP_2_PO-R_poplatek  '), TRIM('  Po.OP_2_PO-R_POPL '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751784', TRIM(' Použití OP_2_PO-R_pojištění '), TRIM('  Po.OP_2_PO-R_POJIS  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751785', TRIM(' Použití OP_2_PO-R_jistina - promlč. '), TRIM('  Po.OP_2_PO-R_JISTPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751786', TRIM(' Použití OP_2_PO-R_úrok - promlč.  '), TRIM('  Po.OP_2_PO-R_ÚROKPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751787', TRIM(' Použití OP_2_PO-R_poplatek - promlč.  '), TRIM('  Po.OP_2_PO-R_POPLPR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '751788', TRIM(' Použití OP_2_PO-R_pojištění - promlč. '), TRIM('  Po.OP_2_PO-R_POJ-PR '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754612', TRIM(' Použití OP_1_FO-R_úrok  '), TRIM('  Po.OP_1_FO-R_ÚROK '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754641', TRIM(' Použití OP_1_FO-NR_jistina  '), TRIM('  Po.OP_1_FO-NR_JIST  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754642', TRIM(' Použití OP_1_FO-NR_úrok '), TRIM('  Po.OP_1_FO-NR_ÚROK  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754661', TRIM(' Použití OP_1_PO-NR_jistina  '), TRIM('  Po.OP_1_PO-NR_JIST  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754662', TRIM(' Použití OP_1_PO-NR_úrok '), TRIM('  Po.OP_1_PO-NR_ÚROK  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754671', TRIM(' Použití OP_1_PO-RG_jistina  '), TRIM('  Po.OP_1_PO-RG_JIST  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754672', TRIM(' Použití OP_1_PO-RG_úrok '), TRIM('  Po.OP_1_PO-RG_ÚROK  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754681', TRIM(' Použití OP_1_PO-R_jistina '), TRIM('  Po.OP_1_PO-R_JIST '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754682', TRIM(' Použití OP_1_PO-R_úrok  '), TRIM('  Po.OP_1_PO-R_ÚROK '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754712', TRIM(' Použití OP_2_FO-R_úrok  '), TRIM('  Po.OP_2_FO-R_ÚROK '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754741', TRIM(' Použití OP_2_FO-NR_jistina  '), TRIM('  Po.OP_2_FO-NR_JIST  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754742', TRIM(' Použití OP_2_FO-NR_úrok '), TRIM('  Po.OP_2_FO-NR_ÚROK  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754761', TRIM(' Použití OP_2_PO-NR_jistina  '), TRIM('  Po.OP_2_PO-NR_JIST  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754762', TRIM(' Použití OP_2_PO-NR_úrok '), TRIM('  Po.OP_2_PO-NR_ÚROK  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754771', TRIM(' Použití OP_2_PO-RG_jistina  '), TRIM('  Po.OP_2_PO-RG_JIST  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754772', TRIM(' Použití OP_2_PO-RG_úrok '), TRIM('  Po.OP_2_PO-RG_ÚROK  '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754781', TRIM(' Použití OP_2_PO-R_jistina '), TRIM('  Po.OP_2_PO-R_JIST '));
+INSERT INTO ac_ucet_mat (typ, jepodrozvaha, basel, mena, ucet, poznamka, popis) VALUES ('V', 0, 0, 'CZK', '754782', TRIM(' Použití OP_2_PO-R_úrok  '), TRIM('  Po.OP_2_PO-R_ÚROK '));
+
+
+ROLLBACK WORK;
+
+--End of B137117_UID77502_3-ac_ucet_mat

@@ -1,0 +1,104 @@
+-- @TC:ONCE: ID = V2, B136445_UID85335_5
+-- @TC:ONCE: DESCRIPTION = RSTS-28790: Odstranit všechny cizí klíče v archivní databázi {INTERNAL_DEFECT}
+-- @TC:ONCE: DBKIND=ARCHIV
+
+BEGIN WORK;
+
+ALTER TABLE   mo_smlouva_kart DROP CONSTRAINT   mosmlouvakart_c_f1  ;
+ALTER TABLE   mo_spec_kart  DROP CONSTRAINT   mospeckart_c_f1 ;
+ALTER TABLE   mo_uz_kart  DROP CONSTRAINT   mouzkart_c_f1 ;
+ALTER TABLE   rp_kontosp_rozp DROP CONSTRAINT   rpkontosprozp_c_f1  ;
+ALTER TABLE   rp_prevodsp_kart  DROP CONSTRAINT   rpprevodspkart_c_f1 ;
+ALTER TABLE   rs_upom_kart  DROP CONSTRAINT   rsupomkart_c_f1 ;
+ALTER TABLE   rs_vklad_kart DROP CONSTRAINT   rsvkladkart_c_f1  ;
+ALTER TABLE   ay_doklad_kart  DROP CONSTRAINT   ay_doklad_kart_f1 ;
+ALTER TABLE   ay_doklad_kart  DROP CONSTRAINT   ay_doklad_kart_f2 ;
+ALTER TABLE   cn_nepl_den DROP CONSTRAINT   cn_nepl_den_f3  ;
+ALTER TABLE   cv_planvyplat_kart  DROP CONSTRAINT   cv_planvyplat_k_f1  ;
+ALTER TABLE   cz_zadost_den DROP CONSTRAINT   cz_zadost_den_f1  ;
+ALTER TABLE   cz_zadost_den DROP CONSTRAINT   cz_zadost_den_f2  ;
+ALTER TABLE   cz_zadost_den DROP CONSTRAINT   cz_zadost_den_f3  ;
+ALTER TABLE   rs_vypor_kart DROP CONSTRAINT   rsvyporkart_c_f1  ;
+ALTER TABLE   ai_chdoklad_kart  DROP CONSTRAINT   aichdokladkart_c_f1 ;
+ALTER TABLE   ai_platba_kart  DROP CONSTRAINT   aiplatbakart_c_f1 ;
+ALTER TABLE   ai_vsdavka_prot DROP CONSTRAINT   aivsdavkaprot_c_f2  ;
+ALTER TABLE   ai_vsdoklad_kart  DROP CONSTRAINT   aivsdokladkart_c_f1 ;
+ALTER TABLE   aw_davka_prot DROP CONSTRAINT   awdavkaprot_c_f2  ;
+ALTER TABLE   aw_imagedokl_kart DROP CONSTRAINT   awimagedoklkart_c_f1  ;
+ALTER TABLE   aw_vsdoklad_kart  DROP CONSTRAINT   awvsdokladkart_c_f1 ;
+ALTER TABLE   ac_konto_arch DROP CONSTRAINT   ackontoarch_c_f1  ;
+ALTER TABLE   ac_ocsaldo_den  DROP CONSTRAINT   acocsaldoden_c_f1 ;
+ALTER TABLE   ac_sko_arch DROP CONSTRAINT   acskoarch_c_f1  ;
+ALTER TABLE   ac_sko_mat  DROP CONSTRAINT   acskomat_c_f1 ;
+ALTER TABLE   ao_spuc_den DROP CONSTRAINT   aospucden_c_f1  ;
+ALTER TABLE   ec_komcrp_kart  DROP CONSTRAINT   eckomcrpkart_c_f1 ;
+ALTER TABLE   ec_uhrpojist_kart DROP CONSTRAINT   ecuhrpojistkart_c_f1  ;
+ALTER TABLE   ep_av_kart  DROP CONSTRAINT   epavkart_c_epavkartf2 ;
+ALTER TABLE   ep_platba_arch  DROP CONSTRAINT   epplatbaarch_c_epplatbaarchf1 ;
+ALTER TABLE   es_vklad_kart DROP CONSTRAINT   esvkladkart_c_f1  ;
+ALTER TABLE   es_vkladkal_arch  DROP CONSTRAINT   esvkladkalarch_c_f1 ;
+ALTER TABLE   es_vkladkal_mat DROP CONSTRAINT   esvkladkalmat_c_f1  ;
+ALTER TABLE   es_vkladkin_arch  DROP CONSTRAINT   esvkladkinarch_c_f1 ;
+ALTER TABLE   es_vkladkin_mat DROP CONSTRAINT   esvkladkinmat_c_f1  ;
+ALTER TABLE   eu_akc_kart DROP CONSTRAINT   euakckart_c_f1  ;
+ALTER TABLE   eu_cerpkal_arch DROP CONSTRAINT   eucerpkalarch_c_f1  ;
+ALTER TABLE   eu_cerpkal_mat  DROP CONSTRAINT   eucerpkalmat_c_f1 ;
+ALTER TABLE   eu_cerpkin_arch DROP CONSTRAINT   eucerpkinarch_c_f1  ;
+ALTER TABLE   eu_cerpkin_mat  DROP CONSTRAINT   eucerpkinmat_c_f1 ;
+ALTER TABLE   eu_pris_kart  DROP CONSTRAINT   eupriskart_c_f1 ;
+ALTER TABLE   eu_sml_arch DROP CONSTRAINT   eusmlarch_c_f1  ;
+ALTER TABLE   eu_splat_kart DROP CONSTRAINT   eusplatkart_c_f1  ;
+ALTER TABLE   eu_splatkal_arch  DROP CONSTRAINT   eusplatkalarch_c_f1 ;
+ALTER TABLE   eu_splatkal_mat DROP CONSTRAINT   eusplatkalmat_c_f1  ;
+ALTER TABLE   eu_splatkin_arch  DROP CONSTRAINT   eusplatkinarch_c_f1 ;
+ALTER TABLE   eu_splatkin_mat DROP CONSTRAINT   eusplatkinmat_c_f1  ;
+ALTER TABLE   eu_ucel_arch  DROP CONSTRAINT   euucelarch_c_f1 ;
+ALTER TABLE   eu_ucel_mat DROP CONSTRAINT   euucelmat_c_f1  ;
+ALTER TABLE   eu_zajist_arch  DROP CONSTRAINT   euzajistarch_c_f1 ;
+ALTER TABLE   eu_zajist_mat DROP CONSTRAINT   euzajistmat_c_f1  ;
+ALTER TABLE   eu_zajuct_kart  DROP CONSTRAINT   euzajuctkart_c_f1 ;
+ALTER TABLE   eu_zajuct_kart  DROP CONSTRAINT   euzajuctkart_c_f2 ;
+ALTER TABLE   ev_cenpap_arch  DROP CONSTRAINT   evcenpaparch_c_f1 ;
+ALTER TABLE   ev_cenpap_mat DROP CONSTRAINT   evcenpapmat_c_f1  ;
+ALTER TABLE   ev_nemov_arch DROP CONSTRAINT   evnemovarch_c_f1  ;
+ALTER TABLE   ev_nemov_mat  DROP CONSTRAINT   evnemovmat_c_f1 ;
+ALTER TABLE   ev_pojist_arch  DROP CONSTRAINT   evpojistarch_c_f1 ;
+ALTER TABLE   ev_pojist_mat DROP CONSTRAINT   evpojistmat_c_f1  ;
+ALTER TABLE   ev_pojistcrp_arch DROP CONSTRAINT   evpojistcrparch_c_f1  ;
+ALTER TABLE   ev_pojistcrp_mat  DROP CONSTRAINT   evpojistcrpmat_c_f1 ;
+ALTER TABLE   ev_vec_arch DROP CONSTRAINT   evvecarch_c_f1  ;
+ALTER TABLE   ev_vklad_arch DROP CONSTRAINT   evvkladarch_c_f1  ;
+ALTER TABLE   ev_vklad_mat  DROP CONSTRAINT   evvkladmat_c_f1 ;
+ALTER TABLE   ev_vzosvec_arch DROP CONSTRAINT   evvzosvecarch_c_f1  ;
+ALTER TABLE   ev_vzosvec_mat  DROP CONSTRAINT   evvzosvecmat_c_f1 ;
+ALTER TABLE   ev_vzsmlvec_arch  DROP CONSTRAINT   evvzsmlvecarch_c_f1 ;
+ALTER TABLE   ev_vzsmlvec_mat DROP CONSTRAINT   evvzsmlvecmat_c_f1  ;
+ALTER TABLE   ev_vzsmlvec_mat DROP CONSTRAINT   evvzsmlvecmat_c_f2  ;
+ALTER TABLE   ev_vzvecvec_arch  DROP CONSTRAINT   evvzvecvecarch_c_f1 ;
+ALTER TABLE   ev_vzvecvec_mat DROP CONSTRAINT   evvzvecvecmat_c_f2  ;
+ALTER TABLE   ev_vzvecvec_mat DROP CONSTRAINT   evvzvecvecmat_c_f1  ;
+ALTER TABLE   mo_fintok_kart  DROP CONSTRAINT   mofintokkart_c_f1 ;
+ALTER TABLE   mo_klient_kart  DROP CONSTRAINT   moklientkart_c_f1 ;
+ALTER TABLE   mo_obraty_kart  DROP CONSTRAINT   moobratykart_c_f1 ;
+ALTER TABLE   mo_result_kart  DROP CONSTRAINT   moresultkart_c_f1 ;
+ALTER TABLE   ru_cerp_kart  DROP CONSTRAINT   rucerpkart_c_f1 ;
+ALTER TABLE   ru_op_kart  DROP CONSTRAINT   ruopkart_c_f1 ;
+ALTER TABLE   ru_opuct_kart DROP CONSTRAINT   ruopuctkart_c_f2  ;
+ALTER TABLE   ru_opuct_kart DROP CONSTRAINT   ruopuctkart_c_f1  ;
+ALTER TABLE   ru_real_arch  DROP CONSTRAINT   rurealarch_c_f1 ;
+ALTER TABLE   ru_real_mat DROP CONSTRAINT   rurealmat_c_f2  ;
+ALTER TABLE   ru_splat_kart DROP CONSTRAINT   rusplatkart_c_fkrusplatkart246  ;
+ALTER TABLE   ru_upom_kart  DROP CONSTRAINT   ruupomkart_c_f1 ;
+ALTER TABLE   ru_vyplspor_kart  DROP CONSTRAINT   ruvyplsporkart_c_f1 ;
+ALTER TABLE   ru_vypor_kart DROP CONSTRAINT   ruvyporkart_c_fkruvyporkart236  ;
+ALTER TABLE   rz_zuct_kart  DROP CONSTRAINT   rzzuctkart_c_f1 ;
+ALTER TABLE   ur_konto_mat  DROP CONSTRAINT   urkontomat_c_f1 ;
+ALTER TABLE   ur_nepripsany_mat DROP CONSTRAINT   urnepripsanymat_c_f1  ;
+ALTER TABLE   ur_pripisop_den DROP CONSTRAINT   urpripisopden_c_f1  ;
+ALTER TABLE   ur_pripsany_den DROP CONSTRAINT   urpripsanyden_c_f1  ;
+ALTER TABLE   tv_headparams_den DROP CONSTRAINT   tv_headparams_den_f1  ;
+
+
+ROLLBACK WORK;
+
+--End of B136445_UID85335_5

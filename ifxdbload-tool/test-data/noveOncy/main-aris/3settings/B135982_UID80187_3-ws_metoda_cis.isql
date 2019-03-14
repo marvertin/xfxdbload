@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135982_UID80187_3-ws_metoda_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-25799: IMPLEMENTACE (modrá): RSTS-13211_REAL: Integrace úvěrového procesu CIBIS – ECM (dokončení 2018S) {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+INSERT INTO ws_metoda_cis (id, nazev, specifikace, metoda, poznamka, platnost, smersluzby, skupinasluzeb) VALUES (53, 'Předání registračního čísla úvěru', null, 'ecmContractUpdateCreditMetadata', null, 1, 1, 6);
+INSERT INTO ws_metoda_cis (id, nazev, specifikace, metoda, poznamka, platnost, smersluzby, skupinasluzeb) VALUES (54, 'Nastavení referenta úvěru', 'https://ecm.test.turboconsult.cz/cibis-ws-ecm/ws/Ecm?wsdl', 'setRefII', null, 1, 0, 7);
+ROLLBACK WORK;
+
+--End of B135982_UID80187_3-ws_metoda_cis

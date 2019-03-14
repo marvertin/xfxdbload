@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137179_UID90468_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31529: IMPL (design,dat.model): RSTS-30719_Evidence indikátorů - datové struktury {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE cep_indikatordefault_kart ADD datumukonprobace   DATE BEFORE datumStorno;
+
+ROLLBACK WORK;
+
+--End of B137179_UID90468_1

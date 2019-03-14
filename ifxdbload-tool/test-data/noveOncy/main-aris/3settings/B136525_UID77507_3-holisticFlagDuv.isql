@@ -1,0 +1,53 @@
+-- @TC:ONCE: ID = V2, B136525_UID77507_3-holisticFlagDuv
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Chyba systému - úvěr', 'Chyba při vyhodnocení na straně systému', 'RDT00u', 'UVER', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Chyba člověk - úvěr', 'Chyba při vyhodnocení na straně uživatele systému', 'RDT00u', 'UVER', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Chyba systému - dlužník', 'Chyba při vyhodnocení na straně systému', 'RDT00d', 'DLUZNIK', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Chyba člověk - dlužník', 'Chyba při vyhodnocení na straně uživatele systému', 'RDT00d', 'DLUZNIK', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Zastavení úročení', 'Zastavení náběhu úroků u neselhaných úvěrů', 'RD020', 'UVER', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Nedodržení účelu', 'Na úvěru nebyl dodržen účel', 'RD130', 'UVER', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Porušení jiných smluvních podmínek', 'Na úvěru byly porušeny smluvní podmínky', 'RD130', 'UVER', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Realizace zajištění', 'Na úvěru bylo realizováno zajištění (např. prodej nemovitosti, ručitel, Uniqa) jiné než spoření', 'RD150', 'UVER', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Úvěr s diskontem', 'Úvěr s diskontem', 'RD160', 'UVER', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Selhání spojeného dlužníka', 'Selhaný úvěr u spojeného dlužníka', 'RD230', 'DLUZNIK', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Jiný důvod', 'Jiný důvod na úvěru', 'S06u', 'UVER', '2,3', '1', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Ztráta zaměstnání', 'Klient nebo součást ekonomické jednotky ztratil zaměstnání', 'RD110', 'DLUZNIK', '1', '0', null, 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Snížení příjmů - zdraví', 'Klientovi nebo ekonomické jednotce se výrazně snížili přijmy v důsledku zdravotních obtíží', 'RD110', 'DLUZNIK', '1', '0', '12', 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Snížení příjmů - ostatní', 'Klientovi nebo ekonomické jednotce se výrazně snížili přijmy z ostatních důvodů', 'RD110', 'DLUZNIK', '1', '0', '12', 1, 1);
+
+INSERT INTO cep_holisticflagduv_cis(duvod, popis, kodindikatoru, vztahobjekt, hodnotazapnuti, hodnotavypnuti, pocetmesautoukonc, autoproved, platnost)
+VALUES('Jiný důvod', 'Jiný důvod u dlužníka ', 'S06d', 'DLUZNIK', '2,3', '1', null, 1, 1);
+
+ROLLBACK WORK;
+
+--End of B136525_UID77507_3

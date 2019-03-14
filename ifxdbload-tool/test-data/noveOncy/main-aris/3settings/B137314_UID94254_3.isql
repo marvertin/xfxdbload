@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137314_UID94254_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33427: Dořešení dopadů do RK Cizinec. {STORY}
+
+
+BEGIN WORK;
+
+-- #Délka v zaměstnání 0-2 roky#
+CALL TW_RegDelKey('EU', 'finSit', 'delka-v-zam', 'delka-0-2-roky');
+
+ROLLBACK WORK;
+
+--End of B137314_UID94254_3

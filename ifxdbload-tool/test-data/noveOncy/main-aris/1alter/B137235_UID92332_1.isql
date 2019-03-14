@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137235_UID92332_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+-- Odstraníme check, protože ho potřebujeme v 5alter změnit
+ALTER TABLE cpd_pozdokumenty_cis DROP CONSTRAINT cpd_pozdokumenty_cis_c1;
+
+ROLLBACK WORK;
+
+--End of B137235_UID92332_1

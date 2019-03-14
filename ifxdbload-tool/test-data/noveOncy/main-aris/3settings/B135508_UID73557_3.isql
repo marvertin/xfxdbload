@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135508_UID73557_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22636: Možnost editace hraničního LTV na úvěrové smlouvě {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis) values ('EU', '3018', 'Změnit hraniční LTV na smlouvě');
+
+ROLLBACK WORK;
+
+--End of B135508_UID73557_3

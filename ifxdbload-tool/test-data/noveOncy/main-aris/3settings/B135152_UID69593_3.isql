@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B135152_UID69593_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20529: RSTS procedury do dodávky {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+-- dle souboru reg_pro_RK_RSTS
+
+update tw_registr_cis                   
+ set hodnota = 'RSTS_crk_dokladCislRadaVychoz' --'crk_dokladCislRadaVychoz_RSTS'                    
+where funkce = 'funkceCisRada'                    
+and udaj ='cilovaImpl';
+
+update tw_registr_cis                   
+ set hodnota = 'crk_spustitkontrrizsubjekt_NU' -- 'RSTS_kontrola_RS_Main'                   
+where funkce = 'revizeUN'                   
+and udaj ='rozhFceRizSub-cil';
+
+update tw_registr_cis                   
+ set hodnota = 'RSTS_scoring' --'uv_scoring_new' -- 'crk_vypocetScoringuVychoziImpl'                    
+where funkce = 'funkce'                   
+and udaj ='aktualniImpl'                    
+and uloha='rizKon-aplScoring';
+
+ROLLBACK WORK;
+
+--End of B135152_UID69593_3

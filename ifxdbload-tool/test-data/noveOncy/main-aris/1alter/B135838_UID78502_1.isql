@@ -1,0 +1,34 @@
+-- @TC:ONCE: ID = V2, B135838_UID78502_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24830: Číselník typů příjmů {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE cfs_prijemtyp_acis
+  ADD limituznatelnosti     DECIMAL(16,2) BEFORE poznamka,
+  ADD procentouznatelnosti  DECIMAL(6, 2) BEFORE poznamka;
+  
+ALTER TABLE cfs_prijemtyp_cis
+  ADD limituznatelnosti     DECIMAL(16,2) BEFORE poznamka,
+  ADD procentouznatelnosti  DECIMAL(6, 2) BEFORE poznamka;
+
+ALTER TABLE cfs_prijem_mat
+  ADD uznmescastka  DECIMAL(16,2) BEFORE platnost,
+  ADD castkavmene   DECIMAL(16,2) BEFORE platnost,
+  ADD refmena       CHAR(3) BEFORE platnost,
+  ADD refkurslist   INTEGER BEFORE platnost;
+
+ALTER TABLE cfs_prijem_arch
+  ADD uznmescastka  DECIMAL(16,2) BEFORE platnost,
+  ADD castkavmene   DECIMAL(16,2) BEFORE platnost,
+  ADD refmena       CHAR(3) BEFORE platnost,
+  ADD refkurslist   INTEGER BEFORE platnost;
+
+CREATE INDEX cfs_prijem_mat_i_fk6 ON cfs_prijem_mat(refmena);
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT FOREIGN KEY(refmena) REFERENCES ac_mena_cis(mena) CONSTRAINT cfs_prijem_mat_fk6;
+
+CREATE INDEX cfs_prijem_mat_i_fk7 ON cfs_prijem_mat(refkurslist);
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT FOREIGN KEY(refkurslist) REFERENCES ac_kurslist_den(ser) CONSTRAINT cfs_prijem_mat_fk7;
+
+ROLLBACK WORK;
+
+--End of B135838_UID78502_1

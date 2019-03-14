@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136941_UID36095_1-bc_akce_cis
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE bc_akce_acis ADD zpozdeniparalelbeh   Integer BEFORE reflogserver;
+ALTER TABLE bc_akce_cis ADD zpozdeniparalelbeh   Integer BEFORE reflogserver;
+
+ROLLBACK WORK;
+
+--End of B136941_UID36095_1-bc_akce_cis

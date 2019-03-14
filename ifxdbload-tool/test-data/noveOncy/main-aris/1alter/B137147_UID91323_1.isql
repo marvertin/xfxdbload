@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B137147_UID91323_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31938: Sale+Central: Zvýšení počtu znaků pro pole při doplňování ÚŽ {STORY}
+
+
+BEGIN WORK;
+
+ --RSTS-31938: Sale+Central: Zvýšení počtu znaků pro pole při doplňování ÚŽ
+ALTER TABLE crk_pozadDokument_mat  MODIFY upresneniprooz LVARCHAR(2000);   --povodny typ VARCHAR(255)
+ALTER TABLE crk_pozadVysvetleni_mat  MODIFY otazka LVARCHAR(2000);                    --povodny typ VARCHAR(255)
+ALTER TABLE crk_pozadVysvetleni_mat  MODIFY odpoved LVARCHAR(1000);                --povodny typ VARCHAR(255)
+
+ALTER TABLE crk_pozadDokument_arch  MODIFY upresneniprooz LVARCHAR(2000);   --povodny typ VARCHAR(255)
+ALTER TABLE crk_pozadVysvetleni_arch  MODIFY otazka LVARCHAR(2000);                    --povodny typ VARCHAR(255)
+ALTER TABLE crk_pozadVysvetleni_arch  MODIFY odpoved LVARCHAR(1000);                --povodny typ VARCHAR(255)
+
+ROLLBACK WORK;
+
+--End of B137147_UID91323_1

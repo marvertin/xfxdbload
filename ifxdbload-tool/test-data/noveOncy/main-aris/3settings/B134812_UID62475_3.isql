@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B134812_UID62475_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17010: Main: Kontrola případných dalších dopadů odstranění číselníku sazeb v Main {STORY}
+
+BEGIN WORK;
+
+call TW_RegDelKey('RU', '*', 'vyzva', 'baze');
+
+UPDATE TW_Registr_Cis SET hodnota = 0 WHERE oblast = 'RU' AND funkce = 'vyzva' AND udaj IN ('sazbaPU', 'sazba');
+
+UPDATE TW_Registr_Cis SET hodnota = 0 WHERE oblast = 'RU' AND funkce = 'odppohl' AND udaj IN ('sazbaPU', 'sazba');
+
+ROLLBACK WORK;
+
+--End of B134812_UID62475_3

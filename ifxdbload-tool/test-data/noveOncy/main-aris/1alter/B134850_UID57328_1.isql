@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B134850_UID57328_1
+-- @TC:ONCE: DESCRIPTION = Mít dostupné storno/zamítnutí jen v definovaných situacích {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE seu_uz_mat 
+  ADD urVysledekKot Integer  DEFAULT 0 BEFORE opisovanazadost,
+  ADD CONSTRAINT (CHECK (urVysledekKot IN (0,1)) CONSTRAINT seu_uz_mat_d59s);
+
+ALTER TABLE seu_uz_arch  
+  ADD urVysledekKot Integer BEFORE opisovanazadost;
+
+ROLLBACK WORK;
+
+--End of B134850_UID57328_1

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135879_UID78649_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24928: Zápis informace o vyhodnocení - pilot {STORY}
+
+BEGIN WORK;
+
+INSERT INTO tw_typobjserno_cis(tabulka, nazev, platnost)
+VALUES ('cps_vyhuvproc_den', 'Vyhodnocení úvěrového procesu', 1);
+
+INSERT INTO tw_typobjserno_cis(tabulka, nazev, platnost)
+VALUES ('cps_vyhuvprocprijem_den', 'Vyhodnocení úvěrového procesu pro příjem', 1);
+
+INSERT INTO tw_typobjserno_cis(tabulka, nazev, platnost)
+VALUES ('cps_kritvyhuvproc_den', 'Kritérium vyhodnocení procesu', 1);
+
+ROLLBACK WORK;
+
+--End of B135879_UID78649_3

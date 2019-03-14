@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, B135120_UID67942_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19763: Schvalovací protokol (Protokol o posouzení úvěru). {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+insert into rr_reptype_cis (repcode, area, repkind, reptype, repvar
+  , repname, exportdir, keepinterval, bulkprint, bulkprintformat
+  , bulkprintsave, bulkprintdir, savewithoutpreview, formatchange, listinternalmail
+  , writedocument
+) values ('EU430', 'EU', 43, 0, 0
+  , 'Schvalovací protokol', 'J2EE', 1, 0, null
+  , 0,  null, 0, 0, 0
+  , 0
+)
+;
+
+insert into rr_xreptype_cis (refrepcode, datod, datdo, predloha, cesta
+  , soubor, interniid, externiid, externidocid, poznamka
+  , platnost
+) values ('EU430', MDY(1,1,2018), null, 'J', 'C:\Cibis\reports\reports_j2ee\EU43'
+  , 'EU430.jrxml', null, null, null, null
+  , 1
+)
+;
+
+INSERT INTO do_typdokumentu_cis (text, poznamka, platnost, biztyp, obsah
+  , podobsah, garant, generovany, repcode, archivovat
+  , podepisovany, typproecm, obsahproecm, podobsahproecm
+) VALUES ('Schvalovací protokol', null, 1, 98, '04'
+  , '01', 'OZU', 1, 'EU430', 1
+  , 0, null, null, null)
+;
+
+call TW_RegSetOrAddKey('EU','posouzeniUveru','generDok','schvalProt', TW_LastSer() , 1/*lze editovat*/)
+;
+
+ROLLBACK WORK;
+
+--End of B135120_UID67942_3

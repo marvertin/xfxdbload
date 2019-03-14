@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, B135816_UID78871_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25063: Zavést číselník "Způsob doručení dokumentů ÚSD" {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE czd_zpusobdorucusd_cis (
+  serno   SERIAL NOT NULL,
+  nazev   VARCHAR(60) NOT NULL,
+  povolitjinaadr   CHAR(1) NOT NULL,
+  uhradapoplatkukl   Integer NOT NULL,
+  tuhr   CHAR(8),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poznamka VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+,
+  CHECK (uhradapoplatkukl IN (0,1)) CONSTRAINT czd_zpusobdorucusd_cis_c1,
+  CHECK (platnost IN (0,1)) CONSTRAINT czd_zpusobdorucusd_cis_du82
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX czd_zpusobdorucusd_cis_pk ON czd_zpusobdorucusd_cis(serno);
+ALTER TABLE czd_zpusobdorucusd_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT czd_zpusobdorucusd_cis_pk;
+
+CREATE TABLE czd_zpusobdorucusd_acis (
+  idarch   SERIAL NOT NULL,
+  nazev   VARCHAR(60) NOT NULL,
+  povolitjinaadr   CHAR(1) NOT NULL,
+  uhradapoplatkukl   Integer NOT NULL,
+  tuhr   CHAR(8),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poznamka VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+,
+  CHECK (uhradapoplatkukl IN (0,1)) CONSTRAINT czd_zpusobdorucusd_acis_c1,
+  CHECK (platnost IN (0,1)) CONSTRAINT czd_zpusobdorucusd_acis_du82
+)lock mode row;
+
+ROLLBACK WORK;
+
+--End of B135816_UID78871_1

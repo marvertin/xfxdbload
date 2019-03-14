@@ -1,0 +1,22 @@
+-- @TC:ONCE: ID = V2, B137121_UID91678_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32119: Nemov: Rozšíření parcely o položku Společné části věci {STORY}
+-- @TC:ONCE: LOAD_UNLESS_LOADED = B137120_UID91678_1
+
+BEGIN WORK;
+
+Alter table cev_parcela_arch
+  --Určuje zda je parcela společnou částí věci. Typicky ve vztahu k bytové jednotce pro potřeby návrhu na vklad/výmaz do katastru nemovitostí.
+  Add spolCastVeci int /*boolean*/ before poruser,
+  Add CONSTRAINT CHECK (spolcastveci IN (0,1)) CONSTRAINT cev_parcela_arch_dc3r
+;
+
+
+Alter table cev_parcela_mat
+  --Určuje zda je parcela společnou částí věci. Typicky ve vztahu k bytové jednotce pro potřeby návrhu na vklad/výmaz do katastru nemovitostí.
+  Add spolCastVeci int /*boolean*/ before poruser,
+  Add CONSTRAINT CHECK (spolcastveci IN (0,1)) CONSTRAINT cev_parcela_mat_dc3q
+;
+
+ROLLBACK WORK;
+
+--End of B137120_UID91678_1

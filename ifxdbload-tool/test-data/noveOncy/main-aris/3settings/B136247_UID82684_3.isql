@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136247_UID82684_3
+-- @TC:ONCE: DESCRIPTION = Dotazník na výběr účelu a zajištění v CIBIS-Sale
+
+BEGIN WORK;
+
+update eu_ucel_cis set ucelss = 0 where ucel = 1213;
+
+update eu_ucel_cis set zkratka = 'StavPN' where ucel = 1107 ;
+
+update eu_ucel_cis set zkratka = 'StavPP' where ucel = 1108 ;
+
+ROLLBACK WORK;
+
+--End of B136162_UID82684_3

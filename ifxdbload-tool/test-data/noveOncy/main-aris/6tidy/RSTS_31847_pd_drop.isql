@@ -1,0 +1,6 @@
+-- @TC:ONCE: ID = V2, RSTS_31847_pd_drop
+-- @TC:ONCE: DESCRIPTION = Drop RSTS_31847_pd_drop
+-- @TC:ONCE: RELOAD_ALWAYS
+BEGIN WORK;
+  call TW_DropRoutineOpt('RSTS_31847_pd');
+ROLLBACK WORK;

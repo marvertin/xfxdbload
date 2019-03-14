@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B137332_UID95018_4-refobdobi
+-- @TC:ONCE: DESCRIPTION = RSTS-33830: Migrace pro naplnění nového sloupce sp_vratmf_kart.refobdobi {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+UPDATE sp_vratmf_kart a
+   SET a.refobdobi = (SELECT b.serno FROM csp_vratobdobi_mat b WHERE b.rok = a.rok and b.obdobi = a.obdobi)
+ WHERE a.rok is not null and a.obdobi is not null;
+
+ROLLBACK WORK;
+
+--End of B137332_UID95018_4-refobdobi

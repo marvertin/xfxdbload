@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B136010_UID80005_1-agregLTV
+-- @TC:ONCE: DESCRIPTION = RSTS-25696: Parametrizace a migrace nového typu RK Agregované LTV {STORY}
+
+
+BEGIN WORK;
+
+UPDATE crk_kontrolatyp_cis
+SET poradizobraz = poradizobraz + 1
+WHERE poradizobraz >= 12;
+
+-- Vytvoření rezervy v pořadí zobrazení pro příští zmeny číselníku kontrol
+UPDATE crk_kontrolatyp_cis
+SET poradizobraz = poradizobraz * 100;
+
+ROLLBACK WORK;
+
+--End of B136013_UID80005_1-agregLTV

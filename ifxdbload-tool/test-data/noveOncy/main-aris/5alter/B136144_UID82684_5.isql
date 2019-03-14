@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136144_UID82684_5
+-- @TC:ONCE: DESCRIPTION = Vyplněný dotazník
+
+
+BEGIN WORK;
+
+RENAME TABLE seu_dotaznikvarpu_mat TO old_seu_dotaznikvarpu_mat ;  
+
+ROLLBACK WORK;
+
+--End of B136144_UID82684_5

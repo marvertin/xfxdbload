@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B136199_UID83015_1
+-- @TC:ONCE: DESCRIPTION = RSTS-27231: V Sale umožnit efektivní volbu doručení USD na korespondenční adresu {STORY}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE seu_uz_arch ADD (
+  typadresyusd   CHAR(1)
+);
+
+
+ALTER TABLE seu_uz_mat ADD (
+  typadresyusd   CHAR(1)
+);
+
+
+--CHECKS
+ALTER TABLE seu_uz_mat
+ADD CONSTRAINT (CHECK (typAdresyUSD in ('N', 'T', 'K', 'J')) CONSTRAINT seu_uz_mat_c7);
+
+
+
+ROLLBACK WORK;
+
+--End of B136199_UID83015_1

@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B137362_UID94211_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33387: Sale: Zapojení a výpočet funkce pro vyhodnocení započítání příjmů {STORY}
+
+
+BEGIN WORK;
+
+-- #Funkce pro vyhodnocení započítávání příjmů - aktuální implementace#
+call TW_RegSetOrAddKey('EU', 'finSit', 'fceZapPrijem', 'aktualniImpl', null, 1,
+                       'Úvěr', 'Finanční situace osoby pro úvěrový případ', 'Funkce započítávání příjmů',
+                       'Funkce pro vyhodnocení započítávání příjmů - aktuální implementace', 1);
+                       
+                       
+-- #Funkce pro vyhodnocení započítávání příjmů - výchozí implementace#
+call TW_RegSetOrAddKey('EU', 'finSit', 'fceZapPrijem', 'vychoziImpl', 'cfs_zapoctPrijemFceVychozImpl', 1,
+                       'Úvěr', 'Finanční situace osoby pro úvěrový případ', 'Funkce započítávání příjmů',
+                       'Funkce pro vyhodnocení započítávání příjmů - výchozí implementace', 1);
+
+ROLLBACK WORK;
+
+--End of B137362_UID94211_3

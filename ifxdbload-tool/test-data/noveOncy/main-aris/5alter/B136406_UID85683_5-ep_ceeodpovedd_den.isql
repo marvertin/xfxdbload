@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136406_UID85683_5-ep_ceeodpovedd_den
+-- @TC:ONCE: DESCRIPTION = RSTS-28995: Záporné serno {ACCEPTATION_DEFECT}
+
+BEGIN WORK;
+
+alter table ep_ceeodpovedd_den modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table ep_ceeodpovedd_den add constraint primary key (serno) constraint ep_ceeodpovedd_den_pk;
+
+ROLLBACK WORK;
+
+--End of B136406_UID85683_5

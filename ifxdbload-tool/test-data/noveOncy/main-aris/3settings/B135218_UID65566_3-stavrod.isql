@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135218_UID65566_3-stavrod
+-- @TC:ONCE: DESCRIPTION = RSTS-18492: Přidat kontrolu na povinné zadání druhé osoby do páru pro konkrétní rodinné stavy (bod 21) {STORY}
+
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'STAVROD', 'druhDruzka', 5, 1,
+  'Osoba', 'Evidence osoby', 'Persons', 'Rodinný stav druh/družka');
+
+ROLLBACK WORK;
+
+--End of B135218_UID65566_3-stavrod

@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B135637_UID75316_3-provDen
+-- @TC:ONCE: DESCRIPTION = RSTS-23355: Doplnit zápisy do PD pro Central - úlohazáložka Schvalování úvěru
+
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4001, 'Vyžádat součinnost jiného referenta při posouzení úvěru', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4002, 'Posouzení – přidat požadovaný dokument', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4003, 'Posouzení – změnit požadovaný dokument', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4004, 'Posouzení – zrušit požadovaný dokument', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4005, 'Posouzení – přidat požadavek na vysvětlení', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4006, 'Posouzení – změnit požadavek na vysvětlení', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4007, 'Posouzení – zrušit požadavek na vysvětlení', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4008, 'Vyžádat doplnění podkladů k úvěru od OZ', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4009, 'Manuálně změnit posouzení úvěru', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4010, 'Změnit interní poznámky k posouzení', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4011, 'Manuálně změnit stavy rizikových kontrol', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4012, 'Zadat přehodnocení rizikové kontroly', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4013, 'Manuálně spustit rizikovou kontrolu pro vybrané předměty', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4014, 'Zadat individuální sazbu pro ÚŽ', null, 1);
+
+ROLLBACK WORK;
+
+--End of B135637_UID75316_3-provDen

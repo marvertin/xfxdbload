@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135952_UID80041_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25718: Přidání nových atributů do seo_prukaz_mat a seo_prukaz_arch {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE seo_prukaz_mat ADD priorita INTEGER BEFORE poruser,
+                           ADD platnost INTEGER DEFAULT 1 NOT NULL BEFORE poruser,
+                           ADD CONSTRAINT CHECK (platnost IN (0,1)) CONSTRAINT seo_prukaz_mat_d83i;
+
+ALTER TABLE seo_prukaz_arch ADD priorita INTEGER BEFORE poruser,
+                            ADD platnost INTEGER BEFORE poruser,
+                            ADD CONSTRAINT CHECK (platnost IN (0,1)) CONSTRAINT seo_prukaz_arch_d84c;
+
+ROLLBACK WORK;
+
+--End of B135952_UID80041_1

@@ -11,7 +11,7 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="cz.tconsult.lib.ifxdbload.tool.IfxDbLoad"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--dir ./test-data/noveOncy  --fazes f100alter"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--dir ./test-data/noveOncy  --fazes f050before,f100alter,f300settings,f400migration,f500alter,f600tidy"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ifxdbload-tool"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea"/>
 </launchConfiguration>

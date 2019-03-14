@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136881_UID77507_3-exekuceprovokruh
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 1, 'Exportovat seznam přehledů exekucí', 1);
+
+ROLLBACK WORK;
+
+--End of B136881_UID77507_3-exekuceprovokruh

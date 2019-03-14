@@ -1,0 +1,73 @@
+-- @TC:ONCE: ID = V2, B135139_UID43095_1
+-- @TC:ONCE: DESCRIPTION = Nastavit odeslání typu SMS/e-mailu do ECM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- tw_smstyp_cis
+
+ALTER TABLE tw_smstyp_cis ADD (
+  archivovat   Integer  DEFAULT 0 NOT NULL BEFORE platnost
+)
+;
+
+ALTER TABLE tw_smstyp_cis ADD CONSTRAINT (CHECK (archivovat IN (0,1)) CONSTRAINT tw_smstyp_cis_d5kw);
+
+-- ###############################################################
+-- tw_smstyp_acis
+
+ALTER TABLE tw_smstyp_acis ADD (
+  archivovat   Integer  BEFORE platnost
+)
+;
+
+ALTER TABLE tw_smstyp_acis ADD CONSTRAINT (CHECK (archivovat IN (0,1)) CONSTRAINT tw_smstyp_acis_d5kx);
+
+-- ###############################################################
+-- tw_sms_kart 
+
+ALTER TABLE tw_sms_kart  ADD (
+  archivace   Integer DEFAULT 0 NOT NULL BEFORE portime,
+  datpotvrarchiv   DATE BEFORE portime,
+  iddokarchiv CHAR(40) BEFORE portime
+)
+;
+
+ALTER TABLE tw_sms_kart ADD CONSTRAINT (CHECK (archivace IN (0, 1, 2)) CONSTRAINT tw_sms_kart_C3);
+
+-- ###############################################################
+-- tw_emailtyp_cis
+
+ALTER TABLE tw_emailtyp_cis ADD (
+  archivovat   Integer  DEFAULT 0 NOT NULL BEFORE platnost
+)
+;
+
+ALTER TABLE tw_emailtyp_cis ADD CONSTRAINT (CHECK (archivovat IN (0,1)) CONSTRAINT tw_emailtyp_cis_d5l1);
+
+-- ###############################################################
+-- tw_emailtyp_acis 
+
+ALTER TABLE tw_emailtyp_acis  ADD (
+  archivovat   Integer  BEFORE platnost
+)
+;
+
+ALTER TABLE tw_emailtyp_acis  ADD CONSTRAINT (CHECK (archivovat IN (0,1)) CONSTRAINT tw_emailtyp_acis_d5l2);
+
+-- ###############################################################
+-- tw_email_kart  
+
+ALTER TABLE tw_email_kart ADD (
+  archivace   Integer DEFAULT 0 NOT NULL BEFORE portime,
+  datpotvrarchiv   DATE BEFORE portime,
+  iddokarchiv CHAR(40) BEFORE portime
+)
+;
+
+ALTER TABLE tw_email_kart ADD CONSTRAINT (CHECK (archivace IN (0, 1, 2)) CONSTRAINT tw_email_kart_c2);
+
+ROLLBACK WORK;
+
+--End of B135139_UID43095_1

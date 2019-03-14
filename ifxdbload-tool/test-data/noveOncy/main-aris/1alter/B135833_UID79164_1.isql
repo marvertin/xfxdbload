@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B135833_UID79164_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25258: Doplnit interní druh pobytu do evidencí CIBIS-Sale {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE seo_osoba_arch
+  ADD refdruhpobytinterni   INTEGER;
+  
+ALTER TABLE seo_osoba_mat
+  ADD refdruhpobytinterni   INTEGER;
+
+CREATE INDEX seo_osoba_mat_i_f7 ON seo_osoba_mat(refdruhpobytinterni);
+
+ALTER TABLE seo_osoba_mat ADD CONSTRAINT FOREIGN KEY(refdruhpobytinterni) REFERENCES eo_druhpobytinterni_cis(id) CONSTRAINT seo_osoba_mat_f7;
+
+ROLLBACK WORK;
+
+--End of B135833_UID79164_1

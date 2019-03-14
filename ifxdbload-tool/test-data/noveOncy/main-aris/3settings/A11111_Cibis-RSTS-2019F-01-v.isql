@@ -1,0 +1,9 @@
+--V1,ID:A11111_Cibis-RSTS-2019F-01-v
+
+BEGIN WORK;
+
+		  
+		  
+INSERT INTO  db_info (kdo, co) VALUES (USER, 'Cibis-RSTS-2019F-01-v');
+	  
+ROLLBACK WORK;

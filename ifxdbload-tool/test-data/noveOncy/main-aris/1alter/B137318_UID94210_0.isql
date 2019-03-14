@@ -1,0 +1,70 @@
+-- @TC:ONCE: ID = V2, B137318_UID94210_0
+-- @TC:ONCE: DESCRIPTION = RSTS-33387: Sale: Zapojení a výpočet funkce pro vyhodnocení započítání příjmů {STORY}
+
+
+BEGIN WORK;
+
+-- Číselník Popis kritéria pro vyhodnocení započítávání příjmů
+CREATE TABLE cfs_prijemzapoctkrit_cis (
+  id   SERIAL NOT NULL,
+  otazka   VARCHAR(128),
+  platnost   Integer  DEFAULT 1,
+  poznamka   VARCHAR(70),
+  datporizeni   DATE,
+  datzmeny   DATE,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT cfs_prijemzapoctkrit_cis_dcu9
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_prijemzapoctkrit_cis_pk ON cfs_prijemzapoctkrit_cis(id);
+ALTER TABLE cfs_prijemzapoctkrit_cis ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT cfs_prijemzapoctkrit_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+-----------------------------------------------------
+
+CREATE TABLE cfs_prijemzapoctkrit_acis (
+  idarch   SERIAL NOT NULL,
+  id   INTEGER,
+  otazka   VARCHAR(128),
+  platnost   Integer  DEFAULT 1,
+  poznamka   VARCHAR(70),
+  datporizeni   DATE,
+  datzmeny   DATE,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT cfs_prijemzapoctkrit_acis_dcu9
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_prijemzapoctkrit_acis_pk ON cfs_prijemzapoctkrit_acis(idarch);
+ALTER TABLE cfs_prijemzapoctkrit_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cfs_prijemzapoctkrit_acis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+
+ROLLBACK WORK;
+
+--End of B137318_UID94210_0

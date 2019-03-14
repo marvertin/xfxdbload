@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B135284_UID43095_1
+-- @TC:ONCE: DESCRIPTION = Nastavit odeslání typu SMS/e-mailu do ECM {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- tw_sms_kart 
+
+ALTER TABLE tw_sms_kart  DROP (
+  datpotvrarchiv,
+  iddokarchiv
+)
+;
+
+-- ###############################################################
+-- tw_email_kart  
+
+ALTER TABLE tw_email_kart DROP (
+  datpotvrarchiv ,
+  iddokarchiv
+)
+;
+
+ROLLBACK WORK;
+
+--End of B135284_UID43095_1

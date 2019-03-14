@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B135251_UID69527_1
+-- @TC:ONCE: DESCRIPTION = RSTS-20484: Finální plnění položek schvalovacího protokolu {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE cfs_zavazek_mat ADD (
+  kodoperace   CHAR(2),
+  zustatekjistiny   DECIMAL(16, 2)
+);
+
+ALTER TABLE cfs_zavazek_arch ADD (
+  kodoperace   CHAR(2),
+  zustatekjistiny   DECIMAL(16, 2)
+);
+
+ROLLBACK WORK;
+
+--End of B135251_UID69527_1

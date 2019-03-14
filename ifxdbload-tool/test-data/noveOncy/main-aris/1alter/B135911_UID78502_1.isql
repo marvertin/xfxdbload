@@ -1,0 +1,46 @@
+-- @TC:ONCE: ID = V2, B135911_UID78502_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24830: Rozšíření číselníku typů příjmů {STORY}
+
+
+BEGIN WORK;
+
+
+CREATE TABLE cfs_podmprijemtyp_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refprijemtyp   INTEGER,
+  refpodmprijemtyp   INTEGER,
+  platnost   Integer NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT cfs_podmprijemtyp_acis_dtu2
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_podmprijemtyp_acis_pk ON cfs_podmprijemtyp_acis(idarch);
+ALTER TABLE cfs_podmprijemtyp_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cfs_podmprijemtyp_acis_pk;
+
+
+
+CREATE TABLE cfs_podmprijemtyp_cis (
+  serno   SERIAL NOT NULL,
+  refprijemtyp   INTEGER NOT NULL,
+  refpodmprijemtyp   INTEGER NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT cfs_podmprijemtyp_cis_dtsy
+)lock mode row;
+
+
+--PK
+CREATE UNIQUE INDEX cfs_podmprijemtyp_cis_pk ON cfs_podmprijemtyp_cis(serno);
+ALTER TABLE cfs_podmprijemtyp_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cfs_podmprijemtyp_cis_pk;
+
+ROLLBACK WORK;
+
+--End of B135911_UID78502_1

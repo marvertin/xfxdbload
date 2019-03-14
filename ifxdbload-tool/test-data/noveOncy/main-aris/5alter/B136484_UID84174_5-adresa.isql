@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, B136484_UID84174_5-adresa
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+
+BEGIN WORK;
+
+alter table seo_osoba_arch modify refadresakoresp BIGINT;
+alter table seo_osoba_mat  modify refadresakoresp BIGINT;
+
+alter table seo_osoba_arch modify refadresatrv BIGINT;
+alter table seo_osoba_mat  modify refadresatrv BIGINT;
+
+alter table seo_zamestnavatel_arch modify refadresa BIGINT;
+alter table seo_zamestnavatel_mat  modify refadresa BIGINT;
+
+alter table sep_vyplsek_arch modify refadresa BIGINT;
+alter table sep_vyplsek_mat  modify refadresa BIGINT;
+
+alter table seu_uz_arch modify refadresadorucusd BIGINT;
+alter table seu_uz_mat  modify refadresadorucusd BIGINT;
+
+alter table seo_adresa_arch modify serno  BIGINT    NOT NULL;
+alter table seo_adresa_arch modify idarch BIGSERIAL (2147483648) NOT NULL;
+alter table seo_adresa_arch add constraint primary key (idarch) constraint seo_adresa_arch_pk;
+
+alter table seo_adresa_mat  modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table seo_adresa_mat  add constraint primary key (serno) constraint seo_adresa_mat_pk;
+
+ALTER TABLE seo_osoba_mat ADD CONSTRAINT (FOREIGN KEY(refadresakoresp) REFERENCES seo_adresa_mat(serno) CONSTRAINT seo_osoba_mat_f5);
+ALTER TABLE seo_osoba_mat ADD CONSTRAINT (FOREIGN KEY(refadresatrv) REFERENCES seo_adresa_mat(serno) CONSTRAINT seo_osoba_mat_f4);
+ALTER TABLE seo_zamestnavatel_mat ADD CONSTRAINT (FOREIGN KEY(refadresa) REFERENCES seo_adresa_mat(serno) CONSTRAINT seo_zamestnavatel_mat_f2);
+ALTER TABLE sep_vyplsek_mat ADD CONSTRAINT (FOREIGN KEY(refadresa) REFERENCES seo_adresa_mat(serno) CONSTRAINT ses_vyplsek_mat_f2);
+ALTER TABLE seu_uz_mat      ADD CONSTRAINT (FOREIGN KEY(refadresadorucusd) REFERENCES seo_adresa_mat(serno) CONSTRAINT seu_uz_mat_fk3);
+
+ROLLBACK WORK;
+
+--End of B136484_UID84174_5

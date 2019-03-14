@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B137439_UID95994_4
+-- @TC:ONCE: DESCRIPTION = RSTS-34271: NDD: Odstranění klasifikace {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+UPDATE RS_Real_Mat SET realklasif = NULL WHERE stav NOT IN ('V', 'Z');
+
+ROLLBACK WORK;
+
+--End of B137439_UID95994_4

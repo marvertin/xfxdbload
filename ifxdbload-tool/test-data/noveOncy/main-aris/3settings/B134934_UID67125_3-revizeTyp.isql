@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B134934_UID67125_3-revizeTyp
+-- @TC:ONCE: DESCRIPTION = RSTS-19343: Doplnění aktualizace revize do provedení kontrol CC-Telefony a CC - příjmy {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('VERI_PRI', 'Zadání výsledku při verifikaci příjmů', null, ap_datprov(), ap_datprov());
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('VERI_TEL', 'Zadání výsledku při verifikaci telefonů', null, ap_datprov(), ap_datprov());
+
+ROLLBACK WORK;
+
+--End of B134934_UID67125_3-revizeTyp

@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B136660_UID61156_5
+-- @TC:ONCE: DESCRIPTION = RSTS-16259: Zpřehlednění názvů sloupců v cfs_zavazek_mat {REALIZACE}
+
+BEGIN WORK;
+
+ALTER TABLE cfs_zavazek_mat 
+  DROP refseuuz, 
+  DROP refeusml, 
+  DROP refeusmltyp;
+
+ALTER TABLE cfs_zavazek_arch
+  DROP refseuuz, 
+  DROP refeusml, 
+  DROP refeusmltyp;
+
+CREATE INDEX cfs_zavazek_mat_i_fk3 ON cfs_zavazek_mat(refseuuzpuvod);
+ALTER TABLE cfs_zavazek_mat ADD CONSTRAINT FOREIGN KEY(refseuuzpuvod) REFERENCES seu_uz_mat(serno) CONSTRAINT cfs_zavazek_mat_fk3;
+
+CREATE INDEX cfs_zavazek_mat_i_fk6 ON cfs_zavazek_mat(refeusmlpuvod,refeusmltyppuvod);
+ALTER TABLE cfs_zavazek_mat ADD CONSTRAINT FOREIGN KEY(refeusmlpuvod,refeusmltyppuvod) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT cfs_zavazek_mat_fk6;
+
+ROLLBACK WORK;
+
+--End of B136660_UID61156_5

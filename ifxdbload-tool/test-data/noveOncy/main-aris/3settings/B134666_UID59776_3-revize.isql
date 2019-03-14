@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B134666_UID59776_3-revize
+-- @TC:ONCE: DESCRIPTION = RSTS-15529: Parametrizace pro posouzení úvěru {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('MANZMPOS', 'Manuální změna posouzení úvěru', null, ap_datprov(), ap_datprov());
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('ZMEDOPLN', 'Změna v požadavcích na doplnění dokumentů či informací', null, ap_datprov(), ap_datprov());
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('ZMEINPOZ', 'Změna interní poznámky v posouzení úvěru', null, ap_datprov(), ap_datprov());
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('VYZSOURE', 'Vyžádání součinnosti jiného referenta', null, ap_datprov(), ap_datprov());
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('DOKONORR', 'Dokončení posouzení úvěru na OŘR', null, ap_datprov(), ap_datprov());
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('VYZDOPOZ', 'OZ publikován požadavek na doplnění podkladů k úvěru', null, ap_datprov(), ap_datprov());
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('PREDOPLN', 'Předání doplnění podkladů z ÚŽ na centrálu', null, ap_datprov(), ap_datprov());
+
+INSERT INTO crk_revizetyp_cis (kod, nazev, poznamka, pordatprov, refdatprov) VALUES ('SUPERVIZ', 'Dokončení supervize nemovitostí', null, ap_datprov(), ap_datprov());
+
+ROLLBACK WORK;
+
+--End of B134666_UID59776_3-revize

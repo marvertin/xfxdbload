@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B136337_UID85205_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28698: V dotazníku přestalo fungovat předgenerování pojištění Uniqa {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+--#Otázky dotazníku zajištění pro vygenerování pojištění Uniqa pro <id_sady>#
+Call TW_RegSetOrAddKey('EU', 'creditrq', 'rozhodNastroj', 'otazky-pro-uniqa-120', '200, 220', 1,
+'Úvěr', 'Rozhodovací nástroj pro variantu PÚ', 'Dotazník', 'Otázky dotazníku zajištění pro vygenerování pojištění Uniqa pro 120');
+
+Call TW_RegSetOrAddKey('EU', 'creditrq', 'rozhodNastroj', 'otazky-pro-uniqa-130', '200, 220', 1,
+'Úvěr', 'Rozhodovací nástroj pro variantu PÚ', 'Dotazník', 'Otázky dotazníku zajištění pro vygenerování pojištění Uniqa pro 130');
+
+--#Odpovědi dotazníku zajištění pro vygenerování pojištění Uniqa pro <id_sady>#
+Call TW_RegSetOrAddKey('EU', 'creditrq', 'rozhodNastroj', 'odp-pro-uniqa-120', '202, 1', 1,
+'Úvěr', 'Rozhodovací nástroj pro variantu PÚ', 'Dotazník', 'Odpovědi dotazníku zajištění pro vygenerování pojištění Uniqa pro 120');
+
+Call TW_RegSetOrAddKey('EU', 'creditrq', 'rozhodNastroj', 'odp-pro-uniqa-130', '202, 1', 1,
+'Úvěr', 'Rozhodovací nástroj pro variantu PÚ', 'Dotazník', 'Odpovědi dotazníku zajištění pro vygenerování pojištění Uniqa pro 130');
+
+
+ROLLBACK WORK;
+
+--End of B136337_UID85205_3

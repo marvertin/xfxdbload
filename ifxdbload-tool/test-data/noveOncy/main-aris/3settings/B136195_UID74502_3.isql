@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136195_UID74502_3
+-- @TC:ONCE: DESCRIPTION = RSTS-23066: Nástroj na předávaní dokumentů do ECM {REQUEST}
+
+
+BEGIN WORK;
+
+--#Interval předání dokumentů do ECM# 
+call TW_RegSetOrAddKey('DO', 'elArchiv', 'intervalPredani', '*', 60, 1, 'Dokumenty', 'Elektronický archiv', 'Elektronický archiv', 'Interval předání dokumentů do ECM', 1);
+
+ROLLBACK WORK;
+
+--End of B136195_UID74502_3

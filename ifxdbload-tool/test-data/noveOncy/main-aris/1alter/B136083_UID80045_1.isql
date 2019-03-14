@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136083_UID80045_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25721: Umožnit zadávat pro občanské průkazy SK kód série dokladu v CIBIS-Sale {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE seo_prukaz_mat ADD serieprukazu CHAR(10) BEFORE priorita;
+ALTER TABLE seo_prukaz_arch ADD serieprukazu CHAR(10) BEFORE priorita;
+
+ROLLBACK WORK;
+
+--End of B136083_UID80045_1

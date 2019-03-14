@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B136296_UID81197_1
+-- @TC:ONCE: DESCRIPTION = RSTS-26322: TF001879 - CIBIS-Sale - Smlouva SS, Ukončení smlouvy SS - Dokumenty - zaměněné obsahy vygenerovaných a podepsaných dokumentů {DEFECT}
+
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE do_provedenipodpisu (
+  serno   SERIAL NOT NULL,
+  refdokument   BIGINT NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX do_provedenipodpisu_pk ON do_provedenipodpisu(serno);
+ALTER TABLE do_provedenipodpisu ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT do_provedenipodpisu_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX do_provedenipodpisu_u1 ON do_provedenipodpisu(refuser);
+ALTER TABLE do_provedenipodpisu ADD CONSTRAINT (UNIQUE (refuser) CONSTRAINT do_provedenipodpisu_u1);
+
+
+ROLLBACK WORK;
+
+--End of B136296_UID81197_1

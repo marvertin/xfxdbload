@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135362_UID72803_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22291: Šablona "Prohlášení příjmů" {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+update cfs_prijemtyp_cis set socialnidavka=1 where druhprijmu='OSTATNI' and poradi in (5,6,7,8,10,11);
+
+
+ROLLBACK WORK;
+
+--End of B135362_UID72803_3

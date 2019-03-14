@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B137189_UID92332_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+--eu_ucel_cis
+UPDATE eu_ucel_cis SET extrefinzapoct = 1 where ucel = 1502;
+UPDATE eu_ucel_cis SET extrefinzapoct = 1 where ucel = 1508;
+
+ROLLBACK WORK;
+
+--End of B137189_UID92332_3

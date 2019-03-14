@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135167_UID68939_3-stavRod
+-- @TC:ONCE: DESCRIPTION = RSTS-20150 : Kontrola rodinného stavu vůči návodné otázce {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'STAVROD', 'zenatyVdana', 2, 1);
+
+ROLLBACK WORK;
+
+--End of B135167_UID68939_3-stavRod

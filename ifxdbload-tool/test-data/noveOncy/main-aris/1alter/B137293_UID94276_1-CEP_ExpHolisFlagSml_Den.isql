@@ -1,0 +1,50 @@
+-- @TC:ONCE: ID = V2, B137293_UID94276_1-CEP_ExpHolisFlagSml_Den
+-- @TC:ONCE: DESCRIPTION = RSTS-33441: IMPL (design, dat.model): RSTS-33185_Exporty v evidenci hoslistic flag {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+CREATE TABLE cep_expholisflagsml_den (
+  serno   SERIAL NOT NULL,
+  refholisticflagden   INTEGER,
+  refholisticflag   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  regcissml   CHAR(15),
+  smlspor   DECIMAL(16, 0),
+  tsmlspor   CHAR(4),
+  stav   CHAR(1),
+  kontopu   DECIMAL(16, 0),
+  tkopu   CHAR(2),
+  variantapu   CHAR(10),
+  variantaput   CHAR(35),
+  vysepu   DECIMAL(16,2),
+  blokcastkapu   DECIMAL(16,2),
+  datsplatpu   DATE,
+  konto   DECIMAL(16, 0),
+  tko   CHAR(2),
+  vyse   DECIMAL(16,2),
+  blokcastka   DECIMAL(16,2),
+  datsplat   DATE,
+  splatka   DECIMAL(16,2),
+  dobasplat   Integer,
+  prislib   DECIMAL(16,2),
+  datrestr   DATE,
+  datposlzm   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_expholisflagsml_den_pk ON cep_expholisflagsml_den(serno);
+ALTER TABLE cep_expholisflagsml_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_expholisflagsml_den_pk;
+
+--FK
+CREATE INDEX cep_expholisflagsml_den_i2 ON cep_expholisflagsml_den(refholisticflag);
+ALTER TABLE cep_expholisflagsml_den ADD CONSTRAINT FOREIGN KEY(refholisticflag) REFERENCES cep_holisticflag_mat(serno) CONSTRAINT cep_expholisflagsml_den_f2;
+CREATE INDEX cep_expholisflagsml_den_i1 ON cep_expholisflagsml_den(refholisticflagden);
+ALTER TABLE cep_expholisflagsml_den ADD CONSTRAINT FOREIGN KEY(refholisticflagden) REFERENCES cep_expholisticflag_den(serno) CONSTRAINT cep_expholisflagsml_den_f1;
+
+ROLLBACK WORK;
+
+--End of B137293_UID94276_1-CEP_ExpHolisFlagSml_Den

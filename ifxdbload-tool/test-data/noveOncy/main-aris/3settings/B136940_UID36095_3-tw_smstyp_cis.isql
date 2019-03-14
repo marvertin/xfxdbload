@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136940_UID36095_3-tw_smstyp_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-5046: TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+UPDATE tw_smstyp_cis SET textsms = '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>> byla spuštěna.' WHERE zkratka = 'DAVKA_START';
+UPDATE tw_smstyp_cis SET textsms = '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>> byla ukončena. Provozní datum dávky: <<DATUM_START>>. Provozní datum při ukončení: <<DATUM_KONEC>>.' WHERE zkratka = 'DAVKA_END';
+UPDATE tw_smstyp_cis SET textsms = '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>>. Chyba: <<ERROR>>.' WHERE zkratka = 'DAVKA_ERR';
+UPDATE tw_smstyp_cis SET textsms = '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>> byla přerušena. Provozní datum dávky: <<DATUM_START>>. Provozní datum při ukončení: <<DATUM_KONEC>>.' WHERE zkratka = 'DAVKA_STOP';
+UPDATE tw_smstyp_cis SET textsms = '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>> byla zrušena. Provozní datum dávky: <<DATUM_START>>. Provozní datum při ukončení: <<DATUM_KONEC>>.' WHERE zkratka = 'DAVKA_CANCEL';
+UPDATE tw_smstyp_cis SET textsms = '<<DATABAZE>>@<<SERVER>> <<AKCE>> dávky <<DAVKA>> - varování. Provozní datum dávky: <<DATUM_START>>. Provozní datum při ukončení: <<DATUM_KONEC>>.' WHERE zkratka = 'DAVKA_ENDW';
+
+ROLLBACK WORK;
+
+--End of B136940_UID36095_3-tw_smstyp_cis

@@ -1,0 +1,77 @@
+-- @TC:ONCE: ID = V2, B137031_UID90468_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31529: IMPL (design,dat.model): RSTS-30719_Evidence indikátorů - datové struktury {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RDT00d', 'D', 0, 'Technical Default - D', 'O', '0, 1', 0, 110, 0, 0, 0, 1, 0, 'Technical Default - D');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RDT00u', 'D', 0, 'Technical Default - U', 'P', '0, 1', 0, 110, 0, 0, 0, 1, 0, 'Technical Default - U');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD010', 'D', 0, '90+ DPD', 'P', '0, 1', 0, 120, 3, 12, 0, 1, 1, '90+ DPD');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD020', 'D', 0, 'Non-Accrued Status', 'P', '0, 1', 0, 130, 3, 12, 0, 1, 1, 'Non-Accrued Status');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD030d', 'D', 0, 'Specif.Credit Risk Adjustments - D', 'O', '0, 1', 0, 330, 3, 12, 0, 0, 1, 'Specific Credit Risk Adjustments - D');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD030u', 'D', 0, 'Specif.Credit Risk Adjustments - U', 'P', '0, 1', 0, 340, 3, 12, 0, 0, 1, 'Specific Credit Risk Adjustments - U');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD040', 'D', 0, 'Sale of a Credit Obligation', 'P', '0, 1', 0, 150, 0, 0, 0, 1, 1, 'Sale of a Credit Obligation');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD050', 'D', 0, 'Distressed Restructuring', 'P', '0, 1', 0, 160, 12, 12, 0, 1, 1, 'Distressed Restructuring');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD060', 'D', 0, 'Bankruptcy/Insolvency', 'O', '0, 1', 0, 170, 3, 12, 1, 1, 1, 'Bankruptcy/Insolvency');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD070', 'D', 0, 'Credit Fraud', 'O', '0, 1', 0, 180, 0, 0, 0, 1, 1, 'Credit Fraud');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD080d', 'D', 0, 'Death of a Borrower - D', 'O', '0, 1', 0, 190, 0, 0, 1, 1, 1, 'Death of a Borrower - D');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD080u', 'D', 0, 'Death of a Borrower - U', 'P', '0, 1', 0, 190, 3, 12, 1, 1, 1, 'Death of a Borrower - U');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD110', 'D', 0, 'Loss of Sufficient Recurring Income', 'O', '0, 1', 0, 200, 3, 12, 0, 1, 1, 'Loss of Sufficient Recurring Income');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD120', 'D', 0, 'Significant Indebtedness', 'O', '0, 1', 0, 210, 3, 12, 0, 1, 1, 'Significant Indebtedness');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD130', 'D', 0, 'Breach of Contractual Covenants', 'P', '0, 1', 0, 220, 3, 12, 0, 1, 1, 'Breach of Contractual Covenants');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD140', 'D', 0, 'Term.Cred.Contract before Maturity', 'P', '0, 1', 0, 230, 3, 12, 1, 1, 1, 'Termination of a Credit Contract before Its Maturity');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD150', 'D', 0, 'Forec.of Col.or Call of Guarantee', 'P', '0, 1', 0, 240, 3, 12, 1, 1, 1, 'Foreclosure of Collateral or Call of Guarantee');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD160', 'D', 0, 'Purchase or Orig.at a Mat.Discount', 'P', '0, 1', 0, 250, 3, 12, 0, 1, 1, 'Purchase or Origination at a Material Discount');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD210', 'D', 1, 'PI Product Cross-Default', 'P', '0, 1', 0, 260, 3, 12, 1, 1, 1, 'PI Product Cross-Default');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD220', 'D', 1, 'PI Cross-Def.Due to Pulling Effect', 'P', '0, 1', 0, 270, 3, 12, 1, 1, 1, 'PI Cross-Defualt Due to Pulling Effect');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD230', 'D', 1, 'Micro-SME Cross-Def.from Joint Obl.', 'O', '0, 1', 0, 280, 0, 0, 1, 1, 1, 'Micro-SME Cross-Defualt from Joint Obligations');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('RD240', 'D', 1, 'Cross-Default of Connected Obligors', 'O', '0, 1', 0, 10, 3, 12, 1, 1, 1, 'Cross-Default of Connected Obligors');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('S01', 'S', 0, 'RSTS DPD 30+', 'P', '1, 2, 3', 1, 20, 0, 0, 0, 1, 1, 'RSTS DPD 30+');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('S02', 'S', 0, 'EBA DPD 30+', 'P', '1, 2, 3', 1, 30, 0, 0, 0, 1, 1, 'EBA DPD 30+');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('S03', 'S', 1, 'SICR on OE', 'P', '1, 2, 3', 1, 40, 0, 0, 0, 1, 1, 'SICR on OE');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('S04', 'S', 0, 'Fraud', 'O', '1, 2', 1, 50, 0, 0, 0, 1, 1, 'Fraud');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('S05', 'S', 0, 'Exekuce', 'O', '1, 2', 1, 60, 0, 0, 0, 1, 1, 'Exekuce');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('S06d', 'S', 0, 'Holistic flag - D', 'O', '1, 2, 3', 1, 70, 0, 0, 0, 1, 1, 'Holistic flag - D');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('S06u', 'S', 0, 'Holistic flag - U', 'P', '1, 2, 3', 1, 80, 0, 0, 0, 1, 1, 'Holistic flag - U');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('SQ', 'S', 0, 'Quant. Comp.', 'P', '1, 2', 1, 90, 0, 0, 0, 1, 1, 'Quant. Comp.');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('SX', 'S', 0, 'Chyb. rating', 'P', '1, 2', 1, 100, 0, 0, 0, 1, 1, 'Chyb. rating');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('SDd', 'S', 0, 'Indikátor defaultu - D', 'O', '1, 2, 3', 1, 310, 0, 0, 1, 0, 1, 'Indikátor defaultu - D');
+
+INSERT INTO cep_indikatortyp_cis (kod, druh, krizovyindikator, nazev, objekt, oborhodnot, hodnotavypnuti, poradivyhodnoceni, probacnidobazakladni, probacnidobaopakovana, on_line, prenos, souhrnnevyhodnoceni, poznamka) VALUES ('SDu', 'S', 0, 'Indikátor defaultu - U', 'P', '1, 2, 3', 1, 320, 0, 0, 1, 0, 1, 'Indikátor defaultu - U');
+
+
+
+ROLLBACK WORK;
+
+--End of B137031_UID90468_3

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136201_UID83015_4
+-- @TC:ONCE: DESCRIPTION = RSTS-27231: V Sale umožnit efektivní volbu doručení USD na korespondenční adresu {STORY}
+
+
+BEGIN WORK;
+
+UPDATE seu_uz_mat SET zpusobdorucusd = 1, typadresyusd = 'T' WHERE zpusobpodpusd = 'ZASPOST';
+
+ROLLBACK WORK;
+
+--End of B136201_UID83015_4

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134763_UID65364_3
+-- @TC:ONCE: DESCRIPTION = RSTS-18396: Doplnit zápis do PD při obnovení úvěrového návrhu {STORY}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 3003, 'Obnovit úvěrový návrh', 1);
+
+ROLLBACK WORK;
+
+--End of B134763_UID65364_3

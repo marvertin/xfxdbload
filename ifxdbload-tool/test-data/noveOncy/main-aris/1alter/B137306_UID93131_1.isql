@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B137306_UID93131_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32835: Main: Rozšíření číselníku bank a vznik nových číselníků
+
+BEGIN WORK;
+
+ALTER TABLE cfs_delkavzam_cis 
+  ADD poruser   CHAR(20)  DEFAULT USER before refuser,
+  ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND before refuser;
+
+ALTER TABLE cfs_delkavzam_acis 
+  ADD poruser   CHAR(20)  DEFAULT USER before refuser,
+  ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND before refuser;
+
+ALTER TABLE cfs_typpracpomer_cis 
+  ADD poruser   CHAR(20)  DEFAULT USER before refuser,
+  ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND before refuser;
+
+ALTER TABLE cfs_typpracpomer_acis 
+  ADD poruser   CHAR(20)  DEFAULT USER before refuser,
+  ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND before refuser;
+
+ROLLBACK WORK;
+
+--End of B137306_UID93131_1

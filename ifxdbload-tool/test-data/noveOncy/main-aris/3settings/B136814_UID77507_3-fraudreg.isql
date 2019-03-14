@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136814_UID77507_3-fraudreg
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+-- #Typ rizikového subjektu – osoba se záznamem o fraudu# 
+call TW_RegSetOrAddKey('EP', 'rizsubjekt', 'typ', 'OsobaSFraudem', null, 1, 'Podpora pro produkt', 'Rizikový subjekt', 'Typ rizikového subjektu', 'Typ rizikového subjektu – osoba se záznamem o fraudu', 1);
+
+ROLLBACK WORK;
+
+--End of B136814_UID77507_3-fraudreg

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136204_UID76919_3-ws_metoda_cis
+-- @TC:ONCE: DESCRIPTION = REAL: Výpisy SIS - zaručená elektronická pečeť PO
+
+BEGIN WORK;
+
+INSERT INTO ws_metoda_cis (id, nazev, specifikace, metoda, poznamka, platnost, smersluzby, skupinasluzeb) VALUES (55, 'Konverze souboru do PDF či PDF/A', 'https://rstest.602.cz/ltd/ltd.asmx?WSDL', 'convertFileEx', null, 1, 1, 11);
+
+ROLLBACK WORK;
+
+--End of B136204_UID76919_3-ws_metoda_cis

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B136117_UID82065_3-podmPrijem
+-- @TC:ONCE: DESCRIPTION = RSTS-26702: Špatný výpočet uznatelné částky {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+insert into cfs_podmprijemtyp_cis (refprijemtyp, refpodmprijemtyp)
+values ((select serno from cfs_prijemtyp_cis where poradi = 9), 1);
+
+insert into cfs_podmprijemtyp_cis (refprijemtyp, refpodmprijemtyp)
+values ((select serno from cfs_prijemtyp_cis where poradi = 9), 2);
+
+update cfs_prijemtyp_cis
+set limituznatelnosti = 7600
+where poradi = 6;
+
+ROLLBACK WORK;
+
+--End of B136117_UID82065_3

@@ -1,0 +1,30 @@
+-- @TC:ONCE: ID = V2, B135607_UID75459_4-overenidate
+-- @TC:ONCE: DESCRIPTION = Chyby při pokusu o předání ÚŽ - zavedeni overeniDate
+
+
+BEGIN WORK;
+
+
+-- ###############################################################
+-- DO_Dokument_Mat
+
+SET TRIGGERS FOR do_dokument_mat DISABLED;
+
+UPDATE do_dokument_mat SET overeniDate = date(overeniTime) WHERE overeniTime IS NOT NULL;
+
+SET TRIGGERS FOR do_dokument_mat ENABLED;
+
+
+-- ###############################################################
+-- DO_Dokument_Arch
+
+SET TRIGGERS FOR do_dokument_arch DISABLED;
+
+UPDATE do_dokument_arch SET overeniDate = date(overeniTime) WHERE overeniTime IS NOT NULL;
+
+SET TRIGGERS FOR do_dokument_arch ENABLED;
+
+
+ROLLBACK WORK;
+
+--End of B135607_UID75459_4-overenidate

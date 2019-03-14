@@ -65,6 +65,9 @@ public class OnceLoaderImpl implements OnceLoader {
     Collections.sort(pss);
 
     for (final OnceScript once : pss) {
+      if (! once.getDirectiveErrors().isEmpty()) {
+        ctx.errorReporter().badOnceDirective(once.getDirectiveErrors(), once.getPs().getSource());
+      }
       final String scriptid = once.getScriptId();
 
       //      final boolean ignorovatChecksum =  once.getStatements().stream().flatMap(stm -> stm.getDirectives().stream()).filter(dir -> dir.getKey().equals("IGNORE_CHECKSUM")).findFirst().isPresent();
@@ -77,14 +80,14 @@ public class OnceLoaderImpl implements OnceLoader {
 
       final Long checksum = checksums.get(scriptid);
       if (checksum == null) {
-        System.out.println("NEZAVEDEN:        " + scriptid);
+        //System.out.println("NEZAVEDEN:        " + scriptid);
       } else {
         if (once.getGlobalDirectives().isIgnoreChecksum()) {
           System.out.println("IGNOROVAT:       " + scriptid);
         } else if (once.verify(checksum) ) {
-          System.out.println("OK:              " + scriptid);
+          //System.out.println("OK:              " + scriptid);
         } else {
-          System.out.println("!!!!BAD!!!       " + scriptid);
+          //System.out.println("!!!!BAD!!!       " + scriptid);
         }
       }
     }

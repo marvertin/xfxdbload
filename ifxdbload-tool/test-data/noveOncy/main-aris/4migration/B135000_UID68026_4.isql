@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B135000_UID68026_4
+-- @TC:ONCE: DESCRIPTION = RSTS-19815: BRKI má nad starými daty opačně KOT / OKI {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+ UPDATE creditregaction set (xresult) = 
+   (CASE WHEN xresult_old = 'Y' THEN 'OKI' WHEN xresult_old = 'N' THEN 'KOT' WHEN xresult_old = 'P' THEN 'KOM' WHEN xresult_old = 'F' THEN 'ERR' ELSE 'NDF' END) 
+   WHERE xresult_old in('Y','N');
+ 
+ UPDATE creditregaction set (xcbresult) = 
+   (CASE WHEN xcbresult_old = 'Y' THEN 'OKI' WHEN xcbresult_old = 'N' THEN 'KOT' WHEN xcbresult_old = 'P' THEN 'KOM' WHEN xcbresult_old = 'F' THEN 'ERR' ELSE 'NDF' END) 
+   WHERE xcbresult_old in('Y','N');    
+   
+ UPDATE creditregcheck set (xresult) = 
+   (CASE WHEN xresult_old = 'Y' THEN 'OKI' WHEN xresult_old = 'N' THEN 'KOT' WHEN xresult_old = 'P' THEN 'KOM' WHEN xresult_old = 'F' THEN 'ERR' ELSE 'NDF' END)
+   WHERE xresult_old in('Y','N');
+   
+ UPDATE creditregcheck set (xcbresult) = 
+   (CASE WHEN xcbresult_old = 'Y' THEN 'OKI' WHEN xcbresult_old = 'N' THEN 'KOT' WHEN xcbresult_old = 'P' THEN 'KOM' WHEN xcbresult_old = 'F' THEN 'ERR' ELSE 'NDF' END) 
+    WHERE xcbresult_old in('Y','N');    
+     
+ ROLLBACK WORK;
+
+
+--End of B135000_UID68026_4
+
+

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135232_UID70126_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20904: Doplnit zápisy do PD při editaci firem {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, platnost) VALUES ('EO', 1303, 'Změnit údaje o firmě', 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, platnost) VALUES ('EO', 1304, 'Vytvořit ověřeného pracovníka firmy', 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, platnost) VALUES ('EO', 1305, 'Změnit ověřeného pracovníka firmy', 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, platnost) VALUES ('EO', 1306, 'Odstranit ověřeného pracovníka firmy', 1);
+
+ROLLBACK WORK;
+
+--End of B135232_UID70126_3

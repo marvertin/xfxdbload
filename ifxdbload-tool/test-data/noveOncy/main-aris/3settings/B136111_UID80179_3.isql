@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, B136111_UID80179_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25796: Požadovat zadání druhého dokladu pro vybrané situace {STORY}
+
+
+BEGIN WORK;
+
+-- #Požadovat druhý průkaz pro ÚŽ#
+CALL TW_RegSetOrAddKey('EO', 'prukaz', 'pozadDruhy', 'UZ', 1, 
+  1, 'Osoba', 'Osoba základ', 'Požadovat druhý průkaz', 'Požadovat druhý průkaz pro ÚŽ');
+  
+-- #Požadovat druhý průkaz pro Nová SS#
+CALL TW_RegSetOrAddKey('EO', 'prukaz', 'pozadDruhy', 'NovaSS', 0,
+  1, 'Osoba', 'Osoba základ', 'Požadovat druhý průkaz', 'Požadovat druhý průkaz pro Nová SS');
+
+-- #Požadovat druhý průkaz pro Změna SS#
+CALL TW_RegSetOrAddKey('EO', 'prukaz', 'pozadDruhy', 'ZmenaSS', 0, 
+  1, 'Osoba', 'Osoba základ', 'Požadovat druhý průkaz', 'Požadovat druhý průkaz pro Změna SS');
+  
+-- #Požadovat druhý průkaz pro Ukončení SS#
+CALL TW_RegSetOrAddKey('EO', 'prukaz', 'pozadDruhy', 'UkonSS', 0, 
+  1, 'Osoba', 'Osoba základ', 'Požadovat druhý průkaz', 'Požadovat druhý průkaz pro Ukončení SS');
+
+-- #Požadovat druhý průkaz pro Čerpání#
+CALL TW_RegSetOrAddKey('EO', 'prukaz', 'pozadDruhy', 'Cerpani', 1, 
+  1, 'Osoba', 'Osoba základ', 'Požadovat druhý průkaz', 'Požadovat druhý průkaz pro Čerpání');
+
+-- #Požadovat druhý průkaz pro Změna osobních údajů#
+CALL TW_RegSetOrAddKey('EO', 'prukaz', 'pozadDruhy', 'ZmenaOsU', 1, 
+  1, 'Osoba', 'Osoba základ', 'Požadovat druhý průkaz', 'Požadovat druhý průkaz pro Změna osobních údajů');
+
+ROLLBACK WORK;
+
+--End of B136111_UID80179_3

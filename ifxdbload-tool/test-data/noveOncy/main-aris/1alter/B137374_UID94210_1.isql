@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B137374_UID94210_1
+-- @TC:ONCE: DESCRIPTION = RSTS-33386: Uložit výsledky z funkce pro vyhodnocení započítávání příjmů {STORY}
+
+
+BEGIN WORK;
+
+-- Do tabulky cfs_prijem_mat přidán FK na tabulku cfs_prijemzapoctvstup_den
+ALTER TABLE cfs_prijem_mat ADD (refprijzapoctfcevstup  INTEGER BEFORE vyslfcezapoctprij);
+CREATE INDEX cfs_prijem_mat_i_fk13 ON cfs_prijem_mat(refprijzapoctfcevstup);
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT FOREIGN KEY(refprijzapoctfcevstup) REFERENCES cfs_prijemzapoctvstup_den(serno) CONSTRAINT cfs_prijem_mat_fk13;
+
+-- archív
+ALTER TABLE cfs_prijem_arch ADD (refprijzapoctfcevstup  INTEGER BEFORE vyslfcezapoctprij);
+
+ROLLBACK WORK;
+
+--End of B137374_UID94210_1

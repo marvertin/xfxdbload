@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B133984_UID62251_3
+-- @TC:ONCE: DESCRIPTION = Ukládání a mazání modelu - rozšíření číselníku akcí tvorby modelu {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+update ep_splspormodakce_cis set vymazobrcfschvaluv = 0;
+
+call TW_RegDelKey('EP','modSplacASpor','mazaniModelu','priSchvaleniUN');
+
+ROLLBACK WORK;
+
+--End of B133984_UID62251_3

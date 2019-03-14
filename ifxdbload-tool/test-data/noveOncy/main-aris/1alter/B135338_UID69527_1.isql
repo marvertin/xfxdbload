@@ -1,0 +1,36 @@
+-- @TC:ONCE: ID = V2, B135338_UID69527_1
+-- @TC:ONCE: DESCRIPTION = RSTS-20484: Finální plnění položek schvalovacího protokolu {STORY}
+
+BEGIN WORK;
+
+ALTER TABLE seu_uz_mat ADD (
+  pozadverifprijemos1   Integer,
+  pozadverifprijemos2   Integer,
+  pozadverifprijemos3   Integer,
+  pozadverifprijemos4   Integer
+);
+
+ALTER TABLE seu_uz_mat ADD CONSTRAINT (
+  CHECK (pozadverifprijemos1 IN (0,1)) CONSTRAINT seu_uz_mat_d5r0,
+  CHECK (pozadverifprijemos2 IN (0,1)) CONSTRAINT seu_uz_mat_d5r1,
+  CHECK (pozadverifprijemos3 IN (0,1)) CONSTRAINT seu_uz_mat_d5r2,
+  CHECK (pozadverifprijemos4 IN (0,1)) CONSTRAINT seu_uz_mat_d5r3
+);
+
+ALTER TABLE seu_uz_arch ADD (
+  pozadverifprijemos1   Integer,
+  pozadverifprijemos2   Integer,
+  pozadverifprijemos3   Integer,
+  pozadverifprijemos4   Integer
+);
+
+ALTER TABLE seu_uz_arch ADD CONSTRAINT (
+  CHECK (pozadverifprijemos1 IN (0,1)) CONSTRAINT seu_uz_arch_d5r4,
+  CHECK (pozadverifprijemos2 IN (0,1)) CONSTRAINT seu_uz_arch_d5r5,
+  CHECK (pozadverifprijemos3 IN (0,1)) CONSTRAINT seu_uz_arch_d5r6,
+  CHECK (pozadverifprijemos4 IN (0,1)) CONSTRAINT seu_uz_arch_d5r7
+);
+
+ROLLBACK WORK;
+
+--End of B135338_UID69527_1

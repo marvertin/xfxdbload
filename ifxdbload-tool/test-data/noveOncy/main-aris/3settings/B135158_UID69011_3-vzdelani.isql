@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135158_UID69011_3-vzdelani
+-- @TC:ONCE: DESCRIPTION = RSTS-20188: Neumožnit vzdělání "neuvedeno" {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('EO', 'ENVIRONMENT', 'VZDELANI', 'nepovolenProUZ', 0, 1,
+  'Osoba', 'Evidence osoby', 'Persons', 'Nepovolené vzdělání pro ÚŽ');
+
+ROLLBACK WORK;
+
+--End of B135158_UID69011_3-vzdelani

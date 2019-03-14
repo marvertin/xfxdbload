@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137001_UID90883_1
+-- @TC:ONCE: DESCRIPTION = RSTS-31743: RK - agregované LTV {DEFECT}
+
+
+BEGIN WORK;
+
+-- Dropujeme, protože potřebujeme benevolentnější CHECK (Pokud se jedná externí závazek, pak číslo kontraktu nemusí být vyplněno, viz 5alter)
+ALTER TABLE crk_kontrolasmlouvyagltv_den DROP CONSTRAINT crk_kontrolasmlouvyagltv_den_c1;
+
+ROLLBACK WORK;
+
+--End of B137001_UID90883_1

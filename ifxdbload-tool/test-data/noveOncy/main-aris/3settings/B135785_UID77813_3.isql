@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135785_UID77813_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24395: Přiložit dokumenty k čerpání či doložení uspořené částky - dokončení práce s dokumenty {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO do_typdokumentutypobjektu_cis (doktyp, tabulka, uzivatelskypristup, platnost, explicitgener, platnostod, platnostdo)
+                                   VALUES (949, 'seu_balicekpopisdokl_mat','EDITACE', 1, 0, mdy(1,1,2016), null);
+
+ROLLBACK WORK;
+
+--End of B135785_UID77813_3

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135161_UID57749_3
+-- @TC:ONCE: DESCRIPTION = RSTS-14632: Schvalovací protokol - základní údaje úvěru - nejjednodušší kostra {STORY}
+
+BEGIN WORK;
+
+INSERT INTO TW_TypObjSerno_Cis(
+      tabulka, nazev, platnost
+  ) VALUES (
+      'cps_posouzprot_kart', 'Protokol o posouzení úvěru', 1
+  )
+;
+
+ROLLBACK WORK;
+
+--End of B135161_UID57749_3

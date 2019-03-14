@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134757_UID42565_3
+-- @TC:ONCE: DESCRIPTION = RSTS-7334: Změnit údaje role osoby (?-1) {STORY}
+
+
+BEGIN WORK;
+
+insert into tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EP', 1001, 'Změnit údaje o roli osoby', 1);
+
+ROLLBACK WORK;
+
+--End of B134757_UID42565_3

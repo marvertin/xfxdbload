@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B134974_UID66486_3-typDokum
+-- @TC:ONCE: DESCRIPTION = RSTS-18999: Manuálně vyžádat doplnění podkladů od OZ po 1. posouzení na centrále - generování dokumentů {STORY}
+
+
+BEGIN WORK;
+
+-- Typ dokumentu pro přehled požadavků centrály na doplnění ÚŽ
+call TW_RegSetKey ('EU', 'posouzeniUveru', 'generDok', 'prehledPozCentraly'
+  , (select doktyp from do_typdokumentu_cis where text = 'Přehled požadavků centrály na doplnění ÚŽ'));
+
+ROLLBACK WORK;
+
+--End of B134974_UID66486_3-typDokum

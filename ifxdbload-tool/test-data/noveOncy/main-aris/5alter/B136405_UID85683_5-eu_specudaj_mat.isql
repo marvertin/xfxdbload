@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136405_UID85683_5-eu_specudaj_mat
+-- @TC:ONCE: DESCRIPTION = RSTS-28995: Záporné serno {ACCEPTATION_DEFECT}
+
+BEGIN WORK;
+
+alter table eu_specudaj_arch modify serno BIGINT    NOT NULL;
+alter table eu_specudaj_arch modify idarch BIGSERIAL (2147483648) NOT NULL;
+alter table eu_specudaj_arch add constraint primary key (idarch) constraint eu_specudaj_arch_pk;
+
+alter table eu_specudaj_mat  modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table eu_specudaj_mat  add constraint primary key (serno) constraint eu_specudaj_mat_pk;
+
+ROLLBACK WORK;
+
+--End of B136405_UID85683_5

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136053_UID77815_6
+-- @TC:ONCE: DESCRIPTION = RSTS-24397: TF001802 - ÚŽ - Závazky klienta a partnera/ky - chybné stanovení délky úvěru {DEFECT}
+
+BEGIN WORK;
+
+DROP PROCEDURE IF EXISTS Seu_UverMaxSplatka;
+
+ROLLBACK WORK;
+
+--End of B136053_UID77815_6

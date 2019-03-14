@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B135212_UID69035_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20201: Provizní systém - příznak o interním refinancování {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(5, 'VL025');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(6, 'VL025');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(7, 'VL025');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(8, 'VL025');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(9, 'VL025');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(10, 'VL025');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(11, 'VL025');
+
+ROLLBACK WORK;
+
+--End of B135212_UID69035_3

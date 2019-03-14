@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136880_UID77507_3-exekucereg
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+-- #Den v měsíci pro vyhodnocení přehledu exekucí# 
+call TW_RegSetOrAddKey('BD', 'default', 'prehledExekuci', 'denZpracovani', null, 1, 'Správa systému', 'Noční dávka', 'Přehledy exekucí', 'Den v měsíci pro vyhodnocení přehledu exekucí', 1);
+
+ROLLBACK WORK;
+
+--End of B136880_UID77507_3-exekucereg

@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B134943_UID67229_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19395: Subdodávka IMPLEMENTACE: RSTS-17037_Zohlednit v provizích přílohy na úvěrové smlouvě {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(5, 'VL024');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(6, 'VL024');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(7, 'VL024');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(8, 'VL024');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(9, 'VL024');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(10, 'VL024');
+INSERT INTO opr_kombtypvlast_cis(refobchprodpovol, typvlastnosti) VALUES(11, 'VL024');
+
+ROLLBACK WORK;
+
+--End of B134943_UID67229_3

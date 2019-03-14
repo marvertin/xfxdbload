@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B135714_UID75446_3-provDen
+-- @TC:ONCE: DESCRIPTION = RSTS-23398: Doplnit zápisy do PD pro Sale - externí kontroly {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4015, 'Provést ověření dokumentů VIDO', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4016, 'Spravovat seznam ověřených pracovníků firmy', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4017, 'Zaznamenat výsledek kola telefonického ověření příjmu', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4018, 'Zaznamenat výsledek telefonického ověření příjmu', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4019, 'Zaznamenat výsledek kola telefonického ověření telefonů', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4020, 'Zaznamenat výsledek telefonického ověření telefonů', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4021, 'Obnovit požadavek s neověřeným souhlasem', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4022, 'Zaznamenat výsledek kola telefonického ověření souhlasu', null, 1);
+INSERT INTO TW_Prov_Typ_Cis (okruh, typ, popis, poznamka, platnost) VALUES ('EU', 4023, 'Zaznamenat výsledek telefonického ověření souhlasu', null, 1);
+
+ROLLBACK WORK;
+
+--End of B135714_UID75446_3-provDen

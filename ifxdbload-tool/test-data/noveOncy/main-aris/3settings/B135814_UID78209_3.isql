@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B135814_UID78209_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24679: Parametrizace a migrace stresových kontrol {STORY}
+
+BEGIN WORK;
+
+insert into crk_revizetyp_cis(kod, nazev, poznamka, platnost)
+  VALUES ('NOVY_TYP', 'Inicializace při zavedení nového typu RK', null, 1);
+
+call TW_RegSetOrAddKey('EU', 'rizKon-bonUkaz', 'stres', 'koef-prijem', 90, 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-bonUkaz', 'stres', 'koef-spl-zav', 105, 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-bonUkaz', 'stres', 'koef-nakl-dom', 110, 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-bonUkaz', 'stres', 'max-prijem', 2000000, 1);
+
+ROLLBACK WORK;
+
+--End of B135814_UID78209_3

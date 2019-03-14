@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136809_UID83225_3
+-- @TC:ONCE: DESCRIPTION = Postupné čerpání 
+
+BEGIN WORK;
+
+call TW_RegDelKey('RU', 'zajist', 'kontrolaGlobLTV', 'hranice');
+
+ROLLBACK WORK;
+
+--End of B136809_UID83225_3

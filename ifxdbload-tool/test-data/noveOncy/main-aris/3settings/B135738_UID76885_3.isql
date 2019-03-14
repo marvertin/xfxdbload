@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135738_UID76885_3
+-- @TC:ONCE: DESCRIPTION = RSTS-23898: Přiložit dokumenty k čerpání či doložení uspořené částky. {STORY}
+
+
+BEGIN WORK;
+
+insert into tw_typobjserno_cis (tabulka,nazev) values ('seu_balicekpopisdokl_mat', 'Popis dokladů v balíčku dokladů');
+
+ROLLBACK WORK;
+
+--End of B135738_UID76885_3

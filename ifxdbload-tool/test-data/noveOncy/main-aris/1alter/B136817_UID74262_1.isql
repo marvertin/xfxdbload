@@ -1,0 +1,27 @@
+-- @TC:ONCE: ID = V2, B136817_UID74262_1
+-- @TC:ONCE: DESCRIPTION = RSTS-22976: CENTRAL - dospořování SS {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE cfs_zavazek_arch ADD (
+  splatkapu   DECIMAL(16, 2),
+  dosporovani   DECIMAL(16, 2),
+  splatkasu   DECIMAL(16, 2),
+  diskontsplatkasu   DECIMAL(16, 2),
+  dobadiskontu   Integer,
+  diskontsazba   DECIMAL(16, 2)
+);
+
+ALTER TABLE cfs_zavazek_mat ADD (
+  splatkapu   DECIMAL(16, 2),
+  dosporovani   DECIMAL(16, 2),
+  splatkasu   DECIMAL(16, 2),
+  diskontsplatkasu   DECIMAL(16, 2),
+  dobadiskontu   Integer,
+  diskontsazba   DECIMAL(16, 2)
+);
+
+ROLLBACK WORK;
+
+--End of B136817_UID74262_1

@@ -1,0 +1,90 @@
+-- @TC:ONCE: ID = V2, B136655_UID77507_1-fraud_mat
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+CREATE TABLE cep_fraud_mat (
+  serno  SERIAL NOT NULL,
+  os   Integer,
+  typ   INTEGER,
+  kodindikatoru   CHAR(10),
+  idafery   CHAR(40),
+  idorca   CHAR(40),
+  datvzniku   DATE,
+  stopcerp   Integer,
+  prenosrs   Integer,
+  stav   CHAR(1) NOT NULL,
+  poznamka   VARCHAR(255),
+  hodnotazapnuti   CHAR(10),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  provuser   CHAR(20),
+  provtime   DATETIME YEAR TO SECOND,
+  provdatprov   DATE,
+  zrususer   CHAR(20),
+  zrustime   DATETIME YEAR TO SECOND,
+  zrusdatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (stopcerp IN (0,1)) CONSTRAINT cep_fraud_mat_d9dm,
+  CHECK (prenosrs IN (0,1)) CONSTRAINT cep_fraud_mat_d9dn
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_fraud_mat_pk ON cep_fraud_mat(serno);
+ALTER TABLE cep_fraud_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_fraud_mat_pk;
+
+--FK
+CREATE INDEX cep_fraud_mat_i_fk1 ON cep_fraud_mat(typ);
+ALTER TABLE cep_fraud_mat ADD CONSTRAINT FOREIGN KEY(typ) REFERENCES cep_fraudtyp_cis(serno) CONSTRAINT cep_fraud_mat_fk1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cep_fraud_mat
+ADD CONSTRAINT (CHECK (stav IN ('A', 'C', 'Z')) CONSTRAINT cep_fraud_mat_c1);
+--------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE cep_fraud_arch (
+   idarch   SERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  os   Integer,
+  typ   INTEGER,
+  kodindikatoru   CHAR(10),
+  idafery   CHAR(40),
+  idorca   CHAR(40),
+  datvzniku   DATE,
+  stopcerp   Integer,
+  prenosrs   Integer,
+  stav   CHAR(1),
+  poznamka   VARCHAR(255),
+  hodnotazapnuti   CHAR(10),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  provuser   CHAR(20),
+  provtime   DATETIME YEAR TO SECOND,
+  provdatprov   DATE,
+  zrususer   CHAR(20),
+  zrustime   DATETIME YEAR TO SECOND,
+  zrusdatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (stopcerp IN (0,1)) CONSTRAINT cep_fraud_arch_d9dm,
+  CHECK (prenosrs IN (0,1)) CONSTRAINT cep_fraud_arch_d9dn
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_fraud_arch_pk ON cep_fraud_arch(idarch);
+ALTER TABLE cep_fraud_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cep_fraud_arch_pk;
+
+
+ROLLBACK WORK;
+
+--End of B136655_UID77507_1-fraud_mat

@@ -1,0 +1,8 @@
+-- @TC:ONCE: ID = V2, B137081_UID77507_4
+-- @TC:ONCE: DESCRIPTION = RSTS-31777: REAL: Nové rizikové kontroly na stádium {REALIZACE}
+-- @TC:ONCE: NO_TRANSACTION_CONTROL
+
+
+call crk_initNewRk('B137081_UID77507_4', 'RSTS-31777: REAL: Nové rizikové kontroly na stádium {REALIZACE}', 'IFRS_OSOB', 'IFRS_UVER');
+
+--End of B137081_UID77507_4

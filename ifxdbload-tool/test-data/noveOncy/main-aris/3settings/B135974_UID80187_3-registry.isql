@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135974_UID80187_3-registry
+-- @TC:ONCE: DESCRIPTION = RSTS-25799: IMPLEMENTACE (modrá): RSTS-13211_REAL: Integrace úvěrového procesu CIBIS – ECM (dokončení 2018S) {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', '*', 'referent', 'implRefII', 'ww', 1, 'Úvěr', 'Úvěrová smlouva', 'Management of credit contract', 'Implicitní referent II úvěru', 1);
+
+ROLLBACK WORK;
+
+--End of B135974_UID80187_3-registry

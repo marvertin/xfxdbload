@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136134_UID82730_1
+-- @TC:ONCE: DESCRIPTION = RSTS-27103: Chybí index na seo_prukaz_arch.serno {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CREATE INDEX seo_prukaz_arch_i1 ON seo_prukaz_arch(serno);
+
+ROLLBACK WORK;
+
+--End of B136134_UID82730_1

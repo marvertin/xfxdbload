@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B137462_UID93197_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32875: Vygenerování dokumentu k podpisu (po sekci 6) {STORY}
+
+
+BEGIN WORK;
+
+-- #Skupina dokumentů pro doplňkové požadavky#
+call TW_RegSetOrAddKey('EP', 'doplnkovy-pozadavek', 'dokumenty', 'skupina-dokumentu', 24 /*skupina pre doplňkový požadavek*/, 1, 
+  'Podpora pro produkt', 'Doplňkový požadavek', 'Dokumenty', 'Skupina dokumentů pro doplňkové požadavky', 1);
+
+ROLLBACK WORK;
+
+--End of B137462_UID93197_3

@@ -1,0 +1,26 @@
+-- @TC:ONCE: ID = V2, B136838_UID36095_1-bc_spravcedavky
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+CREATE TABLE bc_spravcedavky (
+  id      SERIAL NOT NULL,
+  davkaid   INTEGER NOT NULL,
+  spravce   CHAR(64) NOT NULL,
+  aktivni   Integer NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (aktivni IN (0,1)) CONSTRAINT bc_spravcedavky_d9rf
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX bc_spravcedavky_pk ON bc_spravcedavky(id);
+ALTER TABLE bc_spravcedavky ADD CONSTRAINT PRIMARY KEY(id) CONSTRAINT bc_spravcedavky_pk;
+
+--FK
+CREATE INDEX bc_spravcedavky_i_f1 ON bc_spravcedavky(davkaid);
+ALTER TABLE bc_spravcedavky ADD CONSTRAINT FOREIGN KEY(davkaid) REFERENCES bc_davka_cis(id) CONSTRAINT bc_spravcedavky_f1;
+
+ROLLBACK WORK;
+
+--End of B136838_UID36095_1-bc_spravcedavky

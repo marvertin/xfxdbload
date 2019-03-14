@@ -1,0 +1,51 @@
+-- @TC:ONCE: ID = V2, B136536_UID86875_1-exchangeSynchro
+-- @TC:ONCE: DESCRIPTION = RSTS-29696 REAL: Synchronizace kalendáře CRM s mobilním zařízením (PILOT)
+
+BEGIN WORK;
+
+  ALTER TABLE cl_schuzka_mat
+    ADD misto varchar(255) before nazev,
+    ADD exchangeid   varchar(255) before refuser,
+    ADD syndocrm   datetime year to second before refuser,
+    ADD syndoexch   datetime year to second before refuser;
+
+  ALTER TABLE cl_schuzka_arch
+    ADD misto varchar(255) before nazev,
+    ADD exchangeid   varchar(255) before refuser,
+    ADD syndocrm   datetime year to second before refuser,
+    ADD syndoexch   datetime year to second before refuser;
+
+  --INDEXES
+  CREATE INDEX cl_schuzka_mat_i1 ON cl_schuzka_mat(exchangeid);
+  CREATE INDEX cl_schuzka_mat_i2 ON cl_schuzka_mat(agent, caskonec);  -- kvůli synchronizaci schůzek OZ z Exchange do CRM
+  CREATE INDEX cl_schuzka_mat_i3 ON cl_schuzka_mat(agent, datvznik);  -- kvůli hromadné synchronizaci schůzek nově vytvořených (při převodu na jiného OZ)
+  CREATE INDEX cl_schuzka_mat_i4 ON cl_schuzka_mat(agent, datzrus); -- kvůli hromadné synchronizaci schůzek zrušených (při převodu na jiného OZ)
+
+
+  CREATE TABLE cl_synchro_den (
+    serno   SERIAL NOT NULL,
+    ozast   DECIMAL(16, 0),
+    email   CHAR(45),
+    obdobiod   datetime year to second,
+    obdobido   datetime year to second,
+    nactenocrm   Integer,
+    nactenoexchange   Integer,
+    vytvorenocrm   Integer,
+    aktualizovanocrm   Integer,
+    zrusenocrm   Integer,    
+    chyba   Integer NOT NULL,
+    refuser   CHAR(20)  DEFAULT USER,
+    reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+    CHECK (chyba IN (0,1)) CONSTRAINT cl_synchro_den_d9q2
+  )lock mode row;
+
+  --PK
+  CREATE UNIQUE INDEX cl_synchro_den_pk ON cl_synchro_den(serno);
+  ALTER TABLE cl_synchro_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cl_synchro_den_pk;
+
+  --INDEXES
+  CREATE INDEX cl_synchro_den_i1 ON cl_synchro_den(ozast, reftime); -- kvůli času poslední synchronizace
+      
+ROLLBACK WORK;
+
+--End of B136536_UID86875_1-exchangeSynchro

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B134813_UID65979_3
+-- @TC:ONCE: DESCRIPTION = RSTS-18713: Nastavení koeficientu zajištění u stávajících typů {STORY}
+
+BEGIN WORK;
+
+UPDATE EU_Zajist_Cis SET maxProcSniz = 75 WHERE zajist IN (105, 201, 205, 210, 211);
+
+ROLLBACK WORK;
+
+--End of B134813_UID65979_3

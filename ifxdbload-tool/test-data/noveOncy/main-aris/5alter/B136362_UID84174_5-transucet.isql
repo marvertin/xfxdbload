@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B136362_UID84174_5-transucet
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+-- @TC:ONCE: IGNORE_CHECKSUM
+
+BEGIN WORK;
+
+alter table ses_transucet_arch modify serno BIGINT    NOT NULL;
+alter table ses_transucet_arch modify idarch BIGSERIAL (2147483648) NOT NULL;
+alter table ses_transucet_arch add constraint primary key (idarch) constraint ses_transucet_arch_pk;
+
+alter table ses_transucet_mat  modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table ses_transucet_mat  add constraint primary key (serno) constraint ses_transucet_mat_pk;
+
+ROLLBACK WORK;
+
+--End of B136362_UID84174_5

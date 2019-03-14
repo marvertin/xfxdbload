@@ -1,0 +1,3 @@
+--V1,ID:B134570_UID60217_3_doktyp_exec
+--notran
+  EXECUTE PROCEDURE B134570_UID60217_3_doktyp();

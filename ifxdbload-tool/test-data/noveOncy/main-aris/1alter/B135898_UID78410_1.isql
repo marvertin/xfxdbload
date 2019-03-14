@@ -1,0 +1,24 @@
+-- @TC:ONCE: ID = V2, B135898_UID78410_1
+-- @TC:ONCE: DESCRIPTION = RSTS-24772: Slučováním dokumentů ztrácíme certifikáty {REQUEST}
+
+
+BEGIN WORK;
+
+
+ALTER TABLE do_typdokumentu_acis ADD (
+    slucovatproecm   INT BEFORE portime
+);
+
+
+ALTER TABLE do_typdokumentu_cis ADD (
+    slucovatproecm   INT  DEFAULT 1 NOT NULL BEFORE portime
+);
+
+
+ALTER TABLE do_typdokumentu_cis
+  ADD CONSTRAINT (CHECK (slucovatproecm IN (0,1)) CONSTRAINT do_typdokumentu_cis_d72w)
+;
+
+ROLLBACK WORK;
+
+--End of B135898_UID78410_1

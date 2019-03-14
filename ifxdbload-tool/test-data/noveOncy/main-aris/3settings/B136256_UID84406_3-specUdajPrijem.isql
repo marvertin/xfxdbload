@@ -1,0 +1,75 @@
+-- @TC:ONCE: ID = V2, B136256_UID84406_3-specUdajPrijem
+-- @TC:ONCE: DESCRIPTION = RSTS-28169: Příjem ZAR a jiné mají špatné serno v eu_typspecudaj_cis {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+--#Specifický údaj pro příjem v cizí <měně>#
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'EUR', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v EUR (eurech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí EUR', 1);                 
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'USD', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v USD (amer. dolarech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí USD', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'AUD', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v AUD (austral. dolarech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí AUD', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'BRL', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v BRL (brazilských realech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí BRL', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'BGN', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v BGN (bulharských leva)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí BGN', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'CNY', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v CNY (čínských renminbi)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí CNY', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'DKK', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v DKK (dánských korunách)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí DKK', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'PHP', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v PHP (filipínských peso)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí PHP', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'HKD', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v HKD (honkongských dol.)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí HKD', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'HRK', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v HRK (chorvatských kunách)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí HRK', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'INR', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v INR (indických rupiích)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí INR', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'IDR', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v IDR (indonézských rupiích)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí IDR', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'ILS', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v ILS (izrael. šekelech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí ILS', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'JPY', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v JPY (japonských jenech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí JPY', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'ZAR', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v ZAR (jihoafr. randech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí ZAR', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'KRW', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v KRW (korejských wonech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí KRW', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'CAD', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v CAD (kanad. dolarech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí CAD', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'HUF', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v HUF (maďar. forintech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí HUF', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'MYR', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v MYR (malajsij. riggitech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí MYR', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'MXN', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v MXN (mexických pesech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí MXN', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'XDR', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v XDR (SDR)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí XDR', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'NOK', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v NOK (norských korunách)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí NOK', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'NZD', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v NZD (novozél. dolarech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí NZD', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'PLN', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v PLN (polských zlotých)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí PLN', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'RON', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v RON (rumun. nových leu)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí RON', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'RUB', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v RUB (ruských rublech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí RUB', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'SGD', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v SGD (singapurských dol.)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí SGD', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'SEK', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v SEK (švéd. korunách)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí SEK', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'CHF', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v CHF (švýcar. francích)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí CHF', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'THB', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v THB (thajských bahtech)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí THB', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'TRY', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v TRY (tureckých lirách)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí TRY', 1);
+call TW_RegSetorAddKey('EU', 'specUdaj', 'prijemMena', 'GBP', (SELECT serno FROM EU_TypSpecUdaj_Cis WHERE nazev = 'příjem v GBP (britských librách)'), 1,
+                   'Úvěr', 'Úvěrová smlouva', 'Specifické údaje', 'Specifický údaj pro příjem v cizí GBP', 1);
+
+ROLLBACK WORK;
+
+--End of B136256_UID84406_3-specUdajPrijem

@@ -20,6 +20,8 @@ import lombok.Data;
 public class OnceScript implements Comparable<OnceScript> {
 
   private final ParseredSource ps;
+  private final OnceDirectivesGlobal globalDirectives;
+  private List<String> directiveErrors;
 
   public boolean verify(final long checksum) {
 
@@ -30,14 +32,28 @@ public class OnceScript implements Comparable<OnceScript> {
     return FLegacyChecksumVerifier.verify(this, checksum);
   }
 
-
-  public OnceDirectivesGlobal getGlobalDirectives() {
-    // TODO [veverka] Dodělat a zrozumnit, zvýkonit -- 13. 3. 2019 17:13:48 veverka
+  public OnceScript(final ParseredSource ps) {
+    this.ps = ps;
     final Set<SplDirective> directives = ps.getStatements().get(0).getDirectives();
-    final OnceDirectivesGlobal globalDirectives = new OnceDirectivesParser(directives).parse();
-    return globalDirectives;
+    final OnceDirectivesParser odp = new OnceDirectivesParser(directives);
+    odp.parseLocal(); // využíváme jen vedleší efekt, který vyžere lokální direktivy, jenž legitimně moho být u prvního příkazu, ale nás teď nezajímají
+    this.globalDirectives = odp.parseGlobal();
+    directiveErrors = odp.errors();
+
+    // zjistíme chyby v lokálních direktivách z druhho a dalšího příkazu, ty z prvního tam máme
+    final List<SplStatement> příkazyKroměPrvního = ps.getStatements().subList(1, ps.getStatements().size());
+    //    directiveErrors.addAll(
+    //        příkazyKroměPrvního.stream()
+    //        .flatMap(stm -> localDirectivesError(stm).stream())
+    //        .collect(Collectors.toList())
+    //        );
   }
 
+  private List<String> localDirectivesError(final SplStatement stm) {
+    final OnceDirectivesParser odp = new OnceDirectivesParser(stm.getDirectives());
+    odp.parseLocal();
+    return odp.errors();
+  }
 
   /**
    * spočte checksum onceskriptu
@@ -77,4 +93,6 @@ public class OnceScript implements Comparable<OnceScript> {
   public int compareTo(final OnceScript o) {
     return ps.getFileNameOnly().compareTo(o.getPs().getFileNameOnly());
   }
+
+
 }

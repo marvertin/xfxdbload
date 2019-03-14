@@ -1,0 +1,61 @@
+-- @TC:ONCE: ID = V2, B135009_UID67839_3-email
+-- @TC:ONCE: DESCRIPTION = RSTS-19701: Notifikace o zpracování žádosti v CIBIS-Central {STORY}
+
+BEGIN WORK;
+
+update TW_EmailTyp_Cis set predmet = 'Vaše žádost o úvěr <<CISLO_SS> byla zamítnuta'
+  , obsah = 'Vaše žádost o úvěr <<CISLO_SS> byla zamítnuta. Raiffeisen stavební spořitelna'
+ where zkratka = 'UVER_ZAMIT_KLIENT'
+;
+
+update TW_EmailTyp_Cis set predmet = 'Žádost o úvěr <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla zamítnuta'
+  , obsah = 'Žádost o úvěr <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla zamítnuta. Raiffeisen stavební spořitelna'
+ where zkratka = 'UVER_ZAMIT_OZ'
+;
+
+update TW_EmailTyp_Cis set predmet = 'Vaše žádost o úvěr <<CISLO_SS>> byla stornována'
+  , obsah = 'Vaše žádost o úvěr <<CISLO_SS>> byla stornována. Raiffeisen stavební spořitelna'
+ where zkratka = 'UVER_STORNO_KLIENT'
+;
+
+update TW_EmailTyp_Cis set predmet = 'Žádost o úvěr <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla stornována'
+  , obsah = 'Žádost o úvěr <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla stornována. Raiffeisen stavební spořitelna'
+ where zkratka = 'UVER_STORNO_OZ'
+;
+
+insert into TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno
+  , predmet
+  , obsah
+  , maxpokusu, zpusob, platnost)
+  values ('UVER_ZAMITREG_KLIENT', 'Informace o zamítnutí úvěrového návrhu z důvodu registru - klient', 'rsts@rsts.cz', 'RSTS'
+  , 'Vaše žádost o úvěr <<CISLO_SS>> byla zamítnuta'
+  , 'Vaše žádost o úvěr <<CISLO_SS>> byla zamítnuta na základě dotazu do <<externí databáze>>. Raiffeisen stavební spořitelna'
+  , 1, 'A', 1
+  )
+;
+
+insert into TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno
+  , predmet
+  , obsah
+  , maxpokusu, zpusob, platnost)
+  values ('UVER_ZAMITREG_OZ', 'Informace o zamítnutí úvěrového návrhu z důvodu registru - OZ', 'rsts@rsts.cz', 'RSTS'
+  , 'Žádost o úvěr <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla zamítnuta'
+  , 'Žádost o úvěr <<CISLO_SS>> pro klienta <<JMENO_PRIJMENI>> byla zamítnuta na základě dotazu do <<externí databáze>>. Raiffeisen stavební spořitelna'
+  , 1, 'A', 1
+  )
+;
+
+insert into TW_EmailTyp_Cis (zkratka, popis, odesilatel, odesilateljmeno
+  , predmet
+  , obsah
+  , maxpokusu, zpusob, platnost)
+  values ('UVER_POKRAC_OZ', 'Úvěrová žádost - vrácení ÚŽ k zadání pro OZ', 'sale@rsts.cz', 'RSTS'
+  , 'Je možné pokračovat v zadání úvěru: <<CISLO_SS>> klient: <<JMENO_PRIJMENI>>'
+  , 'Je možné pokračovat v zadání úvěru: <<CISLO_SS>> klient: <<JMENO_PRIJMENI>>. Raiffeisen stavební spořitelna'
+  , 5, 'A', 1
+  )
+;
+
+ROLLBACK WORK;
+
+--End of B135009_UID67839_3-email

@@ -1,0 +1,18 @@
+-- @TC:ONCE: ID = V2, B136046_UID70672_1-rr_reptype_cis
+-- @TC:ONCE: DESCRIPTION = RSTS-21185: Rozlišení šablon pro PB a J2EE aplikace {REQUEST}
+
+
+BEGIN WORK;
+
+-- Uvádí technologii, ve které má být report dostupný.
+ALTER TABLE rr_reptype_cis ADD(
+  reporttechnology   CHAR(20)
+);
+
+--CHECKS
+ALTER TABLE rr_reptype_cis
+ADD CONSTRAINT (CHECK (reportTechnology in('reports_fe', 'reports_j2ee', 'reports_javabe')) CONSTRAINT rr_reptype_cis_c2);
+
+ROLLBACK WORK;
+
+--End of B136046_UID70672_1-rr_reptype_cis

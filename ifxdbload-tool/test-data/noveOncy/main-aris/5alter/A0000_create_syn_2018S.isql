@@ -1,0 +1,50 @@
+--V1,ID:A0000_create_syn_2018S
+--notrans
+-- @TC:ONCE: IGNORE_CHECKSUM
+-- @TC:ONCE: RELOAD_ALWAYS
+drop PROCEDURE if exists A0000_create_syn_2018S;
+create PROCEDURE A0000_create_syn_2018S ();
+
+begin
+
+ON EXCEPTION IN (-218)
+END EXCEPTION with resume;
+
+drop synonym sv_stat;
+drop synonym sv_stat_stav;
+create synonym sv_stat for r8ssa4@kosatkarn:sv_stat;
+create synonym sv_stat_stav for r8ssa4@kosatkarn:sv_stat_stav;
+
+drop synonym sv_stsp_fo;
+drop synonym sv_stsp_po;
+create synonym sv_stsp_fo for r8ssa4@kosatkarn:sv_stsp_fo;
+create synonym sv_stsp_po for r8ssa4@kosatkarn:sv_stsp_po;
+
+drop synonym sv_odbsit;
+create synonym sv_odbsit  for r8ssa4@kosatkarn:sv_odbsit;
+
+drop synonym sv_uvery_fo;
+create synonym sv_uvery_fo for r8ssa4@kosatkarn:sv_uvery_fo;
+
+drop synonym sv_uvurok_fo;
+create synonym sv_uvurok_fo for r8ssa4@kosatkarn:sv_uvurok_fo;
+
+drop synonym sv_uvery_po;
+create synonym sv_uvery_po for r8ssa4@kosatkarn:sv_uvery_po;
+
+drop synonym sv_uvurok_po;
+create synonym sv_uvurok_po for r8ssa4@kosatkarn:sv_uvurok_po;
+
+drop synonym sv_zajist_fo;
+create synonym sv_zajist_fo for r8ssa4@kosatkarn:sv_zajist_fo;
+
+drop synonym sv_zajist_po;
+create synonym sv_zajist_po for r8ssa4@kosatkarn:sv_zajist_po;
+
+end;
+
+END PROCEDURE;
+
+EXECUTE PROCEDURE A0000_create_syn_2018S();
+DROP PROCEDURE A0000_create_syn_2018S;
+

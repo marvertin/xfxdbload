@@ -1,0 +1,68 @@
+-- @TC:ONCE: ID = V2, B135119_UID67942_1
+-- @TC:ONCE: DESCRIPTION = RSTS-19763: Schvalovací protokol (Protokol o posouzení úvěru). {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+----------------------------------------------------------------
+CREATE TABLE cps_posouzprot_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  stav   CHAR(1)  DEFAULT 'W',
+  err   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  pordatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refdatprov   DATE
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_posouzprot_arch_pk ON cps_posouzprot_arch(idarch);
+ALTER TABLE cps_posouzprot_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cps_posouzprot_arch_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+----------------------------------------------------------------
+CREATE TABLE cps_posouzprot_kart (
+  serno   SERIAL NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  --W = čeká na zpracování, D = zpracováno, C = stornováno
+  stav   CHAR(1)  DEFAULT 'W',
+  err   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  pordatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refdatprov   DATE
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cps_posouzprot_kart_pk ON cps_posouzprot_kart(serno);
+ALTER TABLE cps_posouzprot_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cps_posouzprot_kart_pk;
+
+--FK
+
+--INDEXES
+CREATE INDEX cps_posouzprot_kart_i1 ON cps_posouzprot_kart(smlouva, stav);
+CREATE INDEX cps_posouzprot_kart_i2 ON cps_posouzprot_kart(stav);
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cps_posouzprot_kart
+ADD CONSTRAINT (CHECK (stav in ('W', 'D', 'C')) CONSTRAINT cps_posouzprot_kart_c1);
+
+
+ROLLBACK WORK;
+
+--End of B135119_UID67942_1

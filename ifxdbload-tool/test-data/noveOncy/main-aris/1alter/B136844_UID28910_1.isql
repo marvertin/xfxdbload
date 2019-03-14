@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136844_UID28910_1
+-- @TC:ONCE: DESCRIPTION = RSTS-2754: Nabídka sazeb při refixu - poloautomatizace {REQUEST}
+
+
+BEGIN WORK;
+
+RENAME COLUMN ceu_refixaceuver_den.vznikpodhs TO hyposmernice;
+
+ROLLBACK WORK;
+
+--End of B136844_UID28910_1

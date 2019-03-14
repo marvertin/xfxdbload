@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B137410_UID93190_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32868: Sekce 1 - Základní údaje požadavku - bez nabídky smluv {STORY}
+
+BEGIN WORK;
+
+alter table sep_doplnpozadavek_arch
+  add vyzadovanZz2 Integer  DEFAULT 0 before vyzadpodpklienta
+;
+
+alter table sep_doplnpozadavek_mat
+  --Je třeba zadat ZZ2?
+  --Pokud je typPozadavku.zadaniZz2 == 'OZ', tak je zde hodnota výběru, kterou OZ může provést - ale třeba ji nebude provádět, otázka zletilosti či opatrovnictví klienta se zde neřeší, vhodným silným příznakem je existence zz1.
+  --Jinak je zde zkopírována hodnota z číselníku Sep_doplnPozadTyp_Cis.zadanizz2
+  add vyzadovanZz2 Integer  DEFAULT 0 before vyzadpodpklienta
+;
+
+ROLLBACK WORK;
+
+--End of B137410_UID93190_1

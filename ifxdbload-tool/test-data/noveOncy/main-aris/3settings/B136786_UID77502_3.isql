@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136786_UID77502_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24221: Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REQUEST}
+
+
+BEGIN WORK;
+
+INSERT INTO ac_ucet_mat (basel, mena, ucet, poznamka, popis) VALUES (0, 'CZK', '712018', 'Poplatky za uzavření_X_X_FO-R_VU', 'Po.uzavření_FO-R_VU');
+INSERT INTO ac_ucet_mat (basel, mena, ucet, poznamka, popis) VALUES (0, 'CZK', '712048', 'Poplatky za uzavření_X_X_FO-NR_VU', 'Po.uzavření_FO-NR_VU');
+INSERT INTO ac_ucet_mat (basel, mena, ucet, poznamka, popis) VALUES (0, 'CZK', '712088', 'Poplatky za uzavření_X_X_PO-R_VU', 'Po.uzavření_PO-R_VU');
+INSERT INTO ac_ucet_mat (basel, mena, ucet, poznamka, popis) VALUES (0, 'CZK', '712068', 'Poplatky za uzavření_X_X_PO-NR_VU', 'Po.uzavření_PO-NR_VU');
+INSERT INTO ac_ucet_mat (basel, mena, ucet, poznamka, popis) VALUES (0, 'CZK', '712078', 'Poplatky za uzavření_X_X_PO-RG_VU', 'Po.uzavření_PO-RG_VU');
+
+ROLLBACK WORK;
+
+--End of B136786_UID77502_3

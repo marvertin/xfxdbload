@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135514_UID74050_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22864: Nastavení délky bezpečnostního limitu {DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE tw_registr_cis SET udaj = 'cibis-os'  WHERE oblast='TW' and uloha='web' and funkce='odhlaseni_limit' and udaj='CIBIS-OS';
+
+ROLLBACK WORK;
+
+--End of B135514_UID74050_3

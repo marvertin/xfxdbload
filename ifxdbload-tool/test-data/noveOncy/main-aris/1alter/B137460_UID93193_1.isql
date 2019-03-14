@@ -1,0 +1,25 @@
+-- @TC:ONCE: ID = V2, B137460_UID93193_1
+-- @TC:ONCE: DESCRIPTION = RSTS-32871: Sekce 3 - zákonný zástupce {STORY}
+
+BEGIN WORK;
+
+alter table sep_doplnpozadavek_arch
+ add overenineexzz1   Integer  DEFAULT 0 before zakonnyzastupce2,
+ add duvodneexzz1   VARCHAR(255) before zakonnyzastupce2,
+ add overenineexzz2   Integer  DEFAULT 0 before vyzadovanzz2,
+ add duvodneexzz2   VARCHAR(255) before vyzadovanzz2
+;
+
+alter table sep_doplnpozadavek_mat
+ add overenineexzz1   Integer  DEFAULT 0 before zakonnyzastupce2,
+ add duvodneexzz1   VARCHAR(255) before zakonnyzastupce2,
+ add overenineexzz2   Integer  DEFAULT 0 before vyzadovanzz2,
+ add duvodneexzz2   VARCHAR(255) before vyzadovanzz2,
+ add constraint CHECK (overenineexzz1 IN (0,1)) CONSTRAINT sep_doplnpozadavek_mat_dcws,
+ add constraint  CHECK (overenineexzz2 IN (0,1)) CONSTRAINT sep_doplnpozadavek_mat_dcwu
+;
+
+
+ROLLBACK WORK;
+
+--End of B137460_UID93193_1

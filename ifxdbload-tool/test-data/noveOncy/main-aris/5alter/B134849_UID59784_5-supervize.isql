@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B134849_UID59784_5-supervize
+-- @TC:ONCE: DESCRIPTION = RSTS-15537: Při dokončení Supervize (starý Central) propsat výsledky do posouzení (nový Central) {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE cev_supervize_mat
+ADD CONSTRAINT (CHECK (vysledekposouzeni in ('OKI', 'KOT', 'POK')) CONSTRAINT cev_supervize_mat_c2);
+
+ROLLBACK WORK;
+
+--End of B134849_UID59784_5-supervize

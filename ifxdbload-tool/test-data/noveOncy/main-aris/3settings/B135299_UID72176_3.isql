@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B135299_UID72176_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21993: Chyba předání - v  chceck-listu 2 odpověď i dokument {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-od-OZ', 'e-mail-TEC', 'techniciORR@rsts.cz', 1);
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-od-OZ', 'e-mail-ANA', 'analyticiORR@rsts.cz', 1);
+call TW_RegSetOrAddKey('EU', 'posouzeniUveru', 'e-maily-od-OZ', 'e-mail-FRA', 'fraud@rsts.cz', 1);
+
+ROLLBACK WORK;
+
+--End of B135299_UID72176_3

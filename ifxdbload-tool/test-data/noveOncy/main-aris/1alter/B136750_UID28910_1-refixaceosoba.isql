@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, B136750_UID28910_1-refixaceosoba
+-- @TC:ONCE: DESCRIPTION = RSTS-2754: Nabídka sazeb při refixu - poloautomatizace {REQUEST}
+
+
+BEGIN WORK;
+
+CREATE TABLE ceu_refixaceosoba_den (
+  serno   BIGSERIAL NOT NULL,
+  refrefixace   BIGINT NOT NULL,
+  celknezajangklpar   DECIMAL(16,2),
+  celkuverangklpar   DECIMAL(16,2),
+  celkpocetpluverukl   Integer,
+  dsti   DECIMAL(16,2),
+  dti   DECIMAL(16,2),
+  ppv   DECIMAL(16,2),
+  urg   DECIMAL(16,2),
+  nejhorsistage   Integer,
+  nejhorsistageid   CHAR(13),
+  nejhorsistagerole   CHAR(2),
+  vek   Integer,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX ceu_refixaceosoba_den_pk ON ceu_refixaceosoba_den(serno);
+ALTER TABLE ceu_refixaceosoba_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT ceu_refixaceosoba_den_pk;
+
+--FK
+CREATE INDEX ceu_refixaceosoba_den_i_f1 ON ceu_refixaceosoba_den(refrefixace);
+ALTER TABLE ceu_refixaceosoba_den ADD CONSTRAINT FOREIGN KEY(refrefixace) REFERENCES ceu_refixace_mat(serno) CONSTRAINT ceu_refixaceosoba_den_f1;
+
+ROLLBACK WORK;
+
+--End of B136750_UID28910_1

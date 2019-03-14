@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B135216_UID69035_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20201: Provizní systém - příznak o interním refinancování {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+INSERT INTO ep_uhrvlastnost_enum(vlastnost,popis,dattyp,mnozina,poznamka,dostupmodel,promenvcase)
+VALUES(57,'Účely úvěrové smlouvy','INTEGER',1,null,1,1);
+
+ROLLBACK WORK;
+
+--End of B135216_UID69035_3

@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B137261_UID92332_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32469: Parametrizace a domain model {STORY}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EU', 'pozadDok', 'funkce', 'logovatvstupy', 0, 1, 'Úvěr',
+  'Požadované dokumenty', 'Logování', 'Logovat vstupy funkce požadované dokumenty', 1);
+
+call TW_RegSetOrAddKey('EU', 'paramProduktu', 'podmUcelu', 'navysProcentualni', 10, 1, 'Úvěr',
+  'Parametrizace produktu', 'Podmínky účelu', 'Povolené navýšení – procentuální', 1);
+
+call TW_RegSetOrAddKey('EU', 'paramProduktu', 'podmUcelu', 'navysAbsolutni', 200000, 1, 'Úvěr',
+  'Parametrizace produktu', 'Podmínky účelu', 'Povolené navýšení – absolutní', 1);
+
+
+ROLLBACK WORK;
+
+--End of B137261_UID92332_3

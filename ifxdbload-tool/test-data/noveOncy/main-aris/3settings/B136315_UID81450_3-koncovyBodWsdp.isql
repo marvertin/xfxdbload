@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136315_UID81450_3-koncovyBodWsdp
+-- @TC:ONCE: DESCRIPTION = Aktualizace IS CIBIS na novou verzi WSDP 2.8
+
+BEGIN WORK;
+
+Call TW_RegSetOrAddKey('EN', 'WS', 'WSDP', 'KoncovyBod', 'https://katastr.cuzk.cz/ws/wsdp/2.8/');
+
+ROLLBACK WORK;
+
+--End of B136315_UID81450_3-koncovyBodWsdp

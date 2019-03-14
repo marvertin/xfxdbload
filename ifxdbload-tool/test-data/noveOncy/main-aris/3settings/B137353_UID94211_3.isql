@@ -1,0 +1,38 @@
+-- @TC:ONCE: ID = V2, B137353_UID94211_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33387: Sale: Zapojení a výpočet funkce pro vyhodnocení započítání příjmů {STORY}
+
+
+BEGIN WORK;
+
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (1, 'Je způsob získání příjmu Zaměstnanecký příjem v ČR nebo Zaměstnanecký příjem v zahraničí?', 1, null, AP_DatProv(), AP_DatProv());
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (2, 'Je typ pracovního poměru "Dohoda o provedení práce"?', 1, null, AP_DatProv(), AP_DatProv());
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (3, 'Je osoba na příjmu ve výpovědi nebo jednání o ukončení pracovního poměru?', 1, null, AP_DatProv(), AP_DatProv());
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (4, 'Je délka v zaměstnání kratší než 12 měsíců?', 1, null, AP_DatProv(), AP_DatProv());
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (5, 'Je osoba na příjmu ve zkušební době?', 1, null, AP_DatProv(), AP_DatProv());
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (6, 'Je zaměstnání na dobu určitou?', 1, null, AP_DatProv(), AP_DatProv());
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (7, 'Je pro osobu v zaměstnání sjednána dohoda o prodloužení pracovního poměru?', 1, null, AP_DatProv(), AP_DatProv());
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (8, 'Bude pracovní poměr trvat méně než 6 měsíců?', 1, null, AP_DatProv(), AP_DatProv());
+
+INSERT INTO cfs_prijemZapoctKrit_cis (id, otazka, platnost, poznamka, datPorizeni, datZmeny)
+VALUES (9, 'Je zaměstnavatel pracovní agentura?', 1, null, AP_DatProv(), AP_DatProv());
+
+
+ROLLBACK WORK;
+
+--End of B137353_UID94211_3

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136747_UID85627_3-tw_users_accessData
+-- @TC:ONCE: DESCRIPTION = RSTS-28964: Zrušení pole v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('TW', 'users', 'accessData', 'enables', 0, 0, 'Správa systému', 'Správa přístupu', 'Users', 'Nastavení přístupu k datům u uživatelského účtu', 1);
+
+ROLLBACK WORK;
+
+--End of B136747_UID85627_3-tw_users_accessData

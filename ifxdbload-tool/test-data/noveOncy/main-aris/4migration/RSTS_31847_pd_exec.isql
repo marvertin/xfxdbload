@@ -1,0 +1,3 @@
+--V1,ID:RSTS_31847_pd_exec
+--notran
+  EXECUTE PROCEDURE RSTS_31847_pd();

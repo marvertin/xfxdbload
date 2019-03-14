@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B135070_UID68767_3
+-- @TC:ONCE: DESCRIPTION = RSTS-20057: Optimalizace alternativní nabídky pro navýšení splátky {STORY}
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('EU', 'zadost', 'altNab', 'mesPridelLimit', 12, 1/*lze editovat*/);
+
+ROLLBACK WORK;
+
+--End of B135070_UID68767_3

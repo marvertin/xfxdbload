@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135635_UID75279_3-registry
+-- @TC:ONCE: DESCRIPTION = RSTS-23328: Přejmenování parametru {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE tw_registr_cis SET
+nazev = 'Vždy přičíst SP při přepočtu NHZA'
+WHERE oblast = 'EU'
+AND uloha = '*'
+AND funkce = 'zajist'
+AND udaj = 'prepocetNHZASPDoba';
+
+ROLLBACK WORK;

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135870_UID78499_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24827: Import kurzovního lístku {STORY}
+
+
+BEGIN WORK;
+
+insert into ac_mena_cis (mena, popis, oznaceni) values ('ISK', 'Islandská koruna', null);
+
+ROLLBACK WORK;
+
+--End of B135870_UID78499_3

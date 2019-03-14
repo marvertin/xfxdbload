@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B136775_UID74269_3
+-- @TC:ONCE: DESCRIPTION = RSTS-22978: RK - UR a Bonita kontrola {EPIC}
+
+
+BEGIN WORK;
+
+insert into rr_reptype_cis (repcode, area, repkind, reptype, repvar
+  , repname, exportdir, keepinterval, bulkprint, bulkprintformat
+  , bulkprintsave, bulkprintdir, savewithoutpreview, formatchange, listinternalmail
+  , writedocument, reporttechnology
+) values ('EU440', 'EU', 44, 0, 0
+  , 'Přehled kontraktů z úvěrové zprávy', 'p:\RSTS\PROJEKTY\CIBIS-RSTS-2018S-R\Test\Tisky\', 1, 0, 'XLSX'
+  , 0,  null, 1, 0, 0
+  , 0, 'reports_j2ee'
+);
+
+insert into rr_xreptype_cis (refrepcode, datod, datdo, predloha, cesta
+  , soubor, interniid, externiid, externidocid, poznamka
+  , platnost, lasttemplatedir
+) values ('EU440', MDY(1,1,2018), null, 'J', 'C:\Cibis\reports\reports_j2ee\EU44'
+  , 'EU440.jrxml', null, null, null, null
+  , 1, 'EU44'
+);
+
+
+ROLLBACK WORK;
+
+--End of B136775_UID74269_3

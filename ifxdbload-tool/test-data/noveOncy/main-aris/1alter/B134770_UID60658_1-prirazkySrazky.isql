@@ -1,0 +1,88 @@
+-- @TC:ONCE: ID = V2, B134770_UID60658_1-prirazkySrazky
+-- @TC:ONCE: DESCRIPTION = Evidence přirážek a srážek {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+-- ###############################################################
+-- ###############################################################
+-- SEU_SazbaUprav_Mat
+
+CREATE TABLE seu_sazbauprav_mat (
+  serno   BIGINT NOT NULL,
+  refuz   BIGINT NOT NULL,
+  refpravidlo   INTEGER NOT NULL,
+  typ   CHAR(1) NOT NULL,
+  zmena   Integer,
+  poradi   Integer,
+  hodnota   DECIMAL(6, 3),
+  pravidlo   VARCHAR(255),
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT seu_sazbauprav_mat_d4ed
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX seu_sazbauprav_mat_pk ON seu_sazbauprav_mat(serno);
+ALTER TABLE seu_sazbauprav_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT seu_sazbauprav_mat_pk;
+
+--FK
+CREATE INDEX seu_sazbauprav_mat_i_f1 ON seu_sazbauprav_mat(refuz);
+ALTER TABLE seu_sazbauprav_mat ADD CONSTRAINT FOREIGN KEY(refuz) REFERENCES seu_uz_mat(serno) CONSTRAINT seu_sazbauprav_mat_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE seu_sazbauprav_mat
+ADD CONSTRAINT (CHECK (typ IN ('R', 'P', 'S')) CONSTRAINT seu_sazbauprav_mat_c1);
+
+
+-- ###############################################################
+-- SEU_SazbaUprav_Arch
+
+CREATE TABLE seu_sazbauprav_arch (
+  idarch   BIGSERIAL NOT NULL,
+  serno   BIGINT NOT NULL,
+  refuz   BIGINT NOT NULL,
+  refpravidlo   INTEGER NOT NULL,
+  typ   CHAR(1) NOT NULL,
+  zmena   Integer,
+  poradi   Integer,
+  hodnota   DECIMAL(6, 3),
+  pravidlo   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT seu_sazbauprav_arch_d4ed
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX seu_sazbauprav_arch_pk ON seu_sazbauprav_arch(idarch);
+ALTER TABLE seu_sazbauprav_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT seu_sazbauprav_arch_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+;
+
+-- ###############################################################
+-- ###############################################################
+
+ROLLBACK WORK;
+
+--End of B134770_UID60658_1-prirazkySrazky

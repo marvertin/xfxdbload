@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135740_UID43793_1
+-- @TC:ONCE: DESCRIPTION = RSTS-7906: Úprava v potvrzeních o úrocích a ve výpisech z kont {REQUEST}
+-- @TC:ONCE: DBKIND=ARCHIV
+
+BEGIN WORK;
+
+ALTER TABLE tv_head_den ADD (
+  jeplatebnisporeni  Integer,
+  trealuver          Char(4),
+  tsmluver           Char(4)
+);
+
+ROLLBACK WORK;
+
+--End of B135740_UID43793_1

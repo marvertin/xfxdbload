@@ -1,0 +1,114 @@
+-- @TC:ONCE: ID = V2, B136073_UID80607_1-rkCizinec
+-- @TC:ONCE: DESCRIPTION = RSTS-26009: Algoritmy, zapojení a zobrazení RK Cizinec {STORY}
+
+
+BEGIN WORK;
+
+--------------------------------------VYPOCET---------------------------------------------------
+CREATE TABLE crk_vypocetcizinec_den (
+  serno   BIGINT NOT NULL,
+  refschvaluverh   BIGINT NOT NULL,
+  datvyhod   DATE,
+  delkazamo1   CHAR(4),
+  delkazamo2   CHAR(4),
+  delkazamo3   CHAR(4),
+  delkazamo4   CHAR(4),
+  statobcanstvio1   CHAR(2),
+  statobcanstvio2   CHAR(2),
+  statobcanstvio3   CHAR(2),
+  statobcanstvio4   CHAR(2),
+  druhprukaz1o1   Integer,
+  druhprukaz2o1   Integer,
+  druhprukaz1o2   Integer,
+  druhprukaz2o2   Integer,
+  druhprukaz1o3   Integer,
+  druhprukaz2o3   Integer,
+  druhprukaz1o4   Integer,
+  druhprukaz2o4   Integer,
+  internidruhpobyto1   INTEGER,
+  internidruhpobyto2   INTEGER,
+  internidruhpobyto3   INTEGER,
+  internidruhpobyto4   INTEGER,
+  typpobyto1   CHAR(1),
+  typpobyto2   CHAR(1),
+  typpobyto3   CHAR(1),
+  typpobyto4   CHAR(1),
+  kontrolniurg   DECIMAL(16,2),
+  typyucelu   VARCHAR(255),
+  typyzajist   VARCHAR(255),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX crk_vypocetcizinec_den_pk ON crk_vypocetcizinec_den(serno);
+ALTER TABLE crk_vypocetcizinec_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT crk_vypocetcizinec_den_pk;
+
+--FK
+CREATE INDEX crk_vypocetcizinec_den_i_f1 ON crk_vypocetcizinec_den(refschvaluverh);
+ALTER TABLE crk_vypocetcizinec_den ADD CONSTRAINT FOREIGN KEY(refschvaluverh) REFERENCES crk_schvaluverh_mat(serno) CONSTRAINT crk_vypocetcizinec_den_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE crk_vypocetcizinec_den
+ADD CONSTRAINT (CHECK (delkazamo1 IN ('D0_2', 'D2_5', 'D5_N')) CONSTRAINT crk_vypocetcizinec_den_c1),
+ADD CONSTRAINT (CHECK (delkazamo2 IN ('D0_2', 'D2_5', 'D5_N')) CONSTRAINT crk_vypocetcizinec_den_c2),
+ADD CONSTRAINT (CHECK (delkazamo3 IN ('D0_2', 'D2_5', 'D5_N')) CONSTRAINT crk_vypocetcizinec_den_c3),
+ADD CONSTRAINT (CHECK (delkazamo4 IN ('D0_2', 'D2_5', 'D5_N')) CONSTRAINT crk_vypocetcizinec_den_c4),
+ADD CONSTRAINT (CHECK (kontrolniUrg in (0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5)) CONSTRAINT crk_vypocetcizinec_den_c5);
+
+
+--------------------------------------VYSLEDEK---------------------------------------------------
+CREATE TABLE crk_vysledekcizinec_den (
+  refvypocet   BIGINT NOT NULL,
+  refschvalrevize   BIGINT NOT NULL,
+  vyslbezpdruhpobytu   CHAR(3),
+  vyslbezpucel   CHAR(3),
+  vysldelkazam   CHAR(3),
+  vysldruh2doklad   CHAR(3),
+  vysldruhpobyt   CHAR(3),
+  vysldruh1doklad   CHAR(3),
+  vyslkontrurg   CHAR(3),
+  vyslodlozenezastpravo   CHAR(3),
+  vyslpovintdruhpobyt   CHAR(3),
+  vyslzajisteninem   CHAR(3),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX crk_vysledekcizinec_den_pk ON crk_vysledekcizinec_den(refvypocet);
+ALTER TABLE crk_vysledekcizinec_den ADD CONSTRAINT PRIMARY KEY(refvypocet) CONSTRAINT crk_vysledekcizinec_den_pk;
+
+--FK
+ALTER TABLE crk_vysledekcizinec_den ADD CONSTRAINT FOREIGN KEY(refvypocet) REFERENCES crk_vypocetcizinec_den(serno) CONSTRAINT crk_vysledekcizinec_den_f1;
+CREATE INDEX crk_vysledekcizinec_den_i_f2 ON crk_vysledekcizinec_den(refschvalrevize);
+ALTER TABLE crk_vysledekcizinec_den ADD CONSTRAINT FOREIGN KEY(refschvalrevize) REFERENCES crk_schvalrevize_den(serno) CONSTRAINT crk_vysledekcizinec_den_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE crk_vysledekcizinec_den
+ADD CONSTRAINT (CHECK (vyslBezpDruhPobytu in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c1),
+ADD CONSTRAINT (CHECK (vyslBezpUcel in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c2),
+ADD CONSTRAINT (CHECK (vyslDelkaZam in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c3),
+ADD CONSTRAINT (CHECK (vyslDruh2Doklad in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c4),
+ADD CONSTRAINT (CHECK (vyslDruhPobyt in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c5),
+ADD CONSTRAINT (CHECK (vyslDruh1Doklad in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c6),
+ADD CONSTRAINT (CHECK (vyslKontrUrg in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c7),
+ADD CONSTRAINT (CHECK (vyslOdlozeneZastPravo in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c8),
+ADD CONSTRAINT (CHECK (vyslPovIntDruhPobyt in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c9),
+ADD CONSTRAINT (CHECK (vyslZajisteniNem in ('OKI', 'KOM', 'KOT', 'ERR', 'NDF')) CONSTRAINT crk_vysledekcizinec_den_c10);
+
+ROLLBACK WORK;
+
+--End of B136073_UID80607_1-rkCizinec

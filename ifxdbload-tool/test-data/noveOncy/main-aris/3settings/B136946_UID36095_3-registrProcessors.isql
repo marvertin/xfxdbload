@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136946_UID36095_3-registrProcessors
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+CALL TW_RegDelKey('BP','batch','kontrol','processors');
+
+ROLLBACK WORK;
+
+--End of B136946_UID36095_3-registrProcessors

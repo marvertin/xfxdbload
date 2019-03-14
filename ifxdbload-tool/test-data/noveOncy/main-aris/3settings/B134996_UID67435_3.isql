@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134996_UID67435_3
+-- @TC:ONCE: DESCRIPTION = Nelze zobrazit finanční situaci role v Main {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EO', 'FINSIT', '*', 'TYPROLE', 'KL,RU,PR,SD', 1, 'Podpora pro produkt', 'Finanční situace role', 'Financial situation of role', 'typy rolí pro výpočet finanční situace');
+
+ROLLBACK WORK;
+
+--End of B134996_UID67435_3

@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B134993_UID67601_1-sazbauprav
+-- @TC:ONCE: DESCRIPTION = RSTS-19584: Do seznamu přirážek a slev se asi nedostává základní sazba {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE seu_sazbauprav_mat MODIFY refpravidlo INTEGER;
+ALTER TABLE seu_sazbauprav_arch MODIFY refpravidlo INTEGER;
+
+ALTER TABLE seu_sazbauprav_mat DROP CONSTRAINT seu_sazbauprav_mat_c1;
+ALTER TABLE seu_sazbauprav_mat ADD CONSTRAINT (CHECK (typ IN ('Z', 'R', 'P', 'S')) CONSTRAINT seu_sazbauprav_mat_c1);
+
+ROLLBACK WORK;
+
+--End of B134993_UID67601_1-sazbauprav

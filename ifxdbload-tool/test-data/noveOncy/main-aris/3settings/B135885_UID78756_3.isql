@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B135885_UID78756_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24997: Zavést číselník "Druh dokladu pro ÚŽ" {STORY}
+
+
+BEGIN WORK;
+
+UPDATE eo_druhprukaz_cis SET platnost = 0 WHERE zkratka = 'PP';
+UPDATE eo_druhprukaz_cis SET platnost = 0 WHERE zkratka = 'ZD';
+
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (6, 'Občanský průkaz SK', null, 1, 'OS');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (7, 'Povolení k trvalému pobytu', null, 1, 'VT');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (8, 'Potvrzení o přechodném pobytu', null, 1, 'TP');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (9, 'Povolení k dlouhodobému pobytu', null, 1, 'VD');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (10, 'Modrá karta', null, 1, 'MK');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (11, 'Zaměstnanecká karta', null, 1, 'ZK');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (12, 'Povolení k přechodnému pobytu', null, 1, 'VP');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (13, 'ID karta občana EU', null, 1, 'IE');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (14, 'Pas EU', null, 1, 'PE');
+INSERT INTO eo_druhprukaz_cis (druhprukaz, popis, poznamka, platnost, zkratka) VALUES (15, 'Pas 3. státu', null, 1, 'P3');
+
+ROLLBACK WORK;
+
+--End of B135885_UID78756_3

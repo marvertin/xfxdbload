@@ -1,0 +1,29 @@
+-- @TC:ONCE: ID = V2, B136799_UID77507_3-holisticfprovokruh
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_okruh_cis (okruh, popis, platnost) VALUES ('DF', 'Default', 1);
+
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 10, 'Vytvořit záznam o Holistic Flagu', 1);
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 11, 'Změnit údaje Holistic Flagu', 1);
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 12, 'Provést záznam o Holistic Flagu', 1);
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 13, 'Ukončit záznam o Holistic Flagu', 1);
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 14, 'Ukončit automaticky záznam o Holistic Flagu', 1);
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 15, 'Zrušit záznam o Holistic Flagu', 1);
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 16, 'Exportovat seznam Holistic Flagů', 1);
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('DF', 17, 'Exportovat údaje Holistic Flagu', 1);
+
+
+ROLLBACK WORK;
+
+--End of B136799_UID77507_3-holisticfprovokruh

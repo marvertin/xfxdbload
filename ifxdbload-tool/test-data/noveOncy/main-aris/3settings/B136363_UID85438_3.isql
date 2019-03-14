@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B136363_UID85438_3
+-- @TC:ONCE: DESCRIPTION = RSTS-28842: Nesedí názvy účtů v číselníku Matrika účtů {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+UPDATE AC_Ucet_Mat SET popis = 'Souv. účet k sankcím k odeps.pohled' WHERE ucet = '999901';
+
+UPDATE AC_Ucet_Mat SET popis = 'Výnosy z odeps.pohl.- sankce_X_X_Fn' WHERE ucet = '762040';
+
+UPDATE AC_Ucet_Mat SET popis = 'Výnosy z odeps.pohl.- sankce_X_X_Fr' WHERE ucet = '762050';
+
+UPDATE AC_Ucet_Mat SET popis = 'Výnosy z odeps.pohl.- sankce_X_X_Pr' WHERE ucet = '762080';
+
+UPDATE AC_Ucet_Mat SET popis = 'Výnosy z odeps.pohl.- sankce_X_X_Pn' WHERE ucet = '762060';
+
+UPDATE AC_Ucet_Mat SET popis = 'Výnosy z odeps.pohl.- sankce_X_X_Po' WHERE ucet = '762070';
+
+ROLLBACK WORK;
+
+--End of B136363_UID85438_3

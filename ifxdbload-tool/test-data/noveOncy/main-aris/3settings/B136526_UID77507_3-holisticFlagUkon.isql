@@ -1,0 +1,71 @@
+-- @TC:ONCE: ID = V2, B136526_UID77507_3-holisticFlagUkon
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Chyba systému - úvěr' AND kodindikatoru = 'RDT00u'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Chyba člověk - úvěr' AND kodindikatoru = 'RDT00u'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Chyba systému - dlužník' AND kodindikatoru = 'RDT00d'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Chyba člověk - dlužník' AND kodindikatoru = 'RDT00d'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Zastavení úročení' AND kodindikatoru = 'RD020'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Nedodržení účelu' AND kodindikatoru = 'RD130'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Porušení jiných smluvních podmínek' AND kodindikatoru = 'RD130'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Realizace zajištění' AND kodindikatoru = 'RD150'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Úvěr s diskontem' AND kodindikatoru = 'RD160'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Selhání spojeného dlužníka' AND kodindikatoru = 'RD230'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Ztráta zaměstnání' AND kodindikatoru = 'RD110'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Snížení příjmů - zdraví' AND kodindikatoru = 'RD110'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Snížení příjmů - ostatní' AND kodindikatoru = 'RD110'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Snížení příjmů - zdraví' AND kodindikatoru = 'RD110'), 'Automaticky ukončeno', 'Ukončení po uplynutí období platnosti', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Snížení příjmů - ostatní' AND kodindikatoru = 'RD110'), 'Automaticky ukončeno', 'Ukončení po uplynutí období platnosti', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Jiný důvod' AND kodindikatoru = 'S06u'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+INSERT INTO cep_holisticflagukon_cis(refduvodhf, duvodukonc, popis, platnost)
+VALUES((SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Jiný důvod' AND kodindikatoru = 'S06d'), 'Uživatelsky ukončeno', 'Uživatelské ukončení v evidenci HF', 1);
+
+UPDATE cep_holisticflagduv_cis
+SET refduvautoukon = (SELECT serno
+                      FROM cep_holisticflagukon_cis
+                      WHERE refduvodhf = (SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Snížení příjmů - zdraví' AND kodindikatoru = 'RD110') AND duvodukonc = 'Automaticky ukončeno')
+WHERE serno = (SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Snížení příjmů - zdraví' AND kodindikatoru = 'RD110');
+
+UPDATE cep_holisticflagduv_cis
+SET refduvautoukon = (SELECT serno
+                      FROM cep_holisticflagukon_cis
+                      WHERE refduvodhf = (SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Snížení příjmů - ostatní' AND kodindikatoru = 'RD110') AND duvodukonc = 'Automaticky ukončeno')
+WHERE serno = (SELECT serno FROM cep_holisticflagduv_cis WHERE  duvod = 'Snížení příjmů - ostatní' AND kodindikatoru = 'RD110');
+
+ROLLBACK WORK;
+
+--End of B136526_UID77507_3

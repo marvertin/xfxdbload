@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B135853_UID78209_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24679: Parametrizace a migrace stresových kontrol {STORY}
+
+BEGIN WORK;
+
+--Aktuální parametrizace stresových kontrol se shoduje s existující parametrizací "vzorových bonitních" RK
+
+insert into crk_kontrolapravidlo_cis (refsada, refucel, reftyp, sadaporadi, urgod, urgdo, pohlavi, vekod, vekdo, platnost, hranice)
+  select refsada, refucel, 'STRES_DSTI', sadaporadi, urgod, urgdo, pohlavi, vekod, vekdo, platnost, hranice
+  FROM crk_kontrolapravidlo_cis where reftyp = 'BONI_DSTI' order by serno
+;
+insert into crk_kontrolapravidlo_cis (refsada, refucel, reftyp, sadaporadi, urgod, urgdo, pohlavi, vekod, vekdo, platnost, hranice)
+  select refsada, refucel, 'STRES_DTI', sadaporadi, urgod, urgdo, pohlavi, vekod, vekdo, platnost, hranice
+  FROM crk_kontrolapravidlo_cis where reftyp = 'BONI_DTI' order by serno
+;
+insert into crk_kontrolapravidlo_cis (refsada, refucel, reftyp, sadaporadi, urgod, urgdo, pohlavi, vekod, vekdo, platnost, hranice)
+  select refsada, refucel, 'STRES_PRVY', sadaporadi, urgod, urgdo, pohlavi, vekod, vekdo, platnost, hranice
+  FROM crk_kontrolapravidlo_cis where reftyp = 'BONI_PRVY' order by serno
+;
+
+ROLLBACK WORK;
+
+--End of B135853_UID78209_3

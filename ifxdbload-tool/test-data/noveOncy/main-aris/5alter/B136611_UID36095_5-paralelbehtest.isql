@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136611_UID36095_5-paralelbehtest
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+
+BEGIN WORK;
+
+ALTER TABLE bc_akce_cis MODIFY paralelbehtest Integer DEFAULT NULL; 
+
+
+ALTER TABLE bc_akce_cis MODIFY paralelbehtest Integer NOT NULL; 
+
+ROLLBACK WORK;
+
+--End of B136611_UID36095_5-paralelbehtest

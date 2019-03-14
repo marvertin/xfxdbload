@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B134994_UID67879_3
+-- @TC:ONCE: DESCRIPTION = RSTS-19723: Zmenit hodnotu registů timeoutu pro SOLUS a BRKI {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+call TW_RegSetOrAddKey('EP', 'BRKI', 'query', 'timeout', 300000, 1);
+call TW_RegSetOrAddKey('EP', 'SOLUS', 'query', 'timeout', 300000, 1);
+
+
+ROLLBACK WORK;
+
+--End of B134994_UID67879_3

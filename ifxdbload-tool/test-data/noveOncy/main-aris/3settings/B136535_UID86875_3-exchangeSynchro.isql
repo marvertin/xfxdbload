@@ -1,0 +1,28 @@
+-- @TC:ONCE: ID = V2, B136535_UID86875_3-exchangeSynchro
+-- @TC:ONCE: DESCRIPTION = RSTS-29696 REAL: Synchronizace kalendáře CRM s mobilním zařízením (PILOT)
+
+BEGIN WORK;
+
+-- EWS URL, Active Directory doména, login + password pro emailovou doménu @rsts.cz
+call TW_RegSetOrAddKey('CL', 'exchange', 'emaildomain', 'rsts', '@rsts.cz', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'Emailová doména pro synchronizaci s MS Exchange');
+call TW_RegSetOrAddKey('CL', 'exchange', 'ews', 'rsts', '', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'URL na MS Exchange Web Services (EWS)');
+call TW_RegSetOrAddKey('CL', 'exchange', 'addomain', 'rsts', '', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'AD doména pro synchronizaci s MS Exchange'); 
+call TW_RegSetOrAddKey('CL', 'exchange', 'login', 'rsts', '', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'Login technologického uživatele pro synchronizaci s MS Exchange');  
+call TW_RegSetOrAddKey('CL', 'exchange', 'password', 'rsts', '', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'Heslo technologického uživatele pro synchronizaci s MS Exchange');
+update tw_registr_cis set sifrovano = 1 where oblast = 'CL' and uloha =  'exchange' and funkce = 'password' and udaj = 'rsts';
+
+-- EWS URL, Active Directory doména, login + password pro emailovou doménu @obchod.rsts.cz
+call TW_RegSetOrAddKey('CL', 'exchange', 'emaildomain', 'obchod', '@obchod.rsts.cz', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'Emailová doména pro synchronizaci s MS Exchange');
+call TW_RegSetOrAddKey('CL', 'exchange', 'ews', 'obchod', '', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'URL na MS Exchange Web Services (EWS)');
+call TW_RegSetOrAddKey('CL', 'exchange', 'addomain', 'obchod', '', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'AD doména pro synchronizaci s MS Exchange');
+call TW_RegSetOrAddKey('CL', 'exchange', 'login', 'obchod', '', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'Login technologického uživatele pro synchronizaci s MS Exchange');
+call TW_RegSetOrAddKey('CL', 'exchange', 'password', 'obchod', '', 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'Heslo technologického uživatele pro synchronizaci s MS Exchange');
+update tw_registr_cis set sifrovano = 1 where oblast = 'CL' and uloha =  'exchange' and funkce = 'password' and udaj = 'obchod';
+
+-- délka období synchronizace schůzek ve dnech - do budoucnosti i do minulosti
+call TW_RegSetOrAddKey('CL', 'exchange', 'obdobi', 'budouci', 365, 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'Délka období synchronizace schůzek ve dnech do budoucnosti');  
+call TW_RegSetOrAddKey('CL', 'exchange', 'obdobi', 'minule', 7, 1, 'Sales Network', 'CRM - Calendar', 'Exchange', 'Délka období synchronizace schůzek ve dnech do minulosti');
+
+ROLLBACK WORK;
+
+--End of B136535_UID86875_3-exchangeSynchro

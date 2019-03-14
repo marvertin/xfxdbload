@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137279_UID94152_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33355: Parametrizovat "Refinancování bez navýšení" v číselníku typů účelů {STORY}
+
+
+BEGIN WORK;
+
+UPDATE eu_ucel_cis SET refinbeznavys = 1 WHERE ucel IN (1507, 1508);
+
+ROLLBACK WORK;
+
+--End of B137279_UID94152_3

@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B136126_UID81028_3
+-- @TC:ONCE: DESCRIPTION = RSTS-26232: Nelze dokončit kontrolu souhlasu {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE tw_emailtyp_cis
+SET predmet = 'Dokončení kontroly dokumentů - schváleno:  smlouva: <<CISLO_SS>> <<TYP_ROLE>>: <<JMENO_PRIJMENI>>',
+    obsah = 'Kontrola naskenovaných dokumentů pro úvěr <<CISLO_SS>>, <<TYP_ROLE>> <<JMENO_PRIJMENI>>, byla úspěšně dokončena, pro spuštění dotazů do registrů se vraťte do ÚŽ, sekce Úvěrová žádost, pokračujte stiskem tlačítka Pokračovat. Raiffeisen stavební spořitelna'
+WHERE zkratka = 'SCHVALENI_VIDO_OZ';
+
+ROLLBACK WORK;
+
+--End of B136126_UID81028_3

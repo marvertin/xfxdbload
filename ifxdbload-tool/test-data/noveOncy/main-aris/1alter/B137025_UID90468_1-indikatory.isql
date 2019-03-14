@@ -1,0 +1,360 @@
+-- @TC:ONCE: ID = V2, B137025_UID90468_1-indikatory
+-- @TC:ONCE: DESCRIPTION = RSTS-31529: IMPL (design,dat.model): RSTS-30719_Evidence indikátorů - datové struktury {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+CREATE TABLE cep_indikatortyp_cis (
+  serno   SERIAL NOT NULL,
+  kod   CHAR(10) NOT NULL,
+  druh   CHAR(1) NOT NULL,
+  krizovyindikator   Integer NOT NULL,
+  nazev   CHAR(35),
+  objekt   CHAR(1) NOT NULL,
+  oborhodnot   CHAR(25),
+  hodnotavypnuti   Integer NOT NULL,
+  poradivyhodnoceni   Integer NOT NULL,
+  probacnidobazakladni   Integer NOT NULL,
+  probacnidobaopakovana   Integer NOT NULL,
+  on_line   Integer NOT NULL,
+  prenos   Integer NOT NULL,
+  souhrnnevyhodnoceni   Integer NOT NULL,
+  poznamka   CHAR(70),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (krizovyindikator IN (0,1)) CONSTRAINT cep_indikatortyp_cis_d9xs,
+  CHECK (on_line IN (0,1)) CONSTRAINT cep_indikatortyp_cis_d9xz,
+  CHECK (prenos IN (0,1)) CONSTRAINT cep_indikatortyp_cis_d9y0,
+  CHECK (souhrnnevyhodnoceni IN (0,1)) CONSTRAINT cep_indikatortyp_cis_d9y1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_indikatortyp_cis_pk ON cep_indikatortyp_cis(serno);
+ALTER TABLE cep_indikatortyp_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_indikatortyp_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX cep_indikatortyp_cis_u1 ON cep_indikatortyp_cis(kod);
+ALTER TABLE cep_indikatortyp_cis ADD CONSTRAINT (UNIQUE (kod) CONSTRAINT cep_indikatortyp_cis_u1);
+
+--CHECKS
+ALTER TABLE cep_indikatortyp_cis
+ADD CONSTRAINT (CHECK (druh IN ('D', 'S')) CONSTRAINT cep_indikatortyp_cis_c1),
+ADD CONSTRAINT (CHECK (objekt IN ('P', 'O')) CONSTRAINT cep_indikatortyp_cis_c2);
+
+
+CREATE TABLE cep_indikatortyp_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  kod   CHAR(10),
+  druh   CHAR(1),
+  krizovyindikator   Integer,
+  nazev   CHAR(35),
+  objekt   CHAR(1),
+  oborhodnot   CHAR(25),
+  hodnotavypnuti   Integer,
+  poradivyhodnoceni   Integer,
+  probacnidobazakladni   Integer,
+  probacnidobaopakovana   Integer,
+  on_line   Integer,
+  prenos   Integer,
+  souhrnnevyhodnoceni   Integer,
+  poznamka   CHAR(70),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (krizovyindikator IN (0,1)) CONSTRAINT cep_indikatortyp_acis_d9xs,
+  CHECK (on_line IN (0,1)) CONSTRAINT cep_indikatortyp_acis_d9xz,
+  CHECK (prenos IN (0,1)) CONSTRAINT cep_indikatortyp_acis_d9y0,
+  CHECK (souhrnnevyhodnoceni IN (0,1)) CONSTRAINT cep_indikatortyp_acis_d9y1
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_indikatortyp_acis_pk ON cep_indikatortyp_acis(idarch);
+ALTER TABLE cep_indikatortyp_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cep_indikatortyp_acis_pk;
+
+CREATE TABLE cep_indikatordefault_kart (
+  serno   SERIAL NOT NULL,
+  typindikator   INTEGER NOT NULL,
+  stav   CHAR(1) NOT NULL,
+  hodnota   Integer NOT NULL,
+  osoba   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  datumpocatku   DATE NOT NULL,
+  datumpocatkurefindikator   DATE,
+  datumukonceni   DATE,
+  datumocekukonpodminek   DATE,
+  datumocekukonprobace   DATE,
+  datumresetprobace   DATE,
+  datumstorno   DATE,
+  probacnidoba   Integer NOT NULL,
+  stavprobace   CHAR(10) NOT NULL,
+  refindikatorudalost   INTEGER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_indikatordefault_kart_pk ON cep_indikatordefault_kart(serno);
+ALTER TABLE cep_indikatordefault_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_indikatordefault_kart_pk;
+
+--FK
+CREATE INDEX cep_indikatordefault_kart_i_f2 ON cep_indikatordefault_kart(refindikatorudalost);
+ALTER TABLE cep_indikatordefault_kart ADD CONSTRAINT FOREIGN KEY(refindikatorudalost) REFERENCES cep_indikatordefault_kart(serno) CONSTRAINT cep_indikatordefault_kart_f2;
+CREATE INDEX cep_indikatordefault_kart_i_f1 ON cep_indikatordefault_kart(typindikator);
+ALTER TABLE cep_indikatordefault_kart ADD CONSTRAINT FOREIGN KEY(typindikator) REFERENCES cep_indikatortyp_cis(serno) CONSTRAINT cep_indikatordefault_kart_f1;
+CREATE INDEX cep_indikatordefault_kart_i_f4 ON cep_indikatordefault_kart(osoba);
+ALTER TABLE cep_indikatordefault_kart ADD CONSTRAINT FOREIGN KEY(osoba) REFERENCES eo_osoba_mat(os) CONSTRAINT cep_indikatordefault_kart_f4;
+CREATE INDEX cep_indikatordefault_kart_i_f5 ON cep_indikatordefault_kart(smlouva,tsml);
+ALTER TABLE cep_indikatordefault_kart ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT cep_indikatordefault_kart_f5;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cep_indikatordefault_kart
+ADD CONSTRAINT (CHECK (stav IN ('A', 'U', 'L', 'V', 'R', 'D', 'P', 'S')) CONSTRAINT cep_indikatordefault_kart_c1),
+ADD CONSTRAINT (CHECK (stavProbace IN ('STARTED', 'RESET', 'SUSPENDED', 'PASSED', 'ENDED')) CONSTRAINT cep_indikatordefault_kart_c2);
+
+
+CREATE TABLE cep_indikatorprenos_bnd (
+  serno   SERIAL NOT NULL,
+  refindikatordefaultprimarni   INTEGER NOT NULL,
+  refindikatordefaultpreneseno   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_indikatorprenos_bnd_pk ON cep_indikatorprenos_bnd(serno);
+ALTER TABLE cep_indikatorprenos_bnd ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_indikatorprenos_bnd_pk;
+
+--FK
+CREATE INDEX cep_indikatorprenos_bnd_i_f1 ON cep_indikatorprenos_bnd(refindikatordefaultprimarni);
+ALTER TABLE cep_indikatorprenos_bnd ADD CONSTRAINT FOREIGN KEY(refindikatordefaultprimarni) REFERENCES cep_indikatordefault_kart(serno) CONSTRAINT cep_indikatorprenos_bnd_f1;
+CREATE INDEX cep_indikatorprenos_bnd_i_f2 ON cep_indikatorprenos_bnd(refindikatordefaultpreneseno);
+ALTER TABLE cep_indikatorprenos_bnd ADD CONSTRAINT FOREIGN KEY(refindikatordefaultpreneseno) REFERENCES cep_indikatordefault_kart(serno) CONSTRAINT cep_indikatorprenos_bnd_f2;
+
+CREATE TABLE cep_indikatorpodklad_kart (
+  serno   SERIAL NOT NULL,
+  typzmena   CHAR(20) NOT NULL,
+  typindikator   INTEGER NOT NULL,
+  stav   CHAR(15) NOT NULL,
+  osoba   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  datumudalost   DATE NOT NULL,
+  datumvytvoreni   DATE NOT NULL,
+  datumukonpodminka   DATE,
+  datumukonprobace   DATE,
+  hodnota   Integer,
+  text   CHAR(70),
+  spolecnapohledavka   Integer,
+  spolecnaskupina   Integer,
+  refindikatoriniciace   INTEGER,
+  refindikatorprimarni   INTEGER,
+  refindikatordotceny   INTEGER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  zpractime   datetime year to second,
+  zpracuser   CHAR(20),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (spolecnapohledavka IN (0,1)) CONSTRAINT cep_indikatorpodklad_kart_d9yz,
+  CHECK (spolecnaskupina IN (0,1)) CONSTRAINT cep_indikatorpodklad_kart_d9z0
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_indikatorpodklad_kart_pk ON cep_indikatorpodklad_kart(serno);
+ALTER TABLE cep_indikatorpodklad_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_indikatorpodklad_kart_pk;
+
+--FK
+CREATE INDEX cep_indikatorpodklad_kart_i_f1 ON cep_indikatorpodklad_kart(typindikator);
+ALTER TABLE cep_indikatorpodklad_kart ADD CONSTRAINT FOREIGN KEY(typindikator) REFERENCES cep_indikatortyp_cis(serno) CONSTRAINT cep_indikatorpodklad_kart_f1;
+CREATE INDEX cep_indikatorpodklad_kart_i_f2 ON cep_indikatorpodklad_kart(osoba);
+ALTER TABLE cep_indikatorpodklad_kart ADD CONSTRAINT FOREIGN KEY(osoba) REFERENCES eo_osoba_mat(os) CONSTRAINT cep_indikatorpodklad_kart_f2;
+CREATE INDEX cep_indikatorpodklad_kart_i_f3 ON cep_indikatorpodklad_kart(smlouva,tsml);
+ALTER TABLE cep_indikatorpodklad_kart ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT cep_indikatorpodklad_kart_f3;
+CREATE INDEX cep_indikatorpodklad_kart_i_f5 ON cep_indikatorpodklad_kart(refindikatoriniciace);
+ALTER TABLE cep_indikatorpodklad_kart ADD CONSTRAINT FOREIGN KEY(refindikatoriniciace) REFERENCES cep_indikatordefault_kart(serno) CONSTRAINT cep_indikatorpodklad_kart_f5;
+CREATE INDEX cep_indikatorpodklad_kart_i_f6 ON cep_indikatorpodklad_kart(refindikatorprimarni);
+ALTER TABLE cep_indikatorpodklad_kart ADD CONSTRAINT FOREIGN KEY(refindikatorprimarni) REFERENCES cep_indikatordefault_kart(serno) CONSTRAINT cep_indikatorpodklad_kart_f6;
+CREATE INDEX cep_indikatorpodklad_kart_i_f7 ON cep_indikatorpodklad_kart(refindikatordotceny);
+ALTER TABLE cep_indikatorpodklad_kart ADD CONSTRAINT FOREIGN KEY(refindikatordotceny) REFERENCES cep_indikatordefault_kart(serno) CONSTRAINT cep_indikatorpodklad_kart_f7;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cep_indikatorpodklad_kart
+ADD CONSTRAINT (CHECK (typZmena IN ('SET_START', 'SET_END', 'S_CANCEL', 'R_CANCEL', 'PROB_START', 'PROB_SUSP', 'PROB_PASSED', 
+'CURING_END', 'TRANSF_SET_START', 'TRANSF_SET_END', 'TRANSF_S_CANCEL', 'TRANSF_R_CANCEL', 'TRANSF_PROB_START',
+'TRANSF_PROB_SUSP', 'TRANSF_PROB_PASSED', 'TRANSF_CURING_END')) CONSTRAINT cep_indikatorpodklad_kart_c1),
+ADD CONSTRAINT (CHECK (stav IN ('ZPRACOVANO', 'NEZPRACOVANO', 'STORNO')) CONSTRAINT cep_indikatorpodklad_kart_c2);
+
+CREATE TABLE cep_indikatorpodklad_bnd (
+  serno   SERIAL NOT NULL,
+  refindikatorpodklad   INTEGER NOT NULL,
+  refindikatordefault   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_indikatorpodklad_bnd_pk ON cep_indikatorpodklad_bnd(serno);
+ALTER TABLE cep_indikatorpodklad_bnd ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_indikatorpodklad_bnd_pk;
+
+--FK
+CREATE INDEX cep_indikatorpodklad_bnd_i_f1 ON cep_indikatorpodklad_bnd(refindikatorpodklad);
+ALTER TABLE cep_indikatorpodklad_bnd ADD CONSTRAINT FOREIGN KEY(refindikatorpodklad) REFERENCES cep_indikatorpodklad_kart(serno) CONSTRAINT cep_indikatorpodklad_bnd_f1;
+CREATE INDEX cep_indikatorpodklad_bnd_i_f2 ON cep_indikatorpodklad_bnd(refindikatordefault);
+ALTER TABLE cep_indikatorpodklad_bnd ADD CONSTRAINT FOREIGN KEY(refindikatordefault) REFERENCES cep_indikatordefault_kart(serno) CONSTRAINT cep_indikatorpodklad_bnd_f2;
+
+CREATE TABLE cep_indikatorvarovani_den (
+  serno   SERIAL NOT NULL,
+  indikatorpodklad   INTEGER NOT NULL,
+  datumzpracovani   DATE NOT NULL,
+  kod   CHAR(20) NOT NULL,
+  osoba   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  text   VARCHAR(255),
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_indikatorvarovani_den_pk ON cep_indikatorvarovani_den(serno);
+ALTER TABLE cep_indikatorvarovani_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_indikatorvarovani_den_pk;
+
+--FK
+CREATE INDEX cep_indikatorvarovani_den_i_f1 ON cep_indikatorvarovani_den(indikatorpodklad);
+ALTER TABLE cep_indikatorvarovani_den ADD CONSTRAINT FOREIGN KEY(indikatorpodklad) REFERENCES cep_indikatorpodklad_kart(serno) CONSTRAINT cep_indikatorvarovani_den_f1;
+CREATE INDEX cep_indikatorvarovani_den_i_f2 ON cep_indikatorvarovani_den(osoba);
+ALTER TABLE cep_indikatorvarovani_den ADD CONSTRAINT FOREIGN KEY(osoba) REFERENCES eo_osoba_mat(os) CONSTRAINT cep_indikatorvarovani_den_f2;
+CREATE INDEX cep_indikatorvarovani_den_i_f3 ON cep_indikatorvarovani_den(smlouva,tsml);
+ALTER TABLE cep_indikatorvarovani_den ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT cep_indikatorvarovani_den_f3;
+
+CREATE TABLE cep_default_mat (
+  serno   SERIAL NOT NULL,
+  osoba   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  stav   CHAR(1) NOT NULL,
+  datumvznik   DATE NOT NULL,
+  datumkonec   DATE,
+  jedefault   Integer NOT NULL,
+  datumzmenapriznak   DATE,
+  pohledavka   DECIMAL(16, 2),
+  pohledavkacelkem   DECIMAL(16, 2),
+  kodgpc   CHAR(6),
+  pohledavkapodil   DECIMAL(6, 2),
+  probacezacatek   DATE,
+  probacereset   DATE,
+  probacestav   CHAR(10),
+  datumocekvyleceni   DATE,
+  ebadpd   Integer,
+  restrukturalizace   Integer NOT NULL,
+  dluh   DECIMAL(16, 2),
+  balonovasplatka   Integer  DEFAULT 0 NOT NULL,
+  vyznamnasplatka   Integer  DEFAULT 0 NOT NULL,
+  ucetstav   CHAR(15),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (jedefault IN (0,1)) CONSTRAINT cep_default_mat_da0s,
+  CHECK (restrukturalizace IN (0,1)) CONSTRAINT cep_default_mat_da14,
+  CHECK (balonovasplatka IN (0,1)) CONSTRAINT cep_default_mat_da16,
+  CHECK (vyznamnasplatka IN (0,1)) CONSTRAINT cep_default_mat_da17
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_default_mat_pk ON cep_default_mat(serno);
+ALTER TABLE cep_default_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_default_mat_pk;
+
+--FK
+CREATE INDEX cep_default_mat_i_f1 ON cep_default_mat(osoba);
+ALTER TABLE cep_default_mat ADD CONSTRAINT FOREIGN KEY(osoba) REFERENCES eo_osoba_mat(os) CONSTRAINT cep_default_mat_f1;
+CREATE INDEX cep_default_mat_i_f2 ON cep_default_mat(smlouva,tsml);
+ALTER TABLE cep_default_mat ADD CONSTRAINT FOREIGN KEY(smlouva,tsml) REFERENCES eu_sml_mat(smlouva,tsml) CONSTRAINT cep_default_mat_f2;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cep_default_mat
+ADD CONSTRAINT (CHECK (stav IN ('A', 'U', 'V', 'S', 'P', 'L')) CONSTRAINT cep_default_mat_c1),
+ADD CONSTRAINT (CHECK (kodGPC IN ('FL1301', 'FL1309', 'FL1305', 'FL1306', 'FL0802')) CONSTRAINT cep_default_mat_c2),
+ADD CONSTRAINT (CHECK (probaceStav IN ('STARTED', 'RESET', 'SUSPENDED', 'PASSED', 'ENDED')) CONSTRAINT cep_default_mat_c3),
+ADD CONSTRAINT (CHECK (pohledavkaPodil BETWEEN 0 AND 100) CONSTRAINT cep_default_mat_c4),
+ADD CONSTRAINT (CHECK (ucetStav IN ('CLOSED', 'SOLD', 'WRITTEN OFF', 'REPAID', 'ACTIVE')) CONSTRAINT cep_default_mat_c5);
+
+CREATE TABLE cep_default_arch (
+  idarch   SERIAL NOT NULL,
+  serno   Integer NOT NULL,
+  osoba   INTEGER,
+  smlouva   DECIMAL(16, 0),
+  tsml   CHAR(4),
+  stav   CHAR(1),
+  datumvznik   DATE,
+  datumkonec   CHAR(45),
+  jedefault   Integer,
+  datumzmenapriznak   DATE,
+  pohledavka   DECIMAL(16, 2),
+  pohledavkacelkem   DECIMAL(16, 2),
+  kodgpc   CHAR(6),
+  pohledavkapodil   DECIMAL(6, 2),
+  probacezacatek   DATE,
+  probacereset   DATE,
+  probacestav   CHAR(10),
+  datumocekvyleceni   DATE,
+  ebadpd   Integer,
+  restrukturalizace   Integer,
+  dluh   DECIMAL(16, 2),
+  balonovasplatka   Integer  DEFAULT 0,
+  vyznamnasplatka   Integer  DEFAULT 0,
+  ucetstav   CHAR(15),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  poruser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refuser   CHAR(20)  DEFAULT USER,
+  CHECK (jedefault IN (0,1)) CONSTRAINT cep_default_arch_da1j,
+  CHECK (restrukturalizace IN (0,1)) CONSTRAINT cep_default_arch_da1v,
+  CHECK (balonovasplatka IN (0,1)) CONSTRAINT cep_default_arch_da1x,
+  CHECK (vyznamnasplatka IN (0,1)) CONSTRAINT cep_default_arch_da1y
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_default_arch_pk ON cep_default_arch(idarch);
+ALTER TABLE cep_default_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cep_default_arch_pk;
+
+CREATE TABLE cep_indikatordefault_bnd (
+  serno   SERIAL NOT NULL,
+  refindikatordefault   INTEGER NOT NULL,
+  refdefault   INTEGER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_indikatordefault_bnd_pk ON cep_indikatordefault_bnd(serno);
+ALTER TABLE cep_indikatordefault_bnd ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_indikatordefault_bnd_pk;
+
+--FK
+CREATE INDEX cep_indikatordefault_bnd_i_f1 ON cep_indikatordefault_bnd(refindikatordefault);
+ALTER TABLE cep_indikatordefault_bnd ADD CONSTRAINT FOREIGN KEY(refindikatordefault) REFERENCES cep_indikatordefault_kart(serno) CONSTRAINT cep_indikatordefault_bnd_f1;
+CREATE INDEX cep_indikatordefault_bnd_i_f2 ON cep_indikatordefault_bnd(refdefault);
+ALTER TABLE cep_indikatordefault_bnd ADD CONSTRAINT FOREIGN KEY(refdefault) REFERENCES cep_default_mat(serno) CONSTRAINT cep_indikatordefault_bnd_f2;
+
+ROLLBACK WORK;
+
+--End of B137025_UID90468_1-indikatory

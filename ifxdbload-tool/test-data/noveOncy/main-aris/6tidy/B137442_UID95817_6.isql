@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B137442_UID95817_6
+-- @TC:ONCE: DESCRIPTION = RSTS-34193: NDD: Přemapování účtů {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+CALL TW_DropProcedures('am_kontouvmapsa');
+CALL TW_DropProcedures('am_kontouvmapin');
+CALL TW_DropProcedures('am_kontouvmapin_t');
+CALL TW_DropProcedures('am_kontouvmapsa_t');
+CALL TW_DropProcedures('ac_e_2');
+
+set triggers tw_registredproc_kart_d disabled;
+delete from TW_RegistredProc_Kart where procname = 'AC_E_2';
+set triggers tw_registredproc_kart_d enabled;
+
+
+ROLLBACK WORK;
+
+--End of B137442_UID95817_6

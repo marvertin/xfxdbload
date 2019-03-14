@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B135229_UID70530_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21105: Detail Bonita SU {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+INSERT INTO crk_kontrolasada_cis(reftsml, sadanazev, platnostod, platnost) VALUES('SUFO', 'Smlouvy SUFO', MDY(1,1,1994), 1);
+
+INSERT INTO crk_kontrolapravidlo_cis(refsada, refucel, sadaporadi, urgod, urgdo, pohlavi, vekod, vekdo, platnost)
+SELECT (SELECT serno FROM crk_kontrolasada_cis WHERE reftsml = 'SUFO' AND platnostod = MDY(1,1,1994)), refucel, sadaporadi, urgod, urgdo, pohlavi, vekod, vekdo, platnost
+FROM crk_kontrolapravidlo_cis
+WHERE refsada = (SELECT serno FROM crk_kontrolasada_cis WHERE reftsml = 'SUFO' AND sadanazev = 'SUFO 2017');
+
+INSERT INTO crk_kontrolatyph_cis(reftyp, refpravidlo, hranice, platnost)
+SELECT t.reftyp, (SELECT serno FROM crk_kontrolapravidlo_cis WHERE refsada = (SELECT serno FROM crk_kontrolasada_cis WHERE reftsml = 'SUFO' AND platnostod = MDY(1,1,1994) AND sadaporadi = p.sadaporadi)), t.hranice, t.platnost
+FROM crk_kontrolapravidlo_cis p join crk_kontrolatyph_cis t on p.serno = t.refpravidlo
+WHERE p.refsada = (SELECT serno FROM crk_kontrolasada_cis WHERE reftsml = 'SUFO' AND sadanazev = 'SUFO 2017');
+
+ROLLBACK WORK;
+
+--End of B135229_UID70530_3

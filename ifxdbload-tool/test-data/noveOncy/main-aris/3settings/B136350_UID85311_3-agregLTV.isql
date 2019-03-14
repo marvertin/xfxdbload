@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136350_UID85311_3-agregLTV
+-- @TC:ONCE: DESCRIPTION = RSTS-28771: Hranice RK Agregované LTV nemá být "specifická" ale "detailní" {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE crk_kontrolatyp_cis SET zpusoburcenihranicekon = 'D' WHERE kod = 'LTV_AGREG';
+
+ROLLBACK WORK;
+
+--End of B136350_UID85311_3-agregLTV

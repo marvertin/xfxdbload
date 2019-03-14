@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137444_UID94211_5
+-- @TC:ONCE: DESCRIPTION = RSTS-33387: Sale: Zapojení a výpočet funkce pro vyhodnocení započítání příjmů {STORY}
+
+
+BEGIN WORK;
+
+-- v 1alter se tento CONSTRAINT odstranil, abych jej zde mohli rozšířit o NDF
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT (CHECK (VyslFCEZapoctPrij IN ('KOT', 'KOM', 'OKI', 'NDF')) CONSTRAINT cfs_prijem_mat_c3);
+
+ROLLBACK WORK;
+
+--End of B137444_UID94211_5

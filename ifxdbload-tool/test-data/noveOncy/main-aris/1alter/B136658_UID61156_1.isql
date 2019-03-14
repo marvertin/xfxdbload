@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B136658_UID61156_1
+-- @TC:ONCE: DESCRIPTION = RSTS-16259: Zpřehlednění názvů sloupců v cfs_zavazek_mat {REALIZACE}
+
+
+BEGIN WORK;
+
+ALTER TABLE cfs_zavazek_mat ADD refseuuzpuvod BIGINT BEFORE refrefincimuz;
+ALTER TABLE cfs_zavazek_mat ADD refeusmlpuvod DEC(16, 0) BEFORE refrefincimuz;
+ALTER TABLE cfs_zavazek_mat ADD refeusmltyppuvod CHAR(4) BEFORE refrefincimuz;
+
+ALTER TABLE cfs_zavazek_arch ADD refseuuzpuvod BIGINT BEFORE refrefincimuz;
+ALTER TABLE cfs_zavazek_arch ADD refeusmlpuvod DEC(16, 0) BEFORE refrefincimuz;
+ALTER TABLE cfs_zavazek_arch ADD refeusmltyppuvod CHAR(4) BEFORE refrefincimuz;
+
+ROLLBACK WORK;
+
+--End of B136658_UID61156_1

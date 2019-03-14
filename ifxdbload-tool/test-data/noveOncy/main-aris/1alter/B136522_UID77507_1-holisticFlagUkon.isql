@@ -1,0 +1,59 @@
+-- @TC:ONCE: ID = V2, B136522_UID77507_1-holisticFlagUkon
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+CREATE TABLE cep_holisticflagukon_cis (
+  serno   SERIAL NOT NULL,
+  refduvodhf   INTEGER NOT NULL,
+  duvodukonc   CHAR(40) NOT NULL,
+  popis   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  poznamka   VARCHAR(255),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT cep_holisticflagukon_cis_d91w
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_holisticflagukon_cis_pk ON cep_holisticflagukon_cis(serno);
+ALTER TABLE cep_holisticflagukon_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_holisticflagukon_cis_pk;
+
+--FK
+CREATE INDEX cep_holisticflagukon_cis_i_f1 ON cep_holisticflagukon_cis(refduvodhf);
+ALTER TABLE cep_holisticflagukon_cis ADD CONSTRAINT FOREIGN KEY(refduvodhf) REFERENCES cep_holisticflagduv_cis(serno) CONSTRAINT cep_holisticflagukon_cis_f1;
+
+--UNIQUE INDEXES
+CREATE UNIQUE INDEX cep_holisticflagukon_cis_u1 ON cep_holisticflagukon_cis(refduvodhf,duvodukonc);
+ALTER TABLE cep_holisticflagukon_cis ADD CONSTRAINT (UNIQUE (refduvodhf,duvodukonc) CONSTRAINT cep_holisticflagukon_cis_u1);
+
+
+CREATE TABLE cep_holisticflagukon_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  refduvodhf   INTEGER NOT NULL,
+  duvodukonc   CHAR(40) NOT NULL,
+  popis   VARCHAR(255),
+  platnost   Integer NOT NULL,
+  poznamka   VARCHAR(255),
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT cep_holisticflagukon_acis_d91w
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_holisticflagukon_acis_pk ON cep_holisticflagukon_acis(serno,idarch);
+ALTER TABLE cep_holisticflagukon_acis ADD CONSTRAINT PRIMARY KEY(serno,idarch) CONSTRAINT cep_holisticflagukon_acis_pk;
+
+---------------------------------------
+--FK
+CREATE INDEX cep_holisticflagduv_cis_i_f1 ON cep_holisticflagduv_cis(refduvautoukon);
+ALTER TABLE cep_holisticflagduv_cis ADD CONSTRAINT FOREIGN KEY(refduvautoukon) REFERENCES cep_holisticflagukon_cis(serno) CONSTRAINT cep_holisticflagduv_cis_f1;
+
+ROLLBACK WORK;
+
+--End of B136522_UID77507_1

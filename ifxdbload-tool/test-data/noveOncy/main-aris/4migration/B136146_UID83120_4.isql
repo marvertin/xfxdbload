@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136146_UID83120_4
+-- @TC:ONCE: DESCRIPTION = RSTS-27295: Částka příjmu v měně příjmu není zmigrována {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE cfs_prijem_mat SET uznmescastka = castka, castkavmene = castka;
+
+
+ROLLBACK WORK;
+
+--End of B136146_UID83120_4

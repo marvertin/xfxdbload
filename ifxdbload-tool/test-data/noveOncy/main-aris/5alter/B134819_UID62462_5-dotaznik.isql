@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134819_UID62462_5-dotaznik
+-- @TC:ONCE: DESCRIPTION = RSTS-17004: Rozšířit modelovací případ o datové struktury pro dotazník a pro návodné otázky {STORY}
+
+
+BEGIN WORK;
+
+alter table PRO_BSSimulationCase drop refquestvarbl;
+
+ROLLBACK WORK;
+
+--End of B134819_UID62462_5-dotaznik

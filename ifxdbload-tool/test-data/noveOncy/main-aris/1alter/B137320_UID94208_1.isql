@@ -1,0 +1,104 @@
+-- @TC:ONCE: ID = V2, B137320_UID94208_1
+-- @TC:ONCE: DESCRIPTION = RSTS-33385: Sale: Úprava příjmu ve skupině údajů Příjmy 2 {STORY}
+
+
+BEGIN WORK;
+
+CREATE TABLE cfs_kalkulackazam_mat (
+  serno   SERIAL NOT NULL,
+  prummescastkaza3m   DECIMAL(16, 2),
+  rozdil12ma3mproc   DECIMAL(6, 2),
+  rozdil12ma3mkc   DECIMAL(16, 2),
+  rozdil3maprumvypisproc   DECIMAL(6, 2),
+  rozdil3maprumvypiskc   DECIMAL(16, 2),
+  vypis1m   DECIMAL(16, 2),
+  vypis2m   DECIMAL(16, 2),
+  vypis3m   DECIMAL(16, 2),
+  hranicerozdil3maprumvypisproc   DECIMAL(6, 2),
+  hranicerozdil3maprumvypiskc   DECIMAL(16, 2),
+  hranicerozdil12ma3mproc   DECIMAL(6, 2),
+  hranicerozdil12ma3mkc   DECIMAL(16, 2),
+  vyslrozdil12ma3mproc   CHAR(3),
+  vyslrozdil12ma3mkc   CHAR(3),
+  vyslrozdil3maprumvypisproc   CHAR(3),
+  vyslrozdil3maprumvypiskc   CHAR(3),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_kalkulackazam_mat_pk ON cfs_kalkulackazam_mat(serno);
+ALTER TABLE cfs_kalkulackazam_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cfs_kalkulackazam_mat_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cfs_kalkulackazam_mat
+ADD CONSTRAINT (CHECK (vyslrozdil12ma3mproc IN ('OKI', 'KOM', 'KOT')) CONSTRAINT cfs_kalkulackazam_mat_c1),
+ADD CONSTRAINT (CHECK (vyslrozdil12ma3mkc IN ('OKI', 'KOM', 'KOT')) CONSTRAINT cfs_kalkulackazam_mat_c2),
+ADD CONSTRAINT (CHECK (vyslrozdil3maprumvypisproc IN ('OKI', 'KOM', 'KOT')) CONSTRAINT cfs_kalkulackazam_mat_c3),
+ADD CONSTRAINT (CHECK (vyslrozdil3maprumvypiskc IN ('OKI', 'KOM', 'KOT')) CONSTRAINT cfs_kalkulackazam_mat_c4);
+
+----------------------------------------------
+
+CREATE TABLE cfs_kalkulackazam_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  prummescastkaza3m   DECIMAL(16, 2),
+  rozdil12ma3mproc   DECIMAL(6, 2),
+  rozdil12ma3mkc   DECIMAL(16, 2),
+  rozdil3maprumvypisproc   DECIMAL(6, 2),
+  rozdil3maprumvypiskc   DECIMAL(16, 2),
+  vypis1m   DECIMAL(16, 2),
+  vypis2m   DECIMAL(16, 2),
+  vypis3m   DECIMAL(16, 2),
+  hranicerozdil3maprumvypisproc   DECIMAL(6, 2),
+  hranicerozdil3maprumvypiskc   DECIMAL(16, 2),
+  hranicerozdil12ma3mproc   DECIMAL(6, 2),
+  hranicerozdil12ma3mkc   DECIMAL(16, 2),
+  vyslrozdil12ma3mproc   CHAR(3),
+  vyslrozdil12ma3mkc   CHAR(3),
+  vyslrozdil3maprumvypisproc   CHAR(3),
+  vyslrozdil3maprumvypiskc   CHAR(3),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cfs_kalkulackazam_arch_pk ON cfs_kalkulackazam_arch(idarch);
+ALTER TABLE cfs_kalkulackazam_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cfs_kalkulackazam_arch_pk;
+
+--FK
+CREATE INDEX cfs_kalkulackazam_arch_i_f1 ON cfs_kalkulackazam_arch(serno);
+ALTER TABLE cfs_kalkulackazam_arch ADD CONSTRAINT FOREIGN KEY(serno) REFERENCES cfs_kalkulackazam_mat(serno) CONSTRAINT cfs_kalkulackazam_arch_f1;
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+----------------------------------------------
+
+--pridat do cfs_prijem_mat vazbu na cfs_kalkulackazam_mat
+ALTER TABLE cfs_prijem_mat ADD (refkalkulackazam INTEGER before poruser);
+CREATE INDEX cfs_prijem_mat_i_f12 ON cfs_prijem_mat(refkalkulackazam);
+ALTER TABLE cfs_prijem_mat ADD CONSTRAINT FOREIGN KEY(refkalkulackazam) REFERENCES cfs_kalkulackazam_mat(serno) CONSTRAINT cfs_prijem_mat_f12;
+
+ALTER TABLE cfs_prijem_arch ADD (refkalkulackazam INTEGER before poruser);
+
+ROLLBACK WORK;
+
+--End of B137320_UID94208_1

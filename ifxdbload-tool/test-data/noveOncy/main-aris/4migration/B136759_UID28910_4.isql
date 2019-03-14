@@ -1,0 +1,35 @@
+-- @TC:ONCE: ID = V2, B136759_UID28910_4
+-- @TC:ONCE: DESCRIPTION = RSTS-2754: Nabídka sazeb při refixu - poloautomatizace {REQUEST}
+
+
+BEGIN WORK;
+
+-- Stav
+  create index eu_kalendarfixaci_mat_28910a on eu_kalendarfixaci_mat(fixaceod, stav);
+  create index eu_kalendarfixaci_mat_28910b on eu_kalendarfixaci_mat(fixacedo, stav);
+  
+  -- platným do budoucna bude nastaven stav: Budoucí (B)
+  update  eu_kalendarfixaci_mat 
+  set stav = 'B'
+  where fixaceod > ap_datprov()
+    and stav = 'A';
+  
+  -- platným do minulosti bude nastaven stav: Ukončený (U)
+  update  eu_kalendarfixaci_mat 
+  set stav = 'U'
+  where fixacedo < ap_datprov()
+    and stav = 'A';
+    
+  drop index eu_kalendarfixaci_mat_28910a;
+  drop index eu_kalendarfixaci_mat_28910b;
+
+-- Vznik
+  update  eu_kalendarfixaci_mat
+  set vznik = 'I';
+
+-- Sazba a splátka
+  call RSTS_2754_sazby();
+
+ROLLBACK WORK;
+
+--End of B136759_UID28910_4

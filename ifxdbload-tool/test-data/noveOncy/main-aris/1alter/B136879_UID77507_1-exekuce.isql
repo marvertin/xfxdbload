@@ -1,0 +1,105 @@
+-- @TC:ONCE: ID = V2, B136879_UID77507_1-exekuce
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+
+BEGIN WORK;
+--------------------------------------------------------------------------------------------
+CREATE TABLE cep_exekuce_mat (
+  serno   SERIAL NOT NULL,
+  os   Integer,
+  stav   CHAR(1),
+  aktponabytpm   Integer,
+  aktponabytpmsum   DECIMAL(16,2),
+  aktponabytpmpredxmes   Integer,
+  aktponabytpmpredxmessum   DECIMAL(16,2),
+  aktprednabytpm   Integer,
+  aktprednabytpmsum   DECIMAL(16,2),
+  aktpocet   Integer,
+  aktsum   DECIMAL(16,2),
+  ukoncpocet   Integer,
+  ukoncsum   DECIMAL(16,2),
+  ukoncdatposledn   DATE,
+  stornopocet   Integer,
+  stornosum   DECIMAL(16,2),
+  stornodatposledn   DATE,
+  smlsporsaldosum   DECIMAL(16,2),
+  dispprostr   DECIMAL(16,2),
+  poznamka   CHAR(70),
+  poruser   CHAR(20)  DEFAULT USER NOT NULL,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  pordatprov   DATE NOT NULL,
+  provuser   CHAR(20),
+  provtime   datetime year to second,
+  provdatprov   DATE,
+  ukoncuser   CHAR(20),
+  ukonctime   datetime year to second,
+  ukoncdatprov   DATE,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second,
+  zrusdatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  refdatprov   DATE NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_exekuce_mat_pk ON cep_exekuce_mat(serno);
+ALTER TABLE cep_exekuce_mat ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT cep_exekuce_mat_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+ALTER TABLE cep_exekuce_mat
+ADD CONSTRAINT (CHECK (stav in ('A', 'C', 'Z', 'U')) CONSTRAINT cep_exekuce_mat_c1);
+
+--------------------------------------------------------------------------------------------
+CREATE TABLE cep_exekuce_arch (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  os   Integer,
+  stav   CHAR(1),
+  aktponabytpm   Integer,
+  aktponabytpmsum   DECIMAL(16,2),
+  aktponabytpmpredxmes   Integer,
+  aktponabytpmpredxmessum   DECIMAL(16,2),
+  aktprednabytpm   Integer,
+  aktprednabytpmsum   DECIMAL(16,2),
+  aktpocet   Integer,
+  aktsum   DECIMAL(16,2),
+  ukoncpocet   Integer,
+  ukoncsum   DECIMAL(16,2),
+  ukoncdatposledn   DATE,
+  stornopocet   Integer,
+  stornosum   DECIMAL(16,2),
+  stornodatposledn   DATE,
+  smlsporsaldosum   DECIMAL(16,2),
+  dispprostr   DECIMAL(16,2),
+  poznamka   CHAR(70),
+  poruser   CHAR(20)  DEFAULT USER,
+  portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  pordatprov   DATE,
+  provuser   CHAR(20),
+  provtime   datetime year to second,
+  provdatprov   DATE,
+  ukoncuser   CHAR(20),
+  ukonctime   datetime year to second,
+  ukoncdatprov   DATE,
+  zrususer   CHAR(20),
+  zrustime   datetime year to second,
+  zrusdatprov   DATE,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  refdatprov   DATE
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX cep_exekuce_arch_pk ON cep_exekuce_arch(idarch);
+ALTER TABLE cep_exekuce_arch ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT cep_exekuce_arch_pk;
+
+ROLLBACK WORK;
+
+--End of B136879_UID77507_1-exekuce

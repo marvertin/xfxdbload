@@ -1,0 +1,39 @@
+-- @TC:ONCE: ID = V2, B135937_UID80001_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25692: Evidovat u závazků nové vlastnosti včetně zadání v Sale {STORY}
+
+
+BEGIN WORK;
+
+
+-- ###############################################################
+--       cfs_zavazek_arch
+
+-- 55  cfs_zavazek_arch-1/2       [CREATE.COLUMN]
+ALTER TABLE cfs_zavazek_arch
+    ADD zahrnagregltv   Integer  ,
+    ADD zajistenonemov  Integer  ,
+    ADD ltv             DECIMAL(16, 2)  ;
+
+-- 56  cfs_zavazek_arch-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE cfs_zavazek_arch
+    ADD CONSTRAINT CHECK (zahrnagregltv IN (0,1)) CONSTRAINT cfs_zavazek_arch_d85y,
+    ADD CONSTRAINT CHECK (zajistenonemov IN (0,1)) CONSTRAINT cfs_zavazek_arch_d85z;
+
+-- ###############################################################
+--       cfs_zavazek_mat
+
+-- 57  cfs_zavazek_mat-1/2       [CREATE.COLUMN]
+ALTER TABLE cfs_zavazek_mat
+    ADD zahrnagregltv   Integer  ,
+    ADD zajistenonemov  Integer  ,
+    ADD ltv             DECIMAL(16, 2)  ;
+
+-- 58  cfs_zavazek_mat-2/2       [CREATE.CONSTRAINT_CHECK]
+ALTER TABLE cfs_zavazek_mat
+    ADD CONSTRAINT CHECK (zahrnagregltv IN (0,1)) CONSTRAINT cfs_zavazek_mat_d85v,
+    ADD CONSTRAINT CHECK (zajistenonemov IN (0,1)) CONSTRAINT cfs_zavazek_mat_d85w;
+
+
+ROLLBACK WORK;
+
+--End of B135937_UID80001_1

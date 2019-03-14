@@ -1,0 +1,19 @@
+-- @TC:ONCE: ID = V2, B134886_UID60734_3
+-- @TC:ONCE: DESCRIPTION = RSTS-16013: ÚŽ: Úprava údajů pro podnikatelské příjmy {STORY}
+
+
+BEGIN WORK;
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmy', 'O1', 13, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu DAP zaměstnavatele <osoba_v_ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmy', 'O2', 14, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu DAP zaměstnavatele <osoba_v_ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmy', 'O3', 15, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu DAP zaměstnavatele <osoba_v_ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmy', 'O4', 16, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu DAP zaměstnavatele <osoba_v_ÚŽ>');
+
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'O1', 812, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu DAP zaměstnavatele v zahraničí <osoba_v_ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'O2', 813, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu DAP zaměstnavatele v zahraničí <osoba_v_ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'O3', 814, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu DAP zaměstnavatele v zahraničí <osoba_v_ÚŽ>');
+CALL TW_RegSetOrAddKey('EU', 'creditrq-zaklad', 'docPrijmyZahr', 'O4', 815, 1, 'Úvěr', 'Úvěrová žádost - dokumenty', 'Dokumenty', 'Typ dokumentu DAP zaměstnavatele v zahraničí <osoba_v_ÚŽ>');
+
+ROLLBACK WORK;
+
+--End of B134886_UID60734_3

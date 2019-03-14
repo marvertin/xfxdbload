@@ -1,0 +1,33 @@
+-- @TC:ONCE: ID = V2, B136903_UID90768_3
+-- @TC:ONCE: DESCRIPTION = RSTS-31689: Editace logických serverů (proposal3) {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+-- Prostredi
+
+INSERT INTO bc_prostredi_cis (kod, popis, dbserver, dbnazev, prodprostredi) VALUES ('PROD', 'Produkční prostředí', 'PROD', 'aris30', 1);
+INSERT INTO bc_prostredi_cis (kod, popis, dbserver, dbnazev, prodprostredi) VALUES ('QUAL', 'Prostředí QUAL', 'QUAL', 'aris30', 0);
+INSERT INTO bc_prostredi_cis (kod, popis, dbserver, dbnazev, prodprostredi) VALUES ('TEST', 'Prostředí TEST', 'TEST', 'aris30', 0);
+INSERT INTO bc_prostredi_cis (kod, popis, dbserver, dbnazev, prodprostredi) VALUES ('EVAL', 'Prostředí EVAL', 'EVAL', 'aris30', 0);
+INSERT INTO bc_prostredi_cis (kod, popis, dbserver, dbnazev, prodprostredi) VALUES ('CUST', 'Prostředí CUST', 'CUST', 'aris30', 0);
+INSERT INTO bc_prostredi_cis (kod, popis, dbserver, dbnazev, prodprostredi) VALUES ('REPL', 'Prostředí REPL', 'REPL', 'aris30', 0);
+INSERT INTO bc_prostredi_cis (kod, popis, dbserver, dbnazev, prodprostredi) VALUES ('AJA', 'Prostředí AJA', 'AJA', 'aris30', 0);
+
+-- Logicky server
+
+INSERT INTO bc_logserver_cis (kod, popis) VALUES ('UNIX', 'Unix server');
+
+-- Fyzicky server
+
+INSERT INTO bc_fyzserver_cis (reflogserver, refprostredi, jmeno) VALUES ('UNIX', 'PROD', 'PROD');
+INSERT INTO bc_fyzserver_cis (reflogserver, refprostredi, jmeno) VALUES ('UNIX', 'QUAL', 'QUAL');
+INSERT INTO bc_fyzserver_cis (reflogserver, refprostredi, jmeno) VALUES ('UNIX', 'TEST', 'TEST');
+INSERT INTO bc_fyzserver_cis (reflogserver, refprostredi, jmeno) VALUES ('UNIX', 'EVAL', 'EVAL');
+INSERT INTO bc_fyzserver_cis (reflogserver, refprostredi, jmeno) VALUES ('UNIX', 'CUST', 'CUST');
+INSERT INTO bc_fyzserver_cis (reflogserver, refprostredi, jmeno) VALUES ('UNIX', 'REPL', 'REPL');
+INSERT INTO bc_fyzserver_cis (reflogserver, refprostredi, jmeno) VALUES ('UNIX', 'AJA', 'STAT');
+
+ROLLBACK WORK;
+
+--End of B136903_UID90768_3

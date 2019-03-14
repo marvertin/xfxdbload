@@ -1,0 +1,16 @@
+-- @TC:ONCE: ID = V2, B137331_UID91935_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32259: Registry pro komunikaci OZ {REQUEST}
+
+
+BEGIN WORK;
+
+UPDATE tw_emailtyp_cis SET obsah = 'Dobrý den, k níže uvedené žádosti je požadováno doplnění. Smlouva SS: <<SMLOUVA_SS>>\nKlient:  <<KLIENT>>\nÚŽ: <<CISLO_UZ>>\nVarianta: <<VARIANTA_PU>>\nVýše úvěru: <<VYSE_UVERU>>\nPožadavky zpracovatele úvěru:\n<<TYPY_DOKUMENTU_SCHVALOVATELE_UVERU>> \n<<POZADOVANE_ODPOVEDI_SCHVALOVATELE_UVERU>>\n<<KONTAKT_NA_SCHVALOVATELE_UVERU>>\n\nPožadavky stavebního technika:\n<<TYPY_DOKUMENTU_STAVEBNIHO_TECHNIKA>>\n<<POZADOVANE_ODPOVEDI_STAVEBNIHO_TECHNIKA>>\n<<KONTAKT_NA_STAVEBNIHO_TECHNIKA>>\nPožadavky pro analytika rizik:\n<<TYPY_DOKUMENTU_ANALYTIK>>\n<<POZADOVANE_ODPOVEDI_ANALYTIK>>\n<<KONTAKT_NA_ANALYTIKA>>\nPožadavky pro analytika rizik 2:\n<<TYPY_DOKUMENTU_FRAUD>>\n<<POZADOVANE_ODPOVEDI_FRAUD>>\n<<KONTAKT_NA_FRAUD>> \n\nPro otevření úvěrové žádosti lze použít odkaz:   <<ODKAZ_OTEVRENI_UZ>>\n\nDěkuje vaše RSTS'
+WHERE zkratka = 'SCH_UV_PRERUS_OZ_PRVNI';
+
+UPDATE tw_emailtyp_cis SET obsah = 'Dobrý den, k níže uvedené žádosti je požadování doplnění. Smlouva SS: <<SMLOUVA_SS>>\nKlient:  <<KLIENT>>\nÚŽ: <<CISLO_UZ>>\nVarianta: <<VARIANTA_PU>>\nVýše úvěru: <<VYSE_UVERU>>\n\nPožadavky pro analytika rizik:\n<<TYPY_DOKUMENTU_ANALYTIK>>\n<<POZADOVANE_ODPOVEDI_ANALYTIK>>\n<<KONTAKT_NA_ANALYTIKA>>\nPožadavky pro analytika rizik 2:\n<<TYPY_DOKUMENTU_FRAUD>>\n<<POZADOVANE_ODPOVEDI_FRAUD>>\n<<KONTAKT_NA_FRAUD>>\n\nPro otevření úvěrové žádosti lze použít odkaz:   <<ODKAZ_OTEVRENI_UZ>>\n\nDěkuje vaše RSTS'
+WHERE zkratka = 'SCH_UV_PRERUS_OZ_ANR';
+
+
+ROLLBACK WORK;
+
+--End of B137331_UID91935_3

@@ -1,0 +1,10 @@
+-- @TC:ONCE: ID = V2, B136231_UID81986_3
+-- @TC:ONCE: DESCRIPTION = RSTS-26660: Přehled parametrizace číselníků v 2018S {PROJECT_ISSUE}
+
+BEGIN WORK;
+
+UPDATE czd_zpusobdorucusd_cis SET nazev = 'OZ - poradenské místo PPL', uhradapoplatkukl = 1 WHERE nazev = 'OZ - poradenské místo PPT';
+
+ROLLBACK WORK;
+
+--End of B136231_UID81986_3

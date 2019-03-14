@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136514_UID77507_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+DELETE FROM ep_itfskupudaj_def WHERE udaj IN (SELECT udaj FROM ep_itfudaj_cis WHERE kod IN ('SA_Credit_065', 'SA_Credit_066', 'SA_Credit_067', 'SA_Credit_088', 'SA_Credit_089', 'SA_Credit_090', 'SA_Credit_111', 'SA_Credit_112', 'SA_Credit_113'));
+
+UPDATE ep_itfudaj_cis SET platnost = 0 WHERE kod IN ('SA_Credit_065', 'SA_Credit_066', 'SA_Credit_067', 'SA_Credit_088', 'SA_Credit_089', 'SA_Credit_090', 'SA_Credit_111', 'SA_Credit_112', 'SA_Credit_113');
+
+ROLLBACK WORK;
+
+--End of B136514_UID77507_3

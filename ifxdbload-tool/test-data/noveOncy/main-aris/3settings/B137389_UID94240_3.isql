@@ -1,0 +1,17 @@
+-- @TC:ONCE: ID = V2, B137389_UID94240_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33414: Vygenerovat specifickou podmínku. {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO eu_specpodm_cis (ser, druhpodm, poznamka, platnost, nedzaloha, priorita, predcerp, pocerp, text1, text2, pokuta, pocmesposunu, periodicita, perioda) 
+  VALUES ((SELECT MAX(ser) + 1 FROM eu_specpodm_cis), 'Potvrzení o výši příjmu po ukončení zkušební doby', 'Potvrzení o výši příjmu po ukončení zkušební doby', 1, null, 0, 1, 0, 
+  'Předloží akceptovatelné aktuální Potvrzení o výši příjmu pro osobu (dotáhnout jméno a příjmení) v dostatečné výši, vystavené po ukončení zkušební doby.', 
+  null, null, 3, 0, null);
+
+call TW_RegSetOrAddKey('EU', 'specpodm', 'generDruh', 'prijemZkusDoba', (SELECT MAX(ser) FROM eu_specpodm_cis), 1, 'Úvěr',
+  'Specifické podmínky', 'Příjem ve zkušební době', 'Specifická podmínka před čerpáním doložení PVP po zkušební době', 1);
+
+ROLLBACK WORK;
+
+--End of B137389_UID94240_3

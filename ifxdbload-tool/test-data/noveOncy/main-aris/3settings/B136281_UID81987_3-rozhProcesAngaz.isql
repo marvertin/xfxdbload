@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136281_UID81987_3-rozhProcesAngaz
+-- @TC:ONCE: DESCRIPTION = RSTS-26661: Zrevidovat stav funkcí {PROJECT_ISSUE}
+
+
+BEGIN WORK;
+
+INSERT INTO cps_kritvyhuvproc_cis (serno, nazev) VALUES (22, 'Maximální úvěrová angažovanost > X');
+
+ROLLBACK WORK;
+
+--End of B136281_UID81987_3-rozhProcesAngaz

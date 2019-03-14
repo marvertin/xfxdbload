@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B136511_UID77507_3
+-- @TC:ONCE: DESCRIPTION = RSTS-24223: REAL: IFRS - Nová definice defaultu, zrušení klasifikace, přemapování účtů na stádia {REALIZACE}
+
+BEGIN WORK;
+
+call TW_RegDelKey('RU', '*', 'cerp', 'kontrklasifklient');
+call TW_RegDelKey('RU', '*', 'vyzva', 'minklasif');
+call TW_RegDelKey('RU', '*', 'prvym', 'minklasif');
+
+ROLLBACK WORK;
+
+--End of B136511_UID77507_3

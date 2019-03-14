@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B134732_UID59722_1-usd
+-- @TC:ONCE: DESCRIPTION = RSTS-15511: Převod entit a seren USD {STORY}
+
+
+BEGIN WORK;
+
+--  staré záznamy vedou na starou seu_zadost_mat, zatímco nové záznamy na novou seu_uz_mat
+alter table seu_usdhlavicka_mat drop constraint seu_usdhlavicka_mat_f3;
+
+ROLLBACK WORK;
+
+--End of B134732_UID59722_1-usd

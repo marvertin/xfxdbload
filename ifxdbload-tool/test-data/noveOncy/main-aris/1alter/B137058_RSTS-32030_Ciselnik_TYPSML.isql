@@ -1,0 +1,47 @@
+-- @TC:ONCE: ID = V2, B137058_RSTS-32030_Ciselnik_TYPSML
+-- @TC:ONCE: DESCRIPTION = RSTS-32030: IMPL (integrace): RSTS-32030_Číselník TYPSML {REALIZACE}
+
+BEGIN WORK;
+
+CREATE TABLE csp_typsml_cis (
+  serno   SERIAL NOT NULL,
+  typsml   Integer NOT NULL,
+  popis   VARCHAR(255) NOT NULL,
+  platnost   Integer  DEFAULT 1 NOT NULL,
+  poznamka   VARCHAR(255),
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+  CHECK (platnost IN (0,1)) CONSTRAINT csp_typsml_cis_da4c
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_typsml_cis_pk ON csp_typsml_cis(serno);
+ALTER TABLE csp_typsml_cis ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT csp_typsml_cis_pk;
+
+--FK
+
+--INDEXES
+
+--UNIQUE INDEXES
+
+--CHECKS
+
+CREATE TABLE csp_typsml_acis (
+  idarch   SERIAL NOT NULL,
+  serno   INTEGER NOT NULL,
+  typsml   Integer,
+  popis   VARCHAR(255),
+  platnost   Integer,
+  poznamka   VARCHAR(255),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND,
+  CHECK (platnost IN (0,1)) CONSTRAINT csp_typsml_acis_da3q
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_typsml_acis_pk ON csp_typsml_acis(idarch);
+ALTER TABLE csp_typsml_acis ADD CONSTRAINT PRIMARY KEY(idarch) CONSTRAINT csp_typsml_acis_pk;
+
+ROLLBACK WORK;
+
+--End of B137058_RSTS-32030_Ciselnik_TYPSML

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136840_UID36095_5-bc_spravcedavky
+-- @TC:ONCE: DESCRIPTION = TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE bc_davka_cis DROP spravce;
+ALTER TABLE bc_davka_acis DROP spravce;
+
+ROLLBACK WORK;
+
+--End of B136840_UID36095_5-bc_spravcedavky

@@ -1,0 +1,23 @@
+-- @TC:ONCE: ID = V2, B137397_UID94241_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33415: Central: Doplnění tlačítka a modálního okna pro kalkulačku ZAM {STORY}
+
+
+BEGIN WORK;
+
+-- #Hranice překročení rozdílu 3M a průměru výpisů v Kč#
+call TW_RegSetKey('EU', 'finSit', 'kalkulZam', 'hrPrekrocRozdVypK', '2500');
+
+-- #Hranice překročení rozdílu 3M a průměru výpisů v %#
+call TW_RegSetKey('EU', 'finSit', 'kalkulZam', 'hrPrekrocRozdVypP', '5');
+
+-- #Hranice překročení rozdílu 12M a 3M v Kč#
+call TW_RegSetKey('EU', 'finSit', 'kalkulZam', 'hrPrekrocRozdPriK', '5000');
+
+-- #Hranice překročení rozdílu 12M a 3M v %#
+call TW_RegSetKey('EU', 'finSit', 'kalkulZam', 'hrPrekrocRozdPriP', '10');
+
+
+
+ROLLBACK WORK;
+
+--End of B137397_UID94241_3

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136822_UID36095_1-bc_davka_cis_opakspustspecif
+-- @TC:ONCE: DESCRIPTION = RSTS-5046: TR2: Centrální řízení dávek v CIBIS-MC {REQUEST}
+
+BEGIN WORK;
+
+ALTER TABLE bc_davka_cis ADD opakspustspecif CHAR(70) BEFORE platnost;
+ALTER TABLE bc_davka_acis ADD opakspustspecif CHAR(70) BEFORE platnost;
+
+ROLLBACK WORK;
+
+--End of B136822_UID36095_1-bc_davka_cis_opakspustspecif

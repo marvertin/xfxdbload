@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B137097_UID83520_3
+-- @TC:ONCE: DESCRIPTION = RSTS-27550: Zaručená elektronická pečeť PO -potvrzení o úrocích {REQUEST}
+
+
+BEGIN WORK;
+
+UPDATE rr_reptype_cis SET signature = 1 WHERE repcode = 'UP000';
+
+ROLLBACK WORK;
+
+--End of B137097_UID83520_3

@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136228_UID77318_6
+-- @TC:ONCE: DESCRIPTION = RSTS-24136: TF001790 - ÚŽ - Úvěrová žádost - opakovaný dotaz do registrů se neprovedl pro všechny osoby {DEFECT}
+
+
+BEGIN WORK;
+
+call TW_ExecSql('DROP PROCEDURE crk_isSuppressKot', -674);
+
+ROLLBACK WORK;
+
+--End of B136228_UID77318_6

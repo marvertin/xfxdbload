@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B136478_UID84174_5-seunavot
+-- @TC:ONCE: DESCRIPTION = RSTS-28021: Prevence přetečení serno - změna datového typu {REALIZACE}
+
+BEGIN WORK;
+
+alter table seu_navot_arch modify serno BIGINT    NOT NULL;
+alter table seu_navot_arch modify idarch BIGSERIAL (2147483648) NOT NULL;
+alter table seu_navot_arch add constraint primary key (idarch) constraint seu_navot_arch_pk;
+
+alter table seu_navot_mat  modify serno BIGSERIAL (2147483648) NOT NULL;
+alter table seu_navot_mat  add constraint primary key (serno) constraint seu_navot_mat_pk;
+
+ROLLBACK WORK;
+
+--End of B136478_UID84174_5

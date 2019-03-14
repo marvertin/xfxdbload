@@ -1,0 +1,985 @@
+-- @TC:ONCE: ID = V2, B135823_UID78871_3
+-- @TC:ONCE: DESCRIPTION = RSTS-25063: Zavést číselník Způsob doručení dokumentů ÚSD {STORY}
+
+
+BEGIN WORK;
+
+-- Číselník: Druhy operací
+INSERT INTO ac_druh_cis (
+      druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, 
+      dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, 
+      meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, 
+      popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost
+  ) VALUES (
+     'Dp88', 'I', 'U', 0, 0, null, 9, null, null, 
+     'Doručení USD-EMS', null, null, null, 'Doručení USD-EMS', null, null, 1, 1, 0, 
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+     'Poplatek za doručení USD - EMS', null, 1, 1, 0, 1
+  )
+;
+
+INSERT INTO ac_druh_cis (
+      druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, 
+      dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, 
+      meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, 
+      popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost
+  ) VALUES (
+     'Dp89', 'I', 'U', 0, 0, null, 9, null, null, 
+     'Doručení USD-PPL', null, null, null, 'Doručení USD-PPL', null, null, 1, 1, 0, 
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+     'Poplatek za doručení USD - PPL', null, 1, 1, 0, 1
+  )
+;
+
+INSERT INTO ac_druh_cis (
+      druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, 
+      dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, 
+      meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, 
+      popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost
+  ) VALUES (
+     'Dm88', 'I', 'U', 0, 0, null, 9, null, null, 
+     'Z-Doručení USD-EMS', null, null, null, 'Z-Doručení USD-EMS', null, null, 1, 1, 0, 
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+     'Z - Poplatek za doručení USD - ESM', 'Zesplatnění poplatku za doručení USD - ESM', 1, 1, 0, 1
+  )
+;
+
+INSERT INTO ac_druh_cis (
+      druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, 
+      dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, 
+      meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, 
+      popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost
+  ) VALUES (
+     'Dm89', 'I', 'U', 0, 0, null, 9, null, null, 
+     'Z-Doručení USD-PPL', null, null, null, 'Z-Doručení USD-PPL', null, null, 1, 1, 0, 
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+     'Z - Poplatek za doručení USD - PPL', 'Zesplatnění poplatku za doručení USD - PPL', 1, 1, 0, 1
+  )
+;
+
+INSERT INTO ac_druh_cis (
+      druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, 
+      dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, 
+      meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, 
+      popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost
+  ) VALUES (
+     'Dr88', 'I', 'U', 0, 0, null, 9, null, null, 
+     'S-Doručení USD-EMS', null, null, null, 'S-Doručení USD-EMS', null, null, 1, 1, 0, 
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+     'S - Poplatek za doručení USD - ESM', 'Splacení poplatku za doručení USD - ESM', 1, 1, 0, 1
+  )
+;
+
+INSERT INTO ac_druh_cis (
+      druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, 
+      dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, 
+      meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, 
+      popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost
+  ) VALUES (
+     'Dr89', 'I', 'U', 0, 0, null, 9, null, null, 
+     'S-Doručení USD-PPL', null, null, null, 'S-Doručení USD-PPL', null, null, 1, 1, 0, 
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+     'S - Poplatek za doručení USD - PPL', 'Splacení poplatku za doručení USD - PPL', 1, 1, 0, 1
+  )
+;
+
+INSERT INTO ac_druh_cis (
+      druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, 
+      dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, 
+      meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, 
+      popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost
+  ) VALUES (
+     'Do88', 'I', 'U', 0, 0, null, 9, null, null, 
+     'Sníž-Doruč.USD-EMS', null, null, null, 'Sníž-Doruč.USD-EMS', null, null, 1, 1, 0, 
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+     'Sníž - Poplatek za doruč.USD - ESM', 'Snížení podrozvaky poplatku za doručení USD - ESM', 1, 1, 0, 1
+  )
+;
+
+INSERT INTO ac_druh_cis (
+      druh, zdroj, uhrink, priorita, zapg, konstsym, dbvarsym, dbspecsym, crspecsym, 
+      dbtext, dbsko, dbucet, crvarsym, crtext, crsko, crucet, b, k, i, 
+      meniocsaldodb, meniocsaldocr, meniocsaldospdb, meniocsaldospcr, jecerpani, jenakladanivkladem, jevklad, kursrozdil, jezaklsp, presporenicc, 
+      popis, poznamka, checkdblimit, checkcrlimit, vklad_splatka, platnost
+  ) VALUES (
+     'Do89', 'I', 'U', 0, 0, null, 9, null, null, 
+     'Sníž-Doruč.USD-PPL', null, null, null, 'Sníž-Doruč.USD-PPL', null, null, 1, 1, 0, 
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+     'Sníž - Poplatek za doruč.USD - PPL', 'Snížení podrozvaky poplatku za doručení USD - PPL', 1, 1, 0, 1
+  )
+;
+-- /Číselník: Druhy operací
+
+-- Číselník: Druhy operací na výpise
+INSERT INTO ac_druhtko_cis (
+      druh, tko, jevypis, jecerpani, vypdbtext, vypcrtext, 
+      dbvarsym, dbspecsym, crspecsym, dbsko, dbucet, dbtext, crvarsym, crsko, crucet, crtext, 
+      platnost, popis, poznamka
+  ) VALUES (
+     'Dp88', 'CA', 1, 0, 'Poplatek za doručení USD - EMS', 'Poplatek za doručení USD - EMS', 
+     null, null, null, null, null, null, null, 'FEES', null, null, 
+     1, 'Poplatek za doručení USD - EMS', null
+  )
+;
+
+INSERT INTO ac_druhtko_cis (
+      druh, tko, jevypis, jecerpani, vypdbtext, vypcrtext, 
+      dbvarsym, dbspecsym, crspecsym, dbsko, dbucet, dbtext, crvarsym, crsko, crucet, crtext, 
+      platnost, popis, poznamka
+  ) VALUES (
+     'Dp89', 'CA', 1, 0, 'Poplatek za doručení USD - PPL', 'Poplatek za doručení USD - PPL', 
+     null, null, null, null, null, null, null, 'FEES', null, null, 
+     1, 'Poplatek za doručení USD - PPL', null
+  )
+;
+-- /Číselník: Druhy operací na výpise
+
+-- Číselník: Typy dluhu
+INSERT INTO ac_typdluhu_cis (
+      typ, nazev, tko, predsplatsko, posplatsko, 
+      operpredpis, operzesplat, opersplatky, operpodrozv, opersniz, operuzavpodr, operprevodpodr, platnost
+  ) VALUES (
+      388, 'Poplatek za doručení USD - EMS', 'CA', 'FEES', 'MFES', 
+      'Dp88', 'Dm88', 'Dr88', 'Do88', 'DD03', 'DC03', 'DT03', 1
+  )
+;
+
+INSERT INTO ac_typdluhu_cis (
+      typ, nazev, tko, predsplatsko, posplatsko, 
+      operpredpis, operzesplat, opersplatky, operpodrozv, opersniz, operuzavpodr, operprevodpodr, platnost
+  ) VALUES (
+      389, 'Poplatek za doručení USD - PPL', 'CA', 'FEES', 'MFES', 
+      'Dp89', 'Dm89', 'Dr89', 'Do89', 'DD03', 'DC03', 'DT03', 1
+  )
+;
+-- /Číselník: Typy dluhu
+
+-- Číselník: Typy účetní úhrady
+INSERT INTO ah_uhrada_cis (
+     typuhrada, tko, mena, typdluznika, fincode, vztahpohl, typpohl, typdluhu, ucetvynos, 
+     casoverozliseni, uhrcoobjekt, faze, druhvynos, castkapopl, mimosplatky, skupina, popis, poznamka, platnost
+  ) VALUES (
+      88, 'CA', null, 'OT', '0', 'N', null, 388, null, 
+      0, null, 2, '', null, 0, null, 'Poplatek za doručení USD - EMS', null, 1
+  )
+;
+
+INSERT INTO ah_uhrada_cis (
+     typuhrada, tko, mena, typdluznika, fincode, vztahpohl, typpohl, typdluhu, ucetvynos, 
+     casoverozliseni, uhrcoobjekt, faze, druhvynos, castkapopl, mimosplatky, skupina, popis, poznamka, platnost
+  ) VALUES (
+      89, 'CA', null, 'OT', 0, 'N', null, 389, null, 
+      0, null, 2, '', null, 0, null, 'Poplatek za doručení USD - PPL', null, 1
+  )
+;
+-- /Číselník: Typy účetní úhrady
+
+-- Číselník: Typy úhrad
+INSERT INTO ep_uhrada_cis (
+      tuhr, text, cetnost, tuhruct, poznamka, platnost
+  ) VALUES (
+      'USD01', 'Poplatek za doručení USD - EMS', 'J', 88, null, 1
+  )
+;
+
+INSERT INTO ep_uhrada_cis (
+      tuhr, text, cetnost, tuhruct, poznamka, platnost
+  ) VALUES (
+      'USD02', 'Poplatek za doručení USD - PPL', 'J', 89, null, 1
+  )
+;
+-- /Číselník: Typy úhrad
+
+-- Číselník: Šablona parametrizace produktové úhrady
+INSERT INTO ep_uhrdefpar_cis(nazev, tuhr, charakter, tsml, datod) 
+VALUES('Poplatek za ÚSD', 'USD01', 'U', 'PFSU', ap_datprov());
+
+INSERT INTO ep_uhrsazeb_cis(popis, datod, defpar, treal, perioda, stoppopl, mena, zaoktyp, zaokpresnost, alikvotni) 
+VALUES ('Poplatek za ÚSD - EMS - PFSU', ap_datprov(), tw_lastser(), 'PUFO', 'J', 1, 'CZK', 'N', 0, 0);
+
+INSERT INTO ep_uhrpravidlo_cis(popis, priorita, predpis, fixnicast, mena, dostupmodel) 
+VALUES ('Úhrada za doručení ÚSD', 1, tw_lastser(), 120, 'CZK', 0);
+------
+
+INSERT INTO ep_uhrdefpar_cis(nazev, tuhr, charakter, tsml, datod) 
+VALUES('Poplatek za ÚSD', 'USD01', 'U', 'SUFO', ap_datprov());
+
+INSERT INTO ep_uhrsazeb_cis(popis, datod, defpar, treal, perioda, stoppopl, mena, zaoktyp, zaokpresnost, alikvotni) 
+VALUES ('Poplatek za ÚSD - EMS - SUFO', ap_datprov(), tw_lastser(), 'SUFO', 'J', 1, 'CZK', 'N', 0, 0);
+
+INSERT INTO ep_uhrpravidlo_cis(popis, priorita, predpis, fixnicast, mena, dostupmodel) 
+VALUES ('Úhrada za doručení ÚSD', 1, tw_lastser(), 120, 'CZK', 0);
+------
+INSERT INTO ep_uhrdefpar_cis(nazev, tuhr, charakter, tsml, datod) 
+VALUES('Poplatek za ÚSD', 'USD02', 'U', 'PFSU', ap_datprov());
+
+INSERT INTO ep_uhrsazeb_cis(popis, datod, defpar, treal, perioda, stoppopl, mena, zaoktyp, zaokpresnost, alikvotni) 
+VALUES ('Poplatek za ÚSD - PPL - PFSU', ap_datprov(), tw_lastser(), 'PUFO', 'J', 1, 'CZK', 'N', 0, 0);
+
+INSERT INTO ep_uhrpravidlo_cis(popis, priorita, predpis, fixnicast, mena, dostupmodel) 
+VALUES ('Úhrada za doručení ÚSD', 1, tw_lastser(), 150, 'CZK', 0);
+------
+INSERT INTO ep_uhrdefpar_cis(nazev, tuhr, charakter, tsml, datod) 
+VALUES('Poplatek za ÚSD', 'USD02', 'U', 'SUFO', ap_datprov());
+
+INSERT INTO ep_uhrsazeb_cis(popis, datod, defpar, treal, perioda, stoppopl, mena, zaoktyp, zaokpresnost, alikvotni) 
+VALUES ('Poplatek za ÚSD - PPL - SUFO', ap_datprov(), tw_lastser(), 'SUFO', 'J', 1, 'CZK', 'N', 0, 0);
+
+INSERT INTO ep_uhrpravidlo_cis(popis, priorita, predpis, fixnicast, mena, dostupmodel) 
+VALUES ('Úhrada za doručení ÚSD', 1, tw_lastser(), 150, 'CZK', 0);
+-- /Číselník: Šablona parametrizace produktové úhrady
+
+-- Číselník: Způsob doručení dokumentů ÚSD
+INSERT INTO czd_zpusobdorucusd_cis (
+      nazev, povolitjinaadr, uhradapoplatkukl, tuhr, poznamka, platnost
+  ) VALUES (
+      'Klient - Česká pošta doporučeně', 'A', 0, null, null, 1
+  )
+;
+
+INSERT INTO czd_zpusobdorucusd_cis (
+      nazev, povolitjinaadr, uhradapoplatkukl, tuhr, poznamka, platnost
+  ) VALUES (
+      'Klient - EMS', 'A', 1, 'USD01', null, 1
+  )
+;
+
+INSERT INTO czd_zpusobdorucusd_cis (
+      nazev, povolitjinaadr, uhradapoplatkukl, tuhr, poznamka, platnost
+  ) VALUES (
+      'Klient - PPL', 'A', 1, 'USD02', null, 1
+  )
+;
+
+INSERT INTO czd_zpusobdorucusd_cis (
+      nazev, povolitjinaadr, uhradapoplatkukl, tuhr, poznamka, platnost
+  ) VALUES (
+      'OZ - poradenské místo doporučeně', 'V', 0, null, null, 1
+  )
+;
+
+INSERT INTO czd_zpusobdorucusd_cis (
+      nazev, povolitjinaadr, uhradapoplatkukl, tuhr, poznamka, platnost
+  ) VALUES (
+      'OZ - osobní vyzvednutí na centrále', 'N', 0, null, null, 1
+  )
+;
+
+INSERT INTO czd_zpusobdorucusd_cis (
+      nazev, povolitjinaadr, uhradapoplatkukl, tuhr, poznamka, platnost
+  ) VALUES (
+      'Klient - osobní vyzvednutí na centrále', 'N', 0, null, null, 1
+  )
+;
+
+INSERT INTO czd_zpusobdorucusd_cis (
+      nazev, povolitjinaadr, uhradapoplatkukl, tuhr, poznamka, platnost
+  ) VALUES (
+      'OZ - poradenské místo PPT', 'V', 0, 'USD02', null, 1
+  )
+;
+-- /Číselník: Způsob doručení dokumentů ÚSD
+
+-- Číselník: Mapování dluhu
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_FO_PU', 0, '218512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_FO_PU', 1, '218512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_FO_SU', 0, '218522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_FO_SU', 1, '218522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_FO_VU', 0, '218542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_FO_VU', 1, '218542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PN_KO', 0, '218732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PN_KO', 1, '218732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PN_PU', 0, '218712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PN_PU', 1, '218712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PN_SU', 0, '218722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PN_SU', 1, '218722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PN_VU', 0, '218742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PN_VU', 1, '218742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PZ_KO', 0, '218632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PZ_KO', 1, '218632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PZ_PU', 0, '218612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PZ_PU', 1, '218612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PZ_SU', 0, '218622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PZ_SU', 1, '218622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PZ_VU', 0, '218642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_D_PZ_VU', 1, '218642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_FO_PU', 0, '215512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_FO_PU', 1, '215512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_FO_SU', 0, '215522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_FO_SU', 1, '215522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_FO_VU', 0, '215542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_FO_VU', 1, '215542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PN_KO', 0, '215732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PN_KO', 1, '215732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PN_PU', 0, '215712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PN_PU', 1, '215712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PN_SU', 0, '215722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PN_SU', 1, '215722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PN_VU', 0, '215742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PN_VU', 1, '215742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PZ_KO', 0, '215632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PZ_KO', 1, '215632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PZ_PU', 0, '215612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PZ_PU', 1, '215612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PZ_SU', 0, '215622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PZ_SU', 1, '215622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PZ_VU', 0, '215642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_K_PZ_VU', 1, '215642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_FO_PU', 0, '216512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_FO_PU', 1, '216512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_FO_SU', 0, '216522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_FO_SU', 1, '216522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_FO_VU', 0, '216542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_FO_VU', 1, '216542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PN_KO', 0, '216732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PN_KO', 1, '216732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PN_PU', 0, '216712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PN_PU', 1, '216712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PN_SU', 0, '216722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PN_SU', 1, '216722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PN_VU', 0, '216742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PN_VU', 1, '216742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PZ_KO', 0, '216632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PZ_KO', 1, '216632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PZ_PU', 0, '216612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PZ_PU', 1, '216612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PZ_SU', 0, '216622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PZ_SU', 1, '216622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PZ_VU', 0, '216642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '0_S_PZ_VU', 1, '216642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_FO_PU', 0, '241512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_FO_PU', 1, '241512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_FO_SU', 0, '241522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_FO_SU', 1, '241522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_FO_VU', 0, '241542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_FO_VU', 1, '241542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PN_KO', 0, '241732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PN_KO', 1, '241732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PN_PU', 0, '241712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PN_PU', 1, '241712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PN_SU', 0, '241722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PN_SU', 1, '241722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PN_VU', 0, '241742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PN_VU', 1, '241742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PZ_KO', 0, '241632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PZ_KO', 1, '241632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PZ_PU', 0, '241612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PZ_PU', 1, '241612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PZ_SU', 0, '241622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PZ_SU', 1, '241622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PZ_VU', 0, '241642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '1_X_PZ_VU', 1, '241642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_FO_PU', 0, '242512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_FO_PU', 1, '242512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_FO_SU', 0, '242522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_FO_SU', 1, '242522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_FO_VU', 0, '242542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_FO_VU', 1, '242542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PN_KO', 0, '242732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PN_KO', 1, '242732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PN_PU', 0, '242712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PN_PU', 1, '242712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PN_SU', 0, '242722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PN_SU', 1, '242722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PN_VU', 0, '242742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PN_VU', 1, '242742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PZ_KO', 0, '242632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PZ_KO', 1, '242632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PZ_PU', 0, '242612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PZ_PU', 1, '242612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PZ_SU', 0, '242622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PZ_SU', 1, '242622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PZ_VU', 0, '242642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '2_X_PZ_VU', 1, '242642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_FO_PU', 0, '243512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_FO_PU', 1, '243512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_FO_SU', 0, '243522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_FO_SU', 1, '243522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_FO_VU', 0, '243542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_FO_VU', 1, '243542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PN_KO', 0, '243732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PN_KO', 1, '243732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PN_PU', 0, '243712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PN_PU', 1, '243712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PN_SU', 0, '243722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PN_SU', 1, '243722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PN_VU', 0, '243742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PN_VU', 1, '243742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PZ_KO', 0, '243632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PZ_KO', 1, '243632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PZ_PU', 0, '243612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PZ_PU', 1, '243612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PZ_SU', 0, '243622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PZ_SU', 1, '243622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PZ_VU', 0, '243642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '3_X_PZ_VU', 1, '243642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_FO_PU', 0, '244512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_FO_PU', 1, '244512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_FO_SU', 0, '244522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_FO_SU', 1, '244522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_FO_VU', 0, '244542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_FO_VU', 1, '244542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PN_KO', 0, '244732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PN_KO', 1, '244732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PN_PU', 0, '244712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PN_PU', 1, '244712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PN_SU', 0, '244722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PN_SU', 1, '244722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PN_VU', 0, '244742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PN_VU', 1, '244742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PZ_KO', 0, '244632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PZ_KO', 1, '244632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PZ_PU', 0, '244612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PZ_PU', 1, '244612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PZ_SU', 0, '244622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PZ_SU', 1, '244622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PZ_VU', 0, '244642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, '4_X_PZ_VU', 1, '244642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, 'X_X_FO_VO', 0, '996550', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, 'X_X_FO_VO', 1, '996550', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, 'X_X_PN_VO', 0, '996750', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, 'X_X_PN_VO', 1, '996750', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, 'X_X_PZ_VO', 0, '996650', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (388, 'X_X_PZ_VO', 1, '996650', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_FO_PU', 0, '218512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_FO_PU', 1, '218512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_FO_SU', 0, '218522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_FO_SU', 1, '218522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_FO_VU', 0, '218542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_FO_VU', 1, '218542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PN_KO', 0, '218732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PN_KO', 1, '218732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PN_PU', 0, '218712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PN_PU', 1, '218712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PN_SU', 0, '218722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PN_SU', 1, '218722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PN_VU', 0, '218742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PN_VU', 1, '218742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PZ_KO', 0, '218632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PZ_KO', 1, '218632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PZ_PU', 0, '218612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PZ_PU', 1, '218612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PZ_SU', 0, '218622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PZ_SU', 1, '218622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PZ_VU', 0, '218642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_D_PZ_VU', 1, '218642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_FO_PU', 0, '215512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_FO_PU', 1, '215512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_FO_SU', 0, '215522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_FO_SU', 1, '215522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_FO_VU', 0, '215542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_FO_VU', 1, '215542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PN_KO', 0, '215732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PN_KO', 1, '215732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PN_PU', 0, '215712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PN_PU', 1, '215712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PN_SU', 0, '215722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PN_SU', 1, '215722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PN_VU', 0, '215742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PN_VU', 1, '215742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PZ_KO', 0, '215632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PZ_KO', 1, '215632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PZ_PU', 0, '215612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PZ_PU', 1, '215612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PZ_SU', 0, '215622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PZ_SU', 1, '215622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PZ_VU', 0, '215642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_K_PZ_VU', 1, '215642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_FO_PU', 0, '216512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_FO_PU', 1, '216512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_FO_SU', 0, '216522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_FO_SU', 1, '216522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_FO_VU', 0, '216542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_FO_VU', 1, '216542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PN_KO', 0, '216732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PN_KO', 1, '216732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PN_PU', 0, '216712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PN_PU', 1, '216712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PN_SU', 0, '216722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PN_SU', 1, '216722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PN_VU', 0, '216742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PN_VU', 1, '216742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PZ_KO', 0, '216632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PZ_KO', 1, '216632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PZ_PU', 0, '216612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PZ_PU', 1, '216612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PZ_SU', 0, '216622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PZ_SU', 1, '216622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PZ_VU', 0, '216642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '0_S_PZ_VU', 1, '216642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_FO_PU', 0, '241512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_FO_PU', 1, '241512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_FO_SU', 0, '241522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_FO_SU', 1, '241522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_FO_VU', 0, '241542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_FO_VU', 1, '241542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PN_KO', 0, '241732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PN_KO', 1, '241732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PN_PU', 0, '241712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PN_PU', 1, '241712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PN_SU', 0, '241722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PN_SU', 1, '241722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PN_VU', 0, '241742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PN_VU', 1, '241742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PZ_KO', 0, '241632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PZ_KO', 1, '241632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PZ_PU', 0, '241612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PZ_PU', 1, '241612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PZ_SU', 0, '241622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PZ_SU', 1, '241622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PZ_VU', 0, '241642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '1_X_PZ_VU', 1, '241642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_FO_PU', 0, '242512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_FO_PU', 1, '242512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_FO_SU', 0, '242522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_FO_SU', 1, '242522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_FO_VU', 0, '242542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_FO_VU', 1, '242542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PN_KO', 0, '242732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PN_KO', 1, '242732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PN_PU', 0, '242712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PN_PU', 1, '242712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PN_SU', 0, '242722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PN_SU', 1, '242722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PN_VU', 0, '242742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PN_VU', 1, '242742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PZ_KO', 0, '242632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PZ_KO', 1, '242632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PZ_PU', 0, '242612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PZ_PU', 1, '242612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PZ_SU', 0, '242622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PZ_SU', 1, '242622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PZ_VU', 0, '242642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '2_X_PZ_VU', 1, '242642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_FO_PU', 0, '243512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_FO_PU', 1, '243512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_FO_SU', 0, '243522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_FO_SU', 1, '243522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_FO_VU', 0, '243542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_FO_VU', 1, '243542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PN_KO', 0, '243732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PN_KO', 1, '243732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PN_PU', 0, '243712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PN_PU', 1, '243712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PN_SU', 0, '243722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PN_SU', 1, '243722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PN_VU', 0, '243742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PN_VU', 1, '243742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PZ_KO', 0, '243632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PZ_KO', 1, '243632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PZ_PU', 0, '243612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PZ_PU', 1, '243612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PZ_SU', 0, '243622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PZ_SU', 1, '243622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PZ_VU', 0, '243642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '3_X_PZ_VU', 1, '243642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_FO_PU', 0, '244512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_FO_PU', 1, '244512', null, '712514', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_FO_SU', 0, '244522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_FO_SU', 1, '244522', null, '712524', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_FO_VU', 0, '244542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_FO_VU', 1, '244542', null, '712544', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PN_KO', 0, '244732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PN_KO', 1, '244732', null, '712734', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PN_PU', 0, '244712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PN_PU', 1, '244712', null, '712714', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PN_SU', 0, '244722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PN_SU', 1, '244722', null, '712724', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PN_VU', 0, '244742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PN_VU', 1, '244742', null, '712744', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PZ_KO', 0, '244632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PZ_KO', 1, '244632', null, '712634', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PZ_PU', 0, '244612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PZ_PU', 1, '244612', null, '712614', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PZ_SU', 0, '244622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PZ_SU', 1, '244622', null, '712624', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PZ_VU', 0, '244642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, '4_X_PZ_VU', 1, '244642', null, '712644', 0, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, 'X_X_FO_VO', 0, '996550', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, 'X_X_FO_VO', 1, '996550', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, 'X_X_PN_VO', 0, '996750', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, 'X_X_PN_VO', 1, '996750', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, 'X_X_PZ_VO', 0, '996650', '999341', '762001', 1, 1);
+
+INSERT INTO ac_mapdluhu_cis (typdluhu, mapkod, splatny, ucet, protiucet, vynosucet, jepodrozvaha, platnost) VALUES (389, 'X_X_PZ_VO', 1, '996650', '999341', '762001', 1, 1);
+-- /Číselník: Mapování dluhu
+
+-- Číselník: Priority dluhu
+INSERT INTO ac_priordluhu_cis (
+      schema, typdluhu, zesplatprior1, zesplatprior3, splacprior1, splacprior3, platnost
+  ) VALUES (
+      'STANDARD', 388, 300, 300, 300, 300, 1
+  )
+;
+
+INSERT INTO ac_priordluhu_cis (
+      schema, typdluhu, zesplatprior1, zesplatprior3, splacprior1, splacprior3, platnost
+  ) VALUES (
+     'STANDARDPO', 388, null, null, 500, 500, 1
+  )
+;
+
+INSERT INTO ac_priordluhu_cis (
+      schema, typdluhu, zesplatprior1, zesplatprior3, splacprior1, splacprior3, platnost
+  ) VALUES (
+     'VYMAH-DOHODA', 388, 300, 300, 300, 300, 1
+  )
+;
+
+INSERT INTO ac_priordluhu_cis (
+      schema, typdluhu, zesplatprior1, zesplatprior3, splacprior1, splacprior3, platnost
+  ) VALUES (
+     'VYMAH-SOUD',388, null, null, 300, 300, 1
+  )
+;
+
+INSERT INTO ac_priordluhu_cis (
+      schema, typdluhu, zesplatprior1, zesplatprior3, splacprior1, splacprior3, platnost
+  ) VALUES (
+      'STANDARD', 389, 300, 300, 300, 300, 1
+  )
+;
+
+INSERT INTO ac_priordluhu_cis (
+      schema, typdluhu, zesplatprior1, zesplatprior3, splacprior1, splacprior3, platnost
+  ) VALUES (
+     'STANDARDPO', 389, null, null, 500, 500, 1
+  )
+;
+
+INSERT INTO ac_priordluhu_cis (
+      schema, typdluhu, zesplatprior1, zesplatprior3, splacprior1, splacprior3, platnost
+  ) VALUES (
+     'VYMAH-DOHODA', 389, 300, 300, 300, 300, 1
+  )
+;
+
+INSERT INTO ac_priordluhu_cis (
+      schema, typdluhu, zesplatprior1, zesplatprior3, splacprior1, splacprior3, platnost
+  ) VALUES (
+     'VYMAH-SOUD',389, null, null, 300, 300, 1
+  )
+;
+-- /Číselník: Priority dluhu
+
+ROLLBACK WORK;
+
+--End of B135823_UID78871_3

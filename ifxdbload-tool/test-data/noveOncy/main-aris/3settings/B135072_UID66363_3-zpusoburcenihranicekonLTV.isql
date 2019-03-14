@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B135072_UID66363_3-zpusoburcenihranicekonLTV
+-- @TC:ONCE: DESCRIPTION = ClearQuest jiĹľ nenĂ­ podporovĂˇn, brzo bude napojenĂ­ na JIRA! {CUSTOMERREQUEST}
+
+
+BEGIN WORK;
+--RSTS-18923
+UPDATE crk_kontrolatyp_cis SET zpusoburcenihranicekon = 'S' WHERE kod = 'LTV';
+
+ROLLBACK WORK;
+
+--End of B135072_UID66363_3-zpusobhranicekonLTV

@@ -1,0 +1,74 @@
+-- @TC:ONCE: ID = V2, B137127_UID91545_1-zrcadlomf
+-- @TC:ONCE: DESCRIPTION = RSTS-32033: Nová úloha - Zrcadlo MF
+
+BEGIN WORK;
+
+ALTER TABLE sp_zrcmf_mat  ADD serno   BIGINT before smlouva;
+ALTER TABLE sp_zrcmf_mat  ADD poruser   CHAR(20)  DEFAULT USER;
+ALTER TABLE sp_zrcmf_mat  ADD portime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND;
+ALTER TABLE sp_zrcmf_mat  ADD refuser   CHAR(20)  DEFAULT USER;
+ALTER TABLE sp_zrcmf_mat  ADD reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND;
+
+CREATE TABLE csp_zrcmfzmena_den (
+  serno   SERIAL NOT NULL,
+  typzaznamu   CHAR(1),
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  ico   DECIMAL(8,0)  DEFAULT 49241257 NOT NULL,
+  rc   CHAR(10) NOT NULL,
+  datsml   DATE NOT NULL,
+  datuk   DATE,
+  duvuk   Integer,
+  vyplaceno   DECIMAL(16,2),
+  vraceno   DECIMAL(16,2),
+  jm   CHAR(24),
+  prijm   CHAR(35),
+  psc   CHAR(5),
+  rokzprac   datetime year to year,
+  kolo   Integer,
+  obcanstvi   Integer,
+  stavrc   Integer,
+  duplicita   CHAR(1),
+  dedeni   Integer,
+  datzm   DATE,
+  typsml   Integer,
+  pobyt   CHAR(1),
+  pobytmv   CHAR(2),
+  blokovano   DECIMAL(16, 2),
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_zrcmfzmena_den_pk ON csp_zrcmfzmena_den(serno);
+ALTER TABLE csp_zrcmfzmena_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT csp_zrcmfzmena_den_pk;
+
+--CHECKS
+ALTER TABLE csp_zrcmfzmena_den
+ADD CONSTRAINT (CHECK (typzaznamu in ('N','P')) CONSTRAINT csp_zrcmfzmena_den_c1);
+
+CREATE TABLE csp_zrcmfmanvst_kart (
+  serno   BIGINT NOT NULL,
+  refzrcadlo   BIGINT,
+  smlouva   DECIMAL(16, 0) NOT NULL,
+  poradi   Integer,
+  refpuvodni   INTEGER,
+  refnove   INTEGER,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_zrcmfmanvst_kart_pk ON csp_zrcmfmanvst_kart(serno);
+ALTER TABLE csp_zrcmfmanvst_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT csp_zrcmfmanvst_kart_pk;
+
+--FK
+CREATE INDEX csp_zrcmfmanvst_kart_i1 ON csp_zrcmfmanvst_kart(refzrcadlo);
+--odloženo do 5alter až za vytvoření PK na sp_zrcmf_mat: ALTER TABLE csp_zrcmfmanvst_kart ADD CONSTRAINT FOREIGN KEY(refzrcadlo) REFERENCES sp_zrcmf_mat(serno) CONSTRAINT csp_zrcmfmanvst_kart_f1;
+CREATE INDEX csp_zrcmfmanvst_kart_i2 ON csp_zrcmfmanvst_kart(refpuvodni);
+ALTER TABLE csp_zrcmfmanvst_kart ADD CONSTRAINT FOREIGN KEY(refpuvodni) REFERENCES csp_zrcmfzmena_den(serno) CONSTRAINT csp_zrcmfmanvst_kart_f2;
+CREATE INDEX csp_zrcmfmanvst_kart_i3 ON csp_zrcmfmanvst_kart(refnove);
+ALTER TABLE csp_zrcmfmanvst_kart ADD CONSTRAINT FOREIGN KEY(refnove) REFERENCES csp_zrcmfzmena_den(serno) CONSTRAINT csp_zrcmfmanvst_kart_f3;
+
+ROLLBACK WORK;
+
+--End of B137127_UID91545_1-zrcadlomf

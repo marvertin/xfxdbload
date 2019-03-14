@@ -1,0 +1,14 @@
+-- @TC:ONCE: ID = V2, B135324_UID70525_3
+-- @TC:ONCE: DESCRIPTION = RSTS-21100: Provést verifikaci typů přikládaných dokumentů (chyba se projeví v ECM) {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+CALL tw_regsetoraddkey('DO', 'docmng', 'upload', 'accept', 
+  'image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/rtf,image/tiff,text/plain',
+  1 /*Lze editovat*/,
+  'Dokumenty', 'Evidence dokumentů', 'Upload', 'Povolené typy souborů pro upload oddělené čárkami');
+
+ROLLBACK WORK;
+
+--End of B135324_UID70525_3

@@ -1,0 +1,21 @@
+-- @TC:ONCE: ID = V2, B135891_UID79164_1
+-- @TC:ONCE: DESCRIPTION = RSTS-25258: Doplnit interní druh pobytu do evidencí CIBIS-Sale {STORY}
+
+
+BEGIN WORK;
+
+ALTER TABLE seo_osoba_arch
+  DROP refdruhpobytinterni;
+  
+ALTER TABLE seo_osoba_mat
+  DROP refdruhpobytinterni;
+  
+ALTER TABLE seo_prukaz_arch
+  ADD refdruhpobytinterni   INTEGER BEFORE poruser;
+  
+ALTER TABLE seo_prukaz_mat
+  ADD refdruhpobytinterni   INTEGER BEFORE poruser;
+  
+ROLLBACK WORK;
+
+--End of B135891_UID79164_1

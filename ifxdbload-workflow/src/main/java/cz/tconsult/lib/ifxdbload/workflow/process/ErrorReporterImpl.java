@@ -29,6 +29,8 @@ import cz.tconsult.lib.lexer.LexerTokenLocator;
  */
 public class ErrorReporterImpl implements ErrorReporter {
 
+  // TODO [veverka] Formátovat lépe výpisy chyb -- 14. 3. 2019 12:55:02 veverka
+
 
   private static final Logger log = LoggerFactory.getLogger(ErrorReporterImpl.class);
 
@@ -133,6 +135,12 @@ public class ErrorReporterImpl implements ErrorReporter {
     log.error("reportSpravnyObjektNaNespravnemMiste: {}", stm);
     //TODO [veverka] implementuj - vygenerovana metoda [veverka 15:47:38]
 
+  }
+
+
+  @Override
+  public void badOnceDirective(final List<String> errors, final NamedString source) {
+    log.error("Direktivy " + errors + "   |  " + source.getName());
   }
 
 }

@@ -1,0 +1,44 @@
+-- @TC:ONCE: ID = V2, B136042_UID80606_3-rk-cizinec
+-- @TC:ONCE: DESCRIPTION = RSTS-26008: Parametrizace a migrace pro nový typ RK Cizinec {STORY}
+
+
+BEGIN WORK;
+
+
+INSERT INTO crk_kontrolatyp_cis(kod, poradizobraz, nazev, garant, pozadovatkdy,
+                                spustrozliseniko, nejnizsiuroven, zpusoburcenihranicekon, popishranice, spustitelnakontrola,
+                                prioritavolani, typalternativninabidky, algoritmusfunkcef1, algoritmusfunkcef2, algoritmusfunkcef3,
+                                algoritmusfunkcef4, algoritmusfunkcef5, spustautprischval, spustautpricerp, nedostupsalechyba,
+                                kombinovana, zpusvypoctupar, vypocetctvericepodpora, vypocetctvericeprovest, zadatupresneni,
+                                hranicekontroly, pozadovatprozalozce, expiracepocetdni, cachepocetdni, dotazextregistr,
+                                externiregistr, platnost, zverejnitprizamitnuti, nazevproklienta)
+VALUES ('CIZINEC', 4450, 'Cizinec', 'OZU', 'P',
+        1, 'U', 'N', null, 1,
+        2030, null, 'F1 NE', 'F2 NE', 'F3 NE',
+        'F4 ZACHRANA', 'F5 ZACHRANA VYMENA', 0, 0, 1,
+        0, null, 0, 0, 0,
+        null, 0, null, null, 0,
+        null, 1, 0, null);
+        
+--#Délka v zaměstnání 0-2 roky#        
+call TW_RegSetOrAddKey('EU', 'finSit', 'delka-v-zam', 'delka-0-2-roky', 'D0_2', 1, 'Osoba', 'Finanční situace osoby pro úvěrový případ', 'Délka v zaměstnání', 'Délka v zaměstnání 0-2 roky', 1);   
+
+--#Zajištění typu <typ zajištění> je odloženým zástavním právem#
+call TW_RegSetOrAddKey('EU', 'rizKon-jine-typy', 'cizinec', 'odloz-255', '1', 1, 'Úvěr', 'Rizikové kontroly úvěru - jiné typy kontrol', 'Cizinec', 'Zajištění typu 255 je odloženým zástavním právem', 1);
+
+--#Hranice kontrolního URG pro RK Cizinec#
+call TW_RegSetKey('EU', 'rizKon-jine-typy', 'cizinec', 'kontrol-URG', '2');
+
+--#Účel typu <typ účelu> je akceptovaný účel pro RK Cizinec#
+call TW_RegSetOrAddKey('EU', 'rizKon-jine-typy', 'cizinec', 'ucel-1301', '1', 1, 'Úvěr', 'Rizikové kontroly úvěru - jiné typy kontrol', 'Cizinec', 'Účel typu 1301 je akceptovaný účel pro RK Cizinec', 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-jine-typy', 'cizinec', 'ucel-1505', '1', 1, 'Úvěr', 'Rizikové kontroly úvěru - jiné typy kontrol', 'Cizinec', 'Účel typu 1505 je akceptovaný účel pro RK Cizinec', 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-jine-typy', 'cizinec', 'ucel-1506', '1', 1, 'Úvěr', 'Rizikové kontroly úvěru - jiné typy kontrol', 'Cizinec', 'Účel typu 1506 je akceptovaný účel pro RK Cizinec', 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-jine-typy', 'cizinec', 'ucel-1501', '1', 1, 'Úvěr', 'Rizikové kontroly úvěru - jiné typy kontrol', 'Cizinec', 'Účel typu 1501 je akceptovaný účel pro RK Cizinec', 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-jine-typy', 'cizinec', 'ucel-1502', '1', 1, 'Úvěr', 'Rizikové kontroly úvěru - jiné typy kontrol', 'Cizinec', 'Účel typu 1502 je akceptovaný účel pro RK Cizinec', 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-jine-typy', 'cizinec', 'ucel-1503', '1', 1, 'Úvěr', 'Rizikové kontroly úvěru - jiné typy kontrol', 'Cizinec', 'Účel typu 1503 je akceptovaný účel pro RK Cizinec', 1);
+call TW_RegSetOrAddKey('EU', 'rizKon-jine-typy', 'cizinec', 'ucel-1504', '1', 1, 'Úvěr', 'Rizikové kontroly úvěru - jiné typy kontrol', 'Cizinec', 'Účel typu 1504 je akceptovaný účel pro RK Cizinec', 1);
+
+
+ROLLBACK WORK;
+
+--End of B136042_UID80606_3-rk-cizinec

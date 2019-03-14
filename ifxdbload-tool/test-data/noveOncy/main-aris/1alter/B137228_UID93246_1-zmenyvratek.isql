@@ -1,0 +1,79 @@
+-- @TC:ONCE: ID = V2, B137228_UID93246_1-zmenyvratek
+-- @TC:ONCE: DESCRIPTION = RSTS-32908: IMPL (dat.model+část BE): RSTS-32037_Nová úloha - Vratky SP na MF {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+ALTER TABLE sp_vratmf_kart
+  ADD refobdobi BIGINT before rok;
+
+--FK
+CREATE INDEX sp_vratmf_kart_i_f2 ON sp_vratmf_kart(refobdobi);
+ALTER TABLE sp_vratmf_kart ADD CONSTRAINT FOREIGN KEY(refobdobi) REFERENCES csp_vratobdobi_mat(serno) CONSTRAINT sp_vratmf_kart_f2;
+
+--CHECKS
+ALTER TABLE sp_vratmf_kart
+ADD CONSTRAINT (CHECK (kodzprac in ('A','B','C','F','S','Z')) CONSTRAINT sp_vratmf_kart_c1);
+
+----------------------------------------------------------------
+CREATE TABLE csp_vratmfzmena_den (
+  serno   SERIAL NOT NULL,
+  typzaznamu   CHAR(1) NOT NULL,
+  realn   Integer,
+  refobdobi   BIGINT,
+  rok   datetime year to year,
+  obdobi   Integer,
+  smlouva   DECIMAL(16, 0),
+  ico   DECIMAL(8,0),
+  typvrac   Integer,
+  datzal   DATE,
+  datuk   DATE,
+  duvuk   Integer,
+  castka   DECIMAL(16, 2),
+  rc   CHAR(10),
+  prijm   CHAR(35),
+  jm   CHAR(24),
+  psc   CHAR(5),
+  kodzprac   CHAR(1)  DEFAULT 'A',
+  spzarok   datetime year to year,
+  refuser   CHAR(20)  DEFAULT USER NOT NULL,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND NOT NULL
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_vratmfzmena_den_pk ON csp_vratmfzmena_den(serno);
+ALTER TABLE csp_vratmfzmena_den ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT csp_vratmfzmena_den_pk;
+
+
+--CHECKS
+ALTER TABLE csp_vratmfzmena_den
+ADD CONSTRAINT (CHECK (typzaznamu in ('P','N')) CONSTRAINT csp_vratmfzmena_den_c1);
+
+----------------------------------------------------------------
+CREATE TABLE csp_vratmfmanvst_kart (
+  serno   BIGINT NOT NULL,
+  refvratka   INTEGER NOT NULL,
+  smlouva   DECIMAL(16, 0),
+  poradi   Integer NOT NULL,
+  refpuvodni   INTEGER,
+  refnove   INTEGER,
+  refuser   CHAR(20)  DEFAULT USER,
+  reftime   DATETIME YEAR TO SECOND  DEFAULT CURRENT YEAR TO SECOND
+)lock mode row;
+
+--PK
+CREATE UNIQUE INDEX csp_vratmfmanvst_kart_pk ON csp_vratmfmanvst_kart(serno);
+ALTER TABLE csp_vratmfmanvst_kart ADD CONSTRAINT PRIMARY KEY(serno) CONSTRAINT csp_vratmfmanvst_kart_pk;
+
+--FK
+CREATE INDEX csp_vratmfmanvst_kart_ifk1 ON csp_vratmfmanvst_kart(refvratka);
+ALTER TABLE csp_vratmfmanvst_kart ADD CONSTRAINT FOREIGN KEY(refvratka) REFERENCES sp_vratmf_kart(ser) CONSTRAINT csp_vratmfmanvst_kart_f1;
+CREATE INDEX csp_vratmfmanvst_kart_ifk2 ON csp_vratmfmanvst_kart(refpuvodni);
+ALTER TABLE csp_vratmfmanvst_kart ADD CONSTRAINT FOREIGN KEY(refpuvodni) REFERENCES csp_vratmfzmena_den(serno) CONSTRAINT csp_vratmfmanvst_kart_f2;
+CREATE INDEX csp_vratmfmanvst_kart_ifk3 ON csp_vratmfmanvst_kart(refnove);
+ALTER TABLE csp_vratmfmanvst_kart ADD CONSTRAINT FOREIGN KEY(refnove) REFERENCES csp_vratmfzmena_den(serno) CONSTRAINT csp_vratmfmanvst_kart_f3;
+
+
+ROLLBACK WORK;
+
+--End of B137228_UID93246_1-zmenyvratek

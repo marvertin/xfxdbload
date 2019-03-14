@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B134690_UID63336_3
+-- @TC:ONCE: DESCRIPTION = RSTS-17539: Aktualizovat check-list (A-6) {STORY}
+
+
+BEGIN WORK;
+
+INSERT INTO tw_prov_typ_cis (okruh, typ, popis, platnost) VALUES ('EU', 2003, 'Aktualizovat check-list', 1);
+
+ROLLBACK WORK;
+
+--End of B134690_UID63336_3

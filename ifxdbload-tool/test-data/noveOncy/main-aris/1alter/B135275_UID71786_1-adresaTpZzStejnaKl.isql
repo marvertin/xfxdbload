@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B135275_UID71786_1-adresaTpZzStejnaKl
+-- @TC:ONCE: DESCRIPTION = RSTS-21816: Příznak "adresa TP stejna jako u KL" evidovat a používat pro ZZ2 zvlášť {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+ALTER TABLE ses_ukonsml_arch ADD  adresatpzz2stejnakl   Integer BEFORE refuser; 
+ALTER TABLE ses_ukonsml_arch ADD CONSTRAINT (CHECK (adresatpzz2stejnakl IN (0,1)) CONSTRAINT ses_ukonsml_arch_d5oa);
+  
+ALTER TABLE ses_ukonsml_mat ADD  adresatpzz2stejnakl   Integer BEFORE refuser; 
+ALTER TABLE ses_ukonsml_mat ADD CONSTRAINT (CHECK (adresatpzz2stejnakl IN (0,1)) CONSTRAINT  ses_ukonsml_mat_d5o9);
+
+ROLLBACK WORK;
+
+--End of B135275_UID71786_1-adresaTpZzStejnaKl

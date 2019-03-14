@@ -1,0 +1,12 @@
+-- @TC:ONCE: ID = V2, B137173_UID93256_3
+-- @TC:ONCE: DESCRIPTION = RSTS-32917: Dořešení chybových stavů při importu CB skóre {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+-- tw_registr_cis
+call TW_RegSetOrAddKey('EU', 'default', 'Cbskore', 'min', 166, 1, 'Úvěr', 'Default', 'Indikátory', 'Dolní hranice CB skóre', 1);
+
+ROLLBACK WORK;
+
+--End of B137173_UID93256_3

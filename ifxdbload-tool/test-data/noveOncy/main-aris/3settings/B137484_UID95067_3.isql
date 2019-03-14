@@ -1,0 +1,15 @@
+-- @TC:ONCE: ID = V2, B137484_UID95067_3
+-- @TC:ONCE: DESCRIPTION = RSTS-33854: Parametrizace RK - HIST_KLUV {INTERNAL_DEFECT}
+
+
+BEGIN WORK;
+
+UPDATE crk_kontrolatyp_cis SET pozadovatkdy = 'X' WHERE kod = 'HIST_KLUV';
+
+UPDATE crk_kontrolatyp_cis SET pozadovatkdy = 'P' WHERE kod = 'HIST_VYMU';
+
+UPDATE crk_kontrolatyp_cis SET nazev = 'Stádium IFRS os.' WHERE kod = 'IFRS_OSOB';
+
+ROLLBACK WORK;
+
+--End of B137484_UID95067_3

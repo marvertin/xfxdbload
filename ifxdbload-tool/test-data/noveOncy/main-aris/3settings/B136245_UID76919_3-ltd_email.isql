@@ -1,0 +1,11 @@
+-- @TC:ONCE: ID = V2, B136245_UID76919_3-ltd_email
+-- @TC:ONCE: DESCRIPTION = REAL: Výpisy SIS - zaručená elektronická pečeť PO
+BEGIN WORK;
+
+INSERT INTO tw_emailtyp_cis (zkratka, popis, odesilatel, odesilateljmeno, predmet, obsah, 
+odkaz, maxpriloh, maxpokusu, maxinterval, casod, casdo, maxpocetznaku, bezdiakritiky, zpusob, blokovano, priorita, archivovat, platnost, maxpocetpriloh) 
+VALUES ('EPECET_FAILED_NOTIF', 'Neúspěšný požadavek na elektronickou pečeť', null, null, 'Neúspěšný požadavek na elektronickou pečeť', 'Neúspěšný požadavek klienta číslo konta: <<CISLO_KONTA>> o pečetění reportu: <<REPORT>>.', 
+null, 0, 1, 24, null, null, null, 0, 'A', 0, 2, 0, 1, 0);
+
+ROLLBACK WORK;
+--End of B1136245_UID76919_3-ltd_email

@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B136003_UID81068_1-seo_osoba_mat
+-- @TC:ONCE: DESCRIPTION = RSTS-26255: OPRAVA (2 a 3): RSTS-26062_REAL: Sledování SQL sessions na provozu {INTERNAL_WORK}
+
+
+BEGIN WORK;
+
+DROP INDEX seo_osoba_mat_i1;
+
+CREATE INDEX seo_osoba_mat_i1 ON seo_osoba_mat(rc, typid);
+
+ROLLBACK WORK;
+
+--End of B136003_UID81068_1-seo_osoba_mat

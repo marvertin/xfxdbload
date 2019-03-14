@@ -1,0 +1,13 @@
+-- @TC:ONCE: ID = V2, B134916_UID65848_3-povolání
+-- @TC:ONCE: DESCRIPTION = RSTS-18644: Předání povolání k osobě {STORY}
+
+BEGIN WORK;
+
+call TW_RegSetKey ('EO','ENVIRONMENT','POVOLANI','*', NULL);
+
+UPDATE EO_Povolani_Cis SET Platnost = 0 WHERE Povolani < 12;
+-- nová povolání 12-22 viz B133898_UID61379_3-povolani.isql
+
+ROLLBACK WORK;
+
+--End of B134916_UID65848_3-povolání

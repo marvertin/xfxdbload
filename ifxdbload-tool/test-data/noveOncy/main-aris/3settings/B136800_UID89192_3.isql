@@ -1,0 +1,20 @@
+-- @TC:ONCE: ID = V2, B136800_UID89192_3
+-- @TC:ONCE: DESCRIPTION = RSTS-30959: Změna výpočtu EBA DPD {INTERNAL_DEFECT}
+
+BEGIN WORK;
+
+call TW_RegDelKey('EU', 'EBADPD', 'absPrah', '*');
+
+call TW_RegDelKey('EU', 'EBADPD', 'relPrah', 'KL');
+call TW_RegDelKey('EU', 'EBADPD', 'relPrah', 'MK');
+call TW_RegDelKey('EU', 'EBADPD', 'relPrah', 'PR');
+         
+call TW_RegSetorAddKey('EU', 'EBADPD', 'osobaRole', 'KL', 1, 1, 'Podpora pro produkt', 'DPD', 'Vyhodnocení', 'Zahrnutí klienta pro EBA DPD', 1);
+
+call TW_RegSetorAddKey('EU', 'EBADPD', 'osobaRole', 'MK', 1, 1, 'Podpora pro produkt', 'DPD', 'Vyhodnocení', 'Zahrnutí manžele klienta pro EBA DPD', 1);
+
+call TW_RegSetorAddKey('EU', 'EBADPD', 'osobaRole', 'PRdd', 1, 1, 'Podpora pro produkt', 'DPD', 'Vyhodnocení', 'Zahrnutí přistupitele se vztahem druh/družka pro EBA DPD', 1);
+
+ROLLBACK WORK;
+
+--End of B136800_UID89192_3
