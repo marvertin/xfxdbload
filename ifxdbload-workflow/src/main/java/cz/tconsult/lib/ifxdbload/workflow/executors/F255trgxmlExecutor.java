@@ -50,7 +50,8 @@ public class F255trgxmlExecutor implements FazeExecutor {
 
     final CatalogLoader cat = new CatalogLoader(ctx.dc().getJt());
 
-    final AutomaticTriggersSplStatementGenerator generator = new AutomaticTriggersSplStatementGenerator(cat.readTableColumnsFromCatalog());
+    final AutomaticTriggersSplStatementGenerator generator = new AutomaticTriggersSplStatementGenerator(cat.readTableColumnsFromCatalog(),
+        cat.readBigsernoTablesFromCatalog());
 
     final XmlAutoTiggerParser parser = new XmlAutoTiggerParser();
 

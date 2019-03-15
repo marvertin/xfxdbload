@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +37,10 @@ import cz.tconsult.lib.lexer.LexerTokenLocator;
  * </pre>
  */
 
+/**
+ * @author jaksik
+ *
+ */
 public class AutomaticTriggersSplStatementGenerator {
 
   private static final AColumnName REFUSER_COLUMN = AColumnName.from("refuser");
@@ -68,9 +71,12 @@ public class AutomaticTriggersSplStatementGenerator {
   private static final Logger log = LoggerFactory.getLogger(AutomaticTriggersSplStatementGenerator.class);
 
   private final Map<ATableName, Set<AColumnName>> tables2columns;
+  private final List<ATableName> bigsernoTables;
 
-  public AutomaticTriggersSplStatementGenerator(final Map<ATableName, Set<AColumnName>> tablesToColumns) {
-    tables2columns = tablesToColumns;
+
+  public AutomaticTriggersSplStatementGenerator(final Map<ATableName, Set<AColumnName>> tables2Columns, final List<ATableName> bigsernoTables) {
+    this.tables2columns = tables2Columns;
+    this.bigsernoTables = bigsernoTables;
   }
 
   /**
@@ -292,27 +298,6 @@ public class AutomaticTriggersSplStatementGenerator {
     return strColumnsToIncludeA;
   } // protected String convColumnsToIncludeToString
 
-  private void _dropTriggerIfRequired(final ATableName aTableName, final ATriggerName aTriggerName)  {
-
-    return;
-
-    /*
-
-    if (aTableName == null) {return;}
-    if (aTriggerName == null) {return;}
-    if (!iDropAllTriggers) {
-
-      final Set<ATriggerName> triggerNames = getTablesToTriggersx().get(aTableName);
-      if (triggerNames != null) {
-        if (triggerNames.contains(aTriggerName)) {
-
-          dropTrigger(aTableName.getSchemaWithDot() +aTriggerName);
-        }
-      }
-    }
-     */
-  }
-
   /**
    * Vytvoří trigger zabraňující aktualizaci tabulky
    *
@@ -330,7 +315,6 @@ public class AutomaticTriggersSplStatementGenerator {
     strColumnsToIncludeA = convColumnsToIncludeToString(columnsToIncludeA);
 
     final ATriggerName triggerName = createTriggerName(astrTableName, ETriggerEvent.ONUPDATE);
-    _dropTriggerIfRequired(astrTableName, triggerName);
 
     toExecute = " CREATE TRIGGER "  + triggerName
         + " UPDATE " + strColumnsToIncludeA + "ON " + astrTableName
@@ -356,7 +340,6 @@ public class AutomaticTriggersSplStatementGenerator {
     String toExecute;
 
     final ATriggerName triggerName = createTriggerName(astrTableName,  ETriggerEvent.ONDELETE);
-    _dropTriggerIfRequired(astrTableName, triggerName);
 
     toExecute = " CREATE TRIGGER " + triggerName
         + " DELETE ON " + astrTableName
@@ -398,7 +381,6 @@ public class AutomaticTriggersSplStatementGenerator {
       final String strColumnsList = getOneStringFromListOfStrings(columns);
 
       final ATriggerName triggerName = createTriggerName(aStrTableName, ETriggerEvent.ONUPDATE);
-      _dropTriggerIfRequired(aStrTableName, triggerName);
 
       String toExecute;
 
@@ -424,44 +406,12 @@ public class AutomaticTriggersSplStatementGenerator {
     return null;
   }
 
-  // TODO [jaksik] dořešit -- 15. 3. 2019 11:36:35 jaksik
-  private boolean shouldBeSerno64bitInsertedToEvidenceTable(final ATableName aTableName, final Set<AColumnName> aColumns) {
 
-    final boolean b = true;
-
-    if (b) {
-      return false;
-    }
-
-    boolean result;
-    if (SERNO_EVIDENCE_TABLE.getPureTableName().equals(aTableName.getPureTableName())) {
-
-      result = false;
-    }
-    else {
-
-      result = false;
-      for (final AColumnName cd : aColumns) {
-
-        if (SERNO_COLUMN.equals(cd)) {
-
-          final Map<AColumnName, String> m = null;//iTable2Column2DataType.get(aTableName);
-          if (m != null) {
-            final String colType = m.get(cd);
-            if (!StringUtils.isBlank(colType)) {
-
-              final String s = SERNO_SQLTYPENAME_INFORMIX;
-              if (colType.equalsIgnoreCase(s)) {
-
-                result = true;
-                break;
-              }
-            }
-          }
-        }
-      }
-    }
-    return result;
+  /**
+   * Vrací true pokud je tabulka v seznamu tabulek, které mají "bigserno"
+   */
+  private boolean shouldBeSerno64bitInsertedToEvidenceTable(final ATableName aTableName) {
+    return !aTableName.getPureTableName().equals(SERNO_EVIDENCE_TABLE) && bigsernoTables.contains(aTableName);
   }
 
   /**
@@ -478,11 +428,9 @@ public class AutomaticTriggersSplStatementGenerator {
     final Set<AColumnName> columns = getTableColumns(aTableName);
     final boolean useRefDatProv = columns.contains(REFDATPROV_COLUMN);
 
-    final boolean shouldBeSerno64bitInsertedToEvidenceTable
-    = shouldBeSerno64bitInsertedToEvidenceTable(aTableName, columns);
+    final boolean shouldBeSerno64bitInsertedToEvidenceTable = shouldBeSerno64bitInsertedToEvidenceTable(aTableName);
 
     final ATriggerName triggerName = createTriggerName(aTableName, ETriggerEvent.ONINSERT);
-    _dropTriggerIfRequired(aTableName, triggerName);
 
     String toExecute;
 
@@ -573,7 +521,6 @@ public class AutomaticTriggersSplStatementGenerator {
       strEqualsConditionInIf = getEqualsCondition(tableColumnsUpdateOfClause, ":pre", ":new");
 
       final ATriggerName triggerName = createTriggerName(aStrTableName, ETriggerEvent.ONUPDATE);
-      _dropTriggerIfRequired(aStrTableName, triggerName);
 
       String toExecute;
 

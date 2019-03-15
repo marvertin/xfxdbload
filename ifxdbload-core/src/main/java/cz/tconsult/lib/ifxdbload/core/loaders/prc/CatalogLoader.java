@@ -76,7 +76,7 @@ public class CatalogLoader {
         .stream().collect(
             groupingBy(TableColumn::getTabname, // podle názvu seskupit do seznamu stringů
                 mapping(TableColumn::getColname, Collectors.toSet()))); // a všechny do setu
-    log.debug("Mapa názvů na data: {}" , tableColumnsInDb);
+    log.debug("Mapa názvů na sloupce: {}" , tableColumnsInDb);
 
     return tableColumnsInDb;
   }
@@ -86,6 +86,17 @@ public class CatalogLoader {
     private ATableName tabname;
     private AColumnName colname;
   }
+
+  /**
+   * Načte z katalogu názvy tabulek, která mají "bekíé serno" a v triggeru je pro ně zípis do tw_serno
+   */
+  public List<ATableName> readBigsernoTablesFromCatalog() {
+    final List<ATableName> tables = jt.queryForList(sql("BigsernoTables.sql"),ATableName.class);
+    log.debug("Sezname tabulek s bigsernem: {}" , tables);
+
+    return tables;
+  }
+
 
 
   @SneakyThrows
