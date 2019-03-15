@@ -1,11 +1,17 @@
 package cz.tconsult.lib.ifxdbload.workflow.executors;
 
-import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cz.tconsult.lib.ifxdbload.core.db.LoadContext;
+import cz.tconsult.lib.ifxdbload.core.loaders.prc.CatalogLoader;
+import cz.tconsult.lib.ifxdbload.core.loaders.trgxml.AutomaticTriggersSplStatementGenerator;
+import cz.tconsult.lib.ifxdbload.core.loaders.trgxml.TrgXmlLoader;
+import cz.tconsult.lib.ifxdbload.core.loaders.trgxml.XmlAutoTiggerParser;
+import cz.tconsult.lib.ifxdbload.core.loaders.trgxml.XmlTrigData;
+import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.ifxdbload.workflow.data.LoFaze;
-import cz.tconsult.lib.ifxdbload.workflow.data.LoSoubor;
 import cz.tconsult.lib.ifxdbload.workflow.process.FazeExecutor;
 import cz.tconsult.lib.ifxdbload.workflow.process.InterFazeBoard;
 
@@ -42,29 +48,26 @@ public class F255trgxmlExecutor implements FazeExecutor {
   @Override
   public String execute(final LoadContext ctx) {
 
+    final CatalogLoader cat = new CatalogLoader(ctx.dc().getJt());
+
+    final AutomaticTriggersSplStatementGenerator generator = new AutomaticTriggersSplStatementGenerator(cat.readTableColumnsFromCatalog());
+
+    final XmlAutoTiggerParser parser = new XmlAutoTiggerParser();
 
 
-
-    final Instant str = Instant.now();
-
-    final List<LoSoubor> loSoubor = lofaze.getSoubors();
-
-
-    /*
-    final List<SplStatement> stms =
-        .map(LoSoubor::getDataAsString)
-        .map(splParser::parse)
-        .flatMap(ps -> ps.getStatements().stream())
+    final List<SplStatement> stms = lofaze.getSoubors().stream()
+        .map(lo -> { return new XmlTrigData(lo.getDataAsBytes().getBytes(), lo.getLocator());
+        })
+        .map(parser::parse) //parsujeme XML definice
+        .flatMap(Collection::stream)
+        .map(generator::generateStatement) //henerujeme SplStatementy pro jednotlivé triggery
         .collect(Collectors.toList());
 
-    // TODO [veverka] řešit schema -- 7. 3. 2019 10:34:16 veverka
-    final XmlTrgLoader prcLoader = new XmlTrgLoader(ctx);
+
+    final TrgXmlLoader prcLoader = new TrgXmlLoader(ctx);
     prcLoader.readAllFromCatalog();
     prcLoader.load(stms);
 
-     */
-
-    // TODO [jaksik]  -- 12. 3. 2019 14:34:12 jaksik
     return null;
 
 

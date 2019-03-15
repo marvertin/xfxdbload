@@ -38,7 +38,7 @@ public class PrcLoader extends DbObjLoader0 {
   public void readAllFromCatalog() {
     // FIXME [jaksik] upravit logování -- 11. 3. 2019 14:18:02 jaksik
     log.info("louduji z katalogu");
-    catalogLoader.readFromCatalog();
+    catalogLoader.readProceduresFromCatalog();
   }
 
   /**

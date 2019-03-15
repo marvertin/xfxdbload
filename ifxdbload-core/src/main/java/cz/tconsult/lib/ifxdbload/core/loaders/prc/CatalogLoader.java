@@ -7,6 +7,7 @@ import static java.util.stream.Collectors.mapping;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,15 +18,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.google.common.io.Resources;
 
+import cz.tconsult.lib.ifxdbload.core.loaders.trgxml.AColumnName;
+import cz.tconsult.lib.ifxdbload.core.loaders.trgxml.ATableName;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-/**
- * @author jaksik
- *
- */
 /**
  * @author jaksik
  *
@@ -39,6 +38,8 @@ public class CatalogLoader {
   private static final Logger log = LoggerFactory.getLogger(CatalogLoader.class);
 
   private Map<String, String> proceduresInDb;
+  private Map<ATableName, Set<AColumnName>> tableColumnsInDb;
+
 
   private int skipped;
   private int reloaded;
@@ -47,24 +48,43 @@ public class CatalogLoader {
   /**
    * Načte z katalogu procedury a jejich těla
    */
-  public void readFromCatalog() {
+  public void readProceduresFromCatalog() {
 
     proceduresInDb =
-        jt.query(sql("ProceduresCatalogAll.sql"),
-            new Object[] {},  // podle schématu se vybírá
-            new BeanPropertyRowMapper<>(Record.class, true)) // a to je jen pomocný objekt
+        jt.query(sql("ProceduresBodyAll.sql"),
+            new BeanPropertyRowMapper<>(ProcedureBody.class, true)) // a to je jen pomocný objekt
         .stream().collect(
-            groupingBy(Record::getNazev, // podle názvu seskupit do seznamu stringů
-                mapping(Record::getData, joining()))); // a všechny stringy spojit
+            groupingBy(ProcedureBody::getProcname, // podle názvu seskupit do seznamu stringů
+                mapping(ProcedureBody::getData, joining()))); // a všechny stringy spojit
     log.debug("Mapa názvů na data: {}" , proceduresInDb);
 
   }
 
+  @Data
+  public static class ProcedureBody {
+    private String procname;
+    private String data;
+  }
+
+  /**
+   * Načte z katalogu tabulky a jejich sloupce
+   */
+  public Map<ATableName, Set<AColumnName>> readTableColumnsFromCatalog() {
+    tableColumnsInDb =
+        jt.query(sql("TablesColumnsAll.sql"),
+            new BeanPropertyRowMapper<>(TableColumn.class, true)) // a to je jen pomocný objekt
+        .stream().collect(
+            groupingBy(TableColumn::getTabname, // podle názvu seskupit do seznamu stringů
+                mapping(TableColumn::getColname, Collectors.toSet()))); // a všechny do setu
+    log.debug("Mapa názvů na data: {}" , tableColumnsInDb);
+
+    return tableColumnsInDb;
+  }
 
   @Data
-  public static class Record {
-    private String nazev;
-    private String data;
+  public static class TableColumn {
+    private ATableName tabname;
+    private AColumnName colname;
   }
 
 
