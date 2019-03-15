@@ -82,6 +82,7 @@ public class SplParser {
     try {
       final List<LexerToken> tokens = lexer.lex(source.getData(), source.getName().toString());
       final List<SplStatement> result = parseAll(new TokenIterator<LexerToken>(tokens));
+      OnceDirectiveV1Hack.hackniV1DirektivyDoVysledku(result, source.getData());
       return new ParseredSource(source, result);
     } catch (final YParseError e) {
       // toto je výjimkka způsobená špatným tokenem, je prostě očekáváno něco jiného

@@ -21,7 +21,7 @@ public class OnceScript implements Comparable<OnceScript> {
 
   private final ParseredSource ps;
   private final OnceDirectivesGlobal globalDirectives;
-  private List<String> directiveErrors;
+  private Set<String> directiveErrors;
 
   public boolean verify(final long checksum) {
 
@@ -49,7 +49,7 @@ public class OnceScript implements Comparable<OnceScript> {
     //        );
   }
 
-  private List<String> localDirectivesError(final SplStatement stm) {
+  private Set<String> localDirectivesError(final SplStatement stm) {
     final OnceDirectivesParser odp = new OnceDirectivesParser(stm.getDirectives());
     odp.parseLocal();
     return odp.errors();

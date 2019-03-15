@@ -1,16 +1,17 @@
 package cz.tconsult.lib.ifxdbload.core.loaders.once;
 
-import java.time.Duration;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.Sets;
 
 import cz.tconsult.lib.ifxdbload.core.tw.FSplitter;
 import cz.tconsult.lib.spllexer.SplDirective;
@@ -28,15 +29,14 @@ import cz.tconsult.lib.spllexer.SplDirective;
 public class OnceDirectivesParser {
 
   public OnceDirectivesParser(final Set<SplDirective> directives) {
-    // kopie musí být vyrobena, protože během parsrování se z množiny
-    // ubírá, aby se zjistilo, které direktivy jsou nepaltné
-
-    this.directives = new HashSet<>(directives);
+    // raději unmodifieble, v dřívejší verzi byla tendence direktivy odstraňovat
+    this.directives = Collections.unmodifiableSet(directives);
   }
 
   private final Set<SplDirective> directives;
+  private final Set<SplDirective> usedDirectives = new HashSet<>();
 
-  private final List<String> errors = new ArrayList<>();
+  private final Set<String> errors = new TreeSet<>();
 
   // zpracované direktivy
 
@@ -60,47 +60,65 @@ public class OnceDirectivesParser {
 
 
   private boolean parseFlag(final String directiveName) {
-    final List<String> values = findAndRemoveValues(directiveName);
-    checkDuplicity(directiveName, values);
-    return ! values.isEmpty(); // neprázná množina značí výskyt direktivy
+    final Optional<String> valline = findOneValline(directiveName);
+    if (valline.isPresent() && ! StringUtils.isEmpty(valline.get())) {
+      errors.add(String.format("Directive \"%s\" is flag, but has a value \"%s\"", directiveName, valline.get()));
+    }
+    return valline.isPresent(); // neprázná množina značí výskyt direktivy
   }
 
 
   private Optional<String> parseValue(final String directiveName) {
-    final List<String> values = findAndRemoveValues(directiveName);
-    checkDuplicity(directiveName, values);
-    return values.stream().findFirst();
+    final Optional<String> valline = findOneValline(directiveName);
+    if (valline.isPresent() && StringUtils.isBlank(valline.get())) { // jen pokud existuje, musí mít hodnotu, může ale neexistovat
+      errors.add(String.format("Directive \"%s\" must have a value", directiveName));
+
+    }
+    return valline;
   }
 
   private String parseValue(final String directiveName, final String defaltValue) {
-    final List<String> values = findAndRemoveValues(directiveName);
-    checkDuplicity(directiveName, values);
-    return values.stream().findFirst().orElse(defaltValue);
+    return findOneValline(directiveName).orElse(defaltValue);
   }
 
-  private List<String> parseValues(final String directiveName) {
-    final List<String> values = findAndRemoveValues(directiveName);
-    checkDuplicity(directiveName, values);
 
-    return values.stream()
-        .findFirst()
+
+  private String parseId(final String directiveName) {
+    final List<String> values = parseValues(directiveName);
+    if (values.isEmpty()) {
+      errors.add(String.format("Missing ID directive or has no value."));
+      return "<MISSING-ID>";
+    }
+    if (values.size() != 2) {
+      errors.add(String.format("Not exactly 2 values in ID directive\"%s\"", values));
+    }
+    if (! values.get(0).equals("V2")) {
+      errors.add(String.format("Unsupoorted version \"%s\", only V2 is supported", values.get(0)));
+    }
+    return values.get(values.size()-1);
+  }
+
+
+  private List<String> parseValues(final String directiveName) {
+    return findOneValline(directiveName)
         .map(FSplitter::splitByComma)
         .orElse(Collections.emptyList());
   }
 
-  private void checkDuplicity(final String directiveName, final List<String> values) {
+  private void checkDuplicityx(final String directiveName, final List<String> values) {
     if (values.size() > 1) {
       errors.add(String.format("Duplicit directive \"%s\" with values %s.", directiveName, values));
     }
   }
 
-  private List<String> findAndRemoveValues(final String directiveName) {
-    final Set<SplDirective> dires = directives.stream()
-        .filter(d -> "ONCE".equals(d.getScope()))  // jen našeho rozsahu
-        .filter(d -> directiveName.equals(d.getKey()))
-        .collect(Collectors.toSet());
-    // to, co jsme našli odstranit, aby zůstaly jen direktivy, které jsoui neplatné
-    directives.removeAll(dires);
+  /**
+   * Pro danou direktivu najde seznam jejich použití a vrátí všechny řetězce hodnot direktuiv.
+   * V kažzdé položce je celý řetězec za rovnítkem, není parsrováno čárkama.
+   * @param directiveName
+   * @return
+   */
+  private List<String> findVallines(final String directiveName) {
+    final Set<SplDirective> dires = findDirectives(directiveName);
 
     return dires.stream()
         .map(SplDirective::getValue)
@@ -109,9 +127,35 @@ public class OnceDirectivesParser {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Vrátí linu z porvní direktivy, pokud je mnoho direktiv, tak zapíše chybu
+   * @param directiveName
+   * @return
+   */
+  private Optional<String> findOneValline(final String directiveName) {
+    final List<String> vallines = findVallines(directiveName);
+    checkDuplicityx(directiveName, vallines);
+    return vallines.stream().findFirst();
+  }
+
+  /**
+   * Najde všechny direktivy daného jména a odstraní je, takže volat jen jednou.
+   * @param directiveName
+   * @return
+   */
+  private Set<SplDirective> findDirectives(final String directiveName) {
+    final Set<SplDirective> dires = directives.stream()
+        .filter(d -> "ONCE".equals(d.getScope()))  // jen našeho rozsahu
+        .filter(d -> directiveName.equals(d.getKey()))
+        .collect(Collectors.toSet());
+    // to, co jsme našli odstranit, aby zůstaly jen direktivy, které jsoui neplatné
+    usedDirectives.addAll(dires);
+    return dires;
+  }
+
   public OnceDirectivesGlobal parseGlobal() {
     return new OnceDirectivesGlobal(
-        parseValue("ID", "ss"),
+        parseId("ID"),
         parseValue("DESCRIPTION", ""),
         parseFlag("NO_TRANSACTION_CONTROL"),
         parseFlag("IGNORE_CHECKSUM"),
@@ -124,23 +168,14 @@ public class OnceDirectivesParser {
 
   public OnceDirectivesLocal parseLocal() {
     final OnceDirectivesLocal dires = new OnceDirectivesLocal(
-        parseValue("MIGRATION_TABLE"),
-        parseFlag("MIGRATION_FAIL_ON_ERROR"),
-        parseValue("MIGRATION_INTERVAL", "PT1M"),
-        parseValue("MIGRATION_COLUMN"),
-        parseValue("MIGRATION_STATUS_PREPARED"),
-        parseValue("MIGRATION_STATUS_OK"),
-        parseValue("MIGRATION_STATUS_ERROR"),
-        parseValue("MIGRATION_STATUS_SKIPPED")
-
-        //@TC:ONCE: MIGRATION_TABLE = jméno tabulky
-        //@TC:ONCE: MIGRATION_FAIL_ON_ERROR
-        //@TC:ONCE: MIGRATION_INTERVAL = počet vteřin pro výpis
-        //@TC:ONCE: MIGRATION_COLUMN = jméno sloupce se stavem migrovaných záznamů
-        //@TC:ONCE: MIGRATION_STATUS_PREPARED = název hodnoty pro doposud nezmigrované záznamy
-        //@TC:ONCE: MIGRATION_STATUS_OK = název hodnoty pro úspěšně zmigrované záznamy
-        //@TC:ONCE: MIGRATION_STATUS_ERROR = název hodnoty pro neúspěšně zmigrované záznamy
-        //@TC:ONCE: MIGRATION_STATUS_SKIPPED = název hodnoty pro přeskočení nezmigrovatelných záznamů
+        parseValue("MIGRATION_TABLE"),            //@TC:ONCE: MIGRATION_TABLE = jméno tabulky
+        parseFlag("MIGRATION_FAIL_ON_ERROR"),     //@TC:ONCE: MIGRATION_FAIL_ON_ERROR
+        parseValue("MIGRATION_INTERVAL", "PT1M"), //@TC:ONCE: MIGRATION_INTERVAL = počet vteřin pro výpis
+        parseValue("MIGRATION_COLUMN"),           //@TC:ONCE: MIGRATION_COLUMN = jméno sloupce se stavem migrovaných záznamů
+        parseValue("MIGRATION_STATUS_PREPARED"),  //@TC:ONCE: MIGRATION_STATUS_PREPARED = název hodnoty pro doposud nezmigrované záznamy
+        parseValue("MIGRATION_STATUS_OK"),        //@TC:ONCE: MIGRATION_STATUS_OK = název hodnoty pro úspěšně zmigrované záznamy
+        parseValue("MIGRATION_STATUS_ERROR"),     //@TC:ONCE: MIGRATION_STATUS_ERROR = název hodnoty pro neúspěšně zmigrované záznamy
+        parseValue("MIGRATION_STATUS_SKIPPED")    //@TC:ONCE: MIGRATION_STATUS_SKIPPED = název hodnoty pro přeskočení nezmigrovatelných záznamů
         );
     try {
       dires.getMigrationInterval();
@@ -148,21 +183,19 @@ public class OnceDirectivesParser {
       errors.add(String.format("Wrong value \"%s\" of directive MIGRATION_INTERVAL, cannot convert to Duration",  dires.getMigrationIntervalIsoStr()));
     }
     return dires;
-
-    // DateTimeParseException
   }
 
-  public List<String> errors() {
-    return ListUtils.union(errors,
-        directives.stream()
+  /**
+   *  Vrátí všechny posbírané chyby.
+   *  Také chyby neexistující direktivy, to znamená direktiv, která neprošla přes parsrování.
+   */
+  public Set<String> errors() {
+    return Sets.union(errors,
+        Sets.difference(directives, usedDirectives).stream()
         .map(dire -> "Unknown directive " + dire)
-        .collect(Collectors.toList())
+        .collect(Collectors.toSet())
         );
   }
 
-  public static void main(final String[] args) {
-
-    System.out.println(Duration.parse("XPT20S"));
-  }
 
 }

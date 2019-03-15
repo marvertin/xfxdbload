@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -139,7 +140,7 @@ public class ErrorReporterImpl implements ErrorReporter {
 
 
   @Override
-  public void badOnceDirective(final List<String> errors, final NamedString source) {
+  public void badOnceDirective(final Set<String> errors, final NamedString source) {
     log.error("Direktivy " + errors + "   |  " + source.getName());
   }
 

@@ -1,6 +1,6 @@
 package cz.tconsult.lib.ifxdbload.core.tw;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.dao.DataAccessException;
 
@@ -16,6 +16,6 @@ public interface ErrorReporter {
 
   void goodObjectOnBadPlace(SplStatement stm);
 
-  void badOnceDirective(List<String> errors, NamedString source);
+  void badOnceDirective(Set<String> errors, NamedString source);
 
 }

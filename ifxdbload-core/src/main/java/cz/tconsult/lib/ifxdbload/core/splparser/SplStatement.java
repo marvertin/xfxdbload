@@ -33,7 +33,7 @@ public class SplStatement {
   private final String text;
 
   /** Text SQL příkazu kanonizovaný pro výpočet hešíka nejspíš onceskriptu */
-  @Getter(AccessLevel.NONE)
+  //  @Getter(AccessLevel.NONE)
   private final String textForHash;
 
   /** Lokátor prvního tokenu příkazu, je zajímavý pro určení pozice */
