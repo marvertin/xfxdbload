@@ -30,7 +30,8 @@ public class FazeExecutorFactoryImpl implements FazeExecutorFactory {
     case f300settings: return new F300settingsExecutor();
     case f400migration: return new F400migrationExecutor();
     case f500alter: return new F500alterExecutor();
-    case f555trgxml: return new F555trgxmlExecutor();
+    // FIXME [jaksik] nahradit správným exekutorem -- 15. 3. 2019 10:49:13 jaksik
+    case f555trgxml: return new F255trgxmlExecutor();
     case f600tidy:  return new F600tidyExecutor();
     case f700finish: return new ____________DummyExecutor_____________();
 

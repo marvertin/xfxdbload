@@ -935,7 +935,7 @@ public class AutomaticTriggersSplStatementGenerator {
     //log.debug("----------------------------------" + System.getProperty("line.separator") + aSqlCommand);
     log.debug(aSqlCommand);
 
-    final SplStatement stmt = new SplStatement(null, EStmType.TRIGGER, aTriggerName.toString(), aSqlCommand, new LexerTokenLocator() {
+    final SplStatement stmt = new SplStatement(null, EStmType.TRIGGER, aTriggerName.toString(), aSqlCommand, aSqlCommand, new LexerTokenLocator() {
 
       @Override
       public String getInputSourceName() {
