@@ -41,7 +41,7 @@ public class OnceScript implements Comparable<OnceScript> {
   }
 
 
-  private OnceDirectivesLocal localDirectives(final SplStatement stm) {
+  public OnceDirectivesLocal localDirectives(final SplStatement stm) {
     final OnceDirectivesParser odp = new OnceDirectivesParser(stm.getDirectives());
     return odp.parseLocal();
   }
