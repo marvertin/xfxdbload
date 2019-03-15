@@ -1,7 +1,5 @@
 package cz.tconsult.lib.ifxdbload.core.tw;
 
-import java.util.Set;
-
 import org.springframework.dao.DataAccessException;
 
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
@@ -15,7 +13,5 @@ public interface ErrorReporter {
   void parsing(LexerToken badToken, NamedString source);
 
   void goodObjectOnBadPlace(SplStatement stm);
-
-  void badOnceDirective(Set<String> errors, NamedString source);
 
 }

@@ -3,8 +3,11 @@ package cz.tconsult.lib.ifxdbload.core.loaders.once;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -20,6 +23,10 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class OnceLoaderImpl implements OnceLoader {
+
+
+  private static final Logger log = LoggerFactory.getLogger(OnceLoaderImpl.class);
+
 
   private final LoadContext ctx;
   private Map<String, Long> checksums;
@@ -54,7 +61,31 @@ public class OnceLoaderImpl implements OnceLoader {
 
   @Override
   public void load(final List<ParseredSource> pss) {
-    _load(pss.stream().map(OnceScript::new).collect(Collectors.toList()));
+    _load(pss.stream()
+        .map(OnceScript::new)
+        .filter(this::filterGoodSyntaxOnce)
+        .collect(Collectors.toList())
+        );
+  }
+
+  private void reportOnceError(final OnceScript once, final String description) {
+    log.error("Once " + once.getPs().getSource().getName() + "  " + description);
+  }
+
+  private void reportOnceErrors(final OnceScript once, final Set<String> errors) {
+    ;
+    log.error("Once " +  once.getPs().getSource().getName() + "  " +
+        errors.stream().collect(Collectors.joining("\n    ", "\n    ", "")));
+  }
+
+  private boolean filterGoodSyntaxOnce(final OnceScript once) {
+    final Set<String> syntaxErrors = once.checkSyntaxErrors();
+    if (! syntaxErrors.isEmpty()) {
+      reportOnceErrors(once, syntaxErrors);
+      return false;
+    } else {
+      return true;
+    }
   }
 
   private void _load(final List<OnceScript> pss) {
@@ -65,10 +96,7 @@ public class OnceLoaderImpl implements OnceLoader {
     Collections.sort(pss);
 
     for (final OnceScript once : pss) {
-      if (! once.getDirectiveErrors().isEmpty()) {
-        ctx.errorReporter().badOnceDirective(once.getDirectiveErrors(), once.getPs().getSource());
-      }
-      final String scriptid = once.getScriptId();
+      final String scriptid = once.getScriptIdFromDirective();
 
       //      final boolean ignorovatChecksum =  once.getStatements().stream().flatMap(stm -> stm.getDirectives().stream()).filter(dir -> dir.getKey().equals("IGNORE_CHECKSUM")).findFirst().isPresent();
       //      ps.getStatements().stream().forEach(stm -> {

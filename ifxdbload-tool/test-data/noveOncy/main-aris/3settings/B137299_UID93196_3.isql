@@ -18,6 +18,12 @@ INSERT INTO rr_reptype_cis (repcode, area, repkind, reptype, repvar, repname, ex
 INSERT INTO rr_xreptype_cis (refrepcode, datod, datdo, predloha, cesta, soubor, lasttemplatedir, interniid, externiid, externidocid, poznamka, platnost)
   VALUES ('SS060', MDY(1, 1, 2018), null, 'J', 'c:\Tomcat\111\tcres\reports_j2ee\SS06', 'SS060.jrxml', 'SS05', null, null, null, null, 1);
 
+-- @TC:ONCE: MIGRATION_TABLE = tabumigra
+-- @TC:ONCE: MIGRATION_COLUMN = lkolomigra
+-- @TC:ONCE: MIGRATION_STATUS_OK = ok
+-- @TC:ONCE: MIGRATION_STATUS_PREPARED = prep
+-- @TC:ONCE: MIGRATION_STATUS_ERROR = err
+
 
 
 CREATE TEMP TABLE typdokumentu_lastserno_temp (typpodepdok INTEGER, typprilohdok INTEGER, skupina INTEGER, typdokumentuskupina INTEGER);

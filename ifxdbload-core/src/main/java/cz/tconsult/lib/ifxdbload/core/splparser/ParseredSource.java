@@ -6,6 +6,7 @@ import java.util.List;
 import cz.tconsult.lib.ifxdbload.core.tw.NamedString;
 import cz.tconsult.lib.lexer.LexerToken;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * Reprezentuje parsrované etry, to znamená soubor nebo pentry ze zipu.
@@ -17,6 +18,7 @@ import lombok.Data;
  *
  */
 @Data
+@ToString(doNotUseGetters=true) // testjeme tma stav
 public class ParseredSource {
 
 
@@ -46,6 +48,7 @@ public class ParseredSource {
     }
     return statements;
   }
+
 
   public LexerToken getBadToken() {
     if (badToken == null) {
