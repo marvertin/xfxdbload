@@ -1,6 +1,5 @@
 package cz.tconsult.lib.ifxdbload.core.loaders.trgxml;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,12 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.io.Resources;
-
 import cz.tconsult.lib.ifxdbload.core.splparser.EStmType;
 import cz.tconsult.lib.ifxdbload.core.splparser.SplStatement;
 import cz.tconsult.lib.lexer.LexerTokenLocator;
-import lombok.SneakyThrows;
 
 /**
  * @author Veverka, Roman Přichystal
@@ -64,7 +60,6 @@ public class AutomaticTriggersSplStatementGenerator {
   // **************************************************************************************** //
 
 
-  private int pocetDropnutychTriggeru;
   private int pocetVytvorenychInsertTriggeru;
   private int pocetVytvorenychUpdateTriggeru;
   private int pocetVytvorenychDeleteTriggeru;
@@ -72,23 +67,10 @@ public class AutomaticTriggersSplStatementGenerator {
 
   private static final Logger log = LoggerFactory.getLogger(AutomaticTriggersSplStatementGenerator.class);
 
-  private final Map<ATableName, Set<AColumnName>> iTablesToColumns;
-
-
-  /**
-   * Dřív jsem měl místo Set<AColumnName> celou strukturu Set<ColumnDef> ve které byl i datový typ.
-   * Ale to se neukázalo jako dobré řešení, protože existuje nástroj, který čte XML, ve kterém jsou
-   * pouze názvy sloupců a ne jejich datové typy. A pak jsem měl tedy problém, protože se seznam sloupce
-   * tahá tam i zpět z této sdílené knihovny.
-   * Takže si datové typy vytvářím pouze pro účely této knihovny.[polakm;2014-06-25 16:47:30]
-   */
-  private Map<ATableName, Map<AColumnName, String>> iTable2Column2DataType;
-
-  //[polakm;2009-08-26 17:41:52] Zda nad danou tabulkou promazat všechny triggery. V opačném případě jen ten, který bude zaváděn
-  private boolean iDropAllTriggers;
+  private final Map<ATableName, Set<AColumnName>> tables2columns;
 
   public AutomaticTriggersSplStatementGenerator(final Map<ATableName, Set<AColumnName>> tablesToColumns) {
-    iTablesToColumns = tablesToColumns;
+    tables2columns = tablesToColumns;
   }
 
   /**
@@ -221,11 +203,6 @@ public class AutomaticTriggersSplStatementGenerator {
     checkTableExistence(aStrTableName, aLokace);
     if (aStrArchivTableName != null) {
       checkTableExistence(aStrArchivTableName, aLokace);
-    }
-
-    // zruš všechny triggery, pokud ještě nebyly zrušeny
-    if(iDropAllTriggers) {
-      dropTriggersIfNotDropedYet(aStrTableName);
     }
 
     // switch podle typu triggeru, který má být vytvořen
@@ -362,7 +339,7 @@ public class AutomaticTriggersSplStatementGenerator {
     //System.out.println(strSQLora);
 
     pocetVytvorenychUpdateTriggeru++;
-    return executeSqlCommand(toExecute, triggerName);
+    return createSplStatement(toExecute, triggerName);
   }
 
 
@@ -387,7 +364,7 @@ public class AutomaticTriggersSplStatementGenerator {
 
     pocetVytvorenychDeleteTriggeru++;
 
-    return executeSqlCommand(toExecute,triggerName);
+    return createSplStatement(toExecute,triggerName);
 
 
   }
@@ -441,12 +418,13 @@ public class AutomaticTriggersSplStatementGenerator {
       //System.err.println(toExecute);
       pocetVytvorenychUpdateTriggeru++;
 
-      return executeSqlCommand(toExecute, triggerName);
+      return createSplStatement(toExecute, triggerName);
     }
 
     return null;
   }
 
+  // TODO [jaksik] dořešit -- 15. 3. 2019 11:36:35 jaksik
   private boolean shouldBeSerno64bitInsertedToEvidenceTable(final ATableName aTableName, final Set<AColumnName> aColumns) {
 
     final boolean b = true;
@@ -467,7 +445,7 @@ public class AutomaticTriggersSplStatementGenerator {
 
         if (SERNO_COLUMN.equals(cd)) {
 
-          final Map<AColumnName, String> m = iTable2Column2DataType.get(aTableName);
+          final Map<AColumnName, String> m = null;//iTable2Column2DataType.get(aTableName);
           if (m != null) {
             final String colType = m.get(cd);
             if (!StringUtils.isBlank(colType)) {
@@ -538,7 +516,7 @@ public class AutomaticTriggersSplStatementGenerator {
 
     pocetVytvorenychInsertTriggeru++;
 
-    return executeSqlCommand(toExecute, triggerName);
+    return createSplStatement(toExecute, triggerName);
   }
 
 
@@ -627,7 +605,7 @@ public class AutomaticTriggersSplStatementGenerator {
       //System.err.println(toExecute);
       pocetVytvorenychUpdateTriggeru++;
 
-      return executeSqlCommand(toExecute, triggerName);
+      return createSplStatement(toExecute, triggerName);
     }
 
     return null;
@@ -810,7 +788,7 @@ public class AutomaticTriggersSplStatementGenerator {
     }
      */
 
-    final Set<AColumnName> columns = getTableColumnsForTable(astrTableName);
+    final Set<AColumnName> columns = getColumnsForTable(astrTableName);
 
     if (columns.isEmpty()) {
       throw new RuntimeException("Table '" + astrTableName + "' does not exists or has no columns");
@@ -818,119 +796,7 @@ public class AutomaticTriggersSplStatementGenerator {
     return columns;
   }
 
-  @SneakyThrows
-  public String sql(final String sqlResoruceName) {
-    return Resources.toString(Resources.getResource("sql/" + sqlResoruceName), StandardCharsets.UTF_8);
-  }
-
-  /*
-    private boolean existTrigger(String astrTableName, String astrTriggerName) throws SQLException {
-      PreparedStatement stmt;
-      ResultSet rset;
-      boolean blnTriggerExist = false;
-
-      stmt =
-        conn.prepareStatement(
-          " select trigname "
-            + " from systables, systriggers "
-            + " where systables.tabid = systriggers.tabid "
-            + "and systables.tabname = ?"
-            + "and systriggers.trigname = ?");
-
-      stmt.setString(1, astrTableName);
-      stmt.setString(2, astrTriggerName);
-      rset = stmt.executeQuery();
-      // z vráceného ResultSetu přečti jméno triggeru
-      if (rset != null && rset.next()) {
-        rset.getString("trigname");
-        blnTriggerExist = true;
-      }
-      rset.close();
-      stmt.close();
-      return blnTriggerExist;
-    }
-   */
-
-  /*
-   * Pokud existuje trigger zadaného typu, vrátí jeho jméno. V jíném případě vrací null. Trigger načte ze
-   * ze systémové tabulky systriggers.
-   * @param astrTableName Jméno tabulky
-   * @param astrTriggerType Typ triggeru. Jedna z hodnot INSERT_TRIGGER, DELETE_TRIGGER, UPDATE_TRIGGER
-   * @return Jméno trigeru. Null pokud trigger neexistuje.
-   * @throws SQLException
-   * @author Roman Přichystal
-   */
-
-  /*    protected String getExistingTriggerName(String astrTableName, String astrTriggerType) throws SQLException {
-        String strTriggerName;
-        PreparedStatement stmt;
-        ResultSet rset;
-
-        strTriggerName = null;
-        stmt = conn.prepareStatement(
-                " select trigname "
-                    + " from systables, systriggers "
-                    + " where systables.tabid = systriggers.tabid "
-                    +       "and systables.tabname = ?"
-                    +       "and systriggers.event = ?");
-
-        stmt.setString(1, astrTableName);
-        stmt.setString(2, astrTriggerType);
-        rset = stmt.executeQuery();
-        // z vráceného ResultSetu přečti jméno triggeru
-        if (rset != null && rset.next()) {
-            strTriggerName = rset.getString("trigname");
-        }
-        rset.close();
-        stmt.close();
-        return strTriggerName;
-    }
-   */
-
-  /**
-   * Zruší všechny triggery zadaného typu.
-   *
-   * @param astrTableName jméno tabulky
-   * @param astrTriggerType typ triggeru
-   *
-   * @throws SQLException
-   *
-   * @author Roman Přichystal
-   */
-  private void dropTriggersIfNotDropedYet(final ATableName astrTableName){
-
-    /*
-    final Set<ATriggerName> triggernames = getTablesToTriggersx().remove(astrTableName); // vyhodit z mapy, aby se příště triggery pro danozu tabulku nerušily
-    if (triggernames == null)
-    {
-      return; // triggery pro takovou tabulku neexistují nebo jižř byly zrušeny
-    }
-    for (final ATriggerName strTriggerName : triggernames) {
-      dropTrigger(astrTableName.getSchemaWithDot()+strTriggerName);
-    }
-     */
-  }
-
-
-  /**
-   * Zruší trigger zadaného jména
-   *
-   * @param astrTriggerName Jméno triggeru
-   *
-   * @author Roman Přichystal
-   */
-
-  private void dropTrigger(final String astrTriggerName) {
-    /*
-    String      strSQL;
-
-    strSQL = " drop trigger " + astrTriggerName;
-    executeSqlCommand(strSQL);
-    pocetDropnutychTriggeru++;
-     */
-  }
-
-  private SplStatement executeSqlCommand(final String aSqlCommand, final ATriggerName aTriggerName){
+  private SplStatement createSplStatement(final String aSqlCommand, final ATriggerName aTriggerName){
 
     //log.debug("----------------------------------" + System.getProperty("line.separator") + aSqlCommand);
     log.debug(aSqlCommand);
@@ -1054,14 +920,6 @@ public class AutomaticTriggersSplStatementGenerator {
             }
   }
 
-
-  /**
-   * @return počet dropnutych triggerů
-   */
-  public int getPocetDropnutychTriggeru() {
-    return pocetDropnutychTriggeru;
-  }
-
   /**
    * @return počet vytvorenych delete triggerů
    */
@@ -1084,22 +942,15 @@ public class AutomaticTriggersSplStatementGenerator {
   }
 
   private void checkTableExistence(final ATableName astrTableName, final Object aLokace) {
-    final Set<AColumnName> columns = getTableColumnsForTable(astrTableName);
+    final Set<AColumnName> columns = getColumnsForTable(astrTableName);
     if (columns == null) {
       throw new RuntimeException("Table '" + astrTableName + "' does not exists" + (aLokace == null ? "" : " in \"" + aLokace + "\""));
     }
   }
 
-  /**
-   * @return the tablesToColumns
-   * @throws SQLException
-   */
-  private Map<ATableName, Set<AColumnName>> getTablesToColumns()  {
-    return iTablesToColumns;
-  }
 
-  private Set<AColumnName> getTableColumnsForTable(final ATableName aQualifiedTableName) {
-    final Set<AColumnName> cols = getTablesToColumns().get(aQualifiedTableName);
+  private Set<AColumnName> getColumnsForTable(final ATableName aQualifiedTableName) {
+    final Set<AColumnName> cols = tables2columns.get(aQualifiedTableName);
 
     @SuppressWarnings("unchecked")
     final Set<AColumnName> result = cols == null ? Collections.EMPTY_SET : new LinkedHashSet<>(cols);
@@ -1107,7 +958,7 @@ public class AutomaticTriggersSplStatementGenerator {
 
   }
 
-  public SplStatement generateStatement(final AutoTrigger trigger) {
+  public SplStatement generate(final AutoTrigger trigger) {
     return makeTrigger(
         trigger.getTableNameA(),
         trigger.getArchTableNameA(),

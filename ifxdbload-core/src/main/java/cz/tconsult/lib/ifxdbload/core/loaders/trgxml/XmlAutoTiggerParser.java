@@ -2,7 +2,6 @@ package cz.tconsult.lib.ifxdbload.core.loaders.trgxml;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -15,18 +14,12 @@ import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cz.tconsult.lib.ifxdbload.core.loaders.trgxml.AutomaticTriggersSplStatementGenerator.EColumnsHandleMode;
-
 public class XmlAutoTiggerParser {
 
 
   private static final Logger log = LoggerFactory.getLogger(XmlAutoTiggerParser.class);
 
   List<AutoTrigger> iTriggers=new ArrayList<AutoTrigger>();
-
-  private XmlTrigData iFile;
-
-  private AutomaticTriggersSplStatementGenerator iAutCreator;
 
   public List<AutoTrigger> parse(final XmlTrigData aXtd) {
     iTriggers.clear();
@@ -46,8 +39,6 @@ public class XmlAutoTiggerParser {
     org.jdom.Document docA;
     org.jdom.Element rootElemA;
     List<Element> tableElemsA=null;
-
-    iFile=aXtd;
 
     // *** Načtení jdom-dokumentu z "aFileEle" do "docA"
     saxBuilderA = new SAXBuilder();
@@ -154,54 +145,5 @@ public class XmlAutoTiggerParser {
     List<Element> children = aEle.getChildren(aChildName);
     return children;
   }
-
-  private void loadAutTriggers2db(final AutomaticTriggersSplStatementGenerator aCreator) throws SQLException {
-
-    iAutCreator=aCreator;
-    for(final AutoTrigger trigger : iTriggers){
-      log.debug("Zpracovava se trigger typu :"+trigger.getTriggerType()+ " s eventem: "+trigger.getTriggerEvent()+" pro tabulku "+trigger.getTableNameA());
-
-      if (trigger.getColumnsToIncludeA() != null) {
-        iAutCreator.makeTrigger(
-            trigger.getTableNameA(),
-            trigger.getArchTableNameA(),
-            trigger.getTriggerType(),
-            trigger.getTriggerEvent(),
-            trigger.getColumnsToIncludeA(),
-            EColumnsHandleMode.INCLUDE,
-            iFile);
-      }
-      else if (trigger.getColumnsToExcludeA() != null) {
-        iAutCreator.makeTrigger(
-            trigger.getTableNameA(),
-            trigger.getArchTableNameA(),
-            trigger.getTriggerType(),
-            trigger.getTriggerEvent(),
-            trigger.getColumnsToExcludeA(),
-            EColumnsHandleMode.EXCLUDE,
-            iFile);
-      }
-      else {
-        iAutCreator.makeTrigger(
-            trigger.getTableNameA(),
-            trigger.getArchTableNameA(),
-            trigger.getTriggerType(),
-            trigger.getTriggerEvent(),
-            null,
-            EColumnsHandleMode.NOTHING,
-            iFile);
-      }
-    }
-  }
-
-  public void loadAutTriggers2db(final XmlTrigData aFile,final AutomaticTriggersSplStatementGenerator aCreator)
-      throws JDOMException,IOException,SQLException{
-    iAutCreator=aCreator;
-    iTriggers.clear();
-    parseXMLFileWithAutoTriggers(aFile);
-    loadAutTriggers2db(aCreator);
-  }
-
-
 
 }

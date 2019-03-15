@@ -60,7 +60,7 @@ public class F255trgxmlExecutor implements FazeExecutor {
         })
         .map(parser::parse) //parsujeme XML definice
         .flatMap(Collection::stream)
-        .map(generator::generateStatement) //henerujeme SplStatementy pro jednotlivé triggery
+        .map(generator::generate) //henerujeme SplStatementy pro jednotlivé triggery
         .collect(Collectors.toList());
 
 
